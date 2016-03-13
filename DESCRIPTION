@@ -9,7 +9,8 @@ License: MIT + file LICENSE
 URL: https://github.com/ropenscilabs/taxa
 BugReports: https://github.com/ropenscilabs/taxa/issues
 Imports:
-    R6
+    R6,
+    jsonlite
 Suggests:
     testthat
 RoxygenNote: 5.0.1
