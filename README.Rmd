@@ -1,0 +1,23 @@
+taxa
+====
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+[![Build Status](https://travis-ci.org/ropenscilabs/taxa.svg?branch=master)](https://travis-ci.org/ropenscilabs/taxa)
+
+taxon classes for R
+
+> NOTE: This package may not end up being a separate package, but it may. It's a space to explore taxonomic classes for R
+
+## use cases
+
+* use in [binomen](https://github.com/ropensci/binomen): xxx
+* use in [taxize](https://github.com/ropensci/taxize): xxx
+* use in [metacoder](https://github.com/grunwaldlab/metacoder): xxx
