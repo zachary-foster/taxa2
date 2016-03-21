@@ -203,3 +203,15 @@ maketax <- function(binomial, grouping){
 # `[[`.Taxon <- function(x, y) {
 #   x$classification[y]
 # }
+
+`[.MultiTaxonId` <- function(x, i) {
+  x$ids[i]
+}
+
+`[[.MultiTaxonId` <- function(x, i) {
+  x$ids[[i]]
+}
+
+`[.TaxonId` <- function(x, i) {
+  x$id[i]
+}
