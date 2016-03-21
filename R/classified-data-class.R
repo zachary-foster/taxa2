@@ -88,13 +88,13 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
 #' Create a subset of items classified by a taxonomy.
 #' Child and parent taxa of specified taxa are not preserved.
 #'
-#' @inheritParams subset.classified
+#' @inheritParams subset_classified
 #'
 #' @return \code{\link{classified}}
 #'
 #' @export
 `[[.classified` <- function(...) {
-  subset(..., subtaxa = FALSE, supertaxa = FALSE)
+  subset_classified(..., subtaxa = FALSE, supertaxa = FALSE)
 }
 
 #' Create a inclusive subset of \code{\link{classified}}
@@ -102,13 +102,13 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
 #' Create a subset of items classified by a taxonomy.
 #' Child and parent taxa of specified taxa are preserved.
 #'
-#' @inheritParams subset.classified
+#' @inheritParams subset_classified
 #'
 #' @return \code{\link{classified}}
 #'
 #' @export
 `[.classified` <- function(...) {
-  subset(...)
+  subset_classified(...)
 }
 
 
@@ -117,13 +117,16 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
 #' Create a subset of items classified by a taxonomy.
 #' Only unspecified taxa with no items or children with items are discarded.
 #'
+#' @param obj \code{\link{classified}}
 #' @param taxon A key to filter the taxon data.frame rows on
 #' @param item A key to filter the item data.frame rows on
+#' @param subtaxa (\code{logical} of length 1) If \code{TRUE}, return subtaxa of specified taxa
+#' @param supertaxa (\code{logical} of length 1) If \code{TRUE}, return supertaxa of specified taxa
 #'
 #' @return \code{\link{classified}}
 #'
 #' @export
-subset.classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALSE) {
+subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALSE) {
   # non-standard argument evaluation
   my_taxon_data <- taxon_data(obj)
   column_var_name <- colnames(my_taxon_data)

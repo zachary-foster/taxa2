@@ -64,7 +64,6 @@ get_supertaxa <- function(targets, taxa, parents, recursive = TRUE, simplify = F
 #'   target taxa. If \code{TRUE}, return all the subtaxa of every subtaxa, etc.
 #' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
 #'   vector of unique taxon IDs
-#' @param include_target (\code{logical}) If \code{TRUE}, the target taxa are included in the output
 #'
 #' @return If \code{simplify = FALSE}, then a list of vectors of taxon IDs are returned
 #'   corresponding to the \code{target} argument. If \code{simplify = TRUE}, then the unique taxon

@@ -19,8 +19,6 @@ target taxa. If \code{TRUE}, return all the subtaxa of every subtaxa, etc.}
 
 \item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results into a single
 vector of unique taxon IDs}
-
-\item{include_target}{(\code{logical}) If \code{TRUE}, the target taxa are included in the output}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors of taxon IDs are returned
