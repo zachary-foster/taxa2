@@ -42,9 +42,9 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
   if (nrow(item_data) != length(item_taxon_id)) {
     stop("'item_data' must have the same number of rows as 'item_taxon_id'")
   }
-  if ( any(colnames(taxon_data) %in% colnames(item_data)) ) {
-    stop("'taxon_data' and 'item_data' may not share column names")
-  }
+#   if ( any(colnames(taxon_data) %in% colnames(item_data)) ) {
+#     stop("'taxon_data' and 'item_data' may not share column names")
+#   }
   reserved_col_names <- c("taxon_id", "parent_id", "item_taxon_id")
   if ( any(colnames(taxon_data) %in% reserved_col_names) ) {
     stop(paste("Column names cannot be one of the following:",
