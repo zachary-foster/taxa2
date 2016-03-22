@@ -32,29 +32,12 @@ library(taxa)
 ```{r eval=FALSE}
 file_path <- system.file("extdata", "unite_general_release.fasta", package = "metacoder")
 sequences <- ape::read.FASTA(file_path)
-unite_ex_data_3 <- extract_taxonomy(names(sequences),
-                                    regex = "^(.*)\\|(.*)\\|(.*)\\|.*\\|(.*)$",
-                                    key = c(name = "item_info", seq_id = "item_info",
-                                            other_id = "item_info", "class_name"),
-                                    database = "none")
+data <- extract_taxonomy(names(sequences),
+                         regex = "^(.*)\\|(.*)\\|(.*)\\|.*\\|(.*)$",
+                         key = c(name = "item_info", seq_id = "item_info",
+                                 other_id = "item_info", "class_name"),
+                         database = "none")
 ```
-
-
-## Creating the class from scratch
-
-Normally, users would not create the class from scratch, since this is rather complex.
-Instead, the class would be the output of functions like `metacoder::extract_taxonomy`.
-`unite_ex_data_3` is an example of the current output format of `metacoder::extract_taxonomy`, but I would like to change its output to a `classified` object.
-
-```{r}
-data <- classified(taxon_id = unite_ex_data_3$taxa$taxon_id,
-                   parent_id = unite_ex_data_3$taxa$parent_id,
-                   item_taxon_id = unite_ex_data_3$items$taxon_id,
-                   taxon_data = data.frame(name =  unite_ex_data_3$taxa$name,
-                                           rank = unite_ex_data_3$taxa$rank),
-                   item_data = data.frame(seq_id = unite_ex_data_3$items$seq_id))
-```
-
 
 ## Acessing taxon data
 
@@ -109,14 +92,14 @@ plot(data_subset,
 The `[[` currently corresponds to a more restrictive type of subsetting, in which the parents and children of taxa are not automatically preserved.
 
 ```{r}
-plot(data[[item_count > 5]],
+plot(data[[item_count > 5, ]],
      vertex_size = item_count,
      vertex_color = item_count,
      vertex_label = name)
 ```
 
 ```{r}
-plot(data[[item_count < 200]],
+plot(data[[item_count < 200, ]],
      vertex_size = item_count,
      vertex_color = item_count,
      vertex_label = name,
