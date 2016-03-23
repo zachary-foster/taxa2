@@ -19,7 +19,10 @@
 #' @export
 classified <- function(taxon_id, parent_id, item_taxon_id,
                        taxon_data = NULL, item_data = NULL,
-                       taxon_funcs = list(item_count = count_items), item_funcs = list()) {
+                       taxon_funcs = list(item_count = count_items, rank = get_rank), item_funcs = list()) {
+  #
+
+
   # Check that taxon ids are unique
   if (length(unique(taxon_id)) != length(taxon_id)) { stop("'taxon_id' must be unique") }
   # Check that parent_id is the same length of taxon_id
@@ -27,7 +30,7 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
   # All parent_id should be in taxon_id
   parent_id[! parent_id %in% taxon_id] <- NA
   # All item_taxon_id should be in taxon_id
-  if (any(! item_taxon_id %in% taxon_id)) { stop("All 'item_taxon_id' must be in 'taxon_id'") }
+  if (any(! item_taxon_id %in% c(taxon_id, NA))) { stop("All 'item_taxon_id' must be in 'taxon_id'") }
 
   # check taxon_data and item_data
   if (is.null(taxon_data)) {
@@ -207,7 +210,7 @@ taxon_data.classified <- function(obj, calculated_cols = TRUE) {
   data <- cbind(data.frame(taxon_id = obj$taxon_id, parent_id = obj$parent_id),
                 obj$taxon_data)
   if (calculated_cols) {
-    calculated_data <- lapply(obj$taxon_funcs, taxon_apply, obj = obj)
+    calculated_data <- lapply(obj$taxon_funcs, taxon_apply, obj = obj, taxon = obj$taxon_id)
     names(calculated_data) <- names(obj$taxon_funcs)
     data <- cbind(data, as.data.frame(calculated_data))
   }
@@ -248,17 +251,20 @@ item_data.classified <- function(obj, calculated_cols = TRUE) {
 #'
 #' @param obj (\code{\link{classified}})
 #' @param func (\code{function}) A function that accepts an object of type \code{\link{classified}}.
+#' @param ... Passed to \code{mapply}
 #'
 #' @return \code{list} of length equal to the number of taxa in \code{obj}
 #'
 #' @export
-taxon_apply <- function(obj, func) {
+taxon_apply <- function(obj, func, ...) {
   UseMethod("taxon_apply")
 }
 
 #' @export
-taxon_apply.classified <- function(obj, func) {
-  unlist(lapply(split_by_taxon(obj), func), recursive = FALSE)
+taxon_apply.classified <- function(obj, func, ...) {
+  split_data <- split_by_taxon(obj)
+  mapply_args <- c(list(func), list(split_data), list(...))
+  unlist(do.call(mapply, mapply_args), recursive = FALSE)
 }
 
 
@@ -357,8 +363,32 @@ split_by_item.classified <- function(obj) {
 #' Count items in \code{\link{classified}}
 #'
 #' @param obj (\code{\link{classified}})
+#' @param taxon (\code{character} of length 1) The taxon_id used
 #'
 #' @return \code{numeric} of length 1
-count_items <- function(obj) {
+#'
+#' @export
+count_items <- function(obj, taxon) {
   length(obj$item_taxon_id)
+}
+
+#' Get rank of taxon in \code{\link{classified}}
+#'
+#' Get rank of taxon in \code{\link{classified}}
+#'
+#' @param obj (\code{\link{classified}})
+#' @param taxon (\code{character} of length 1) The taxon_id used
+#'
+#' @return \code{numeric} of length 1
+#'
+#' @export
+get_rank <- function(obj, taxon) {
+  print(taxon)
+  super_taxa <- get_supertaxa(targets = taxon,
+                              taxa = obj$taxon_id,
+                              parents = obj$parent_id,
+                              recursive = TRUE,
+                              simplify = TRUE,
+                              include_target = TRUE)
+  length(super_taxa)
 }

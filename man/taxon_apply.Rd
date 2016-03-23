@@ -4,12 +4,14 @@
 \alias{taxon_apply}
 \title{Apply a function to every taxon}
 \usage{
-taxon_apply(obj, func)
+taxon_apply(obj, func, ...)
 }
 \arguments{
 \item{obj}{(\code{\link{classified}})}
 
 \item{func}{(\code{function}) A function that accepts an object of type \code{\link{classified}}.}
+
+\item{...}{Passed to \code{mapply}}
 }
 \value{
 \code{list} of length equal to the number of taxa in \code{obj}

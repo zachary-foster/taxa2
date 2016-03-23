@@ -5,8 +5,8 @@
 \title{Create an instance of \code{classified}}
 \usage{
 classified(taxon_id, parent_id, item_taxon_id, taxon_data = NULL,
-  item_data = NULL, taxon_funcs = list(item_count = count_items),
-  item_funcs = list())
+  item_data = NULL, taxon_funcs = list(item_count = count_items, rank =
+  get_rank), item_funcs = list())
 }
 \arguments{
 \item{taxon_id}{Unique taxon ids}
