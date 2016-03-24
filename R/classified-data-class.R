@@ -3,7 +3,7 @@
 #' Create an instance of \code{classified} containing items classified by a taxonomy
 #'
 #' @param taxon_id Unique taxon ids
-#' @param parent_id Parent taxa of \code{taxon_id}
+#' @param parent_id Taxon ids of parent taxa of \code{taxon_id}
 #' @param item_taxon_id Taxon ids of items
 #' @param taxon_data A \code{data.frame} with rows pretaining to \code{taxon_id}
 #' @param item_data A \code{data.frame} with rows pretaining to \code{item_taxon_id}
@@ -206,12 +206,18 @@ taxon_data <- function(obj, calculated_cols = TRUE) {
 }
 
 #' @export
-taxon_data.classified <- function(obj, calculated_cols = TRUE) {
+taxon_data.classified <- function(obj,
+                                  subset = c(colnames(obj$taxon_data), names(obj$taxon_funcs)),
+                                  calculated_cols = TRUE) {
+  # Combine taxon id information and arbitrary user-defined data
   data <- cbind(data.frame(taxon_id = obj$taxon_id, parent_id = obj$parent_id),
                 obj$taxon_data)
-  if (calculated_cols) {
-    calculated_data <- lapply(obj$taxon_funcs, taxon_apply, obj = obj, taxon = obj$taxon_id)
-    names(calculated_data) <- names(obj$taxon_funcs)
+  # Check if any of the column-generating functions are needed
+  functions <- obj$taxon_funcs[names(obj$taxon_funcs) %in% subset]
+  # Apply column-generating functions and append to output
+  if (calculated_cols && length(functions) > 0) {
+    calculated_data <- lapply(functions, taxon_apply, obj = obj, taxon = obj$taxon_id)
+    names(calculated_data) <- names(functions)
     data <- cbind(data, as.data.frame(calculated_data))
   }
   return(data)
