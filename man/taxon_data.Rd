@@ -4,16 +4,22 @@
 \alias{taxon_data}
 \title{Return taxon data from \code{\link{classified}}}
 \usage{
-taxon_data(obj, calculated_cols = TRUE)
+taxon_data(obj, ...)
 }
 \arguments{
 \item{obj}{(\code{\link{classified}})}
 
 \item{calculated_cols}{(\code{logical} of length 1) If \code{TRUE}, return calculated columns using
 \code{\link{classified}$taxon_funcs}.}
+
+\item{subset}{(\code{character}) The names of columns, either user defined or generated using \code{taxon_funcs}.
+Default: All columns.}
+
+\item{drop}{(\code{logical} of length 1) If \code{TRUE}, if \code{subset} is a single column
+name, then a \code{vector} is returned instead of a \code{data.frame}}
 }
 \value{
-\code{data.frame} with rows corresponding to taxa in input
+A \code{data.frame} or \code{vector} with rows corresponding to taxa in input
 }
 \description{
 Return a table of data associated with taxa of and object of type

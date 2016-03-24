@@ -11,7 +11,7 @@ classified(taxon_id, parent_id, item_taxon_id, taxon_data = NULL,
 \arguments{
 \item{taxon_id}{Unique taxon ids}
 
-\item{parent_id}{Parent taxa of \code{taxon_id}}
+\item{parent_id}{Taxon ids of parent taxa of \code{taxon_id}}
 
 \item{item_taxon_id}{Taxon ids of items}
 
