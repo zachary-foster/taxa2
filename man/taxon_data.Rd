@@ -11,7 +11,7 @@ taxon_data(...)
   calculated_cols = TRUE, drop = TRUE, ...)
 }
 \arguments{
-\item{...}{Passed to \code{\link{taxon_data.classified}}}
+\item{...}{Passed to \code{taxon_data.classified}}
 
 \item{obj}{(\code{\link{classified}})}
 

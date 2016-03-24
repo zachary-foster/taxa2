@@ -89,18 +89,8 @@ plot(data_subset,
      vertex_label = data_subset$taxon_data$name)
 ```
 
-
-You can also choose wether the parents and children of taxa are preserved.
-
 ```{r}
-subset(data, item_count > 5, subtaxa = FALSE, supertaxa = FALSE) %>%
-  plot(vertex_size = item_count,
-       vertex_color = item_count,
-       vertex_label = name)
-```
-
-```{r}
-subset(data, item_count < 200, subtaxa = FALSE, supertaxa = FALSE) %>%
+subset(data, item_count < 200) %>%
   plot(vertex_size = item_count,
        vertex_color = item_count,
        vertex_label = name,
@@ -108,8 +98,42 @@ subset(data, item_count < 200, subtaxa = FALSE, supertaxa = FALSE) %>%
        layout = "fruchterman-reingold")
 ```
 
+
+You can also choose wether the parents and children of taxa are preserved.
+
+```{r}
+subset(data, item_count > 5, subtaxa = FALSE) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name)
+```
+
 However, it is still not working right as you might expect. 
 I think this is because, when a child taxon is eliminated, its items are not transferred to the parent taxon.
 This is why some taxa in the above two plots have `0` items.
 Their children all together had > 5 items, but each child had < 5 items. 
 I think the solution is to transfer the items of eliminated children to their non-eliminated parents, but I need to look into this more.
+
+
+```{r}
+data_subset <- subset(data, data$taxon_data$name == "Agaricales", supertaxa = TRUE)
+plot(data_subset,
+     vertex_size = taxon_data(data_subset, "item_count"),
+     vertex_color = taxon_data(data_subset, "item_count"),
+     vertex_label = data_subset$taxon_data$name)
+```
+
+
+## Combining multiple `classified` objects
+
+```{r}
+part_a <- subset(data, name == "Agaricales")
+part_b <- subset(data, name == "Helotiales")
+sum(part_a, part_b) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name,
+       tree_label = name,
+       layout = "fruchterman-reingold")
+```
+

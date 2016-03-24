@@ -2,7 +2,7 @@
 % Please edit documentation in R/classified-data-class.R
 \name{item_apply}
 \alias{item_apply}
-\title{(NOT IMPLEMENTED) Apply a function to every item}
+\title{Apply a function to every item}
 \usage{
 item_apply(obj, func)
 }
