@@ -89,6 +89,8 @@ plot(data_subset,
      vertex_label = data_subset$taxon_data$name)
 ```
 
+
+
 ```{r}
 subset(data, item_count < 200) %>%
   plot(vertex_size = item_count,
@@ -149,5 +151,26 @@ sum(part_a, part_b, part_c, part_d) %>%
        tree_label = name,
        layout = "fruchterman-reingold")
 
+```
+
+
+
+## Subsetting items 
+
+
+```{r}
+subset(data, , sample(nrow(data$item_data), 50)) %>%
+    plot(vertex_size = item_count,
+         vertex_color = item_count,
+         vertex_label = name)
+```
+
+
+
+```{r}
+subset(data, name == "Ascomycota", sample(nrow(data$item_data), 100)) %>%
+    plot(vertex_size = item_count,
+         vertex_color = item_count,
+         vertex_label = name)
 ```
 
