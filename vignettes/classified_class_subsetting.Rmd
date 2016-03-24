@@ -22,6 +22,7 @@ devtools::install_github("grunwaldlab/metacoder") # do this before trying to kni
 ```
 
 ```{r}
+library(magrittr)
 library(metacoder)
 library(taxa)
 ```
@@ -29,7 +30,7 @@ library(taxa)
 
 ## Pepare data
 
-```{r eval=FALSE}
+```{r}
 file_path <- system.file("extdata", "unite_general_release.fasta", package = "metacoder")
 sequences <- ape::read.FASTA(file_path)
 data <- extract_taxonomy(names(sequences),
@@ -72,38 +73,39 @@ plot(data,
 Note how this: 
 
 ```{r}
-plot(data[name == "Ascomycota", ],
-     vertex_size = item_count,
-     vertex_color = item_count,
-     vertex_label = name)
+subset(data, name == "Ascomycota") %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name)
 ```
 
 ... is the same as this:
 
 ```{r}
-data_subset <- data[data$taxon_data$name == "Ascomycota", ]
+data_subset <- subset(data, data$taxon_data$name == "Ascomycota")
 plot(data_subset,
-     vertex_size = taxon_data(data_subset)$item_count,
-     vertex_color = taxon_data(data_subset)$item_count,
+     vertex_size = taxon_data(data_subset, "item_count"),
+     vertex_color = taxon_data(data_subset, "item_count"),
      vertex_label = data_subset$taxon_data$name)
 ```
 
 
-The `[[` currently corresponds to a more restrictive type of subsetting, in which the parents and children of taxa are not automatically preserved.
+You can also choose wether the parents and children of taxa are preserved.
 
 ```{r}
-plot(data[[item_count > 5, ]],
-     vertex_size = item_count,
-     vertex_color = item_count,
-     vertex_label = name)
+subset(data, item_count > 5, subtaxa = FALSE, supertaxa = FALSE) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name)
 ```
 
 ```{r}
-plot(data[[item_count < 200, ]],
-     vertex_size = item_count,
-     vertex_color = item_count,
-     vertex_label = name,
-     layout = "fruchterman-reingold")
+subset(data, item_count < 200, subtaxa = FALSE, supertaxa = FALSE) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name,
+       tree_label = name,
+       layout = "fruchterman-reingold")
 ```
 
 However, it is still not working right as you might expect. 
