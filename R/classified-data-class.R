@@ -152,16 +152,15 @@ subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE,
   }
   new_taxa <- unique(new_taxa)
 
-  new_items <- item_id[item_id %in% new_taxa] #temp
+  # new_items <- item_id[item_id %in% new_taxa] #temp
 
   classified(taxon_id = new_taxa,
              parent_id =  x$parent_id[new_taxa],
-             item_taxon_id = new_items,
+             item_taxon_id = item_id[item_id %in% new_taxa],
              taxon_data = x$taxon_data[new_taxa, , drop = FALSE],
-             item_data = x$item_data[new_items, , drop = FALSE],
+             item_data = x$item_data[item_id %in% new_taxa, , drop = FALSE],
              taxon_funcs = x$taxon_funcs,
              item_funcs = x$item_funcs)
-
 }
 
 
