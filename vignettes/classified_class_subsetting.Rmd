@@ -116,11 +116,10 @@ I think the solution is to transfer the items of eliminated children to their no
 
 
 ```{r}
-data_subset <- subset(data, data$taxon_data$name == "Agaricales", supertaxa = TRUE)
-plot(data_subset,
-     vertex_size = taxon_data(data_subset, "item_count"),
-     vertex_color = taxon_data(data_subset, "item_count"),
-     vertex_label = data_subset$taxon_data$name)
+subset(data, name == "Agaricales", supertaxa = TRUE) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name)
 ```
 
 
@@ -129,11 +128,26 @@ plot(data_subset,
 ```{r}
 part_a <- subset(data, name == "Agaricales")
 part_b <- subset(data, name == "Helotiales")
-sum(part_a, part_b) %>%
+part_c <- subset(data, name == "Pleosporales")
+sum(part_a, part_b, part_c) %>%
   plot(vertex_size = item_count,
        vertex_color = item_count,
        vertex_label = name,
        tree_label = name,
        layout = "fruchterman-reingold")
+```
+
+Note that if the content of the parts summed overlap, this does not work yet. 
+We might need to have more formal item ids to make this work..
+
+```{r, eval = FALSE}
+part_d <- subset(data, name == "Strophariaceae")
+sum(part_a, part_b, part_c, part_d) %>%
+  plot(vertex_size = item_count,
+       vertex_color = item_count,
+       vertex_label = name,
+       tree_label = name,
+       layout = "fruchterman-reingold")
+
 ```
 
