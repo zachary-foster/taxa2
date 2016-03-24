@@ -208,7 +208,7 @@ taxon_data.classified <- function(obj,
   data <- cbind(data.frame(taxon_id = obj$taxon_id, parent_id = obj$parent_id),
                 obj$taxon_data)
   # Remove any user-defined columns not specified
-  data <- data[ , colnames(data) %in% subset, drop = drop]
+  data <- data[ , colnames(data) %in% subset, drop = FALSE]
   # Check if any of the column-generating functions are needed
   functions <- obj$taxon_funcs[names(obj$taxon_funcs) %in% subset]
   # Apply column-generating functions and append to output
@@ -218,7 +218,7 @@ taxon_data.classified <- function(obj,
     data <- cbind(data, as.data.frame(calculated_data))
   }
   # Reorder output to match order of subset
-  data <- data[ , subset]
+  data <- data[ , subset, drop = drop]
   return(data)
 }
 
