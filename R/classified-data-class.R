@@ -205,10 +205,7 @@ subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALS
 #' @return A \code{data.frame} or \code{vector} with rows corresponding to taxa in input
 #'
 #' @export
-taxon_data <- function(obj,
-                       subset = c(colnames(obj$taxon_data), names(obj$taxon_funcs)),
-                       calculated_cols = TRUE,
-                       drop = TRUE) {
+taxon_data <- function(obj, ...) {
   UseMethod("taxon_data")
 }
 
