@@ -197,21 +197,31 @@ subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALS
 #' @param obj (\code{\link{classified}})
 #' @param calculated_cols (\code{logical} of length 1) If \code{TRUE}, return calculated columns using
 #' \code{\link{classified}$taxon_funcs}.
+#' @param subset (\code{character}) The names of columns, either user defined or generated using \code{taxon_funcs}.
+#' Default: All columns.
+#' @param drop (\code{logical} of length 1) If \code{TRUE}, if \code{subset} is a single column
+#' name, then a \code{vector} is returned instead of a \code{data.frame}
 #'
-#' @return \code{data.frame} with rows corresponding to taxa in input
+#' @return A \code{data.frame} or \code{vector} with rows corresponding to taxa in input
 #'
 #' @export
-taxon_data <- function(obj, calculated_cols = TRUE) {
+taxon_data <- function(obj,
+                       subset = c(colnames(obj$taxon_data), names(obj$taxon_funcs)),
+                       calculated_cols = TRUE,
+                       drop = TRUE) {
   UseMethod("taxon_data")
 }
 
 #' @export
 taxon_data.classified <- function(obj,
                                   subset = c(colnames(obj$taxon_data), names(obj$taxon_funcs)),
-                                  calculated_cols = TRUE) {
+                                  calculated_cols = TRUE,
+                                  drop = TRUE) {
   # Combine taxon id information and arbitrary user-defined data
   data <- cbind(data.frame(taxon_id = obj$taxon_id, parent_id = obj$parent_id),
                 obj$taxon_data)
+  # Remove any user-defined columns not specified
+  data <- data[ , colnames(data) %in% subset, drop = drop]
   # Check if any of the column-generating functions are needed
   functions <- obj$taxon_funcs[names(obj$taxon_funcs) %in% subset]
   # Apply column-generating functions and append to output
@@ -220,6 +230,8 @@ taxon_data.classified <- function(obj,
     names(calculated_data) <- names(functions)
     data <- cbind(data, as.data.frame(calculated_data))
   }
+  # Reorder output to match order of subset
+  data <- data[ , subset]
   return(data)
 }
 
@@ -389,7 +401,6 @@ count_items <- function(obj, taxon) {
 #'
 #' @export
 get_rank <- function(obj, taxon) {
-  print(taxon)
   super_taxa <- get_supertaxa(targets = taxon,
                               taxa = obj$taxon_id,
                               parents = obj$parent_id,
