@@ -225,6 +225,10 @@ taxon_data.classified <- function(obj,
                                   subset = taxon_data_colnames(obj),
                                   calculated_cols = TRUE,
                                   drop = TRUE) {
+  # Check that the user is making sense
+  if (calculated_cols == FALSE && any(subset %in% names(obj$taxon_funcs))) {
+    stop("Cannot use a calculated column when `calculated_cols = FALSE`.")
+  }
   # Combine taxon id information and arbitrary user-defined data
   data <- cbind(data.frame(taxon_id = obj$taxon_id, parent_id = obj$parent_id),
                 obj$taxon_data)
