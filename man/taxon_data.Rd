@@ -2,18 +2,24 @@
 % Please edit documentation in R/classified-data-class.R
 \name{taxon_data}
 \alias{taxon_data}
+\alias{taxon_data.classified}
 \title{Return taxon data from \code{\link{classified}}}
 \usage{
-taxon_data(obj, ...)
+taxon_data(...)
+
+\method{taxon_data}{classified}(obj, subset = taxon_data_colnames(obj),
+  calculated_cols = TRUE, drop = TRUE, ...)
 }
 \arguments{
-\item{obj}{(\code{\link{classified}})}
+\item{...}{Passed to \code{\link{taxon_data.classified}}}
 
-\item{calculated_cols}{(\code{logical} of length 1) If \code{TRUE}, return calculated columns using
-\code{\link{classified}$taxon_funcs}.}
+\item{obj}{(\code{\link{classified}})}
 
 \item{subset}{(\code{character}) The names of columns, either user defined or generated using \code{taxon_funcs}.
 Default: All columns.}
+
+\item{calculated_cols}{(\code{logical} of length 1) If \code{TRUE}, return calculated columns using
+\code{\link{classified}$taxon_funcs}.}
 
 \item{drop}{(\code{logical} of length 1) If \code{TRUE}, if \code{subset} is a single column
 name, then a \code{vector} is returned instead of a \code{data.frame}}

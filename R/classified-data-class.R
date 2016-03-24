@@ -85,72 +85,43 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
 }
 
 
-
-#' Create a restrictive subset of \code{\link{classified}}
-#'
-#' Create a subset of items classified by a taxonomy.
-#' Child and parent taxa of specified taxa are not preserved.
-#'
-#' @inheritParams subset_classified
-#'
-#' @return \code{\link{classified}}
-#'
-#' @export
-`[[.classified` <- function(...) {
-  subset_classified(..., subtaxa = FALSE, supertaxa = FALSE)
-}
-
-#' Create a inclusive subset of \code{\link{classified}}
-#'
-#' Create a subset of items classified by a taxonomy.
-#' Child and parent taxa of specified taxa are preserved.
-#'
-#' @inheritParams subset_classified
-#'
-#' @return \code{\link{classified}}
-#'
-#' @export
-`[.classified` <- function(...) {
-  subset_classified(...)
-}
-
-
 #' Create a inclusive subset of \code{\link{classified}}
 #'
 #' Create a subset of items classified by a taxonomy.
 #' Only unspecified taxa with no items or children with items are discarded.
 #'
-#' @param obj \code{\link{classified}}
+#' @param x \code{\link{classified}}
 #' @param taxon A key to filter the taxon data.frame rows on
 #' @param item A key to filter the item data.frame rows on
 #' @param subtaxa (\code{logical} of length 1) If \code{TRUE}, return subtaxa of specified taxa
 #' @param supertaxa (\code{logical} of length 1) If \code{TRUE}, return supertaxa of specified taxa
+#' @param ... not used
 #'
 #' @return \code{\link{classified}}
 #'
 #' @export
-subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALSE) {
+subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE, ...) {
   # non-standard argument evaluation
-  my_taxon_data <- taxon_data(obj)
+  my_taxon_data <- taxon_data(x)
   column_var_name <- colnames(my_taxon_data)
   unused_result <- lapply(column_var_name, function(x) assign(x, my_taxon_data[[x]], envir = parent.frame(2)))
 
   # Defaults
   if (missing(taxon) && missing(item)) {
-    return(obj)
+    return(x)
   }
   if (missing(taxon)) {
-    taxon_id <- obj$taxon_id
+    taxon_id <- x$taxon_id
   } else {
     taxon <- eval(substitute(taxon))
-    taxon_id <- obj$taxon_id[taxon]
+    taxon_id <- x$taxon_id[taxon]
   }
-  parent_id <- obj$parent_id[taxon_id]
+  parent_id <- x$parent_id[taxon_id]
   if (missing(item)) {
-    item_id <- obj$item_taxon_id
+    item_id <- x$item_taxon_id
   } else {
     item <- eval(substitute(item))
-    item_id <- obj$item_taxon_id[item]
+    item_id <- x$item_taxon_id[item]
   }
 
   new_taxa <- taxon_id
@@ -158,8 +129,8 @@ subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALS
   if (subtaxa) {
     new_taxa <- c(new_taxa,
                   get_subtaxa(targets = taxon_id,
-                              taxa = obj$taxon_id,
-                              parents = obj$parent_id,
+                              taxa = x$taxon_id,
+                              parents = x$parent_id,
                               recursive = TRUE,
                               simplify = TRUE))
   }
@@ -167,8 +138,8 @@ subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALS
   if (supertaxa) {
     new_taxa <- c(new_taxa,
                   get_supertaxa(targets = taxon_id,
-                                taxa = obj$taxon_id,
-                                parents = obj$parent_id,
+                                taxa = x$taxon_id,
+                                parents = x$parent_id,
                                 recursive = TRUE,
                                 simplify = TRUE,
                                 include_target = FALSE))
@@ -178,12 +149,12 @@ subset_classified <- function(obj, taxon, item, subtaxa = TRUE, supertaxa = FALS
   new_items <- item_id[item_id %in% new_taxa] #temp
 
   classified(taxon_id = new_taxa,
-             parent_id =  obj$parent_id[new_taxa],
+             parent_id =  x$parent_id[new_taxa],
              item_taxon_id = new_items,
-             taxon_data = obj$taxon_data[new_taxa, , drop = FALSE],
-             item_data = obj$item_data[new_items, , drop = FALSE],
-             taxon_funcs = obj$taxon_funcs,
-             item_funcs = obj$item_funcs)
+             taxon_data = x$taxon_data[new_taxa, , drop = FALSE],
+             item_data = x$item_data[new_items, , drop = FALSE],
+             taxon_funcs = x$taxon_funcs,
+             item_funcs = x$item_funcs)
 
 }
 
@@ -212,19 +183,23 @@ taxon_data_colnames <- function(obj) {
 #' Default: All columns.
 #' @param drop (\code{logical} of length 1) If \code{TRUE}, if \code{subset} is a single column
 #' name, then a \code{vector} is returned instead of a \code{data.frame}
+#' @param ... Passed to \code{\link{taxon_data.classified}}
 #'
 #' @return A \code{data.frame} or \code{vector} with rows corresponding to taxa in input
 #'
 #' @export
-taxon_data <- function(obj, ...) {
+#' @rdname taxon_data
+taxon_data <- function(...) {
   UseMethod("taxon_data")
 }
 
+#' @method taxon_data classified
 #' @export
+#' @rdname taxon_data
 taxon_data.classified <- function(obj,
                                   subset = taxon_data_colnames(obj),
                                   calculated_cols = TRUE,
-                                  drop = TRUE) {
+                                  drop = TRUE, ...) {
   # Check that the user is making sense
   if (calculated_cols == FALSE && any(subset %in% names(obj$taxon_funcs))) {
     stop("Cannot use a calculated column when `calculated_cols = FALSE`.")
