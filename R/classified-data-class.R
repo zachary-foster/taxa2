@@ -120,20 +120,23 @@ subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE,
   unused_result <- lapply(column_var_name, function(x) assign(x, my_taxon_data[[x]], envir = parent.frame(2)))
 
   # Defaults
-  if (missing(taxon) && missing(item)) {
-    return(x)
-  }
+#   if (missing(taxon) && missing(item)) {
+#     return(x)
+#   }
   if (missing(taxon)) {
     taxon_id <- x$taxon_id
   } else {
-    taxon <- eval(substitute(taxon))
-    taxon_id <- x$taxon_id[taxon]
+    parsed_taxon <- tryCatch(suppressWarnings(eval(taxon)), error = function(x) NULL)
+    if (is.null(parsed_taxon)) { parsed_taxon <- eval(substitute(taxon)) }
+    taxon_id <- x$taxon_id[parsed_taxon]
   }
   parent_id <- x$parent_id[taxon_id]
   if (missing(item)) {
     item_id <- seq_along(x$item_taxon_id)
   } else {
-    item_id <- eval(substitute(item))
+    parsed_item_id <- tryCatch(suppressWarnings(eval(item)), error = function(x) NULL)
+    if (is.null(parsed_item_id)) { parsed_item_id <- eval(substitute(item)) }
+    item_id <- parsed_item_id
   }
 
   new_taxa <- taxon_id
@@ -176,7 +179,7 @@ subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE,
     taxa_with_items <- taxon_data(output, "item_count") > 0
     output$taxon_id <- output$taxon_id[taxa_with_items]
     output$parent_id <- output$parent_id[taxa_with_items]
-    output$taxon_data <- output$taxon_data[taxa_with_items, ]
+    output$taxon_data <- output$taxon_data[taxa_with_items, , drop = FALSE]
   }
   return(output)
 }
