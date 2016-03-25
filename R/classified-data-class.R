@@ -39,6 +39,12 @@ classified <- function(taxon_id, parent_id, item_taxon_id,
   if (is.null(item_data)) {
     item_data <- as.data.frame(matrix(numeric(0), nrow = length(item_taxon_id)))
   }
+  if (class(taxon_data) != "data.frame") {
+    stop("'taxon_data' must a data.frame")
+  }
+  if (class(item_data) != "data.frame") {
+    stop("'item_data' must a data.frame")
+  }
   if (nrow(taxon_data) != length(taxon_id)) {
     stop("'taxon_data' must have the same number of rows as 'taxon_id'")
   }
