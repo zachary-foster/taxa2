@@ -101,12 +101,13 @@ reserved_col_names <- function() {
 #' @param item A key to filter the item data.frame rows on
 #' @param subtaxa (\code{logical} of length 1) If \code{TRUE}, return subtaxa of specified taxa
 #' @param supertaxa (\code{logical} of length 1) If \code{TRUE}, return supertaxa of specified taxa
+#' @param itemless (\code{logical} of length 1) If \code{TRUE}, return taxa even if they have no items assigned to them
 #' @param ... not used
 #'
 #' @return \code{\link{classified}}
 #'
 #' @export
-subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE, ...) {
+subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE, itemless = TRUE, ...) {
   # non-standard argument evaluation
   my_taxon_data <- taxon_data(x)
   column_var_name <- colnames(my_taxon_data)
@@ -151,16 +152,27 @@ subset.classified <- function(x, taxon, item, subtaxa = TRUE, supertaxa = FALSE,
   }
   new_taxa <- unique(new_taxa)
 
-  # new_items <- item_id[item_id %in% new_taxa] #temp
   inluded_items <- item_id[x$item_taxon_id[item_id] %in% new_taxa]
 
-  classified(taxon_id = new_taxa,
-             parent_id =  x$parent_id[new_taxa],
-             item_taxon_id = x$item_taxon_id[inluded_items],
-             taxon_data = x$taxon_data[new_taxa, , drop = FALSE],
-             item_data = x$item_data[inluded_items, , drop = FALSE],
-             taxon_funcs = x$taxon_funcs,
-             item_funcs = x$item_funcs)
+
+
+  # Make output
+  output <- classified(taxon_id = new_taxa,
+                       parent_id =  x$parent_id[new_taxa],
+                       item_taxon_id = x$item_taxon_id[inluded_items],
+                       taxon_data = x$taxon_data[new_taxa, , drop = FALSE],
+                       item_data = x$item_data[inluded_items, , drop = FALSE],
+                       taxon_funcs = x$taxon_funcs,
+                       item_funcs = x$item_funcs)
+
+  # Remove taxa with no items
+  if (! itemless) {
+    taxa_with_items <- taxon_data(output, "item_count") > 0
+    output$taxon_id <- output$taxon_id[taxa_with_items]
+    output$parent_id <- output$parent_id[taxa_with_items]
+    output$taxon_data <- output$taxon_data[taxa_with_items, ]
+  }
+  return(output)
 }
 
 

@@ -165,10 +165,20 @@ subset(data, , sample(nrow(data$item_data), 50)) %>%
          vertex_label = name)
 ```
 
-
+By default, even taxa with no items are preserved.
 
 ```{r}
 subset(data, name == "Ascomycota", sample(nrow(data$item_data), 100)) %>%
+    plot(vertex_size = item_count,
+         vertex_color = item_count,
+         vertex_label = name)
+```
+
+
+But these can be removed using the `itemless` option.
+
+```{r}
+subset(data, name == "Ascomycota", sample(nrow(data$item_data), 100), itemless = FALSE) %>%
     plot(vertex_size = item_count,
          vertex_color = item_count,
          vertex_label = name)

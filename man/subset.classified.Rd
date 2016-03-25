@@ -5,7 +5,7 @@
 \title{Create a inclusive subset of \code{\link{classified}}}
 \usage{
 \method{subset}{classified}(x, taxon, item, subtaxa = TRUE,
-  supertaxa = FALSE, ...)
+  supertaxa = FALSE, itemless = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{\link{classified}}}
@@ -17,6 +17,8 @@
 \item{subtaxa}{(\code{logical} of length 1) If \code{TRUE}, return subtaxa of specified taxa}
 
 \item{supertaxa}{(\code{logical} of length 1) If \code{TRUE}, return supertaxa of specified taxa}
+
+\item{itemless}{(\code{logical} of length 1) If \code{TRUE}, return taxa even if they have no items assigned to them}
 
 \item{...}{not used}
 }
