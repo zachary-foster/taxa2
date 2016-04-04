@@ -399,7 +399,7 @@ split_by_taxon.classified <- function(obj) {
                parent_id =  obj$parent_id[new_taxa_id],
                item_taxon_id = new_item_id,
                taxon_data = obj$taxon_data[new_taxa_id, , drop = FALSE],
-               item_data = obj$item_data[new_item_id, , drop = FALSE],
+               item_data = obj$item_data[taxon_item_ids, , drop = FALSE],
                taxon_funcs = obj$taxon_funcs,
                item_funcs = obj$item_funcs)
   }
