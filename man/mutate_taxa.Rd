@@ -23,7 +23,7 @@ appears in \code{taxon_data(.data)} can be used as if it was a vector on its own
 \examples{
 \dontrun{
 # Add one or more taxon columns
-mutate_taxa(unite_ex_data_3, x = 1, y = x+2)
+mutate_taxa(unite_ex_data, x = 1, y = x+2)
 }
 
 }

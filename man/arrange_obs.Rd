@@ -22,9 +22,9 @@ appears in \code{obs_data(.data)} can be used as if it was a vector on its own. 
 \examples{
 \dontrun{
 # Sort observations by sequence name alphabetically
-arrange_obs(unite_ex_data_3, seq_name)
+arrange_obs(unite_ex_data, seq_name)
 # Reverse order of sort
-arrange_obs(unite_ex_data_3, desc(seq_name))
+arrange_obs(unite_ex_data, desc(seq_name))
 }
 }
 \seealso{

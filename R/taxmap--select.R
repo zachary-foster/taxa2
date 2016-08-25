@@ -19,7 +19,7 @@
 #' @examples
 #' \dontrun{
 #' # subset taxon columns
-#' select_taxa(unite_ex_data_3, name)
+#' select_taxa(unite_ex_data, name)
 #' }
 #'
 #' @export
@@ -51,7 +51,7 @@ select_taxa <- function(.data, ...) {
 #' @examples
 #' \dontrun{
 #' # subset observation columns
-#' select_obs(unite_ex_data_3, other_id, seq_id)
+#' select_obs(unite_ex_data, other_id, seq_id)
 #' }
 #'
 #' @export

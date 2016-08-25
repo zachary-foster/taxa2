@@ -48,9 +48,9 @@ See \link[dplyr]{sample_n} for the inspiration for this function.
 \examples{
 \dontrun{
 # subsample taxa, preserving shared supertaxa
-sample_n_taxa(unite_ex_data_3, 100, supertaxa = TRUE)
+sample_n_taxa(unite_ex_data, 100, supertaxa = TRUE)
 # subsample taxa using weights, preserving subtaxa
-sample_n_taxa(unite_ex_data_3, 10, subtaxa = TRUE,
+sample_n_taxa(unite_ex_data, 10, subtaxa = TRUE,
               taxon_weight = ifelse(unite_rank == "g" & n_subtaxa > 3, 1, 0))
 }
 

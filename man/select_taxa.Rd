@@ -27,7 +27,7 @@ used as if it was a vector on its own. See \code{\link[dplyr]{select}} for more 
 \examples{
 \dontrun{
 # subset taxon columns
-select_taxa(unite_ex_data_3, name)
+select_taxa(unite_ex_data, name)
 }
 
 }

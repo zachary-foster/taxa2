@@ -15,7 +15,7 @@
 #' @examples
 #' \dontrun{
 #' # Add one or more taxon columns
-#' mutate_taxa(unite_ex_data_3, x = 1, y = x+2)
+#' mutate_taxa(unite_ex_data, x = 1, y = x+2)
 #' }
 #'
 #' @export
@@ -49,7 +49,7 @@ mutate_taxa <- function(.data, ...) {
 #' @examples
 #' \dontrun{
 #' # Add one or more observation columns
-#' mutate_obs(unite_ex_data_3, x = 1, y = x+2)
+#' mutate_obs(unite_ex_data, x = 1, y = x+2)
 #' }
 #'
 #' @export
@@ -82,7 +82,7 @@ mutate_obs <- function(.data, ...) {
 #' @examples
 #' \dontrun{
 #' # Replace all taxon columns with new columns
-#' transmute_taxa(unite_ex_data_3, x = 1, y = x+2)
+#' transmute_taxa(unite_ex_data, x = 1, y = x+2)
 #' }
 #'
 #' @export
@@ -116,7 +116,7 @@ transmute_taxa <- function(.data, ...) {
 #' @examples
 #' \dontrun{
 #' # Replace all observation columns with new columns
-#' transmute_obs(unite_ex_data_3, x = 1, y = x+2)
+#' transmute_obs(unite_ex_data, x = 1, y = x+2)
 #' }
 #'
 #' @export

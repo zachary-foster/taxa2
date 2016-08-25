@@ -27,7 +27,7 @@ used as if it was a vector on its own. See \code{\link[dplyr]{select}} for more 
 \examples{
 \dontrun{
 # subset observation columns
-select_obs(unite_ex_data_3, other_id, seq_id)
+select_obs(unite_ex_data, other_id, seq_id)
 }
 
 }

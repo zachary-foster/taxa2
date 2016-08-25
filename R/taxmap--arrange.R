@@ -14,9 +14,9 @@
 #' @examples
 #' \dontrun{
 #' # Sort by taxon name alphabetically
-#' arrange_taxa(unite_ex_data_3, name)
+#' arrange_taxa(unite_ex_data, name)
 #' # Reverse order of sort
-#' arrange_taxa(unite_ex_data_3, desc(name))
+#' arrange_taxa(unite_ex_data, desc(name))
 #' }
 #'
 #' @export
@@ -45,9 +45,9 @@ arrange_taxa <- function(.data, ...) {
 #' @examples
 #' \dontrun{
 #' # Sort observations by sequence name alphabetically
-#' arrange_obs(unite_ex_data_3, seq_name)
+#' arrange_obs(unite_ex_data, seq_name)
 #' # Reverse order of sort
-#' arrange_obs(unite_ex_data_3, desc(seq_name))
+#' arrange_obs(unite_ex_data, desc(seq_name))
 #' }
 #' @export
 arrange_obs <- function(.data, ...) {

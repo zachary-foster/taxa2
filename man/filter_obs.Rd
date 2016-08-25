@@ -31,9 +31,9 @@ appears in \code{obs_data(.data)} can be used as if it was a vector on its own. 
 \examples{
 \dontrun{
 # Filter by sequence name, but preserve all taxa
-filter_obs(unite_ex_data_3, grepl("Lachnum", seq_name))
+filter_obs(unite_ex_data, grepl("Lachnum", seq_name))
 # Filter by sequence name and only keep taxa with sequences that pass the filter
-filter_obs(unite_ex_data_3, grepl("Lachnum", seq_name), unobserved = FALSE)
+filter_obs(unite_ex_data, grepl("Lachnum", seq_name), unobserved = FALSE)
 }
 
 }

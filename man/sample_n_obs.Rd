@@ -50,13 +50,13 @@ See \link[dplyr]{sample_n} for the inspiration for this function.
 \examples{
 \dontrun{
 # Subsample without replacement, keeping all taxa
-sample_n_obs(unite_ex_data_3, 100)
+sample_n_obs(unite_ex_data, 100)
 # Subsample without replacement and remove unsampled taxa
-sample_n_obs(unite_ex_data_3, 100, unobserved = FALSE)
+sample_n_obs(unite_ex_data, 100, unobserved = FALSE)
 # Subsample with taxon weight
-sample_n_obs(unite_ex_data_3, 100, unobserved = FALSE, taxon_weight = 1 / n_obs)
+sample_n_obs(unite_ex_data, 100, unobserved = FALSE, taxon_weight = 1 / n_obs)
 # Sample with replacement
-sample_n_obs(unite_ex_data_3, 10000, replace = TRUE)
+sample_n_obs(unite_ex_data, 10000, replace = TRUE)
 }
 
 }

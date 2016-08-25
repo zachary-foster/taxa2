@@ -35,13 +35,13 @@
 #' @examples
 #' \dontrun{
 #' # Subsample without replacement, keeping all taxa
-#' sample_n_obs(unite_ex_data_3, 100)
+#' sample_n_obs(unite_ex_data, 100)
 #' # Subsample without replacement and remove unsampled taxa
-#' sample_n_obs(unite_ex_data_3, 100, unobserved = FALSE)
+#' sample_n_obs(unite_ex_data, 100, unobserved = FALSE)
 #' # Subsample with taxon weight
-#' sample_n_obs(unite_ex_data_3, 100, unobserved = FALSE, taxon_weight = 1 / n_obs)
+#' sample_n_obs(unite_ex_data, 100, unobserved = FALSE, taxon_weight = 1 / n_obs)
 #' # Sample with replacement
-#' sample_n_obs(unite_ex_data_3, 10000, replace = TRUE)
+#' sample_n_obs(unite_ex_data, 10000, replace = TRUE)
 #' }
 #'
 #' @export
@@ -96,13 +96,13 @@ sample_n_obs <- function(.data, size, replace = FALSE, taxon_weight = NULL, obs_
 #' @examples
 #' \dontrun{
 #' # Subsample without replacement, keeping all taxa
-#' sample_frac_obs(unite_ex_data_3, 0.1)
+#' sample_frac_obs(unite_ex_data, 0.1)
 #' # Subsample without replacement and remove unsampled taxa
-#' sample_frac_obs(unite_ex_data_3, 0.1, unobserved = FALSE)
+#' sample_frac_obs(unite_ex_data, 0.1, unobserved = FALSE)
 #' # Subsample with taxon weight
-#' sample_frac_obs(unite_ex_data_3, 0.1, unobserved = FALSE, taxon_weight = 1 / n_obs)
+#' sample_frac_obs(unite_ex_data, 0.1, unobserved = FALSE, taxon_weight = 1 / n_obs)
 #' # Sample with replacement
-#' sample_frac_obs(unite_ex_data_3, 10, replace = TRUE)
+#' sample_frac_obs(unite_ex_data, 10, replace = TRUE)
 #' }
 #'
 #' @export
@@ -150,9 +150,9 @@ sample_frac_obs <- function(.data, size = 1, replace = FALSE, taxon_weight = NUL
 #' @examples
 #' \dontrun{
 #' # subsample taxa, preserving shared supertaxa
-#' sample_n_taxa(unite_ex_data_3, 100, supertaxa = TRUE)
+#' sample_n_taxa(unite_ex_data, 100, supertaxa = TRUE)
 #' # subsample taxa using weights, preserving subtaxa
-#' sample_n_taxa(unite_ex_data_3, 10, subtaxa = TRUE,
+#' sample_n_taxa(unite_ex_data, 10, subtaxa = TRUE,
 #'               taxon_weight = ifelse(unite_rank == "g" & n_subtaxa > 3, 1, 0))
 #' }
 #'
@@ -205,9 +205,9 @@ sample_n_taxa <- function(.data, size, taxon_weight = NULL, obs_weight = NULL,
 #' @examples
 #' \dontrun{
 #' # subsample taxa, preserving shared supertaxa
-#' sample_frac_taxa(unite_ex_data_3, 0.1, supertaxa = TRUE)
+#' sample_frac_taxa(unite_ex_data, 0.1, supertaxa = TRUE)
 #' # subsample taxa using weights, preserving subtaxa
-#' sample_frac_taxa(unite_ex_data_3, 0.01, subtaxa = TRUE,
+#' sample_frac_taxa(unite_ex_data, 0.01, subtaxa = TRUE,
 #'                  taxon_weight = ifelse(unite_rank == "g" & n_subtaxa > 3, 1, 0))
 #' }
 #'

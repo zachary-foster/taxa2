@@ -50,13 +50,13 @@ See \link[dplyr]{sample_frac} for the inspiration for this function.
 \examples{
 \dontrun{
 # Subsample without replacement, keeping all taxa
-sample_frac_obs(unite_ex_data_3, 0.1)
+sample_frac_obs(unite_ex_data, 0.1)
 # Subsample without replacement and remove unsampled taxa
-sample_frac_obs(unite_ex_data_3, 0.1, unobserved = FALSE)
+sample_frac_obs(unite_ex_data, 0.1, unobserved = FALSE)
 # Subsample with taxon weight
-sample_frac_obs(unite_ex_data_3, 0.1, unobserved = FALSE, taxon_weight = 1 / n_obs)
+sample_frac_obs(unite_ex_data, 0.1, unobserved = FALSE, taxon_weight = 1 / n_obs)
 # Sample with replacement
-sample_frac_obs(unite_ex_data_3, 10, replace = TRUE)
+sample_frac_obs(unite_ex_data, 10, replace = TRUE)
 }
 
 }

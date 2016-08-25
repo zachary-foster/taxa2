@@ -22,9 +22,9 @@ appears in \code{taxon_data(.data)} can be used as if it was a vector on its own
 \examples{
 \dontrun{
 # Sort by taxon name alphabetically
-arrange_taxa(unite_ex_data_3, name)
+arrange_taxa(unite_ex_data, name)
 # Reverse order of sort
-arrange_taxa(unite_ex_data_3, desc(name))
+arrange_taxa(unite_ex_data, desc(name))
 }
 
 }

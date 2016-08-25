@@ -23,7 +23,7 @@ appears in \code{obs_data(.data)} can be used as if it was a vector on its own. 
 \examples{
 \dontrun{
 # Replace all observation columns with new columns
-transmute_obs(unite_ex_data_3, x = 1, y = x+2)
+transmute_obs(unite_ex_data, x = 1, y = x+2)
 }
 
 }

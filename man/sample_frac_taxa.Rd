@@ -48,9 +48,9 @@ inspiration for this function.
 \examples{
 \dontrun{
 # subsample taxa, preserving shared supertaxa
-sample_frac_taxa(unite_ex_data_3, 0.1, supertaxa = TRUE)
+sample_frac_taxa(unite_ex_data, 0.1, supertaxa = TRUE)
 # subsample taxa using weights, preserving subtaxa
-sample_frac_taxa(unite_ex_data_3, 0.01, subtaxa = TRUE,
+sample_frac_taxa(unite_ex_data, 0.01, subtaxa = TRUE,
                  taxon_weight = ifelse(unite_rank == "g" & n_subtaxa > 3, 1, 0))
 }
 
