@@ -1,6 +1,13 @@
 language: r
+r:
+  - release
+  - devel
+
 sudo: false
 cache: packages
+
+after_success:
+  - Rscript -e 'library(covr);codecov()'
 
 notifications:
   email:
