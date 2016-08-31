@@ -34,7 +34,7 @@
 #' (t2 <- taxon(nm2, gr2))
 #'
 #' # a taxa object
-#' t3 <- taxa(t1, t2)
+#' t3 <- taxons(t1, t2)
 #' t3$taxa
 #' t3$taxa[[1]]
 #' t3$taxa[[2]]
@@ -72,7 +72,7 @@ Taxon <- R6::R6Class(
 
 #' @export
 #' @rdname taxon
-taxa <- function(...) Taxa$new(...)
+taxons <- function(...) Taxa$new(...)
 
 Taxa <- R6::R6Class(
   "Taxa",

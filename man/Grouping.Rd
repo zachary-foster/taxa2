@@ -83,9 +83,9 @@ res$as_df()
 res$as_df(wide = TRUE)
 
 # data.frame
-library("taxize")
-x <- classification("Bison bison", db = "gbif")
-gg <- grouping(x[[1]])
+data(bison_bison)
+bison_bison
+gg <- grouping(bison_bison)
 gg$names_non_null()
 gg
 }
