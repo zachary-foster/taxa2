@@ -38,8 +38,8 @@
 #' )
 #' hier2 <- hierarchy(c, b, a)
 #'
-#' hierarchies_(hier1, hier2)
-hierarchies_ <- function(...) {
+#' hierarchies(hier1, hier2)
+hierarchies <- function(...) {
   structure(list(...), class = "hierarchies")
 }
 
