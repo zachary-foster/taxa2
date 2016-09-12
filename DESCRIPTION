@@ -2,9 +2,11 @@ Package: taxa
 Type: Package
 Title: Taxonomic Classes for R
 Description: Taxonomic Classes for R.
-Version: 0.0.2.9000
-Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
-    email = "myrmecocystus@gmail.com"))
+Version: 0.0.2.9046
+Authors@R: c(
+    person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus@gmail.com"),
+    person("Zachary", "Foster", role = "aut", email = "zacharyfoster1989@gmail.com")
+    )
 License: MIT + file LICENSE
 URL: https://github.com/ropenscilabs/taxa
 BugReports: https://github.com/ropenscilabs/taxa/issues
@@ -16,7 +18,10 @@ Imports:
     magrittr,
     tibble
 Suggests:
-    testthat
+    testthat,
+    rmarkdown (>= 0.9.6)
 Depends: R (>= 3.0.2)
+VignetteBuilder: knitr
 RoxygenNote: 5.0.1
-LazyData: true
+LazyLoad: yes
+LazyData: yes

@@ -1,10 +1,10 @@
-#' TaxonName class
+#' TaxonRank class
 #'
 #' @export
-#' @param name (character) a taxonomic name. required
+#' @param name (character) rank name. required
 #' @param database (character) database class object, optional
 #'
-#' @return An \code{R6Class} object of class \code{TaxonName}
+#' @return An \code{R6Class} object of class \code{TaxonRank}
 #'
 #' @section Methods:
 #' \itemize{
@@ -12,30 +12,26 @@
 #' }
 #'
 #' @examples
-#' (poa <- taxon_name("Poa"))
-#' (undef <- taxon_name("undefined"))
-#' (sp1 <- taxon_name("species 1"))
-#' (poa_annua <- taxon_name("Poa annua"))
-#' (x <- taxon_name("Poa annua L."))
+#' taxon_rank("species")
+#' taxon_rank("genus")
+#' taxon_rank("kingdom")
+#' # taxon_rank("stuff")  # should fail
 #'
-#' x$name
-#' x$database
-#'
-#' (x <- taxon_name(
-#'   "Poa annua",
+#' (x <- taxon_rank(
+#'   "species",
 #'   database_list$ncbi
 #' ))
 #' x$rank
 #' x$database
-taxon_name <- function(name, database = NULL) {
-  TaxonName$new(
+taxon_rank <- function(name, database = NULL) {
+  TaxonRank$new(
     name = name,
     database = database
   )
 }
 
-TaxonName <- R6::R6Class(
-  "TaxonName",
+TaxonRank <- R6::R6Class(
+  "TaxonRank",
   public = list(
     name = NULL,
     database = NULL,
@@ -48,7 +44,7 @@ TaxonName <- R6::R6Class(
     },
 
     print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonName> %s\n", self$name)))
+      cat(paste0(indent, sprintf("<TaxonRank> %s\n", self$name)))
       cat(paste0(indent, paste0("  database: ", self$database$name %||% "none", "\n")))
       invisible(self)
     }
