@@ -7,11 +7,11 @@
 taxmap(taxon_ids, supertaxon_ids, taxa = taxon_ids,
   obs_taxon_ids = numeric(0), taxon_data = NULL, obs_data = NULL,
   taxon_funcs = list(n_obs = n_obs, n_obs_1 = n_obs_1, n_supertaxa =
-  n_supertaxa, n_subtaxa = n_subtaxa, n_subtaxa_1 = n_subtaxa_1, hierarchies =
-  hierarchies), obs_funcs = list())
+  n_supertaxa, n_subtaxa = n_subtaxa, n_subtaxa_1 = n_subtaxa_1, classifications
+  = classifications), obs_funcs = list())
 }
 \arguments{
-\item{taxon_ids}{(\code{character}) 
+\item{taxon_ids}{(\code{character})
 These are unique identifiers for taxa.
 They will be coerced into characters.}
 

@@ -15,11 +15,11 @@ n_subtaxa_1(obj, subset = 1:nrow(obj$taxon_data))
 \code{numeric}
 }
 \description{
-Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}, not including subtaxa of subtaxa etc. 
+Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}, not including subtaxa of subtaxa etc.
 This does not include subtaxa assigned to subtaxa.
 }
 \seealso{
-Other taxon_funcs: \code{\link{hierarchies}},
+Other taxon_funcs: \code{\link{classifications}},
   \code{\link{n_obs_1}}, \code{\link{n_obs}},
   \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}}
 }
