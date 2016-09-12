@@ -2,7 +2,7 @@
 #'
 #' Create an instance of \code{taxmap} containing observations taxmap by a taxonomy.
 #'
-#' @param taxon_ids (\code{character}) 
+#' @param taxon_ids (\code{character})
 #' These are unique identifiers for taxa.
 #' They will be coerced into characters.
 #' @param supertaxon_ids (\code{character} OR (\code{numeric}))
@@ -28,7 +28,7 @@
 #' @param obs_funcs (\code{list} of named \code{function}s)
 #' These the values produced by these functions will be accessible as a column in \code{obs_data}.
 #' The first parameter of each function should be a single \code{taxmap} object.
-#' 
+#'
 #' @return An object of type \code{taxmap}
 #'
 #' @export
@@ -41,7 +41,7 @@ taxmap <- function(taxon_ids, supertaxon_ids,
                                           n_supertaxa = n_supertaxa,
                                           n_subtaxa = n_subtaxa,
                                           n_subtaxa_1 = n_subtaxa_1,
-                                          hierarchies = hierarchies),
+                                          classifications = classifications),
                        obs_funcs = list()) {
   # Validate `taxon_ids` ---------------------------------------------------------------------------
   # Coerce into character vector
@@ -54,7 +54,7 @@ taxmap <- function(taxon_ids, supertaxon_ids,
   if (length(unique(taxon_ids)) != length(taxon_ids)) { stop("'taxon_ids' must be unique") }
   # Name `taxa` with taxon_ids
   taxa <- stats::setNames(taxa, taxon_ids)
-  
+
   # Validate `supertaxon_ids` -----------------------------------------------------------------------------
   # Check that `supertaxon_ids` is the same length as `taxa`
   if (length(taxa) != length(supertaxon_ids)) {
@@ -63,9 +63,9 @@ taxmap <- function(taxon_ids, supertaxon_ids,
   # Convert indexes to values of `taxon_ids`
   if (is.numeric(supertaxon_ids)) {
     supertaxon_ids <- taxon_ids[supertaxon_ids]
-  } 
+  }
   supertaxon_ids[! supertaxon_ids %in% taxon_ids] <- NA
-  
+
   # Validate `obs_taxon_ids` ---------------------------------------------------------------------------
   # Check that all `obs_taxon_ids` are in `taxon_ids`
   if (is.character(obs_taxon_ids)) {
@@ -73,12 +73,12 @@ taxmap <- function(taxon_ids, supertaxon_ids,
     if (any(is.na(obs_taxon_ids))) {
       warning("Some `obs_taxon_ids` could not be found in `taxon_ids`. They will be `NA`. ")
     }
-  } 
+  }
   # Convert indexes to values of `taxon_ids`
   if (is.numeric(obs_taxon_ids)) {
     obs_taxon_ids <- taxon_ids[obs_taxon_ids]
   }
-  
+
   # Validate `taxon_data` and `obs_data` ----------------------------------------------------------
   # Check that the tables are structured correctly
   validate_table <- function(data, ids, ...) {
@@ -96,10 +96,10 @@ taxmap <- function(taxon_ids, supertaxon_ids,
                    paste0(reserved_col_names, collapse = ", ")))
       }
       result <- dplyr::bind_cols(result, data)
-    } 
+    }
     return(result)
   }
-  taxon_data <- validate_table(taxon_data, taxon_ids, taxon_ids = taxon_ids, 
+  taxon_data <- validate_table(taxon_data, taxon_ids, taxon_ids = taxon_ids,
                               supertaxon_ids = supertaxon_ids)
   obs_data <- validate_table(obs_data, obs_taxon_ids, obs_taxon_ids = obs_taxon_ids)
   # Check that tables do not share column names
@@ -115,7 +115,7 @@ taxmap <- function(taxon_ids, supertaxon_ids,
       stop(paste("'", col_funcs_name, "' must all be named functions"))
     }
   }
-  validate_col_funcs(taxon_funcs, "taxon_funcs") 
+  validate_col_funcs(taxon_funcs, "taxon_funcs")
   validate_col_funcs(obs_funcs, "obs_funcs")
 
   # Make object
@@ -130,40 +130,40 @@ taxmap <- function(taxon_ids, supertaxon_ids,
 
 
 #' Print a \code{\link{taxmap}} object
-#' 
+#'
 #' Print a \code{\link{taxmap}} object
-#' 
+#'
 #' @param x
 #' object to print
 #' @param max_rows (\code{integer} of length 1)
-#' The maximum number of rows to print in tables. 
+#' The maximum number of rows to print in tables.
 #' @param ... Not used
-#' 
+#'
 #' @export
 print.taxmap <- function(x, max_rows = 7, ...) {
   loadNamespace("dplyr") # used for print methods
   max_chars <- getOption("width") - 12
-  
+
    print_header <- function(var_name) {
      target_width <- max_chars
      spacer_count <- (target_width - nchar(var_name) - 2) / 2
      spacer <- paste0(rep("-", spacer_count), collapse = "")
      cat(paste0("\n", spacer, " ", var_name, " ", spacer, "\n"))
    }
-   
+
    print_chars <- function(chars) {
-     
+
      interleave <- function(v1,v2) { # https://stat.ethz.ch/pipermail/r-help/2006-March/101023.html
        ord1 <- 2*(1:length(v1))-1
        ord2 <- 2*(1:length(v2))
        c(v1,v2)[order(c(ord1,ord2))]
      }
-     
+
      q = "'"
-     interleaved <- interleave(chars[1:(length(chars) / 2)], 
+     interleaved <- interleave(chars[1:(length(chars) / 2)],
                                rev(chars[(length(chars) / 2 + 1):length(chars)]))
      is_greater_than_max <- cumsum(nchar(interleaved) + 2) + 10 > max_chars
-     if (all(! is_greater_than_max)) { 
+     if (all(! is_greater_than_max)) {
        max_printed <- length(chars)
      } else {
        max_printed <- which.max(is_greater_than_max)
@@ -180,8 +180,8 @@ print.taxmap <- function(x, max_rows = 7, ...) {
      }
      cat(output)
    }
-  
-  
+
+
   cat(paste0('`taxmap` object with data for ', nrow(x$taxon_data),
              ' taxa and ', nrow(x$obs_data), ' observations:\n'))
   print_header("taxa")
@@ -216,7 +216,7 @@ print.taxmap <- function(x, max_rows = 7, ...) {
 #' Default: All columns.
 #' @param calculated_cols (\code{logical} of length 1)
 #' If \code{TRUE}, return calculated columns using  functions in \code{\link{taxmap}$taxon_funcs}.
-#' These values are calculated each time \code{taxon_data} is called since their values can change if 
+#' These values are calculated each time \code{taxon_data} is called since their values can change if
 #' the data is subset.
 #' @param sort_by (\code{character} of length 1)
 #' The name of a column in \code{obj$taxon_data} or a function name in  \code{obj$taxon_funcs}.
@@ -247,7 +247,7 @@ taxon_data <- function(obj,
   if (is.null(col_subset)) {
     col_subset <- c(colnames(obj$taxon_data), names(obj$taxon_funcs))
   }
-  
+
   # Check that the user is making sense
   if (calculated_cols == FALSE && any(col_subset %in% names(obj$taxon_funcs))) {
     stop("Cannot use a calculated column when `calculated_cols = FALSE`.")
@@ -281,12 +281,12 @@ taxon_data <- function(obj,
     }
     data <- data[order(sort_by_col, decreasing = decreasing), ]
   }
-  
+
   # Apply drop
   if (ncol(data) == 1 && drop) {
     data <- data[[1]]
   }
-  
+
   return(data)
 }
 
@@ -305,7 +305,7 @@ taxon_data <- function(obj,
 #' Default: All columns.
 #' @param calculated_cols (\code{logical} of length 1)
 #' If \code{TRUE}, return calculated columns using  functions in \code{\link{taxmap}$obs_funcs}.
-#' These values are calculated each time \code{obs_data} is called since their values can change if 
+#' These values are calculated each time \code{obs_data} is called since their values can change if
 #' the data is subset.
 #' @param sort_by (\code{character} of length 1)
 #' The name of a column in \code{obj$obs_data} or a function name in  \code{obj$obs_funcs}.
@@ -334,7 +334,7 @@ obs_data <- function(obj,
   if (is.null(col_subset)) {
     col_subset <- c(colnames(obj$obs_data), names(obj$obs_funcs))
   }
-  
+
   # Check that the user is making sense
   if (calculated_cols == FALSE && any(col_subset %in% names(obj$obs_funcs))) {
     stop("Cannot use a calculated column when `calculated_cols = FALSE`.")
@@ -368,13 +368,13 @@ obs_data <- function(obj,
     }
     data <- data[order(sort_by_col, decreasing = decreasing), ]
   }
-  
+
   # Apply drop
   if (ncol(data) == 1 && drop) {
     data <- data[[1]]
   } else {
     data <- dplyr::tbl_df(data)
   }
-  
+
   return(data)
 }

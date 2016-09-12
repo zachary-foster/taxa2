@@ -152,7 +152,7 @@ hier2 <- hierarchy(c, b, a)
 ```
 
 ```{r}
-hierarchies_(hier1, hier2)
+hierarchies(hier1, hier2)
 ```
 
 ## taxamap classes

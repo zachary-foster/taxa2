@@ -72,55 +72,55 @@ database_list <- list(
     "ncbi",
     "http://www.ncbi.nlm.nih.gov/taxonomy",
     "NCBI Taxonomy Database",
-    "*"
+    ".*"
   ),
 
-  gbif <- taxon_database(
+  gbif = taxon_database(
     "gbif",
     "http://www.gbif.org/developer/species",
     "GBIF Taxonomic Backbone",
-    "*"
+    ".*"
   ),
 
-  bold <- taxon_database(
+  bold = taxon_database(
     "bold",
     "http://www.boldsystems.org",
     "Barcode of Life",
-    "*"
+    ".*"
   ),
 
-  col <- taxon_database(
+  col = taxon_database(
     "col",
     "http://www.catalogueoflife.org",
     "Catalogue of Life",
-    "*"
+    ".*"
   ),
 
-  eol <- taxon_database(
+  eol = taxon_database(
     "eol",
     "http://eol.org",
     "Encyclopedia of Life",
-    "*"
+    ".*"
   ),
 
-  nbn <- taxon_database(
+  nbn = taxon_database(
     "nbn",
     "https://nbn.org.uk",
     "UK National Biodiversity Network",
-    "*"
+    ".*"
   ),
 
-  tps <- taxon_database(
+  tps = taxon_database(
     "tps",
     "http://www.tropicos.org/",
     "Tropicos",
-    "*"
+    ".*"
   ),
 
-  itis <- taxon_database(
+  itis = taxon_database(
     "itis",
     "http://www.itis.gov",
     "Integrated Taxonomic Information System",
-    "*"
+    ".*"
   )
 )
