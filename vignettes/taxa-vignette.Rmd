@@ -1,0 +1,196 @@
+---
+title: "Introduction to the taxa package"
+author: "Scott Chamberlain and Zachary Foster"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to the taxa package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+`taxa` defines taxonomic classes for R. The goal is to use these classes as low 
+level fundamental taxonomic classes that other R packages can build on and use.
+
+There are two distinct sets of classes in `taxa`:
+
+* so called `taxa` classes that are concerned only with taxonomic information
+* so called `taxmap` classes that are concerned with combined taxonomic and 
+other data (e.g., molecular sequences)
+
+Diagram of class concepts for `taxa` classes
+
+<img src="class_concept_graph_v2.png" title="taxa classes diagram" height="500">
+
+Diagram of class concepts for `taxmap` classes
+
+> TO BE COMPLETED
+
+
+## Install
+
+Development version from GitHub
+
+```{r eval=FALSE}
+devtools::install_github("ropenscilabs/taxa")
+```
+
+```{r}
+library("taxa")
+```
+
+## taxa classes
+
+### taxon components
+
+database
+
+```{r}
+(x <- taxon_database(
+  "ncbi",
+  "http://www.ncbi.nlm.nih.gov/taxonomy",
+  "NCBI Taxonomy Database",
+  "*"
+))
+x$name
+x$url
+```
+
+rank
+
+```{r}
+taxon_rank("species")
+```
+
+name
+
+```{r}
+taxon_name("Poa")
+```
+
+id
+
+```{r}
+taxon_id(12345)
+```
+
+### taxon
+
+```{r}
+(x <- taxon(
+  name = taxon_name("Poa annua"),
+  rank = taxon_rank("species"),
+  id = taxon_id(93036)
+))
+```
+
+### taxa
+
+```{r}
+(x <- taxon(
+  name = taxon_name("Poa annua"),
+  rank = taxon_rank("species"),
+  id = taxon_id(93036)
+))
+taxa_(x, x, x)
+```
+
+### hierarchy
+
+```{r}
+x <- taxon(
+  name = taxon_name("Poaceae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(4479)
+)
+
+y <- taxon(
+  name = taxon_name("Poa"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(4544)
+)
+
+z <- taxon(
+  name = taxon_name("Poa annua"),
+  rank = taxon_rank("species"),
+  id = taxon_id(93036)
+)
+
+(hier1 <- hierarchy(z, y, x))
+```
+
+### hierarchies
+
+```{r}
+a <- taxon(
+  name = taxon_name("Felidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(9681)
+)
+b <- taxon(
+  name = taxon_name("Puma"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(146712)
+)
+c <- taxon(
+  name = taxon_name("Puma concolor"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9696)
+)
+hier2 <- hierarchy(c, b, a)
+```
+
+```{r}
+hierarchies_(hier1, hier2)
+```
+
+## taxamap classes
+
+### Filter
+
+Remove singleton taxa, but reassign singletons to supertaxa that pass filter
+
+```{r}
+filter_taxa(unite_ex_data, n_obs > 1)
+```
+
+Remove singleton taxa and associated seqeuence data
+
+```{r}
+filter_taxa(unite_ex_data, n_obs > 1, taxonless = FALSE, reassign_obs = FALSE)
+```
+
+### Mutate
+
+Add one or more taxon columns
+
+```{r}
+mutate_taxa(unite_ex_data, x = 1, y = x+2)
+```
+
+### Select 
+
+Select taxon columns
+
+```{r}
+select_taxa(unite_ex_data, name)
+```
+
+### Arrange
+
+Sort by taxon name alphabetically
+
+```{r}
+arrange_taxa(unite_ex_data, name)
+```
