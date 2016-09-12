@@ -16,7 +16,8 @@ Imports:
     dplyr,
     lazyeval,
     magrittr,
-    tibble
+    tibble,
+    knitr
 Suggests:
     testthat,
     rmarkdown (>= 0.9.6)
