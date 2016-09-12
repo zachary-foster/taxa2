@@ -2,7 +2,7 @@ Package: taxa
 Type: Package
 Title: Taxonomic Classes for R
 Description: Taxonomic Classes for R.
-Version: 0.0.2.9000
+Version: 0.0.2.9040
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com"))
 License: MIT + file LICENSE
@@ -19,4 +19,5 @@ Suggests:
     testthat
 Depends: R (>= 3.0.2)
 RoxygenNote: 5.0.1
-LazyData: true
+LazyLoad: yes
+LazyData: yes
