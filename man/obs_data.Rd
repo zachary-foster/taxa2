@@ -21,7 +21,7 @@ Default: All columns.}
 
 \item{calculated_cols}{(\code{logical} of length 1)
 If \code{TRUE}, return calculated columns using  functions in \code{\link{taxmap}$obs_funcs}.
-These values are calculated each time \code{obs_data} is called since their values can change if 
+These values are calculated each time \code{obs_data} is called since their values can change if
 the data is subset.}
 
 \item{sort_by}{(\code{character} of length 1)

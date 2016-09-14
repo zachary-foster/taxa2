@@ -18,7 +18,7 @@ n_supertaxa(obj, subset = 1:nrow(obj$taxon_data))
 Get  number of supertaxa for each taxon in an object of type \code{\link{taxmap}}
 }
 \seealso{
-Other taxon_funcs: \code{\link{hierarchies}},
+Other taxon_funcs: \code{\link{classifications}},
   \code{\link{n_obs_1}}, \code{\link{n_obs}},
   \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}}
 }

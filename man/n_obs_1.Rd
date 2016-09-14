@@ -19,7 +19,7 @@ Count observations assigned to a specific taxon in \code{\link{taxmap}}.
 This does not include observations assigned to subtaxa.
 }
 \seealso{
-Other taxon_funcs: \code{\link{hierarchies}},
+Other taxon_funcs: \code{\link{classifications}},
   \code{\link{n_obs}}, \code{\link{n_subtaxa_1}},
   \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}}
 }
