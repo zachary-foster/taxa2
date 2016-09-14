@@ -45,7 +45,7 @@ hierarchies <- function(...) {
 
 #' @export
 print.hierarchies <- function(x, ...) {
-  cat("<hierarchies>", "\n")
+  cat("<Hierarchies>", "\n")
   cat("  no. hierarchies: ", length(x), "\n")
   for (i in seq_along(x[1:min(10, length(x))])) {
     cat(
