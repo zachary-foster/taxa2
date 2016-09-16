@@ -17,13 +17,15 @@ Taxonomy <- R6::R6Class(
   "Taxonomy",
   lock_class = TRUE,
   public = list(
+    taxa = NULL,
     uniqtaxa = NULL,
     edgelists = NULL,
     edgelist = NULL,
     graph = NULL,
 
     initialize = function(...) {
-      private$unique_taxa(list(...))
+      self$taxa <- list(...)
+      private$get_unique_taxa(list(...))
       private$edge_lists(list(...))
       private$edge_list()
       private$make_graph()
@@ -39,7 +41,7 @@ Taxonomy <- R6::R6Class(
   ),
 
   private = list(
-    unique_taxa = function(x) {
+    get_unique_taxa = function(x) {
       tx <- unlist(lapply(x, function(z) {
         z$taxa
       }))
