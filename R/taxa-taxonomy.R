@@ -1,7 +1,9 @@
 #' Taxonomy class
 #'
+#' Used to store taxonomic tree structures.
+#'
 #' @export
-#' @param ... Any number of object of class \code{Taxon}
+#' @param ... Any number of object of class \code{\link{hierarchy}}
 #' @return An \code{R6Class} object of class \code{Taxonomy}
 #'
 #' @details on initialize, we parse the inputs and find all duplicate
@@ -29,7 +31,7 @@ Taxonomy <- R6::R6Class(
       cat(paste0(indent, "<Taxonomy>\n"))
       taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
       taxon_ids <- names(self$taxa)
-      limited_print(paste(taxon_ids, taxon_names, sep = ") "),
+      limited_print(paste(taxon_ids, taxon_names, sep = ". "),
                     prefix = paste0(indent, "  ", length(self$taxa), " taxa:"))
       limited_print(private$make_graph(),
                     prefix = paste0(indent, "  ", nrow(self$edge_list), " edges:"))
