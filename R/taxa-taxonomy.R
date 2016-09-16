@@ -26,11 +26,13 @@ Taxonomy <- R6::R6Class(
     },
 
     print = function(indent = "") {
-      max_chars <- getOption("width") - 10
       cat(paste0(indent, "<Taxonomy>\n"))
-      # taxon_names <- vapply(self$taxa, function(x) x$name, character(1))
-      cat(paste0("  no. unique taxa: ", length(self$taxa)), "\n")
-      cat(paste0("  graph: ", paste0(private$make_graph(), collapse = " ")), "\n")
+      taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
+      taxon_ids <- names(self$taxa)
+      limited_print(paste(taxon_ids, taxon_names, sep = ") "),
+                    prefix = paste0(indent, "  ", length(self$taxa), " taxa:"))
+      limited_print(private$make_graph(),
+                    prefix = paste0(indent, "  ", nrow(self$edge_list), " edges:"))
       invisible(self)
     }
   ),
