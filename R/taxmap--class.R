@@ -151,52 +151,21 @@ print.taxmap <- function(x, max_rows = 7, ...) {
      cat(paste0("\n", spacer, " ", var_name, " ", spacer, "\n"))
    }
 
-   print_chars <- function(chars) {
-
-     interleave <- function(v1,v2) { # https://stat.ethz.ch/pipermail/r-help/2006-March/101023.html
-       ord1 <- 2*(1:length(v1))-1
-       ord2 <- 2*(1:length(v2))
-       c(v1,v2)[order(c(ord1,ord2))]
-     }
-
-     q = "'"
-     interleaved <- interleave(chars[1:(length(chars) / 2)],
-                               rev(chars[(length(chars) / 2 + 1):length(chars)]))
-     is_greater_than_max <- cumsum(nchar(interleaved) + 2) + 10 > max_chars
-     if (all(! is_greater_than_max)) {
-       max_printed <- length(chars)
-     } else {
-       max_printed <- which.max(is_greater_than_max)
-     }
-     if (max_printed < length(chars)) {
-       first_part <-  chars[1:as.integer(max_printed / 2 - 0.5)]
-       second_part <- chars[as.integer(length(chars) - (max_printed / 2) + 1.5):length(chars)]
-       output <- paste0(paste0(collapse = ", ", first_part),
-                        " ... ",
-                        paste0(collapse = ", ", second_part),
-                        "\n")
-     } else {
-       output <- paste0(paste0(collapse = ", ", chars), "\n")
-     }
-     cat(output)
-   }
-
-
   cat(paste0('`taxmap` object with data for ', nrow(x$taxon_data),
              ' taxa and ', nrow(x$obs_data), ' observations:\n'))
   print_header("taxa")
-  print_chars(names(x$taxa))
+  limited_print(names(x$taxa))
   print_header("taxon_data")
   print(x$taxon_data, n = max_rows)
   print_header("obs_data")
   print(x$obs_data, n = max_rows)
   if (length(x$taxon_funcs) > 0) {
     print_header("taxon_funcs")
-    print_chars(names(x$taxon_funcs))
+    limited_print(names(x$taxon_funcs))
   }
   if (length(x$obs_funcs) > 0) {
     print_header("obs_funcs")
-    print_chars(names(x$obs_funcs))
+    limited_print(names(x$obs_funcs))
   }
   invisible(x)
 }

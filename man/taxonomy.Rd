@@ -7,13 +7,13 @@
 taxonomy(...)
 }
 \arguments{
-\item{...}{Any number of object of class \code{Taxon}}
+\item{...}{Any number of object of class \code{\link{hierarchy}}}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}
 }
 \description{
-Taxonomy class
+Used to store taxonomic tree structures.
 }
 \details{
 on initialize, we parse the inputs and find all duplicate
