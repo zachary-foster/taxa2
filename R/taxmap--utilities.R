@@ -1,78 +1,3 @@
-#' Get all supertaxa of a taxon
-#'
-#' Return the taxon IDs or \code{taxon_data} indexes of all supertaxa (i.e. all taxa the target taxa
-#' are a part of) in an object of type \code{taxmap}.
-#'
-#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon information to be
-#'   queried.
-#' @param subset (\code{character}) \code{taxon_ids} or indexes of \code{taxon_data} for which
-#'   supertaxa will be returned. Default: All taxa in \code{obj} will be used.
-#' @param recursive (\code{logical}) If \code{FALSE}, only return the supertaxa one level above the
-#'   target taxa. If \code{TRUE}, return all the supertaxa of every supertaxa, etc.
-#' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
-#'   vector of unique values.
-#' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
-#' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
-#'   \code{taxon_data} instead of \code{taxon_ids}
-#' @param na (\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.
-#'
-#' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
-#'   \code{subset} argument. If \code{simplify = TRUE}, then unique values are returned in a single
-#'   vector.
-#'
-#' @examples
-#' \dontrun{
-#' supertaxa(contaminants, subset = 1:10)}
-#'
-#' @family taxmap taxonomy functions
-#'
-#' @export
-supertaxa <- function(obj, subset = NULL, recursive = TRUE,
-                      simplify = FALSE, include_input = FALSE, index = FALSE, na = FALSE) {
-  # Parse arguments --------------------------------------------------------------------------------
-  subset <- format_taxon_subset(obj, subset)
-
-  # Get supertaxa ----------------------------------------------------------------------------------
-  parent_index <- match(obj$taxon_data$supertaxon_ids, obj$taxon_data$taxon_ids) # precomputing makes it much faster
-  recursive_part <- function(taxon) {
-    supertaxon <- parent_index[taxon]
-    if (recursive) {
-      if (is.na(supertaxon)) {
-        output <- c(taxon, supertaxon)
-      } else {
-        output <- c(taxon, recursive_part(supertaxon))
-      }
-    } else {
-      output <- c(taxon, supertaxon)
-    }
-    return(unname(output))
-  }
-  output <- lapply(subset, recursive_part)
-
-  # Remove query taxa from output ------------------------------------------------------------------
-  if (! include_input) {
-    output <- lapply(output, `[`, -1)
-  }
-
-  # Remove NAs from output -------------------------------------------------------------------------
-  if (! na) {
-    output <- lapply(output, function(x) x[!is.na(x)])
-  }
-
-  # Convert to taxon_ids ---------------------------------------------------------------------------
-  if (! index) {
-    output <- lapply(output, function(x) obj$taxon_data$taxon_ids[x])
-  }
-
-  # Reduce dimensionality --------------------------------------------------------------------------
-  if (simplify) {
-    output <- unique(unname(unlist(output)))
-  }
-
-  return(output)
-}
-
-
 #' Get root taxa
 #'
 #' Return the root taxa for a \code{\link{taxmap}} object. Can also be used to get the roots of
@@ -92,7 +17,7 @@ supertaxa <- function(obj, subset = NULL, recursive = TRUE,
 #' @export
 roots <- function(obj, subset = NULL, index = FALSE) {
   # Parse arguments --------------------------------------------------------------------------------
-  subset <- format_taxon_subset(obj, subset)
+  subset <- format_taxon_subset(obj$taxon_data$taxon_ids, subset)
 
   # Get roots --------------------------------------------------------------------------------------
   parents <- supertaxa(obj, subset = subset, recursive = TRUE, include_input = TRUE, index = TRUE, na = FALSE)
@@ -143,7 +68,7 @@ roots <- function(obj, subset = NULL, index = FALSE) {
 subtaxa <- function(obj, subset = NULL, recursive = TRUE,
                     simplify = FALSE, include_input = FALSE, index = FALSE) {
   # Parse arguments --------------------------------------------------------------------------------
-  subset <- format_taxon_subset(obj, subset)
+  subset <- format_taxon_subset(obj$taxon_data$taxon_ids, subset)
 
   # Get subtaxa ------------------------------------------------------------------------------------
   parent_index <- match(obj$taxon_data$supertaxon_ids, obj$taxon_data$taxon_ids)
@@ -218,7 +143,7 @@ subtaxa <- function(obj, subset = NULL, recursive = TRUE,
 #' @export
 obs <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE) {
   # Parse arguments --------------------------------------------------------------------------------
-  subset <- format_taxon_subset(obj, subset)
+  subset <- format_taxon_subset(obj$taxon_data$taxon_ids, subset)
 
   # Get observations of taxa ------------------------------------------------------------------------------
   my_subtaxa <- subtaxa(obj, subset = subset, recursive = recursive, include_input = TRUE, index = TRUE)

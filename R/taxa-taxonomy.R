@@ -20,7 +20,7 @@ Taxonomy <- R6::R6Class(
   lock_class = TRUE,
   public = list(
     taxa = NULL,
-    edge_list = NULL,
+    edge_list = NULL, # Note: this should be made of taxon ids, not indexes, for consistency between subsets
 
     initialize = function(...) {
       private$unique_taxa(list(...))
@@ -36,7 +36,54 @@ Taxonomy <- R6::R6Class(
       limited_print(private$make_graph(),
                     prefix = paste0(indent, "  ", nrow(self$edge_list), " edges:"))
       invisible(self)
+    },
+
+    supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
+                         include_input = FALSE, index = FALSE, na = FALSE) {
+      # Parse arguments
+      subset <- format_taxon_subset(names(self$taxa), subset)
+
+      # Get supertaxa
+      parent_index <- match(self$edge_list$from, self$edge_list$to) # precomputing makes it much faster
+      recursive_part <- function(taxon) {
+        supertaxon <- parent_index[taxon]
+        if (recursive) {
+          if (is.na(supertaxon)) {
+            output <- c(taxon, supertaxon)
+          } else {
+            output <- c(taxon, recursive_part(supertaxon))
+          }
+        } else {
+          output <- c(taxon, supertaxon)
+        }
+        return(unname(output))
+      }
+      output <- lapply(subset, recursive_part)
+
+      # Remove query taxa from output
+      if (! include_input) {
+        output <- lapply(output, `[`, -1)
+      }
+
+      # Remove NAs from output
+      if (! na) {
+        output <- lapply(output, function(x) x[!is.na(x)])
+      }
+
+      # Convert to taxon_ids
+      if (! index) {
+        output <- lapply(output, function(x) names(self$taxa)[x])
+      }
+
+      # Reduce dimensionality
+      if (simplify) {
+        output <- unique(unname(unlist(output)))
+      }
+
+      return(output)
     }
+
+
   ),
 
   private = list(
@@ -67,3 +114,54 @@ Taxonomy <- R6::R6Class(
     }
   )
 )
+
+
+
+#' @export
+supertaxa <- function(obj, ...) {
+  UseMethod("supertaxa")
+}
+
+#' @export
+supertaxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+supertaxa.Taxonomy <- function(obj, ...) {
+  obj$supertaxa(...)
+}
+
+
+#' Get all supertaxa of a taxon
+#'
+#' Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target taxa
+#' are a part of) in an object of type \code{\link{taxonomy}} or \code{\link{taxmap}}.
+#' \preformatted{
+#' obj$supertaxa(subset = NULL, recursive = TRUE,
+#'               simplify = FALSE, include_input = FALSE,
+#'               index = FALSE, na = FALSE)
+#' supertaxa(obj, ...)}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
+#'   queried.
+#' @param subset (\code{character}) \code{taxon_ids} or indexes of \code{taxon_data} for which
+#'   supertaxa will be returned. Default: All taxa in \code{obj} will be used.
+#' @param recursive (\code{logical}) If \code{FALSE}, only return the supertaxa one level above the
+#'   target taxa. If \code{TRUE}, return all the supertaxa of every supertaxa, etc.
+#' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
+#'   vector of unique values.
+#' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
+#' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
+#'   \code{taxon_data} instead of \code{taxon_ids}
+#' @param na (\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.
+#' @param ... Used to pass the parameters to the R6 method of \code{\link{taxonomy}}
+#'
+#' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
+#'   \code{subset} argument. If \code{simplify = TRUE}, then unique values are returned in a single
+#'   vector.
+#'
+#' @family taxmap taxonomy functions
+#'
+#' @name supertaxa
+NULL

@@ -211,7 +211,7 @@ taxon_data <- function(obj,
   if (is.null(row_subset)) {
     row_subset <- 1:nrow(obj$taxon_data)
   } else {
-    row_subset <- format_taxon_subset(obj, row_subset)
+    row_subset <- format_taxon_subset(obj$taxon_data$taxon_ids, row_subset)
   }
   if (is.null(col_subset)) {
     col_subset <- c(colnames(obj$taxon_data), names(obj$taxon_funcs))

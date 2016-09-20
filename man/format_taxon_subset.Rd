@@ -4,15 +4,15 @@
 \alias{format_taxon_subset}
 \title{Format taxon subset value}
 \usage{
-format_taxon_subset(obj, index)
+format_taxon_subset(taxon_ids, index)
 }
 \arguments{
-\item{obj}{(\code{taxmap})
-The \code{taxmap} object containing taxon information to be queried.}
-
 \item{index}{If a \code{character}, then it should be values of \code{taxon_ids}.
 If a \code{numeric}, then it should be row indexes of \code{taxon_data}.
 If a \code{logical}, then it should correspond to rows of \code{taxon_data}.}
+
+\item{obj}{(\code{taxmap})
+The \code{taxmap} object containing taxon information to be queried.}
 }
 \value{
 \code{numeric}
