@@ -23,7 +23,7 @@ vector of unique values.}
 
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.}
 
-\item{...}{Used to pass the parameters to the R6 method of \code{\link{taxonomy}}}
+\item{...}{U Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the

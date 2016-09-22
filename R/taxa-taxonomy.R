@@ -81,6 +81,31 @@ Taxonomy <- R6::R6Class(
       }
 
       return(output)
+    },
+
+    roots = function(subset = NULL, index = FALSE) {
+      # Parse arguments
+      subset <- format_taxon_subset(names(self$taxa), subset)
+
+      # Get roots
+      parents <- self$supertaxa(subset = subset, recursive = TRUE,
+                                include_input = TRUE, index = TRUE, na = FALSE)
+      is_global_root <- vapply(parents, length, numeric(1)) == 1
+      if (missing(subset)) {
+        is_root <- is_global_root
+      } else {
+        is_root <- is_global_root | vapply(parents,
+                                           FUN.VALUE = logical(1),
+                                           function(x) ! any(x[-1] %in% subset))
+      }
+      output <- unname(subset[is_root])
+
+      # Convert to taxon_ids
+      if (! index) {
+        output <- names(self$taxa)[output]
+      }
+
+      return(output)
     }
 
 
@@ -100,8 +125,8 @@ Taxonomy <- R6::R6Class(
         tmp <- as.numeric(vapply(z$taxa, function(w) {
           names(which(vapply(self$taxa, function(n) identical(n, w), logical(1))))
         }, ""))
-        res <- tibble::data_frame(to = NA_integer_, from = NA_integer_)
-        for (i in 1:(length(tmp) - 1)) {
+        res <- tibble::data_frame(from = NA_integer_, to = NA_integer_)
+        for (i in 1:(length(tmp))) {
           res[i,] <- c(tmp[c(i, i + 1)])
         }
         res
@@ -132,7 +157,6 @@ supertaxa.Taxonomy <- function(obj, ...) {
   obj$supertaxa(...)
 }
 
-
 #' Get all supertaxa of a taxon
 #'
 #' Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target taxa
@@ -155,7 +179,7 @@ supertaxa.Taxonomy <- function(obj, ...) {
 #' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
 #'   \code{taxon_data} instead of \code{taxon_ids}
 #' @param na (\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.
-#' @param ... Used to pass the parameters to the R6 method of \code{\link{taxonomy}}
+#' @param ... U Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
 #' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
 #'   \code{subset} argument. If \code{simplify = TRUE}, then unique values are returned in a single
@@ -164,4 +188,43 @@ supertaxa.Taxonomy <- function(obj, ...) {
 #' @family taxmap taxonomy functions
 #'
 #' @name supertaxa
+NULL
+
+
+#' @export
+roots <- function(obj, ...) {
+  UseMethod("roots")
+}
+
+#' @export
+roots.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+roots.Taxonomy <- function(obj, ...) {
+  obj$roots(...)
+}
+
+#' Get root taxa
+#'
+#' Return the root taxa for a \code{\link{taxmap}} object. Can also be used to get the roots of
+#' a subset of taxa.
+#' \preformatted{
+#' obj$roots(subset = NULL, index = FALSE)
+#' roots(obj, ...)}
+#'
+#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon information to be
+#'   queried.
+#' @param subset (\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
+#'   taxon in \code{obj} will be used.
+#' @param index (\code{logical}) If \code{TRUE}, return the indexes of roots in
+#'   \code{taxon_data} instead of \code{taxon_ids}
+#' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
+#'
+#' @return \code{character}
+#'
+#' @family taxmap taxonomy functions
+#'
+#' @name roots
 NULL

@@ -1,41 +1,4 @@
-#' Get root taxa
-#'
-#' Return the root taxa for a \code{\link{taxmap}} object. Can also be used to get the roots of
-#' a subset of taxa.
-#'
-#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon information to be
-#'   queried.
-#' @param subset (\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
-#'   taxon in \code{obj} will be used.
-#' @param index (\code{logical}) If \code{TRUE}, return the indexes of roots in
-#'   \code{taxon_data} instead of \code{taxon_ids}
-#'
-#' @return \code{character}
-#'
-#' @family taxmap taxonomy functions
-#'
-#' @export
-roots <- function(obj, subset = NULL, index = FALSE) {
-  # Parse arguments --------------------------------------------------------------------------------
-  subset <- format_taxon_subset(obj$taxon_data$taxon_ids, subset)
 
-  # Get roots --------------------------------------------------------------------------------------
-  parents <- supertaxa(obj, subset = subset, recursive = TRUE, include_input = TRUE, index = TRUE, na = FALSE)
-  is_global_root <- vapply(parents, length, numeric(1)) == 1
-  if (missing(subset)) {
-    is_root <- is_global_root
-  } else {
-    is_root <- is_global_root | vapply(parents, function(x) ! any(x[-1] %in% subset), logical(1))
-  }
-  output <- unname(subset[is_root])
-
-  # Convert to taxon_ids ---------------------------------------------------------------------------
-  if (! index) {
-    output <- obj$taxon_data$taxon_ids[output]
-  }
-
-  return(output)
-}
 
 
 #' Get all subtaxa of a taxon

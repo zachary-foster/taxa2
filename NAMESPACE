@@ -3,6 +3,8 @@
 S3method(print,hierarchies)
 S3method(print,taxa)
 S3method(print,taxmap)
+S3method(roots,Taxonomy)
+S3method(roots,default)
 S3method(supertaxa,Taxonomy)
 S3method(supertaxa,default)
 export("%>%")
