@@ -1,0 +1,14 @@
+# Issue 009) Adapt `taxmap` utility functions to `taxonomy`
+
+## Thu Sep 22 14:18:34 2016
+
+I noticed that the edge list in `taxonomy` does not have an edge for each taxon. 
+This is different than how it was structured in `metacoder` and this is making adapting functions like `supertaxa` more difficult than I thought. 
+Also, the algolrythm used to construct the edge list involves an all-vs-all comparison of `taxon` objects. 
+I think I had originally done something like this in `metacoder`, but eventully opted for a recursive strategy to make it faster on large datasets.
+However, I dont think I have ever taken into account situations like:
+
+a > b > c
+b > c
+
+Something to look into...
