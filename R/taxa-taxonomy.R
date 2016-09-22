@@ -126,7 +126,7 @@ Taxonomy <- R6::R6Class(
           names(which(vapply(self$taxa, function(n) identical(n, w), logical(1))))
         }, ""))
         res <- tibble::data_frame(from = NA_integer_, to = NA_integer_)
-        for (i in 1:(length(tmp))) {
+        for (i in 1:(length(tmp) - 1)) {
           res[i,] <- c(tmp[c(i, i + 1)])
         }
         res
