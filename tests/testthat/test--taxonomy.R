@@ -49,12 +49,69 @@ tigris <- taxon(
   rank = taxon_rank("species"),
   id = taxon_id(9696)
 )
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = taxon_rank("kingdom"),
+  id = taxon_id(33090)
+)
+solanaceae <- taxon(
+  name = taxon_name("Solanaceae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(4070)
+)
+solanum <- taxon(
+  name = taxon_name("Solanum"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(4107)
+)
+lycopersicum <- taxon(
+  name = taxon_name("lycopersicum"),
+  rank = taxon_rank("species"),
+  id = taxon_id(49274)
+)
+tuberosum <- taxon(
+  name = taxon_name("tuberosum"),
+  rank = taxon_rank("species"),
+  id = taxon_id(4113)
+)
+unidentified <- taxon(
+  name = taxon_name("unidentified"),
+  rank = NA,
+  id = NA
+)
+
 tiger <- hierarchy(mammalia, felidae, panthera, tigris)
 cougar <- hierarchy(mammalia, felidae, puma, concolor)
 mole <- hierarchy(mammalia, notoryctidae, notoryctes, typhlops)
-
-
+tomato <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
+potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
+potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
+unidentified_animal <- hierarchy(mammalia, unidentified)
+unidentified_plant <- hierarchy(plantae, unidentified)
 
 test_that("Simple usage", {
+  x <- taxonomy(tiger, cougar, mole)
+})
 
+
+
+test_that("Multiple roots", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato)
+})
+
+
+test_that("Different starting ranks, but same lineage", {
+  x <- taxonomy(tomato, potato_partial)
+})
+
+
+test_that("Same taxon name, different lineage", {
+  x <- taxonomy(unidentified_plant, unidentified_animal)
+})
+
+
+test_that("Edge cases", {
+  x <- taxonomy()
+  x <- taxonomy(hierarchy())
+  x <- taxonomy(hierarchy(taxon()))
 })
