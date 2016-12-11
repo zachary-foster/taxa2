@@ -76,8 +76,8 @@ tuberosum <- taxon(
 )
 unidentified <- taxon(
   name = taxon_name("unidentified"),
-  rank = NA,
-  id = NA
+  rank = taxon_rank("species"),
+  id = taxon_id(0)
 )
 
 tiger <- hierarchy(mammalia, felidae, panthera, tigris)

@@ -12,3 +12,31 @@ a > b > c
 b > c
 
 Something to look into...
+
+
+## Wed Dec 7 18:25:57 2016
+
+I think I have a non-recursive way to make an edge list from hierarchies. 
+
+```
+mammalia <- taxon(
+  name = taxon_name("Mammalia"),
+  rank = taxon_rank("class"),
+  id = taxon_id(9681)
+)
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = taxon_rank("kingdom"),
+  id = taxon_id(33090)
+)
+unidentified <- taxon(
+  name = taxon_name("unidentified"),
+  rank = taxon_rank("species"),
+  id = taxon_id(0)
+)
+x <- taxonomy(unidentified_plant, unidentified_animal)
+> x
+<Taxonomy>
+  3 taxa: 1. Plantae, 2. unidentified, 3. Mammalia
+  2 edges: 1->2, 3->2
+```
