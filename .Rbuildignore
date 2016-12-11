@@ -5,5 +5,4 @@
 ^README\.Rmd$
 ^scratch$
 man-roxygen
-
-^notes/$
+^notes$
