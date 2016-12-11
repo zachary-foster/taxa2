@@ -121,46 +121,55 @@ Taxonomy <- R6::R6Class(
 
 #' @keywords internal
 parse_heirarchies_to_taxonomy <- function(heirarchies) {
+  # Look for input edge cases
+  if (length(heirarchies) == 0) {
+    return(list(taxa = list(), edge_list = data.frame(from = character(), to = character(),
+                                                       stringsAsFactors=FALSE)))
+  }
+
   # This is used to store both taxon names and their IDs once assigned. The IDs will be added as
   # names to the taxon character vectors
   taxon_names <- lapply(heirarchies,
-                        function(heirarchy) setNames(c(NA, vapply(heirarchy$taxa,
-                                                                  function(taxon) taxon$name$name, character(1))), NA))
+                        function(heirarchy) stats::setNames(c(NA, vapply(heirarchy$taxa,
+                                                                         function(taxon) taxon$name$name, character(1))), NA))
   # initialize output lists
   unique_taxa <- list()
   edge_list <- list() # matrix?
   max_id <- 0 # used to keep track of what IDs have already been used
 
   # Find the maximum depth of the classifications
-  max_depth <- max(vapply(taxon_names, length, numeric(1)))
+  heirarchies_depths <- vapply(taxon_names, length, numeric(1))
+  max_depth <- max(heirarchies_depths)
 
   # For each level in the classifications, identify unique taxa and add them to the taxon list and
   # the edge list. NOTE: This function modifies variables outside of it and is not independent.
   process_one_level <- function(depth) {
 
     # Identify unique pairs of taxon ids and unclassified taxon names and make new IDs
-    all_pairs <- lapply(taxon_names, function(x) c(names(x)[depth - 1], x[depth]))
+    all_pairs <- lapply(taxon_names[heirarchies_depths >= depth], function(x) c(names(x)[depth - 1], x[depth]))
     unique_encoding <- match(all_pairs, unique(all_pairs))
     new_ids <- unique_encoding + max_id
     max_id <<- max(new_ids)
 
     # Add new IDs to `taxon_names` as vector names
-    unused_output <- mapply(seq_along(taxon_names), new_ids,
+    unused_output <- mapply(seq_along(taxon_names)[heirarchies_depths >= depth], new_ids,
                             FUN = function(index, id) {names(taxon_names[[index]])[depth] <<- id})
 
     # Get representative taxa objects to add to the taxon list.
     # The `depth - 1` is because `NA` was added to each hierachy in `taxon_names` so the indexes
     # are one off.
-    taxon_objects <- lapply(heirarchies, function(heirarchy) heirarchy$taxa[[depth - 1]])
-    new_taxa <- setNames(taxon_objects[match(unique(unique_encoding), unique_encoding)],
-                         unique(new_ids))
+    taxon_objects <- lapply(heirarchies[heirarchies_depths > (depth - 1)],
+                            function(heirarchy) heirarchy$taxa[[depth - 1]])
+    new_taxa <- stats::setNames(taxon_objects[match(unique(unique_encoding), unique_encoding)],
+                                unique(new_ids))
 
     # TODO: either check that unique taxa identified by name are actually unique when considering
     # all fields (e.g. `id`) or rework function to optionally consider all fields with identifiying
     # unique taxa in the first place
 
     # Get edge list additions
-    new_edges <- unique(lapply(taxon_names, function(x) c(names(x)[c(depth -1, depth)])))
+    new_edges <- unique(lapply(taxon_names[heirarchies_depths >= depth],
+                               function(x) c(names(x)[c(depth - 1, depth)])))
 
     # Append classified taxa and edges to ouptut of parent function
     unique_taxa <<- c(unique_taxa, new_taxa)
@@ -169,7 +178,8 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
   no_ouput <- lapply(2:max_depth, process_one_level) # starts at 2 because of NA being prepended
 
   # Convert edge list to matrix
-  edge_list <- do.call(rbind, edge_list)
+  edge_list <- stats::setNames(as.data.frame(do.call(rbind, edge_list), stringsAsFactors = FALSE),
+                               c("from", "to"))
 
   return(list(taxa = unique_taxa, edge_list = edge_list))
 }

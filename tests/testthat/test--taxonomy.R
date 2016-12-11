@@ -100,7 +100,11 @@ test_that("Multiple roots", {
 })
 
 
-test_that("Different starting ranks, but same lineage", {
+test_that("Hierarchies of differnt lengths", {
+  x <- taxonomy(tiger, unidentified_animal)
+})
+
+test_that("Different starting ranks, but same lineage", { # Currently not handled right
   x <- taxonomy(tomato, potato_partial)
 })
 
