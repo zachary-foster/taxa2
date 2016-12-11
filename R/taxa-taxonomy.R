@@ -341,6 +341,11 @@ subtaxa.Taxonomy <- function(obj, ...) {
 #' Get all subtaxa of a taxon
 #'
 #' Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
+#' \preformatted{
+#' obj$subtaxa(subset = NULL, recursive = TRUE,
+#'               simplify = FALSE, include_input = FALSE,
+#'               index = FALSE, na = FALSE)
+#' subtaxa(obj, ...)}
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
 #'   queried.

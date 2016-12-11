@@ -91,17 +91,35 @@ unidentified_plant <- hierarchy(plantae, unidentified)
 
 test_that("Simple usage", {
   x <- taxonomy(tiger, cougar, mole)
+  subtaxa(x)
+  x$subtaxa()
+  roots(x)
+  x$roots()
+  supertaxa(x)
+  x$supertaxa()
 })
 
 
 
 test_that("Multiple roots", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato)
+  subtaxa(x)
+  x$subtaxa()
+  roots(x)
+  x$roots()
+  supertaxa(x)
+  x$supertaxa()
 })
 
 
 test_that("Hierarchies of differnt lengths", {
   x <- taxonomy(tiger, unidentified_animal)
+  subtaxa(x)
+  x$subtaxa()
+  roots(x)
+  x$roots()
+  supertaxa(x)
+  x$supertaxa()
 })
 
 # test_that("Different starting ranks, but same lineage", { # Currently not handled right, low priority
@@ -111,6 +129,12 @@ test_that("Hierarchies of differnt lengths", {
 
 test_that("Same taxon name, different lineage", {
   x <- taxonomy(unidentified_plant, unidentified_animal)
+  subtaxa(x)
+  x$subtaxa()
+  roots(x)
+  x$roots()
+  supertaxa(x)
+  x$supertaxa()
 })
 
 

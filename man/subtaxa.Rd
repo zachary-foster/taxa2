@@ -28,5 +28,10 @@ If \code{simplify = FALSE}, then a list of vectors are returned corresponding to
 }
 \description{
 Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
+\preformatted{
+obj$subtaxa(subset = NULL, recursive = TRUE,
+              simplify = FALSE, include_input = FALSE,
+              index = FALSE, na = FALSE)
+subtaxa(obj, ...)}
 }
 
