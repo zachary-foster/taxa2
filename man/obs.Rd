@@ -30,7 +30,6 @@ Given one or more taxa IDs and a \code{\link{taxmap}} object, return the observa
 (e.g. sequence information) associated with each taxon.
 }
 \seealso{
-Other taxmap taxonomy functions: \code{\link{roots}},
-  \code{\link{subtaxa}}, \code{\link{supertaxa}}
+Other taxmap taxonomy functions: \code{\link{supertaxa}}
 }
 

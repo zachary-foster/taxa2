@@ -40,7 +40,6 @@ obj$supertaxa(subset = NULL, recursive = TRUE,
 supertaxa(obj, ...)}
 }
 \seealso{
-Other taxmap taxonomy functions: \code{\link{obs}},
-  \code{\link{roots}}, \code{\link{subtaxa}}
+Other taxmap taxonomy functions: \code{\link{obs}}
 }
 

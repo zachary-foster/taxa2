@@ -4,7 +4,7 @@
 \alias{roots}
 \title{Get root taxa}
 \arguments{
-\item{obj}{(\code{taxmap}) The \code{taxmap} object containing taxon information to be
+\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon information to be
 queried.}
 
 \item{subset}{(\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
@@ -24,9 +24,5 @@ a subset of taxa.
 \preformatted{
 obj$roots(subset = NULL, index = FALSE)
 roots(obj, ...)}
-}
-\seealso{
-Other taxmap taxonomy functions: \code{\link{obs}},
-  \code{\link{subtaxa}}, \code{\link{supertaxa}}
 }
 

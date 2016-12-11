@@ -107,9 +107,60 @@ Taxonomy <- R6::R6Class(
       }
 
       return(output)
+    },
+
+    subtaxa = function(subset = NULL, recursive = TRUE,
+                        simplify = FALSE, include_input = FALSE, index = FALSE) {
+      # Parse arguments
+      subset <- format_taxon_subset(names(self$taxa), subset)
+
+      # Get subtaxa
+      parent_index <- match(self$edge_list$from, self$edge_list$to)
+
+      get_children <- function(taxon) {
+        which(parent_index == taxon)
+      }
+
+      recursive_part <- function(taxon) {
+        # Get immediate children of current taxon
+        children <- get_children(taxon)
+        # Run this function on them to get their output
+        child_output <- lapply(children, recursive_part)
+        child_output <- stats::setNames(unlist(child_output, recursive = FALSE),
+                                        unlist(lapply(child_output, names)))
+        # Get all subtaxa from the names of the child output
+        child_taxa <- c(taxon, as.numeric(names(child_output)))
+        # Combine the child output with the subtaxa for the current taxon
+        output <- stats::setNames(c(list(child_taxa), child_output),
+                                  c(taxon, names(child_output)))
+        return(output)
+      }
+
+      if (recursive) {
+        starting_taxa <- self$roots(subset = subset, index = TRUE)
+        output <- stats::setNames(unlist(lapply(starting_taxa, recursive_part), recursive = FALSE)[as.character(subset)],
+                                  names(subset))
+      } else {
+        output <- lapply(subset, function(x) c(x, get_children(x)))
+      }
+
+      # Remove query taxa from output
+      if (! include_input) {
+        output <- lapply(output, `[`, -1)
+      }
+
+      # Convert to taxon_ids
+      if (! index) {
+        output <- lapply(output, function(x) names(self$taxa)[x])
+      }
+
+      # Reduce dimensionality
+      if (simplify) {
+        output <- unique(unname(unlist(output)))
+      }
+
+      return(output)
     }
-
-
   ),
 
   private = list(
@@ -258,7 +309,7 @@ roots.Taxonomy <- function(obj, ...) {
 #' obj$roots(subset = NULL, index = FALSE)
 #' roots(obj, ...)}
 #'
-#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon information to be
+#' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
 #'   queried.
 #' @param subset (\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
 #'   taxon in \code{obj} will be used.
@@ -268,7 +319,44 @@ roots.Taxonomy <- function(obj, ...) {
 #'
 #' @return \code{character}
 #'
-#' @family taxmap taxonomy functions
-#'
 #' @name roots
+NULL
+
+#' @export
+subtaxa <- function(obj, ...) {
+  UseMethod("subtaxa")
+}
+
+#' @export
+subtaxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+subtaxa.Taxonomy <- function(obj, ...) {
+  obj$subtaxa(...)
+}
+
+
+#' Get all subtaxa of a taxon
+#'
+#' Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
+#'   queried.
+#' @param subset (\code{character}) \code{taxon_ids} or indexes of \code{taxon_data} for which
+#'   supertaxa will be returned. Default: All taxa in \code{obj} will be used.
+#' @param recursive (\code{logical}) If \code{FALSE}, only return the subtaxa one level bwlow the
+#'   target taxa. If \code{TRUE}, return all the subtaxa of every subtaxa, etc.
+#' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
+#'   vector of unique values.
+#' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
+#' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
+#'   \code{taxon_data} instead of \code{taxon_ids}
+#'
+#' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
+#'   \code{target} argument. If \code{simplify = TRUE}, then the unique values are returned in a
+#'   single vector.
+#'
+#' @name subtaxa
 NULL
