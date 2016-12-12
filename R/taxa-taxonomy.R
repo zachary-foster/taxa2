@@ -170,7 +170,7 @@ Taxonomy <- R6::R6Class(
     get_return_type = function(indexes, return_type = c("index", "id", "taxa", "hierarchies")) {
       return_type <- match.arg(return_type)
       if (return_type == "index") {
-        return(indexes)
+        return(as.integer(indexes))
       } else if (return_type == "id") {
         return(self$edge_list$to[indexes])
       } else if (return_type == "taxa") {
