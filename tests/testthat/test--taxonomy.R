@@ -1,7 +1,7 @@
 ## Testing `taxonomy` class
 
 library(taxa)
-context("Creating `taxonomy` object")
+context("Testing the `taxonomy` object")
 
 ## Creating test data
 notoryctidae <- taxon(
@@ -91,55 +91,42 @@ unidentified_plant <- hierarchy(plantae, unidentified)
 
 test_that("Simple usage", {
   x <- taxonomy(tiger, cougar, mole)
-  subtaxa(x)
-  x$subtaxa()
-  roots(x)
-  x$roots()
-  supertaxa(x)
-  x$supertaxa()
+  expect_length(x$taxa, 9)
+  expect_equal(dim(x$edge_list), c(9, 2))
+  expect_length(x$roots(), 1)
 })
-
 
 
 test_that("Multiple roots", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato)
-  subtaxa(x)
-  x$subtaxa()
-  roots(x)
-  x$roots()
-  supertaxa(x)
-  x$supertaxa()
+  expect_length(x$taxa, 14)
+  expect_equal(dim(x$edge_list), c(14, 2))
+  expect_length(x$roots(), 2)
 })
 
 
-test_that("Hierarchies of differnt lengths", {
+test_that("Hierarchies of different lengths", {
   x <- taxonomy(tiger, unidentified_animal)
-  subtaxa(x)
-  x$subtaxa()
-  roots(x)
-  x$roots()
-  supertaxa(x)
-  x$supertaxa()
+  expect_length(x$taxa, 5)
+  expect_equal(dim(x$edge_list), c(5, 2))
+  expect_length(x$roots(), 1)
 })
-
-# test_that("Different starting ranks, but same lineage", { # Currently not handled right, low priority
-#   x <- taxonomy(tomato, potato_partial)
-# })
 
 
 test_that("Same taxon name, different lineage", {
   x <- taxonomy(unidentified_plant, unidentified_animal)
-  subtaxa(x)
-  x$subtaxa()
-  roots(x)
-  x$roots()
-  supertaxa(x)
-  x$supertaxa()
+  expect_length(x$taxa, 4)
+  expect_equal(dim(x$edge_list), c(4, 2))
+  expect_length(x$roots(), 2)
+  expect_equal(sum(sapply(x$taxa, function(x) x$name$name) == "unidentified"), 2)
 })
 
 
-# test_that("Edge cases", { # Currently not handled right
-#   x <- taxonomy()
-#   x <- taxonomy(hierarchy())
-#   x <- taxonomy(hierarchy(taxon()))
-# })
+test_that("Edge cases", {
+  x <- taxonomy()
+  expect_length(x$taxa, 0)
+  expect_equal(dim(x$edge_list), c(0, 2))
+  x <- taxonomy(hierarchy())
+  expect_length(x$taxa, 0)
+  expect_equal(dim(x$edge_list), c(0, 2))
+})

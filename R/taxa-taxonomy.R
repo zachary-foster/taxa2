@@ -32,10 +32,14 @@ Taxonomy <- R6::R6Class(
       cat(paste0(indent, "<Taxonomy>\n"))
       taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
       taxon_ids <- names(self$taxa)
-      limited_print(paste(taxon_ids, taxon_names, sep = ". "),
-                    prefix = paste0(indent, "  ", length(self$taxa), " taxa:"))
-      limited_print(private$make_graph(),
-                    prefix = paste0(indent, "  ", nrow(self$edge_list), " edges:"))
+      if (length(self$taxa) > 0) {
+        limited_print(paste(taxon_ids, taxon_names, sep = ". "),
+                      prefix = paste0(indent, "  ", length(self$taxa), " taxa:"))
+        limited_print(private$make_graph(),
+                      prefix = paste0(indent, "  ", nrow(self$edge_list), " edges:"))
+      } else {
+        cat("Empty taxonomy")
+      }
       invisible(self)
     },
 
@@ -185,7 +189,8 @@ Taxonomy <- R6::R6Class(
 #' @keywords internal
 parse_heirarchies_to_taxonomy <- function(heirarchies) {
   # Look for input edge cases
-  if (length(heirarchies) == 0) {
+  total_taxa_count <- sum(vapply(heirarchies, function(x) length(x$taxa), numeric(1)))
+  if (length(heirarchies) == 0 || total_taxa_count == 0) {
     return(list(taxa = list(), edge_list = data.frame(from = character(), to = character(),
                                                       stringsAsFactors=FALSE)))
   }
