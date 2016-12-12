@@ -48,21 +48,26 @@ Hierarchy <- R6::R6Class(
     print = function(indent = "") {
       cat(paste0(indent, "<Hierarchy>\n"))
       cat("  no. taxon's: ", length(self$taxa), "\n")
-      for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
-        cat(
-          sprintf("  %s / %s / %s",
-                  self$taxa[[i]]$name$name %||% "",
-                  self$taxa[[i]]$rank$name %||% "",
-                  self$taxa[[i]]$id$id %||% ""
-          ), "\n")
+      if (length(self$taxa) > 0) {
+        for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
+          cat(
+            sprintf("  %s / %s / %s",
+                    self$taxa[[i]]$name$name %||% "",
+                    self$taxa[[i]]$rank$name %||% "",
+                    self$taxa[[i]]$id$id %||% ""
+            ), "\n")
+        }
+        if (length(self$taxa) > 10) cat("  ...")
       }
-      if (length(self$taxa) > 10) cat("  ...")
       invisible(self)
     }
   ),
 
   private = list(
     sort_hierarchy = function(x) {
+      if (length(x) == 0) {
+        return(x)
+      }
       ranks <- tolower(vapply(x, function(z) z$rank$name, ""))
       # check that each rank is in the acceptable set
       invisible(lapply(ranks, function(z) {

@@ -18,8 +18,7 @@ vector of unique values.}
 
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in the output}
 
-\item{index}{(\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
-\code{taxon_data} instead of \code{taxon_ids}}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the

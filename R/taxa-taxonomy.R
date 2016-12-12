@@ -40,7 +40,7 @@ Taxonomy <- R6::R6Class(
     },
 
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
-                         include_input = FALSE, index = FALSE, na = FALSE) {
+                         include_input = FALSE, return_type = "id", na = FALSE) {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
 
@@ -71,10 +71,8 @@ Taxonomy <- R6::R6Class(
         output <- lapply(output, function(x) x[!is.na(x)])
       }
 
-      # Convert to taxon_ids
-      if (! index) {
-        output <- lapply(output, function(x) names(self$taxa)[x])
-      }
+      # Convert to return type
+      output <- lapply(output, private$get_return_type, return_type = return_type)
 
       # Reduce dimensionality
       if (simplify) {
@@ -84,13 +82,13 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    roots = function(subset = NULL, index = FALSE) {
+    roots = function(subset = NULL, return_type = "id") {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
 
       # Get roots
       parents <- self$supertaxa(subset = subset, recursive = TRUE,
-                                include_input = TRUE, index = TRUE, na = FALSE)
+                                include_input = TRUE, return_type = "index", na = FALSE)
       is_global_root <- vapply(parents, length, numeric(1)) == 1
       if (missing(subset)) {
         is_root <- is_global_root
@@ -101,16 +99,14 @@ Taxonomy <- R6::R6Class(
       }
       output <- unname(subset[is_root])
 
-      # Convert to taxon_ids
-      if (! index) {
-        output <- names(self$taxa)[output]
-      }
+      # Convert to return type
+      output <- private$get_return_type(output, return_type = return_type)
 
       return(output)
     },
 
     subtaxa = function(subset = NULL, recursive = TRUE,
-                        simplify = FALSE, include_input = FALSE, index = FALSE) {
+                       simplify = FALSE, include_input = FALSE, return_type = "id") {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
 
@@ -137,7 +133,7 @@ Taxonomy <- R6::R6Class(
       }
 
       if (recursive) {
-        starting_taxa <- self$roots(subset = subset, index = TRUE)
+        starting_taxa <- self$roots(subset = subset, return_type = "index")
         output <- stats::setNames(unlist(lapply(starting_taxa, recursive_part), recursive = FALSE)[as.character(subset)],
                                   names(subset))
       } else {
@@ -149,14 +145,13 @@ Taxonomy <- R6::R6Class(
         output <- lapply(output, `[`, -1)
       }
 
-      # Convert to taxon_ids
-      if (! index) {
-        output <- lapply(output, function(x) names(self$taxa)[x])
-      }
+      # Convert to return type
+      output <- lapply(output, private$get_return_type, return_type = return_type)
+
 
       # Reduce dimensionality
       if (simplify) {
-        output <- unique(unname(unlist(output)))
+          output <- unique(unname(unlist(output)))
       }
 
       return(output)
@@ -166,6 +161,23 @@ Taxonomy <- R6::R6Class(
   private = list(
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")
+    },
+
+    get_return_type = function(indexes, return_type = c("index", "id", "taxa", "hierarchies")) {
+      return_type <- match.arg(return_type)
+      if (return_type == "index") {
+        return(indexes)
+      } else if (return_type == "id") {
+        return(self$edge_list$to[indexes])
+      } else if (return_type == "taxa") {
+        return(self$taxa[self$edge_list$to[indexes]])
+      } else if (return_type == "hierarchies") {
+        return(lapply(self$supertaxa(indexes, include_input = TRUE, return_type = "taxa"),
+                      function(t) do.call(hierarchy, t)))
+      } else {
+        stop(paste('Invailed return type: "return_type" must be one of the following:',
+                   paste(return_type, collapse = ", ")))
+      }
     }
   )
 )
@@ -175,7 +187,7 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
   # Look for input edge cases
   if (length(heirarchies) == 0) {
     return(list(taxa = list(), edge_list = data.frame(from = character(), to = character(),
-                                                       stringsAsFactors=FALSE)))
+                                                      stringsAsFactors=FALSE)))
   }
 
   # This is used to store both taxon names and their IDs once assigned. The IDs will be added as
@@ -271,8 +283,7 @@ supertaxa.Taxonomy <- function(obj, ...) {
 #' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
 #'   vector of unique values.
 #' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
-#' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
-#'   \code{taxon_data} instead of \code{taxon_ids}
+#' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
 #' @param na (\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.
 #' @param ... U Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
@@ -313,8 +324,7 @@ roots.Taxonomy <- function(obj, ...) {
 #'   queried.
 #' @param subset (\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
 #'   taxon in \code{obj} will be used.
-#' @param index (\code{logical}) If \code{TRUE}, return the indexes of roots in
-#'   \code{taxon_data} instead of \code{taxon_ids}
+#' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
 #' @return \code{character}
@@ -356,8 +366,7 @@ subtaxa.Taxonomy <- function(obj, ...) {
 #' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
 #'   vector of unique values.
 #' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
-#' @param index (\code{logical}) If \code{TRUE}, return the indexes of supertaxa in
-#'   \code{taxon_data} instead of \code{taxon_ids}
+#' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
 #'
 #' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
 #'   \code{target} argument. If \code{simplify = TRUE}, then the unique values are returned in a

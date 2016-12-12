@@ -10,8 +10,7 @@ queried.}
 \item{subset}{(\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
 taxon in \code{obj} will be used.}
 
-\item{index}{(\code{logical}) If \code{TRUE}, return the indexes of roots in
-\code{taxon_data} instead of \code{taxon_ids}}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".}
 
 \item{...}{Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}}
 }
