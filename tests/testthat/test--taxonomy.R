@@ -75,9 +75,7 @@ tuberosum <- taxon(
   id = taxon_id(4113)
 )
 unidentified <- taxon(
-  name = taxon_name("unidentified"),
-  rank = taxon_rank("species"),
-  id = taxon_id(0)
+  name = taxon_name("unidentified")
 )
 
 tiger <- hierarchy(mammalia, felidae, panthera, tigris)
@@ -129,6 +127,16 @@ test_that("Edge cases", {
   x <- taxonomy(hierarchy())
   expect_length(x$taxa, 0)
   expect_equal(dim(x$edge_list), c(0, 2))
+})
+
+
+test_that("Characters as inputs", {
+  x <- taxonomy(c("a", "b", "c"), c("a", "d"))
+  expect_length(x$taxa, 4)
+  expect_equal(dim(x$edge_list), c(4, 2))
+  expect_length(x$roots(), 1)
+
+  # x <- taxonomy(list(c("a", "b", "c"), c("a", "d"))) # does not work yet
 })
 
 

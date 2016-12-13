@@ -25,7 +25,7 @@
 #' x$name
 #' x$id
 #' x$database
-taxon <- function(name, rank, id, authority = NULL) {
+taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
   Taxon$new(
     name = name,
     rank = rank,
@@ -45,6 +45,17 @@ Taxon <- R6::R6Class(
     initialize = function(
       name = NULL, rank = NULL, id = NULL, authority = NULL
     ) {
+      # Convert characters to appropriate classes
+      if (is.character(name)) {
+        name <- taxon_name(name)
+      }
+      if (is.character(rank)) {
+        rank <- taxon_rank(rank)
+      }
+      if (is.character(id)) {
+        id <- taxon_id(id)
+      }
+
       self$name <- name
       self$rank <- rank
       self$id <- id

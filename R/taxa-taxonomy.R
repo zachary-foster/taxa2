@@ -23,7 +23,14 @@ Taxonomy <- R6::R6Class(
     edge_list = NULL, # Note: this should be made of taxon ids, not indexes, for consistency between subsets
 
     initialize = function(...) {
-      parse_data <- parse_heirarchies_to_taxonomy(list(...))
+      input <- list(...)
+
+      # If character strings are supplied, convert to hierarcies
+      char_input_index <- which(lapply(input, class) == "character")
+      input[char_input_index] <- lapply(input[char_input_index], hierarchy)
+
+      # Parse input
+      parse_data <- parse_heirarchies_to_taxonomy(input)
       self$taxa <- parse_data$taxa
       self$edge_list <- parse_data$edge_list
     },
@@ -188,6 +195,7 @@ Taxonomy <- R6::R6Class(
 
 #' @keywords internal
 parse_heirarchies_to_taxonomy <- function(heirarchies) {
+
   # Look for input edge cases
   total_taxa_count <- sum(vapply(heirarchies, function(x) length(x$taxa), numeric(1)))
   if (length(heirarchies) == 0 || total_taxa_count == 0) {
