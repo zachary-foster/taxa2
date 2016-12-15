@@ -14,7 +14,7 @@ select_obs(.data, ...)
 \code{taxon_data} typed as if it was a varaible on its own.} \item{\code{numeric}}{Indexes of
 columns in \code{taxon_data}} } To match column names with a character vector, use
 \code{matches("my_col_name")}. To match a logical vector, convert it to a column index using
-\code{\link{which}}.}
+\code{\link[base]{which}}.}
 }
 \value{
 An object of type \code{\link{taxmap}}
