@@ -153,6 +153,25 @@ Taxonomy <- R6::R6Class(
     },
 
 
+    leaves = function(subset = NULL, return_type = "id") {
+      # Parse arguments
+      subset <- format_taxon_subset(names(self$taxa), subset)
+
+      # Find taxa without subtaxa
+      my_subtaxa <- self$subtaxa(subset = subset, recursive = TRUE,
+                                 include_input = FALSE)
+      leaf_ids <- names(my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 0])
+      output <- match(leaf_ids, self$edge_list$to)
+
+      # Convert to return type
+      output <- stats::setNames(private$get_return_type(output, return_type = return_type),
+                                self$edge_list$to[output])
+
+      return(output)
+    },
+
+
+
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE, return_type = "id") {
       # Parse arguments
@@ -468,4 +487,43 @@ stems.Taxonomy <- function(obj, ...) {
 #' @return \code{character}
 #'
 #' @name stems
+NULL
+
+
+#' @export
+leaves <- function(obj, ...) {
+  UseMethod("leaves")
+}
+
+#' @export
+leaves.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+leaves.Taxonomy <- function(obj, ...) {
+  obj$leaves(...)
+}
+
+
+
+#' Get leaf taxa
+#'
+#' Return the leaf taxa for a \code{\link{taxmap}} object.
+#' Leaf taxa are taxa with no subtaxa.
+#' \preformatted{
+#' obj$leaves(subset = NULL, return_type = "id")
+#' leaves(obj, ...)}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
+#'   queried.
+#' @param subset (\code{character}) Taxon IDs for which leaf taxa will be returned. Default: All
+#'   taxon in \code{obj} will be used.
+#' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' Note that "index" is the index of the edge list, not the taxon list.
+#' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
+#'
+#' @return \code{character}
+#'
+#' @name leaves
 NULL

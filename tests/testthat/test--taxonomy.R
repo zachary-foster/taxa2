@@ -247,3 +247,23 @@ test_that("Finding stems", {
   expect_equal(class(x$stems(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
 })
 
+
+test_that("Finding leaves", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$leaves(), leaves(x))
+
+  # Index return type
+  expect_type(x$leaves(return_type = "index"), "integer")
+
+  # Taxon ID return type
+  expect_type(x$leaves(return_type = "id"), "character")
+
+  # Taxon object return type
+  expect_type(x$leaves(return_type = "taxa"), "list")
+  expect_equal(class(x$leaves(return_type = "taxa")[[1]]), c("Taxon", "R6"))
+
+  # Hierarchy return type
+  expect_type(x$leaves(return_type = "hierarchies"), "list")
+  expect_equal(class(x$leaves(return_type = "hierarchies")[[1]]), c("Hierarchy", "R6"))
+})
