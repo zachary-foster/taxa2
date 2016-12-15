@@ -218,3 +218,32 @@ test_that("Finding subtaxa", {
   expect_equal(class(x$subtaxa(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
 })
 
+
+test_that("Finding stems", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$stems(), stems(x))
+
+  # Index return type
+  expect_type(x$stems(return_type = "index")[[1]], "integer")
+  expect_type(x$stems(return_type = "index", simplify = TRUE), "integer")
+
+  # Taxon ID return type
+  expect_type(x$stems(return_type = "id")[[1]], "character")
+  expect_type(x$stems(return_type = "id", simplify = TRUE), "character")
+
+  # Taxon object return type
+  expect_type(x$stems(return_type = "taxa"), "list")
+  expect_type(x$stems(return_type = "taxa")[[1]], "list")
+  expect_equal(class(x$stems(return_type = "taxa")[[1]][[1]]), c("Taxon", "R6"))
+  expect_type(x$stems(return_type = "taxa", simplify = TRUE), "list")
+  expect_equal(class(x$stems(return_type = "taxa", simplify = TRUE)[[1]]), c("Taxon", "R6"))
+
+  # Hierarchy return type
+  expect_type(x$stems(return_type = "hierarchies"), "list")
+  expect_type(x$stems(return_type = "hierarchies")[[1]], "list")
+  expect_equal(class(x$stems(return_type = "hierarchies")[[1]][[1]]), c("Hierarchy", "R6"))
+  expect_type(x$stems(return_type = "hierarchies", simplify = TRUE), "list")
+  expect_equal(class(x$stems(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+})
+
