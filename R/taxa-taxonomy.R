@@ -181,7 +181,7 @@ Taxonomy <- R6::R6Class(
       }
 
       if (recursive) {
-        starting_taxa <- self$roots(subset = subset, return_type = "index")
+        starting_taxa <- unname(self$roots(subset = subset, return_type = "index"))
         output <- stats::setNames(unlist(lapply(starting_taxa, recursive_part), recursive = FALSE)[as.character(subset)],
                                   names(subset))
       } else {
