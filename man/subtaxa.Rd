@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxa-taxonomy.R
 \name{subtaxa}
 \alias{subtaxa}
-\title{Get all subtaxa of a taxon}
+\title{Get subtaxa}
 \arguments{
 \item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon information to be
 queried.}
@@ -18,7 +18,8 @@ vector of unique values.}
 
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in the output}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+Note that "index" is the index of the edge list, not the taxon list.}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
@@ -29,8 +30,8 @@ If \code{simplify = FALSE}, then a list of vectors are returned corresponding to
 Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
 \preformatted{
 obj$subtaxa(subset = NULL, recursive = TRUE,
-              simplify = FALSE, include_input = FALSE,
-              index = FALSE, na = FALSE)
+            simplify = FALSE, include_input = FALSE,
+            return_type = "id", na = FALSE)
 subtaxa(obj, ...)}
 }
 

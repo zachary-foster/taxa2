@@ -321,7 +321,7 @@ supertaxa.Taxonomy <- function(obj, ...) {
 #' \preformatted{
 #' obj$supertaxa(subset = NULL, recursive = TRUE,
 #'               simplify = FALSE, include_input = FALSE,
-#'               index = FALSE, na = FALSE)
+#'               return_type = "id", na = FALSE)
 #' supertaxa(obj, ...)}
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
@@ -334,6 +334,7 @@ supertaxa.Taxonomy <- function(obj, ...) {
 #'   vector of unique values.
 #' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
 #' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' Note that "index" is the index of the edge list, not the taxon list.
 #' @param na (\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.
 #' @param ... U Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
@@ -367,7 +368,7 @@ roots.Taxonomy <- function(obj, ...) {
 #' Return the root taxa for a \code{\link{taxmap}} object. Can also be used to get the roots of
 #' a subset of taxa.
 #' \preformatted{
-#' obj$roots(subset = NULL, index = FALSE)
+#' obj$roots(subset = NULL, return_type = "id")
 #' roots(obj, ...)}
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
@@ -375,6 +376,7 @@ roots.Taxonomy <- function(obj, ...) {
 #' @param subset (\code{character}) Taxon IDs for which root taxa will be returned. Default: All
 #'   taxon in \code{obj} will be used.
 #' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' Note that "index" is the index of the edge list, not the taxon list.
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
 #' @return \code{character}
@@ -404,8 +406,8 @@ subtaxa.Taxonomy <- function(obj, ...) {
 #' Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
 #' \preformatted{
 #' obj$subtaxa(subset = NULL, recursive = TRUE,
-#'               simplify = FALSE, include_input = FALSE,
-#'               index = FALSE, na = FALSE)
+#'             simplify = FALSE, include_input = FALSE,
+#'             return_type = "id", na = FALSE)
 #' subtaxa(obj, ...)}
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
@@ -418,6 +420,7 @@ subtaxa.Taxonomy <- function(obj, ...) {
 #'   vector of unique values.
 #' @param include_input (\code{logical}) If \code{TRUE}, the input taxa are included in the output
 #' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' Note that "index" is the index of the edge list, not the taxon list.
 #'
 #' @return If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
 #'   \code{target} argument. If \code{simplify = TRUE}, then the unique values are returned in a
@@ -442,13 +445,13 @@ stems.Taxonomy <- function(obj, ...) {
   obj$stems(...)
 }
 
-#' Get stems taxa
+#' Get stem taxa
 #'
 #' Return the stem taxa for a \code{\link{taxonomy}} or a \code{\link{taxmap}} object.
 #' Stem taxa are all those from the roots to the first taxon with more than one subtaxon.
-#'
 #' \preformatted{
-#' obj$stems(subset = NULL, return_type = FALSE)
+#' obj$stems(subset = NULL, simplify = FALSE,
+#'           return_type = "id", exclude_leaves = FALSE)
 #' stems(obj, ...)}
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
@@ -456,6 +459,10 @@ stems.Taxonomy <- function(obj, ...) {
 #' @param subset (\code{character}) Taxon IDs for which stem taxa will be returned. Default: All
 #'   taxon in \code{obj} will be used.
 #' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' Note that "index" is the index of the edge list, not the taxon list.
+#' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
+#'   vector of unique values.
+#' @param exclude_leaves (\code{logical}) If \code{TRUE}, the do not include taxa with no subtaxa.
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
 #'
 #' @return \code{character}

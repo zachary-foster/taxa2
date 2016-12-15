@@ -4,7 +4,7 @@
 \alias{taxon}
 \title{Taxon class}
 \usage{
-taxon(name, rank, id, authority = NULL)
+taxon(name, rank = NULL, id = NULL, authority = NULL)
 }
 \arguments{
 \item{name}{(character) an TaxonName object or character. if character

@@ -18,7 +18,8 @@ vector of unique values.}
 
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in the output}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+Note that "index" is the index of the edge list, not the taxon list.}
 
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.}
 
@@ -35,7 +36,7 @@ are a part of) in an object of type \code{\link{taxonomy}} or \code{\link{taxmap
 \preformatted{
 obj$supertaxa(subset = NULL, recursive = TRUE,
               simplify = FALSE, include_input = FALSE,
-              index = FALSE, na = FALSE)
+              return_type = "id", na = FALSE)
 supertaxa(obj, ...)}
 }
 \seealso{
