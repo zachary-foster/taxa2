@@ -111,7 +111,8 @@ Taxonomy <- R6::R6Class(
       output <- unname(subset[is_root])
 
       # Convert to return type
-      output <- private$get_return_type(output, return_type = return_type)
+      output <- stats::setNames(private$get_return_type(output, return_type = return_type),
+                                self$edge_list$to[output])
 
       return(output)
     },
@@ -140,7 +141,8 @@ Taxonomy <- R6::R6Class(
       output <- lapply(my_roots, recursive_part)
 
       # Convert to return type
-      output <- private$get_return_type(output, return_type = return_type)
+      output <- stats::setNames(lapply(output, private$get_return_type, return_type = return_type),
+                                self$edge_list$to[my_roots])
 
       # Reduce dimensionality
       if (simplify) {
