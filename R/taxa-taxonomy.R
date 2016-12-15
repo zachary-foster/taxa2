@@ -116,6 +116,41 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
+
+    stems = function(subset = NULL, return_type = "id", simplify = FALSE, exclude_leaves = FALSE) {
+      # Parse arguments
+      subset <- format_taxon_subset(names(self$taxa), subset)
+
+      # Get roots to start search
+      my_roots <- self$roots(subset = subset, return_type = "index")
+
+      # Search until taxa with multiple subtaxa are found
+      parent_index <- match(self$edge_list$from, self$edge_list$to) # precomputing makes it much faster
+      recursive_part <- function(taxon) {
+        children <- which(parent_index == taxon)
+        if (length(children) == 0 && ! exclude_leaves) {
+          output <- taxon
+        } else if (length(children) == 1) {
+          output <- c(taxon, recursive_part(supertaxon))
+        } else {
+          output <- taxon
+        }
+        return(unname(output))
+      }
+      output <- lapply(my_roots, recursive_part)
+
+      # Convert to return type
+      output <- private$get_return_type(output, return_type = return_type)
+
+      # Reduce dimensionality
+      if (simplify) {
+        output <- unique(unname(unlist(output)))
+      }
+
+      return(output)
+    },
+
+
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE, return_type = "id") {
       # Parse arguments
@@ -162,7 +197,7 @@ Taxonomy <- R6::R6Class(
 
       # Reduce dimensionality
       if (simplify) {
-          output <- unique(unname(unlist(output)))
+        output <- unique(unname(unlist(output)))
       }
 
       return(output)
@@ -335,7 +370,7 @@ roots.Taxonomy <- function(obj, ...) {
 #'
 #' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
 #'   queried.
-#' @param subset (\code{character}) Taxon IDs for which supertaxa will be returned. Default: All
+#' @param subset (\code{character}) Taxon IDs for which root taxa will be returned. Default: All
 #'   taxon in \code{obj} will be used.
 #' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
@@ -361,7 +396,8 @@ subtaxa.Taxonomy <- function(obj, ...) {
 }
 
 
-#' Get all subtaxa of a taxon
+
+#' Get subtaxa
 #'
 #' Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object of type \code{taxmap}
 #' \preformatted{
@@ -386,4 +422,41 @@ subtaxa.Taxonomy <- function(obj, ...) {
 #'   single vector.
 #'
 #' @name subtaxa
+NULL
+
+
+#' @export
+stems <- function(obj, ...) {
+  UseMethod("stems")
+}
+
+#' @export
+stems.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+stems.Taxonomy <- function(obj, ...) {
+  obj$stems(...)
+}
+
+#' Get stems taxa
+#'
+#' Return the stem taxa for a \code{\link{taxonomy}} or a \code{\link{taxmap}} object.
+#' Stem taxa are all those from the roots to the first taxon with more than one subtaxon.
+#'
+#' \preformatted{
+#' obj$stems(subset = NULL, return_type = FALSE)
+#' stems(obj, ...)}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object containing taxon information to be
+#'   queried.
+#' @param subset (\code{character}) Taxon IDs for which stem taxa will be returned. Default: All
+#'   taxon in \code{obj} will be used.
+#' @param return_type (\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
+#' @param ... Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}
+#'
+#' @return \code{character}
+#'
+#' @name stems
 NULL
