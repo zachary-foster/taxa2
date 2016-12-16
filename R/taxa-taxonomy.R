@@ -159,9 +159,8 @@ Taxonomy <- R6::R6Class(
 
       # Find taxa without subtaxa
       my_subtaxa <- self$subtaxa(subset = subset, recursive = TRUE,
-                                 include_input = FALSE)
-      leaf_ids <- names(my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 0])
-      output <- match(leaf_ids, self$edge_list$to)
+                                 include_input = TRUE, return_type = "index")
+      output <- unlist(my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 1])
 
       # Convert to return type
       output <- stats::setNames(private$get_return_type(output, return_type = return_type),
