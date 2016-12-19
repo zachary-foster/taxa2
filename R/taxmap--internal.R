@@ -13,9 +13,9 @@
 #' @return \code{numeric}
 #'
 #' @keywords internal
-format_taxon_subset <- function(obj, index) {
+format_taxon_subset <- function(taxon_ids, index) {
   if (is.null(index)) {
-    output <- stats::setNames(1:nrow(obj$taxon_data), obj$taxon_data$taxon_ids)
+    output <- stats::setNames(seq_along(taxon_ids), taxon_ids)
   } else {
     if (is.null(names(index))) {
       names(index) <- index
@@ -24,7 +24,7 @@ format_taxon_subset <- function(obj, index) {
       output <- index
       my_names <- names(index)
     } else if (is.character(index)) {
-      output <- match(index, obj$taxon_data$taxon_ids)
+      output <- match(index, taxon_ids)
       my_names <- names(index)
     } else if (is.logical(index)) {
       output <- which(index)

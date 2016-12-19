@@ -42,27 +42,46 @@ Hierarchy <- R6::R6Class(
     ranklist = NULL,
 
     initialize = function(...) {
-      self$taxa <- private$sort_hierarchy(list(...))
+      input <- unlist(list(...))
+
+      # If character strings are supplied, convert to taxa
+      char_input_index <- which(lapply(input, class) == "character")
+      input[char_input_index] <- lapply(input[char_input_index], taxon)
+
+      # Parse input
+      all_have_ranks <- all(vapply(input,
+                                   function(x) ! is.null(x$rank$name),
+                                   logical(1)))
+      if (all_have_ranks) {
+        self$taxa <- private$sort_hierarchy(input)
+      } else {
+        self$taxa <- input
+      }
     },
 
     print = function(indent = "") {
       cat(paste0(indent, "<Hierarchy>\n"))
       cat("  no. taxon's: ", length(self$taxa), "\n")
-      for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
-        cat(
-          sprintf("  %s / %s / %s",
-                  self$taxa[[i]]$name$name %||% "",
-                  self$taxa[[i]]$rank$name %||% "",
-                  self$taxa[[i]]$id$id %||% ""
-          ), "\n")
+      if (length(self$taxa) > 0) {
+        for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
+          cat(
+            sprintf("  %s / %s / %s",
+                    self$taxa[[i]]$name$name %||% "",
+                    self$taxa[[i]]$rank$name %||% "",
+                    self$taxa[[i]]$id$id %||% ""
+            ), "\n")
+        }
+        if (length(self$taxa) > 10) cat("  ...")
       }
-      if (length(self$taxa) > 10) cat("  ...")
       invisible(self)
     }
   ),
 
   private = list(
     sort_hierarchy = function(x) {
+      if (length(x) == 0) {
+        return(x)
+      }
       ranks <- tolower(vapply(x, function(z) z$rank$name, ""))
       # check that each rank is in the acceptable set
       invisible(lapply(ranks, function(z) {
