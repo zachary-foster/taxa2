@@ -88,8 +88,17 @@ unidentified_animal <- hierarchy(mammalia, unidentified)
 unidentified_plant <- hierarchy(plantae, unidentified)
 
 test_that("Simple usage", {
-  x <- taxmap(tiger, cougar, mole)
+
+  abund <- data.frame(name = c("tiger", "cougar", "mole"),
+                      count = 1:3)
+  counts <- tibble::as_tibble(data.frame(name = c("T", "C", "M"),
+                                         count = c(2, 3, 4)))
+
+  x <- taxmap(tiger, cougar, mole, data = list(abund = abund, counts = counts))
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))
   expect_length(x$roots(), 1)
 })
+
+
+# TODO: data as single frame and unnamed list

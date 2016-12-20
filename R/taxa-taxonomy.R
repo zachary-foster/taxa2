@@ -21,6 +21,7 @@ Taxonomy <- R6::R6Class(
   public = list(
     taxa = NULL,
     edge_list = NULL, # Note: this should be made of taxon ids, not indexes, for consistency between subsets
+    input_ids = NULL, # Only used by `Taxmap` right now
 
     initialize = function(...) {
       input <- list(...)
@@ -30,9 +31,10 @@ Taxonomy <- R6::R6Class(
       input[char_input_index] <- lapply(input[char_input_index], hierarchy)
 
       # Parse input
-      parse_data <- parse_heirarchies_to_taxonomy(input)
-      self$taxa <- parse_data$taxa
-      self$edge_list <- parse_data$edge_list
+      parsed_data <- parse_heirarchies_to_taxonomy(input)
+      self$taxa <- parsed_data$taxa
+      self$edge_list <- parsed_data$edge_list
+      self$input_ids <- parsed_data$input_ids
     },
 
     print = function(indent = "") {
@@ -312,7 +314,10 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
   edge_list <- stats::setNames(as.data.frame(do.call(rbind, edge_list), stringsAsFactors = FALSE),
                                c("from", "to"))
 
-  return(list(taxa = unique_taxa, edge_list = edge_list))
+  # Get input taxon ids
+  input_ids <- vapply(taxon_names, function(x) names(x)[length(x)], character(1))
+
+  return(list(taxa = unique_taxa, edge_list = edge_list, input_ids = input_ids))
 }
 
 
