@@ -93,8 +93,10 @@ test_that("Simple usage", {
                       count = 1:3)
   counts <- tibble::as_tibble(data.frame(name = c("T", "C", "M"),
                                          count = c(2, 3, 4)))
+  a_list <- list("a", "b", "c", "a", "b", "c")
+  a_vector <- 1:3
 
-  x <- taxmap(tiger, cougar, mole, data = list(abund = abund, counts = counts))
+  x <- taxmap(tiger, cougar, mole, data = list(counts = counts, a_list = a_list, a_vector = a_vector, abund = abund))
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))
   expect_length(x$roots(), 1)

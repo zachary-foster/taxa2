@@ -30,25 +30,27 @@ Taxmap <- R6::R6Class(
       self$funcs <- validate_taxmap_funcs(funcs, self)
     },
 
-    print = function(indent = "", max_rows = 3, max_table = 3, max_width = getOption("width") - 10) {
+    print = function(indent = "", max_rows = 3, max_items = 3, max_width = getOption("width") - 10) {
 
       # Call `taxonomy` print method
-      super$print(indent = indent)
+      taxonomy_output <- paste0(paste0(capture.output(super$print(indent = indent)), collapse = "\n"), "\n")
+      cat(gsub(taxonomy_output, pattern = "Taxonomy", replacement = "Taxmap"))
 
-      # Print first few rows of each table, up to a maximum number of rows/tables
-      cat("  data:\n")
+      # Print a subset of each item in data, up to a maximum number, then just print item names
+      cat(paste0("  ", length(self$data), " data sets:\n"))
       if (length(self$data) > 0) {
-        for (i in 1:min(c(max_table, length(self$data)))) {
-          print_table(self$data[[i]], name = names(self$data[i]),
-                      max_rows = max_rows, max_width = max_width)
+        for (i in 1:min(c(max_items, length(self$data)))) {
+          print_item(self$data[[i]], name = names(self$data[i]), max_rows = max_rows, max_width = max_width, prefix = "    ")
         }
-        if (length(self$data) > max_table) {
-          cat(paste0("And ", length(self$data) - max_table, " more tables:\n"))
-          limited_print(names(self$data)[(max_table + 1):length(self$data)])
+        if (length(self$data) > max_items) {
+          cat(paste0("    And ", length(self$data) - max_items, " more data sets:"))
+          limited_print(names(self$data)[(max_items + 1):length(self$data)])
         }
-      } else {
-        cat("No associated data.\n")
       }
+
+      # Print the names of functions
+      cat(paste0("  ", length(self$funcs), " functions:\n"))
+      limited_print(names(self$funcs))
 
       invisible(self)
     }
@@ -109,25 +111,59 @@ validate_taxmap_data <- function(data, self) {
 }
 
 
+#' Validate `funcs` input for Taxamp
+#'
+#' Make sure `funcs` is in the right format and complain if it is not.
+#'
+#' @param funcs The `funcs` variable passed to the `Taxmap` constructor
+#'
+#' @return A `funcs` varaible with the right format
+#'
 #' @keywords internal
 validate_taxmap_funcs <- function(funcs, self) {
   funcs
 }
+
 
 #' Print a table
 #'
 #' Used to print each table in the `taxmap` print method.
 #'
 #' @param data The table to be printed
-#' @param max_rows (\code{numeric} of length 1) The maximum number of row to print
+#' @param max_rows (\code{numeric} of length 1) The maximum number of rows in tables to print.
+#' @param max_items (\code{numeric} of length 1) The maximum number of list items to print.
 #' @param max_width (\code{numeric} of length 1) The maximum number of characters to print.
+#' @param prefix (\code{numeric} of length 1) What to print in front of each line.
 #'
 #' @keywords internal
-print_table <- function(data, name = NULL, max_rows = 3, max_width = getOption("width") - 10) {
-  loadNamespace("dplyr") # used for print methods
-  if (length(name) > 0 && ! is.na(name)) {
-    cat(paste0(name, ":\n"))
+print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width = getOption("width") - 10, prefix = "") {
+  prefixed_print <- function(x, prefix, ...) {
+    output <- paste0(prefix, capture.output(print(x, ...)))
+    cat(paste0(paste0(output, collapse = "\n"), "\n"))
   }
-  print(data, n = max_rows, width = max_width)
+
+
+  if (is.data.frame(data)) {
+    loadNamespace("dplyr") # used for tibble print methods
+    if (length(name) > 0 && ! is.na(name)) {
+      cat(paste0(prefix, name, ":\n"))
+    }
+    prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows, width = max_width)
+  } else if (is.list(data)) {
+    if (length(data) < 1) {
+      prefixed_print(list(), prefix = prefix)
+    } else {
+      cat(paste0(prefix, name, ":\n"))
+      prefixed_print(data[1:min(c(max_items, length(data)))], prefix =  paste0(prefix, "  "))
+      if (length(data) > max_items) {
+        cat(paste0(prefix, "  And ", length(data) - max_items, " more items\n"))
+      }
+    }
+  } else if (is.vector(data)) {
+    cat(paste0(prefix, name, ": "))
+    limited_print(data, max_chars = max_width)
+  } else {
+    prefixed_print(data, prefix = prefix)
+  }
   invisible(data)
 }
