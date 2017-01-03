@@ -53,6 +53,36 @@ Taxmap <- R6::R6Class(
       limited_print(names(self$funcs))
 
       invisible(self)
+    },
+
+    obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
+      # Parse arguments
+      subset <- format_taxon_subset(self$edge_list$from, subset)
+      if (length(data) == 1 && (data %in% names(self$data) || is.integer(data))) { # data is name/index of dataset in object
+        obs_taxon_ids <- extract_taxon_ids(self$data[[data]])
+      } else {
+        obs_taxon_ids <- extract_taxon_ids(data)
+      }
+
+      # Get observations of taxa
+      my_subtaxa <- self$subtaxa(subset = subset, recursive = recursive, include_input = TRUE, index = TRUE)
+      unique_subtaxa <- unique(unlist(my_subtaxa))
+      obs_taxon_index <- match(obs_taxon_ids, self$edge_list$from)
+      obs_key <- split(seq_along(obs_taxon_ids), obs_taxon_index)
+      output <- stats::setNames(lapply(my_subtaxa, function(x) unname(unlist(obs_key[as.character(x)]))),
+                                names(subset))
+      is_null <- vapply(output, is.null, logical(1))
+      output[is_null] <- lapply(1:sum(is_null), function(x) numeric(0))
+
+      # Convert to return type
+      output <- lapply(output, private$get_return_type, return_type = return_type)
+
+      # Reduce dimensionality
+      if (simplify) {
+        output <- unique(unname(unlist(output)))
+      }
+
+      return(output)
     }
   ),
 
@@ -61,6 +91,36 @@ Taxmap <- R6::R6Class(
   )
 )
 
+
+
+#' Find taxon id info in data set
+#'
+#' Look for taxon ids in an object.
+#' For tables, this would be a "taxon_id" column.
+#' For lists/vectors, it would be names.
+#'
+#' @param x Something to look for taxon ids in.
+#'
+#' @return Taxon ids if found, otherwise throw an error.
+#'
+#' @keywords internal
+extract_taxon_ids <- function(x) {
+  if (is.data.frame(x)) {
+    if ("taxon_id" %in% colnames(x)) {
+      return(x$taxon_ids)
+    } else {
+      stop('There is no "taxon_id" column in the specified table.')
+    }
+  } else if (is.list(x) || is.vector(x)) {
+    if (is.null(names(x))) {
+      stop('The specified object is a list/vector, but is not named by taxon ID.')
+    } else {
+      return(names(x))
+    }
+  } else {
+    stop("Invalid object type supplied.")
+  }
+}
 
 #' Convert `data` input for Taxamp
 #'
@@ -167,3 +227,47 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width
   }
   invisible(data)
 }
+
+
+#' @export
+obs <- function(obj, ...) {
+  UseMethod("obs")
+}
+
+#' @export
+obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+obs.Taxmap <- function(obj, ...) {
+  obj$obs(...)
+}
+
+#' Get data indexes associated with taxa
+#'
+#' Given a \code{\link{taxmap}} object, return the indexes
+#' associated with each taxon in a given table included in that \code{\link{taxmap}} object.
+#'
+#' @param obj (\code{taxmap})
+#' The \code{taxmap} object containing taxon information to be queried.
+#' @param data Either the name of something in \code{obj$data} that has taxon information or a
+#' an external object with taxon information.
+#' For tables, there must be a column named "taxon_id" and lists/vectors must be named by taxon ID.
+#' @param subset (\code{character}) \code{taxon_ids} or indexes for which
+#'   observation indexes will be returned. Default: All taxa in \code{obj} will be used.
+#' @param recursive (\code{logical})
+#' If \code{FALSE}, only return the observation assigned to the specified input taxa, not subtaxa.
+#' If \code{TRUE}, return all the observations of every subtaxa, etc.
+#' @param simplify (\code{logical}) If \code{TRUE}, then combine all the results into a single
+#'   vector of unique observation indexes.
+#'
+#' @return If \code{simplify = FALSE}, then a list of vectors of observation indexes are returned
+#'   corresponding to the \code{target} argument. If \code{simplify = TRUE}, then the observation indexes
+#'   for all \code{target} taxa are returned in a single vector.
+#'
+#' @family taxmap taxonomy functions
+#'
+#' @name obs
+NULL
+

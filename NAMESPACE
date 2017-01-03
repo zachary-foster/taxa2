@@ -2,6 +2,8 @@
 
 S3method(leaves,Taxonomy)
 S3method(leaves,default)
+S3method(obs,Taxmap)
+S3method(obs,default)
 S3method(print,hierarchies)
 S3method(print,taxa)
 S3method(print,taxmap)
