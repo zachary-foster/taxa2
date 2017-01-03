@@ -57,7 +57,7 @@ Taxmap <- R6::R6Class(
 
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
-      subset <- format_taxon_subset(self$edge_list$from, subset)
+      subset <- format_taxon_subset(names(self$taxa), subset)
       if (length(data) == 1 && (data %in% names(self$data) || is.integer(data))) { # data is name/index of dataset in object
         obs_taxon_ids <- extract_taxon_ids(self$data[[data]])
       } else {
@@ -65,17 +65,14 @@ Taxmap <- R6::R6Class(
       }
 
       # Get observations of taxa
-      my_subtaxa <- self$subtaxa(subset = subset, recursive = recursive, include_input = TRUE, index = TRUE)
+      my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = recursive, include_input = TRUE, return_type = "index") #'unname' is neede for some reason.. something to look into
       unique_subtaxa <- unique(unlist(my_subtaxa))
-      obs_taxon_index <- match(obs_taxon_ids, self$edge_list$from)
+      obs_taxon_index <- match(obs_taxon_ids, self$edge_list$to)
       obs_key <- split(seq_along(obs_taxon_ids), obs_taxon_index)
       output <- stats::setNames(lapply(my_subtaxa, function(x) unname(unlist(obs_key[as.character(x)]))),
                                 names(subset))
       is_null <- vapply(output, is.null, logical(1))
       output[is_null] <- lapply(1:sum(is_null), function(x) numeric(0))
-
-      # Convert to return type
-      output <- lapply(output, private$get_return_type, return_type = return_type)
 
       # Reduce dimensionality
       if (simplify) {
@@ -107,7 +104,7 @@ Taxmap <- R6::R6Class(
 extract_taxon_ids <- function(x) {
   if (is.data.frame(x)) {
     if ("taxon_id" %in% colnames(x)) {
-      return(x$taxon_ids)
+      return(x$taxon_id)
     } else {
       stop('There is no "taxon_id" column in the specified table.')
     }
@@ -254,7 +251,7 @@ obs.Taxmap <- function(obj, ...) {
 #' @param data Either the name of something in \code{obj$data} that has taxon information or a
 #' an external object with taxon information.
 #' For tables, there must be a column named "taxon_id" and lists/vectors must be named by taxon ID.
-#' @param subset (\code{character}) \code{taxon_ids} or indexes for which
+#' @param subset (\code{character}) Taxon IDs or indexes for which
 #'   observation indexes will be returned. Default: All taxa in \code{obj} will be used.
 #' @param recursive (\code{logical})
 #' If \code{FALSE}, only return the observation assigned to the specified input taxa, not subtaxa.
