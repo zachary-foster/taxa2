@@ -104,6 +104,10 @@ test_that("Simple usage", {
                           abund = abund),
               funcs = list(loud_names = a_func))
 
+  x$all_names()
+  x$names_used(num == 3, length(c(count)) > num, loud_names == "quiet")
+  x$data_used(num == 3, length(c(count)) > num, loud_names == "quiet")
+
 
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))
