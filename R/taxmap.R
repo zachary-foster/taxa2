@@ -55,6 +55,86 @@ Taxmap <- R6::R6Class(
       invisible(self)
     },
 
+    # Returns the names of things to be accessible using non-standard evaluation
+    all_names = function(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE) {
+      output <- c()
+
+      # Get column names in each table, removing 'taxon_id'
+      is_table <- vapply(self$data, is.data.frame, logical(1))
+      if (tables) {
+        table_col_names <- unlist(lapply(self$data[is_table], colnames))
+        names(table_col_names) <- paste0("data$", rep(names(self$data[is_table]),
+                                      vapply(self$data[is_table], ncol, integer(1))))
+        table_col_names <- table_col_names[table_col_names != "taxon_id"]
+        output <- c(output, table_col_names)
+      }
+
+      # Get other object names in data
+      if (others) {
+        other_names <- names(self$data[!is_table])
+        names(other_names) <- rep("data", length(other_names))
+        output <- c(output, other_names)
+      }
+
+
+      # Get function names
+      if (funcs) {
+        func_names <- names(self$funcs)
+        names(func_names) <- rep("funcs", length(func_names))
+        output <- c(output, func_names)
+      }
+
+      # Check for duplicates
+      if (warn) {
+        duplicated_names <- unique(output[duplicated(output)])
+        if (length(duplicated_names) > 0) {
+          warning(paste0("The following names are used more than once: ",
+                         paste0(duplicated_names, collapse = ", ")))
+        }
+      }
+
+
+      # Add the name to the name of the name and return
+      names(output) <- paste0(names(output), "$", output)
+      return(output)
+    },
+
+    # Looks for names of data in a expression for use with non-standard evaulation
+    names_used = function(...) {
+      decompose <- function(x) {
+        if (class(x) %in% c("call", "(")) {
+          return(lapply(1:length(x), function(i) decompose(x[[i]])))
+        } else {
+          return(as.character(x))
+        }
+      }
+
+      expressions <- lapply(lazyeval::lazy_dots(...), function(x) x$expr)
+      if (length(expressions) == 0) {
+        return(character(0))
+      } else {
+        names_used <- unlist(lapply(1:length(expressions), function(i) decompose(expressions[[i]])))
+        my_names <- self$all_names()
+        return(my_names[my_names %in% names_used])
+      }
+    },
+
+    # Get a list of all data in an expression used with non-standard evaluation
+    data_used = function(...) {
+
+      # Get the data referred to by name
+      my_names_used <- self$names_used(...)
+      output <- lapply(names(my_names_used),
+                       function(x) eval(parse(text = paste0("self$", x))))
+      names(output) <- my_names_used
+
+      # Run any functions and return their results instead
+      is_func <- vapply(output, is.function, logical(1))
+      output[is_func] <- lapply(output[is_func], function(f) f(self))
+
+      return(output)
+    },
+
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
@@ -268,3 +348,48 @@ obs.Taxmap <- function(obj, ...) {
 #' @name obs
 NULL
 
+
+#' @export
+all_names <- function(obj, ...) {
+  UseMethod("all_names")
+}
+
+#' @export
+all_names.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+all_names.Taxmap <- function(obj, ...) {
+  obj$all_names(...)
+}
+
+#' Return names of data in taxmap
+#'
+#' Return all the valid names that can be used with non-standard evalulation in manipulation functions like \code{filter_taxa}.
+#'
+#' @param obj (\code{taxmap})
+#' The \code{taxmap} object containing taxon information to be queried.
+#' @param tables If \code{TRUE}, include the names of columns of tables in \code{obj$data}
+#' @param funcs If \code{TRUE}, include the names of user-definable functionsin \code{obj$funcs}.
+#' @param others If \code{TRUE}, include the names of data in \code{obj$data} besides tables.
+#' @param warn If \code{TRUE}, warn if there are duplicate names.
+#'
+#' @return \code{character}
+#'
+#' @name all_names
+NULL
+
+
+#' Get names of taxon_data in an unevaluated expression
+#'
+#' Get names of taxon_data in an unevaluated expression
+#'
+#' @param obj a \code{taxmap} object
+#' @param ... unevaluated expression
+#'
+#' @return \code{character}
+#'
+#' @keywords internal
+#' @name names_used
+NULL

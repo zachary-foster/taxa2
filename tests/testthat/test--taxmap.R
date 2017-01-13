@@ -91,12 +91,20 @@ test_that("Simple usage", {
 
   abund <- data.frame(name = c("tiger", "cougar", "mole"),
                       count = 1:3)
-  counts <- tibble::as_tibble(data.frame(name = c("T", "C", "M"),
-                                         count = c(2, 3, 4)))
+  counts <- tibble::as_tibble(data.frame(taxon = c("T", "C", "M"),
+                                         num = c(2, 3, 4)))
   a_list <- list("a", "b", "c", "a", "b", "c")
   a_vector <- 1:3
+  a_func <- function(x) {paste0(x$data$abund$name, "!!!")}
 
-  x <- taxmap(tiger, cougar, mole, data = list(counts = counts, a_list = a_list, a_vector = a_vector, abund = abund))
+  x <- taxmap(tiger, cougar, mole,
+              data = list(counts = counts,
+                          a_list = a_list,
+                          a_vector = a_vector,
+                          abund = abund),
+              funcs = list(loud_names = a_func))
+
+
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))
   expect_length(x$roots(), 1)
