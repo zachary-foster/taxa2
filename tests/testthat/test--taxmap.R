@@ -87,31 +87,42 @@ potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
 unidentified_animal <- hierarchy(mammalia, unidentified)
 unidentified_plant <- hierarchy(plantae, unidentified)
 
+# create object used by multiple tests
+abund <- data.frame(name = c("tiger", "cougar", "mole"),
+                    count = 1:3)
+counts <- tibble::as_tibble(data.frame(taxon = c("T", "C", "M"),
+                                       num = c(2, 3, 4)))
+a_list <- list("a", "b", "c", "a", "b", "c")
+a_vector <- 1:3
+a_func <- function(x) {paste0(x$data$abund$name, "!!!")}
+
+x <- taxmap(tiger, cougar, mole,
+            data = list(counts = counts,
+                        a_list = a_list,
+                        a_vector = a_vector,
+                        abund = abund),
+            funcs = list(loud_names = a_func))
+
+
+
 test_that("Simple usage", {
-
-  abund <- data.frame(name = c("tiger", "cougar", "mole"),
-                      count = 1:3)
-  counts <- tibble::as_tibble(data.frame(taxon = c("T", "C", "M"),
-                                         num = c(2, 3, 4)))
-  a_list <- list("a", "b", "c", "a", "b", "c")
-  a_vector <- 1:3
-  a_func <- function(x) {paste0(x$data$abund$name, "!!!")}
-
-  x <- taxmap(tiger, cougar, mole,
-              data = list(counts = counts,
-                          a_list = a_list,
-                          a_vector = a_vector,
-                          abund = abund),
-              funcs = list(loud_names = a_func))
-
-  x$all_names()
-  x$names_used(num == 3, length(c(count)) > num, loud_names == "quiet")
-  x$data_used(num == 3, length(c(count)) > num, loud_names == "quiet")
-
-
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))
   expect_length(x$roots(), 1)
+})
+
+
+test_that("Finding names and values usable for NSE", {
+  # These functions are used to find the relevant inforamtion in an expression passed to a maniulation function like `filter_taxa`
+  x$all_names()
+  x$names_used(num == 3, length(c(count)) > num, loud_names == "quiet")
+  x$data_used(num == 3, length(c(count)) > num, loud_names == "quiet")
+})
+
+
+
+test_that("Filtering by taxon", {
+  x$filter_taxa(2, subtaxa = TRUE)
 })
 
 

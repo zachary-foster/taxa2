@@ -210,7 +210,7 @@ Taxmap <- R6::R6Class(
 
           reassign_one <- function(parents) {
             included_parents <- parents[parents %in% taxa_subset]
-            return(.data$taxon_data$taxon_ids[included_parents[1]])
+            return(self$edge_list$to[included_parents[1]])
           }
 
           # Get the taxon ids of the current object
@@ -228,9 +228,9 @@ Taxmap <- R6::R6Class(
 
           # Replace taxon ids
           if (is.data.frame(self$data[[data_index]])) {
-            self$data[data_index][to_reassign, "taxon_id"] <- new_data_taxon_ids
+            self$data[[data_index]][to_reassign, "taxon_id"] <- new_data_taxon_ids
           } else {
-            names(self$data[data_index])[to_reassign] <- new_data_taxon_ids
+            names(self$data[[data_index]])[to_reassign] <- new_data_taxon_ids
           }
         }
 
@@ -241,7 +241,7 @@ Taxmap <- R6::R6Class(
       if (reassign_taxa) {
         reassign_one <- function(parents) {
           included_parents <- parents[parents %in% taxa_subset]
-          return(.data$taxon_data$taxon_ids[included_parents[1]])
+          return(self$edge_list$to[included_parents[1]])
         }
 
         to_reassign <- ! self$edge_list$from %in% self$edge_list$to[taxa_subset]
@@ -510,3 +510,71 @@ NULL
 #' @keywords internal
 #' @name names_used
 NULL
+
+
+#' Filter taxa with a list of conditions
+#'
+#' Filter taxa in a \code{\link{taxmap}} object with a series of conditions. Any variable name that
+#' appears in \code{obj$all_names()} can be used as if it was a vector on its own. See
+#' \code{\link[dplyr]{filter}} for the inspiration for this function and more information.
+#' Calling the function using the \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R functions.
+#' However, calling the function using the \code{filter_taxa(obj, ...)} mitates R's traditional copy-on-modify semantics,
+#' so "obj" would not be changed; instead a changed version would be returned, like most R functions.
+#' \preformatted{
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#'                 reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
+#' filter_taxa(obj, ...)}
+#'
+#' @param obj An object of class \code{\link{taxmap}}
+#' @param ... One or more filtering conditions. Each filtering condition can be one of three things: \describe{
+#'   \item{\code{character}}{One or more taxon IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row indexes
+#'   of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of length equal
+#'   to the number of rows in \code{obj$edge_list}} } Any variable name that
+#' appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' @param subtaxa (\code{logical} of length 1) If \code{TRUE}, include subtaxa of taxa passing the
+#'   filter.
+#' @param supertaxa (\code{logical} of length 1) If \code{TRUE}, include supertaxa of taxa passing
+#'   the filter.
+#' @param taxonless (\code{logical}) If \code{TRUE}, include observations even if the
+#'   taxon they are assigned to is filtered out. Observations assigned to removed taxa will be
+#'   assigned to \code{NA}. This option can be either simply \code{TRUE}/\code{FALSE},
+#'   meaning that all data sets will be treated the same, or a logical vector can be supplied with names
+#'   corresponding one or more data sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)}
+#'   would inlcude observations whose taxon was filtered out in \code{obj$data$abundance}, but not in \code{obj$data$stats}.
+#'   See the \code{reassign} option below for further complications.
+#' @param reassign_obs (\code{logical} of length 1) If \code{TRUE}, observations assigned to removed
+#'   taxa will be reassigned to the closest supertaxon that passed the filter. If there are no
+#'   supertaxa of such an observation that passed the filter, they will be filtered out if
+#'   \code{taxonless} is \code{TRUE}. This option can be either simply \code{TRUE}/\code{FALSE},
+#'   meaning that all data sets will be treated the same, or a logical vector can be supplied with names
+#'   corresponding one or more data sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would reassign observations
+#'   in \code{obj$data$abundance}, but not in \code{obj$data$stats}.
+#' @param reassign_taxa (\code{logical} of length 1) If \code{TRUE}, subtaxa of removed taxa will be
+#'   reassigned to the closest supertaxon that passed the filter. This is useful for removing intermediate levels of a taxonomy.
+#' @param invert (\code{logical} of length 1) If \code{TRUE}, do NOT include the selection.
+#'   This is different than just replacing a \code{==} with a \code{!=} because this option negates
+#'   the selection after taking into account the \code{subtaxa} and \code{supertaxa} options.
+#'   This is useful for removing a taxon and all its subtaxa for example.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name filter_taxa
+NULL
+
+#' @export
+filter_taxa <- function(obj, ...) {
+  UseMethod("filter_taxa")
+}
+
+#' @export
+filter_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+filter_taxa.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$filter_taxa(...)
+}

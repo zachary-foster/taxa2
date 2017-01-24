@@ -2,6 +2,8 @@
 
 S3method(all_names,Taxmap)
 S3method(all_names,default)
+S3method(filter_taxa,Taxmap)
+S3method(filter_taxa,default)
 S3method(leaves,Taxonomy)
 S3method(leaves,default)
 S3method(obs,Taxmap)
