@@ -174,6 +174,26 @@ Taxmap <- R6::R6Class(
         return(data_taxon_ids)
       }
 
+      parse_possibly_named_logical <- function(input, default) { # used to parse inputs to `taxonless` and `reassign_obs`
+        if (is.null(names(input))) {
+          if (length(input) == 1) {
+            output <- stats::setNames(rep(input, length(self$data)), names(self$data))
+          } else if (length(input) == length(self$data)) {
+            output <- stats::setNames(input, names(self$data))
+          } else {
+            error("Invalid input for logical vector selecting which data sets to affect. Valid inputs include:\n  1) a single unnamed logical (e.g. TRUE)\n  2) one or more named logicals with names matching data sets in obj$data (e.g. c(data_1 = TRUE, data_2 = FALSE)\n  3) an unamed logical vector of the same length as obj$data.")
+          }
+        } else {
+          if (length(not_data_names <- names(input)[! names(input) %in% names(self$data)]) > 0) {
+            stop(paste0("Invalid input for logical vector selecting which data sets to affect. The following names are not in self$data: ",
+                        paste0(not_data_names, collapse = ", ")))
+          }
+          output <- stats::setNames(rep(default, length(self$data)), names(self$data))
+          output[names(input)] <- input
+        }
+        return(output)
+      }
+
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...), data = self$data_used(...))
 
@@ -205,37 +225,36 @@ Taxmap <- R6::R6Class(
       }
 
       # Reassign taxonless observations
-      if (reassign_obs) {
-        process_one <- function(data_index) {
+      reassign_obs <- parse_possibly_named_logical(reassign_obs, default = formals(self$filter_taxa)$reassign_obs)
+      process_one <- function(data_index) {
 
-          reassign_one <- function(parents) {
-            included_parents <- parents[parents %in% taxa_subset]
-            return(self$edge_list$to[included_parents[1]])
-          }
-
-          # Get the taxon ids of the current object
-          if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[data_index]])))) {
-            return(NULL) # if there is no taxon id info, dont change anything
-          }
-
-          # Generate replacement taxon ids
-          to_reassign <- ! data_taxon_ids %in% self$edge_list$to[taxa_subset]
-          supertaxa_key <- self$supertaxa(subset = unique(data_taxon_ids[to_reassign]),
-                                          recursive = TRUE, simplify = FALSE, include_input = FALSE,
-                                          return_type = "index", na = FALSE)
-          reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
-          new_data_taxon_ids <- reassign_key[data_taxon_ids[to_reassign]]
-
-          # Replace taxon ids
-          if (is.data.frame(self$data[[data_index]])) {
-            self$data[[data_index]][to_reassign, "taxon_id"] <- new_data_taxon_ids
-          } else {
-            names(self$data[[data_index]])[to_reassign] <- new_data_taxon_ids
-          }
+        reassign_one <- function(parents) {
+          included_parents <- parents[parents %in% taxa_subset]
+          return(self$edge_list$to[included_parents[1]])
         }
 
-        unused_output <- lapply(seq_along(self$data), process_one)
+        # Get the taxon ids of the current object
+        if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[data_index]])))) {
+          return(NULL) # if there is no taxon id info, dont change anything
+        }
+
+        # Generate replacement taxon ids
+        to_reassign <- ! data_taxon_ids %in% self$edge_list$to[taxa_subset]
+        supertaxa_key <- self$supertaxa(subset = unique(data_taxon_ids[to_reassign]),
+                                        recursive = TRUE, simplify = FALSE, include_input = FALSE,
+                                        return_type = "index", na = FALSE)
+        reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
+        new_data_taxon_ids <- reassign_key[data_taxon_ids[to_reassign]]
+
+        # Replace taxon ids
+        if (is.data.frame(self$data[[data_index]])) {
+          self$data[[data_index]][to_reassign, "taxon_id"] <- new_data_taxon_ids
+        } else {
+          names(self$data[[data_index]])[to_reassign] <- new_data_taxon_ids
+        }
       }
+
+      unused_output <- lapply(seq_along(self$data)[reassign_obs], process_one)
 
       # Reassign subtaxa
       if (reassign_taxa) {
@@ -254,21 +273,33 @@ Taxmap <- R6::R6Class(
 
 
       # Remove taxonless observations
+      taxonless <- parse_possibly_named_logical(taxonless, default = formals(self$filter_taxa)$taxonless)
       process_one <- function(my_index) {
 
         # Get the taxon ids of the current object
-        if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[data_index]])))) {
+        if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[my_index]])))) {
           return(NULL) # if there is no taxon id info, dont change anything
         }
 
         obs_subset <- data_taxon_ids %in% self$edge_list$to[taxa_subset]
-        if (taxonless) {
-          self$data[[data_index]][! obs_subset, "obs_taxon_ids"] <- as.character(NA)
+        if (taxonless[my_index]) {
+          if (is.data.frame(self$data[[my_index]])) {
+            self$data[[my_index]][! obs_subset, "taxon_id"] <- as.character(NA)
+          } else {
+            names(self$data[[my_index]])[! obs_subset] <- as.character(NA)
+          }
         } else {
-          self$data[[data_index]] <- self$data[[data_index]][obs_subset, , drop = FALSE]
+          if (is.data.frame(self$data[[my_index]])) {
+            self$data[[my_index]] <- self$data[[my_index]][obs_subset, , drop = FALSE]
+          } else {
+            self$data[[my_index]] <- self$data[[my_index]][obs_subset]
+          }
         }
 
       }
+      unused_output <- lapply(seq_along(self$data), process_one)
+
+
 
       # Remove filtered taxa
       self$taxa <- self$taxa[self$edge_list$to[taxa_subset]]

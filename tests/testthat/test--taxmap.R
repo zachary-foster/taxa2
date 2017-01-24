@@ -122,7 +122,7 @@ test_that("Finding names and values usable for NSE", {
 
 
 test_that("Filtering by taxon", {
-  x$filter_taxa(2, subtaxa = TRUE)
+  filter_taxa(x, 2, subtaxa = TRUE, supertaxa = TRUE, reassign_obs = c(abund = TRUE, a_vector = FALSE), taxonless = c(abund = F, a_vector = T))
 })
 
 
