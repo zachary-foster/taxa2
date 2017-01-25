@@ -23,6 +23,17 @@ Taxonomy <- R6::R6Class(
     edge_list = NULL, # Note: this should be made of taxon ids, not indexes, for consistency between subsets
     input_ids = NULL, # Only used by `Taxmap` right now
 
+    # A simple wrapper to make future changes easier
+    taxon_ids = function() {
+      self$edge_list$to
+    },
+
+    # A simple wrapper to make future changes easier
+    taxon_names = function() {
+      vapply(self$taxa[self$edge_list$to], function(x) x$name$name, character(1))
+    },
+
+
     initialize = function(...) {
       input <- list(...)
 

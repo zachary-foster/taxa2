@@ -147,7 +147,7 @@ Taxmap <- R6::R6Class(
       # Get observations of taxa
       my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = recursive, include_input = TRUE, return_type = "index") #'unname' is neede for some reason.. something to look into
       unique_subtaxa <- unique(unlist(my_subtaxa))
-      obs_taxon_index <- match(obs_taxon_ids, self$edge_list$to)
+      obs_taxon_index <- match(obs_taxon_ids, self$taxon_ids())
       obs_key <- split(seq_along(obs_taxon_ids), obs_taxon_index)
       output <- stats::setNames(lapply(my_subtaxa, function(x) unname(unlist(obs_key[as.character(x)]))),
                                 names(subset))
@@ -164,15 +164,6 @@ Taxmap <- R6::R6Class(
 
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
                            reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE) {
-
-      get_data_taxon_ids <- function(x) {
-        if (is.data.frame(x)) {
-          data_taxon_ids <- x$taxon_id
-        } else {
-          data_taxon_ids <- names(x)
-        }
-        return(data_taxon_ids)
-      }
 
       parse_possibly_named_logical <- function(input, default) { # used to parse inputs to `taxonless` and `reassign_obs`
         if (is.null(names(input))) {
@@ -199,7 +190,7 @@ Taxmap <- R6::R6Class(
 
       # convert taxon_ids to logical
       is_char <- vapply(selection, is.character, logical(1))
-      selection[is_char] <- lapply(selection[is_char], function(x) self$edge_list$to %in% x)
+      selection[is_char] <- lapply(selection[is_char], function(x) self$taxon_ids() %in% x)
 
       # convert indexes to logical
       is_index <- vapply(selection, is.numeric, logical(1))
@@ -230,7 +221,7 @@ Taxmap <- R6::R6Class(
 
         reassign_one <- function(parents) {
           included_parents <- parents[parents %in% taxa_subset]
-          return(self$edge_list$to[included_parents[1]])
+          return(self$taxon_ids()[included_parents[1]])
         }
 
         # Get the taxon ids of the current object
@@ -239,7 +230,7 @@ Taxmap <- R6::R6Class(
         }
 
         # Generate replacement taxon ids
-        to_reassign <- ! data_taxon_ids %in% self$edge_list$to[taxa_subset]
+        to_reassign <- ! data_taxon_ids %in% self$taxon_ids()[taxa_subset]
         supertaxa_key <- self$supertaxa(subset = unique(data_taxon_ids[to_reassign]),
                                         recursive = TRUE, simplify = FALSE, include_input = FALSE,
                                         return_type = "index", na = FALSE)
@@ -260,15 +251,15 @@ Taxmap <- R6::R6Class(
       if (reassign_taxa) {
         reassign_one <- function(parents) {
           included_parents <- parents[parents %in% taxa_subset]
-          return(self$edge_list$to[included_parents[1]])
+          return(self$taxon_ids()[included_parents[1]])
         }
 
-        to_reassign <- ! self$edge_list$from %in% self$edge_list$to[taxa_subset]
-        supertaxa_key <- self$supertaxa(subset = unique(self$edge_list$to[to_reassign]),
+        to_reassign <- ! self$edge_list$from %in% self$taxon_ids()[taxa_subset]
+        supertaxa_key <- self$supertaxa(subset = unique(self$taxon_ids()[to_reassign]),
                                         recursive = TRUE, simplify = FALSE, include_input = FALSE,
                                         return_type = "index", na = FALSE)
         reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
-        self$edge_list[to_reassign, "from"] <- reassign_key[self$edge_list$to[to_reassign]]
+        self$edge_list[to_reassign, "from"] <- reassign_key[self$taxon_ids()[to_reassign]]
       }
 
 
@@ -281,7 +272,7 @@ Taxmap <- R6::R6Class(
           return(NULL) # if there is no taxon id info, dont change anything
         }
 
-        obs_subset <- data_taxon_ids %in% self$edge_list$to[taxa_subset]
+        obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
         if (taxonless[my_index]) {
           if (is.data.frame(self$data[[my_index]])) {
             self$data[[my_index]][! obs_subset, "taxon_id"] <- as.character(NA)
@@ -302,12 +293,62 @@ Taxmap <- R6::R6Class(
 
 
       # Remove filtered taxa
-      self$taxa <- self$taxa[self$edge_list$to[taxa_subset]]
+      self$taxa <- self$taxa[self$taxon_ids()[taxa_subset]]
       self$edge_list <- self$edge_list[taxa_subset, , drop = FALSE]
-      self$edge_list[! self$edge_list$from %in% self$edge_list$to, "from"] <- as.character(NA)
+      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <- as.character(NA)
+
+      return(self)
+    },
+
+
+
+
+
+
+    filter_obs = function(target, ..., unobserved = TRUE) {
+      # non-standard argument evaluation
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...), data = self$data_used(...))
+
+      # convert taxon_ids to indexes
+      is_char <- vapply(selection, is.character, logical(1))
+      if (sum(is_char) > 0) {
+        stop("observation filtering with taxon IDs is not currently supported. If you want to filter observation by taxon IDs, use something like: `obj$data$my_target$taxon_ids %in% my_subset`")
+      }
+      # selection[is_char] <- lapply(selection[is_char], function(x) match(x, .data$taxon_data$taxon_ids))
+
+      # convert logical to indexes
+      is_logical <- vapply(selection, is.logical, logical(1))
+      selection[is_logical] <- lapply(selection[is_logical], which)
+
+      # combine filters
+      intersect_with_dups <-function(a, b) {
+        #taken from http://r.789695.n4.nabble.com/intersect-without-discarding-duplicates-td2225377.html
+        rep(sort(intersect(a, b)), pmin(table(a[a %in% b]), table(b[b %in% a])))
+      }
+      selection <- Reduce(intersect_with_dups, selection)
+
+      # Remove observations
+      data_taxon_ids <- get_data_taxon_ids(self$data[[target]]) # used in removing unobserved taxa but must be calculated before filtering observations
+      self$data[[target]] <- self$data[[target]][selection, , drop = FALSE]
+
+      # Remove unobserved taxa
+      if (! unobserved & ! is.null(data_taxon_ids)) {
+        unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]), na = FALSE,
+                                          recursive = TRUE, simplify = TRUE, include_input = TRUE, return_type = "index")
+        taxa_to_remove <- 1:nrow(self$edge_list) %in% unobserved_taxa & vapply(self$obs(target), length, numeric(1)) == 0
+        self$taxa <- self$taxa[self$taxon_ids()[! taxa_to_remove]]
+        self$edge_list <- self$edge_list[! taxa_to_remove, , drop = FALSE]
+        self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <- as.character(NA)
+        # Todo: deal with other objects in data that had their taxa removed. There should be a `remove_taxa` function that this and `filter_taxa` could use.
+      }
 
       return(self)
     }
+
+
+  remove_taxa <- function()
+
+
 
   ),
 
@@ -609,3 +650,62 @@ filter_taxa.Taxmap <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
   obj$filter_taxa(...)
 }
+
+
+
+
+#' Filter observations with a list of conditions
+#'
+#' Filter data in a \code{\link{taxmap}} (in \code{obj$data}) object with a series of conditions.
+#' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{filter}} for the inspiration for this function and more information.
+#' \preformatted{
+#' obj$filter_obs(target, ..., unobserved = TRUE)
+#' filter_obs(obj, target, ...)}
+#'
+#' @param obj An object of type \code{\link{taxmap}}
+#' @param target The name of the list/vector/table in \code{obj$data} to filter
+#' @param ... One or more filtering conditions. Each filtering condition can be one of three things: \describe{
+#'   \item{\code{character}}{One or more taxon IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row indexes
+#'   of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of length equal
+#'   to the number of rows in \code{obj$edge_list}} } Any variable name that
+#' appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' @param unobserved (\code{logical} of length 1) If \code{TRUE}, preserve taxa even if all of their
+#'   observations are filtered out. If \code{FALSE}, remove taxa for which all observations were filtered out.
+#'   Note that only taxa that are unobserved due to this filtering will be removed; there might be
+#'   other taxa without observations to begin with that will not be removed.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name filter_obs
+NULL
+
+#' @export
+filter_obs <- function(obj, ...) {
+  UseMethod("filter_obs")
+}
+
+#' @export
+filter_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+filter_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$filter_obs(...)
+}
+
+
+get_data_taxon_ids <- function(x) {
+  if (is.data.frame(x)) {
+    data_taxon_ids <- x$taxon_id
+  } else {
+    data_taxon_ids <- names(x)
+  }
+  return(data_taxon_ids)
+}
+
+
