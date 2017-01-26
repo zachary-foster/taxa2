@@ -343,10 +343,13 @@ Taxmap <- R6::R6Class(
       }
 
       return(self)
+    },
+
+    select_obs = function(target, ...) {
+      self$data[[target]] <- dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
+                                              dplyr::select(self$data[[target]], ...))
+      return(self)
     }
-
-
-  remove_taxa <- function()
 
 
 
@@ -709,3 +712,50 @@ get_data_taxon_ids <- function(x) {
 }
 
 
+
+#' Subset columns in a \code{\link{taxmap}} object
+#'
+#' Subsets \code{obs_data} columns in a \code{\link{taxmap}} object. Takes and returns a
+#' \code{\link{taxmap}} object. Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{select}} for the inspiration for this function and more information.
+#' \preformatted{
+#' obj$select_obs(target, ..., unobserved = TRUE)
+#' select_obs(obj, target, ...)}
+#'
+#' @param obj An object of type \code{\link{taxmap}}
+#' @param target The name of the list/vector/table in \code{obj$data} to filter
+#' @param ... One or more column names to return in the new object. Each can be one of two things:
+#'   \describe{ \item{expression with unquoted column name}{The name of a column in
+#'   \code{obj$data[[target]]} typed as if it was a varaible on its own.} \item{\code{numeric}}{Indexes of
+#'   columns in \code{obj$data[[target]]}} } To match column names with a character vector, use
+#'   \code{matches("my_col_name")}. To match a logical vector, convert it to a column index using
+#'   \code{\link[base]{which}}.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @examples
+#' \dontrun{
+#' # subset observation columns
+#' select_obs(unite_ex_data, other_id, seq_id)
+#' }
+#'
+#' @name select_obs
+NULL
+
+#' @export
+select_obs <- function(obj, ...) {
+  UseMethod("select_obs")
+}
+
+#' @export
+select_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+select_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$select_obs(...)
+}

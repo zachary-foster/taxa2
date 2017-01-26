@@ -91,7 +91,8 @@ unidentified_plant <- hierarchy(plantae, unidentified)
 abund <- data.frame(name = c("tiger", "cougar", "mole"),
                     count = 1:3)
 counts <- tibble::as_tibble(data.frame(taxon = c("T", "C", "M"),
-                                       num = c(2, 3, 4)))
+                                       num = c(2, 3, 4),
+                                       num_2 = c(4, 5, 6)))
 a_list <- list("a", "b", "c", "a", "b", "c")
 a_vector <- 1:3
 a_func <- function(x) {paste0(x$data$abund$name, "!!!")}
