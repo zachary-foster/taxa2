@@ -349,6 +349,59 @@ Taxmap <- R6::R6Class(
       self$data[[target]] <- dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
                                               dplyr::select(self$data[[target]], ...))
       return(self)
+    },
+
+
+    mutate_obs = function(target, ...) {
+      data_used <- self$data_used(...)
+      unevaluated <- lazyeval::lazy_dots(...)
+      for (index in seq_along(unevaluated)) {
+        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+        data_used <- c(data_used, new_col) # Allow this col to be used in evaluating the next cols
+        self$data[[target]][[names(new_col)]] <- new_col[[1]]
+      }
+      return(self)
+    },
+
+
+    transmute_obs = function(target, ...) {
+      result <- list()
+      data_used <- self$data_used(...)
+      unevaluated <- lazyeval::lazy_dots(...)
+      for (index in seq_along(unevaluated)) {
+        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+        data_used <- c(data_used, new_col) # Allow this col to be used in evaluating the next cols
+        result[[names(new_col)]] <- new_col[[1]]
+      }
+      self$data[[target]] <- tibble::as_tibble(result)
+      return(self)
+    },
+
+
+    arrange_obs = function(target, ...) {
+      data_used <- self$data_used(...)
+      data_used <- data_used[! names(data_used) %in% names(self$data[[target]])] # These are not needed since they are already in the table being sorted
+      if (length(data_used) == 0) {
+        self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
+      } else {
+        target_with_extra_cols <- dplyr::bind_cols(data_used, self$data[[target]])
+        self$data[[target]] <- dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      }
+
+      return(self)
+    },
+
+    arrange_taxa = function(...) {
+      data_used <- self$data_used(...)
+      data_used <- data_used[! names(data_used) %in% names(self$edge_list)] # These are not needed since they are already in the table being sorted
+      if (length(data_used) == 0) {
+        self$edge_list <- dplyr::arrange(self$edge_list, ...)
+      } else {
+        target_with_extra_cols <- dplyr::bind_cols(data_used, self$edge_list)
+        self$edge_list <- dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      }
+
+      return(self)
     }
 
 
@@ -470,7 +523,7 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width
     output <- paste0(prefix, capture.output(print(x, ...)))
     cat(paste0(paste0(output, collapse = "\n"), "\n"))
   }
-
+  arrange_obs
 
   if (is.data.frame(data)) {
     loadNamespace("dplyr") # used for tibble print methods
@@ -662,6 +715,9 @@ filter_taxa.Taxmap <- function(obj, ...) {
 #' Filter data in a \code{\link{taxmap}} (in \code{obj$data}) object with a series of conditions.
 #' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
 #' See \code{\link[dplyr]{filter}} for the inspiration for this function and more information.
+#' Calling the function using the \code{obj$filter_obs(...)} style edits "obj" in place, unlike most R functions.
+#' However, calling the function using the \code{filter_obs(obj, ...)} mitates R's traditional copy-on-modify semantics,
+#' so "obj" would not be changed; instead a changed version would be returned, like most R functions.
 #' \preformatted{
 #' obj$filter_obs(target, ..., unobserved = TRUE)
 #' filter_obs(obj, target, ...)}
@@ -718,6 +774,9 @@ get_data_taxon_ids <- function(x) {
 #' Subsets \code{obs_data} columns in a \code{\link{taxmap}} object. Takes and returns a
 #' \code{\link{taxmap}} object. Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
 #' See \code{\link[dplyr]{select}} for the inspiration for this function and more information.
+#' Calling the function using the \code{obj$select_obs(...)} style edits "obj" in place, unlike most R functions.
+#' However, calling the function using the \code{select_obs(obj, ...)} mitates R's traditional copy-on-modify semantics,
+#' so "obj" would not be changed; instead a changed version would be returned, like most R functions.
 #' \preformatted{
 #' obj$select_obs(target, ..., unobserved = TRUE)
 #' select_obs(obj, target, ...)}
@@ -759,3 +818,162 @@ select_obs.Taxmap <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
   obj$select_obs(...)
 }
+
+
+
+#' Add columns to \code{\link{taxmap}} objects
+#'
+#' Add columns to tables in \code{obj$data} in \code{\link{taxmap}} objects. Any variable name that appears in
+#' \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{mutate_obs}} for the inspiration for this function and more information.
+#' Calling the function using the \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R functions.
+#' However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics,
+#' so "obj" would not be changed; instead a changed version would be returned, like most R functions.
+#' \preformatted{
+#' obj$mutate_obs(target, ...)
+#' mutate_obs(obj, target, ...)}
+#'
+#' @param obj An object of type \code{\link{taxmap}}
+#' @param target The name of the table in \code{obj$data} to filter
+#' @param ... One or more named columns to add. Newly created columns can be
+#'   referenced in the same function call.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#' @name mutate_obs
+NULL
+
+#' @export
+mutate_obs <- function(obj, ...) {
+  UseMethod("mutate_obs")
+}
+
+#' @export
+mutate_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+mutate_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$mutate_obs(...)
+}
+
+
+#' Replace columns in \code{\link{taxmap}} objects
+#'
+#' Replace columns of tables in \code{obj$data} in \code{\link{taxmap}} objects.
+#' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{transmute}} for the inspiration for this function and more information.
+#' \preformatted{
+#' obj$transmute_obs(target, ...)
+#' transmute_obs(obj, target, ...)}
+#'
+#' @param obj An object of type \code{\link{taxmap}}
+#' @param target The name of the table in \code{obj$data} to filter
+#' @param ... One or more named columns to add. Newly created columns can be
+#'   referenced in the same function call.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name transmute_obs
+NULL
+
+
+#' @export
+transmute_obs <- function(obj, ...) {
+  UseMethod("transmute_obs")
+}
+
+#' @export
+transmute_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+transmute_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$transmute_obs(...)
+}
+
+
+
+#' Sort columns of \code{\link{taxmap}} objects
+#'
+#' Sort columns of tables in \code{obj$data} in \code{\link{taxmap}} objects.
+#' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{arrange}} for the inspiration for this function and more information.
+#' \preformatted{
+#' obj$arrange_obs(target, ...)
+#' arrange_obs(obj, target, ...)}
+#'
+#' @param obj An object of type \code{\link{taxmap}}
+#' @param target The name of the table in \code{obj$data} to filter
+#' @param ... One or more column names to sort on.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name arrange_obs
+NULL
+
+#' @export
+arrange_obs <- function(obj, ...) {
+  UseMethod("arrange_obs")
+}
+
+#' @export
+arrange_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+arrange_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$arrange_obs(...)
+}
+
+
+
+
+#' Sort the edge list of \code{\link{taxmap}} objects
+#'
+#' Sort the edge list of \code{taxon_data} in \code{\link{taxmap}} objects.
+#' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \code{\link[dplyr]{arrange}} for the inspiration for this function and more information.
+#' \preformatted{
+#' obj$arrange_taxa(...)
+#' arrange_taxa(obj, ...)}
+#'
+#' @param .data \code{\link{taxmap}}
+#' @param ... One or more column names to sort on.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name arrange_taxa
+NULL
+
+
+#' @export
+arrange_taxa <- function(obj, ...) {
+  UseMethod("arrange_taxa")
+}
+
+#' @export
+arrange_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+arrange_taxa.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$arrange_taxa(...)
+}
+
+

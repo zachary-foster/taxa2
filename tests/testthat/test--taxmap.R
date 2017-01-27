@@ -104,6 +104,18 @@ x <- taxmap(tiger, cougar, mole,
                         abund = abund),
             funcs = list(loud_names = a_func))
 
+mutate_obs(x, "counts",
+           new_col = paste(taxon, num, loud_names),
+           newer_col = paste("better than", new_col))
+
+transmute_obs(x, "counts",
+              new_col = paste(taxon, num, loud_names),
+              newer_col = paste("better than", new_col))
+
+arrange_obs(x, "counts", 3:1)
+arrange_obs(x, "counts", taxon, num)
+arrange_obs(x, "counts", loud_names)
+arrange_taxa(x, 1:9)
 
 
 test_that("Simple usage", {
