@@ -402,9 +402,43 @@ Taxmap <- R6::R6Class(
       }
 
       return(self)
+    },
+
+
+    sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+                            use_supertaxa = TRUE, collapse_func = mean, ...) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight), data = data_used)
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight), data = data_used)
+
+      # Calculate taxon component of taxon weights
+      if (is.null(taxon_weight)) {
+        obs_taxon_weight <- rep(1, nrow(self$data[[target]]))
+      } else {
+        obs_index <- match(get_data_taxon_ids(self$data[[target]]), self$taxon_ids())
+        my_supertaxa <- self$supertaxa(recursive = use_supertaxa, simplify = FALSE,
+                                       include_input = TRUE, return_type = "index", na = FALSE)
+        taxon_weight_product <- vapply(my_supertaxa, function(x) collapse_func(taxon_weight[x]), numeric(1))
+        obs_taxon_weight <- taxon_weight_product[obs_index]
+      }
+      obs_taxon_weight <- obs_taxon_weight / sum(obs_taxon_weight)
+
+      # Calculate observation component of observation weights
+      if (is.null(obs_weight)) {
+        obs_weight <- rep(1, nrow(self$data[[target]]))
+      }
+      obs_weight <- obs_weight / sum(obs_weight)
+
+      # Combine observation and taxon weight components
+      combine_func <- prod
+      weight <- mapply(obs_taxon_weight, obs_weight, FUN = function(x, y) combine_func(c(x,y)))
+      weight <- weight / sum(weight)
+
+      # Sample observations
+      sampled_rows <- sample.int(nrow(my_obs_data), size = size, replace = replace, prob = weight)
+      self$filter_obs(sampled_rows, ...)
     }
-
-
 
   ),
 
@@ -949,7 +983,7 @@ arrange_obs.Taxmap <- function(obj, ...) {
 #' obj$arrange_taxa(...)
 #' arrange_taxa(obj, ...)}
 #'
-#' @param .data \code{\link{taxmap}}
+#' @param obj \code{\link{taxmap}}
 #' @param ... One or more column names to sort on.
 #'
 #' @return An object of type \code{\link{taxmap}}
@@ -977,3 +1011,53 @@ arrange_taxa.Taxmap <- function(obj, ...) {
 }
 
 
+
+#' Sample n observations from \code{\link{taxmap}}
+#'
+#' Randomly sample some number of observations from a \code{\link{taxmap}} object. Weights can be
+#' specified for observations or the taxa they are taxmap by.
+#' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' See \link[dplyr]{sample_n} for the inspiration for this function.
+#'
+#' @param obj (\code{\link{taxmap}}) The object to sample from.
+#' @param target The name of the table in \code{obj$data} to filter
+#' @param size (\code{numeric} of length 1) The number of observations to sample.
+#' @param replace (\code{logical} of length 1) If \code{TRUE}, sample with replacement.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. If
+#'   \code{use_supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. If
+#'   \code{obs_weight} is also specified, the two weights are multiplied (after \code{taxon_weight}
+#'   for each observation is calculated).
+#' @param obs_weight (\code{numeric}) Sampling weights of each observation.  If
+#'   \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{taxon_weight} for each observation is calculated).
+#' @param use_supertaxa (\code{logical} of length 1) Affects how the \code{taxon_weight} is used. If
+#'   \code{TRUE}, the weights for each taxon in an observation's classification are multiplied to get the
+#'   observation weight. Otherwise, just the taxonomic level the observation is assign to it considered.
+#' @param collapse_func (\code{function} of length 1) If \code{taxon_weight} option is used and
+#'   \code{supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. This function should take  numeric
+#'   vector and return a single number.
+#' @param ... Additional options are passed to \code{\link{filter_obs}}.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#' @name sample_n_obs
+NULL
+
+#' @export
+sample_n_obs <- function(obj, ...) {
+  UseMethod("sample_n_obs")
+}
+
+#' @export
+sample_n_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_n_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$arrange_taxa(...)
+}
