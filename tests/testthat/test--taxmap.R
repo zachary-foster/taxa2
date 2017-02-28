@@ -118,6 +118,7 @@ arrange_obs(x, "counts", loud_names)
 arrange_taxa(x, 1:9)
 
 
+
 test_that("Simple usage", {
   expect_length(x$taxa, 9)
   expect_equal(dim(x$edge_list), c(9, 2))

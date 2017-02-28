@@ -436,9 +436,61 @@ Taxmap <- R6::R6Class(
       weight <- weight / sum(weight)
 
       # Sample observations
-      sampled_rows <- sample.int(nrow(my_obs_data), size = size, replace = replace, prob = weight)
-      self$filter_obs(sampled_rows, ...)
+      sampled_rows <- sample.int(nrow(self$data[[target]]), size = size, replace = replace, prob = weight)
+      self$filter_obs(target, sampled_rows, ...)
+    },
+
+    sample_frac_obs = function(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+                                use_supertaxa = TRUE, collapse_func = mean, ...) {
+      self$sample_n_obs(target = target, size = size * nrow(self$data[[target]]), replace = replace,
+                   taxon_weight = taxon_weight, obs_weight = obs_weight,
+                   use_supertaxa = use_supertaxa, collapse_func = collapse_func, ...)
+    },
+
+    sample_n_taxa = function(size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+                              use_subtaxa = TRUE, collapse_func = mean, ...) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight), data = data_used)
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight), data = data_used)
+
+      # Calculate observation component of taxon weights
+      if (is.null(obs_weight)) {
+        taxon_obs_weight <- rep(1, nrow(self$edge_list))
+      } else {
+        if (is.null(obs_target)) {
+          stop("If the option `obs_weight` is used, then `obs_target` must also be defined.")
+        }
+        my_obs <- self$obs(obs_target, recursive = use_subtaxa, simplify = FALSE)
+        taxon_obs_weight <- vapply(my_obs, function(x) collapse_func(obs_weight[x]), numeric(1))
+      }
+      taxon_obs_weight <- taxon_obs_weight / sum(taxon_obs_weight)
+
+      # Calculate taxon component of taxon weights
+      if (is.null(taxon_weight)) {
+        taxon_weight <- rep(1, nrow(self$edge_list))
+      }
+      taxon_weight <- taxon_weight / sum(taxon_weight)
+
+      # Combine observation and taxon weight components
+      combine_func <- prod
+      weight <- mapply(taxon_weight, taxon_obs_weight, FUN = function(x, y) combine_func(c(x,y)))
+      weight <- weight / sum(weight)
+
+      # Sample observations
+      sampled_rows <- sample.int(nrow(self$edge_list), size = size, replace = FALSE, prob = weight)
+      self$filter_taxa(sampled_rows, ...)
+    },
+
+    sample_frac_taxa = function(size = 1, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+                                 use_subtaxa = TRUE, collapse_func = mean, ...) {
+      self$sample_n_taxa(size = size * nrow(self$edge_list),
+                    taxon_weight = taxon_weight, obs_weight = obs_weight, obs_target = obs_target,
+                    use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
     }
+
+
+
 
   ),
 
@@ -1018,6 +1070,11 @@ arrange_taxa.Taxmap <- function(obj, ...) {
 #' specified for observations or the taxa they are taxmap by.
 #' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
 #' See \link[dplyr]{sample_n} for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_n_obs(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+#' use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_obs(obj, target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+#' use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj (\code{\link{taxmap}}) The object to sample from.
 #' @param target The name of the table in \code{obj$data} to filter
@@ -1059,5 +1116,181 @@ sample_n_obs.default <- function(obj, ...) {
 #' @export
 sample_n_obs.Taxmap <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
-  obj$arrange_taxa(...)
+  obj$sample_n_obs(...)
+}
+
+
+#' Sample a proportion of observations from \code{\link{taxmap}}
+#'
+#' Randomly sample some propoortion of observations from a \code{\link{taxmap}} object. Weights can be
+#' specified for observations or their taxa.
+#' See \link[dplyr]{sample_frac} for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_frac_obs(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+#' use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
+#' use_supertaxa = TRUE, collapse_func = mean, ...)}
+#'
+#' @param obj (\code{\link{taxmap}}) The object to sample from.
+#' @param target The name of the table in \code{obj$data} to filter
+#' @param size (\code{numeric} of length 1) The proportion of observations to sample.
+#' @param replace (\code{logical} of length 1) If \code{TRUE}, sample with replacement.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. If
+#'   \code{use_supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. If
+#'   \code{obs_weight} is also specified, the two weights are multiplied (after \code{taxon_weight}
+#'   for each observation is calculated).
+#' @param obs_weight (\code{numeric}) Sampling weights of each observation.  If
+#'   \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{taxon_weight} for each observation is calculated).
+#' @param use_supertaxa (\code{logical} of length 1) Affects how the \code{taxon_weight} is used. If
+#'   \code{TRUE}, the weights for each taxon in an observation's classification are multiplied to get the
+#'   observation weight. Otherwise, just the taxonomic level the observation is assign to it considered.
+#' @param collapse_func (\code{function} of length 1) If \code{taxon_weight} option is used and
+#'   \code{supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. This function should take  numeric
+#'   vector and return a single number.
+#' @param ... Additional options are passed to \code{\link{filter_obs}}.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#' @name sample_frac_obs
+NULL
+
+#' @export
+sample_frac_obs <- function(obj, ...) {
+  UseMethod("sample_frac_obs")
+}
+
+#' @export
+sample_frac_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_frac_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$sample_frac_obs(...)
+}
+
+
+#' Sample n taxa from \code{\link{taxmap}}
+#'
+#' Randomly sample some number of taxa from a \code{\link{taxmap}} object. Weights can be
+#' specified for taxa or the observations assigned to them.
+#' See \link[dplyr]{sample_n} for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+#' use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+#' use_subtaxa = TRUE, collapse_func = mean, ...)}
+#'
+#' @param obj (\code{\link{taxmap}}) The object to sample from.
+#' @param size (\code{numeric} of length 1) The number of taxa to sample.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. The expression
+#'   given is evaluated in the context of \code{\link{taxon_data}}. In other words, any column name
+#'   that appears in \code{\link{taxon_data}(.data)} can be used as if it was a vector on its own.
+#'   If \code{obs_weight} is also specified, the two weights are multiplied (after
+#'   \code{obs_weight} for each taxon is calculated).
+#' @param obs_weight (\code{numeric}) Sampling weights of each observation. The weights for each observation
+#'   assigned to a given taxon are supplied to \code{collapse_func} to get the taxon weight. If
+#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. The
+#'   expression given is evaluated in the context of \code{\link{obs_data}}. In other words, any
+#'   column name that appears in \code{\link{obs_data}(.data)} can be used as if it was a vector on
+#'   its own. If \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{obs_weight} for each observation is calculated). \code{obs_target} must be used with this option.
+#' @param obs_target (\code{character} of length 1) The name of the data set in \code{obj$data} that values in
+#' \code{obs_weight} corresponds to. Must be used when \code{obs_weight} is used.
+#' @param use_subtaxa (\code{logical} of length 1) Affects how the \code{obs_weight} option is
+#'   used. If \code{TRUE}, the weights for each taxon in an observation's classification are multiplied to
+#'   get the observation weight. Otherwise, just the taxonomic level the observation is assign to it considered.
+#' @param collapse_func (\code{function} of length 1) If \code{taxon_weight} is used and
+#'   \code{supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. This function should take  numeric
+#'   vector and return a single number.
+#' @param ... Additional options are passed to \code{\link{filter_taxa}}.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name sample_n_taxa
+NULL
+
+#' @export
+sample_n_taxa <- function(obj, ...) {
+  UseMethod("sample_n_taxa")
+}
+
+#' @export
+sample_n_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_n_taxa.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$sample_n_taxa(...)
+}
+
+
+
+#' Sample a proportion of taxa from \code{\link{taxmap}}
+#'
+#' Randomly sample some proportion of taxa from a \code{\link{taxmap}} object. Weights can be
+#' specified for taxa or the observations assigned to them. See \link[dplyr]{sample_frac} for the
+#' inspiration for this function.
+#' \preformatted{
+#' obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+#' use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
+#' use_subtaxa = TRUE, collapse_func = mean, ...)}
+#'
+#' @param obj (\code{\link{taxmap}}) The object to sample from.
+#' @param size (\code{numeric} of length 1) The proportion of taxa to sample.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. The expression
+#'   given is evaluated in the context of \code{\link{taxon_data}}. In other words, any column name
+#'   that appears in \code{\link{taxon_data}(.data)} can be used as if it was a vector on its own.
+#'   If \code{obs_weight} is also specified, the two weights are multiplied (after
+#'   \code{obs_weight} for each taxon is calculated).
+#' @param obs_weight (\code{numeric}) Sampling weights of each observation. The weights for each observation
+#'   assigned to a given taxon are supplied to \code{collapse_func} to get the taxon weight. If
+#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. The
+#'   expression given is evaluated in the context of \code{\link{obs_data}}. In other words, any
+#'   column name that appears in \code{\link{obs_data}(.data)} can be used as if it was a vector on
+#'   its own. If \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{obs_weight} for each observation is calculated). \code{obs_target} must be used with this option.
+#' @param obs_target (\code{character} of length 1) The name of the data set in \code{obj$data} that values in
+#' \code{obs_weight} corresponds to. Must be used when \code{obs_weight} is used.
+#' @param use_subtaxa (\code{logical} of length 1) Affects how the \code{obs_weight} option is
+#'   used. If \code{TRUE}, the weights for each taxon in an observation's classification are multiplied to
+#'   get the observation weight. Otherwise, just the taxonomic level the observation is assign to it considered.
+#' @param collapse_func (\code{function} of length 1) If \code{taxon_weight} is used and
+#'   \code{supertaxa} is \code{TRUE}, the weights for each taxon in an observation's classification are
+#'   supplied to \code{collapse_func} to get the observation weight. This function should take  numeric
+#'   vector and return a single number.
+#' @param ... Additional options are passed to \code{\link{filter_taxa}}.
+#'
+#' @return An object of type \code{\link{taxmap}}
+#'
+#' @family dplyr-like functions
+#'
+#' @name sample_frac_taxa
+NULL
+
+#' @export
+sample_frac_taxa <- function(obj, ...) {
+  UseMethod("sample_frac_taxa")
+}
+
+#' @export
+sample_frac_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_frac_taxa.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$sample_frac_taxa(...)
 }
