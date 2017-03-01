@@ -3,7 +3,7 @@
 #' @export
 #' @param ... Any number of object of class \code{\link{hierarchy}} or character vectors.
 #' @param data A list of tables with data associated with the taxa.
-#' @return An \code{R6Class} object of class \code{Taxmap}
+#' @return An \code{R6Class} object of class \code{\link{taxmap}}
 #'
 #' @details on initialize, function sorts the taxon list, see
 #' \code{\link{ranks_ref}} for the reference rank names and orders
@@ -119,20 +119,34 @@ Taxmap <- R6::R6Class(
       }
     },
 
-    # Get a list of all data in an expression used with non-standard evaluation
-    data_used = function(...) {
-
-      # Get the data referred to by name
-      my_names_used <- self$names_used(...)
-      output <- lapply(names(my_names_used),
+    # Get data by name
+    get_data = function(name) {
+      my_names <- self$all_names()
+      if (any(unknown <- !name %in% my_names)) {
+        stop(paste0("Cannot find the following data: ", paste0(name[unknown], collapse = ", "), "\n ",
+                    "Valid choices include: ",  paste0(my_names, collapse = ", "), "\n "))
+      }
+      name <- my_names[match(name, my_names)]
+      output <- lapply(names(name),
                        function(x) eval(parse(text = paste0("self$", x))))
-      names(output) <- my_names_used
+      names(output) <- name
 
       # Run any functions and return their results instead
       is_func <- vapply(output, is.function, logical(1))
       output[is_func] <- lapply(output[is_func], function(f) f(self))
 
       return(output)
+    },
+
+    # Get a list of all data in an expression used with non-standard evaluation
+    data_used = function(...) {
+      my_names_used <- self$names_used(...)
+      self$get_data(my_names_used)
+    },
+
+    # Return all data
+    all_data = function(...) {
+      self$get_data(self$all_names(...))
     },
 
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
@@ -657,8 +671,8 @@ obs.Taxmap <- function(obj, ...) {
 #' Given a \code{\link{taxmap}} object, return the indexes
 #' associated with each taxon in a given table included in that \code{\link{taxmap}} object.
 #'
-#' @param obj (\code{taxmap})
-#' The \code{taxmap} object containing taxon information to be queried.
+#' @param obj (\code{\link{taxmap}})
+#' The \code{\link{taxmap}} object containing taxon information to be queried.
 #' @param data Either the name of something in \code{obj$data} that has taxon information or a
 #' an external object with taxon information.
 #' For tables, there must be a column named "taxon_id" and lists/vectors must be named by taxon ID.
@@ -698,15 +712,19 @@ all_names.Taxmap <- function(obj, ...) {
 #' Return names of data in taxmap
 #'
 #' Return all the valid names that can be used with non-standard evalulation in manipulation functions like \code{filter_taxa}.
+#' \preformatted{
+#' obj$all_names(name)}
 #'
-#' @param obj (\code{taxmap})
-#' The \code{taxmap} object containing taxon information to be queried.
+#' @param obj (\code{\link{taxmap}})
+#' The \code{\link{taxmap}} object containing taxon information to be queried.
 #' @param tables If \code{TRUE}, include the names of columns of tables in \code{obj$data}
 #' @param funcs If \code{TRUE}, include the names of user-definable functionsin \code{obj$funcs}.
 #' @param others If \code{TRUE}, include the names of data in \code{obj$data} besides tables.
 #' @param warn If \code{TRUE}, warn if there are duplicate names.
 #'
 #' @return \code{character}
+#'
+#' @family accessors
 #'
 #' @name all_names
 NULL
@@ -716,15 +734,63 @@ NULL
 #'
 #' Get names of taxon_data in an unevaluated expression
 #'
-#' @param obj a \code{taxmap} object
-#' @param ... unevaluated expression
+#' @param obj a \code{\link{taxmap}} object
+#' @param ... An expression
 #'
 #' @return \code{character}
 #'
-#' @keywords internal
+#' @family accessors
+#'
 #' @name names_used
 NULL
 
+#' Get data in a taxmap object by name
+#'
+#' Given a vector of names, return a list of data contained in a \code{\link{taxmap}} object.
+#' \preformatted{
+#' obj$get_data(name)}
+#'
+#' @param obj A \code{\link{taxmap}}  object
+#' @param name (\code{character}) Names of data to return.
+#'
+#' @return \code{list}
+#'
+#' @family accessors
+#'
+#' @name get_data
+NULL
+
+#' Get values of data used in an expression
+#'
+#' Get values of data in a \code{\link{taxmap}} used in an expression.
+#' \preformatted{
+#' obj$data_used(...)}
+#'
+#' @param obj a \code{\link{taxmap}} object
+#' @param ... An expression
+#'
+#' @return \code{list}
+#'
+#' @family accessors
+#'
+#' @name data_used
+NULL
+
+#' Get values of all data
+#'
+#' Get values of all data in a \code{\link{taxmap}} object
+#' \preformatted{
+#' obj$data_used(...)}
+#'
+#' @param obj a \code{\link{taxmap}} object
+#' @param ... Passed to \code{\link{all_names}}
+#'
+#' @return \code{list}
+#'
+#' @family accessors
+#'
+#' @name all_data
+NULL
 
 #' Filter taxa with a list of conditions
 #'
