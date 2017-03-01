@@ -102,7 +102,7 @@ Taxmap <- R6::R6Class(
     # Looks for names of data in a expression for use with non-standard evaulation
     names_used = function(...) {
       decompose <- function(x) {
-        if (class(x) %in% c("call", "(")) {
+        if (class(x) %in% c("call", "(", "{")) {
           return(lapply(1:length(x), function(i) decompose(x[[i]])))
         } else {
           return(as.character(x))
