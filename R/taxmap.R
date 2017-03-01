@@ -159,8 +159,11 @@ Taxmap <- R6::R6Class(
       }
 
       # Get observations of taxa
-      my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = recursive, include_input = TRUE, return_type = "index") #'unname' is neede for some reason.. something to look into
-      unique_subtaxa <- unique(unlist(my_subtaxa))
+      if (recursive) {
+        my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE, include_input = TRUE, return_type = "index") #'unname' is neede for some reason.. something to look into
+      } else {
+        my_subtaxa <- subset
+      }
       obs_taxon_index <- match(obs_taxon_ids, self$taxon_ids())
       obs_key <- split(seq_along(obs_taxon_ids), obs_taxon_index)
       output <- stats::setNames(lapply(my_subtaxa, function(x) unname(unlist(obs_key[as.character(x)]))),
