@@ -635,11 +635,7 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width
     if (length(data) < 1) {
       prefixed_print(list(), prefix = prefix)
     } else {
-      cat(paste0(prefix, name, ":\n"))
-      prefixed_print(data[1:min(c(max_items, length(data)))], prefix =  paste0(prefix, "  "))
-      if (length(data) > max_items) {
-        cat(paste0(prefix, "  And ", length(data) - max_items, " more items\n"))
-      }
+      cat(paste0(prefix, name, ": a list with ", length(data), ifelse(length(data) == 1, " item", " items"), "\n"))
     }
   } else if (is.vector(data)) {
     cat(paste0(prefix, name, ": "))
