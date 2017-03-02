@@ -4,18 +4,20 @@
 \alias{n_supertaxa}
 \title{Get number of supertaxa}
 \usage{
-n_supertaxa(obj, subset = 1:nrow(obj$taxon_data))
+n_supertaxa(obj)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
-
-\item{subset}{(\code{character}) The \code{taxon_ids} or indexes in \code{taxon_data}.}
 }
 \value{
 \code{numeric}
 }
 \description{
 Get  number of supertaxa for each taxon in an object of type \code{\link{taxmap}}
+}
+\examples{
+n_supertaxa(ex_taxmap)
+
 }
 \seealso{
 Other taxon_funcs: \code{\link{classifications}},

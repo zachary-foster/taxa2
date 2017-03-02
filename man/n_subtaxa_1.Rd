@@ -4,12 +4,10 @@
 \alias{n_subtaxa_1}
 \title{Get number of subtaxa}
 \usage{
-n_subtaxa_1(obj, subset = 1:nrow(obj$taxon_data))
+n_subtaxa_1(obj)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
-
-\item{subset}{(\code{character}) The \code{taxon_ids} or indexes in \code{taxon_data}.}
 }
 \value{
 \code{numeric}
@@ -17,6 +15,10 @@ n_subtaxa_1(obj, subset = 1:nrow(obj$taxon_data))
 \description{
 Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}, not including subtaxa of subtaxa etc.
 This does not include subtaxa assigned to subtaxa.
+}
+\examples{
+n_subtaxa_1(ex_taxmap)
+
 }
 \seealso{
 Other taxon_funcs: \code{\link{classifications}},
