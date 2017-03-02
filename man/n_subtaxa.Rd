@@ -4,12 +4,10 @@
 \alias{n_subtaxa}
 \title{Get number of subtaxa}
 \usage{
-n_subtaxa(obj, subset = 1:nrow(obj$taxon_data))
+n_subtaxa(obj)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
-
-\item{subset}{(\code{character}) The \code{taxon_ids} or indexes in \code{taxon_data}.}
 }
 \value{
 \code{numeric}

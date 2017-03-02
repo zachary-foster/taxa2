@@ -4,12 +4,12 @@
 \alias{n_obs}
 \title{Count observations in \code{\link{taxmap}}}
 \usage{
-n_obs(obj, subset = 1:nrow(obj$taxon_data))
+n_obs(obj, target)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
 
-\item{subset}{(\code{character}) The \code{taxon_ids} or indexes in \code{taxon_data} to get counts for.}
+\item{target}{The name of the list/vector/table in \code{obj$data}}
 }
 \value{
 \code{numeric}
@@ -17,6 +17,10 @@ n_obs(obj, subset = 1:nrow(obj$taxon_data))
 \description{
 Count observations for each taxon in \code{\link{taxmap}}.
 This includes observations for the specific taxon and its subtaxa.
+}
+\examples{
+n_obs(ex_taxmap, "info")
+
 }
 \seealso{
 Other taxon_funcs: \code{\link{classifications}},

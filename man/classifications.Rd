@@ -4,13 +4,10 @@
 \alias{classifications}
 \title{Get classification of taxa}
 \usage{
-classifications(obj, subset = 1:nrow(obj$taxon_data), sep = ";")
+classifications(obj, sep = ";")
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
-
-\item{subset}{(\code{character})
-The \code{taxon_ids}s or indexes in \code{taxon_data} to get classifications for.}
 
 \item{sep}{(\code{character} of length 1)
 The character(s) to place between taxon IDs}
@@ -21,6 +18,10 @@ The character(s) to place between taxon IDs}
 \description{
 Get classification strings of taxa in an object of type \code{\link{taxmap}}.
 Each classification is constructed by concatenating the taxon ids of the given taxon and its supertaxa.
+}
+\examples{
+classifications(ex_taxmap)
+
 }
 \seealso{
 Other taxon_funcs: \code{\link{n_obs_1}},
