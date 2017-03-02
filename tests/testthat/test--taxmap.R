@@ -29,15 +29,15 @@ felidae <- taxon(
   rank = taxon_rank("family"),
   id = taxon_id(9681)
 )
-puma <- taxon(
-  name = taxon_name("Puma"),
+felis <- taxon(
+  name = taxon_name("Felis"),
   rank = taxon_rank("genus"),
-  id = taxon_id(146712)
+  id = taxon_id(9682)
 )
-concolor <- taxon(
-  name = taxon_name("concolor"),
+catus <- taxon(
+  name = taxon_name("catus"),
   rank = taxon_rank("species"),
-  id = taxon_id(9696)
+  id = taxon_id(9685)
 )
 panthera <- taxon(
   name = taxon_name("Panthera"),
@@ -74,12 +74,28 @@ tuberosum <- taxon(
   rank = taxon_rank("species"),
   id = taxon_id(4113)
 )
+homo <- taxon(
+  name = taxon_name("homo"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(9605)
+)
+sapiens <- taxon(
+  name = taxon_name("sapiens"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9606)
+)
+hominidae <- taxon(
+  name = taxon_name("Hominidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(9604)
+)
 unidentified <- taxon(
   name = taxon_name("unidentified")
 )
 
 tiger <- hierarchy(mammalia, felidae, panthera, tigris)
-cougar <- hierarchy(mammalia, felidae, puma, concolor)
+cat <- hierarchy(mammalia, felidae, felis, catus)
+human <- hierarchy(mammalia, hominidae, homo, sapiens)
 mole <- hierarchy(mammalia, notoryctidae, notoryctes, typhlops)
 tomato <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
 potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
@@ -88,56 +104,27 @@ unidentified_animal <- hierarchy(mammalia, unidentified)
 unidentified_plant <- hierarchy(plantae, unidentified)
 
 # create object used by multiple tests
-abund <- data.frame(name = c("tiger", "cougar", "mole"),
-                    count = 1:3)
-counts <- tibble::as_tibble(data.frame(taxon = c("T", "C", "M"),
-                                       num = c(2, 3, 4),
-                                       num_2 = c(4, 5, 6)))
-a_list <- list("a", "b", "c", "a", "b", "c")
-a_vector <- 1:3
-a_func <- function(x) {paste0(x$data$abund$name, "!!!")}
-
-x <- taxmap(tiger, cougar, mole,
-            data = list(counts = counts,
-                        a_list = a_list,
-                        a_vector = a_vector,
-                        abund = abund),
-            funcs = list(loud_names = a_func))
-
-mutate_obs(x, "counts",
-           new_col = paste(taxon, num, loud_names),
-           newer_col = paste("better than", new_col))
-
-transmute_obs(x, "counts",
-              new_col = paste(taxon, num, loud_names),
-              newer_col = paste("better than", new_col))
-
-arrange_obs(x, "counts", 3:1)
-arrange_obs(x, "counts", taxon, num)
-arrange_obs(x, "counts", loud_names)
-arrange_taxa(x, 1:9)
 
 
 
-test_that("Simple usage", {
-  expect_length(x$taxa, 9)
-  expect_equal(dim(x$edge_list), c(9, 2))
-  expect_length(x$roots(), 1)
-})
 
+info <- data.frame(name = c("tiger", "cat", "mole", "tomato", "potato", "human"),
+                   n_legs = c(4, 4, 4, 0, 0, 2),
+                   dangerous = c(TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
+phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
+                  "12899ba0-9923-4feb-a7f9-758c3c7d5e13",
+                  "11b783d5-af1c-4f4e-8ab5-a51470652b47",
+                  "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
+                  "63604565-0406-460b-8cb8-1abe954b3f3a",
+                  "9fae30cd-fb59-4a81-a39c-e1826a35f612")
 
-test_that("Finding names and values usable for NSE", {
-  # These functions are used to find the relevant inforamtion in an expression passed to a maniulation function like `filter_taxa`
-  x$all_names()
-  x$names_used(num == 3, length(c(count)) > num, loud_names == "quiet")
-  x$data_used(num == 3, length(c(count)) > num, loud_names == "quiet")
-})
+reaction <- function(x) {
+  ifelse(x$data$info$dangerous,
+         paste0("Watch out! That ", x$data$info$name, " might attack!"),
+         paste0("No worries; its just a ", x$data$info$name, "."))
+}
 
-
-
-test_that("Filtering by taxon", {
-  filter_taxa(x, 2, subtaxa = TRUE, supertaxa = TRUE, reassign_obs = c(abund = TRUE, a_vector = FALSE), taxonless = c(abund = F, a_vector = T))
-})
-
-
-# TODO: data as single frame and unnamed list
+x <- taxmap(tiger, cat, mole, tomato, potato, human,
+            data = list(info = info,
+                        phylopic_ids = phylopic_ids),
+            funcs = list(reaction = reaction))

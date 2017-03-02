@@ -5,10 +5,12 @@
 #' @param data A list of tables with data associated with the taxa.
 #' @return An \code{R6Class} object of class \code{\link{taxmap}}
 #'
-#' @details on initialize, function sorts the taxon list, see
+#' @details on initialize, function sorts the taxon list based on rank (if rank information is available), see
 #' \code{\link{ranks_ref}} for the reference rank names and orders
-taxmap <- function(...) {
-  Taxmap$new(...)
+#'
+#' @template taxmapegs
+taxmap <- function(..., data = NULL) {
+  Taxmap$new(..., data = data)
 }
 
 Taxmap <- R6::R6Class(
@@ -331,7 +333,6 @@ Taxmap <- R6::R6Class(
       if (sum(is_char) > 0) {
         stop("observation filtering with taxon IDs is not currently supported. If you want to filter observation by taxon IDs, use something like: `obj$data$my_target$taxon_ids %in% my_subset`")
       }
-      # selection[is_char] <- lapply(selection[is_char], function(x) match(x, .data$taxon_data$taxon_ids))
 
       # convert logical to indexes
       is_logical <- vapply(selection, is.logical, logical(1))
@@ -528,6 +529,9 @@ Taxmap <- R6::R6Class(
 #'
 #' @return Taxon ids if found, otherwise throw an error.
 #'
+#' @examples
+#' taxa:::extract_taxon_ids(ex_taxmap$data$info)
+#'
 #' @keywords internal
 extract_taxon_ids <- function(x) {
   if (is.data.frame(x)) {
@@ -599,6 +603,7 @@ validate_taxmap_data <- function(data, self) {
 #' Validate `funcs` input for Taxamp
 #'
 #' Make sure `funcs` is in the right format and complain if it is not.
+#' NOTE: This currently does nothing.
 #'
 #' @param funcs The `funcs` variable passed to the `Taxmap` constructor
 #'
@@ -612,18 +617,22 @@ validate_taxmap_funcs <- function(funcs, self) {
 
 #' Print a table
 #'
-#' Used to print each table in the `taxmap` print method.
+#' Used to print each item in the `taxmap` print method.
 #'
-#' @param data The table to be printed
+#' @param data The item to be printed
 #' @param max_rows (\code{numeric} of length 1) The maximum number of rows in tables to print.
 #' @param max_items (\code{numeric} of length 1) The maximum number of list items to print.
 #' @param max_width (\code{numeric} of length 1) The maximum number of characters to print.
 #' @param prefix (\code{numeric} of length 1) What to print in front of each line.
 #'
+#' @examples
+#' taxa:::print_item(ex_taxmap$data$info)
+#' taxa:::print_item(1:100)
+#'
 #' @keywords internal
 print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width = getOption("width") - 10, prefix = "") {
   prefixed_print <- function(x, prefix, ...) {
-    output <- paste0(prefix, capture.output(print(x, ...)))
+    output <- paste0(prefix, utils::capture.output(print(x, ...)))
     cat(paste0(paste0(output, collapse = "\n"), "\n"))
   }
   arrange_obs
@@ -650,25 +659,14 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width
 }
 
 
-#' @export
-obs <- function(obj, ...) {
-  UseMethod("obs")
-}
-
-#' @export
-obs.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-obs.Taxmap <- function(obj, ...) {
-  obj$obs(...)
-}
 
 #' Get data indexes associated with taxa
 #'
 #' Given a \code{\link{taxmap}} object, return the indexes
 #' associated with each taxon in a given table included in that \code{\link{taxmap}} object.
+#' \preformatted{
+#' obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
+#' obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 #'
 #' @param obj (\code{\link{taxmap}})
 #' The \code{\link{taxmap}} object containing taxon information to be queried.
@@ -690,8 +688,69 @@ obs.Taxmap <- function(obj, ...) {
 #' @family taxmap taxonomy functions
 #'
 #' @name obs
+#'
+#' @examples
+#' # Get indexes of rows corresponding to each taxon
+#' ex_taxmap$obs("info")
+#'
+#' # Get only a subset of taxon indexes
+#' ex_taxmap$obs("info", subset = 1:2)
+#'
+#' # Get only a subset of taxon IDs
+#' ex_taxmap$obs("info", subset = c("1", "2"))
+#'
+#' # Only return indexes of rows assinged to each taxon specifically (i.e. not subtaxa)
+#' ex_taxmap$obs("info", recursive = FALSE)
+#'
+#' # Lump all row indexes in a single vector
+#' ex_taxmap$obs("info", simplify = TRUE)
+#'
 NULL
 
+#' @export
+obs <- function(obj, ...) {
+  UseMethod("obs")
+}
+
+#' @export
+obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+obs.Taxmap <- function(obj, ...) {
+  obj$obs(...)
+}
+
+
+
+#' Return names of data in a \code{\link{taxmap}}
+#'
+#' Return all the valid names that can be used with non-standard evalulation in manipulation functions like \code{filter_taxa}.
+#' \preformatted{
+#' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
+#' all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#' The \code{\link{taxmap}} object containing taxon information to be queried.
+#' @param tables If \code{TRUE}, include the names of columns of tables in \code{obj$data}
+#' @param funcs If \code{TRUE}, include the names of user-definable functionsin \code{obj$funcs}.
+#' @param others If \code{TRUE}, include the names of data in \code{obj$data} besides tables.
+#' @param warn If \code{TRUE}, warn if there are duplicate names.
+#'
+#' @return \code{character}
+#'
+#' @examples
+#' # Get the names of all data accesible by non-standard evaluation
+#' ex_taxmap$all_names()
+#'
+#' # Dont include the names of functions
+#' ex_taxmap$all_names(funcs = FALSE)
+#'
+#' @family accessors
+#'
+#' @name all_names
+NULL
 
 #' @export
 all_names <- function(obj, ...) {
@@ -708,88 +767,153 @@ all_names.Taxmap <- function(obj, ...) {
   obj$all_names(...)
 }
 
-#' Return names of data in taxmap
+
+
+#' Get names of data used in expressions
 #'
-#' Return all the valid names that can be used with non-standard evalulation in manipulation functions like \code{filter_taxa}.
+#' Get names of available data used in expressions.
+#' Expressions are not evaluated and do not need to make sense.
 #' \preformatted{
-#' obj$all_names(name)}
-#'
-#' @param obj (\code{\link{taxmap}})
-#' The \code{\link{taxmap}} object containing taxon information to be queried.
-#' @param tables If \code{TRUE}, include the names of columns of tables in \code{obj$data}
-#' @param funcs If \code{TRUE}, include the names of user-definable functionsin \code{obj$funcs}.
-#' @param others If \code{TRUE}, include the names of data in \code{obj$data} besides tables.
-#' @param warn If \code{TRUE}, warn if there are duplicate names.
-#'
-#' @return \code{character}
-#'
-#' @family accessors
-#'
-#' @name all_names
-NULL
-
-
-#' Get names of taxon_data in an unevaluated expression
-#'
-#' Get names of taxon_data in an unevaluated expression
+#' obj$names_used(...)
+#' names_used(obj,...)}
 #'
 #' @param obj a \code{\link{taxmap}} object
-#' @param ... An expression
+#' @param ... One or more expressions
 #'
-#' @return \code{character}
+#' @return Named \code{character}
+#'
+#' @examples
+#' ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name names_used
 NULL
 
+#' @export
+names_used <- function(obj, ...) {
+  UseMethod("names_used")
+}
+
+#' @export
+names_used.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+names_used.Taxmap <- function(obj, ...) {
+  obj$names_used(...)
+}
+
+
 #' Get data in a taxmap object by name
 #'
 #' Given a vector of names, return a list of data contained in a \code{\link{taxmap}} object.
 #' \preformatted{
-#' obj$get_data(name)}
+#' obj$get_data(name)
+#' get_data(obj, name)}
 #'
 #' @param obj A \code{\link{taxmap}}  object
 #' @param name (\code{character}) Names of data to return.
 #'
 #' @return \code{list}
 #'
+#' @examples
+#' ex_taxmap$get_data("reaction")
+#'
 #' @family accessors
 #'
 #' @name get_data
 NULL
 
-#' Get values of data used in an expression
+#' @export
+get_data <- function(obj, ...) {
+  UseMethod("get_data")
+}
+
+#' @export
+get_data.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+get_data.Taxmap <- function(obj, ...) {
+  obj$get_data(...)
+}
+
+
+#' Get values of data used in expressions
 #'
-#' Get values of data in a \code{\link{taxmap}} used in an expression.
+#' Get values of data in a \code{\link{taxmap}} used in expressions.
+#' Expressions are not evaluated and do not need to make sense.
 #' \preformatted{
-#' obj$data_used(...)}
+#' obj$data_used(...)
+#' data_used(obj, ...)}
 #'
 #' @param obj a \code{\link{taxmap}} object
-#' @param ... An expression
+#' @param ... One or more expressions
 #'
 #' @return \code{list}
+#'
+#' @examples
+#' ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name data_used
 NULL
 
+#' @export
+data_used <- function(obj, ...) {
+  UseMethod("data_used")
+}
+
+#' @export
+data_used.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+data_used.Taxmap <- function(obj, ...) {
+  obj$data_used(...)
+}
+
+
 #' Get values of all data
 #'
 #' Get values of all data in a \code{\link{taxmap}} object
 #' \preformatted{
-#' obj$data_used(...)}
+#' obj$data_used(...)
+#' data_used(obj, ...)}
 #'
 #' @param obj a \code{\link{taxmap}} object
 #' @param ... Passed to \code{\link{all_names}}
 #'
-#' @return \code{list}
+#' @return Named \code{list}
+#'
+#' @examples
+#' ex_taxmap$all_data()
 #'
 #' @family accessors
 #'
 #' @name all_data
 NULL
+
+#' @export
+all_data <- function(obj, ...) {
+  UseMethod("all_data")
+}
+
+#' @export
+all_data.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+all_data.Taxmap <- function(obj, ...) {
+  obj$all_data(...)
+}
+
 
 #' Filter taxa with a list of conditions
 #'
@@ -820,7 +944,7 @@ NULL
 #'   meaning that all data sets will be treated the same, or a logical vector can be supplied with names
 #'   corresponding one or more data sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)}
 #'   would inlcude observations whose taxon was filtered out in \code{obj$data$abundance}, but not in \code{obj$data$stats}.
-#'   See the \code{reassign} option below for further complications.
+#'   See the \code{reassign_obs} option below for further complications.
 #' @param reassign_obs (\code{logical} of length 1) If \code{TRUE}, observations assigned to removed
 #'   taxa will be reassigned to the closest supertaxon that passed the filter. If there are no
 #'   supertaxa of such an observation that passed the filter, they will be filtered out if
@@ -836,6 +960,30 @@ NULL
 #'   This is useful for removing a taxon and all its subtaxa for example.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#'
+#' @examples
+#' # Filter by index
+#' filter_taxa(ex_taxmap, 1:3)
+#'
+#' # Filter by taxon ID
+#' filter_taxa(ex_taxmap, c("1", "2", "3"))
+#'
+#' # Fiter by TRUE/FALSE
+#' dangerous_taxa <- sapply(ex_taxmap$obs("info"),
+#'                          function(i) any(ex_taxmap$data$info$dangerous[i]))
+#' filter_taxa(ex_taxmap, dangerous_taxa)
+#'
+#' # Include supertaxa
+#' filter_taxa(ex_taxmap, 12, supertaxa = TRUE)
+#'
+#' # Include subtaxa
+#' filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
+#'
+#' # Remove rows in data corresponding to removed taxa
+#' filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))
+#'
+#' # Remove a taxon and it subtaxa
+#' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
 #'
 #' @family dplyr-like functions
 #'
@@ -887,6 +1035,16 @@ filter_taxa.Taxmap <- function(obj, ...) {
 #'
 #' @return An object of type \code{\link{taxmap}}
 #'
+#' @examples
+#' # Filter by row index
+#' filter_obs(ex_taxmap, "info", 1:2)
+#'
+#' # Filter by TRUE/FALSE
+#' filter_obs(ex_taxmap, "info", dangerous == FALSE)
+#'
+#' # Remove taxa whose obserservation were filtered out
+#' filter_obs(ex_taxmap, "info", dangerous == FALSE, unobserved = FALSE)
+#'
 #' @family dplyr-like functions
 #'
 #' @name filter_obs
@@ -922,7 +1080,7 @@ get_data_taxon_ids <- function(x) {
 
 #' Subset columns in a \code{\link{taxmap}} object
 #'
-#' Subsets \code{obs_data} columns in a \code{\link{taxmap}} object. Takes and returns a
+#' Subsets columns in a \code{\link{taxmap}} object. Takes and returns a
 #' \code{\link{taxmap}} object. Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
 #' See \code{\link[dplyr]{select}} for the inspiration for this function and more information.
 #' Calling the function using the \code{obj$select_obs(...)} style edits "obj" in place, unlike most R functions.
@@ -946,10 +1104,14 @@ get_data_taxon_ids <- function(x) {
 #' @family dplyr-like functions
 #'
 #' @examples
-#' \dontrun{
-#' # subset observation columns
-#' select_obs(unite_ex_data, other_id, seq_id)
-#' }
+#' # Selecting a column by name
+#' select_obs(ex_taxmap, "info", dangerous)
+#'
+#' # Selecting a column by index
+#' select_obs(ex_taxmap, "info", 3)
+#'
+#' # Selecting a column by regular expressions
+#' select_obs(ex_taxmap, "info", matches("^n"))
 #'
 #' @name select_obs
 NULL
@@ -976,7 +1138,7 @@ select_obs.Taxmap <- function(obj, ...) {
 #'
 #' Add columns to tables in \code{obj$data} in \code{\link{taxmap}} objects. Any variable name that appears in
 #' \code{obj$all_names()} can be used as if it was a vector on its own.
-#' See \code{\link[dplyr]{mutate_obs}} for the inspiration for this function and more information.
+#' See \code{\link[dplyr]{mutate}} for the inspiration for this function and more information.
 #' Calling the function using the \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R functions.
 #' However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics,
 #' so "obj" would not be changed; instead a changed version would be returned, like most R functions.
@@ -990,6 +1152,11 @@ select_obs.Taxmap <- function(obj, ...) {
 #'   referenced in the same function call.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#'
+#' @examples
+#' mutate_obs(ex_taxmap, "info",
+#'            new_col = "Im new",
+#'            newer_col = paste0(new_col, "er!"))
 #'
 #' @family dplyr-like functions
 #' @name mutate_obs
@@ -1027,6 +1194,8 @@ mutate_obs.Taxmap <- function(obj, ...) {
 #'   referenced in the same function call.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#' @examples
+#' transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 #'
 #' @family dplyr-like functions
 #'
@@ -1067,6 +1236,13 @@ transmute_obs.Taxmap <- function(obj, ...) {
 #'
 #' @return An object of type \code{\link{taxmap}}
 #'
+#' @examples
+#' # Sort in ascending order
+#' arrange_obs(ex_taxmap, "info", n_legs)
+#'
+#' # Sort in decending order
+#' arrange_obs(ex_taxmap, "info", desc(n_legs))
+#'
 #' @family dplyr-like functions
 #'
 #' @name arrange_obs
@@ -1093,7 +1269,7 @@ arrange_obs.Taxmap <- function(obj, ...) {
 
 #' Sort the edge list of \code{\link{taxmap}} objects
 #'
-#' Sort the edge list of \code{taxon_data} in \code{\link{taxmap}} objects.
+#' Sort the edge list in \code{\link{taxmap}} objects.
 #' Any variable name that appears in \code{obj$all_names()} can be used as if it was a vector on its own.
 #' See \code{\link[dplyr]{arrange}} for the inspiration for this function and more information.
 #' \preformatted{
@@ -1104,6 +1280,9 @@ arrange_obs.Taxmap <- function(obj, ...) {
 #' @param ... One or more column names to sort on.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#'
+#' @examples
+#' arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
 #'
 #' @family dplyr-like functions
 #'
@@ -1164,6 +1343,16 @@ arrange_taxa.Taxmap <- function(obj, ...) {
 #'
 #' @return An object of type \code{\link{taxmap}}
 #'
+#' @examples
+#' # Sample 2 rows without replacement
+#' sample_n_obs(ex_taxmap, "info", 2)
+#'
+#' # Sample with replacement
+#' sample_n_obs(ex_taxmap, "info", 10, replace = TRUE)
+#'
+#' # Sample some rows for often then others
+#' sample_n_obs(ex_taxmap, "info", 3, obs_weight = n_legs)
+#'
 #' @family dplyr-like functions
 #' @name sample_n_obs
 NULL
@@ -1219,6 +1408,9 @@ sample_n_obs.Taxmap <- function(obj, ...) {
 #'
 #' @return An object of type \code{\link{taxmap}}
 #'
+#' @examples
+#' sample_frac_obs(ex_taxmap, "info", 0.5)
+#'
 #' @family dplyr-like functions
 #' @name sample_frac_obs
 NULL
@@ -1253,17 +1445,14 @@ sample_frac_obs.Taxmap <- function(obj, ...) {
 #'
 #' @param obj (\code{\link{taxmap}}) The object to sample from.
 #' @param size (\code{numeric} of length 1) The number of taxa to sample.
-#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. The expression
-#'   given is evaluated in the context of \code{\link{taxon_data}}. In other words, any column name
-#'   that appears in \code{\link{taxon_data}(.data)} can be used as if it was a vector on its own.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon.
 #'   If \code{obs_weight} is also specified, the two weights are multiplied (after
 #'   \code{obs_weight} for each taxon is calculated).
 #' @param obs_weight (\code{numeric}) Sampling weights of each observation. The weights for each observation
 #'   assigned to a given taxon are supplied to \code{collapse_func} to get the taxon weight. If
-#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. The
-#'   expression given is evaluated in the context of \code{\link{obs_data}}. In other words, any
-#'   column name that appears in \code{\link{obs_data}(.data)} can be used as if it was a vector on
-#'   its own. If \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. Any variable name that
+#' appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#'  If \code{taxon_weight} is also specified, the two weights are multiplied (after
 #'   \code{obs_weight} for each observation is calculated). \code{obs_target} must be used with this option.
 #' @param obs_target (\code{character} of length 1) The name of the data set in \code{obj$data} that values in
 #' \code{obs_weight} corresponds to. Must be used when \code{obs_weight} is used.
@@ -1277,6 +1466,19 @@ sample_frac_obs.Taxmap <- function(obj, ...) {
 #' @param ... Additional options are passed to \code{\link{filter_taxa}}.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#'
+#' @examples
+#' # Randomly sample three taxa
+#' sample_n_taxa(ex_taxmap, 3)
+#'
+#' # Include supertaxa
+#' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE)
+#'
+#' # Include subtaxa
+#' sample_n_taxa(ex_taxmap, 1, subtaxa = TRUE)
+#'
+#' # Sample some taxa more often then others
+#' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE, obs_weight = n_legs, obs_target = "info")
 #'
 #' @family dplyr-like functions
 #'
@@ -1314,17 +1516,14 @@ sample_n_taxa.Taxmap <- function(obj, ...) {
 #'
 #' @param obj (\code{\link{taxmap}}) The object to sample from.
 #' @param size (\code{numeric} of length 1) The proportion of taxa to sample.
-#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon. The expression
-#'   given is evaluated in the context of \code{\link{taxon_data}}. In other words, any column name
-#'   that appears in \code{\link{taxon_data}(.data)} can be used as if it was a vector on its own.
+#' @param taxon_weight (\code{numeric}) Non-negative sampling weights of each taxon.
 #'   If \code{obs_weight} is also specified, the two weights are multiplied (after
 #'   \code{obs_weight} for each taxon is calculated).
 #' @param obs_weight (\code{numeric}) Sampling weights of each observation. The weights for each observation
 #'   assigned to a given taxon are supplied to \code{collapse_func} to get the taxon weight. If
-#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. The
-#'   expression given is evaluated in the context of \code{\link{obs_data}}. In other words, any
-#'   column name that appears in \code{\link{obs_data}(.data)} can be used as if it was a vector on
-#'   its own. If \code{taxon_weight} is also specified, the two weights are multiplied (after
+#'   \code{use_subtaxa} is \code{TRUE} then the observations assigned to every subtaxa are also used. Any variable name that
+#' appears in \code{obj$all_names()} can be used as if it was a vector on its own.
+#' If \code{taxon_weight} is also specified, the two weights are multiplied (after
 #'   \code{obs_weight} for each observation is calculated). \code{obs_target} must be used with this option.
 #' @param obs_target (\code{character} of length 1) The name of the data set in \code{obj$data} that values in
 #' \code{obs_weight} corresponds to. Must be used when \code{obs_weight} is used.
@@ -1338,6 +1537,10 @@ sample_n_taxa.Taxmap <- function(obj, ...) {
 #' @param ... Additional options are passed to \code{\link{filter_taxa}}.
 #'
 #' @return An object of type \code{\link{taxmap}}
+#'
+#'
+#' @examples
+#' sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
 #'
 #' @family dplyr-like functions
 #'
