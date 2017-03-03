@@ -261,6 +261,68 @@ Taxonomy <- R6::R6Class(
   )
 )
 
+#' Get taxon IDs
+#'
+#' Return the taxon IDs in a \code{\link{taxmap}} object.
+#' They are in the order they appear in the edge list.
+#'
+#' \preformatted{
+#' obj$taxon_ids()
+#' taxon_ids(obj, ...)}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object.
+#'
+#' @name taxon_ids
+NULL
+
+#' @export
+taxon_ids <- function(obj, ...) {
+  UseMethod("taxon_ids")
+}
+
+#' @export
+taxon_ids.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+taxon_ids.Taxonomy <- function(obj, ...) {
+  obj$taxon_ids(...)
+}
+
+
+#' Get taxon names
+#'
+#' Return the taxon names in a \code{\link{taxmap}} object.
+#' They are in the order they appear in the edge list.
+#'
+#' \preformatted{
+#' obj$taxon_names()
+#' taxon_names(obj, ...)}
+#'
+#' @param obj The \code{taxonomy} or \code{taxmap} object.
+#'
+#' @name taxon_names
+NULL
+
+#' @export
+taxon_names <- function(obj, ...) {
+  UseMethod("taxon_names")
+}
+
+#' @export
+taxon_names.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+taxon_names.Taxonomy <- function(obj, ...) {
+  obj$taxon_names(...)
+}
+
+
+
+
 #' @keywords internal
 parse_heirarchies_to_taxonomy <- function(heirarchies) {
 
