@@ -138,7 +138,7 @@ reaction <- function(x) {
          paste0("No worries; its just a ", x$data$info$name, "."))
 }
 
-ex_taxmap <- taxmap(tiger, cat, mole, tomato, potato, human,
+ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                     data = list(info = info,
                                 phylopic_ids = phylopic_ids),
                     funcs = list(reaction = reaction))

@@ -61,6 +61,11 @@ Taxmap <- R6::R6Class(
     all_names = function(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE) {
       output <- c()
 
+      # Add taxon id and taxon name
+      if (others) {
+        output <- c(output, "taxon_names", "taxon_ids")
+      }
+
       # Get column names in each table, removing 'taxon_id'
       is_table <- vapply(self$data, is.data.frame, logical(1))
       if (tables) {
@@ -97,7 +102,7 @@ Taxmap <- R6::R6Class(
 
 
       # Add the name to the name of the name and return
-      names(output) <- paste0(names(output), "$", output)
+      names(output) <- paste0(names(output), ifelse(names(output) == "", "", "$"), output)
       return(output)
     },
 
@@ -135,7 +140,13 @@ Taxmap <- R6::R6Class(
 
       # Run any functions and return their results instead
       is_func <- vapply(output, is.function, logical(1))
-      output[is_func] <- lapply(output[is_func], function(f) f(self))
+      output[is_func] <- lapply(output[is_func], function(f) {
+        if (length(formals(f)) == 0) {
+          return(f())
+        } else {
+          return(f(self))
+        }
+      })
 
       return(output)
     },
@@ -969,6 +980,9 @@ all_data.Taxmap <- function(obj, ...) {
 #' filter_taxa(ex_taxmap, c("1", "2", "3"))
 #'
 #' # Fiter by TRUE/FALSE
+#' filter_taxa(ex_taxmap, taxon_names == "Plantae", subtaxa = TRUE)
+#'
+#' # Filter by an observation characteristic
 #' dangerous_taxa <- sapply(ex_taxmap$obs("info"),
 #'                          function(i) any(ex_taxmap$data$info$dangerous[i]))
 #' filter_taxa(ex_taxmap, dangerous_taxa)

@@ -65,6 +65,9 @@ filter_taxa(ex_taxmap, 1:3)
 filter_taxa(ex_taxmap, c("1", "2", "3"))
 
 # Fiter by TRUE/FALSE
+filter_taxa(ex_taxmap, taxon_names == "Plantae", subtaxa = TRUE)
+
+# Filter by an observation characteristic
 dangerous_taxa <- sapply(ex_taxmap$obs("info"),
                          function(i) any(ex_taxmap$data$info$dangerous[i]))
 filter_taxa(ex_taxmap, dangerous_taxa)
