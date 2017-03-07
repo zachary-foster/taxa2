@@ -234,7 +234,33 @@ Taxonomy <- R6::R6Class(
       }
 
       return(output)
+    },
+
+    id_classifications = function(sep = ";") {
+      vapply(self$supertaxa(recursive = TRUE, include_input = TRUE, return_type = "id", na = FALSE),
+             function(x) paste0(rev(x), collapse = sep), character(1))
+    },
+
+    name_classifications = function(sep = ";") {
+      vapply(self$supertaxa(recursive = TRUE, include_input = TRUE, return_type = "name", na = FALSE),
+             function(x) paste0(rev(x), collapse = sep), character(1))
+    },
+
+    n_supertaxa = function() {
+      vapply(self$supertaxa(recursive = TRUE, include_input = FALSE, return_type = "index", na = FALSE),
+             length, numeric(1))
+    },
+
+    n_subtaxa = function() {
+      vapply(self$subtaxa(recursive = TRUE, include_input = FALSE, return_type = "index"),
+             length, numeric(1))
+    },
+
+    n_subtaxa_1 = function(obj) {
+      vapply(self$subtaxa(recursive = FALSE, include_input = FALSE, return_type = "index"),
+             length, numeric(1))
     }
+
   ),
 
   private = list(
@@ -242,7 +268,7 @@ Taxonomy <- R6::R6Class(
       apply(self$edge_list, 1, paste0, collapse = "->")
     },
 
-    get_return_type = function(indexes, return_type = c("index", "id", "taxa", "hierarchies")) {
+    get_return_type = function(indexes, return_type = c("index", "id", "taxa", "hierarchies", "name")) {
       return_type <- match.arg(return_type)
       if (return_type == "index") {
         return(as.integer(indexes))
@@ -253,6 +279,8 @@ Taxonomy <- R6::R6Class(
       } else if (return_type == "hierarchies") {
         return(lapply(self$supertaxa(indexes, include_input = TRUE, return_type = "taxa"),
                       function(t) do.call(hierarchy, t)))
+      } else if (return_type == "name") {
+        return(self$taxon_names()[indexes])
       } else {
         stop(paste('Invailed return type: "return_type" must be one of the following:',
                    paste(return_type, collapse = ", ")))
@@ -604,3 +632,190 @@ leaves.Taxonomy <- function(obj, ...) {
 #'
 #' @name leaves
 NULL
+
+
+#' Get classifications of taxa
+#'
+#' Get classification strings of taxa in an object of type \code{\link{taxmap}} composed of taxon IDs.
+#' Each classification is constructed by concatenating the taxon ids of the given taxon and its supertaxa.
+#' \preformatted{
+#' obj$id_classifications(sep = ";")
+#' id_classifications(obj, sep = ";")}
+#'
+#' @param obj (\code{\link{taxmap}})
+#' @param sep (\code{character} of length 1)
+#' The character(s) to place between taxon IDs
+#'
+#' @return \code{character}
+#'
+#' @examples
+#' id_classifications(ex_taxmap)
+#'
+#' @family taxon_funcs
+#'
+#' @name id_classifications
+NULL
+
+#' @export
+id_classifications <- function(obj, ...) {
+  UseMethod("id_classifications")
+}
+
+#' @export
+id_classifications.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+id_classifications.Taxonomy <- function(obj, ...) {
+  obj$id_classifications(...)
+}
+
+
+
+#' Get classifications of taxa
+#'
+#' Get classification strings of taxa in an object of type \code{\link{taxmap}} composed of taxon names.
+#' Each classification is constructed by concatenating the taxon names of the given taxon and its supertaxa.
+#' \preformatted{
+#' obj$name_classifications(sep = ";")
+#' name_classifications(obj, sep = ";")}
+#'
+#' @param obj (\code{\link{taxmap}})
+#' @param sep (\code{character} of length 1)
+#' The character(s) to place between taxon names
+#'
+#' @return \code{character}
+#'
+#' @examples
+#' name_classifications(ex_taxmap)
+#'
+#' @family taxon_funcs
+#'
+#' @name name_classifications
+NULL
+
+#' @export
+name_classifications <- function(obj, ...) {
+  UseMethod("name_classifications")
+}
+
+#' @export
+name_classifications.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+name_classifications.Taxonomy <- function(obj, ...) {
+  obj$name_classifications(...)
+}
+
+
+
+#' Get number of supertaxa
+#'
+#' Get number of supertaxa for each taxon in an object of type \code{\link{taxmap}}
+#' \preformatted{
+#' obj$n_supertaxa()
+#' n_supertaxa(obj)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_supertaxa(ex_taxmap)
+#'
+#' @family taxon_funcs
+#'
+#' @name n_supertaxa
+
+#' @export
+n_supertaxa <- function(obj) {
+  UseMethod("n_supertaxa")
+}
+
+#' @export
+n_supertaxa.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_supertaxa.Taxonomy <- function(obj) {
+  obj$n_supertaxa()
+}
+
+
+
+#' Get number of subtaxa
+#'
+#' Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}
+#' \preformatted{
+#' obj$n_subtaxa()
+#' n_subtaxa(obj)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_subtaxa(ex_taxmap)
+#'
+#' @family taxon_funcs
+#'
+#' @name n_subtaxa
+
+#' @export
+n_subtaxa <- function(obj) {
+  UseMethod("n_subtaxa")
+}
+
+#' @export
+n_subtaxa.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_subtaxa.Taxonomy <- function(obj) {
+  obj$n_subtaxa()
+}
+
+
+
+#' Get number of subtaxa
+#'
+#' Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}, not including subtaxa of subtaxa etc.
+#' This does not include subtaxa assigned to subtaxa.
+#' \preformatted{
+#' obj$n_subtaxa_1()
+#' n_subtaxa_1(obj)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_subtaxa_1(ex_taxmap)
+#'
+#' @family taxon_funcs
+#'
+#' @name n_subtaxa_1
+
+#' @export
+n_subtaxa_1 <- function(obj) {
+  UseMethod("n_subtaxa_1")
+}
+
+#' @export
+n_subtaxa_1.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_subtaxa_1.Taxonomy <- function(obj) {
+  obj$n_subtaxa_1()
+}
+
+
+
+

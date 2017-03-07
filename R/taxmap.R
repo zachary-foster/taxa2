@@ -58,12 +58,12 @@ Taxmap <- R6::R6Class(
     },
 
     # Returns the names of things to be accessible using non-standard evaluation
-    all_names = function(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE) {
+    all_names = function(tables = TRUE, funcs = TRUE, others = TRUE, builtin_funcs = TRUE, warn = FALSE) {
       output <- c()
 
-      # Add taxon id and taxon name
-      if (others) {
-        output <- c(output, "taxon_names", "taxon_ids")
+      # Add functions included in the package
+      if (builtin_funcs) {
+        output <- c(output, private$nse_accessible_funcs)
       }
 
       # Get column names in each table, removing 'taxon_id'
@@ -516,15 +516,20 @@ Taxmap <- R6::R6Class(
       self$sample_n_taxa(size = size * nrow(self$edge_list),
                     taxon_weight = taxon_weight, obs_weight = obs_weight, obs_target = obs_target,
                     use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
+    },
+
+    n_obs = function(target) {
+      vapply(self$obs(target, recursive = TRUE, simplify = FALSE), length, numeric(1))
+    },
+
+    n_obs_1 = function(target) {
+      vapply(self$obs(target, recursive = FALSE, simplify = FALSE), length, numeric(1))
     }
-
-
-
 
   ),
 
   private = list(
-
+    nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa", "n_subtaxa", "n_subtaxa_1")
   )
 )
 
@@ -747,6 +752,8 @@ obs.Taxmap <- function(obj, ...) {
 #' @param tables If \code{TRUE}, include the names of columns of tables in \code{obj$data}
 #' @param funcs If \code{TRUE}, include the names of user-definable functionsin \code{obj$funcs}.
 #' @param others If \code{TRUE}, include the names of data in \code{obj$data} besides tables.
+#' @param builtin_funcs If \code{TRUE}, include functions like \code{\link{n_supertaxa}}
+#' that provide information for each taxon.
 #' @param warn If \code{TRUE}, warn if there are duplicate names.
 #'
 #' @return \code{character}
@@ -1576,3 +1583,84 @@ sample_frac_taxa.Taxmap <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
   obj$sample_frac_taxa(...)
 }
+
+
+
+
+#' Count observations in \code{\link{taxmap}}
+#'
+#' Count observations for each taxon in a \code{\link{taxmap}} object.
+#' This includes observations for the specific taxon and its subtaxa.
+#' \preformatted{
+#' obj$n_obs(target)
+#' n_obs(obj, target)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#' @param target The name of the list/vector/table in \code{obj$data}
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_obs(ex_taxmap, "info")
+#'
+#' @family taxon_funcs
+#'
+#' @name n_obs
+NULL
+
+#' @export
+n_obs <- function(obj, ...) {
+  UseMethod("n_obs")
+}
+
+#' @export
+n_obs.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_obs.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$n_obs(...)
+}
+
+
+
+#' Count observation assigned in \code{\link{taxmap}}
+#'
+#' Count observations assigned to a specific taxon in an \code{\link{taxmap}}.
+#' This does not include observations assigned to subtaxa.
+#' \preformatted{
+#' obj$n_obs_1(target)
+#' n_obs_1(obj, target)}
+#'
+#' @param obj (\code{\link{taxmap}})
+#' @param target The name of the list/vector/table in \code{obj$data}
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_obs_1(ex_taxmap, "info")
+#'
+#' @family taxon_funcs
+#'
+#' @name n_obs_1
+NULL
+
+#' @export
+n_obs_1 <- function(obj, ...) {
+  UseMethod("n_obs_1")
+}
+
+#' @export
+n_obs_1.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_obs_1.Taxmap <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE) # Makes this style of executing the function imitate traditional copy-on-change
+  obj$n_obs_1(...)
+}
+
+
