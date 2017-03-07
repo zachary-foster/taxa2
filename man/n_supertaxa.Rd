@@ -4,7 +4,7 @@
 \alias{n_supertaxa}
 \title{Get number of supertaxa}
 \usage{
-n_supertaxa(obj, ...)
+n_supertaxa(obj)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}

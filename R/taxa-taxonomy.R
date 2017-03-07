@@ -731,18 +731,18 @@ name_classifications.Taxonomy <- function(obj, ...) {
 #' @name n_supertaxa
 
 #' @export
-n_supertaxa <- function(obj, ...) {
+n_supertaxa <- function(obj) {
   UseMethod("n_supertaxa")
 }
 
 #' @export
-n_supertaxa.default <- function(obj, ...) {
+n_supertaxa.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-n_supertaxa.Taxonomy <- function(obj, ...) {
-  obj$n_supertaxa(...)
+n_supertaxa.Taxonomy <- function(obj) {
+  obj$n_supertaxa()
 }
 
 
@@ -766,18 +766,18 @@ n_supertaxa.Taxonomy <- function(obj, ...) {
 #' @name n_subtaxa
 
 #' @export
-n_subtaxa <- function(obj, ...) {
+n_subtaxa <- function(obj) {
   UseMethod("n_subtaxa")
 }
 
 #' @export
-n_subtaxa.default <- function(obj, ...) {
+n_subtaxa.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-n_subtaxa.Taxonomy <- function(obj, ...) {
-  obj$n_subtaxa(...)
+n_subtaxa.Taxonomy <- function(obj) {
+  obj$n_subtaxa()
 }
 
 
@@ -802,18 +802,18 @@ n_subtaxa.Taxonomy <- function(obj, ...) {
 #' @name n_subtaxa_1
 
 #' @export
-n_subtaxa_1 <- function(obj, ...) {
+n_subtaxa_1 <- function(obj) {
   UseMethod("n_subtaxa_1")
 }
 
 #' @export
-n_subtaxa_1.default <- function(obj, ...) {
+n_subtaxa_1.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-n_subtaxa_1.Taxonomy <- function(obj, ...) {
-  obj$n_subtaxa_1(...)
+n_subtaxa_1.Taxonomy <- function(obj) {
+  obj$n_subtaxa_1()
 }
 
 

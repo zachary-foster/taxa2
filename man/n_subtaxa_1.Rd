@@ -4,7 +4,7 @@
 \alias{n_subtaxa_1}
 \title{Get number of subtaxa}
 \usage{
-n_subtaxa_1(obj, ...)
+n_subtaxa_1(obj)
 }
 \arguments{
 \item{obj}{(\code{\link{taxmap}})}
