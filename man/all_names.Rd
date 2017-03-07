@@ -13,6 +13,9 @@ The \code{\link{taxmap}} object containing taxon information to be queried.}
 
 \item{others}{If \code{TRUE}, include the names of data in \code{obj$data} besides tables.}
 
+\item{builtin_funcs}{If \code{TRUE}, include functions like \code{\link{n_supertaxa}}
+that provide information for each taxon.}
+
 \item{warn}{If \code{TRUE}, warn if there are duplicate names.}
 }
 \value{
