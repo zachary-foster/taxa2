@@ -192,7 +192,7 @@ Taxmap <- R6::R6Class(
       if (recursive) {
         my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE,
                                    include_input = TRUE, return_type = "index")
-        #'unname' is neede for some reason.. something to look into...
+        #unname is neede for some reason.. something to look into...
       } else {
         my_subtaxa <- subset
       }
