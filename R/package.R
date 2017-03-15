@@ -7,13 +7,6 @@
 #' @keywords package
 NULL
 
-#' a taxmap object
-#'
-#' @name unite_ex_data
-#' @docType data
-#' @keywords data
-NULL
-
 #' A data.frame representing a taxonomic classification.
 #'
 #' Data is from GBIF for the taxon \emph{Bison bison}
