@@ -1,14 +1,15 @@
 #' Format taxon subset value
 #'
-#' Format an input to a \code{subset} option on functions like \code{\link{supertaxa}}.
-#' Converts logical and \code{taxon_ids} into indexes of \code{taxon_data}.
+#' Format an input to a \code{subset} option on functions like
+#' \code{\link{supertaxa}}. Converts logical and \code{taxon_ids} into indexes
+#' of \code{taxon_data}.
 #'
-#' @param obj (\code{taxmap})
-#' The \code{taxmap} object containing taxon information to be queried.
-#' @param index
-#' If a \code{character}, then it should be values of \code{taxon_ids}.
-#' If a \code{numeric}, then it should be row indexes of \code{taxon_data}.
-#' If a \code{logical}, then it should correspond to rows of \code{taxon_data}.
+#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon
+#'   information to be queried.
+#' @param index If a \code{character}, then it should be values of
+#'   \code{taxon_ids}. If a \code{numeric}, then it should be row indexes of
+#'   \code{taxon_data}. If a \code{logical}, then it should correspond to rows
+#'   of \code{taxon_data}.
 #'
 #' @return \code{numeric}
 #'
@@ -38,8 +39,6 @@ format_taxon_subset <- function(taxon_ids, index) {
 }
 
 
-
-
 #' Find taxon id info in data set
 #'
 #' Look for taxon ids in an object.
@@ -63,7 +62,7 @@ extract_taxon_ids <- function(x) {
     }
   } else if (is.list(x) || is.vector(x)) {
     if (is.null(names(x))) {
-      stop('The specified object is a list/vector, but is not named by taxon ID.')
+      stop('The specified object is a list/vector, but not named by taxon ID.')
     } else {
       return(names(x))
     }
@@ -71,6 +70,7 @@ extract_taxon_ids <- function(x) {
     stop("Invalid object type supplied.")
   }
 }
+
 
 #' Convert `data` input for Taxamp
 #'
@@ -94,13 +94,17 @@ validate_taxmap_data <- function(data, input_ids) {
 
       # Add the `taxon_id` column if it is not already there
       if ("taxon_id" %in% colnames(x)) {
-        message(paste0('Using existing "taxon_id" column for table "', name, '"'))
+        message(paste0('Using existing "taxon_id" column for table "',
+                       name, '"'))
       } else if ("taxon_index" %in% colnames(x) && is.integer(x$taxon_index)) {
         x$taxon_id <- input_ids[x$taxon_index]
       } else if (nrow(x) == length(input_ids)) {
         x$taxon_id <- input_ids
       } else {
-        message(paste('The table "', name, '" does not have a "taxon_index" column or a number of rows equal to the number of inputs, so no "taxon_id" can be assigned.'))
+        message(paste('The table "', name,
+                      '" does not have a "taxon_index" column or a number of ',
+                      'rows equal to the number of inputs, so no "taxon_id"',
+                      ' can be assigned.'))
       }
     } else if (is.null(names(x)) && length(x) == length(input_ids)) {
       names(x) <- input_ids
@@ -142,17 +146,22 @@ validate_taxmap_funcs <- function(funcs) {
 #' Used to print each item in the `taxmap` print method.
 #'
 #' @param data The item to be printed
-#' @param max_rows (\code{numeric} of length 1) The maximum number of rows in tables to print.
-#' @param max_items (\code{numeric} of length 1) The maximum number of list items to print.
-#' @param max_width (\code{numeric} of length 1) The maximum number of characters to print.
-#' @param prefix (\code{numeric} of length 1) What to print in front of each line.
+#' @param max_rows (\code{numeric} of length 1) The maximum number of rows in
+#'   tables to print.
+#' @param max_items (\code{numeric} of length 1) The maximum number of list
+#'   items to print.
+#' @param max_width (\code{numeric} of length 1) The maximum number of
+#'   characters to print.
+#' @param prefix (\code{numeric} of length 1) What to print in front of each
+#'   line.
 #'
 #' @examples
 #' taxa:::print_item(ex_taxmap$data$info)
 #' taxa:::print_item(1:100)
 #'
 #' @keywords internal
-print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width = getOption("width") - 10, prefix = "") {
+print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
+                       max_width = getOption("width") - 10, prefix = "") {
   prefixed_print <- function(x, prefix, ...) {
     output <- paste0(prefix, utils::capture.output(print(x, ...)))
     cat(paste0(paste0(output, collapse = "\n"), "\n"))
@@ -164,12 +173,14 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3, max_width
     if (length(name) > 0 && ! is.na(name)) {
       cat(paste0(prefix, name, ":\n"))
     }
-    prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows, width = max_width)
+    prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows,
+                   width = max_width)
   } else if (is.list(data)) {
     if (length(data) < 1) {
       prefixed_print(list(), prefix = prefix)
     } else {
-      cat(paste0(prefix, name, ": a list with ", length(data), ifelse(length(data) == 1, " item", " items"), "\n"))
+      cat(paste0(prefix, name, ": a list with ", length(data),
+                 ifelse(length(data) == 1, " item", " items"), "\n"))
     }
   } else if (is.vector(data)) {
     cat(paste0(prefix, name, ": "))
