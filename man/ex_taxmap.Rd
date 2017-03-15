@@ -6,14 +6,16 @@
 \title{An example taxmap object}
 \format{A \code{\link{taxmap}} object.}
 \source{
-Created from the example code in the \code{\link{taxmap}} documentation.
+Created from the example code in the \code{\link{taxmap}}
+  documentation.
 }
 \usage{
 ex_taxmap
 }
 \description{
-An example taxmap object built from the ground up.
-Typically, data stored in taxmap would be parsed from an input file, but this data set is just for demonstration purposes.
+An example taxmap object built from the ground up. Typically, data stored in
+taxmap would be parsed from an input file, but this data set is just for
+demonstration purposes.
 }
 \keyword{datasets}
 

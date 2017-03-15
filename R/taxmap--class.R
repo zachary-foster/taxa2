@@ -1,12 +1,14 @@
 #' Taxmap class
 #'
 #' @export
-#' @param ... Any number of object of class \code{\link{hierarchy}} or character vectors.
+#' @param ... Any number of object of class \code{\link{hierarchy}} or character
+#'   vectors.
 #' @param data A list of tables with data associated with the taxa.
 #' @return An \code{R6Class} object of class \code{\link{taxmap}}
 #'
-#' @details on initialize, function sorts the taxon list based on rank (if rank information is available), see
-#' \code{\link{ranks_ref}} for the reference rank names and orders
+#' @details on initialize, function sorts the taxon list based on rank (if rank
+#'   information is available), see \code{\link{ranks_ref}} for the reference
+#'   rank names and orders
 #'
 #' @template taxmapegs
 taxmap <- function(..., data = NULL) {
@@ -32,20 +34,27 @@ Taxmap <- R6::R6Class(
       self$funcs <- validate_taxmap_funcs(funcs)
     },
 
-    print = function(indent = "", max_rows = 3, max_items = 3, max_width = getOption("width") - 10) {
+    print = function(indent = "", max_rows = 3, max_items = 3,
+                     max_width = getOption("width") - 10) {
 
       # Call `taxonomy` print method
-      taxonomy_output <- paste0(paste0(capture.output(super$print(indent = indent)), collapse = "\n"), "\n")
+      taxonomy_output <- paste0(
+        paste0(capture.output(super$print(indent = indent)), collapse = "\n"),
+        "\n"
+      )
       cat(gsub(taxonomy_output, pattern = "Taxonomy", replacement = "Taxmap"))
 
-      # Print a subset of each item in data, up to a maximum number, then just print item names
+      # Print a subset of each item, up to a max number, then just print names
       cat(paste0("  ", length(self$data), " data sets:\n"))
       if (length(self$data) > 0) {
         for (i in 1:min(c(max_items, length(self$data)))) {
-          print_item(self$data[[i]], name = names(self$data[i]), max_rows = max_rows, max_width = max_width, prefix = "    ")
+          print_item(self$data[[i]],
+                     name = names(self$data[i]), max_rows = max_rows,
+                     max_width = max_width, prefix = "    ")
         }
         if (length(self$data) > max_items) {
-          cat(paste0("    And ", length(self$data) - max_items, " more data sets:"))
+          cat(paste0("    And ", length(self$data) - max_items,
+                     " more data sets:"))
           limited_print(names(self$data)[(max_items + 1):length(self$data)])
         }
       }
@@ -58,7 +67,8 @@ Taxmap <- R6::R6Class(
     },
 
     # Returns the names of things to be accessible using non-standard evaluation
-    all_names = function(tables = TRUE, funcs = TRUE, others = TRUE, builtin_funcs = TRUE, warn = FALSE) {
+    all_names = function(tables = TRUE, funcs = TRUE, others = TRUE,
+                         builtin_funcs = TRUE, warn = FALSE) {
       output <- c()
 
       # Add functions included in the package
@@ -70,8 +80,10 @@ Taxmap <- R6::R6Class(
       is_table <- vapply(self$data, is.data.frame, logical(1))
       if (tables) {
         table_col_names <- unlist(lapply(self$data[is_table], colnames))
-        names(table_col_names) <- paste0("data$", rep(names(self$data[is_table]),
-                                                      vapply(self$data[is_table], ncol, integer(1))))
+        names(table_col_names) <- paste0("data$",
+                                         rep(names(self$data[is_table]),
+                                             vapply(self$data[is_table],
+                                                    ncol, integer(1))))
         table_col_names <- table_col_names[table_col_names != "taxon_id"]
         output <- c(output, table_col_names)
       }
@@ -102,11 +114,12 @@ Taxmap <- R6::R6Class(
 
 
       # Add the name to the name of the name and return
-      names(output) <- paste0(names(output), ifelse(names(output) == "", "", "$"), output)
+      names(output) <- paste0(names(output),
+                              ifelse(names(output) == "", "", "$"), output)
       return(output)
     },
 
-    # Looks for names of data in a expression for use with non-standard evaulation
+    # Looks for names of data in a expression for use with NSE
     names_used = function(...) {
       decompose <- function(x) {
         if (class(x) %in% c("call", "(", "{")) {
@@ -120,7 +133,8 @@ Taxmap <- R6::R6Class(
       if (length(expressions) == 0) {
         return(character(0))
       } else {
-        names_used <- unlist(lapply(1:length(expressions), function(i) decompose(expressions[[i]])))
+        names_used <- unlist(lapply(1:length(expressions),
+                                    function(i) decompose(expressions[[i]])))
         my_names <- self$all_names()
         return(my_names[my_names %in% names_used])
       }
@@ -130,8 +144,10 @@ Taxmap <- R6::R6Class(
     get_data = function(name) {
       my_names <- self$all_names()
       if (any(unknown <- !name %in% my_names)) {
-        stop(paste0("Cannot find the following data: ", paste0(name[unknown], collapse = ", "), "\n ",
-                    "Valid choices include: ",  paste0(my_names, collapse = ", "), "\n "))
+        stop(paste0("Cannot find the following data: ",
+                    paste0(name[unknown], collapse = ", "), "\n ",
+                    "Valid choices include: ",
+                    paste0(my_names, collapse = ", "), "\n "))
       }
       name <- my_names[match(name, my_names)]
       output <- lapply(names(name),
@@ -165,7 +181,8 @@ Taxmap <- R6::R6Class(
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
-      if (length(data) == 1 && (data %in% names(self$data) || is.integer(data))) { # data is name/index of dataset in object
+      if (length(data) == 1 && # data is name/index of dataset in object
+          (data %in% names(self$data) || is.integer(data))) {
         obs_taxon_ids <- extract_taxon_ids(self$data[[data]])
       } else {
         obs_taxon_ids <- extract_taxon_ids(data)
@@ -173,14 +190,18 @@ Taxmap <- R6::R6Class(
 
       # Get observations of taxa
       if (recursive) {
-        my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE, include_input = TRUE, return_type = "index") #'unname' is neede for some reason.. something to look into
+        my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE,
+                                   include_input = TRUE, return_type = "index")
+        #'unname' is neede for some reason.. something to look into...
       } else {
         my_subtaxa <- subset
       }
       obs_taxon_index <- match(obs_taxon_ids, self$taxon_ids())
       obs_key <- split(seq_along(obs_taxon_ids), obs_taxon_index)
-      output <- stats::setNames(lapply(my_subtaxa, function(x) unname(unlist(obs_key[as.character(x)]))),
-                                names(subset))
+      output <- stats::setNames(
+        lapply(my_subtaxa,function(x) unname(unlist(obs_key[as.character(x)]))),
+        names(subset)
+      )
       is_null <- vapply(output, is.null, logical(1))
       output[is_null] <- lapply(1:sum(is_null), function(x) numeric(0))
 
@@ -192,39 +213,55 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
-    filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
-                           reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE) {
+    filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
+                           taxonless = FALSE, reassign_obs = TRUE,
+                           reassign_taxa = TRUE, invert = FALSE) {
 
-      parse_possibly_named_logical <- function(input, default) { # used to parse inputs to `taxonless` and `reassign_obs`
+      # used to parse inputs to `taxonless` and `reassign_obs`
+      parse_possibly_named_logical <- function(input, default) {
         if (is.null(names(input))) {
           if (length(input) == 1) {
-            output <- stats::setNames(rep(input, length(self$data)), names(self$data))
+            output <- stats::setNames(rep(input, length(self$data)),
+                                      names(self$data))
           } else if (length(input) == length(self$data)) {
             output <- stats::setNames(input, names(self$data))
           } else {
-            error("Invalid input for logical vector selecting which data sets to affect. Valid inputs include:\n  1) a single unnamed logical (e.g. TRUE)\n  2) one or more named logicals with names matching data sets in obj$data (e.g. c(data_1 = TRUE, data_2 = FALSE)\n  3) an unamed logical vector of the same length as obj$data.")
+            error(paste("Invalid input for logical vector selecting which data",
+                        "sets to affect. Valid inputs include:\n",
+                        "1) a single unnamed logical (e.g. TRUE)\n",
+                        "2) one or more named logicals with names matching",
+                        "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
+                        "= FALSE)\n  3) an unamed logical vector of the same",
+                        "length as obj$data."))
           }
         } else {
-          if (length(not_data_names <- names(input)[! names(input) %in% names(self$data)]) > 0) {
-            stop(paste0("Invalid input for logical vector selecting which data sets to affect. The following names are not in self$data: ",
+          if (length(not_data_names <-
+                     names(input)[! names(input) %in% names(self$data)]) > 0) {
+            stop(paste0("Invalid input for logical vector selecting which data",
+                        " sets to affect. The following names are not in",
+                        " self$data: ",
                         paste0(not_data_names, collapse = ", ")))
           }
-          output <- stats::setNames(rep(default, length(self$data)), names(self$data))
+          output <- stats::setNames(rep(default, length(self$data)),
+                                    names(self$data))
           output[names(input)] <- input
         }
         return(output)
       }
 
       # non-standard argument evaluation
-      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...), data = self$data_used(...))
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+                                       data = self$data_used(...))
 
       # convert taxon_ids to logical
       is_char <- vapply(selection, is.character, logical(1))
-      selection[is_char] <- lapply(selection[is_char], function(x) self$taxon_ids() %in% x)
+      selection[is_char] <- lapply(selection[is_char],
+                                   function(x) self$taxon_ids() %in% x)
 
       # convert indexes to logical
       is_index <- vapply(selection, is.numeric, logical(1))
-      selection[is_index] <- lapply(selection[is_index], function(x) 1:nrow(self$edge_list) %in% x)
+      selection[is_index] <- lapply(selection[is_index],
+                                    function(x) 1:nrow(self$edge_list) %in% x)
 
       # combine filters
       selection <- Reduce(`&`, selection)
@@ -232,12 +269,18 @@ Taxmap <- R6::R6Class(
       # Get taxa of subset
       taxa_subset <- unique(c(which(selection),
                               if (subtaxa) {
-                                self$subtaxa(subset = selection, recursive = TRUE, return_type = "index",
-                                             include_input = FALSE, simplify = TRUE)
+                                self$subtaxa(subset = selection,
+                                             recursive = TRUE,
+                                             return_type = "index",
+                                             include_input = FALSE,
+                                             simplify = TRUE)
                               },
                               if (supertaxa) {
-                                self$supertaxa(subset = selection, recursive = TRUE, return_type = "index",
-                                               na = FALSE, simplify = TRUE, include_input = FALSE)
+                                self$supertaxa(subset = selection,
+                                               recursive = TRUE,
+                                               return_type = "index",
+                                               na = FALSE, simplify = TRUE,
+                                               include_input = FALSE)
                               }))
 
       # Invert selection
@@ -246,7 +289,10 @@ Taxmap <- R6::R6Class(
       }
 
       # Reassign taxonless observations
-      reassign_obs <- parse_possibly_named_logical(reassign_obs, default = formals(self$filter_taxa)$reassign_obs)
+      reassign_obs <- parse_possibly_named_logical(
+        reassign_obs,
+        default = formals(self$filter_taxa)$reassign_obs
+      )
       process_one <- function(data_index) {
 
         reassign_one <- function(parents) {
@@ -255,15 +301,18 @@ Taxmap <- R6::R6Class(
         }
 
         # Get the taxon ids of the current object
-        if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[data_index]])))) {
+        if (is.null((data_taxon_ids <-
+                     get_data_taxon_ids(self$data[[data_index]])))) {
           return(NULL) # if there is no taxon id info, dont change anything
         }
 
         # Generate replacement taxon ids
         to_reassign <- ! data_taxon_ids %in% self$taxon_ids()[taxa_subset]
-        supertaxa_key <- self$supertaxa(subset = unique(data_taxon_ids[to_reassign]),
-                                        recursive = TRUE, simplify = FALSE, include_input = FALSE,
-                                        return_type = "index", na = FALSE)
+        supertaxa_key <- self$supertaxa(
+          subset = unique(data_taxon_ids[to_reassign]),
+          recursive = TRUE, simplify = FALSE, include_input = FALSE,
+          return_type = "index", na = FALSE
+        )
         reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
         new_data_taxon_ids <- reassign_key[data_taxon_ids[to_reassign]]
 
@@ -285,20 +334,27 @@ Taxmap <- R6::R6Class(
         }
 
         to_reassign <- ! self$edge_list$from %in% self$taxon_ids()[taxa_subset]
-        supertaxa_key <- self$supertaxa(subset = unique(self$taxon_ids()[to_reassign]),
-                                        recursive = TRUE, simplify = FALSE, include_input = FALSE,
-                                        return_type = "index", na = FALSE)
-        reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
-        self$edge_list[to_reassign, "from"] <- reassign_key[self$taxon_ids()[to_reassign]]
+        supertaxa_key <- self$supertaxa(
+          subset = unique(self$taxon_ids()[to_reassign]),
+          recursive = TRUE, simplify = FALSE, include_input = FALSE,
+          return_type = "index", na = FALSE)
+        reassign_key <- vapply(supertaxa_key, reassign_one, character(1)
+        )
+        self$edge_list[to_reassign, "from"] <-
+          reassign_key[self$taxon_ids()[to_reassign]]
       }
 
 
       # Remove taxonless observations
-      taxonless <- parse_possibly_named_logical(taxonless, default = formals(self$filter_taxa)$taxonless)
+      taxonless <- parse_possibly_named_logical(
+        taxonless,
+        default = formals(self$filter_taxa)$taxonless
+      )
       process_one <- function(my_index) {
 
         # Get the taxon ids of the current object
-        if (is.null((data_taxon_ids <- get_data_taxon_ids(self$data[[my_index]])))) {
+        if (is.null((data_taxon_ids <-
+                     get_data_taxon_ids(self$data[[my_index]])))) {
           return(NULL) # if there is no taxon id info, dont change anything
         }
 
@@ -311,7 +367,8 @@ Taxmap <- R6::R6Class(
           }
         } else {
           if (is.data.frame(self$data[[my_index]])) {
-            self$data[[my_index]] <- self$data[[my_index]][obs_subset, , drop = FALSE]
+            self$data[[my_index]] <-
+              self$data[[my_index]][obs_subset, , drop = FALSE]
           } else {
             self$data[[my_index]] <- self$data[[my_index]][obs_subset]
           }
@@ -325,7 +382,8 @@ Taxmap <- R6::R6Class(
       # Remove filtered taxa
       self$taxa <- self$taxa[self$taxon_ids()[taxa_subset]]
       self$edge_list <- self$edge_list[taxa_subset, , drop = FALSE]
-      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <- as.character(NA)
+      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
+        as.character(NA)
 
       return(self)
     },
@@ -337,12 +395,16 @@ Taxmap <- R6::R6Class(
 
     filter_obs = function(target, ..., unobserved = TRUE) {
       # non-standard argument evaluation
-      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...), data = self$data_used(...))
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+                                       data = self$data_used(...))
 
       # convert taxon_ids to indexes
       is_char <- vapply(selection, is.character, logical(1))
       if (sum(is_char) > 0) {
-        stop("observation filtering with taxon IDs is not currently supported. If you want to filter observation by taxon IDs, use something like: `obj$data$my_target$taxon_ids %in% my_subset`")
+        stop(paste("observation filtering with taxon IDs is not currently",
+                   "supported. If you want to filter observation by taxon IDs,",
+                   "use something like: `obj$data$my_target$taxon_ids %in%",
+                   "my_subset`"))
       }
 
       # convert logical to indexes
@@ -351,32 +413,35 @@ Taxmap <- R6::R6Class(
 
       # combine filters
       intersect_with_dups <-function(a, b) {
-        #taken from http://r.789695.n4.nabble.com/intersect-without-discarding-duplicates-td2225377.html
         rep(sort(intersect(a, b)), pmin(table(a[a %in% b]), table(b[b %in% a])))
       }
       selection <- Reduce(intersect_with_dups, selection)
 
       # Remove observations
-      data_taxon_ids <- get_data_taxon_ids(self$data[[target]]) # used in removing unobserved taxa but must be calculated before filtering observations
+      data_taxon_ids <- get_data_taxon_ids(self$data[[target]])
       self$data[[target]] <- self$data[[target]][selection, , drop = FALSE]
 
       # Remove unobserved taxa
       if (! unobserved & ! is.null(data_taxon_ids)) {
-        unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]), na = FALSE,
-                                          recursive = TRUE, simplify = TRUE, include_input = TRUE, return_type = "index")
-        taxa_to_remove <- 1:nrow(self$edge_list) %in% unobserved_taxa & vapply(self$obs(target), length, numeric(1)) == 0
+        unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]),
+                                          na = FALSE, recursive = TRUE,
+                                          simplify = TRUE, include_input = TRUE,
+                                          return_type = "index")
+        taxa_to_remove <- 1:nrow(self$edge_list) %in%
+          unobserved_taxa & vapply(self$obs(target), length, numeric(1)) == 0
         self$taxa <- self$taxa[self$taxon_ids()[! taxa_to_remove]]
         self$edge_list <- self$edge_list[! taxa_to_remove, , drop = FALSE]
-        self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <- as.character(NA)
-        # Todo: deal with other objects in data that had their taxa removed. There should be a `remove_taxa` function that this and `filter_taxa` could use.
+        self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
+          as.character(NA)
       }
 
       return(self)
     },
 
     select_obs = function(target, ...) {
-      self$data[[target]] <- dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
-                                              dplyr::select(self$data[[target]], ...))
+      self$data[[target]] <-
+        dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
+                         dplyr::select(self$data[[target]], ...))
       return(self)
     },
 
@@ -386,7 +451,8 @@ Taxmap <- R6::R6Class(
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
         new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
-        data_used <- c(data_used, new_col) # Allow this col to be used in evaluating the next cols
+        # Allow this col to be used in evaluating the next cols
+        data_used <- c(data_used, new_col)
         self$data[[target]][[names(new_col)]] <- new_col[[1]]
       }
       return(self)
@@ -399,7 +465,8 @@ Taxmap <- R6::R6Class(
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
         new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
-        data_used <- c(data_used, new_col) # Allow this col to be used in evaluating the next cols
+        # Allow this col to be used in evaluating the next cols
+        data_used <- c(data_used, new_col)
         result[[names(new_col)]] <- new_col[[1]]
       }
       self$data[[target]] <- tibble::as_tibble(result)
@@ -409,12 +476,14 @@ Taxmap <- R6::R6Class(
 
     arrange_obs = function(target, ...) {
       data_used <- self$data_used(...)
-      data_used <- data_used[! names(data_used) %in% names(self$data[[target]])] # These are not needed since they are already in the table being sorted
+      data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
       if (length(data_used) == 0) {
         self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
       } else {
-        target_with_extra_cols <- dplyr::bind_cols(data_used, self$data[[target]])
-        self$data[[target]] <- dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+        target_with_extra_cols <-
+          dplyr::bind_cols(data_used, self$data[[target]])
+        self$data[[target]] <-
+          dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
       }
 
       return(self)
@@ -422,33 +491,43 @@ Taxmap <- R6::R6Class(
 
     arrange_taxa = function(...) {
       data_used <- self$data_used(...)
-      data_used <- data_used[! names(data_used) %in% names(self$edge_list)] # These are not needed since they are already in the table being sorted
+      data_used <- data_used[! names(data_used) %in% names(self$edge_list)]
       if (length(data_used) == 0) {
         self$edge_list <- dplyr::arrange(self$edge_list, ...)
       } else {
         target_with_extra_cols <- dplyr::bind_cols(data_used, self$edge_list)
-        self$edge_list <- dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+        self$edge_list <-
+          dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
       }
 
       return(self)
     },
 
 
-    sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
-                            use_supertaxa = TRUE, collapse_func = mean, ...) {
+    sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL,
+                            obs_weight = NULL, use_supertaxa = TRUE,
+                            collapse_func = mean, ...) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
-      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight), data = data_used)
-      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight), data = data_used)
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
+                                          data = data_used)
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
+                                        data = data_used)
 
       # Calculate taxon component of taxon weights
       if (is.null(taxon_weight)) {
         obs_taxon_weight <- rep(1, nrow(self$data[[target]]))
       } else {
-        obs_index <- match(get_data_taxon_ids(self$data[[target]]), self$taxon_ids())
-        my_supertaxa <- self$supertaxa(recursive = use_supertaxa, simplify = FALSE,
-                                       include_input = TRUE, return_type = "index", na = FALSE)
-        taxon_weight_product <- vapply(my_supertaxa, function(x) collapse_func(taxon_weight[x]), numeric(1))
+        obs_index <- match(get_data_taxon_ids(self$data[[target]]),
+                           self$taxon_ids())
+        my_supertaxa <- self$supertaxa(recursive = use_supertaxa,
+                                       simplify = FALSE, include_input = TRUE,
+                                       return_type = "index", na = FALSE)
+        taxon_weight_product <- vapply(
+          my_supertaxa,
+          function(x) collapse_func(taxon_weight[x]),
+          numeric(1)
+        )
         obs_taxon_weight <- taxon_weight_product[obs_index]
       }
       obs_taxon_weight <- obs_taxon_weight / sum(obs_taxon_weight)
@@ -461,37 +540,51 @@ Taxmap <- R6::R6Class(
 
       # Combine observation and taxon weight components
       combine_func <- prod
-      weight <- mapply(obs_taxon_weight, obs_weight, FUN = function(x, y) combine_func(c(x,y)))
+      weight <- mapply(obs_taxon_weight, obs_weight,
+                       FUN = function(x, y) combine_func(c(x,y)))
       weight <- weight / sum(weight)
 
       # Sample observations
-      sampled_rows <- sample.int(nrow(self$data[[target]]), size = size, replace = replace, prob = weight)
+      sampled_rows <- sample.int(nrow(self$data[[target]]), size = size,
+                                 replace = replace, prob = weight)
       self$filter_obs(target, sampled_rows, ...)
     },
 
-    sample_frac_obs = function(target, size, replace = FALSE, taxon_weight = NULL, obs_weight = NULL,
-                                use_supertaxa = TRUE, collapse_func = mean, ...) {
-      self$sample_n_obs(target = target, size = size * nrow(self$data[[target]]), replace = replace,
-                   taxon_weight = taxon_weight, obs_weight = obs_weight,
-                   use_supertaxa = use_supertaxa, collapse_func = collapse_func, ...)
+    sample_frac_obs = function(target, size, replace = FALSE,
+                               taxon_weight = NULL, obs_weight = NULL,
+                               use_supertaxa = TRUE,
+                               collapse_func = mean, ...) {
+      self$sample_n_obs(target = target,
+                        size = size * nrow(self$data[[target]]),
+                        replace = replace,
+                        taxon_weight = taxon_weight, obs_weight = obs_weight,
+                        use_supertaxa = use_supertaxa,
+                        collapse_func = collapse_func, ...)
     },
 
-    sample_n_taxa = function(size, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
-                              use_subtaxa = TRUE, collapse_func = mean, ...) {
+    sample_n_taxa = function(size, taxon_weight = NULL, obs_weight = NULL,
+                             obs_target = NULL, use_subtaxa = TRUE,
+                             collapse_func = mean, ...) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
-      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight), data = data_used)
-      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight), data = data_used)
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
+                                          data = data_used)
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
+                                        data = data_used)
 
       # Calculate observation component of taxon weights
       if (is.null(obs_weight)) {
         taxon_obs_weight <- rep(1, nrow(self$edge_list))
       } else {
         if (is.null(obs_target)) {
-          stop("If the option `obs_weight` is used, then `obs_target` must also be defined.")
+          stop(paste("If the option `obs_weight` is used, then `obs_target`",
+                     "must also be defined."))
         }
-        my_obs <- self$obs(obs_target, recursive = use_subtaxa, simplify = FALSE)
-        taxon_obs_weight <- vapply(my_obs, function(x) collapse_func(obs_weight[x]), numeric(1))
+        my_obs <- self$obs(obs_target, recursive = use_subtaxa,
+                           simplify = FALSE)
+        taxon_obs_weight <- vapply(my_obs,
+                                   function(x) collapse_func(obs_weight[x]),
+                                   numeric(1))
       }
       taxon_obs_weight <- taxon_obs_weight / sum(taxon_obs_weight)
 
@@ -503,33 +596,41 @@ Taxmap <- R6::R6Class(
 
       # Combine observation and taxon weight components
       combine_func <- prod
-      weight <- mapply(taxon_weight, taxon_obs_weight, FUN = function(x, y) combine_func(c(x,y)))
+      weight <- mapply(taxon_weight, taxon_obs_weight,
+                       FUN = function(x, y) combine_func(c(x,y)))
       weight <- weight / sum(weight)
 
       # Sample observations
-      sampled_rows <- sample.int(nrow(self$edge_list), size = size, replace = FALSE, prob = weight)
+      sampled_rows <- sample.int(nrow(self$edge_list), size = size,
+                                 replace = FALSE, prob = weight)
       self$filter_taxa(sampled_rows, ...)
     },
 
-    sample_frac_taxa = function(size = 1, taxon_weight = NULL, obs_weight = NULL, obs_target = NULL,
-                                 use_subtaxa = TRUE, collapse_func = mean, ...) {
+    sample_frac_taxa = function(size = 1, taxon_weight = NULL,
+                                obs_weight = NULL, obs_target = NULL,
+                                use_subtaxa = TRUE, collapse_func = mean, ...) {
       self$sample_n_taxa(size = size * nrow(self$edge_list),
-                    taxon_weight = taxon_weight, obs_weight = obs_weight, obs_target = obs_target,
-                    use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
+                         taxon_weight = taxon_weight,
+                         obs_weight = obs_weight, obs_target = obs_target,
+                         use_subtaxa = use_subtaxa,
+                         collapse_func = collapse_func, ...)
     },
 
     n_obs = function(target) {
-      vapply(self$obs(target, recursive = TRUE, simplify = FALSE), length, numeric(1))
+      vapply(self$obs(target, recursive = TRUE, simplify = FALSE),
+             length, numeric(1))
     },
 
     n_obs_1 = function(target) {
-      vapply(self$obs(target, recursive = FALSE, simplify = FALSE), length, numeric(1))
+      vapply(self$obs(target, recursive = FALSE, simplify = FALSE),
+             length, numeric(1))
     }
 
   ),
 
   private = list(
-    nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa", "n_subtaxa", "n_subtaxa_1")
+    nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
+                             "n_subtaxa", "n_subtaxa_1")
   )
 )
 

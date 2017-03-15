@@ -10,16 +10,18 @@ limited_print(chars, prefix = "", max_chars = getOption("width") -
 \arguments{
 \item{chars}{(\code{character}) What to print.}
 
-\item{prefix}{(\code{character} of length 1) What to print before \code{chars}, on the same line.}
+\item{prefix}{(\code{character} of length 1) What to print before
+\code{chars}, on the same line.}
 
-\item{max_chars}{(\code{numeric} of length 1) The maximum number of characters to print.}
+\item{max_chars}{(\code{numeric} of length 1) The maximum number of
+characters to print.}
 }
 \value{
 \code{NULL}
 }
 \description{
-Prints the start and end values for a character vecotr.
-The number of values printed depend on the width of the screen by default.
+Prints the start and end values for a character vecotr. The number of values
+printed depend on the width of the screen by default.
 }
 \examples{
 taxa:::limited_print(1:100)

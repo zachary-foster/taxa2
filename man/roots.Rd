@@ -4,25 +4,25 @@
 \alias{roots}
 \title{Get root taxa}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon information to be
-queried.}
+\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+information to be queried.}
 
-\item{subset}{(\code{character}) Taxon IDs for which root taxa will be returned. Default: All
-taxon in \code{obj} will be used.}
+\item{subset}{(\code{character}) Taxon IDs for which root taxa will be
+returned. Default: All taxon in \code{obj} will be used.}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
-Note that "index" is the index of the edge list, not the taxon list.}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id",
+"taxa", or "hierarchies". Note that "index" is the index of the edge list,
+not the taxon list.}
 
-\item{...}{Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}}
+\item{...}{Used by the S3 method to pass the parameters to the R6 method of
+\code{\link{taxonomy}}}
 }
 \value{
 \code{character}
 }
 \description{
-Return the root taxa for a \code{\link{taxmap}} object. Can also be used to get the roots of
-a subset of taxa.
-\preformatted{
-obj$roots(subset = NULL, return_type = "id")
-roots(obj, ...)}
+Return the root taxa for a \code{\link{taxmap}} object. Can also be used to
+get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
+return_type = "id") roots(obj, ...)}
 }
 

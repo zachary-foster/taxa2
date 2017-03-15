@@ -10,10 +10,8 @@
 \code{numeric}
 }
 \description{
-Get number of subtaxa for each taxon in an object of type \code{\link{taxmap}}
-\preformatted{
-obj$n_subtaxa()
-n_subtaxa(obj)}
+Get number of subtaxa for each taxon in an object of type
+\code{\link{taxmap}} \preformatted{ obj$n_subtaxa() n_subtaxa(obj)}
 }
 \examples{
 n_subtaxa(ex_taxmap)

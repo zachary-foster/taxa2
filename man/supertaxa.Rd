@@ -4,40 +4,44 @@
 \alias{supertaxa}
 \title{Get all supertaxa of a taxon}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon information to be
-queried.}
+\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+information to be queried.}
 
-\item{subset}{(\code{character}) \code{taxon_ids} or indexes of \code{taxon_data} for which
-supertaxa will be returned. Default: All taxa in \code{obj} will be used.}
+\item{subset}{(\code{character}) \code{taxon_ids} or indexes of
+\code{taxon_data} for which supertaxa will be returned. Default: All taxa
+in \code{obj} will be used.}
 
-\item{recursive}{(\code{logical}) If \code{FALSE}, only return the supertaxa one level above the
-target taxa. If \code{TRUE}, return all the supertaxa of every supertaxa, etc.}
+\item{recursive}{(\code{logical}) If \code{FALSE}, only return the supertaxa
+one level above the target taxa. If \code{TRUE}, return all the supertaxa
+of every supertaxa, etc.}
 
-\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results into a single
-vector of unique values.}
+\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results
+into a single vector of unique values.}
 
-\item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in the output}
+\item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are
+included in the output}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id", "taxa", or "hierarchies".
-Note that "index" is the index of the edge list, not the taxon list.}
+\item{return_type}{(\code{logical}) Controls output type: "index", "id",
+"taxa", or "hierarchies". Note that "index" is the index of the edge list,
+not the taxon list.}
 
-\item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information is not available.}
+\item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information
+is not available.}
 
-\item{...}{U Used by the S3 method to pass the parameters to the R6 method of \code{\link{taxonomy}}}
+\item{...}{U Used by the S3 method to pass the parameters to the R6 method of
+\code{\link{taxonomy}}}
 }
 \value{
-If \code{simplify = FALSE}, then a list of vectors are returned corresponding to the
-  \code{subset} argument. If \code{simplify = TRUE}, then unique values are returned in a single
-  vector.
+If \code{simplify = FALSE}, then a list of vectors are returned
+  corresponding to the \code{subset} argument. If \code{simplify = TRUE},
+  then unique values are returned in a single vector.
 }
 \description{
-Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target taxa
-are a part of) in an object of type \code{\link{taxonomy}} or \code{\link{taxmap}}.
-\preformatted{
-obj$supertaxa(subset = NULL, recursive = TRUE,
-              simplify = FALSE, include_input = FALSE,
-              return_type = "id", na = FALSE)
-supertaxa(obj, ...)}
+Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
+taxa are a part of) in an object of type \code{\link{taxonomy}} or
+\code{\link{taxmap}}. \preformatted{ obj$supertaxa(subset = NULL, recursive =
+TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
+FALSE) supertaxa(obj, ...)}
 }
 \seealso{
 Other taxmap taxonomy functions: \code{\link{obs}}
