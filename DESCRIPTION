@@ -7,6 +7,10 @@ Authors@R: c(
     person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus@gmail.com"),
     person("Zachary", "Foster", role = "aut", email = "zacharyfoster1989@gmail.com")
     )
+Depends: R (>= 3.0.2)
+VignetteBuilder: knitr
+LazyLoad: yes
+LazyData: yes
 License: MIT + file LICENSE
 URL: https://github.com/ropenscilabs/taxa
 BugReports: https://github.com/ropenscilabs/taxa/issues
@@ -20,9 +24,6 @@ Imports:
     knitr
 Suggests:
     testthat,
-    rmarkdown (>= 0.9.6)
-Depends: R (>= 3.0.2)
-VignetteBuilder: knitr
+    rmarkdown (>= 0.9.6),
+    covr
 RoxygenNote: 5.0.1
-LazyLoad: yes
-LazyData: yes
