@@ -67,7 +67,8 @@ Taxon <- R6::R6Class(
       cat(paste0(indent, paste0("  name: ", self$name$name %||% "none", "\n")))
       cat(paste0(indent, paste0("  rank: ", self$rank$name %||% "none", "\n")))
       cat(paste0(indent, paste0("  id: ", self$id$id %||% "none", "\n")))
-      cat(paste0(indent, paste0("  authority: ", self$authority$name %||% "none", "\n")))
+      cat(paste0(indent, paste0("  authority: ",
+                                self$authority$name %||% "none", "\n")))
       invisible(self)
     }
   )

@@ -1,11 +1,13 @@
 #' Print a subset of a character vector
 #'
-#' Prints the start and end values for a character vecotr.
-#' The number of values printed depend on the width of the screen by default.
+#' Prints the start and end values for a character vecotr. The number of values
+#' printed depend on the width of the screen by default.
 #'
 #' @param chars (\code{character}) What to print.
-#' @param prefix (\code{character} of length 1) What to print before \code{chars}, on the same line.
-#' @param max_chars (\code{numeric} of length 1) The maximum number of characters to print.
+#' @param prefix (\code{character} of length 1) What to print before
+#'   \code{chars}, on the same line.
+#' @param max_chars (\code{numeric} of length 1) The maximum number of
+#'   characters to print.
 #'
 #' @return \code{NULL}
 #'
@@ -18,7 +20,8 @@
 limited_print <- function(chars, prefix = "",
                           max_chars = getOption("width") - nchar(prefix) - 5) {
 
-  interleave <- function(v1,v2) { # https://stat.ethz.ch/pipermail/r-help/2006-March/101023.html
+  # https://stat.ethz.ch/pipermail/r-help/2006-March/101023.html
+  interleave <- function(v1,v2) {
     ord1 <- 2*(1:length(v1))-1
     ord2 <- 2*(1:length(v2))
     c(v1,v2)[order(c(ord1,ord2))]
@@ -35,7 +38,8 @@ limited_print <- function(chars, prefix = "",
   }
   if (max_printed < length(chars)) {
     first_part <-  chars[1:as.integer(max_printed / 2 - 0.5)]
-    second_part <- chars[as.integer(length(chars) - (max_printed / 2) + 1.5):length(chars)]
+    second_part <-
+      chars[as.integer(length(chars) - (max_printed / 2) + 1.5):length(chars)]
     output <- paste0(paste0(collapse = ", ", first_part),
                      " ... ",
                      paste0(collapse = ", ", second_part),

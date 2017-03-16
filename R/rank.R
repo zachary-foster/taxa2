@@ -45,7 +45,8 @@ TaxonRank <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, sprintf("<TaxonRank> %s\n", self$name)))
-      cat(paste0(indent, paste0("  database: ", self$database$name %||% "none", "\n")))
+      cat(paste0(indent, paste0("  database: ",
+                                self$database$name %||% "none", "\n")))
       invisible(self)
     }
   )
