@@ -6,3 +6,4 @@
 ^scratch$
 man-roxygen
 ^notes$
+.github
