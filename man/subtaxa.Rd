@@ -27,8 +27,8 @@ not the taxon list.}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned
-  corresponding to the \code{target} argument. If \code{simplify = TRUE},
-  then the unique values are returned in a single vector.
+corresponding to the \code{target} argument. If \code{simplify = TRUE},
+then the unique values are returned in a single vector.
 }
 \description{
 Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object
@@ -36,4 +36,3 @@ of type \code{taxmap} \preformatted{ obj$subtaxa(subset = NULL, recursive =
 TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) subtaxa(obj, ...)}
 }
-

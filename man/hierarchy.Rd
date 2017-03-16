@@ -17,7 +17,7 @@ Hierarchy class
 }
 \details{
 on initialize, function sorts the taxon list, see
-\code{\link{ranks_ref}} for the reference rank names and orders
+\link{ranks_ref} for the reference rank names and orders
 }
 \examples{
 (x <- taxon(
@@ -43,4 +43,3 @@ on initialize, function sorts the taxon list, see
 res$taxa
 res$ranklist
 }
-

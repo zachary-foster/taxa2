@@ -1,8 +1,8 @@
 #' Make a set of many Hierarchy class objects
 #'
 #' @export
-#' @param ... Any number of object of class \code{Hierarchy}
-#' @return An \code{R6Class} object of class \code{Hierarchy}
+#' @param ... Any number of object of class `Hierarchy`
+#' @return An `R6Class` object of class `Hierarchy`
 #' @examples
 #' x <- taxon(
 #'   name = taxon_name("Poaceae"),

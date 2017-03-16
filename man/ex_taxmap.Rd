@@ -4,10 +4,10 @@
 \name{ex_taxmap}
 \alias{ex_taxmap}
 \title{An example taxmap object}
-\format{A \code{\link{taxmap}} object.}
+\format{A \code{\link[=taxmap]{taxmap()}} object.}
 \source{
-Created from the example code in the \code{\link{taxmap}}
-  documentation.
+Created from the example code in the \code{\link[=taxmap]{taxmap()}}
+documentation.
 }
 \usage{
 ex_taxmap
@@ -18,4 +18,3 @@ taxmap would be parsed from an input file, but this data set is just for
 demonstration purposes.
 }
 \keyword{datasets}
-

@@ -1,11 +1,11 @@
 #' Hierarchy class
 #'
 #' @export
-#' @param ... Any number of object of class \code{Taxon}
-#' @return An \code{R6Class} object of class \code{Hierarchy}
+#' @param ... Any number of object of class `Taxon`
+#' @return An `R6Class` object of class `Hierarchy`
 #'
 #' @details on initialize, function sorts the taxon list, see
-#' \code{\link{ranks_ref}} for the reference rank names and orders
+#' [ranks_ref] for the reference rank names and orders
 #'
 #' @examples
 #' (x <- taxon(

@@ -22,4 +22,3 @@ taxa:::extract_taxon_ids(ex_taxmap$data$info)
 
 }
 \keyword{internal}
-

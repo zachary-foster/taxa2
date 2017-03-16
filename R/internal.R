@@ -3,13 +3,13 @@
 #' Prints the start and end values for a character vecotr. The number of values
 #' printed depend on the width of the screen by default.
 #'
-#' @param chars (\code{character}) What to print.
-#' @param prefix (\code{character} of length 1) What to print before
-#'   \code{chars}, on the same line.
-#' @param max_chars (\code{numeric} of length 1) The maximum number of
+#' @param chars (`character`) What to print.
+#' @param prefix (`character` of length 1) What to print before
+#'   `chars`, on the same line.
+#' @param max_chars (`numeric` of length 1) The maximum number of
 #'   characters to print.
 #'
-#' @return \code{NULL}
+#' @return `NULL`
 #'
 #' @examples
 #' taxa:::limited_print(1:100)

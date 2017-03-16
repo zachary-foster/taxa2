@@ -20,8 +20,7 @@ information to be queried.}
 }
 \description{
 Format an input to a \code{subset} option on functions like
-\code{\link{supertaxa}}. Converts logical and \code{taxon_ids} into indexes
+\code{\link[=supertaxa]{supertaxa()}}. Converts logical and \code{taxon_ids} into indexes
 of \code{taxon_data}.
 }
 \keyword{internal}
-

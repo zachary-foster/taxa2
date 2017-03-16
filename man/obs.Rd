@@ -4,7 +4,7 @@
 \alias{obs}
 \title{Get data indexes associated with taxa}
 \arguments{
-\item{obj}{(\code{\link{taxmap}}) The \code{\link{taxmap}} object containing
+\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The \code{\link[=taxmap]{taxmap()}} object containing
 taxon information to be queried.}
 
 \item{data}{Either the name of something in \code{obj$data} that has taxon
@@ -24,13 +24,13 @@ into a single vector of unique observation indexes.}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors of observation
-  indexes are returned corresponding to the \code{target} argument. If
-  \code{simplify = TRUE}, then the observation indexes for all \code{target}
-  taxa are returned in a single vector.
+indexes are returned corresponding to the \code{target} argument. If
+\code{simplify = TRUE}, then the observation indexes for all \code{target}
+taxa are returned in a single vector.
 }
 \description{
-Given a \code{\link{taxmap}} object, return the indexes associated with each
-taxon in a given table included in that \code{\link{taxmap}} object.
+Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each
+taxon in a given table included in that \code{\link[=taxmap]{taxmap()}} object.
 \preformatted{ obj$obs(data, subset = NULL, recursive = TRUE, simplify =
 FALSE) obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 }
@@ -54,4 +54,3 @@ ex_taxmap$obs("info", simplify = TRUE)
 \seealso{
 Other taxmap taxonomy functions: \code{\link{supertaxa}}
 }
-

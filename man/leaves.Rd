@@ -15,14 +15,13 @@ returned. Default: All taxon in \code{obj} will be used.}
 not the taxon list.}
 
 \item{...}{Used by the S3 method to pass the parameters to the R6 method of
-\code{\link{taxonomy}}}
+\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 \code{character}
 }
 \description{
-Return the leaf taxa for a \code{\link{taxmap}} object. Leaf taxa are taxa
+Return the leaf taxa for a \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
 with no subtaxa. \preformatted{ obj$leaves(subset = NULL, return_type = "id")
 leaves(obj, ...)}
 }
-

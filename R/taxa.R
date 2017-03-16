@@ -1,8 +1,8 @@
 #' Make a set of many Taxon class objects
 #'
 #' @export
-#' @param ... Any number of object of class \code{Taxon}
-#' @return An \code{R6Class} object of class \code{Taxon}
+#' @param ... Any number of object of class `Taxon`
+#' @return An `R6Class` object of class `Taxon`
 #' @examples
 #' (x <- taxon(
 #'   name = taxon_name("Poa annua"),

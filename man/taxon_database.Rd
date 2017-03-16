@@ -25,9 +25,10 @@ TaxonDatabase class
 \section{Methods}{
 
 \itemize{
- \item print - print method
+\item print - print method
 }
 }
+
 \examples{
 # create a database entry
 (x <- taxon_database(
@@ -43,4 +44,3 @@ x$url
 database_list
 database_list$ncbi
 }
-

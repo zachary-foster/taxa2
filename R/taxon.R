@@ -9,7 +9,7 @@
 #' passed in, we'll coerce to a TaxonId object internally, required
 #' @param authority (character) an TaxonAuthority object, optional
 #'
-#' @return An \code{R6Class} object of class \code{Taxon}
+#' @return An `R6Class` object of class `Taxon`
 #'
 #' @section Methods:
 #' \itemize{

@@ -21,15 +21,14 @@ into a single vector of unique values.}
 taxa with no subtaxa.}
 
 \item{...}{Used by the S3 method to pass the parameters to the R6 method of
-\code{\link{taxonomy}}}
+\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 \code{character}
 }
 \description{
-Return the stem taxa for a \code{\link{taxonomy}} or a \code{\link{taxmap}}
+Return the stem taxa for a \code{\link[=taxonomy]{taxonomy()}} or a \code{\link[=taxmap]{taxmap()}}
 object. Stem taxa are all those from the roots to the first taxon with more
 than one subtaxon. \preformatted{ obj$stems(subset = NULL, simplify = FALSE,
 return_type = "id", exclude_leaves = FALSE) stems(obj, ...)}
 }
-

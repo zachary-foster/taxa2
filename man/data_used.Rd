@@ -4,7 +4,7 @@
 \alias{data_used}
 \title{Get values of data used in expressions}
 \arguments{
-\item{obj}{a \code{\link{taxmap}} object}
+\item{obj}{a \code{\link[=taxmap]{taxmap()}} object}
 
 \item{...}{One or more expressions}
 }
@@ -12,7 +12,7 @@
 \code{list}
 }
 \description{
-Get values of data in a \code{\link{taxmap}} used in expressions.
+Get values of data in a \code{\link[=taxmap]{taxmap()}} used in expressions.
 Expressions are not evaluated and do not need to make sense.
 \preformatted{
 obj$data_used(...)
@@ -27,4 +27,3 @@ Other accessors: \code{\link{all_data}},
   \code{\link{all_names}}, \code{\link{get_data}},
   \code{\link{names_used}}
 }
-

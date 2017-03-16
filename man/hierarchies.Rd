@@ -52,4 +52,3 @@ hier2 <- hierarchy(c, b, a)
 
 hierarchies(hier1, hier2)
 }
-

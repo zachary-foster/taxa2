@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{Get data in a taxmap object by name}
 \arguments{
-\item{obj}{A \code{\link{taxmap}}  object}
+\item{obj}{A \code{\link[=taxmap]{taxmap()}}  object}
 
 \item{name}{(\code{character}) Names of data to return.}
 }
@@ -13,7 +13,7 @@
 }
 \description{
 Given a vector of names, return a list of data contained in a
-\code{\link{taxmap}} object. \preformatted{
+\code{\link[=taxmap]{taxmap()}} object. \preformatted{
 obj$get_data(name)
 get_data(obj, name)}
 }
@@ -26,4 +26,3 @@ Other accessors: \code{\link{all_data}},
   \code{\link{all_names}}, \code{\link{data_used}},
   \code{\link{names_used}}
 }
-

@@ -4,7 +4,7 @@
 \alias{filter_obs}
 \title{Filter observations with a list of conditions}
 \arguments{
-\item{obj}{An object of type \code{\link{taxmap}}}
+\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
 \item{target}{The name of the list/vector/table in \code{obj$data} to filter}
 
@@ -23,13 +23,13 @@ are unobserved due to this filtering will be removed; there might be other
 taxa without observations to begin with that will not be removed.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Filter data in a \code{\link{taxmap}} (in \code{obj$data}) object with a
+Filter data in a \code{\link[=taxmap]{taxmap()}} (in \code{obj$data}) object with a
 series of conditions. Any variable name that appears in
 \code{obj$all_names()} can be used as if it was a vector on its own. See
-\code{\link[dplyr]{filter}} for the inspiration for this function and more
+\code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$filter_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
 using the \code{filter_obs(obj, ...)} mitates R's traditional copy-on-modify
@@ -56,4 +56,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
-

@@ -3,8 +3,8 @@
 #' Used to store taxonomic tree structures.
 #'
 #' @export
-#' @param ... Any number of object of class \code{\link{hierarchy}}
-#' @return An \code{R6Class} object of class \code{Taxonomy}
+#' @param ... Any number of object of class [hierarchy()]
+#' @return An `R6Class` object of class `Taxonomy`
 #'
 #' @details on initialize, we parse the inputs and find all duplicate
 #' taxonomic names of the same rank, make an edge list

@@ -15,14 +15,13 @@ returned. Default: All taxon in \code{obj} will be used.}
 not the taxon list.}
 
 \item{...}{Used by the S3 method to pass the parameters to the R6 method of
-\code{\link{taxonomy}}}
+\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 \code{character}
 }
 \description{
-Return the root taxa for a \code{\link{taxmap}} object. Can also be used to
+Return the root taxa for a \code{\link[=taxmap]{taxmap()}} object. Can also be used to
 get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
 return_type = "id") roots(obj, ...)}
 }
-

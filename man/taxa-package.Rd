@@ -2,11 +2,10 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{taxa-package}
-\alias{taxa}
 \alias{taxa-package}
+\alias{taxa}
 \title{taxa}
 \description{
 taxa
 }
 \keyword{package}
-

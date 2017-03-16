@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{select_obs}
 \alias{select_obs}
-\title{Subset columns in a \code{\link{taxmap}} object}
+\title{Subset columns in a \code{\link[=taxmap]{taxmap()}} object}
 \arguments{
-\item{obj}{An object of type \code{\link{taxmap}}}
+\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
 \item{target}{The name of the list/vector/table in \code{obj$data} to filter}
 
@@ -14,16 +14,20 @@ name}{The name of a column in \code{obj$data[[target]]} typed as if it was
 a varaible on its own.} \item{\code{numeric}}{Indexes of columns in
 \code{obj$data[[target]]}} } To match column names with a character vector,
 use \code{matches("my_col_name")}. To match a logical vector, convert it to
-a column index using \code{\link[base]{which}}.}
+a column index using [base::which()].
+
+[[target]: R:[target
+[[target]: R:[target
+[base::which()]: R:base::which()}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Subsets columns in a \code{\link{taxmap}} object. Takes and returns a
-\code{\link{taxmap}} object. Any variable name that appears in
+Subsets columns in a \code{\link[=taxmap]{taxmap()}} object. Takes and returns a
+\code{\link[=taxmap]{taxmap()}} object. Any variable name that appears in
 \code{obj$all_names()} can be used as if it was a vector on its own. See
-\code{\link[dplyr]{select}} for the inspiration for this function and more
+\code{\link[dplyr:select]{dplyr::select()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$select_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
 using the \code{select_obs(obj, ...)} mitates R's traditional copy-on-modify
@@ -51,4 +55,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{transmute_obs}}
 }
-

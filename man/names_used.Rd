@@ -4,7 +4,7 @@
 \alias{names_used}
 \title{Get names of data used in expressions}
 \arguments{
-\item{obj}{a \code{\link{taxmap}} object}
+\item{obj}{a \code{\link[=taxmap]{taxmap()}} object}
 
 \item{...}{One or more expressions}
 }
@@ -27,4 +27,3 @@ Other accessors: \code{\link{all_data}},
   \code{\link{all_names}}, \code{\link{data_used}},
   \code{\link{get_data}}
 }
-

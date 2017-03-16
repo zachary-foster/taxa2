@@ -4,7 +4,7 @@
 #' @param name (character) a taxonomic name. required
 #' @param database (character) database class object, optional
 #'
-#' @return An \code{R6Class} object of class \code{TaxonName}
+#' @return An `R6Class` object of class `TaxonName`
 #'
 #' @section Methods:
 #' \itemize{

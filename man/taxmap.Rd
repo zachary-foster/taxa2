@@ -7,21 +7,21 @@
 taxmap(..., data = NULL)
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link{hierarchy}} or character
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
 vectors.}
 
 \item{data}{A list of tables with data associated with the taxa.}
 }
 \value{
-An \code{R6Class} object of class \code{\link{taxmap}}
+An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
 }
 \description{
 Taxmap class
 }
 \details{
 on initialize, function sorts the taxon list based on rank (if rank
-  information is available), see \code{\link{ranks_ref}} for the reference
-  rank names and orders
+information is available), see \link{ranks_ref} for the reference
+rank names and orders
 }
 \examples{
 notoryctidae <- taxon(
@@ -145,4 +145,3 @@ ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                                 phylopic_ids = phylopic_ids),
                     funcs = list(reaction = reaction))
 }
-

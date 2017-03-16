@@ -1,17 +1,17 @@
 #' Format taxon subset value
 #'
-#' Format an input to a \code{subset} option on functions like
-#' \code{\link{supertaxa}}. Converts logical and \code{taxon_ids} into indexes
-#' of \code{taxon_data}.
+#' Format an input to a `subset` option on functions like
+#' [supertaxa()]. Converts logical and `taxon_ids` into indexes
+#' of `taxon_data`.
 #'
-#' @param obj (\code{taxmap}) The \code{taxmap} object containing taxon
+#' @param obj (`taxmap`) The `taxmap` object containing taxon
 #'   information to be queried.
-#' @param index If a \code{character}, then it should be values of
-#'   \code{taxon_ids}. If a \code{numeric}, then it should be row indexes of
-#'   \code{taxon_data}. If a \code{logical}, then it should correspond to rows
-#'   of \code{taxon_data}.
+#' @param index If a `character`, then it should be values of
+#'   `taxon_ids`. If a `numeric`, then it should be row indexes of
+#'   `taxon_data`. If a `logical`, then it should correspond to rows
+#'   of `taxon_data`.
 #'
-#' @return \code{numeric}
+#' @return `numeric`
 #'
 #' @keywords internal
 format_taxon_subset <- function(taxon_ids, index) {
@@ -146,13 +146,13 @@ validate_taxmap_funcs <- function(funcs) {
 #' Used to print each item in the `taxmap` print method.
 #'
 #' @param data The item to be printed
-#' @param max_rows (\code{numeric} of length 1) The maximum number of rows in
+#' @param max_rows (`numeric` of length 1) The maximum number of rows in
 #'   tables to print.
-#' @param max_items (\code{numeric} of length 1) The maximum number of list
+#' @param max_items (`numeric` of length 1) The maximum number of list
 #'   items to print.
-#' @param max_width (\code{numeric} of length 1) The maximum number of
+#' @param max_width (`numeric` of length 1) The maximum number of
 #'   characters to print.
-#' @param prefix (\code{numeric} of length 1) What to print in front of each
+#' @param prefix (`numeric` of length 1) What to print in front of each
 #'   line.
 #'
 #' @examples

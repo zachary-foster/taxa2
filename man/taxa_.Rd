@@ -23,4 +23,3 @@ Make a set of many Taxon class objects
 ))
 taxa_(x, x, x)
 }
-

@@ -6,7 +6,7 @@
 #' @param description (character) description of the database
 #' @param id_regex (character) id regex
 #'
-#' @return An \code{R6Class} object of class \code{TaxonDatabase}
+#' @return An `R6Class` object of class `TaxonDatabase`
 #'
 #' @section Methods:
 #' \itemize{

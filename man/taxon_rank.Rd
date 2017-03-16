@@ -20,9 +20,10 @@ TaxonRank class
 \section{Methods}{
 
 \itemize{
- \item print - print method
+\item print - print method
 }
 }
+
 \examples{
 taxon_rank("species")
 taxon_rank("genus")
@@ -36,4 +37,3 @@ taxon_rank("kingdom")
 x$rank
 x$database
 }
-

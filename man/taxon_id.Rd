@@ -20,9 +20,10 @@ TaxonId class
 \section{Methods}{
 
 \itemize{
- \item print - print method
+\item print - print method
 }
 }
+
 \examples{
 (x <- taxon_id(12345))
 x$id
@@ -35,4 +36,3 @@ x$database
 x$id
 x$database
 }
-

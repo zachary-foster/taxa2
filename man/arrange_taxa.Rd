@@ -2,19 +2,19 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{arrange_taxa}
 \alias{arrange_taxa}
-\title{Sort the edge list of \code{\link{taxmap}} objects}
+\title{Sort the edge list of \code{\link[=taxmap]{taxmap()}} objects}
 \arguments{
-\item{obj}{\code{\link{taxmap}}}
+\item{obj}{\code{\link[=taxmap]{taxmap()}}}
 
 \item{...}{One or more column names to sort on.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Sort the edge list in \code{\link{taxmap}} objects. Any variable name that
+Sort the edge list in \code{\link[=taxmap]{taxmap()}} objects. Any variable name that
 appears in \code{obj$all_names()} can be used as if it was a vector on its
-own. See \code{\link[dplyr]{arrange}} for the inspiration for this function
+own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function
 and more information. \preformatted{ obj$arrange_taxa(...) arrange_taxa(obj,
 ...)}
 }
@@ -30,4 +30,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
-

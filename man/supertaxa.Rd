@@ -29,21 +29,20 @@ not the taxon list.}
 is not available.}
 
 \item{...}{U Used by the S3 method to pass the parameters to the R6 method of
-\code{\link{taxonomy}}}
+\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned
-  corresponding to the \code{subset} argument. If \code{simplify = TRUE},
-  then unique values are returned in a single vector.
+corresponding to the \code{subset} argument. If \code{simplify = TRUE},
+then unique values are returned in a single vector.
 }
 \description{
 Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
-taxa are a part of) in an object of type \code{\link{taxonomy}} or
-\code{\link{taxmap}}. \preformatted{ obj$supertaxa(subset = NULL, recursive =
+taxa are a part of) in an object of type \code{\link[=taxonomy]{taxonomy()}} or
+\code{\link[=taxmap]{taxmap()}}. \preformatted{ obj$supertaxa(subset = NULL, recursive =
 TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) supertaxa(obj, ...)}
 }
 \seealso{
 Other taxmap taxonomy functions: \code{\link{obs}}
 }
-

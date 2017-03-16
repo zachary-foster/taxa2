@@ -4,14 +4,14 @@
 \alias{n_subtaxa}
 \title{Get number of subtaxa}
 \arguments{
-\item{obj}{(\code{\link{taxmap}})}
+\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
 }
 \value{
 \code{numeric}
 }
 \description{
 Get number of subtaxa for each taxon in an object of type
-\code{\link{taxmap}} \preformatted{ obj$n_subtaxa() n_subtaxa(obj)}
+\code{\link[=taxmap]{taxmap()}} \preformatted{ obj$n_subtaxa() n_subtaxa(obj)}
 }
 \examples{
 n_subtaxa(ex_taxmap)
@@ -23,4 +23,3 @@ Other taxon_funcs: \code{\link{id_classifications}},
   \code{\link{n_subtaxa_1}}, \code{\link{n_supertaxa}},
   \code{\link{name_classifications}}
 }
-

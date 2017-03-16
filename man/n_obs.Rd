@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{n_obs}
 \alias{n_obs}
-\title{Count observations in \code{\link{taxmap}}}
+\title{Count observations in \code{\link[=taxmap]{taxmap()}}}
 \arguments{
-\item{obj}{(\code{\link{taxmap}})}
+\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
 
 \item{target}{The name of the list/vector/table in \code{obj$data}}
 }
@@ -12,7 +12,7 @@
 \code{numeric}
 }
 \description{
-Count observations for each taxon in a \code{\link{taxmap}} object.
+Count observations for each taxon in a \code{\link[=taxmap]{taxmap()}} object.
 This includes observations for the specific taxon and its subtaxa.
 \preformatted{
 obj$n_obs(target)
@@ -28,4 +28,3 @@ Other taxon_funcs: \code{\link{id_classifications}},
   \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
   \code{\link{name_classifications}}
 }
-

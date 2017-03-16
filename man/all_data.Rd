@@ -4,15 +4,15 @@
 \alias{all_data}
 \title{Get values of all data}
 \arguments{
-\item{obj}{a \code{\link{taxmap}} object}
+\item{obj}{a \code{\link[=taxmap]{taxmap()}} object}
 
-\item{...}{Passed to \code{\link{all_names}}}
+\item{...}{Passed to \code{\link[=all_names]{all_names()}}}
 }
 \value{
 Named \code{list}
 }
 \description{
-Get values of all data in a \code{\link{taxmap}} object
+Get values of all data in a \code{\link[=taxmap]{taxmap()}} object
 \preformatted{
 obj$data_used(...)
 data_used(obj, ...)}
@@ -26,4 +26,3 @@ Other accessors: \code{\link{all_names}},
   \code{\link{data_used}}, \code{\link{get_data}},
   \code{\link{names_used}}
 }
-

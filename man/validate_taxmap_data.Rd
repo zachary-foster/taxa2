@@ -2,21 +2,20 @@
 % Please edit documentation in R/taxmap--internal.R
 \name{validate_taxmap_data}
 \alias{validate_taxmap_data}
-\title{Convert `data` input for Taxamp}
+\title{Convert \code{data} input for Taxamp}
 \usage{
 validate_taxmap_data(data, input_ids)
 }
 \arguments{
-\item{data}{The `data` variable passed to the `Taxmap` constructor}
+\item{data}{The \code{data} variable passed to the \code{Taxmap} constructor}
 
 \item{input_ids}{}
 }
 \value{
-A `data` varaible with the right format
+A \code{data} varaible with the right format
 }
 \description{
-Make sure `data` is in the right format and complain if it is not.
-Then, add a `taxon_id` column to data with the same length as the input
+Make sure \code{data} is in the right format and complain if it is not.
+Then, add a \code{taxon_id} column to data with the same length as the input
 }
 \keyword{internal}
-

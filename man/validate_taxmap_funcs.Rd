@@ -2,19 +2,18 @@
 % Please edit documentation in R/taxmap--internal.R
 \name{validate_taxmap_funcs}
 \alias{validate_taxmap_funcs}
-\title{Validate `funcs` input for Taxamp}
+\title{Validate \code{funcs} input for Taxamp}
 \usage{
 validate_taxmap_funcs(funcs)
 }
 \arguments{
-\item{funcs}{The `funcs` variable passed to the `Taxmap` constructor}
+\item{funcs}{The \code{funcs} variable passed to the \code{Taxmap} constructor}
 }
 \value{
-A `funcs` varaible with the right format
+A \code{funcs} varaible with the right format
 }
 \description{
-Make sure `funcs` is in the right format and complain if it is not.
+Make sure \code{funcs} is in the right format and complain if it is not.
 NOTE: This currently does nothing.
 }
 \keyword{internal}
-

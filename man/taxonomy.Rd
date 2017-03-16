@@ -7,7 +7,7 @@
 taxonomy(...)
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link{hierarchy}}}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}}}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}
@@ -86,4 +86,3 @@ taxonomy(hier1, hier2, hier3)
 
 
 }
-

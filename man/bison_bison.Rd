@@ -11,10 +11,9 @@ Data is from GBIF for the taxon \emph{Bison bison}
 It has the following columns
 
 \itemize{
-  \item name. taxon name
-  \item rank. taxon rank
-  \item id. taxon id
+\item name. taxon name
+\item rank. taxon rank
+\item id. taxon id
 }
 }
 \keyword{data}
-

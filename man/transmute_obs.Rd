@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{transmute_obs}
 \alias{transmute_obs}
-\title{Replace columns in \code{\link{taxmap}} objects}
+\title{Replace columns in \code{\link[=taxmap]{taxmap()}} objects}
 \arguments{
-\item{obj}{An object of type \code{\link{taxmap}}}
+\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
 \item{target}{The name of the table in \code{obj$data} to filter}
 
@@ -12,12 +12,12 @@
 referenced in the same function call.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Replace columns of tables in \code{obj$data} in \code{\link{taxmap}} objects.
+Replace columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
 Any variable name that appears in \code{obj$all_names()} can be used as if it
-was a vector on its own. See \code{\link[dplyr]{transmute}} for the
+was a vector on its own. See \code{\link[dplyr:transmute]{dplyr::transmute()}} for the
 inspiration for this function and more information. \preformatted{
 obj$transmute_obs(target, ...) transmute_obs(obj, target, ...)}
 }
@@ -34,4 +34,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}
 }
-

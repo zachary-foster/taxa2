@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{mutate_obs}
 \alias{mutate_obs}
-\title{Add columns to \code{\link{taxmap}} objects}
+\title{Add columns to \code{\link[=taxmap]{taxmap()}} objects}
 \arguments{
-\item{obj}{An object of type \code{\link{taxmap}}}
+\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
 \item{target}{The name of the table in \code{obj$data} to filter}
 
@@ -12,16 +12,15 @@
 referenced in the same function call.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Add columns to tables in \code{obj$data} in \code{\link{taxmap}} objects. Any
+Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects. Any
 variable name that appears in \code{obj$all_names()} can be used as if it was
-a vector on its own. See \code{\link[dplyr]{mutate}} for the inspiration for
+a vector on its own. See \code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for
 this function and more information. Calling the function using the
 \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R
-functions. However, calling the function using the \code{mutate_obs(obj,
-...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
+functions. However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
 \preformatted{ obj$mutate_obs(target, ...) mutate_obs(obj, target, ...)}
 }
@@ -39,4 +38,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
-

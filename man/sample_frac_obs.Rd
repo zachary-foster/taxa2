@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{sample_frac_obs}
 \alias{sample_frac_obs}
-\title{Sample a proportion of observations from \code{\link{taxmap}}}
+\title{Sample a proportion of observations from \code{\link[=taxmap]{taxmap()}}}
 \arguments{
-\item{obj}{(\code{\link{taxmap}}) The object to sample from.}
+\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The object to sample from.}
 
 \item{target}{The name of the table in \code{obj$data} to filter}
 
@@ -37,15 +37,15 @@ taxon in an observation's classification are supplied to
 \code{collapse_func} to get the observation weight. This function should
 take  numeric vector and return a single number.}
 
-\item{...}{Additional options are passed to \code{\link{filter_obs}}.}
+\item{...}{Additional options are passed to \code{\link[=filter_obs]{filter_obs()}}.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Randomly sample some propoortion of observations from a \code{\link{taxmap}}
+Randomly sample some propoortion of observations from a \code{\link[=taxmap]{taxmap()}}
 object. Weights can be specified for observations or their taxa. See
-\link[dplyr]{sample_frac} for the inspiration for this function.
+\code{\link[dplyr:sample_frac]{dplyr::sample_frac()}} for the inspiration for this function.
 \preformatted{ obj$sample_frac_obs(target, size, replace = FALSE,
 taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func =
 mean, ...) sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
@@ -63,4 +63,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
-

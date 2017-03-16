@@ -27,9 +27,10 @@ Taxon class
 \section{Methods}{
 
 \itemize{
- \item print - print method
+\item print - print method
 }
 }
+
 \examples{
 (x <- taxon(
   name = taxon_name("Poa annua"),
@@ -40,4 +41,3 @@ x$name
 x$id
 x$database
 }
-

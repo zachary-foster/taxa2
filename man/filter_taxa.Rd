@@ -4,7 +4,7 @@
 \alias{filter_taxa}
 \title{Filter taxa with a list of conditions}
 \arguments{
-\item{obj}{An object of class \code{\link{taxmap}}}
+\item{obj}{An object of class \code{\link[=taxmap]{taxmap()}}}
 
 \item{...}{One or more filtering conditions. Each filtering condition can be
 one of three things: \describe{ \item{\code{character}}{One or more taxon
@@ -25,8 +25,7 @@ if the taxon they are assigned to is filtered out. Observations assigned to
 removed taxa will be assigned to \code{NA}. This option can be either
 simply \code{TRUE}/\code{FALSE}, meaning that all data sets will be treated
 the same, or a logical vector can be supplied with names corresponding one
-or more data sets in \code{obj$data}. For example, \code{c(abundance =
-TRUE, stats = FALSE)} would inlcude observations whose taxon was filtered
+or more data sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would inlcude observations whose taxon was filtered
 out in \code{obj$data$abundance}, but not in \code{obj$data$stats}. See the
 \code{reassign_obs} option below for further complications.}
 
@@ -52,16 +51,15 @@ account the \code{subtaxa} and \code{supertaxa} options. This is useful for
 removing a taxon and all its subtaxa for example.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Filter taxa in a \code{\link{taxmap}} object with a series of conditions. Any
+Filter taxa in a \code{\link[=taxmap]{taxmap()}} object with a series of conditions. Any
 variable name that appears in \code{obj$all_names()} can be used as if it was
-a vector on its own. See \code{\link[dplyr]{filter}} for the inspiration for
+a vector on its own. See \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration for
 this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R
-functions. However, calling the function using the \code{filter_taxa(obj,
-...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
+functions. However, calling the function using the \code{filter_taxa(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
 \preformatted{ obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
 taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
@@ -103,4 +101,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
-

@@ -4,7 +4,7 @@
 #' @param name (character) rank name. required
 #' @param database (character) database class object, optional
 #'
-#' @return An \code{R6Class} object of class \code{TaxonRank}
+#' @return An `R6Class` object of class `TaxonRank`
 #'
 #' @section Methods:
 #' \itemize{

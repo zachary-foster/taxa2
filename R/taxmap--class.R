@@ -1,13 +1,13 @@
 #' Taxmap class
 #'
 #' @export
-#' @param ... Any number of object of class \code{\link{hierarchy}} or character
+#' @param ... Any number of object of class [hierarchy()] or character
 #'   vectors.
 #' @param data A list of tables with data associated with the taxa.
-#' @return An \code{R6Class} object of class \code{\link{taxmap}}
+#' @return An `R6Class` object of class [taxmap()]
 #'
 #' @details on initialize, function sorts the taxon list based on rank (if rank
-#'   information is available), see \code{\link{ranks_ref}} for the reference
+#'   information is available), see [ranks_ref] for the reference
 #'   rank names and orders
 #'
 #' @template taxmapegs

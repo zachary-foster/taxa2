@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{sample_n_taxa}
 \alias{sample_n_taxa}
-\title{Sample n taxa from \code{\link{taxmap}}}
+\title{Sample n taxa from \code{\link[=taxmap]{taxmap()}}}
 \arguments{
-\item{obj}{(\code{\link{taxmap}}) The object to sample from.}
+\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The object to sample from.}
 
 \item{size}{(\code{numeric} of length 1) The number of taxa to sample.}
 
@@ -37,15 +37,15 @@ observation's classification are supplied to \code{collapse_func} to get
 the observation weight. This function should take  numeric vector and
 return a single number.}
 
-\item{...}{Additional options are passed to \code{\link{filter_taxa}}.}
+\item{...}{Additional options are passed to \code{\link[=filter_taxa]{filter_taxa()}}.}
 }
 \value{
-An object of type \code{\link{taxmap}}
+An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Randomly sample some number of taxa from a \code{\link{taxmap}} object.
+Randomly sample some number of taxa from a \code{\link[=taxmap]{taxmap()}} object.
 Weights can be specified for taxa or the observations assigned to them. See
-\link[dplyr]{sample_n} for the inspiration for this function. \preformatted{
+\code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration for this function. \preformatted{
 obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL, obs_target =
 NULL, use_subtaxa = TRUE, collapse_func = mean, ...) sample_n_taxa(obj, size,
 taxon_weight = NULL, obs_weight = NULL, obs_target = NULL, use_subtaxa =
@@ -75,4 +75,3 @@ Other dplyr-like functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{select_obs}},
   \code{\link{transmute_obs}}
 }
-

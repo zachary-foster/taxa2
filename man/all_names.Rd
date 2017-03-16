@@ -2,9 +2,9 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{all_names}
 \alias{all_names}
-\title{Return names of data in a \code{\link{taxmap}}}
+\title{Return names of data in a \code{\link[=taxmap]{taxmap()}}}
 \arguments{
-\item{obj}{(\code{\link{taxmap}}) The \code{\link{taxmap}} object containing
+\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The \code{\link[=taxmap]{taxmap()}} object containing
 taxon information to be queried.}
 
 \item{tables}{If \code{TRUE}, include the names of columns of tables in
@@ -17,7 +17,7 @@ taxon information to be queried.}
 besides tables.}
 
 \item{builtin_funcs}{If \code{TRUE}, include functions like
-\code{\link{n_supertaxa}} that provide information for each taxon.}
+\code{\link[=n_supertaxa]{n_supertaxa()}} that provide information for each taxon.}
 
 \item{warn}{If \code{TRUE}, warn if there are duplicate names.}
 }
@@ -43,4 +43,3 @@ Other accessors: \code{\link{all_data}},
   \code{\link{data_used}}, \code{\link{get_data}},
   \code{\link{names_used}}
 }
-

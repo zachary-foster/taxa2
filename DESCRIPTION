@@ -2,7 +2,7 @@ Package: taxa
 Type: Package
 Title: Taxonomic Classes for R
 Description: Taxonomic Classes for R.
-Version: 0.0.2.9053
+Version: 0.0.4.9100
 Authors@R: c(
     person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus@gmail.com"),
     person("Zachary", "Foster", role = "aut", email = "zacharyfoster1989@gmail.com")
@@ -14,6 +14,7 @@ LazyData: yes
 License: MIT + file LICENSE
 URL: https://github.com/ropenscilabs/taxa
 BugReports: https://github.com/ropenscilabs/taxa/issues
+Roxygen: list(markdown = TRUE)
 Imports:
     R6,
     jsonlite,
@@ -23,7 +24,8 @@ Imports:
     tibble,
     knitr
 Suggests:
+    roxygen2 (>= 6.0.1),
     testthat,
     rmarkdown (>= 0.9.6),
     covr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

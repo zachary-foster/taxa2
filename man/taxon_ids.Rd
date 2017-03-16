@@ -7,7 +7,7 @@
 \item{obj}{The \code{taxonomy} or \code{taxmap} object.}
 }
 \description{
-Return the taxon IDs in a \code{\link{taxmap}} object.
+Return the taxon IDs in a \code{\link[=taxmap]{taxmap()}} object.
 They are in the order they appear in the edge list.
 }
 \details{
@@ -15,4 +15,3 @@ They are in the order they appear in the edge list.
 obj$taxon_ids()
 taxon_ids(obj, ...)}
 }
-

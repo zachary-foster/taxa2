@@ -20,9 +20,10 @@ TaxonName class
 \section{Methods}{
 
 \itemize{
- \item print - print method
+\item print - print method
 }
 }
+
 \examples{
 (poa <- taxon_name("Poa"))
 (undef <- taxon_name("undefined"))
@@ -40,4 +41,3 @@ x$database
 x$rank
 x$database
 }
-
