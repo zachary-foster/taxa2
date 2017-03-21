@@ -3,128 +3,103 @@
 library(taxa)
 context("Testing the `taxmap` object")
 
-## Creating test data
-notoryctidae <- taxon(
-  name = taxon_name("Notoryctidae"),
-  rank = taxon_rank("family"),
-  id = taxon_id(4479)
-)
-notoryctes <- taxon(
-  name = taxon_name("Notoryctes"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(4544)
-)
-typhlops <- taxon(
-  name = taxon_name("typhlops"),
-  rank = taxon_rank("species"),
-  id = taxon_id(93036)
-)
-mammalia <- taxon(
-  name = taxon_name("Mammalia"),
-  rank = taxon_rank("class"),
-  id = taxon_id(9681)
-)
-felidae <- taxon(
-  name = taxon_name("Felidae"),
-  rank = taxon_rank("family"),
-  id = taxon_id(9681)
-)
-felis <- taxon(
-  name = taxon_name("Felis"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(9682)
-)
-catus <- taxon(
-  name = taxon_name("catus"),
-  rank = taxon_rank("species"),
-  id = taxon_id(9685)
-)
-panthera <- taxon(
-  name = taxon_name("Panthera"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(146712)
-)
-tigris <- taxon(
-  name = taxon_name("tigris"),
-  rank = taxon_rank("species"),
-  id = taxon_id(9696)
-)
-plantae <- taxon(
-  name = taxon_name("Plantae"),
-  rank = taxon_rank("kingdom"),
-  id = taxon_id(33090)
-)
-solanaceae <- taxon(
-  name = taxon_name("Solanaceae"),
-  rank = taxon_rank("family"),
-  id = taxon_id(4070)
-)
-solanum <- taxon(
-  name = taxon_name("Solanum"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(4107)
-)
-lycopersicum <- taxon(
-  name = taxon_name("lycopersicum"),
-  rank = taxon_rank("species"),
-  id = taxon_id(49274)
-)
-tuberosum <- taxon(
-  name = taxon_name("tuberosum"),
-  rank = taxon_rank("species"),
-  id = taxon_id(4113)
-)
-homo <- taxon(
-  name = taxon_name("homo"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(9605)
-)
-sapiens <- taxon(
-  name = taxon_name("sapiens"),
-  rank = taxon_rank("species"),
-  id = taxon_id(9606)
-)
-hominidae <- taxon(
-  name = taxon_name("Hominidae"),
-  rank = taxon_rank("family"),
-  id = taxon_id(9604)
-)
-unidentified <- taxon(
-  name = taxon_name("unidentified")
-)
+### NSE helpers
 
-tiger <- hierarchy(mammalia, felidae, panthera, tigris)
-cat <- hierarchy(mammalia, felidae, felis, catus)
-human <- hierarchy(mammalia, hominidae, homo, sapiens)
-mole <- hierarchy(mammalia, notoryctidae, notoryctes, typhlops)
-tomato <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
-potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
-potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
-unidentified_animal <- hierarchy(mammalia, unidentified)
-unidentified_plant <- hierarchy(plantae, unidentified)
+#### all_names
 
-# create object used by multiple tests
+test_that("Names of table col names are accessible by NSE", {
+  expected_col_names <- colnames(ex_taxmap$data$info)
+  expected_col_names <- expected_col_names[expected_col_names != "taxon_id"]
+  expect_true(all(expected_col_names %in% ex_taxmap$all_names()))
+  expect_false(any(expected_col_names %in% ex_taxmap$all_names(tables = FALSE)))
+})
+
+test_that("Names of functions are accessible by NSE", {
+  expected_funcs <- names(ex_taxmap$funcs)
+  expect_true(all(expected_funcs %in% ex_taxmap$all_names()))
+  expect_false(any(expected_funcs %in% ex_taxmap$all_names(funcs = FALSE)))
+})
+
+test_that("Names of functions are accessible by NSE", {
+  expected_others <-
+    names(ex_taxmap$data)[sapply(ex_taxmap$data,
+                                 function(x) ! "data.frame" %in% class(x))]
+  expect_true(all(expected_others %in% ex_taxmap$all_names()))
+  expect_false(any(expected_others %in% ex_taxmap$all_names(others = FALSE)))
+})
+
+test_that("Names of built-in functions are accessible by NSE", {
+  expected_builtin <- c("taxon_names", "taxon_ids", "n_supertaxa", "n_subtaxa",
+                        "n_subtaxa_1")
+  expect_true(all(expected_builtin %in% ex_taxmap$all_names()))
+  expect_false(any(expected_builtin %in%
+                     ex_taxmap$all_names(builtin_funcs = FALSE)))
+})
+
+test_that("Duplicate names give a warning", {
+  x = ex_taxmap
+  x$data$n_legs = 1:10
+  expect_warning(x$all_names(warn = T),
+                 "The following names are used more than once: n_legs")
+  expect_silent(x$all_names(warn = F))
+})
+
+#### names_used
+
+test_that("Names in basic expressions can be found by NSE", {
+  expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids")
+                  %in% ex_taxmap$names_used(n_legs + n_subtaxa, taxon_ids + 19)))
+})
+
+test_that("Names in complex expressions can be found by NSE", {
+  expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids", "dangerous", "reaction") %in%
+                    ex_taxmap$names_used((((((n_legs))))),
+                                         function(x) length(taxon_ids) + x,
+                                         {{n_subtaxa}},
+                                         taxon_ids[n_subtaxa[dangerous]],
+                                         reaction(n_subtaxa))))
+})
+
+test_that("Names in invalid expressions can be found by NSE", {
+  expect_true(all(c("n_subtaxa")
+                  %in% ex_taxmap$names_used(not_a_variable == n_subtaxa,
+                                            aslkadsldsa)))
+})
+
+#### get_data
+
+test_that("NSE values can be found", {
+  expect_identical(ex_taxmap$get_data(c("n_subtaxa", "n_legs", "reaction")),
+                   list(n_subtaxa = ex_taxmap$n_subtaxa(),
+                        n_legs = ex_taxmap$data$info$n_legs,
+                        reaction = ex_taxmap$funcs$reaction(ex_taxmap)))
+})
 
 
 
+### Mapping functions
 
-info <- data.frame(name = c("tiger", "cat", "mole", "tomato", "potato", "human"),
-                   n_legs = c(4, 4, 4, 0, 0, 2),
-                   dangerous = c(TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
-phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
-                  "12899ba0-9923-4feb-a7f9-758c3c7d5e13",
-                  "11b783d5-af1c-4f4e-8ab5-a51470652b47",
-                  "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
-                  "63604565-0406-460b-8cb8-1abe954b3f3a",
-                  "9fae30cd-fb59-4a81-a39c-e1826a35f612")
+#### obs
 
-reaction <- function(x) {
-  ifelse(x$data$info$dangerous,
-         paste0("Watch out! That ", x$data$info$name, " might attack!"),
-         paste0("No worries; its just a ", x$data$info$name, "."))
-}
+test_that("Mapping between table observations and the edge list works", {
+  result <- ex_taxmap$obs("info")
+  expect_that(all(vapply(result, class,
+                         character(1)) == "integer"))
+  expect_identical(names(result), ex_taxmap$taxon_ids())
+  expect_identical(result[["1"]], 1:4)
+})
 
-x <- taxmap(tiger, cat, mole, tomato, potato, human,
-            data = list(info = info,
-                        phylopic_ids = phylopic_ids),
-            funcs = list(reaction = reaction))
+test_that("Mapping between a subset of observations and the edge list works", {
+  expect_identical(ex_taxmap$obs("info", subset = "1"), list("1" = 1:4))
+  expect_identical(ex_taxmap$obs("info", subset = 1), list("1" = 1:4))
+})
+
+test_that("Mapping non-recursivly between observations and the edge list works", {
+  result <- ex_taxmap$obs("info", recursive = FALSE)
+  expect_true(all(sapply(result[roots(ex_taxmap)], length) == 0))
+  expect_equal(result[["17"]], 6)
+})
+
+test_that("Mapping simplification between observations and the edge list works", {
+  expect_equal(ex_taxmap$obs("info", simplify = TRUE), 1:6)
+})
