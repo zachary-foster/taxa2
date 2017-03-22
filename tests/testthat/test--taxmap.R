@@ -207,3 +207,20 @@ test_that("Edge cases return reasonable outputs during observation column additi
   expect_error(mutate_obs(ex_taxmap, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
+
+
+#### transmute_obs
+
+test_that("Observation column addition (transmute) works",  {
+  result <- transmute_obs(ex_taxmap, "info",
+                          new_col = paste("new", name),
+                          newer_col = paste0(new_col, "!!"))
+  expect_equal(c("taxon_id", "new_col", "newer_col"), colnames(result$data$info))
+})
+
+test_that("Edge cases return reasonable outputs during observation column addition (transmute) ",  {
+  result <- transmute_obs(ex_taxmap, "info")
+  expect_equal("taxon_id", colnames(result$data$info))
+  expect_error(transmute_obs(ex_taxmap, "not_valid"),
+               "not the name of a data set. Valid targets ")
+})

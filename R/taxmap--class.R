@@ -478,7 +478,11 @@ Taxmap <- R6::R6Class(
       # Check that the target data exists
       private$check_dataset_name(target)
 
-      result <- list()
+      if ("taxon_id" %in% colnames(self$data[[target]])) {
+        result <- list(taxon_id = self$data[[target]]$taxon_id)
+      } else {
+        result <- list()
+      }
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
