@@ -83,8 +83,7 @@ test_that("NSE values can be found", {
 
 test_that("Mapping between table observations and the edge list works", {
   result <- ex_taxmap$obs("info")
-  expect_that(all(vapply(result, class,
-                         character(1)) == "integer"))
+  expect_true(all(sapply(result, class) == "integer"))
   expect_identical(names(result), ex_taxmap$taxon_ids())
   expect_identical(result[["1"]], 1:4)
 })
@@ -102,4 +101,72 @@ test_that("Mapping non-recursivly between observations and the edge list works",
 
 test_that("Mapping simplification between observations and the edge list works", {
   expect_equal(ex_taxmap$obs("info", simplify = TRUE), 1:6)
+})
+
+
+
+### Dplyr analogs
+
+#### filter_taxa
+
+test_that("Default taxon filtering works", {
+  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum")
+  expect_equal(result$taxon_names(), c("11" = "Solanum"))
+  expect_equal(as.character(result$data$info$name), c("tomato", "potato"))
+  expect_true(length(result$data$phylopic_ids) == 2)
+})
+
+test_that("Subtaxa can be included when filtering taxa", {
+  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", subtaxa = TRUE)
+  expect_equivalent(result$taxon_names(),
+                    c("Solanum", "lycopersicum", "tuberosum"))
+})
+
+test_that("Supertaxa can be included when filtering taxa", {
+  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", supertaxa = TRUE)
+  expect_equivalent(result$taxon_names(),
+                    c("Solanum", "Solanaceae", "Plantae"))
+})
+
+test_that("Observations can be preserved when filtering taxa", {
+  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", reassign_obs = FALSE)
+  expect_equal(nrow(result$data$info), 0)
+  result <- filter_taxa(ex_taxmap, taxon_names == "tuberosum", reassign_obs = FALSE)
+  expect_equivalent(result$taxon_names(), "tuberosum")
+})
+
+test_that("Taxon ids can be preserved when filtering taxa", {
+  result <- filter_taxa(ex_taxmap, taxon_names != "Solanum", reassign_taxa = FALSE)
+  expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(return_type = "name")))
+})
+
+test_that("The selection of taxa to be filtered can be inverted", {
+  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
+  expect_true(all(! c("tuberosum", "lycopersicum", "Solanum") %in% taxon_names(result)))
+  expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% taxon_names(result)))
+})
+
+test_that("Edge cases return reasonable outputs", {
+  expect_equal(filter_taxa(ex_taxmap), ex_taxmap)
+})
+
+
+#### filter_obs
+
+test_that("Default observation filtering works", {
+  result <- filter_obs(ex_taxmap, "info", n_legs == 2)
+  expect_equivalent(as.character(result$data$info$name), "human")
+})
+
+test_that("Removing taxa when filtering observations work", {
+  result <- filter_obs(ex_taxmap, "info", n_legs == 2, unobserved = FALSE)
+  expect_equivalent(as.character(result$data$info$name), "human")
+  expect_equivalent(result$taxon_names(),
+                    c("Mammalia", "Hominidae", "homo", "sapiens"))
+})
+
+test_that("Edge cases return reasonable outputs", {
+  expect_equal(filter_obs(ex_taxmap, "info"), ex_taxmap)
+  expect_error(filter_obs(ex_taxmap, "not_valid",
+                          "not the name of a data set. Valid targets "))
 })

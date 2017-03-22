@@ -7,7 +7,8 @@ Authors@R: c(
     person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus@gmail.com"),
     person("Zachary", "Foster", role = "aut", email = "zacharyfoster1989@gmail.com")
     )
-Depends: R (>= 3.0.2)
+Depends:
+    R (>= 3.0.2)
 VignetteBuilder: knitr
 LazyLoad: yes
 LazyData: yes
@@ -28,4 +29,4 @@ Suggests:
     testthat,
     rmarkdown (>= 0.9.6),
     covr
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1

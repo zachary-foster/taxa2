@@ -266,6 +266,11 @@ Taxmap <- R6::R6Class(
       # combine filters
       selection <- Reduce(`&`, selection)
 
+      # default to all taxa if no selection is provided
+      if (is.null(selection)) {
+        selection <- rep(TRUE, length(self$taxon_ids()))
+      }
+
       # Get taxa of subset
       taxa_subset <- unique(c(which(selection),
                               if (subtaxa) {
@@ -389,14 +394,22 @@ Taxmap <- R6::R6Class(
     },
 
 
-
-
-
-
     filter_obs = function(target, ..., unobserved = TRUE) {
+      # Check that the target data exists
+      if (! target %in% names(self$data)) {
+        stop(paste0("The target `", target, "` is not the name of a data set.",
+                    " Valid targets include: ",
+                    paste0(names(self$data), collapse = ", ")))
+      }
+
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
+
+      # If no selection is supplied, match all rows
+      if (length(selection) == 0) {
+        selection <- list(seq_len(nrow(self$data[[target]])))
+      }
 
       # convert taxon_ids to indexes
       is_char <- vapply(selection, is.character, logical(1))
@@ -437,6 +450,7 @@ Taxmap <- R6::R6Class(
 
       return(self)
     },
+
 
     select_obs = function(target, ...) {
       self$data[[target]] <-
