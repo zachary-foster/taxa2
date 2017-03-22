@@ -1,14 +1,13 @@
 #' Taxmap class
 #'
 #' @export
-#' @param ... Any number of object of class [hierarchy()] or character
-#'   vectors.
+#' @param ... Any number of object of class [hierarchy()] or character vectors.
 #' @param data A list of tables with data associated with the taxa.
 #' @return An `R6Class` object of class [taxmap()]
 #'
 #' @details on initialize, function sorts the taxon list based on rank (if rank
-#'   information is available), see [ranks_ref] for the reference
-#'   rank names and orders
+#'   information is available), see [ranks_ref] for the reference rank names and
+#'   orders
 #'
 #' @template taxmapegs
 taxmap <- function(..., data = NULL) {
@@ -396,11 +395,7 @@ Taxmap <- R6::R6Class(
 
     filter_obs = function(target, ..., unobserved = TRUE) {
       # Check that the target data exists
-      if (! target %in% names(self$data)) {
-        stop(paste0("The target `", target, "` is not the name of a data set.",
-                    " Valid targets include: ",
-                    paste0(names(self$data), collapse = ", ")))
-      }
+      private$check_dataset_name(target)
 
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
@@ -453,6 +448,9 @@ Taxmap <- R6::R6Class(
 
 
     select_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       self$data[[target]] <-
         dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
                          dplyr::select(self$data[[target]], ...))
@@ -461,6 +459,9 @@ Taxmap <- R6::R6Class(
 
 
     mutate_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
@@ -474,6 +475,9 @@ Taxmap <- R6::R6Class(
 
 
     transmute_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       result <- list()
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
@@ -489,6 +493,9 @@ Taxmap <- R6::R6Class(
 
 
     arrange_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       data_used <- self$data_used(...)
       data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
       if (length(data_used) == 0) {
@@ -521,6 +528,9 @@ Taxmap <- R6::R6Class(
     sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL,
                             obs_weight = NULL, use_supertaxa = TRUE,
                             collapse_func = mean, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
       taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
@@ -644,7 +654,14 @@ Taxmap <- R6::R6Class(
 
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
-                             "n_subtaxa", "n_subtaxa_1")
+                             "n_subtaxa", "n_subtaxa_1"),
+    check_dataset_name = function(target) {
+      if (! target %in% names(self$data)) {
+        stop(paste0("The target `", target, "` is not the name of a data set.",
+                    " Valid targets include: ",
+                    paste0(names(self$data), collapse = ", ")))
+      }
+    }
   )
 )
 

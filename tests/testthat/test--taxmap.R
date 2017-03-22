@@ -170,3 +170,40 @@ test_that("Edge cases return reasonable outputs", {
   expect_error(filter_obs(ex_taxmap, "not_valid",
                           "not the name of a data set. Valid targets "))
 })
+
+
+#### select_obs
+
+test_that("Default observation column subsetting works",  {
+  result <- select_obs(ex_taxmap, "info", dangerous)
+  expect_equal(colnames(result$data$info), c("taxon_id", "dangerous"))
+})
+
+test_that("Edge cases return reasonable outputs during observation column subsetting", {
+  result <- select_obs(ex_taxmap, "info")
+  expect_equal(colnames(result$data$info), c("taxon_id"))
+  expect_error(select_obs(ex_taxmap, "not_valid"),
+                          "not the name of a data set. Valid targets ")
+  expect_error(select_obs(ex_taxmap), " missing, with no default")
+})
+
+
+#### mutate_obs
+
+test_that("Observation column addition works",  {
+  result <- mutate_obs(ex_taxmap, "info",
+                       new_col = "new",
+                       newer_col = paste0(new_col, "er"))
+  expect_true(all(c("new_col", "newer_col") %in% colnames(result$data$info)))
+})
+
+test_that("Observation column replacement works",  {
+  result <- mutate_obs(ex_taxmap, "info", name = "replacement")
+  expect_true(all(result$data$info$name == "replacement"))
+})
+
+test_that("Edge cases return reasonable outputs during observation column addition",  {
+  expect_equal(mutate_obs(ex_taxmap, "info"), ex_taxmap)
+  expect_error(mutate_obs(ex_taxmap, "not_valid"),
+               "not the name of a data set. Valid targets ")
+})
