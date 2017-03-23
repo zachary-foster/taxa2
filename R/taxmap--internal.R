@@ -201,3 +201,39 @@ get_data_taxon_ids <- function(x) {
   }
   return(data_taxon_ids)
 }
+
+
+#' used to parse inputs to `taxonless` and `reassign_obs`
+#'
+#' @keywords internal
+parse_possibly_named_logical <- function(input, data, default) {
+  if (is.null(names(input))) {
+    if (length(input) == 1) {
+      output <- stats::setNames(rep(input, length(data)),
+                                names(data))
+    } else if (length(input) == length(data)) {
+      output <- stats::setNames(input, names(data))
+    } else {
+      stop(paste("Invalid input for logical vector selecting which data",
+                  "sets to affect. Valid inputs include:\n",
+                  "1) a single unnamed logical (e.g. TRUE)\n",
+                  "2) one or more named logicals with names matching",
+                  "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
+                  "= FALSE)\n  3) an unamed logical vector of the same",
+                  "length as obj$data."))
+    }
+  } else {
+    if (length(not_data_names <-
+               names(input)[! names(input) %in% names(data)]) > 0) {
+      stop(paste0("Invalid input for logical vector selecting which data",
+                  " sets to affect. The following names are not in",
+                  " data: ",
+                  paste0(not_data_names, collapse = ", ")))
+    }
+    output <- stats::setNames(rep(default, length(data)),
+                              names(data))
+    output[names(input)] <- input
+  }
+  return(output)
+}
+

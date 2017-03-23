@@ -216,38 +216,6 @@ Taxmap <- R6::R6Class(
                            taxonless = FALSE, reassign_obs = TRUE,
                            reassign_taxa = TRUE, invert = FALSE) {
 
-      # used to parse inputs to `taxonless` and `reassign_obs`
-      parse_possibly_named_logical <- function(input, default) {
-        if (is.null(names(input))) {
-          if (length(input) == 1) {
-            output <- stats::setNames(rep(input, length(self$data)),
-                                      names(self$data))
-          } else if (length(input) == length(self$data)) {
-            output <- stats::setNames(input, names(self$data))
-          } else {
-            error(paste("Invalid input for logical vector selecting which data",
-                        "sets to affect. Valid inputs include:\n",
-                        "1) a single unnamed logical (e.g. TRUE)\n",
-                        "2) one or more named logicals with names matching",
-                        "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
-                        "= FALSE)\n  3) an unamed logical vector of the same",
-                        "length as obj$data."))
-          }
-        } else {
-          if (length(not_data_names <-
-                     names(input)[! names(input) %in% names(self$data)]) > 0) {
-            stop(paste0("Invalid input for logical vector selecting which data",
-                        " sets to affect. The following names are not in",
-                        " self$data: ",
-                        paste0(not_data_names, collapse = ", ")))
-          }
-          output <- stats::setNames(rep(default, length(self$data)),
-                                    names(self$data))
-          output[names(input)] <- input
-        }
-        return(output)
-      }
-
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
@@ -295,6 +263,7 @@ Taxmap <- R6::R6Class(
       # Reassign taxonless observations
       reassign_obs <- parse_possibly_named_logical(
         reassign_obs,
+        self$data,
         default = formals(self$filter_taxa)$reassign_obs
       )
       process_one <- function(data_index) {
@@ -352,6 +321,7 @@ Taxmap <- R6::R6Class(
       # Remove taxonless observations
       taxonless <- parse_possibly_named_logical(
         taxonless,
+        self$data,
         default = formals(self$filter_taxa)$taxonless
       )
       process_one <- function(my_index) {

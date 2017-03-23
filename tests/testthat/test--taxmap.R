@@ -127,7 +127,12 @@ test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
                     funcs = list(reaction = reaction))
 
 
+### Print methods
 
+test_that("Print methods works", {
+  expect_output(print(test_obj),
+                "<Taxmap>.+17 taxa.+17 edges.+2 data sets.+info.+phylopic_ids.+1 functions.+reaction")
+})
 
 ### NSE helpers
 
@@ -199,8 +204,13 @@ test_that("NSE values can be found", {
                    list(n_subtaxa = test_obj$n_subtaxa(),
                         n_legs = test_obj$data$info$n_legs,
                         reaction = test_obj$funcs$reaction(test_obj)))
+  expect_error(test_obj$get_data(c("n_subtaxa", "not_valid")),
+               "Cannot find the following data: not_valid")
 })
 
+test_that("All valid NSE values can be found", {
+  expect_equal(names(all_data(test_obj)), unname(all_names(test_obj)))
+})
 
 
 ### Mapping functions
@@ -227,6 +237,14 @@ test_that("Mapping non-recursivly between observations and the edge list works",
 
 test_that("Mapping simplification between observations and the edge list works", {
   expect_equal(test_obj$obs("info", simplify = TRUE), 1:6)
+})
+
+test_that("Mapping observations in external tables", {
+  external_table <- data.frame(taxon_id = c("15", "13"),
+                               my_name = c("Joe", "Fluffy"))
+  expect_equal(test_obj$obs(external_table)$`1`, c(2, 1))
+  external_table <- data.frame(my_name = c("Joe", "Fluffy"))
+  expect_error(test_obj$obs(external_table), 'no "taxon_id" column')
 })
 
 
