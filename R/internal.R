@@ -20,6 +20,12 @@
 limited_print <- function(chars, prefix = "",
                           max_chars = getOption("width") - nchar(prefix) - 5) {
 
+  if (length(chars) == 0) {
+    cat(prefix)
+    return(invisible(NULL))
+  }
+
+
   # https://stat.ethz.ch/pipermail/r-help/2006-March/101023.html
   interleave <- function(v1,v2) {
     ord1 <- 2*(1:length(v1))-1
@@ -48,6 +54,7 @@ limited_print <- function(chars, prefix = "",
     output <- paste0(paste0(collapse = ", ", chars), "\n")
   }
   cat(paste(prefix, output, collapse = ""))
+  return(invisible(NULL))
 }
 
 

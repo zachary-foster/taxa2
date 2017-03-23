@@ -7,8 +7,7 @@
 taxmap(..., data = NULL)
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
-vectors.}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character vectors.}
 
 \item{data}{A list of tables with data associated with the taxa.}
 }
@@ -20,8 +19,8 @@ Taxmap class
 }
 \details{
 on initialize, function sorts the taxon list based on rank (if rank
-information is available), see \link{ranks_ref} for the reference
-rank names and orders
+information is available), see \link{ranks_ref} for the reference rank names and
+orders
 }
 \examples{
 notoryctidae <- taxon(
