@@ -3,41 +3,167 @@
 library(taxa)
 context("Testing the `taxmap` object")
 
+
+
+notoryctidae <- taxon(
+  name = taxon_name("Notoryctidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(4479)
+)
+notoryctes <- taxon(
+  name = taxon_name("Notoryctes"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(4544)
+)
+typhlops <- taxon(
+  name = taxon_name("typhlops"),
+  rank = taxon_rank("species"),
+  id = taxon_id(93036)
+)
+mammalia <- taxon(
+  name = taxon_name("Mammalia"),
+  rank = taxon_rank("class"),
+  id = taxon_id(9681)
+)
+felidae <- taxon(
+  name = taxon_name("Felidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(9681)
+)
+felis <- taxon(
+  name = taxon_name("Felis"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(9682)
+)
+catus <- taxon(
+  name = taxon_name("catus"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9685)
+)
+panthera <- taxon(
+  name = taxon_name("Panthera"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(146712)
+)
+tigris <- taxon(
+  name = taxon_name("tigris"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9696)
+)
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = taxon_rank("kingdom"),
+  id = taxon_id(33090)
+)
+solanaceae <- taxon(
+  name = taxon_name("Solanaceae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(4070)
+)
+solanum <- taxon(
+  name = taxon_name("Solanum"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(4107)
+)
+lycopersicum <- taxon(
+  name = taxon_name("lycopersicum"),
+  rank = taxon_rank("species"),
+  id = taxon_id(49274)
+)
+tuberosum <- taxon(
+  name = taxon_name("tuberosum"),
+  rank = taxon_rank("species"),
+  id = taxon_id(4113)
+)
+homo <- taxon(
+  name = taxon_name("homo"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(9605)
+)
+sapiens <- taxon(
+  name = taxon_name("sapiens"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9606)
+)
+hominidae <- taxon(
+  name = taxon_name("Hominidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(9604)
+)
+unidentified <- taxon(
+  name = taxon_name("unidentified")
+)
+
+tiger <- hierarchy(mammalia, felidae, panthera, tigris)
+cat <- hierarchy(mammalia, felidae, felis, catus)
+human <- hierarchy(mammalia, hominidae, homo, sapiens)
+mole <- hierarchy(mammalia, notoryctidae, notoryctes, typhlops)
+tomato <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
+potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
+potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
+unidentified_animal <- hierarchy(mammalia, unidentified)
+unidentified_plant <- hierarchy(plantae, unidentified)
+
+info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato"),
+                   n_legs = c(4, 4, 4, 2, 0, 0),
+                   dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
+
+phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
+                  "12899ba0-9923-4feb-a7f9-758c3c7d5e13",
+                  "11b783d5-af1c-4f4e-8ab5-a51470652b47",
+                  "9fae30cd-fb59-4a81-a39c-e1826a35f612",
+                  "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
+                  "63604565-0406-460b-8cb8-1abe954b3f3a")
+
+reaction <- function(x) {
+  ifelse(x$data$info$dangerous,
+         paste0("Watch out! That ", x$data$info$name, " might attack!"),
+         paste0("No worries; its just a ", x$data$info$name, "."))
+}
+
+test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
+                    data = list(info = info,
+                                phylopic_ids = phylopic_ids),
+                    funcs = list(reaction = reaction))
+
+
+
+
 ### NSE helpers
 
 #### all_names
 
 test_that("Names of table col names are accessible by NSE", {
-  expected_col_names <- colnames(ex_taxmap$data$info)
+  expected_col_names <- colnames(test_obj$data$info)
   expected_col_names <- expected_col_names[expected_col_names != "taxon_id"]
-  expect_true(all(expected_col_names %in% ex_taxmap$all_names()))
-  expect_false(any(expected_col_names %in% ex_taxmap$all_names(tables = FALSE)))
+  expect_true(all(expected_col_names %in% test_obj$all_names()))
+  expect_false(any(expected_col_names %in% test_obj$all_names(tables = FALSE)))
 })
 
 test_that("Names of functions are accessible by NSE", {
-  expected_funcs <- names(ex_taxmap$funcs)
-  expect_true(all(expected_funcs %in% ex_taxmap$all_names()))
-  expect_false(any(expected_funcs %in% ex_taxmap$all_names(funcs = FALSE)))
+  expected_funcs <- names(test_obj$funcs)
+  expect_true(all(expected_funcs %in% test_obj$all_names()))
+  expect_false(any(expected_funcs %in% test_obj$all_names(funcs = FALSE)))
 })
 
 test_that("Names of functions are accessible by NSE", {
   expected_others <-
-    names(ex_taxmap$data)[sapply(ex_taxmap$data,
+    names(test_obj$data)[sapply(test_obj$data,
                                  function(x) ! "data.frame" %in% class(x))]
-  expect_true(all(expected_others %in% ex_taxmap$all_names()))
-  expect_false(any(expected_others %in% ex_taxmap$all_names(others = FALSE)))
+  expect_true(all(expected_others %in% test_obj$all_names()))
+  expect_false(any(expected_others %in% test_obj$all_names(others = FALSE)))
 })
 
 test_that("Names of built-in functions are accessible by NSE", {
   expected_builtin <- c("taxon_names", "taxon_ids", "n_supertaxa", "n_subtaxa",
                         "n_subtaxa_1")
-  expect_true(all(expected_builtin %in% ex_taxmap$all_names()))
+  expect_true(all(expected_builtin %in% test_obj$all_names()))
   expect_false(any(expected_builtin %in%
-                     ex_taxmap$all_names(builtin_funcs = FALSE)))
+                     test_obj$all_names(builtin_funcs = FALSE)))
 })
 
 test_that("Duplicate names give a warning", {
-  x = ex_taxmap
+  x = test_obj
   x$data$n_legs = 1:10
   expect_warning(x$all_names(warn = T),
                  "The following names are used more than once: n_legs")
@@ -48,12 +174,12 @@ test_that("Duplicate names give a warning", {
 
 test_that("Names in basic expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids")
-                  %in% ex_taxmap$names_used(n_legs + n_subtaxa, taxon_ids + 19)))
+                  %in% test_obj$names_used(n_legs + n_subtaxa, taxon_ids + 19)))
 })
 
 test_that("Names in complex expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids", "dangerous", "reaction") %in%
-                    ex_taxmap$names_used((((((n_legs))))),
+                    test_obj$names_used((((((n_legs))))),
                                          function(x) length(taxon_ids) + x,
                                          {{n_subtaxa}},
                                          taxon_ids[n_subtaxa[dangerous]],
@@ -62,17 +188,17 @@ test_that("Names in complex expressions can be found by NSE", {
 
 test_that("Names in invalid expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa")
-                  %in% ex_taxmap$names_used(not_a_variable == n_subtaxa,
+                  %in% test_obj$names_used(not_a_variable == n_subtaxa,
                                             aslkadsldsa)))
 })
 
 #### get_data
 
 test_that("NSE values can be found", {
-  expect_identical(ex_taxmap$get_data(c("n_subtaxa", "n_legs", "reaction")),
-                   list(n_subtaxa = ex_taxmap$n_subtaxa(),
-                        n_legs = ex_taxmap$data$info$n_legs,
-                        reaction = ex_taxmap$funcs$reaction(ex_taxmap)))
+  expect_identical(test_obj$get_data(c("n_subtaxa", "n_legs", "reaction")),
+                   list(n_subtaxa = test_obj$n_subtaxa(),
+                        n_legs = test_obj$data$info$n_legs,
+                        reaction = test_obj$funcs$reaction(test_obj)))
 })
 
 
@@ -82,25 +208,25 @@ test_that("NSE values can be found", {
 #### obs
 
 test_that("Mapping between table observations and the edge list works", {
-  result <- ex_taxmap$obs("info")
+  result <- test_obj$obs("info")
   expect_true(all(sapply(result, class) == "integer"))
-  expect_identical(names(result), ex_taxmap$taxon_ids())
+  expect_identical(names(result), test_obj$taxon_ids())
   expect_identical(result[["1"]], 1:4)
 })
 
 test_that("Mapping between a subset of observations and the edge list works", {
-  expect_identical(ex_taxmap$obs("info", subset = "1"), list("1" = 1:4))
-  expect_identical(ex_taxmap$obs("info", subset = 1), list("1" = 1:4))
+  expect_identical(test_obj$obs("info", subset = "1"), list("1" = 1:4))
+  expect_identical(test_obj$obs("info", subset = 1), list("1" = 1:4))
 })
 
 test_that("Mapping non-recursivly between observations and the edge list works", {
-  result <- ex_taxmap$obs("info", recursive = FALSE)
-  expect_true(all(sapply(result[roots(ex_taxmap)], length) == 0))
+  result <- test_obj$obs("info", recursive = FALSE)
+  expect_true(all(sapply(result[roots(test_obj)], length) == 0))
   expect_equal(result[["17"]], 6)
 })
 
 test_that("Mapping simplification between observations and the edge list works", {
-  expect_equal(ex_taxmap$obs("info", simplify = TRUE), 1:6)
+  expect_equal(test_obj$obs("info", simplify = TRUE), 1:6)
 })
 
 
@@ -110,64 +236,64 @@ test_that("Mapping simplification between observations and the edge list works",
 #### filter_taxa
 
 test_that("Default taxon filtering works", {
-  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum")
+  result <- filter_taxa(test_obj, taxon_names == "Solanum")
   expect_equal(result$taxon_names(), c("11" = "Solanum"))
   expect_equal(as.character(result$data$info$name), c("tomato", "potato"))
   expect_true(length(result$data$phylopic_ids) == 2)
 })
 
 test_that("Subtaxa can be included when filtering taxa", {
-  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", subtaxa = TRUE)
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", subtaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "lycopersicum", "tuberosum"))
 })
 
 test_that("Supertaxa can be included when filtering taxa", {
-  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", supertaxa = TRUE)
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", supertaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "Solanaceae", "Plantae"))
 })
 
 test_that("Observations can be preserved when filtering taxa", {
-  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", reassign_obs = FALSE)
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", reassign_obs = FALSE)
   expect_equal(nrow(result$data$info), 0)
-  result <- filter_taxa(ex_taxmap, taxon_names == "tuberosum", reassign_obs = FALSE)
+  result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
 })
 
 test_that("Taxon ids can be preserved when filtering taxa", {
-  result <- filter_taxa(ex_taxmap, taxon_names != "Solanum", reassign_taxa = FALSE)
+  result <- filter_taxa(test_obj, taxon_names != "Solanum", reassign_taxa = FALSE)
   expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(return_type = "name")))
 })
 
 test_that("The selection of taxa to be filtered can be inverted", {
-  result <- filter_taxa(ex_taxmap, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
   expect_true(all(! c("tuberosum", "lycopersicum", "Solanum") %in% taxon_names(result)))
   expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% taxon_names(result)))
 })
 
 test_that("Edge cases return reasonable outputs", {
-  expect_equal(filter_taxa(ex_taxmap), ex_taxmap)
+  expect_equal(filter_taxa(test_obj), test_obj)
 })
 
 
 #### filter_obs
 
 test_that("Default observation filtering works", {
-  result <- filter_obs(ex_taxmap, "info", n_legs == 2)
+  result <- filter_obs(test_obj, "info", n_legs == 2)
   expect_equivalent(as.character(result$data$info$name), "human")
 })
 
 test_that("Removing taxa when filtering observations work", {
-  result <- filter_obs(ex_taxmap, "info", n_legs == 2, unobserved = FALSE)
+  result <- filter_obs(test_obj, "info", n_legs == 2, unobserved = FALSE)
   expect_equivalent(as.character(result$data$info$name), "human")
   expect_equivalent(result$taxon_names(),
                     c("Mammalia", "Hominidae", "homo", "sapiens"))
 })
 
 test_that("Edge cases return reasonable outputs", {
-  expect_equal(filter_obs(ex_taxmap, "info"), ex_taxmap)
-  expect_error(filter_obs(ex_taxmap, "not_valid",
+  expect_equal(filter_obs(test_obj, "info"), test_obj)
+  expect_error(filter_obs(test_obj, "not_valid",
                           "not the name of a data set. Valid targets "))
 })
 
@@ -175,36 +301,36 @@ test_that("Edge cases return reasonable outputs", {
 #### select_obs
 
 test_that("Default observation column subsetting works",  {
-  result <- select_obs(ex_taxmap, "info", dangerous)
+  result <- select_obs(test_obj, "info", dangerous)
   expect_equal(colnames(result$data$info), c("taxon_id", "dangerous"))
 })
 
 test_that("Edge cases return reasonable outputs during observation column subsetting", {
-  result <- select_obs(ex_taxmap, "info")
+  result <- select_obs(test_obj, "info")
   expect_equal(colnames(result$data$info), c("taxon_id"))
-  expect_error(select_obs(ex_taxmap, "not_valid"),
+  expect_error(select_obs(test_obj, "not_valid"),
                           "not the name of a data set. Valid targets ")
-  expect_error(select_obs(ex_taxmap), " missing, with no default")
+  expect_error(select_obs(test_obj), " missing, with no default")
 })
 
 
 #### mutate_obs
 
 test_that("Observation column addition works",  {
-  result <- mutate_obs(ex_taxmap, "info",
+  result <- mutate_obs(test_obj, "info",
                        new_col = "new",
                        newer_col = paste0(new_col, "er"))
   expect_true(all(c("new_col", "newer_col") %in% colnames(result$data$info)))
 })
 
 test_that("Observation column replacement works",  {
-  result <- mutate_obs(ex_taxmap, "info", name = "replacement")
+  result <- mutate_obs(test_obj, "info", name = "replacement")
   expect_true(all(result$data$info$name == "replacement"))
 })
 
 test_that("Edge cases for observation column addition",  {
-  expect_equal(mutate_obs(ex_taxmap, "info"), ex_taxmap)
-  expect_error(mutate_obs(ex_taxmap, "not_valid"),
+  expect_equal(mutate_obs(test_obj, "info"), test_obj)
+  expect_error(mutate_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
 
@@ -212,7 +338,7 @@ test_that("Edge cases for observation column addition",  {
 #### transmute_obs
 
 test_that("Observation column addition (transmute) works",  {
-  result <- transmute_obs(ex_taxmap, "info",
+  result <- transmute_obs(test_obj, "info",
                           new_col = paste("new", name),
                           newer_col = paste0(new_col, "!!"))
   expect_equal(c("taxon_id", "new_col", "newer_col"),
@@ -220,9 +346,9 @@ test_that("Observation column addition (transmute) works",  {
 })
 
 test_that("Edge cases for observation column addition (transmute) ",  {
-  result <- transmute_obs(ex_taxmap, "info")
+  result <- transmute_obs(test_obj, "info")
   expect_equal("taxon_id", colnames(result$data$info))
-  expect_error(transmute_obs(ex_taxmap, "not_valid"),
+  expect_error(transmute_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
 
@@ -230,20 +356,20 @@ test_that("Edge cases for observation column addition (transmute) ",  {
 #### arrange_obs
 
 test_that("Sorting observations work",  {
-  result <- arrange_obs(ex_taxmap, "info", dangerous, name)
-  expect_equal(ex_taxmap$data$info$taxon_id[order(ex_taxmap$data$info$dangerous,
-                                                  ex_taxmap$data$info$name)],
+  result <- arrange_obs(test_obj, "info", dangerous, name)
+  expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
+                                                  test_obj$data$info$name)],
                result$data$info$taxon_id)
-  result <- arrange_obs(ex_taxmap, "info", desc(dangerous), desc(name))
-  expect_equal(ex_taxmap$data$info$taxon_id[order(ex_taxmap$data$info$dangerous,
-                                                  ex_taxmap$data$info$name,
+  result <- arrange_obs(test_obj, "info", desc(dangerous), desc(name))
+  expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
+                                                  test_obj$data$info$name,
                                                   decreasing = TRUE)],
                result$data$info$taxon_id)
 })
 
 test_that("Edge cases during observation sorting works",  {
-  expect_equal(arrange_obs(ex_taxmap, "info"), ex_taxmap)
-  expect_error(arrange_obs(ex_taxmap, "not_valid"),
+  expect_equal(arrange_obs(test_obj, "info"), test_obj)
+  expect_error(arrange_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
 
@@ -251,30 +377,30 @@ test_that("Edge cases during observation sorting works",  {
 #### arrange_taxa
 
 test_that("Sorting taxa work",  {
-  expect_equal(arrange_taxa(ex_taxmap, taxon_ids)$taxon_ids(),
-               sort(ex_taxmap$taxon_ids()))
-  expect_equal(arrange_taxa(ex_taxmap, desc(taxon_ids))$taxon_ids(),
-               sort(ex_taxmap$taxon_ids(), decreasing = TRUE))
+  expect_equal(arrange_taxa(test_obj, taxon_ids)$taxon_ids(),
+               sort(test_obj$taxon_ids()))
+  expect_equal(arrange_taxa(test_obj, desc(taxon_ids))$taxon_ids(),
+               sort(test_obj$taxon_ids(), decreasing = TRUE))
 })
 
 test_that("Edge cases during observation sorting works",  {
-  expect_equal(arrange_taxa(ex_taxmap), ex_taxmap)
+  expect_equal(arrange_taxa(test_obj), test_obj)
 })
 
 
 #### sample_n_obs
 
 test_that("Sampling observations works",  {
-  result <- sample_n_obs(ex_taxmap, "info", size = 3)
+  result <- sample_n_obs(test_obj, "info", size = 3)
   expect_equal(nrow(result$data$info), 3)
-  result <- sample_n_obs(ex_taxmap, "info", size = 30, replace = TRUE)
+  result <- sample_n_obs(test_obj, "info", size = 30, replace = TRUE)
   expect_equal(nrow(result$data$info), 30)
 })
 
 test_that("Edge cases during sampling observations",  {
-  expect_error(sample_n_obs(ex_taxmap),
+  expect_error(sample_n_obs(test_obj),
                "missing, with no default")
-  expect_error(sample_n_obs(ex_taxmap, "not_valid"),
+  expect_error(sample_n_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
 
@@ -282,12 +408,12 @@ test_that("Edge cases during sampling observations",  {
 #### sample_n_taxa
 
 test_that("Sampling observations works",  {
-  result <- sample_n_taxa(ex_taxmap, size = 3)
+  result <- sample_n_taxa(test_obj, size = 3)
   expect_equal(length(result$taxon_ids()), 3)
 })
 
 test_that("Edge cases during sampling observations",  {
-  expect_error(sample_n_taxa(ex_taxmap),
+  expect_error(sample_n_taxa(test_obj),
                "missing, with no default")
   expect_error(sample_n_taxa(),
                "missing, with no default")
