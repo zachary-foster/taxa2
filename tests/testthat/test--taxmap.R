@@ -202,7 +202,7 @@ test_that("Observation column replacement works",  {
   expect_true(all(result$data$info$name == "replacement"))
 })
 
-test_that("Edge cases return reasonable outputs during observation column addition",  {
+test_that("Edge cases for observation column addition",  {
   expect_equal(mutate_obs(ex_taxmap, "info"), ex_taxmap)
   expect_error(mutate_obs(ex_taxmap, "not_valid"),
                "not the name of a data set. Valid targets ")
@@ -215,12 +215,81 @@ test_that("Observation column addition (transmute) works",  {
   result <- transmute_obs(ex_taxmap, "info",
                           new_col = paste("new", name),
                           newer_col = paste0(new_col, "!!"))
-  expect_equal(c("taxon_id", "new_col", "newer_col"), colnames(result$data$info))
+  expect_equal(c("taxon_id", "new_col", "newer_col"),
+               colnames(result$data$info))
 })
 
-test_that("Edge cases return reasonable outputs during observation column addition (transmute) ",  {
+test_that("Edge cases for observation column addition (transmute) ",  {
   result <- transmute_obs(ex_taxmap, "info")
   expect_equal("taxon_id", colnames(result$data$info))
   expect_error(transmute_obs(ex_taxmap, "not_valid"),
                "not the name of a data set. Valid targets ")
 })
+
+
+#### arrange_obs
+
+test_that("Sorting observations work",  {
+  result <- arrange_obs(ex_taxmap, "info", dangerous, name)
+  expect_equal(ex_taxmap$data$info$taxon_id[order(ex_taxmap$data$info$dangerous,
+                                                  ex_taxmap$data$info$name)],
+               result$data$info$taxon_id)
+  result <- arrange_obs(ex_taxmap, "info", desc(dangerous), desc(name))
+  expect_equal(ex_taxmap$data$info$taxon_id[order(ex_taxmap$data$info$dangerous,
+                                                  ex_taxmap$data$info$name,
+                                                  decreasing = TRUE)],
+               result$data$info$taxon_id)
+})
+
+test_that("Edge cases during observation sorting works",  {
+  expect_equal(arrange_obs(ex_taxmap, "info"), ex_taxmap)
+  expect_error(arrange_obs(ex_taxmap, "not_valid"),
+               "not the name of a data set. Valid targets ")
+})
+
+
+#### arrange_taxa
+
+test_that("Sorting taxa work",  {
+  expect_equal(arrange_taxa(ex_taxmap, taxon_ids)$taxon_ids(),
+               sort(ex_taxmap$taxon_ids()))
+  expect_equal(arrange_taxa(ex_taxmap, desc(taxon_ids))$taxon_ids(),
+               sort(ex_taxmap$taxon_ids(), decreasing = TRUE))
+})
+
+test_that("Edge cases during observation sorting works",  {
+  expect_equal(arrange_taxa(ex_taxmap), ex_taxmap)
+})
+
+
+#### sample_n_obs
+
+test_that("Sampling observations works",  {
+  result <- sample_n_obs(ex_taxmap, "info", size = 3)
+  expect_equal(nrow(result$data$info), 3)
+  result <- sample_n_obs(ex_taxmap, "info", size = 30, replace = TRUE)
+  expect_equal(nrow(result$data$info), 30)
+})
+
+test_that("Edge cases during sampling observations",  {
+  expect_error(sample_n_obs(ex_taxmap),
+               "missing, with no default")
+  expect_error(sample_n_obs(ex_taxmap, "not_valid"),
+               "not the name of a data set. Valid targets ")
+})
+
+
+#### sample_n_taxa
+
+test_that("Sampling observations works",  {
+  result <- sample_n_taxa(ex_taxmap, size = 3)
+  expect_equal(length(result$taxon_ids()), 3)
+})
+
+test_that("Edge cases during sampling observations",  {
+  expect_error(sample_n_taxa(ex_taxmap),
+               "missing, with no default")
+  expect_error(sample_n_taxa(),
+               "missing, with no default")
+})
+
