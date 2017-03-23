@@ -130,8 +130,11 @@ test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
 ### Print methods
 
 test_that("Print methods works", {
-  expect_output(print(test_obj),
-                "<Taxmap>.+17 taxa.+17 edges.+2 data sets.+info.+phylopic_ids.+1 functions.+reaction")
+  x <- test_obj
+  x$data$more_data <- list(1, 2, 3)
+  x$data$even_more <- list(1, 2, 3, 4)
+  expect_output(print(x),
+                "<Taxmap>.+17 taxa.+17 edges.+4 data sets.+info.+phylopic_ids.+more_data.+And 1 more data sets.+1 functions.+reaction")
 })
 
 ### NSE helpers
@@ -168,7 +171,7 @@ test_that("Names of built-in functions are accessible by NSE", {
 })
 
 test_that("Duplicate names give a warning", {
-  x = test_obj
+  x = test_obj$clone(deep = TRUE)
   x$data$n_legs = 1:10
   expect_warning(x$all_names(warn = T),
                  "The following names are used more than once: n_legs")
@@ -277,6 +280,12 @@ test_that("Observations can be preserved when filtering taxa", {
   expect_equal(nrow(result$data$info), 0)
   result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE)
+  expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "11", "11"))
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE,
+                        reassign_obs = FALSE)
+  expect_true(all(is.na(result$data$info$taxon_id)))
+  expect_equal(nrow(result$data$info), 6)
 })
 
 test_that("Taxon ids can be preserved when filtering taxa", {
@@ -290,6 +299,7 @@ test_that("The selection of taxa to be filtered can be inverted", {
   expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% taxon_names(result)))
 })
 
+
 test_that("Edge cases return reasonable outputs", {
   expect_equal(filter_taxa(test_obj), test_obj)
 })
@@ -298,7 +308,7 @@ test_that("Edge cases return reasonable outputs", {
 #### filter_obs
 
 test_that("Default observation filtering works", {
-  result <- filter_obs(test_obj, "info", n_legs == 2)
+  result <- filter_obs(test_obj, "info", n_legs == 2, dangerous == TRUE)
   expect_equivalent(as.character(result$data$info$name), "human")
 })
 
@@ -313,6 +323,8 @@ test_that("Edge cases return reasonable outputs", {
   expect_equal(filter_obs(test_obj, "info"), test_obj)
   expect_error(filter_obs(test_obj, "not_valid",
                           "not the name of a data set. Valid targets "))
+  expect_error(filter_obs(test_obj, "info", "11"),
+               "observation filtering with taxon IDs is not currently")
 })
 
 
@@ -361,6 +373,13 @@ test_that("Observation column addition (transmute) works",  {
                           newer_col = paste0(new_col, "!!"))
   expect_equal(c("taxon_id", "new_col", "newer_col"),
                colnames(result$data$info))
+  x <- test_obj$clone(deep = TRUE)
+  x$data$new_table <- data.frame(y = 1:4)
+  result <- transmute_obs(x, "new_table", # no taxon ids in new_table
+                          new_col = paste("new", name),
+                          newer_col = paste0(new_col, "!!"))
+  expect_equal(c("new_col", "newer_col"),
+               colnames(result$data$new_table))
 })
 
 test_that("Edge cases for observation column addition (transmute) ",  {
@@ -382,6 +401,12 @@ test_that("Sorting observations work",  {
   expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
                                                   test_obj$data$info$name,
                                                   decreasing = TRUE)],
+               result$data$info$taxon_id)
+})
+
+test_that("Sorting observations with non-target NSE values",  {
+  result <- arrange_obs(test_obj, "info", phylopic_ids)
+  expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$phylopic_ids)],
                result$data$info$taxon_id)
 })
 
