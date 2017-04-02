@@ -11,7 +11,13 @@
 #' ))
 #' taxa_(x, x, x)
 taxa_ <- function(...) {
-  structure(list(...), class = "taxa")
+  tt <- list(...)
+  if (length(tt) < 1) stop("must give at least 1 input", call. = FALSE)
+  if (!all(vapply(tt, inherits, logical(1), what = "Taxon"))) {
+    stop("all inputs to 'taxa_' must be of class 'Taxon'",
+         call. = FALSE)
+  }
+  structure(tt, class = "taxa")
 }
 
 #' @export

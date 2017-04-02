@@ -1,0 +1,58 @@
+context("hierarchies")
+
+## Creating test data
+x <- taxon(
+  name = taxon_name("Poaceae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(4479)
+)
+y <- taxon(
+  name = taxon_name("Poa"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(4544)
+)
+z <- taxon(
+  name = taxon_name("Poa annua"),
+  rank = taxon_rank("species"),
+  id = taxon_id(93036)
+)
+hier1 <- hierarchy(z, y, x)
+
+a <- taxon(
+  name = taxon_name("Felidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(9681)
+)
+b <- taxon(
+  name = taxon_name("Puma"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(146712)
+)
+c <- taxon(
+  name = taxon_name("Puma concolor"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9696)
+)
+hier2 <- hierarchy(c, b, a)
+
+
+test_that("hierarchies works", {
+  aa <- hierarchies(hier1, hier2)
+
+  expect_is(aa, "hierarchies")
+  expect_is(unclass(aa), "list")
+  expect_is(aa[[1]], "Hierarchy")
+  expect_is(aa[[2]], "Hierarchy")
+
+  expect_equal(length(aa), 2)
+})
+
+test_that("hierarchies fails well", {
+  expect_error(hierarchies(), "must give at least 1 input")
+  expect_error(hierarchies(4),
+               "all inputs to 'hierarchies' must be of class 'Hierarchy'")
+  expect_error(hierarchies("a", "b", "c"),
+               "all inputs to 'hierarchies' must be of class 'Hierarchy'")
+  expect_error(hierarchies(hier1, "c"),
+               "all inputs to 'hierarchies' must be of class 'Hierarchy'")
+})

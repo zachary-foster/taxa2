@@ -40,7 +40,13 @@
 #'
 #' hierarchies(hier1, hier2)
 hierarchies <- function(...) {
-  structure(list(...), class = "hierarchies")
+  hiers <- list(...)
+  if (length(hiers) < 1) stop("must give at least 1 input", call. = FALSE)
+  if (!all(vapply(hiers, inherits, logical(1), what = "Hierarchy"))) {
+    stop("all inputs to 'hierarchies' must be of class 'Hierarchy'",
+         call. = FALSE)
+  }
+  structure(hiers, class = "hierarchies")
 }
 
 #' @export

@@ -1,7 +1,4 @@
-## Testing `hierarchy` class
-
-library(taxa)
-context("Testing the `hierarchy` object")
+context("hierarchy")
 
 ## Creating test data
 plantae <- taxon(
@@ -19,6 +16,24 @@ lycopersicum <- taxon(
 
 
 test_that("Characters as inputs", {
-  expect_equal(hierarchy(plantae, solanaceae, solanum, lycopersicum),
+  aa <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
+
+  expect_is(aa, "Hierarchy")
+  expect_is(aa$taxa, "list")
+  expect_is(aa$taxa[[1]], "Taxon")
+  expect_is(aa$print, "function")
+  expect_equal(aa,
                hierarchy("Plantae", "Solanaceae", "Solanum", "lycopersicum"))
+})
+
+test_that("hierarchy fails well", {
+  expect_error(hierarchy(), "must give at least 1 input")
+  expect_error(hierarchy(4),
+               "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+  expect_error(hierarchy(solanum, 5),
+               "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+
+  # is character, but nonsensical - FIXME, fail on this possibly?
+  # expect_error(hierarchy("a", "b", "c"),
+  #              "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
 })
