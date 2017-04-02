@@ -47,8 +47,28 @@ test_that("hierarchies works", {
   expect_equal(length(aa), 2)
 })
 
+
+test_that("hierarchies - empty", {
+  aa <- hierarchies(hierarchy(), hierarchy())
+
+  expect_is(aa, "hierarchies")
+  expect_is(unclass(aa), "list")
+  expect_is(aa[[1]], "Hierarchy")
+  expect_is(aa[[2]], "Hierarchy")
+  expect_null(aa[[1]]$taxa)
+  expect_null(aa[[2]]$taxa)
+
+
+  aa <- hierarchies()
+
+  expect_match(paste0(capture.output(hierarchies()), collapse = ""),
+               "<Hierarchies>")
+  expect_is(aa, "hierarchies")
+  expect_is(unclass(aa), "list")
+  expect_equal(length(aa), 0)
+})
+
 test_that("hierarchies fails well", {
-  expect_error(hierarchies(), "must give at least 1 input")
   expect_error(hierarchies(4),
                "all inputs to 'hierarchies' must be of class 'Hierarchy'")
   expect_error(hierarchies("a", "b", "c"),

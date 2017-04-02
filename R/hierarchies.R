@@ -41,7 +41,6 @@
 #' hierarchies(hier1, hier2)
 hierarchies <- function(...) {
   hiers <- list(...)
-  if (length(hiers) < 1) stop("must give at least 1 input", call. = FALSE)
   if (!all(vapply(hiers, inherits, logical(1), what = "Hierarchy"))) {
     stop("all inputs to 'hierarchies' must be of class 'Hierarchy'",
          call. = FALSE)
@@ -53,12 +52,18 @@ hierarchies <- function(...) {
 print.hierarchies <- function(x, ...) {
   cat("<Hierarchies>", "\n")
   cat("  no. hierarchies: ", length(x), "\n")
-  for (i in seq_along(x[1:min(10, length(x))])) {
-    cat(
-      paste0("  ", paste0(vapply(x[[i]]$taxa, function(x) x$name$name, ""),
-                          collapse = " / ")),
-      "\n"
-    )
+  if (length(x)) {
+    for (i in seq_along(x[1:min(10, length(x))])) {
+      if (is.null(x[[i]]$taxa)) {
+        cat("  Empty hierarchy", sep = "\n")
+      } else {
+        cat(
+          paste0("  ", paste0(vapply(x[[i]]$taxa, function(x) x$name$name, ""),
+                              collapse = " / ")),
+          "\n"
+        )
+      }
+    }
   }
   if (length(x) > 10) cat("  ...")
 }

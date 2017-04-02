@@ -16,9 +16,17 @@ test_that("taxa works", {
   expect_is(aa[[3]], "Taxon")
 })
 
+test_that("taxa - empty", {
+  aa <- taxa_()
+
+  expect_is(aa, "taxa")
+  expect_is(unclass(aa), "list")
+  expect_equal(length(aa), 0)
+})
+
 test_that("taxa fails well", {
-  expect_error(taxa_(), "must give at least 1 input")
   expect_error(taxa_(5), "all inputs to 'taxa_' must be of class 'Taxon'")
   expect_error(taxa_(mtcars), "all inputs to 'taxa_' must be of class 'Taxon'")
-  expect_error(taxa_(4, x, "adff"), "all inputs to 'taxa_' must be of class 'Taxon'")
+  expect_error(taxa_(4, x, "adff"),
+               "all inputs to 'taxa_' must be of class 'Taxon'")
 })

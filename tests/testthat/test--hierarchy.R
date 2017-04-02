@@ -26,14 +26,22 @@ test_that("Characters as inputs", {
                hierarchy("Plantae", "Solanaceae", "Solanum", "lycopersicum"))
 })
 
-test_that("hierarchy fails well", {
-  expect_error(hierarchy(), "must give at least 1 input")
-  expect_error(hierarchy(4),
-               "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
-  expect_error(hierarchy(solanum, 5),
-               "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
 
-  # is character, but nonsensical - FIXME, fail on this possibly?
-  # expect_error(hierarchy("a", "b", "c"),
-  #              "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+test_that("hierarchy - empty", {
+  aa <- hierarchy()
+
+  expect_is(aa, "Hierarchy")
+  expect_null(aa$taxa)
+  expect_null(aa$ranklist)
+})
+
+
+
+test_that("hierarchy fails well", {
+  expect_error(
+    hierarchy(4),
+    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+  expect_error(
+    hierarchy(solanum, 5),
+    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
 })

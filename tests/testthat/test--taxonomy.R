@@ -124,7 +124,8 @@ test_that("Edge cases", {
   x <- taxonomy()
   expect_length(x$taxa, 0)
   expect_equal(dim(x$edge_list), c(0, 2))
-  x <- taxonomy(hierarchy())
+  expect_error(taxonomy(hierarchy()),
+    "")
   expect_length(x$taxa, 0)
   expect_equal(dim(x$edge_list), c(0, 2))
 })
