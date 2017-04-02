@@ -1,14 +1,13 @@
 #' Taxmap class
 #'
 #' @export
-#' @param ... Any number of object of class [hierarchy()] or character
-#'   vectors.
+#' @param ... Any number of object of class [hierarchy()] or character vectors.
 #' @param data A list of tables with data associated with the taxa.
 #' @return An `R6Class` object of class [taxmap()]
 #'
 #' @details on initialize, function sorts the taxon list based on rank (if rank
-#'   information is available), see [ranks_ref] for the reference
-#'   rank names and orders
+#'   information is available), see [ranks_ref] for the reference rank names and
+#'   orders
 #'
 #' @template taxmapegs
 taxmap <- function(..., data = NULL) {
@@ -217,38 +216,6 @@ Taxmap <- R6::R6Class(
                            taxonless = FALSE, reassign_obs = TRUE,
                            reassign_taxa = TRUE, invert = FALSE) {
 
-      # used to parse inputs to `taxonless` and `reassign_obs`
-      parse_possibly_named_logical <- function(input, default) {
-        if (is.null(names(input))) {
-          if (length(input) == 1) {
-            output <- stats::setNames(rep(input, length(self$data)),
-                                      names(self$data))
-          } else if (length(input) == length(self$data)) {
-            output <- stats::setNames(input, names(self$data))
-          } else {
-            error(paste("Invalid input for logical vector selecting which data",
-                        "sets to affect. Valid inputs include:\n",
-                        "1) a single unnamed logical (e.g. TRUE)\n",
-                        "2) one or more named logicals with names matching",
-                        "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
-                        "= FALSE)\n  3) an unamed logical vector of the same",
-                        "length as obj$data."))
-          }
-        } else {
-          if (length(not_data_names <-
-                     names(input)[! names(input) %in% names(self$data)]) > 0) {
-            stop(paste0("Invalid input for logical vector selecting which data",
-                        " sets to affect. The following names are not in",
-                        " self$data: ",
-                        paste0(not_data_names, collapse = ", ")))
-          }
-          output <- stats::setNames(rep(default, length(self$data)),
-                                    names(self$data))
-          output[names(input)] <- input
-        }
-        return(output)
-      }
-
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
@@ -265,6 +232,11 @@ Taxmap <- R6::R6Class(
 
       # combine filters
       selection <- Reduce(`&`, selection)
+
+      # default to all taxa if no selection is provided
+      if (is.null(selection)) {
+        selection <- rep(TRUE, length(self$taxon_ids()))
+      }
 
       # Get taxa of subset
       taxa_subset <- unique(c(which(selection),
@@ -291,6 +263,7 @@ Taxmap <- R6::R6Class(
       # Reassign taxonless observations
       reassign_obs <- parse_possibly_named_logical(
         reassign_obs,
+        self$data,
         default = formals(self$filter_taxa)$reassign_obs
       )
       process_one <- function(data_index) {
@@ -348,6 +321,7 @@ Taxmap <- R6::R6Class(
       # Remove taxonless observations
       taxonless <- parse_possibly_named_logical(
         taxonless,
+        self$data,
         default = formals(self$filter_taxa)$taxonless
       )
       process_one <- function(my_index) {
@@ -389,14 +363,18 @@ Taxmap <- R6::R6Class(
     },
 
 
-
-
-
-
     filter_obs = function(target, ..., unobserved = TRUE) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
+
+      # If no selection is supplied, match all rows
+      if (length(selection) == 0) {
+        selection <- list(seq_len(nrow(self$data[[target]])))
+      }
 
       # convert taxon_ids to indexes
       is_char <- vapply(selection, is.character, logical(1))
@@ -438,7 +416,11 @@ Taxmap <- R6::R6Class(
       return(self)
     },
 
+
     select_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       self$data[[target]] <-
         dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
                          dplyr::select(self$data[[target]], ...))
@@ -447,6 +429,9 @@ Taxmap <- R6::R6Class(
 
 
     mutate_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
@@ -460,7 +445,14 @@ Taxmap <- R6::R6Class(
 
 
     transmute_obs = function(target, ...) {
-      result <- list()
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
+      if ("taxon_id" %in% colnames(self$data[[target]])) {
+        result <- list(taxon_id = self$data[[target]]$taxon_id)
+      } else {
+        result <- list()
+      }
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
@@ -475,6 +467,9 @@ Taxmap <- R6::R6Class(
 
 
     arrange_obs = function(target, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       data_used <- self$data_used(...)
       data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
       if (length(data_used) == 0) {
@@ -507,6 +502,9 @@ Taxmap <- R6::R6Class(
     sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL,
                             obs_weight = NULL, use_supertaxa = TRUE,
                             collapse_func = mean, ...) {
+      # Check that the target data exists
+      private$check_dataset_name(target)
+
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
       taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
@@ -630,7 +628,14 @@ Taxmap <- R6::R6Class(
 
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
-                             "n_subtaxa", "n_subtaxa_1")
+                             "n_subtaxa", "n_subtaxa_1"),
+    check_dataset_name = function(target) {
+      if (! target %in% names(self$data)) {
+        stop(paste0("The target `", target, "` is not the name of a data set.",
+                    " Valid targets include: ",
+                    paste0(names(self$data), collapse = ", ")))
+      }
+    }
   )
 )
 
