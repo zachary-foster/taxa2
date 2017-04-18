@@ -22,17 +22,19 @@ weights are multiplied (after \code{taxon_weight} for each observation is
 calculated).}
 
 \item{obs_weight}{(\code{numeric}) Sampling weights of each observation.  If
-\code{taxon_weight} is also specified, the two weights are multiplied
-(after \code{taxon_weight} for each observation is calculated).}
+\code{taxon_weight} is also specified, the two weights are multiplied (after
+\code{taxon_weight} for each observation is calculated).}
 
-\item{use_supertaxa}{(\code{logical} of length 1) Affects how the
-\code{taxon_weight} is used. If \code{TRUE}, the weights for each taxon in
-an observation's classification are multiplied to get the observation
-weight. Otherwise, just the taxonomic level the observation is assign to it
-considered.}
+\item{use_supertaxa}{(\code{logical} or \code{numeric} of length 1) Affects how the
+\code{taxon_weight} is used. If \code{TRUE}, the weights for each taxon in an
+observation's classification are multiplied to get the observation weight.
+Otherwise, just the taxonomic level the observation is assign to it
+considered. If \code{TRUE}, use all supertaxa. Positive numbers indicate the
+number of ranks above each taxon to use. \code{0} is equivalent to \code{FALSE}.
+Negative numbers are equivalent to \code{TRUE}.}
 
-\item{collapse_func}{(\code{function} of length 1) If \code{taxon_weight}
-option is used and \code{supertaxa} is \code{TRUE}, the weights for each
+\item{collapse_func}{(\code{function} of length 1) If \code{taxon_weight} option is
+used and \code{supertaxa} is \code{TRUE}, the weights for each
 taxon in an observation's classification are supplied to
 \code{collapse_func} to get the observation weight. This function should
 take  numeric vector and return a single number.}

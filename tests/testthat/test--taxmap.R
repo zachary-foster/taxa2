@@ -122,9 +122,9 @@ reaction <- function(x) {
 }
 
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
-                    data = list(info = info,
-                                phylopic_ids = phylopic_ids),
-                    funcs = list(reaction = reaction))
+                   data = list(info = info,
+                               phylopic_ids = phylopic_ids),
+                   funcs = list(reaction = reaction))
 
 
 ### Print methods
@@ -157,7 +157,7 @@ test_that("Names of functions are accessible by NSE", {
 test_that("Names of functions are accessible by NSE", {
   expected_others <-
     names(test_obj$data)[sapply(test_obj$data,
-                                 function(x) ! "data.frame" %in% class(x))]
+                                function(x) ! "data.frame" %in% class(x))]
   expect_true(all(expected_others %in% test_obj$all_names()))
   expect_false(any(expected_others %in% test_obj$all_names(others = FALSE)))
 })
@@ -188,16 +188,16 @@ test_that("Names in basic expressions can be found by NSE", {
 test_that("Names in complex expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids", "dangerous", "reaction") %in%
                     test_obj$names_used((((((n_legs))))),
-                                         function(x) length(taxon_ids) + x,
-                                         {{n_subtaxa}},
-                                         taxon_ids[n_subtaxa[dangerous]],
-                                         reaction(n_subtaxa))))
+                                        function(x) length(taxon_ids) + x,
+                                        {{n_subtaxa}},
+                                        taxon_ids[n_subtaxa[dangerous]],
+                                        reaction(n_subtaxa))))
 })
 
 test_that("Names in invalid expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa")
                   %in% test_obj$names_used(not_a_variable == n_subtaxa,
-                                            aslkadsldsa)))
+                                           aslkadsldsa)))
 })
 
 #### get_data
@@ -347,7 +347,7 @@ test_that("Edge cases return reasonable outputs during observation column subset
   result <- select_obs(test_obj, "info")
   expect_equal(colnames(result$data$info), c("taxon_id"))
   expect_error(select_obs(test_obj, "not_valid"),
-                          "not the name of a data set. Valid targets ")
+               "not the name of a data set. Valid targets ")
   expect_error(select_obs(test_obj), " missing, with no default")
 })
 
@@ -403,12 +403,12 @@ test_that("Edge cases for observation column addition (transmute) ",  {
 test_that("Sorting observations work",  {
   result <- arrange_obs(test_obj, "info", dangerous, name)
   expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
-                                                  test_obj$data$info$name)],
+                                                 test_obj$data$info$name)],
                result$data$info$taxon_id)
   result <- arrange_obs(test_obj, "info", desc(dangerous), desc(name))
   expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
-                                                  test_obj$data$info$name,
-                                                  decreasing = TRUE)],
+                                                 test_obj$data$info$name,
+                                                 decreasing = TRUE)],
                result$data$info$taxon_id)
 })
 
@@ -448,6 +448,26 @@ test_that("Sampling observations works",  {
   expect_equal(nrow(result$data$info), 30)
 })
 
+test_that("Sampling using data from supertaxa works",  { # Not complete
+  expect_equal({
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = 0)
+  },
+  {
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = FALSE)
+  })
+  expect_equal({
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = -1)
+  },
+  {
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = TRUE)
+  })
+})
+
+
 test_that("Edge cases during sampling observations",  {
   expect_error(sample_n_obs(test_obj),
                "missing, with no default")
@@ -463,10 +483,31 @@ test_that("Sampling observations works",  {
   expect_equal(length(result$taxon_ids()), 3)
 })
 
+
 test_that("Edge cases during sampling observations",  {
   expect_error(sample_n_taxa(test_obj),
                "missing, with no default")
   expect_error(sample_n_taxa(),
                "missing, with no default")
+})
+
+
+test_that("Sampling observations using data from subtaxa works", { # Not complete
+  expect_equal({
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = 0)
+  },
+  {
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = FALSE)
+  })
+  expect_equal({
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = -1)
+  },
+  {
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = TRUE)
+  })
 })
 

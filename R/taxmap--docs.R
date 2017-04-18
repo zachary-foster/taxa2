@@ -475,17 +475,19 @@ NULL
 #'   in an observation's classification are supplied to `collapse_func` to
 #'   get the observation weight. If `obs_weight` is also specified, the two
 #'   weights are multiplied (after `taxon_weight` for each observation is
-#'   calculated).
+#' calculated).
 #' @param obs_weight (`numeric`) Sampling weights of each observation.  If
-#'   `taxon_weight` is also specified, the two weights are multiplied
-#'   (after `taxon_weight` for each observation is calculated).
-#' @param use_supertaxa (`logical` of length 1) Affects how the
-#'   `taxon_weight` is used. If `TRUE`, the weights for each taxon in
-#'   an observation's classification are multiplied to get the observation
-#'   weight. Otherwise, just the taxonomic level the observation is assign to it
-#'   considered.
-#' @param collapse_func (`function` of length 1) If `taxon_weight`
-#'   option is used and `supertaxa` is `TRUE`, the weights for each
+#'   `taxon_weight` is also specified, the two weights are multiplied (after
+#'   `taxon_weight` for each observation is calculated).
+#' @param use_supertaxa (`logical` or `numeric` of length 1) Affects how the
+#'   `taxon_weight` is used. If `TRUE`, the weights for each taxon in an
+#'   observation's classification are multiplied to get the observation weight.
+#'   Otherwise, just the taxonomic level the observation is assign to it
+#'   considered. If `TRUE`, use all supertaxa. Positive numbers indicate the
+#'   number of ranks above each taxon to use. `0` is equivalent to `FALSE`.
+#'   Negative numbers are equivalent to `TRUE`.
+#' @param collapse_func (`function` of length 1) If `taxon_weight` option is
+#'   used and `supertaxa` is `TRUE`, the weights for each
 #'   taxon in an observation's classification are supplied to
 #'   `collapse_func` to get the observation weight. This function should
 #'   take  numeric vector and return a single number.
