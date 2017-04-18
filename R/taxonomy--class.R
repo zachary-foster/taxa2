@@ -74,20 +74,24 @@ Taxonomy <- R6::R6Class(
 
       # Get supertaxa
       parent_index <- match(self$edge_list$from, self$edge_list$to)
-      recursive_part <- function(taxon) {
+      recursive_part <- function(taxon, n_recursions) {
         supertaxon <- parent_index[taxon]
-        if (recursive) {
+        if (n_recursions) {
           if (is.na(supertaxon)) {
             output <- c(taxon, supertaxon)
           } else {
-            output <- c(taxon, recursive_part(supertaxon))
+            if (is.numeric(n_recursions)) {
+              n_recursions <- n_recursions - 1
+            }
+            output <- c(taxon, recursive_part(supertaxon,
+                                              n_recursions = n_recursions))
           }
         } else {
           output <- c(taxon, supertaxon)
         }
         return(unname(output))
       }
-      output <- lapply(subset, recursive_part)
+      output <- lapply(subset, recursive_part, n_recursions = recursive)
 
       # Remove query taxa from output
       if (! include_input) {

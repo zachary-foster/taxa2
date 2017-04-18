@@ -187,6 +187,11 @@ test_that("Finding supertaxa", {
   expect_equal(class(x$supertaxa(return_type = "hierarchies")[[3]][[1]]), c("Hierarchy", "R6"))
   expect_type(x$supertaxa(return_type = "hierarchies", simplify = TRUE), "list")
   expect_equal(class(x$supertaxa(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+
+  # Recursion settings
+  expect_equal(supertaxa(x, recursive = TRUE), supertaxa(x, recursive = -1))
+  expect_equal(supertaxa(x, recursive = FALSE), supertaxa(x, recursive = 0))
+  expect_equal(max(vapply(supertaxa(x, recursive = 1), length, numeric(1))), 2)
 })
 
 

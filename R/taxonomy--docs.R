@@ -40,14 +40,16 @@ NULL
 #'   information to be queried.
 #' @param subset (`character`) `taxon_ids` or indexes of
 #'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#'   in `obj` will be used.
-#' @param recursive (`logical`) If `FALSE`, only return the supertaxa
-#'   one level above the target taxa. If `TRUE`, return all the supertaxa
-#'   of every supertaxa, etc.
-#' @param simplify (`logical`) If `TRUE`, then combine all the results
-#'   into a single vector of unique values.
-#' @param include_input (`logical`) If `TRUE`, the input taxa are
-#'   included in the output
+#' in `obj` will be used.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   supertaxa one rank above the target taxa. If `TRUE`, return all the
+#'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks above the target taxon to return). `0` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
+#' @param include_input (`logical`) If `TRUE`, the input taxa are included in
+#'   the output
 #' @param return_type (`logical`) Controls output type: "index", "id",
 #'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
 #'   not the taxon list.
