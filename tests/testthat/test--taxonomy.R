@@ -221,6 +221,13 @@ test_that("Finding subtaxa", {
   expect_equal(class(x$subtaxa(return_type = "hierarchies")[[3]][[1]]), c("Hierarchy", "R6"))
   expect_type(x$subtaxa(return_type = "hierarchies", simplify = TRUE), "list")
   expect_equal(class(x$subtaxa(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+
+  # Recursion settings
+  expect_equal(subtaxa(x, recursive = TRUE), subtaxa(x, recursive = -1))
+  expect_equal(subtaxa(x, recursive = FALSE), subtaxa(x, recursive = 0))
+  expect_equal(subtaxa(x, "1", recursive = 1, simplify = TRUE),
+               subtaxa(x, subtaxa(x, "1", recursive = FALSE, simplify = TRUE),
+                       recursive = FALSE, simplify = TRUE, include_input = TRUE))
 })
 
 

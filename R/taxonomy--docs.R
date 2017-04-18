@@ -102,9 +102,13 @@ NULL
 #' @param subset (`character`) `taxon_ids` or indexes of
 #'   `taxon_data` for which supertaxa will be returned. Default: All taxa
 #'   in `obj` will be used.
-#' @param recursive (`logical`) If `FALSE`, only return the subtaxa
-#'   one level bwlow the target taxa. If `TRUE`, return all the subtaxa of
-#'   every subtaxa, etc.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the subtaxa
+#'   one rank below the target taxa. If `TRUE`, return all the subtaxa of every
+#'   subtaxa, etc. Positive numbers indicate the number of ranks below the
+#'   immediate subtaxa to return. `0` is equivalent to `FALSE`. Negative numbers
+#'   are equivalent to `TRUE`. Since the algorithm is optimized for traversing
+#'   all of large trees, `numeric` values greater than 0 for this option
+#'   actually take slightly longer to compute than either TRUE or FALSE.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results
 #'   into a single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are

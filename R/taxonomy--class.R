@@ -217,7 +217,7 @@ Taxonomy <- R6::R6Class(
         # Get immediate children of current taxon
         children <- get_children(taxon)
         # Run this function on them to get their output
-        child_output <- lapply(children, recursive_part)
+        child_output <- lapply(children, recursive_part) # stops if no children
         child_output <- stats::setNames(unlist(child_output, recursive = FALSE),
                                         unlist(lapply(child_output, names)))
         # Get all subtaxa from the names of the child output
@@ -243,6 +243,27 @@ Taxonomy <- R6::R6Class(
       # Remove query taxa from output
       if (! include_input) {
         output <- lapply(output, `[`, -1)
+      }
+
+      # Simulate limited recursion
+      #
+      # To increase speed, the recursive algorithm only searches starting at
+      # root taxa, but this makes it hard to limit the number of rankes returned
+      # below each taxon during recursion. Instead, a finite number of
+      # recursions are simulated by filtering the results of tarversing the
+      # entire tree and comparing rank depth between each taxon and its subtaxa.
+      if (is.numeric(recursive) && recursive > 0) {
+        all_taxa <- unique(c(names(output), unlist(output)))
+        rank_depth <- vapply(self$supertaxa(all_taxa), length, numeric(1))
+        output_names <- names(output)
+        output <- lapply(seq_along(output), function(i) {
+          subtaxa_ids <- self$taxon_ids()[output[[i]]]
+          subtaxa_depth <- rank_depth[subtaxa_ids]
+          current_depth <- rank_depth[names(output[i])]
+          passing_taxa <- subtaxa_depth - current_depth <= recursive + 1
+          return(output[[i]][passing_taxa])
+        })
+        names(output) <- output_names
       }
 
       # Convert to return type
