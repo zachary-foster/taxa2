@@ -13,9 +13,11 @@
 #'   taxon ID.
 #' @param subset (`character`) Taxon IDs or indexes for which observation
 #'   indexes will be returned. Default: All taxa in `obj` will be used.
-#' @param recursive (`logical`) If `FALSE`, only return the
-#'   observation assigned to the specified input taxa, not subtaxa. If
-#'   `TRUE`, return all the observations of every subtaxa, etc.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   observation assigned to the specified input taxa, not subtaxa. If `TRUE`,
+#'   return all the observations of every subtaxa, etc. Positive numbers
+#'   indicate the number of ranks below the each taxon to get observations for
+#'   `0` is equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results
 #'   into a single vector of unique observation indexes.
 #'
@@ -189,10 +191,14 @@ NULL
 #'   `TRUE`/`FALSE` vector of length equal to the number of rows in
 #'   `obj$edge_list`} } Any variable name that appears in
 #'   `obj$all_names()` can be used as if it was a vector on its own.
-#' @param subtaxa (`logical` of length 1) If `TRUE`, include subtaxa
-#'   of taxa passing the filter.
-#' @param supertaxa (`logical` of length 1) If `TRUE`, include
-#'   supertaxa of taxa passing the filter.
+#' @param subtaxa (`logical` or `numeric` of length 1) If `TRUE`, include
+#'   subtaxa of taxa passing the filter. Positive numbers indicate the number of
+#'   ranks below the target taxa to return. `0` is equivalent to `FALSE`.
+#'   Negative numbers are equivalent to `TRUE`.
+#' @param supertaxa (`logical`  or `numeric` of length 1) If `TRUE`, include
+#'   supertaxa of taxa passing the filter. Positive numbers indicate the number
+#'   of ranks above the target taxa to return. `0` is equivalent to `FALSE`.
+#'   Negative numbers are equivalent to `TRUE`.
 #' @param taxonless (`logical`) If `TRUE`, include observations even
 #'   if the taxon they are assigned to is filtered out. Observations assigned to
 #'   removed taxa will be assigned to \code{NA}. This option can be either
@@ -525,11 +531,13 @@ NULL
 #' @param obs_weight (`numeric`) Sampling weights of each observation.  If
 #'   `taxon_weight` is also specified, the two weights are multiplied
 #'   (after `taxon_weight` for each observation is calculated).
-#' @param use_supertaxa (`logical` of length 1) Affects how the
+#' @param use_supertaxa (`logical` or `numeric` of length 1) Affects how the
 #'   `taxon_weight` is used. If `TRUE`, the weights for each taxon in
 #'   an observation's classification are multiplied to get the observation
-#'   weight. Otherwise, just the taxonomic level the observation is assign to it
-#'   considered.
+#'   weight. If `FALSE` just the taxonomic level the observation is assign to it
+#'   considered. Positive numbers indicate the number of ranks above the
+#'   each taxon to use. `0` is equivalent to `FALSE`. Negative numbers
+#'   are equivalent to `TRUE`.
 #' @param collapse_func (`function` of length 1) If `taxon_weight`
 #'   option is used and `supertaxa` is `TRUE`, the weights for each
 #'   taxon in an observation's classification are supplied to
@@ -573,11 +581,13 @@ NULL
 #' @param obs_target (`character` of length 1) The name of the data set in
 #'   `obj$data` that values in `obs_weight` corresponds to. Must be
 #'   used when `obs_weight` is used.
-#' @param use_subtaxa (`logical` of length 1) Affects how the
+#' @param use_subtaxa (`logical` or `numeric` of length 1) Affects how the
 #'   `obs_weight` option is used. If `TRUE`, the weights for each
 #'   taxon in an observation's classification are multiplied to get the
-#'   observation weight. Otherwise, just the taxonomic level the observation is
-#'   assign to it considered.
+#'   observation weight. If `FALSE` just the taxonomic level the observation is
+#'   assign to it considered. Positive numbers indicate the number of ranks below the
+#'   each taxon to use. `0` is equivalent to `FALSE`. Negative numbers
+#'   are equivalent to `TRUE`.
 #' @param collapse_func (`function` of length 1) If `taxon_weight` is
 #'   used and `supertaxa` is `TRUE`, the weights for each taxon in an
 #'   observation's classification are supplied to `collapse_func` to get
@@ -633,11 +643,13 @@ NULL
 #' @param obs_target (`character` of length 1) The name of the data set in
 #'   `obj$data` that values in `obs_weight` corresponds to. Must be
 #'   used when `obs_weight` is used.
-#' @param use_subtaxa (`logical` of length 1) Affects how the
+#' @param use_subtaxa (`logical` or `numeric` of length 1) Affects how the
 #'   `obs_weight` option is used. If `TRUE`, the weights for each
 #'   taxon in an observation's classification are multiplied to get the
-#'   observation weight. Otherwise, just the taxonomic level the observation is
-#'   assign to it considered.
+#'   observation weight. If `TRUE` just the taxonomic level the observation is
+#'   assign to it considered. Positive numbers indicate the number of ranks below the
+#'   target taxa to return. `0` is equivalent to `FALSE`. Negative numbers
+#'   are equivalent to `TRUE`.
 #' @param collapse_func (`function` of length 1) If `taxon_weight` is
 #'   used and `supertaxa` is `TRUE`, the weights for each taxon in an
 #'   observation's classification are supplied to `collapse_func` to get

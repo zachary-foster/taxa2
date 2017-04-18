@@ -25,11 +25,13 @@ calculated). \code{obs_target} must be used with this option.}
 \code{obj$data} that values in \code{obs_weight} corresponds to. Must be
 used when \code{obs_weight} is used.}
 
-\item{use_subtaxa}{(\code{logical} of length 1) Affects how the
+\item{use_subtaxa}{(\code{logical} or \code{numeric} of length 1) Affects how the
 \code{obs_weight} option is used. If \code{TRUE}, the weights for each
 taxon in an observation's classification are multiplied to get the
-observation weight. Otherwise, just the taxonomic level the observation is
-assign to it considered.}
+observation weight. If \code{TRUE} just the taxonomic level the observation is
+assign to it considered. Positive numbers indicate the number of ranks below the
+target taxa to return. \code{0} is equivalent to \code{FALSE}. Negative numbers
+are equivalent to \code{TRUE}.}
 
 \item{collapse_func}{(\code{function} of length 1) If \code{taxon_weight} is
 used and \code{supertaxa} is \code{TRUE}, the weights for each taxon in an

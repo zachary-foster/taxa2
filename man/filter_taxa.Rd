@@ -14,11 +14,15 @@ row indexes of \code{obj$edge_list}} \item{\code{logical}}{A
 \code{obj$edge_list}} } Any variable name that appears in
 \code{obj$all_names()} can be used as if it was a vector on its own.}
 
-\item{subtaxa}{(\code{logical} of length 1) If \code{TRUE}, include subtaxa
-of taxa passing the filter.}
+\item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include
+subtaxa of taxa passing the filter. Positive numbers indicate the number of
+ranks below the target taxa to return. \code{0} is equivalent to \code{FALSE}.
+Negative numbers are equivalent to \code{TRUE}.}
 
-\item{supertaxa}{(\code{logical} of length 1) If \code{TRUE}, include
-supertaxa of taxa passing the filter.}
+\item{supertaxa}{(\code{logical}  or \code{numeric} of length 1) If \code{TRUE}, include
+supertaxa of taxa passing the filter. Positive numbers indicate the number
+of ranks above the target taxa to return. \code{0} is equivalent to \code{FALSE}.
+Negative numbers are equivalent to \code{TRUE}.}
 
 \item{taxonless}{(\code{logical}) If \code{TRUE}, include observations even
 if the taxon they are assigned to is filtered out. Observations assigned to

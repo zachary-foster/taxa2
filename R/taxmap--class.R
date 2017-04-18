@@ -188,8 +188,10 @@ Taxmap <- R6::R6Class(
       }
 
       # Get observations of taxa
-      if (recursive) {
-        my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE,
+      if (recursive || (is.numeric(recursive) && recursive > 0)) {
+        my_subtaxa <- self$subtaxa(subset = unname(subset),
+                                   recursive = ifelse(is.numeric(recursive),
+                                                      recursive - 1, TRUE),
                                    include_input = TRUE, return_type = "index")
         #unname is neede for some reason.. something to look into...
       } else {
@@ -240,16 +242,18 @@ Taxmap <- R6::R6Class(
 
       # Get taxa of subset
       taxa_subset <- unique(c(which(selection),
-                              if (subtaxa) {
+                              if (subtaxa || (is.numeric(subtaxa) && subtaxa > 0)) {
                                 self$subtaxa(subset = selection,
-                                             recursive = TRUE,
+                                             recursive = ifelse(is.numeric(subtaxa),
+                                                                subtaxa - 1, TRUE),
                                              return_type = "index",
                                              include_input = FALSE,
                                              simplify = TRUE)
                               },
-                              if (supertaxa) {
+                              if (supertaxa || (is.numeric(supertaxa) && supertaxa > 0)) {
                                 self$supertaxa(subset = selection,
-                                               recursive = TRUE,
+                                               recursive = ifelse(is.numeric(supertaxa),
+                                                                  supertaxa - 1, TRUE),
                                                return_type = "index",
                                                na = FALSE, simplify = TRUE,
                                                include_input = FALSE)
