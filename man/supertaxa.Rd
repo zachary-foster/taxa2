@@ -14,7 +14,7 @@ in \code{obj} will be used.}
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
 supertaxa one rank above the target taxa. If \code{TRUE}, return all the
 supertaxa of every supertaxa, etc. Positive numbers indicate the number of
-recursions (i.e. number of ranks above the target taxon to return). \code{0} is
+recursions (i.e. number of ranks above the target taxon to return). \code{1} is
 equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
 
 \item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results into a

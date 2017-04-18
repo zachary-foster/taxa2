@@ -7,20 +7,18 @@
 format_taxon_subset(taxon_ids, index)
 }
 \arguments{
-\item{index}{If a \code{character}, then it should be values of
-\code{taxon_ids}. If a \code{numeric}, then it should be row indexes of
-\code{taxon_data}. If a \code{logical}, then it should correspond to rows
-of \code{taxon_data}.}
+\item{taxon_ids}{All of the taxon ids from a \code{taxmap} object.}
 
-\item{obj}{(\code{taxmap}) The \code{taxmap} object containing taxon
-information to be queried.}
+\item{index}{If a \code{character}, then it should be values of \code{taxon_ids}. If a
+\code{numeric}, then it should be row indexes of \code{taxon_data}. If a \code{logical},
+then it should correspond to rows of \code{taxon_data}.}
 }
 \value{
-\code{numeric}
+(\code{integer}) row indexes of the edge list in a \code{taxmap} object nammed
+by corresponding taxon ids
 }
 \description{
-Format an input to a \code{subset} option on functions like
-\code{\link[=supertaxa]{supertaxa()}}. Converts logical and \code{taxon_ids} into indexes
-of \code{taxon_data}.
+Format an input to a \code{subset} option on functions like \code{\link[=supertaxa]{supertaxa()}}.
+Converts logical and \code{taxon_ids} into indexes of \code{taxon_data}.
 }
 \keyword{internal}

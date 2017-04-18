@@ -267,12 +267,20 @@ test_that("Subtaxa can be included when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", subtaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "lycopersicum", "tuberosum"))
+  expect_equal(filter_taxa(test_obj, 1, subtaxa = TRUE),
+               filter_taxa(test_obj, 1, subtaxa = -1))
+  expect_equal(filter_taxa(test_obj, 1, subtaxa = FALSE),
+               filter_taxa(test_obj, 1, subtaxa = 0))
 })
 
 test_that("Supertaxa can be included when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", supertaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "Solanaceae", "Plantae"))
+  expect_equal(filter_taxa(test_obj, 16, supertaxa = TRUE),
+               filter_taxa(test_obj, 16, supertaxa = -1))
+  expect_equal(filter_taxa(test_obj, 16, supertaxa = FALSE),
+               filter_taxa(test_obj, 16, supertaxa = 0))
 })
 
 test_that("Observations can be preserved when filtering taxa", {

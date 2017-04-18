@@ -3,6 +3,7 @@
 library(taxa)
 context("Testing the `taxonomy` object")
 
+
 ## Creating test data
 notoryctidae <- taxon(
   name = taxon_name("Notoryctidae"),
@@ -74,9 +75,7 @@ tuberosum <- taxon(
   rank = taxon_rank("species"),
   id = taxon_id(4113)
 )
-unidentified <- taxon(
-  name = taxon_name("unidentified")
-)
+unidentified <- taxon(name = taxon_name("unidentified"))
 
 tiger <- hierarchy(mammalia, felidae, panthera, tigris)
 cougar <- hierarchy(mammalia, felidae, puma, concolor)
@@ -190,8 +189,8 @@ test_that("Finding supertaxa", {
 
   # Recursion settings
   expect_equal(supertaxa(x, recursive = TRUE), supertaxa(x, recursive = -1))
-  expect_equal(supertaxa(x, recursive = FALSE), supertaxa(x, recursive = 0))
-  expect_equal(max(vapply(supertaxa(x, recursive = 1), length, numeric(1))), 2)
+  expect_equal(supertaxa(x, recursive = FALSE), supertaxa(x, recursive = 1))
+  expect_equal(max(vapply(supertaxa(x, recursive = 2), length, numeric(1))), 2)
 })
 
 
@@ -224,8 +223,8 @@ test_that("Finding subtaxa", {
 
   # Recursion settings
   expect_equal(subtaxa(x, recursive = TRUE), subtaxa(x, recursive = -1))
-  expect_equal(subtaxa(x, recursive = FALSE), subtaxa(x, recursive = 0))
-  expect_equal(subtaxa(x, "1", recursive = 1, simplify = TRUE),
+  expect_equal(subtaxa(x, recursive = FALSE), subtaxa(x, recursive = 1))
+  expect_equal(subtaxa(x, "1", recursive = 2, simplify = TRUE),
                subtaxa(x, subtaxa(x, "1", recursive = FALSE, simplify = TRUE),
                        recursive = FALSE, simplify = TRUE, include_input = TRUE))
 })

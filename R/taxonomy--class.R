@@ -91,7 +91,18 @@ Taxonomy <- R6::R6Class(
         }
         return(unname(output))
       }
-      output <- lapply(subset, recursive_part, n_recursions = recursive)
+
+      if (is.numeric(recursive)) {
+        n_recursions <- recursive - 1 # This makes 1 the same as FALSE
+      } else {
+        n_recursions <- recursive
+      }
+
+      if (is.numeric(recursive) && recursive == 0) {
+        output <- setNames(lapply(subset, function(x) numeric(0)), subset)
+      } else {
+        output <- lapply(subset, recursive_part, n_recursions = n_recursions)
+      }
 
       # Remove query taxa from output
       if (! include_input) {
@@ -252,7 +263,7 @@ Taxonomy <- R6::R6Class(
       # below each taxon during recursion. Instead, a finite number of
       # recursions are simulated by filtering the results of tarversing the
       # entire tree and comparing rank depth between each taxon and its subtaxa.
-      if (is.numeric(recursive) && recursive > 0) {
+      if (is.numeric(recursive) && recursive >= 0) {
         all_taxa <- unique(c(names(output), unlist(output)))
         rank_depth <- vapply(self$supertaxa(all_taxa), length, numeric(1))
         output_names <- names(output)
@@ -260,7 +271,7 @@ Taxonomy <- R6::R6Class(
           subtaxa_ids <- self$taxon_ids()[output[[i]]]
           subtaxa_depth <- rank_depth[subtaxa_ids]
           current_depth <- rank_depth[names(output[i])]
-          passing_taxa <- subtaxa_depth - current_depth <= recursive + 1
+          passing_taxa <- subtaxa_depth - current_depth <= recursive
           return(output[[i]][passing_taxa])
         })
         names(output) <- output_names

@@ -188,10 +188,12 @@ Taxmap <- R6::R6Class(
       }
 
       # Get observations of taxa
-      if (recursive || (is.numeric(recursive) && recursive > 0)) {
+      if (is.logical(recursive) && recursive == FALSE) {
+        recursive = 0
+      }
+      if (recursive || is.numeric(recursive)) {
         my_subtaxa <- self$subtaxa(subset = unname(subset),
-                                   recursive = ifelse(is.numeric(recursive),
-                                                      recursive - 1, TRUE),
+                                   recursive = recursive,
                                    include_input = TRUE, return_type = "index")
         #unname is neede for some reason.. something to look into...
       } else {
@@ -241,23 +243,24 @@ Taxmap <- R6::R6Class(
       }
 
       # Get taxa of subset
+      if (is.logical(subtaxa) && subtaxa == FALSE) {
+        subtaxa = 0
+      }
+      if (is.logical(supertaxa) && supertaxa == FALSE) {
+        supertaxa = 0
+      }
       taxa_subset <- unique(c(which(selection),
-                              if (subtaxa || (is.numeric(subtaxa) && subtaxa > 0)) {
-                                self$subtaxa(subset = selection,
-                                             recursive = ifelse(is.numeric(subtaxa),
-                                                                subtaxa - 1, TRUE),
+                              self$subtaxa(subset = selection,
+                                           recursive = subtaxa,
+                                           return_type = "index",
+                                           include_input = FALSE,
+                                           simplify = TRUE),
+                              self$supertaxa(subset = selection,
+                                             recursive = supertaxa,
                                              return_type = "index",
-                                             include_input = FALSE,
-                                             simplify = TRUE)
-                              },
-                              if (supertaxa || (is.numeric(supertaxa) && supertaxa > 0)) {
-                                self$supertaxa(subset = selection,
-                                               recursive = ifelse(is.numeric(supertaxa),
-                                                                  supertaxa - 1, TRUE),
-                                               return_type = "index",
-                                               na = FALSE, simplify = TRUE,
-                                               include_input = FALSE)
-                              }))
+                                             na = FALSE, simplify = TRUE,
+                                             include_input = FALSE)
+      ))
 
       # Invert selection
       if (invert) {

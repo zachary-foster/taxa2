@@ -86,9 +86,11 @@ filter_taxa(ex_taxmap, dangerous_taxa)
 
 # Include supertaxa
 filter_taxa(ex_taxmap, 12, supertaxa = TRUE)
+filter_taxa(ex_taxmap, 12, supertaxa = 2)
 
 # Include subtaxa
 filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
+filter_taxa(ex_taxmap, 1, subtaxa = 2)
 
 # Remove rows in data corresponding to removed taxa
 filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))

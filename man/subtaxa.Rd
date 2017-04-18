@@ -14,7 +14,7 @@ in \code{obj} will be used.}
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the subtaxa
 one rank below the target taxa. If \code{TRUE}, return all the subtaxa of every
 subtaxa, etc. Positive numbers indicate the number of ranks below the
-immediate subtaxa to return. \code{0} is equivalent to \code{FALSE}. Negative numbers
+immediate subtaxa to return. \code{1} is equivalent to \code{FALSE}. Negative numbers
 are equivalent to \code{TRUE}. Since the algorithm is optimized for traversing
 all of large trees, \code{numeric} values greater than 0 for this option
 actually take slightly longer to compute than either TRUE or FALSE.}
