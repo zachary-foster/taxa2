@@ -212,7 +212,7 @@ test_that("NSE values can be found", {
 })
 
 test_that("All valid NSE values can be found", {
-  expect_equal(names(all_data(test_obj)), unname(all_names(test_obj)))
+  expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
 

@@ -140,14 +140,22 @@ Taxmap <- R6::R6Class(
     },
 
     # Get data by name
-    get_data = function(name) {
-      my_names <- self$all_names()
+    get_data = function(name = NULL, ...) {
+      # Get default if name is NULL
+      if (is.null(name)) {
+        name = self$all_names(...)
+      }
+
+      # Check that names provided are valid
+      my_names <- self$all_names(...)
       if (any(unknown <- !name %in% my_names)) {
         stop(paste0("Cannot find the following data: ",
                     paste0(name[unknown], collapse = ", "), "\n ",
                     "Valid choices include: ",
                     paste0(my_names, collapse = ", "), "\n "))
       }
+
+      # Format output
       name <- my_names[match(name, my_names)]
       output <- lapply(names(name),
                        function(x) eval(parse(text = paste0("self$", x))))
@@ -170,11 +178,6 @@ Taxmap <- R6::R6Class(
     data_used = function(...) {
       my_names_used <- self$names_used(...)
       self$get_data(my_names_used)
-    },
-
-    # Return all data
-    all_data = function(...) {
-      self$get_data(self$all_names(...))
     },
 
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {

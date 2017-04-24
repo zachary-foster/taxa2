@@ -107,13 +107,15 @@ NULL
 
 #' Get data in a taxmap object by name
 #'
-#' Given a vector of names, return a list of data contained in a
-#' [taxmap()] object. \preformatted{
-#' obj$get_data(name)
+#' Given a vector of names, return a list of data contained in a [taxmap()]
+#' object. \preformatted{obj$get_data(name)
 #' get_data(obj, name)}
 #'
 #' @param obj A [taxmap()]  object
 #' @param name (`character`) Names of data to return.
+#' @param ... Passed to [all_names()]. Used to filter what kind of data is
+#'   returned (e.g. columns in tables or function output?) if `name` is not
+#'   supplied or what kinds are allowed if `name` is supplied.
 #'
 #' @return `list`
 #'
@@ -145,27 +147,6 @@ NULL
 #' @family accessors
 #'
 #' @name data_used
-NULL
-
-
-#' Get values of all data
-#'
-#' Get values of all data in a [taxmap()] object
-#' \preformatted{
-#' obj$data_used(...)
-#' data_used(obj, ...)}
-#'
-#' @param obj a [taxmap()] object
-#' @param ... Passed to [all_names()]
-#'
-#' @return Named `list`
-#'
-#' @examples
-#' ex_taxmap$all_data()
-#'
-#' @family accessors
-#'
-#' @name all_data
 NULL
 
 

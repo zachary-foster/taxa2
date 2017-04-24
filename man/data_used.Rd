@@ -23,7 +23,6 @@ ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
 
 }
 \seealso{
-Other accessors: \code{\link{all_data}},
-  \code{\link{all_names}}, \code{\link{get_data}},
-  \code{\link{names_used}}
+Other accessors: \code{\link{all_names}},
+  \code{\link{get_data}}, \code{\link{names_used}}
 }

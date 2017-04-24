@@ -39,7 +39,6 @@ ex_taxmap$all_names(funcs = FALSE)
 
 }
 \seealso{
-Other accessors: \code{\link{all_data}},
-  \code{\link{data_used}}, \code{\link{get_data}},
-  \code{\link{names_used}}
+Other accessors: \code{\link{data_used}},
+  \code{\link{get_data}}, \code{\link{names_used}}
 }
