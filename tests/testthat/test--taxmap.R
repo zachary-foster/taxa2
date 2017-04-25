@@ -115,6 +115,13 @@ phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
                   "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
                   "63604565-0406-460b-8cb8-1abe954b3f3a")
 
+foods <- list(c("mammals", "birds"),
+              c("cat food", "mice"),
+              c("insects"),
+              c("Most things, but especially anything rare or expensive"),
+              c("light", "dirt"),
+              c("light", "dirt"))
+
 reaction <- function(x) {
   ifelse(x$data$info$dangerous,
          paste0("Watch out! That ", x$data$info$name, " might attack!"),
@@ -122,9 +129,10 @@ reaction <- function(x) {
 }
 
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
-                   data = list(info = info,
-                               phylopic_ids = phylopic_ids),
-                   funcs = list(reaction = reaction))
+                    data = list(info = info,
+                                phylopic_ids = phylopic_ids,
+                                foods = foods),
+                    funcs = list(reaction = reaction))
 
 
 ### Print methods
@@ -134,7 +142,7 @@ test_that("Print methods works", {
   x$data$more_data <- list(1, 2, 3)
   x$data$even_more <- list(1, 2, 3, 4)
   expect_output(print(x),
-                "<Taxmap>.+17 taxa.+17 edges.+4 data sets.+info.+phylopic_ids.+more_data.+And 1 more data sets.+1 functions.+reaction")
+                "<Taxmap>.+17 taxa.+17 edges.+1 functions.+reaction")
 })
 
 ### NSE helpers
@@ -261,6 +269,7 @@ test_that("Default taxon filtering works", {
   expect_equal(result$taxon_names(), c("11" = "Solanum"))
   expect_equal(as.character(result$data$info$name), c("tomato", "potato"))
   expect_true(length(result$data$phylopic_ids) == 2)
+  expect_true(length(result$data$foods) == 2)
 })
 
 test_that("Subtaxa can be included when filtering taxa", {
@@ -286,10 +295,14 @@ test_that("Supertaxa can be included when filtering taxa", {
 test_that("Observations can be preserved when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", reassign_obs = FALSE)
   expect_equal(nrow(result$data$info), 0)
+  expect_equal(length(result$data$phylopic_ids), 0)
+  expect_equal(length(result$data$foods), 0)
   result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE)
   expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "11", "11"))
+  expect_equal(names(result$data$phylopic_ids), c(NA, NA, NA, NA, "11", "11"))
+  expect_equal(names(result$data$foods), c(NA, NA, NA, NA, "11", "11"))
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE,
                         reassign_obs = FALSE)
   expect_true(all(is.na(result$data$info$taxon_id)))
