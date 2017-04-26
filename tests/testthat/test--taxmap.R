@@ -331,6 +331,11 @@ test_that("Edge cases return reasonable outputs", {
 test_that("Default observation filtering works", {
   result <- filter_obs(test_obj, "info", n_legs == 2, dangerous == TRUE)
   expect_equivalent(as.character(result$data$info$name), "human")
+  result <- filter_obs(test_obj, "phylopic_ids", n_legs == 2, dangerous == TRUE)
+  expect_equal(length(result$data$phylopic_ids), 1)
+  result <- filter_obs(test_obj, "foods", n_legs == 2, dangerous == TRUE)
+  expect_equal(result$data$foods[[1]],
+               "Most things, but especially anything rare or expensive")
 })
 
 test_that("Removing taxa when filtering observations work", {
