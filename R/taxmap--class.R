@@ -343,21 +343,9 @@ Taxmap <- R6::R6Class(
         }
 
         obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
-        if (taxonless[my_index]) {
-          if (is.data.frame(self$data[[my_index]])) {
-            self$data[[my_index]][! obs_subset, "taxon_id"] <- as.character(NA)
-          } else {
-            names(self$data[[my_index]])[! obs_subset] <- as.character(NA)
-          }
-        } else {
-          if (is.data.frame(self$data[[my_index]])) {
-            self$data[[my_index]] <-
-              self$data[[my_index]][obs_subset, , drop = FALSE]
-          } else {
-            self$data[[my_index]] <- self$data[[my_index]][obs_subset]
-          }
-        }
-
+        private$remove_obs(dataset = my_index,
+                           indexes = obs_subset,
+                           unname_only = taxonless[my_index])
       }
       unused_output <- lapply(seq_along(self$data), process_one)
 
@@ -407,7 +395,7 @@ Taxmap <- R6::R6Class(
 
       # Remove observations
       data_taxon_ids <- get_data_taxon_ids(self$data[[target]])
-      self$data[[target]] <- self$data[[target]][selection, , drop = FALSE]
+      private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
       if (! unobserved & ! is.null(data_taxon_ids)) {
@@ -639,11 +627,30 @@ Taxmap <- R6::R6Class(
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
                              "n_subtaxa", "n_subtaxa_1"),
+
     check_dataset_name = function(target) {
       if (! target %in% names(self$data)) {
         stop(paste0("The target `", target, "` is not the name of a data set.",
                     " Valid targets include: ",
                     paste0(names(self$data), collapse = ", ")))
+      }
+    },
+
+    # Remove observations from a particular dataset or just remove the taxon ids
+    remove_obs = function(dataset, indexes, unname_only = FALSE) {
+      if (unname_only) {
+        if (is.data.frame(self$data[[dataset]])) {
+          self$data[[dataset]][! indexes, "taxon_id"] <- as.character(NA)
+        } else {
+          names(self$data[[dataset]])[! indexes] <- as.character(NA)
+        }
+      } else {
+        if (is.data.frame(self$data[[dataset]])) {
+          self$data[[dataset]] <-
+            self$data[[dataset]][indexes, , drop = FALSE]
+        } else {
+          self$data[[dataset]] <- self$data[[dataset]][indexes]
+        }
       }
     }
   )
