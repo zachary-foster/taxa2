@@ -439,6 +439,10 @@ test_that("Sorting observations work",  {
                                                  test_obj$data$info$name,
                                                  decreasing = TRUE)],
                result$data$info$taxon_id)
+  list_results <- arrange_obs(test_obj, "foods", desc(dangerous), desc(name))
+  expect_equal(result$data$info$taxon_id, names(list_results$data$foods))
+  list_results <- arrange_obs(test_obj, "phylopic_ids", desc(dangerous), desc(name))
+  expect_equal(result$data$info$taxon_id, names(list_results$data$phylopic_ids))
 })
 
 test_that("Sorting observations with non-target NSE values",  {

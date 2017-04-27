@@ -483,17 +483,26 @@ Taxmap <- R6::R6Class(
       # Check that the target data exists
       private$check_dataset_name(target)
 
+      # Sort observations
       data_used <- self$data_used(...)
       data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
-      if (length(data_used) == 0) {
-        self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
-      } else {
-        target_with_extra_cols <-
-          dplyr::bind_cols(data_used, self$data[[target]])
-        self$data[[target]] <-
-          dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      if (is.data.frame(self$data[[target]])) { # if it is a table
+        if (length(data_used) == 0) {
+          self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
+        } else {
+          target_with_extra_cols <-
+            dplyr::bind_cols(data_used, self$data[[target]])
+          self$data[[target]] <-
+            dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+        }
+      } else { # if it is a list or vector
+        dummy_table <- data.frame(index = seq_along(self$data[[target]]))
+        if (length(data_used)!= 0) {
+          dummy_table <- dplyr::bind_cols(data_used, dummy_table)
+        }
+        dummy_table <- dplyr::arrange(dummy_table, ...)
+        self$data[[target]] <- self$data[[target]][dummy_table$index]
       }
-
       return(self)
     },
 

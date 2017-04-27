@@ -23,6 +23,7 @@ obj$arrange_obs(target, ...) arrange_obs(obj, target, ...)}
 \examples{
 # Sort in ascending order
 arrange_obs(ex_taxmap, "info", n_legs)
+arrange_obs(ex_taxmap, "foods", name)
 
 # Sort in decending order
 arrange_obs(ex_taxmap, "info", desc(n_legs))
