@@ -581,6 +581,14 @@ Taxmap <- R6::R6Class(
                                taxon_weight = NULL, obs_weight = NULL,
                                use_supertaxa = TRUE,
                                collapse_func = mean, ...) {
+      # Get length of target
+      if (is.data.frame(self$data[[target]])) {
+        target_length <- nrow(self$data[[target]])
+      } else {
+        target_length <- length(self$data[[target]])
+      }
+
+
       self$sample_n_obs(target = target,
                         size = size * target_length,
                         replace = replace,
