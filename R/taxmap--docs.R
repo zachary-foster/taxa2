@@ -480,6 +480,7 @@ NULL
 #' @examples
 #' # Sample 2 rows without replacement
 #' sample_n_obs(ex_taxmap, "info", 2)
+#' sample_n_obs(ex_taxmap, "foods", 2)
 #'
 #' # Sample with replacement
 #' sample_n_obs(ex_taxmap, "info", 10, replace = TRUE)

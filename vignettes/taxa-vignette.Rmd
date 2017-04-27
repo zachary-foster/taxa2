@@ -156,7 +156,10 @@ hier2 <- hierarchy(c, b, a)
 hierarchies(hier1, hier2)
 ```
 
-## taxamap classes
+## taxamap class
+
+The `taxmap` class is used to store any number of tables, lists, or vectors associated with taxa. 
+There is a set of functions to manipulate these data in a taxonomic context using functions based on the **dplyr** functions.
 
 ### Filter
 

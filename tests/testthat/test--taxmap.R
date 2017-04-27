@@ -479,6 +479,10 @@ test_that("Sampling observations works",  {
   expect_equal(nrow(result$data$info), 3)
   result <- sample_n_obs(test_obj, "info", size = 30, replace = TRUE)
   expect_equal(nrow(result$data$info), 30)
+  result <- sample_n_obs(test_obj, "foods", size = 3)
+  expect_equal(length(result$data$foods), 3)
+  result <- sample_n_obs(test_obj, "phylopic_ids", size = 3)
+  expect_equal(length(result$data$phylopic_ids), 3)
 })
 
 test_that("Sampling using data from supertaxa works",  { # Not complete
@@ -514,6 +518,8 @@ test_that("Edge cases during sampling observations",  {
 test_that("Sampling observations works",  {
   result <- sample_n_taxa(test_obj, size = 3)
   expect_equal(length(result$taxon_ids()), 3)
+  expect_equal(length(result$data$foods), 3)
+  expect_equal(length(result$data$phylopic_ids), 3)
 })
 
 

@@ -534,9 +534,16 @@ Taxmap <- R6::R6Class(
       obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
                                         data = data_used)
 
+      # Get length of target
+      if (is.data.frame(self$data[[target]])) {
+        target_length <- nrow(self$data[[target]])
+      } else {
+        target_length <- length(self$data[[target]])
+      }
+
       # Calculate taxon component of taxon weights
       if (is.null(taxon_weight)) {
-        obs_taxon_weight <- rep(1, nrow(self$data[[target]]))
+        obs_taxon_weight <- rep(1, target_length)
       } else {
         obs_index <- match(get_data_taxon_ids(self$data[[target]]),
                            self$taxon_ids())
@@ -554,7 +561,7 @@ Taxmap <- R6::R6Class(
 
       # Calculate observation component of observation weights
       if (is.null(obs_weight)) {
-        obs_weight <- rep(1, nrow(self$data[[target]]))
+        obs_weight <- rep(1, target_length)
       }
       obs_weight <- obs_weight / sum(obs_weight)
 
@@ -565,7 +572,7 @@ Taxmap <- R6::R6Class(
       weight <- weight / sum(weight)
 
       # Sample observations
-      sampled_rows <- sample.int(nrow(self$data[[target]]), size = size,
+      sampled_rows <- sample.int(target_length, size = size,
                                  replace = replace, prob = weight)
       self$filter_obs(target, sampled_rows, ...)
     },
@@ -575,7 +582,7 @@ Taxmap <- R6::R6Class(
                                use_supertaxa = TRUE,
                                collapse_func = mean, ...) {
       self$sample_n_obs(target = target,
-                        size = size * nrow(self$data[[target]]),
+                        size = size * target_length,
                         replace = replace,
                         taxon_weight = taxon_weight, obs_weight = obs_weight,
                         use_supertaxa = use_supertaxa,
