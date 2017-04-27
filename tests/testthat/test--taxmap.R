@@ -233,6 +233,8 @@ test_that("Mapping between table observations and the edge list works", {
   expect_true(all(sapply(result, class) == "integer"))
   expect_identical(names(result), test_obj$taxon_ids())
   expect_identical(result[["1"]], 1:4)
+  expect_identical(result, test_obj$obs("phylopic_ids"))
+  expect_identical(result, test_obj$obs("foods"))
 })
 
 test_that("Mapping between a subset of observations and the edge list works", {
@@ -367,6 +369,9 @@ test_that("Edge cases return reasonable outputs during observation column subset
   expect_error(select_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
   expect_error(select_obs(test_obj), " missing, with no default")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 
@@ -388,6 +393,9 @@ test_that("Edge cases for observation column addition",  {
   expect_equal(mutate_obs(test_obj, "info"), test_obj)
   expect_error(mutate_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 
@@ -413,6 +421,9 @@ test_that("Edge cases for observation column addition (transmute) ",  {
   expect_equal("taxon_id", colnames(result$data$info))
   expect_error(transmute_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 

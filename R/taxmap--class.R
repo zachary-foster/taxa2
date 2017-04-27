@@ -419,6 +419,11 @@ Taxmap <- R6::R6Class(
       # Check that the target data exists
       private$check_dataset_name(target)
 
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
+
       self$data[[target]] <-
         dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
                          dplyr::select(self$data[[target]], ...))
@@ -429,6 +434,11 @@ Taxmap <- R6::R6Class(
     mutate_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
+
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
 
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
@@ -445,6 +455,11 @@ Taxmap <- R6::R6Class(
     transmute_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
+
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
 
       if ("taxon_id" %in% colnames(self$data[[target]])) {
         result <- list(taxon_id = self$data[[target]]$taxon_id)
