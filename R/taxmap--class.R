@@ -77,7 +77,7 @@ Taxmap <- R6::R6Class(
 
       # Get column names in each table, removing 'taxon_id'
       is_table <- vapply(self$data, is.data.frame, logical(1))
-      if (tables) {
+      if (tables && length(self$data[is_table]) > 0) {
         table_col_names <- unlist(lapply(self$data[is_table], colnames))
         names(table_col_names) <- paste0("data$",
                                          rep(names(self$data[is_table]),
@@ -88,15 +88,16 @@ Taxmap <- R6::R6Class(
       }
 
       # Get other object names in data
-      if (others) {
-        other_names <- names(self$data[!is_table])
+      is_other <- !is_table
+      if (others && length(self$data[is_other]) > 0) {
+        other_names <- names(self$data[is_other])
         names(other_names) <- rep("data", length(other_names))
         output <- c(output, other_names)
       }
 
 
       # Get function names
-      if (funcs) {
+      if (funcs && length(self$funcs) > 0) {
         func_names <- names(self$funcs)
         names(func_names) <- rep("funcs", length(func_names))
         output <- c(output, func_names)
