@@ -64,12 +64,44 @@ Taxon <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
-      cat(paste0(indent, paste0("  name: ", self$name$name %||% "none", "\n")))
-      cat(paste0(indent, paste0("  rank: ", self$rank$name %||% "none", "\n")))
-      cat(paste0(indent, paste0("  id: ", self$id$id %||% "none", "\n")))
+      cat(paste0(indent, paste0("  name: ",
+                                private$get_name() %||% "none", "\n")))
+      cat(paste0(indent, paste0("  rank: ",
+                                private$get_rank() %||% "none", "\n")))
+      cat(paste0(indent, paste0("  id: ",
+                                private$get_id() %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
-                                self$authority$name %||% "none", "\n")))
+                                private$authority %||% "none", "\n")))
       invisible(self)
+    }
+  ),
+
+  private = list(
+    get_name = function() {
+      if ("TaxonName" %in% class(self$name)) {
+        output <- self$name$name
+      } else {
+        output <- self$name
+      }
+      return(output)
+    },
+
+    get_rank = function() {
+      if ("TaxonRank" %in% class(self$rank)) {
+        output <- self$rank$name
+      } else {
+        output <- self$rank
+      }
+      return(output)
+    },
+
+    get_id = function() {
+      if ("TaxonId" %in% class(self$id)) {
+        output <- self$id$id
+      } else {
+        output <- self$id
+      }
+      return(output)
     }
   )
 )
