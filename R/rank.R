@@ -6,16 +6,10 @@
 #'
 #' @return An `R6Class` object of class `TaxonRank`
 #'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
-#'
 #' @examples
 #' taxon_rank("species")
 #' taxon_rank("genus")
 #' taxon_rank("kingdom")
-#' # taxon_rank("stuff")  # should fail
 #'
 #' (x <- taxon_rank(
 #'   "species",

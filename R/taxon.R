@@ -1,20 +1,16 @@
 #' Taxon class
 #'
 #' @export
-#' @param name (character) an TaxonName object or character. if character
+#' @param name a TaxonName object [taxon_name] or character string. if character
 #' passed in, we'll coerce to a TaxonName object internally, required
-#' @param rank (character) an TaxonRank object. if character
+#' @param rank a TaxonRank object [taxon_rank] or character string. if character
 #' passed in, we'll coerce to a TaxonRank object internally, required
-#' @param id (character) an TaxonId object. if character
-#' passed in, we'll coerce to a TaxonId object internally, required
-#' @param authority (character) an TaxonAuthority object, optional
+#' @param id a TaxonId object [taxon_id], numeric/integer, or character string.
+#' if numeric/integer/character passed in, we'll coerce to a TaxonId object
+#' internally, required
+#' @param authority (character) a character string, optional
 #'
 #' @return An `R6Class` object of class `Taxon`
-#'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
 #'
 #' @examples
 #' (x <- taxon(

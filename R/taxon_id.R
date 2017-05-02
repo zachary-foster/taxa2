@@ -2,14 +2,9 @@
 #'
 #' @export
 #' @param id (character) a taxonomic id required
-#' @param database (character) database class object, optional
+#' @param database database class object, optional
 #'
 #' @return An `R6Class` object of class `TaxonId`
-#'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
 #'
 #' @examples
 #' (x <- taxon_id(12345))

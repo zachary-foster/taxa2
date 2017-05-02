@@ -7,16 +7,17 @@
 taxon(name, rank = NULL, id = NULL, authority = NULL)
 }
 \arguments{
-\item{name}{(character) an TaxonName object or character. if character
+\item{name}{a TaxonName object \link{taxon_name} or character string. if character
 passed in, we'll coerce to a TaxonName object internally, required}
 
-\item{rank}{(character) an TaxonRank object. if character
+\item{rank}{a TaxonRank object \link{taxon_rank} or character string. if character
 passed in, we'll coerce to a TaxonRank object internally, required}
 
-\item{id}{(character) an TaxonId object. if character
-passed in, we'll coerce to a TaxonId object internally, required}
+\item{id}{a TaxonId object \link{taxon_id}, numeric/integer, or character string.
+if numeric/integer/character passed in, we'll coerce to a TaxonId object
+internally, required}
 
-\item{authority}{(character) an TaxonAuthority object, optional}
+\item{authority}{(character) a character string, optional}
 }
 \value{
 An \code{R6Class} object of class \code{Taxon}
@@ -24,13 +25,6 @@ An \code{R6Class} object of class \code{Taxon}
 \description{
 Taxon class
 }
-\section{Methods}{
-
-\itemize{
-\item print - print method
-}
-}
-
 \examples{
 (x <- taxon(
   name = taxon_name("Poa annua"),
