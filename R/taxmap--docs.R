@@ -26,8 +26,6 @@
 #'   `simplify = TRUE`, then the observation indexes for all `target`
 #'   taxa are returned in a single vector.
 #'
-#' @family taxmap taxonomy functions
-#'
 #' @name obs
 #'
 #' @examples
@@ -239,7 +237,7 @@ NULL
 #' # Remove a taxon and it subtaxa
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name filter_taxa
 NULL
@@ -285,7 +283,7 @@ NULL
 #' # Remove taxa whose obserservation were filtered out
 #' filter_obs(ex_taxmap, "info", dangerous == FALSE, unobserved = FALSE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name filter_obs
 NULL
@@ -316,7 +314,7 @@ NULL
 #'
 #' @return An object of type [taxmap()]
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @examples
 #' # Selecting a column by name
@@ -356,7 +354,7 @@ NULL
 #'            new_col = "Im new",
 #'            newer_col = paste0(new_col, "er!"))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #' @name mutate_obs
 NULL
 
@@ -378,7 +376,7 @@ NULL
 #' @examples
 #' transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name transmute_obs
 NULL
@@ -406,7 +404,7 @@ NULL
 #' # Sort in decending order
 #' arrange_obs(ex_taxmap, "info", desc(n_legs))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name arrange_obs
 NULL
@@ -428,7 +426,7 @@ NULL
 #' @examples
 #' arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name arrange_taxa
 NULL
@@ -488,7 +486,8 @@ NULL
 #' # Sample some rows for often then others
 #' sample_n_obs(ex_taxmap, "info", 3, obs_weight = n_legs)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
+#'
 #' @name sample_n_obs
 NULL
 
@@ -537,7 +536,8 @@ NULL
 #' @examples
 #' sample_frac_obs(ex_taxmap, "info", 0.5)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
+#'
 #' @name sample_frac_obs
 NULL
 
@@ -598,7 +598,7 @@ NULL
 #' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE,
 #'               obs_weight = n_legs, obs_target = "info")
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name sample_n_taxa
 NULL
@@ -650,7 +650,7 @@ NULL
 #' @examples
 #' sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name sample_frac_taxa
 NULL
@@ -672,7 +672,7 @@ NULL
 #' @examples
 #' n_obs(ex_taxmap, "info")
 #'
-#' @family taxon_funcs
+#' @family taxmap data functions
 #'
 #' @name n_obs
 NULL
@@ -692,7 +692,7 @@ NULL
 #'
 #' @examples#' n_obs_1(ex_taxmap, "info")
 #'
-#' @family taxon_funcs
+#' @family taxmap data functions
 #'
 #' @name n_obs_1
 NULL

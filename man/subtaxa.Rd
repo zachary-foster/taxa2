@@ -40,3 +40,8 @@ of type \code{taxmap} \preformatted{ obj$subtaxa(subset = NULL, recursive =
 TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) subtaxa(obj, ...)}
 }
+\seealso{
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{stems}},
+  \code{\link{supertaxa}}
+}

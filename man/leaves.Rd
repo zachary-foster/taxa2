@@ -25,3 +25,8 @@ Return the leaf taxa for a \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are
 with no subtaxa. \preformatted{ obj$leaves(subset = NULL, return_type = "id")
 leaves(obj, ...)}
 }
+\seealso{
+Other taxonomy indexing functions: \code{\link{roots}},
+  \code{\link{stems}}, \code{\link{subtaxa}},
+  \code{\link{supertaxa}}
+}

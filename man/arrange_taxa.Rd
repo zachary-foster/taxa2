@@ -23,7 +23,7 @@ arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{filter_obs}}, \code{\link{filter_taxa}},
   \code{\link{mutate_obs}}, \code{\link{sample_frac_obs}},
   \code{\link{sample_frac_taxa}},

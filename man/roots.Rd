@@ -25,3 +25,8 @@ Return the root taxa for a \code{\link[=taxmap]{taxmap()}} object. Can also be u
 get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
 return_type = "id") roots(obj, ...)}
 }
+\seealso{
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{stems}}, \code{\link{subtaxa}},
+  \code{\link{supertaxa}}
+}

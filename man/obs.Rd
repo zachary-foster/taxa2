@@ -53,6 +53,3 @@ ex_taxmap$obs("info", recursive = FALSE)
 ex_taxmap$obs("info", simplify = TRUE)
 
 }
-\seealso{
-Other taxmap taxonomy functions: \code{\link{supertaxa}}
-}

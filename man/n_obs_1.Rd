@@ -29,8 +29,5 @@ n_obs_1(obj, target)}
 
 }
 \seealso{
-Other taxon_funcs: \code{\link{id_classifications}},
-  \code{\link{n_obs}}, \code{\link{n_subtaxa_1}},
-  \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
-  \code{\link{name_classifications}}
+Other taxmap data functions: \code{\link{n_obs}}
 }
