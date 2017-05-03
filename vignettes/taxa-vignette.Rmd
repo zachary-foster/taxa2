@@ -32,7 +32,15 @@ user-defined data of any type (e.g. molecular sequences, abundance counts etc.)
 
 Diagram of class concepts for `taxa` classes:
 
-<img src="taxa_class_ideas.png" title="taxa classes diagram" width="718">
+```{r results='asis', echo = FALSE}
+flowchart_path <- "taxa_class_ideas.png"
+width <- 718
+if (knitr:::child_mode()) { # if run as a child
+  flowchart_path <- file.path("vignettes", flowchart_path)
+}
+cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="', 
+       width, '">'))
+```
 
 ## Install
 
