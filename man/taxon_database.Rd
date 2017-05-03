@@ -22,13 +22,6 @@ An \code{R6Class} object of class \code{TaxonDatabase}
 \description{
 TaxonDatabase class
 }
-\section{Methods}{
-
-\itemize{
-\item print - print method
-}
-}
-
 \examples{
 # create a database entry
 (x <- taxon_database(

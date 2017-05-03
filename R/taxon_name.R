@@ -6,11 +6,6 @@
 #'
 #' @return An `R6Class` object of class `TaxonName`
 #'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
-#'
 #' @examples
 #' (poa <- taxon_name("Poa"))
 #' (undef <- taxon_name("undefined"))
