@@ -17,7 +17,8 @@ supplied or what kinds are allowed if \code{name} is supplied.}
 }
 \description{
 Given a vector of names, return a list of data contained in a \code{\link[=taxmap]{taxmap()}}
-object. \preformatted{obj$get_data(name)
+object. \preformatted{
+obj$get_data(name)
 get_data(obj, name)}
 }
 \examples{

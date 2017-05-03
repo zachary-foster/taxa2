@@ -22,7 +22,9 @@ this function and more information. Calling the function using the
 \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R
 functions. However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
-\preformatted{ obj$mutate_obs(target, ...) mutate_obs(obj, target, ...)}
+\preformatted{
+obj$mutate_obs(target, ...)
+mutate_obs(obj, target, ...)}
 }
 \examples{
 mutate_obs(ex_taxmap, "info",

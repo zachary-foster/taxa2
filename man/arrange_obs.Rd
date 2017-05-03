@@ -17,8 +17,10 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 Sort columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
 Any variable name that appears in \code{obj$all_names()} can be used as if it
 was a vector on its own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration
-for this function and more information. \preformatted{
-obj$arrange_obs(target, ...) arrange_obs(obj, target, ...)}
+for this function and more information.
+\preformatted{
+obj$arrange_obs(target, ...)
+arrange_obs(obj, target, ...)}
 }
 \examples{
 # Sort in ascending order

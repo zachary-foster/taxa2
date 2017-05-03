@@ -15,8 +15,10 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 Sort the edge list in \code{\link[=taxmap]{taxmap()}} objects. Any variable name that
 appears in \code{obj$all_names()} can be used as if it was a vector on its
 own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function
-and more information. \preformatted{ obj$arrange_taxa(...) arrange_taxa(obj,
-...)}
+and more information.
+\preformatted{
+obj$arrange_taxa(...)
+arrange_taxa(obj, ...)}
 }
 \examples{
 arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))

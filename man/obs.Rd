@@ -33,8 +33,9 @@ taxa are returned in a single vector.
 \description{
 Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each
 taxon in a given table included in that \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{ obj$obs(data, subset = NULL, recursive = TRUE, simplify =
-FALSE) obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
+\preformatted{
+obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
+obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 }
 \examples{
 # Get indexes of rows corresponding to each taxon
