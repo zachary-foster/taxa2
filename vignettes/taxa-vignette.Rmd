@@ -21,7 +21,7 @@ eval = TRUE
 )
 ```
 
-`taxa` defines taxonomic classes for R. The goal is to use these classes as low 
+`taxa` defines taxonomic classes and functions to manipulate them. The goal is to use these classes as low 
 level fundamental taxonomic classes that other R packages can build on and use.
 
 There are two distinct types of classes in `taxa`:
@@ -98,13 +98,13 @@ taxon_name("Poa", database = "ncbi")
 #### `taxon_id`
 
 Each database has its set of unique taxon IDs. 
-These IDs are better than using the taxon name directly because they are guaranteed to be unique, whereas there are often duplicates of taxon names. 
+These IDs are better than using the taxon name directly because they are guaranteed to be unique, whereas there are often duplicates of taxon names (e.g. *Orestias elegans* is the name of both an orchid and a fish). 
 
 ```{r}
 taxon_id(12345, database = "ncbi")
 ```
 
-### the "taxon" class
+### The "taxon" class
 
 The `taxon` class combines the classes containing the name, rank, and ID for the taxon.
 There is also a place to define an authority of the taxon.
@@ -234,7 +234,7 @@ potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
 Unlike the `hierarchies` class, each unique `taxon` object is only represented once in the `taxonomy` object.
 Each taxon has a corresponding entry in an [edge list](https://en.wikipedia.org/wiki/Adjacency_list) that encode how it is related to other taxa.
 This makes `taxonomy` more compact, but harder to manipulate using standard indexing.
-To make manipulation easier, there are methods for `taxomomy` that can provide indexes in a taxonomy context.
+To make manipulation easier, there are methods for `taxomomy` that can provide indexes in a taxonomic context.
 
 #### supertaxa
 
@@ -303,12 +303,13 @@ leaves(tax, return_type = "name")
 
 There are many other functions to interact with `taxonomy` object, such as `stems` and `n_subtaxa`, but these will not be described here for now. 
 
-### The taxmap class
+### The "taxmap" class
 
 The `taxmap` class is used to store any number of tables, lists, or vectors associated with taxa. 
 It is basically the same as the `taxonomy` class, but with the following additions:
-  * A list called `data` that stores arbitrary user data associated with taxa
-  * A list called `funcs` that store user defined functions
+
+* A list called `data` that stores arbitrary user data associated with taxa
+* A list called `funcs` that stores user defined functions
   
 
 ```{r}
@@ -345,17 +346,20 @@ my_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
 
 In most functions that work with taxmap objects, the names of list/vector datasets, table columns, or functions can be used as if they were separate variables on their own. 
 In the case of functions, instead of returning the function itself, the results of the functions are returned.
-To see what variables can be used this way, use `all_names` or `get_data`.
+To see what variables can be used this way, use `all_names`.
 
 ```{r}
 all_names(my_taxmap)
 ```
 
+For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the same effect inside manipulation functions like `filter_taxa` described below. 
+To get the values of these variables, use `get_data`.
+
 ```{r}
 get_data(my_taxmap)
 ```
 
-For example, note how "taxon_names" and "dangerous" is used below. 
+Note how "taxon_names" and "dangerous" are used below. 
 
 #### Filtering
 
