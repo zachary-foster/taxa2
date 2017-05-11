@@ -3,14 +3,11 @@
 #' @description That is, drop them
 #'
 #' @export
-#'
 #' @param .data Input, object of class taxon
-#' @param ... Further unnamed args, see examples
-#' @return For \code{taxon} inputs gives back a \code{taxon} object. For
-#' \code{taxa} inputs gives back a \code{taxa} object. For \code{taxondf}
-#' inputs, gives back a \code{taxondf} object.
+#' @param ... unquoted rank names, e.g., family
+#' @details Only supports `Hierarchy` objects for now
+#' @return an object of the same class as passed in
 #' @examples
-#' # operating on `hierarchy` objects
 #' (x <- taxon(
 #'   name = taxon_name("Poaceae"),
 #'   rank = taxon_rank("family"),
@@ -33,17 +30,23 @@
 #'
 #' ## single taxonomic group
 #' res %>% pop(family)
+#' ### more than 1 - remake res object above first
+#' # res %>% pop(family, genus)
 
 pop <- function(.data, ...) {
   UseMethod("pop")
 }
 
 #' @export
+pop.default <- function(.data, ...) {
+  stop("no 'pop' method for ", class(.data), call. = FALSE)
+}
+
+#' @export
 pop.Hierarchy <- function(.data, ...){
-  name <- vars(...)
-  if (!name %in% names(res$ranklist)) stop(name, " not found", call. = FALSE)
-  which(name == vapply(.data$taxa, function(x) x$rank$name, ""))
-  #hierarchy()
+  nms <- dplyr::vars(...)
+  nms <- vapply(nms, function(z) as.character(z$expr), "", USE.NAMES = FALSE)
+  .data$pop(nms)
 }
 
 # pop.taxa <- function(.data, ...){

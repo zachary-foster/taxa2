@@ -7,6 +7,15 @@
 #' @details on initialize, function sorts the taxon list, see
 #' [ranks_ref] for the reference rank names and orders
 #'
+#' **Methods**
+#'   \describe{
+#'     \item{`pop(rank_names)`}{
+#'       Remove `Taxon` elements by rank name. The change happens in place,
+#'       so you don't need to assign output to a new object. returns self
+#'       - rank_names (character) a vector of rank names
+#'     }
+#'   }
+#'
 #' @examples
 #' (x <- taxon(
 #'   name = taxon_name("Poaceae"),
@@ -30,6 +39,9 @@
 #'
 #' res$taxa
 #' res$ranklist
+#'
+#' # pop off a rank
+#' res$pop("family")
 
 hierarchy <- function(...) {
   Hierarchy$new(...)
@@ -74,6 +86,14 @@ Hierarchy <- R6::R6Class(
         if (length(self$taxa) > 10) cat("  ...")
       }
       invisible(self)
+    },
+
+    pop = function(rank_names) {
+      taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
+      todrop <- which(taxa_rks %in% rank_names)
+      self$taxa[todrop] <- NULL
+      self$ranklist[names(self$ranklist) %in% rank_names] <- NULL
+      self
     }
   ),
 

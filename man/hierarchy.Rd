@@ -18,6 +18,15 @@ Hierarchy class
 \details{
 on initialize, function sorts the taxon list, see
 \link{ranks_ref} for the reference rank names and orders
+
+\strong{Methods}
+\describe{
+\item{\code{pop(rank_names)}}{
+Remove \code{Taxon} elements by rank name. The change happens in place,
+so you don't need to assign output to a new object. returns self
+- rank_names (character) a vector of rank names
+}
+}
 }
 \examples{
 (x <- taxon(
@@ -42,4 +51,7 @@ on initialize, function sorts the taxon list, see
 
 res$taxa
 res$ranklist
+
+# pop off a rank
+res$pop("family")
 }
