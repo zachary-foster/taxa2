@@ -13,8 +13,8 @@ VignetteBuilder: knitr
 LazyLoad: yes
 LazyData: yes
 License: MIT + file LICENSE
-URL: https://github.com/ropenscilabs/taxa
-BugReports: https://github.com/ropenscilabs/taxa/issues
+URL: https://github.com/ropensci/taxa
+BugReports: https://github.com/ropensci/taxa/issues
 Roxygen: list(markdown = TRUE)
 Imports:
     R6,
