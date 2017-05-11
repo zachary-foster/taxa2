@@ -46,5 +46,7 @@ TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) supertaxa(obj, ...)}
 }
 \seealso{
-Other taxmap taxonomy functions: \code{\link{obs}}
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{stems}},
+  \code{\link{subtaxa}}
 }

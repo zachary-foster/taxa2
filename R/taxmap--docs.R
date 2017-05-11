@@ -2,8 +2,9 @@
 #'
 #' Given a [taxmap()] object, return the indexes associated with each
 #' taxon in a given table included in that [taxmap()] object.
-#' \preformatted{ obj$obs(data, subset = NULL, recursive = TRUE, simplify =
-#' FALSE) obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
+#' \preformatted{
+#' obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
+#' obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 #'
 #' @param obj ([taxmap()]) The [taxmap()] object containing
 #'   taxon information to be queried.
@@ -25,8 +26,6 @@
 #'   indexes are returned corresponding to the `target` argument. If
 #'   `simplify = TRUE`, then the observation indexes for all `target`
 #'   taxa are returned in a single vector.
-#'
-#' @family taxmap taxonomy functions
 #'
 #' @name obs
 #'
@@ -52,7 +51,8 @@ NULL
 #' Return names of data in a [taxmap()]
 #'
 #' Return all the valid names that can be used with non-standard evalulation in
-#' manipulation functions like `filter_taxa`. \preformatted{
+#' manipulation functions like `filter_taxa`.
+#' \preformatted{
 #' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 #' all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
 #'
@@ -108,7 +108,8 @@ NULL
 #' Get data in a taxmap object by name
 #'
 #' Given a vector of names, return a list of data contained in a [taxmap()]
-#' object. \preformatted{obj$get_data(name)
+#' object. \preformatted{
+#' obj$get_data(name)
 #' get_data(obj, name)}
 #'
 #' @param obj A [taxmap()]  object
@@ -160,7 +161,8 @@ NULL
 #' functions. However, calling the function using the `filter_taxa(obj,
 #' ...)` mitates R's traditional copy-on-modify semantics, so "obj" would not be
 #' changed; instead a changed version would be returned, like most R functions.
-#' \preformatted{ obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
+#' \preformatted{
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
 #' taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
 #' filter_taxa(obj, ...)}
 #'
@@ -239,7 +241,7 @@ NULL
 #' # Remove a taxon and it subtaxa
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name filter_taxa
 NULL
@@ -255,8 +257,10 @@ NULL
 #' edits "obj" in place, unlike most R functions. However, calling the function
 #' using the `filter_obs(obj, ...)` mitates R's traditional copy-on-modify
 #' semantics, so "obj" would not be changed; instead a changed version would be
-#' returned, like most R functions. \preformatted{ obj$filter_obs(target, ...,
-#' unobserved = TRUE) filter_obs(obj, target, ...)}
+#' returned, like most R functions.
+#' \preformatted{
+#' obj$filter_obs(target, ..., unobserved = TRUE)
+#' filter_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the list/vector/table in `obj$data` to filter
@@ -285,7 +289,7 @@ NULL
 #' # Remove taxa whose obserservation were filtered out
 #' filter_obs(ex_taxmap, "info", dangerous == FALSE, unobserved = FALSE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name filter_obs
 NULL
@@ -301,8 +305,10 @@ NULL
 #' edits "obj" in place, unlike most R functions. However, calling the function
 #' using the `select_obs(obj, ...)` mitates R's traditional copy-on-modify
 #' semantics, so "obj" would not be changed; instead a changed version would be
-#' returned, like most R functions. \preformatted{ obj$select_obs(target, ...,
-#' unobserved = TRUE) select_obs(obj, target, ...)}
+#' returned, like most R functions.
+#' \preformatted{
+#' obj$select_obs(target, ..., unobserved = TRUE)
+#' select_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the list/vector/table in `obj$data` to filter
@@ -316,7 +322,7 @@ NULL
 #'
 #' @return An object of type [taxmap()]
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @examples
 #' # Selecting a column by name
@@ -342,7 +348,9 @@ NULL
 #' functions. However, calling the function using the `mutate_obs(obj,
 #' ...)` mitates R's traditional copy-on-modify semantics, so "obj" would not be
 #' changed; instead a changed version would be returned, like most R functions.
-#' \preformatted{ obj$mutate_obs(target, ...) mutate_obs(obj, target, ...)}
+#' \preformatted{
+#' obj$mutate_obs(target, ...)
+#' mutate_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the table in `obj$data` to filter
@@ -356,7 +364,7 @@ NULL
 #'            new_col = "Im new",
 #'            newer_col = paste0(new_col, "er!"))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #' @name mutate_obs
 NULL
 
@@ -366,8 +374,10 @@ NULL
 #' Replace columns of tables in `obj$data` in [taxmap()] objects.
 #' Any variable name that appears in `obj$all_names()` can be used as if it
 #' was a vector on its own. See [dplyr::transmute()] for the
-#' inspiration for this function and more information. \preformatted{
-#' obj$transmute_obs(target, ...) transmute_obs(obj, target, ...)}
+#' inspiration for this function and more information.
+#' \preformatted{
+#' obj$transmute_obs(target, ...)
+#' transmute_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the table in `obj$data` to filter
@@ -378,7 +388,7 @@ NULL
 #' @examples
 #' transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name transmute_obs
 NULL
@@ -389,8 +399,10 @@ NULL
 #' Sort columns of tables in `obj$data` in [taxmap()] objects.
 #' Any variable name that appears in `obj$all_names()` can be used as if it
 #' was a vector on its own. See [dplyr::arrange()] for the inspiration
-#' for this function and more information. \preformatted{
-#' obj$arrange_obs(target, ...) arrange_obs(obj, target, ...)}
+#' for this function and more information.
+#' \preformatted{
+#' obj$arrange_obs(target, ...)
+#' arrange_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the table in `obj$data` to filter
@@ -406,7 +418,7 @@ NULL
 #' # Sort in decending order
 #' arrange_obs(ex_taxmap, "info", desc(n_legs))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name arrange_obs
 NULL
@@ -417,8 +429,10 @@ NULL
 #' Sort the edge list in [taxmap()] objects. Any variable name that
 #' appears in `obj$all_names()` can be used as if it was a vector on its
 #' own. See [dplyr::arrange()] for the inspiration for this function
-#' and more information. \preformatted{ obj$arrange_taxa(...) arrange_taxa(obj,
-#' ...)}
+#' and more information.
+#' \preformatted{
+#' obj$arrange_taxa(...)
+#' arrange_taxa(obj, ...)}
 #'
 #' @param obj [taxmap()]
 #' @param ... One or more column names to sort on.
@@ -428,7 +442,7 @@ NULL
 #' @examples
 #' arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name arrange_taxa
 NULL
@@ -440,11 +454,12 @@ NULL
 #' object. Weights can be specified for observations or the taxa they are taxmap
 #' by. Any variable name that appears in `obj$all_names()` can be used as
 #' if it was a vector on its own. See [dplyr::sample_n()] for the inspiration
-#' for this function. \preformatted{ obj$sample_n_obs(target, size, replace =
-#' FALSE, taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE,
-#' collapse_func = mean, ...) sample_n_obs(obj, target, size, replace = FALSE,
-#' taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func =
-#' mean, ...)}
+#' for this function.
+#' \preformatted{
+#' obj$sample_n_obs(target, size, replace = FALSE, taxon_weight = NULL,
+#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_obs(obj, target, size, replace = FALSE, taxon_weight = NULL,
+#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
 #' @param target The name of the table in `obj$data` to filter
@@ -488,7 +503,8 @@ NULL
 #' # Sample some rows for often then others
 #' sample_n_obs(ex_taxmap, "info", 3, obs_weight = n_legs)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
+#'
 #' @name sample_n_obs
 NULL
 
@@ -498,9 +514,10 @@ NULL
 #' Randomly sample some propoortion of observations from a [taxmap()]
 #' object. Weights can be specified for observations or their taxa. See
 #' [dplyr::sample_frac()] for the inspiration for this function.
-#' \preformatted{ obj$sample_frac_obs(target, size, replace = FALSE,
-#' taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func =
-#' mean, ...) sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
+#' \preformatted{
+#' obj$sample_frac_obs(target, size, replace = FALSE, taxon_weight = NULL,
+#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
 #' NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
@@ -537,7 +554,8 @@ NULL
 #' @examples
 #' sample_frac_obs(ex_taxmap, "info", 0.5)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
+#'
 #' @name sample_frac_obs
 NULL
 
@@ -546,11 +564,12 @@ NULL
 #'
 #' Randomly sample some number of taxa from a [taxmap()] object.
 #' Weights can be specified for taxa or the observations assigned to them. See
-#' [dplyr::sample_n()] for the inspiration for this function. \preformatted{
-#' obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL, obs_target =
-#' NULL, use_subtaxa = TRUE, collapse_func = mean, ...) sample_n_taxa(obj, size,
-#' taxon_weight = NULL, obs_weight = NULL, obs_target = NULL, use_subtaxa =
-#' TRUE, collapse_func = mean, ...)}
+#' [dplyr::sample_n()] for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
 #' @param size (`numeric` of length 1) The number of taxa to sample.
@@ -598,7 +617,7 @@ NULL
 #' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE,
 #'               obs_weight = n_legs, obs_target = "info")
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name sample_n_taxa
 NULL
@@ -609,8 +628,9 @@ NULL
 #' Randomly sample some proportion of taxa from a [taxmap()] object.
 #' Weights can be specified for taxa or the observations assigned to them. See
 #' [dplyr::sample_frac()] for the inspiration for this function.
-#' \preformatted{ obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight =
-#' NULL, obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
+#' \preformatted{
+#' obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
 #' sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
 #' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
 #'
@@ -650,7 +670,7 @@ NULL
 #' @examples
 #' sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
 #'
-#' @family dplyr-like functions
+#' @family taxmap manipulation functions
 #'
 #' @name sample_frac_taxa
 NULL
@@ -672,7 +692,7 @@ NULL
 #' @examples
 #' n_obs(ex_taxmap, "info")
 #'
-#' @family taxon_funcs
+#' @family taxmap data functions
 #'
 #' @name n_obs
 NULL
@@ -692,7 +712,7 @@ NULL
 #'
 #' @examples#' n_obs_1(ex_taxmap, "info")
 #'
-#' @family taxon_funcs
+#' @family taxmap data functions
 #'
 #' @name n_obs_1
 NULL

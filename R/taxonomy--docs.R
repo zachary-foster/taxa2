@@ -9,6 +9,8 @@
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
+#' @family taxonomy data functions
+#'
 #' @name taxon_ids
 NULL
 
@@ -23,6 +25,8 @@ NULL
 #' taxon_names(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @family taxonomy data functions
 #'
 #' @name taxon_names
 NULL
@@ -62,7 +66,7 @@ NULL
 #'   corresponding to the `subset` argument. If `simplify = TRUE`,
 #'   then unique values are returned in a single vector.
 #'
-#' @family taxmap taxonomy functions
+#' @family taxonomy indexing functions
 #'
 #' @name supertaxa
 NULL
@@ -83,6 +87,8 @@ NULL
 #'   not the taxon list.
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of
 #'   [taxonomy()]
+#'
+#' @family taxonomy indexing functions
 #'
 #' @return `character`
 #'
@@ -121,6 +127,8 @@ NULL
 #'   corresponding to the `target` argument. If `simplify = TRUE`,
 #'   then the unique values are returned in a single vector.
 #'
+#' @family taxonomy indexing functions
+#'
 #' @name subtaxa
 NULL
 
@@ -148,6 +156,8 @@ NULL
 #'
 #' @return `character`
 #'
+#' @family taxonomy indexing functions
+#'
 #' @name stems
 NULL
 
@@ -170,6 +180,8 @@ NULL
 #'
 #' @return `character`
 #'
+#' @family taxonomy indexing functions
+#'
 #' @name leaves
 NULL
 
@@ -190,7 +202,7 @@ NULL
 #' @examples
 #' id_classifications(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name id_classifications
 NULL
@@ -212,7 +224,7 @@ NULL
 #' @examples
 #' name_classifications(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name name_classifications
 NULL
@@ -230,7 +242,7 @@ NULL
 #' @examples
 #' n_supertaxa(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_supertaxa
 NULL
@@ -248,7 +260,7 @@ NULL
 #' @examples
 #' n_subtaxa(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_subtaxa
 NULL
@@ -268,7 +280,7 @@ NULL
 #' @examples
 #' n_subtaxa_1(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_subtaxa_1
 NULL

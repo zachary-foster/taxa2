@@ -65,7 +65,8 @@ this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R
 functions. However, calling the function using the \code{filter_taxa(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
-\preformatted{ obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
+\preformatted{
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
 taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
 filter_taxa(obj, ...)}
 }
@@ -100,7 +101,7 @@ filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{mutate_obs}}, \code{\link{sample_frac_obs}},
   \code{\link{sample_frac_taxa}},

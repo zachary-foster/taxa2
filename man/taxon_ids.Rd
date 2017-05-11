@@ -15,3 +15,10 @@ They are in the order they appear in the edge list.
 obj$taxon_ids()
 taxon_ids(obj, ...)}
 }
+\seealso{
+Other taxonomy data functions: \code{\link{id_classifications}},
+  \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}},
+  \code{\link{n_supertaxa}},
+  \code{\link{name_classifications}},
+  \code{\link{taxon_names}}
+}

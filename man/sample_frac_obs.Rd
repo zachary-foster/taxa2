@@ -48,9 +48,10 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 Randomly sample some propoortion of observations from a \code{\link[=taxmap]{taxmap()}}
 object. Weights can be specified for observations or their taxa. See
 \code{\link[dplyr:sample_frac]{dplyr::sample_frac()}} for the inspiration for this function.
-\preformatted{ obj$sample_frac_obs(target, size, replace = FALSE,
-taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func =
-mean, ...) sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
+\preformatted{
+obj$sample_frac_obs(target, size, replace = FALSE, taxon_weight = NULL,
+obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
+sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
 NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
@@ -58,7 +59,7 @@ sample_frac_obs(ex_taxmap, "info", 0.5)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{mutate_obs}},
   \code{\link{sample_frac_taxa}},

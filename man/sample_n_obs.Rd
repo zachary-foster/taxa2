@@ -49,11 +49,12 @@ Randomly sample some number of observations from a \code{\link[=taxmap]{taxmap()
 object. Weights can be specified for observations or the taxa they are taxmap
 by. Any variable name that appears in \code{obj$all_names()} can be used as
 if it was a vector on its own. See \code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration
-for this function. \preformatted{ obj$sample_n_obs(target, size, replace =
-FALSE, taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE,
-collapse_func = mean, ...) sample_n_obs(obj, target, size, replace = FALSE,
-taxon_weight = NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func =
-mean, ...)}
+for this function.
+\preformatted{
+obj$sample_n_obs(target, size, replace = FALSE, taxon_weight = NULL,
+obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
+sample_n_obs(obj, target, size, replace = FALSE, taxon_weight = NULL,
+obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
 # Sample 2 rows without replacement
@@ -68,7 +69,7 @@ sample_n_obs(ex_taxmap, "info", 3, obs_weight = n_legs)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{mutate_obs}},
   \code{\link{sample_frac_obs}},

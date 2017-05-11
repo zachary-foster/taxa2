@@ -34,8 +34,10 @@ information. Calling the function using the \code{obj$filter_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
 using the \code{filter_obs(obj, ...)} mitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
-returned, like most R functions. \preformatted{ obj$filter_obs(target, ...,
-unobserved = TRUE) filter_obs(obj, target, ...)}
+returned, like most R functions.
+\preformatted{
+obj$filter_obs(target, ..., unobserved = TRUE)
+filter_obs(obj, target, ...)}
 }
 \examples{
 # Filter by row index
@@ -49,7 +51,7 @@ filter_obs(ex_taxmap, "info", dangerous == FALSE, unobserved = FALSE)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_taxa}},
   \code{\link{mutate_obs}}, \code{\link{sample_frac_obs}},
   \code{\link{sample_frac_taxa}},

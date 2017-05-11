@@ -7,3 +7,4 @@
 man-roxygen
 ^notes$
 .github
+^README.html$

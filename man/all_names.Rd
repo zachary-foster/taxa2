@@ -26,7 +26,8 @@ besides tables.}
 }
 \description{
 Return all the valid names that can be used with non-standard evalulation in
-manipulation functions like \code{filter_taxa}. \preformatted{
+manipulation functions like \code{filter_taxa}.
+\preformatted{
 obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
 }

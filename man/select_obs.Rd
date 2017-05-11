@@ -32,8 +32,10 @@ information. Calling the function using the \code{obj$select_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
 using the \code{select_obs(obj, ...)} mitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
-returned, like most R functions. \preformatted{ obj$select_obs(target, ...,
-unobserved = TRUE) select_obs(obj, target, ...)}
+returned, like most R functions.
+\preformatted{
+obj$select_obs(target, ..., unobserved = TRUE)
+select_obs(obj, target, ...)}
 }
 \examples{
 # Selecting a column by name
@@ -47,7 +49,7 @@ select_obs(ex_taxmap, "info", matches("^n"))
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{mutate_obs}},
   \code{\link{sample_frac_obs}},
