@@ -2,7 +2,7 @@
 title: "Introduction to the taxa package"
 author: "Scott Chamberlain and Zachary Foster"
 date: "`r Sys.Date()`"
-output: 
+output:
   rmarkdown::html_vignette:
   toc: true
   vignette: >
@@ -10,7 +10,7 @@ output:
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
-  
+
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
 comment = "#>",
@@ -21,13 +21,13 @@ eval = TRUE
 )
 ```
 
-`taxa` defines taxonomic classes and functions to manipulate them. The goal is to use these classes as low 
+`taxa` defines taxonomic classes and functions to manipulate them. The goal is to use these classes as low
 level fundamental taxonomic classes that other R packages can build on and use.
 
 There are two distinct types of classes in `taxa`:
 
-* Classes that are concerned only with taxonomic information: `taxon`, `taxonomy`, `hierarchy`, etc. 
-* A class called `taxmap` that is concerned with combining taxonomic data with 
+* Classes that are concerned only with taxonomic information: `taxon`, `taxonomy`, `hierarchy`, etc.
+* A class called `taxmap` that is concerned with combining taxonomic data with
 user-defined data of any type (e.g. molecular sequences, abundance counts etc.)
 
 Diagram of class concepts for `taxa` classes:
@@ -38,7 +38,7 @@ width <- 718
 if (knitr:::child_mode()) { # if run as a child
   flowchart_path <- file.path("vignettes", flowchart_path)
 }
-cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="', 
+cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="',
        width, '">'))
 ```
 
@@ -47,7 +47,7 @@ cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="
 Development version from GitHub
 
 ```{r eval=FALSE}
-devtools::install_github("ropenscilabs/taxa")
+devtools::install_github("ropensci/taxa")
 ```
 
 ```{r}
@@ -58,7 +58,7 @@ library("taxa")
 
 ### Minor component classes
 
-There a few optional classes used to store information in other classes. 
+There a few optional classes used to store information in other classes.
 In most cases, these can be replaced with simple character values but using them provides more information and potential functionality.
 
 #### `database`
@@ -97,7 +97,7 @@ taxon_rank(name = "species", database = "ncbi")
 
 #### `taxon_name`
 
-The taxon name can be defined in the same way as rank. 
+The taxon name can be defined in the same way as rank.
 
 ```{r}
 taxon_name("Poa", database = "ncbi")
@@ -105,8 +105,8 @@ taxon_name("Poa", database = "ncbi")
 
 #### `taxon_id`
 
-Each database has its set of unique taxon IDs. 
-These IDs are better than using the taxon name directly because they are guaranteed to be unique, whereas there are often duplicates of taxon names (e.g. *Orestias elegans* is the name of both an orchid and a fish). 
+Each database has its set of unique taxon IDs.
+These IDs are better than using the taxon name directly because they are guaranteed to be unique, whereas there are often duplicates of taxon names (e.g. *Orestias elegans* is the name of both an orchid and a fish).
 
 ```{r}
 taxon_id(12345, database = "ncbi")
@@ -205,7 +205,7 @@ hierarchies(hier1, hier2)
 ### The "taxonomy" class
 
 The `taxonomy` class stores unique `taxon` objects in a tree structure.
-Usually this kind of complex information would be the output of a file parsing function, but the code below shows how to construct a `taxonomy` object from scratch. 
+Usually this kind of complex information would be the output of a file parsing function, but the code below shows how to construct a `taxonomy` object from scratch.
 
 ```{r}
 # define taxa
@@ -253,8 +253,8 @@ The `supertaxa` function returns the supertaxa of all or a subset of the taxa in
 supertaxa(tax)
 ```
 
-By default, the taxon IDs for the supertaxa of all taxa are returned in the same order they appear in the edge list. 
-Taxon IDs (character) or edge list indexes (integer) can be supplied to the `subset` option to only return information for some taxa. 
+By default, the taxon IDs for the supertaxa of all taxa are returned in the same order they appear in the edge list.
+Taxon IDs (character) or edge list indexes (integer) can be supplied to the `subset` option to only return information for some taxa.
 
 ```{r}
 supertaxa(tax, subset = "12")
@@ -309,16 +309,16 @@ leaves(tax, return_type = "name")
 
 #### other functions
 
-There are many other functions to interact with `taxonomy` object, such as `stems` and `n_subtaxa`, but these will not be described here for now. 
+There are many other functions to interact with `taxonomy` object, such as `stems` and `n_subtaxa`, but these will not be described here for now.
 
 ### The "taxmap" class
 
-The `taxmap` class is used to store any number of tables, lists, or vectors associated with taxa. 
+The `taxmap` class is used to store any number of tables, lists, or vectors associated with taxa.
 It is basically the same as the `taxonomy` class, but with the following additions:
 
 * A list called `data` that stores arbitrary user data associated with taxa
 * A list called `funcs` that stores user defined functions
-  
+
 
 ```{r}
 info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato"),
@@ -352,7 +352,7 @@ my_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                     funcs = list(reaction = reaction))
 ```
 
-In most functions that work with taxmap objects, the names of list/vector datasets, table columns, or functions can be used as if they were separate variables on their own. 
+In most functions that work with taxmap objects, the names of list/vector datasets, table columns, or functions can be used as if they were separate variables on their own.
 In the case of functions, instead of returning the function itself, the results of the functions are returned.
 To see what variables can be used this way, use `all_names`.
 
@@ -360,33 +360,33 @@ To see what variables can be used this way, use `all_names`.
 all_names(my_taxmap)
 ```
 
-For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the same effect inside manipulation functions like `filter_taxa` described below. 
+For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the same effect inside manipulation functions like `filter_taxa` described below.
 To get the values of these variables, use `get_data`.
 
 ```{r}
 get_data(my_taxmap)
 ```
 
-Note how "taxon_names" and "dangerous" are used below. 
+Note how "taxon_names" and "dangerous" are used below.
 
 #### Filtering
 
 In addition to all of the functions like `subtaxa` that work with `taxonomy`, `taxmap` has a set of functions to manipulate data in a taxonomic context using functions based on **dplyr**.
 Like many operations on `taxmap` objects, there are a pair of functions that modify the taxa as well as the associated data, which we call "observations".
-The `filter_taxa` and `filter_obs` functions are an example of such a pair that can filter taxa and observations respectively. 
+The `filter_taxa` and `filter_obs` functions are an example of such a pair that can filter taxa and observations respectively.
 For example, we can use `filter_taxa` to subset all taxa with a name starting with "t":
 
 ```{r}
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"))
 ```
-There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes. 
+There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes.
 
 ```{r}
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "17")
 ```
 
 There are many options for `filter_taxa` that make it very flexible.
-For example, the `supertaxa` option can make all the supertaxa of selected taxa be preserved. 
+For example, the `supertaxa` option can make all the supertaxa of selected taxa be preserved.
 
 ```{r}
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"), supertaxa = TRUE)
@@ -422,7 +422,7 @@ mutate_obs(my_taxmap, "info",
            newer_col = paste0(new_col, "er!"))
 ```
 
-#### Subsetting columns 
+#### Subsetting columns
 
 Subsetting columns in tabular datasets is done using `select_obs`.
 
@@ -439,7 +439,7 @@ select_obs(my_taxmap, "info", matches("^dange"))
 
 #### Sorting
 
-Sorting the edge list and observations is done using `arrage_taxa` and `arrange_obs`. 
+Sorting the edge list and observations is done using `arrage_taxa` and `arrange_obs`.
 
 ```{r}
 arrange_taxa(my_taxmap, taxon_names)
