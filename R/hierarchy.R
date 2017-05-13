@@ -1,7 +1,8 @@
 #' Hierarchy class
 #'
 #' @export
-#' @param ... Any number of object of class `Taxon`
+#' @param ... Any number of object of class `Taxon` or taxonomic names as
+#' character strings
 #' @return An `R6Class` object of class `Hierarchy`
 #'
 #' @details on initialize, function sorts the taxon list, see
@@ -37,6 +38,7 @@ hierarchy <- function(...) {
 
 Hierarchy <- R6::R6Class(
   "Hierarchy",
+  lock_objects = TRUE,
   public = list(
     taxa = NULL,
     ranklist = NULL,
@@ -44,13 +46,21 @@ Hierarchy <- R6::R6Class(
     initialize = function(...) {
       input <- unlist(list(...))
 
+      if (!all(vapply(input, function(x)
+        any(class(x) %in% c('character', 'Taxon')), logical(1)))
+      ) {
+        stop(
+          "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'",
+          call. = FALSE)
+      }
+
       # If character strings are supplied, convert to taxa
       char_input_index <- which(lapply(input, class) == "character")
       input[char_input_index] <- lapply(input[char_input_index], taxon)
 
       # Parse input
       all_have_ranks <- all(vapply(input,
-                                   function(x) ! is.null(x$rank$name),
+                                   function(x) !is.null(x$rank$name),
                                    logical(1)))
       if (all_have_ranks) {
         self$taxa <- private$sort_hierarchy(input)
@@ -61,8 +71,8 @@ Hierarchy <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, "<Hierarchy>\n"))
-      cat("  no. taxon's: ", length(self$taxa), "\n")
       if (length(self$taxa) > 0) {
+        cat("  no. taxon's: ", length(self$taxa), "\n")
         for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
           cat(
             sprintf("  %s / %s / %s",
@@ -72,6 +82,8 @@ Hierarchy <- R6::R6Class(
             ), "\n")
         }
         if (length(self$taxa) > 10) cat("  ...")
+      } else {
+        cat("  Empty hierarchy")
       }
       invisible(self)
     }
