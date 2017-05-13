@@ -54,4 +54,7 @@ res$ranklist
 
 # pop off a rank
 res$pop("family")
+
+# pick a rank
+res$pick("family")
 }

@@ -42,6 +42,9 @@
 #'
 #' # pop off a rank
 #' res$pop("family")
+#'
+#' # pick a rank
+#' res$pick("family")
 
 hierarchy <- function(...) {
   Hierarchy$new(...)
@@ -91,6 +94,14 @@ Hierarchy <- R6::R6Class(
     pop = function(rank_names) {
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       todrop <- which(taxa_rks %in% rank_names)
+      self$taxa[todrop] <- NULL
+      self$ranklist[names(self$ranklist) %in% rank_names] <- NULL
+      self
+    },
+
+    pick = function(rank_names) {
+      taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
+      todrop <- which(!taxa_rks %in% rank_names)
       self$taxa[todrop] <- NULL
       self$ranklist[names(self$ranklist) %in% rank_names] <- NULL
       self

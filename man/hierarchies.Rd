@@ -4,7 +4,7 @@
 \alias{hierarchies}
 \title{Make a set of many Hierarchy class objects}
 \usage{
-hierarchies(...)
+hierarchies(..., .list = NULL)
 }
 \arguments{
 \item{...}{Any number of object of class \code{Hierarchy}}

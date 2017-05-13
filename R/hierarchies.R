@@ -39,8 +39,10 @@
 #' hier2 <- hierarchy(c, b, a)
 #'
 #' hierarchies(hier1, hier2)
-hierarchies <- function(...) {
-  structure(list(...), class = "hierarchies")
+hierarchies <- function(..., .list = NULL) {
+  x <- list(...)
+  if (!is.null(.list)) x <- .list
+  structure(x, class = "hierarchies")
 }
 
 #' @export
