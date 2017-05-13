@@ -8,6 +8,9 @@ r:
 
 r_check_args: "--as-cran"
 
+r_github_packages:
+  - tidyverse/dplyr
+
 after_success:
   - Rscript -e 'library(covr);codecov()'
 
