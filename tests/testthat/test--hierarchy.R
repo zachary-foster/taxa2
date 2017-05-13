@@ -10,20 +10,22 @@ solanaceae <- taxon(
 solanum <- taxon(
   name = taxon_name("Solanum")
 )
-lycopersicum <- taxon(
-  name = taxon_name("lycopersicum")
+sl <- taxon(
+  name = taxon_name("Solanum lycopersicum")
 )
 
 
 test_that("Characters as inputs", {
-  aa <- hierarchy(plantae, solanaceae, solanum, lycopersicum)
+  aa <- hierarchy(plantae, solanaceae, solanum, sl)
 
   expect_is(aa, "Hierarchy")
   expect_is(aa$taxa, "list")
   expect_is(aa$taxa[[1]], "Taxon")
   expect_is(aa$print, "function")
-  expect_equal(aa,
-               hierarchy("Plantae", "Solanaceae", "Solanum", "lycopersicum"))
+  expect_equal(
+    aa,
+    hierarchy("Plantae", "Solanaceae", "Solanum", "Solanum lycopersicum")
+  )
 })
 
 
@@ -45,6 +47,41 @@ test_that("hierarchy - empty", {
   )
 })
 
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = "kingdom"
+)
+solanaceae <- taxon(
+  name = taxon_name("Solanaceae"),
+  rank = "family"
+)
+solanum <- taxon(
+  name = taxon_name("Solanum"),
+  rank = "genus"
+)
+sl <- taxon(
+  name = taxon_name("Solanum lycopersicum"),
+  rank = "species"
+)
+
+test_that("hierarchy - print when not empty", {
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Plantae / kingdom /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanaceae / family /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanum / genus /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanum lycopersicum / species /"
+  )
+})
 
 
 test_that("hierarchy fails well", {

@@ -77,6 +77,20 @@ test_that("hierarchies - empty", {
   expect_equal(length(aa), 0)
 })
 
+
+test_that("hierarchies - print when not empty", {
+  expect_output(
+    print(hierarchies(hier1)),
+    "Poaceae / Poa / Poa annua"
+  )
+
+  expect_output(
+    print(hierarchies(hier1, hier2)),
+    "Poaceae / Poa / Poa annua \n  Felidae / Puma / Puma concolor"
+  )
+})
+
+
 test_that("hierarchies fails well", {
   expect_error(hierarchies(4),
                "all inputs to 'hierarchies' must be of class 'Hierarchy'")
