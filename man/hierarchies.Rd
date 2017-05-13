@@ -8,6 +8,8 @@ hierarchies(..., .list = NULL)
 }
 \arguments{
 \item{...}{Any number of object of class \code{Hierarchy}}
+
+\item{.list}{Any number of object of class \code{Hierarchy} in a list}
 }
 \value{
 An \code{R6Class} object of class \code{Hierarchy}

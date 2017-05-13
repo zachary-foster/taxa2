@@ -19,8 +19,7 @@ pop.default <- function(.data, ...) {
 
 #' @export
 pop.Hierarchy <- function(.data, ...){
-  #nms <- dplyr::vars(...)
-  nms <- vars(...)
+  nms <- dplyr::vars(...)
   nms <- vapply(nms, function(z) as.character(z$expr), "", USE.NAMES = FALSE)
   .data$pop(nms)
 }

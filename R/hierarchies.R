@@ -2,6 +2,7 @@
 #'
 #' @export
 #' @param ... Any number of object of class `Hierarchy`
+#' @param .list Any number of object of class `Hierarchy` in a list
 #' @return An `R6Class` object of class `Hierarchy`
 #' @examples
 #' x <- taxon(
