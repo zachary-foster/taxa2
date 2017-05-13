@@ -43,7 +43,7 @@ Taxon <- R6::R6Class(
     ) {
       assert(name, c('TaxonName', 'character'))
       assert(rank, c('TaxonRank', 'character'))
-      assert(id, c('TaxonId', 'character'))
+      assert(id, c('TaxonId', 'character', 'numeric', 'integer'))
       assert(authority, 'character')
 
       # Convert characters to appropriate classes
