@@ -24,6 +24,14 @@ test_that("taxa - empty", {
   expect_equal(length(aa), 0)
 })
 
+test_that("taxa - print method", {
+  # no inputs
+  expect_output(print(taxa_()), "<taxa>")
+  expect_output(print(taxa_()), "no\\. taxa:  0")
+  expect_output(print(taxa_(x)), "no\\. taxa:  1")
+  expect_output(print(taxa_(x)), "Poa annua / species / 93036")
+})
+
 test_that("taxa fails well", {
   expect_error(taxa_(5), "all inputs to 'taxa_' must be of class 'Taxon'")
   expect_error(taxa_(mtcars), "all inputs to 'taxa_' must be of class 'Taxon'")

@@ -30,9 +30,7 @@ TaxonId <- R6::R6Class(
     id = NULL,
     database = NULL,
 
-    initialize = function(
-      id = NULL, database = NULL
-    ) {
+    initialize = function(id = NULL, database = NULL) {
       assert(id, c("character", "integer", "numeric"))
       assert(database, c("character", "TaxonDatabase"))
 

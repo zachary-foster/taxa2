@@ -19,8 +19,8 @@
 #'   id = taxon_id(93036)
 #' ))
 #' x$name
+#' x$rank
 #' x$id
-#' x$database
 taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
   Taxon$new(
     name = name,

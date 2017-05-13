@@ -58,6 +58,15 @@ test_that("hierarchies - empty", {
   expect_null(aa[[1]]$taxa)
   expect_null(aa[[2]]$taxa)
 
+  # prints 'Empty hierarchy'
+  expect_output(
+    print(hierarchies(hierarchy())),
+    "Empty hierarchy"
+  )
+  expect_output(
+    print(hierarchies(hierarchy(), hierarchy())),
+    "Empty hierarchy\n  Empty hierarchy"
+  )
 
   aa <- hierarchies()
 

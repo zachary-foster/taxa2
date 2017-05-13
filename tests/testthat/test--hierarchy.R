@@ -33,6 +33,16 @@ test_that("hierarchy - empty", {
   expect_is(aa, "Hierarchy")
   expect_null(aa$taxa)
   expect_null(aa$ranklist)
+
+  # prints 'Empty hierarchy'
+  expect_output(
+    print(hierarchy()),
+    "Empty hierarchy"
+  )
+  expect_output(
+    print(hierarchy()),
+    "<Hierarchy>"
+  )
 })
 
 
