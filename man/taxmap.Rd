@@ -133,6 +133,13 @@ phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
                   "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
                   "63604565-0406-460b-8cb8-1abe954b3f3a")
 
+foods <- list(c("mammals", "birds"),
+              c("cat food", "mice"),
+              c("insects"),
+              c("Most things, but especially anything rare or expensive"),
+              c("light", "dirt"),
+              c("light", "dirt"))
+
 reaction <- function(x) {
   ifelse(x$data$info$dangerous,
          paste0("Watch out! That ", x$data$info$name, " might attack!"),
@@ -141,6 +148,7 @@ reaction <- function(x) {
 
 ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                     data = list(info = info,
-                                phylopic_ids = phylopic_ids),
+                                phylopic_ids = phylopic_ids,
+                                foods = foods),
                     funcs = list(reaction = reaction))
 }

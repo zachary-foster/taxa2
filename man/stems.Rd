@@ -32,3 +32,8 @@ object. Stem taxa are all those from the roots to the first taxon with more
 than one subtaxon. \preformatted{ obj$stems(subset = NULL, simplify = FALSE,
 return_type = "id", exclude_leaves = FALSE) stems(obj, ...)}
 }
+\seealso{
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{subtaxa}},
+  \code{\link{supertaxa}}
+}

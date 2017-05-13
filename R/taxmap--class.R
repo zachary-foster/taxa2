@@ -77,7 +77,7 @@ Taxmap <- R6::R6Class(
 
       # Get column names in each table, removing 'taxon_id'
       is_table <- vapply(self$data, is.data.frame, logical(1))
-      if (tables) {
+      if (tables && length(self$data[is_table]) > 0) {
         table_col_names <- unlist(lapply(self$data[is_table], colnames))
         names(table_col_names) <- paste0("data$",
                                          rep(names(self$data[is_table]),
@@ -88,15 +88,16 @@ Taxmap <- R6::R6Class(
       }
 
       # Get other object names in data
-      if (others) {
-        other_names <- names(self$data[!is_table])
+      is_other <- !is_table
+      if (others && length(self$data[is_other]) > 0) {
+        other_names <- names(self$data[is_other])
         names(other_names) <- rep("data", length(other_names))
         output <- c(output, other_names)
       }
 
 
       # Get function names
-      if (funcs) {
+      if (funcs && length(self$funcs) > 0) {
         func_names <- names(self$funcs)
         names(func_names) <- rep("funcs", length(func_names))
         output <- c(output, func_names)
@@ -140,14 +141,22 @@ Taxmap <- R6::R6Class(
     },
 
     # Get data by name
-    get_data = function(name) {
-      my_names <- self$all_names()
+    get_data = function(name = NULL, ...) {
+      # Get default if name is NULL
+      if (is.null(name)) {
+        name = self$all_names(...)
+      }
+
+      # Check that names provided are valid
+      my_names <- self$all_names(...)
       if (any(unknown <- !name %in% my_names)) {
         stop(paste0("Cannot find the following data: ",
                     paste0(name[unknown], collapse = ", "), "\n ",
                     "Valid choices include: ",
                     paste0(my_names, collapse = ", "), "\n "))
       }
+
+      # Format output
       name <- my_names[match(name, my_names)]
       output <- lapply(names(name),
                        function(x) eval(parse(text = paste0("self$", x))))
@@ -172,11 +181,6 @@ Taxmap <- R6::R6Class(
       self$get_data(my_names_used)
     },
 
-    # Return all data
-    all_data = function(...) {
-      self$get_data(self$all_names(...))
-    },
-
     obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
@@ -188,8 +192,12 @@ Taxmap <- R6::R6Class(
       }
 
       # Get observations of taxa
-      if (recursive) {
-        my_subtaxa <- self$subtaxa(subset = unname(subset), recursive = TRUE,
+      if (is.logical(recursive) && recursive == FALSE) {
+        recursive = 0
+      }
+      if (recursive || is.numeric(recursive)) {
+        my_subtaxa <- self$subtaxa(subset = unname(subset),
+                                   recursive = recursive,
                                    include_input = TRUE, return_type = "index")
         #unname is neede for some reason.. something to look into...
       } else {
@@ -239,21 +247,24 @@ Taxmap <- R6::R6Class(
       }
 
       # Get taxa of subset
+      if (is.logical(subtaxa) && subtaxa == FALSE) {
+        subtaxa = 0
+      }
+      if (is.logical(supertaxa) && supertaxa == FALSE) {
+        supertaxa = 0
+      }
       taxa_subset <- unique(c(which(selection),
-                              if (subtaxa) {
-                                self$subtaxa(subset = selection,
-                                             recursive = TRUE,
+                              self$subtaxa(subset = selection,
+                                           recursive = subtaxa,
+                                           return_type = "index",
+                                           include_input = FALSE,
+                                           simplify = TRUE),
+                              self$supertaxa(subset = selection,
+                                             recursive = supertaxa,
                                              return_type = "index",
-                                             include_input = FALSE,
-                                             simplify = TRUE)
-                              },
-                              if (supertaxa) {
-                                self$supertaxa(subset = selection,
-                                               recursive = TRUE,
-                                               return_type = "index",
-                                               na = FALSE, simplify = TRUE,
-                                               include_input = FALSE)
-                              }))
+                                             na = FALSE, simplify = TRUE,
+                                             include_input = FALSE)
+      ))
 
       # Invert selection
       if (invert) {
@@ -333,21 +344,9 @@ Taxmap <- R6::R6Class(
         }
 
         obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
-        if (taxonless[my_index]) {
-          if (is.data.frame(self$data[[my_index]])) {
-            self$data[[my_index]][! obs_subset, "taxon_id"] <- as.character(NA)
-          } else {
-            names(self$data[[my_index]])[! obs_subset] <- as.character(NA)
-          }
-        } else {
-          if (is.data.frame(self$data[[my_index]])) {
-            self$data[[my_index]] <-
-              self$data[[my_index]][obs_subset, , drop = FALSE]
-          } else {
-            self$data[[my_index]] <- self$data[[my_index]][obs_subset]
-          }
-        }
-
+        private$remove_obs(dataset = my_index,
+                           indexes = obs_subset,
+                           unname_only = taxonless[my_index])
       }
       unused_output <- lapply(seq_along(self$data), process_one)
 
@@ -397,7 +396,7 @@ Taxmap <- R6::R6Class(
 
       # Remove observations
       data_taxon_ids <- get_data_taxon_ids(self$data[[target]])
-      self$data[[target]] <- self$data[[target]][selection, , drop = FALSE]
+      private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
       if (! unobserved & ! is.null(data_taxon_ids)) {
@@ -421,6 +420,11 @@ Taxmap <- R6::R6Class(
       # Check that the target data exists
       private$check_dataset_name(target)
 
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
+
       self$data[[target]] <-
         dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
                          dplyr::select(self$data[[target]], ...))
@@ -431,6 +435,11 @@ Taxmap <- R6::R6Class(
     mutate_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
+
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
 
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
@@ -447,6 +456,11 @@ Taxmap <- R6::R6Class(
     transmute_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
+
+      # Check that the target is a table
+      if (! is.data.frame(self$data[[target]])) {
+        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      }
 
       if ("taxon_id" %in% colnames(self$data[[target]])) {
         result <- list(taxon_id = self$data[[target]]$taxon_id)
@@ -470,17 +484,26 @@ Taxmap <- R6::R6Class(
       # Check that the target data exists
       private$check_dataset_name(target)
 
+      # Sort observations
       data_used <- self$data_used(...)
       data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
-      if (length(data_used) == 0) {
-        self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
-      } else {
-        target_with_extra_cols <-
-          dplyr::bind_cols(data_used, self$data[[target]])
-        self$data[[target]] <-
-          dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      if (is.data.frame(self$data[[target]])) { # if it is a table
+        if (length(data_used) == 0) {
+          self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
+        } else {
+          target_with_extra_cols <-
+            dplyr::bind_cols(data_used, self$data[[target]])
+          self$data[[target]] <-
+            dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+        }
+      } else { # if it is a list or vector
+        dummy_table <- data.frame(index = seq_along(self$data[[target]]))
+        if (length(data_used)!= 0) {
+          dummy_table <- dplyr::bind_cols(data_used, dummy_table)
+        }
+        dummy_table <- dplyr::arrange(dummy_table, ...)
+        self$data[[target]] <- self$data[[target]][dummy_table$index]
       }
-
       return(self)
     },
 
@@ -512,9 +535,16 @@ Taxmap <- R6::R6Class(
       obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
                                         data = data_used)
 
+      # Get length of target
+      if (is.data.frame(self$data[[target]])) {
+        target_length <- nrow(self$data[[target]])
+      } else {
+        target_length <- length(self$data[[target]])
+      }
+
       # Calculate taxon component of taxon weights
       if (is.null(taxon_weight)) {
-        obs_taxon_weight <- rep(1, nrow(self$data[[target]]))
+        obs_taxon_weight <- rep(1, target_length)
       } else {
         obs_index <- match(get_data_taxon_ids(self$data[[target]]),
                            self$taxon_ids())
@@ -532,7 +562,7 @@ Taxmap <- R6::R6Class(
 
       # Calculate observation component of observation weights
       if (is.null(obs_weight)) {
-        obs_weight <- rep(1, nrow(self$data[[target]]))
+        obs_weight <- rep(1, target_length)
       }
       obs_weight <- obs_weight / sum(obs_weight)
 
@@ -543,7 +573,7 @@ Taxmap <- R6::R6Class(
       weight <- weight / sum(weight)
 
       # Sample observations
-      sampled_rows <- sample.int(nrow(self$data[[target]]), size = size,
+      sampled_rows <- sample.int(target_length, size = size,
                                  replace = replace, prob = weight)
       self$filter_obs(target, sampled_rows, ...)
     },
@@ -552,8 +582,16 @@ Taxmap <- R6::R6Class(
                                taxon_weight = NULL, obs_weight = NULL,
                                use_supertaxa = TRUE,
                                collapse_func = mean, ...) {
+      # Get length of target
+      if (is.data.frame(self$data[[target]])) {
+        target_length <- nrow(self$data[[target]])
+      } else {
+        target_length <- length(self$data[[target]])
+      }
+
+
       self$sample_n_obs(target = target,
-                        size = size * nrow(self$data[[target]]),
+                        size = size * target_length,
                         replace = replace,
                         taxon_weight = taxon_weight, obs_weight = obs_weight,
                         use_supertaxa = use_supertaxa,
@@ -629,11 +667,30 @@ Taxmap <- R6::R6Class(
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
                              "n_subtaxa", "n_subtaxa_1"),
+
     check_dataset_name = function(target) {
       if (! target %in% names(self$data)) {
         stop(paste0("The target `", target, "` is not the name of a data set.",
                     " Valid targets include: ",
                     paste0(names(self$data), collapse = ", ")))
+      }
+    },
+
+    # Remove observations from a particular dataset or just remove the taxon ids
+    remove_obs = function(dataset, indexes, unname_only = FALSE) {
+      if (unname_only) {
+        if (is.data.frame(self$data[[dataset]])) {
+          self$data[[dataset]][! indexes, "taxon_id"] <- as.character(NA)
+        } else {
+          names(self$data[[dataset]])[! indexes] <- as.character(NA)
+        }
+      } else {
+        if (is.data.frame(self$data[[dataset]])) {
+          self$data[[dataset]] <-
+            self$data[[dataset]][indexes, , drop = FALSE]
+        } else {
+          self$data[[dataset]] <- self$data[[dataset]][indexes]
+        }
       }
     }
   )

@@ -11,15 +11,17 @@ information to be queried.}
 \code{taxon_data} for which supertaxa will be returned. Default: All taxa
 in \code{obj} will be used.}
 
-\item{recursive}{(\code{logical}) If \code{FALSE}, only return the supertaxa
-one level above the target taxa. If \code{TRUE}, return all the supertaxa
-of every supertaxa, etc.}
+\item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
+supertaxa one rank above the target taxa. If \code{TRUE}, return all the
+supertaxa of every supertaxa, etc. Positive numbers indicate the number of
+recursions (i.e. number of ranks above the target taxon to return). \code{1} is
+equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
 
-\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results
-into a single vector of unique values.}
+\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results into a
+single vector of unique values.}
 
-\item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are
-included in the output}
+\item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in
+the output}
 
 \item{return_type}{(\code{logical}) Controls output type: "index", "id",
 "taxa", or "hierarchies". Note that "index" is the index of the edge list,
@@ -44,5 +46,7 @@ TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) supertaxa(obj, ...)}
 }
 \seealso{
-Other taxmap taxonomy functions: \code{\link{obs}}
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{stems}},
+  \code{\link{subtaxa}}
 }

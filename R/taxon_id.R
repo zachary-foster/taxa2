@@ -6,11 +6,6 @@
 #'
 #' @return An `R6Class` object of class `TaxonId`
 #'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
-#'
 #' @examples
 #' (x <- taxon_id(12345))
 #' x$id
@@ -53,7 +48,8 @@ TaxonId <- R6::R6Class(
     print = function(indent = "") {
       cat(paste0(indent, sprintf("<TaxonId> %s\n", self$id)))
       cat(paste0(indent, paste0("  database: ",
-                                self$database$name %||% "none", "\n")))
+                                get_database_name(self$database) %||% "none",
+                                "\n")))
       invisible(self)
     }
   )

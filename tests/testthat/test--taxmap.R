@@ -115,6 +115,13 @@ phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
                   "b6400f39-345a-4711-ab4f-92fd4e22cb1a",
                   "63604565-0406-460b-8cb8-1abe954b3f3a")
 
+foods <- list(c("mammals", "birds"),
+              c("cat food", "mice"),
+              c("insects"),
+              c("Most things, but especially anything rare or expensive"),
+              c("light", "dirt"),
+              c("light", "dirt"))
+
 reaction <- function(x) {
   ifelse(x$data$info$dangerous,
          paste0("Watch out! That ", x$data$info$name, " might attack!"),
@@ -123,7 +130,8 @@ reaction <- function(x) {
 
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
                     data = list(info = info,
-                                phylopic_ids = phylopic_ids),
+                                phylopic_ids = phylopic_ids,
+                                foods = foods),
                     funcs = list(reaction = reaction))
 
 
@@ -134,7 +142,7 @@ test_that("Print methods works", {
   x$data$more_data <- list(1, 2, 3)
   x$data$even_more <- list(1, 2, 3, 4)
   expect_output(print(x),
-                "<Taxmap>.+17 taxa.+17 edges.+4 data sets.+info.+phylopic_ids.+more_data.+And 1 more data sets.+1 functions.+reaction")
+                "<Taxmap>.+17 taxa.+17 edges.+1 functions.+reaction")
 })
 
 ### NSE helpers
@@ -157,7 +165,7 @@ test_that("Names of functions are accessible by NSE", {
 test_that("Names of functions are accessible by NSE", {
   expected_others <-
     names(test_obj$data)[sapply(test_obj$data,
-                                 function(x) ! "data.frame" %in% class(x))]
+                                function(x) ! "data.frame" %in% class(x))]
   expect_true(all(expected_others %in% test_obj$all_names()))
   expect_false(any(expected_others %in% test_obj$all_names(others = FALSE)))
 })
@@ -188,16 +196,16 @@ test_that("Names in basic expressions can be found by NSE", {
 test_that("Names in complex expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa", "n_legs", "taxon_ids", "dangerous", "reaction") %in%
                     test_obj$names_used((((((n_legs))))),
-                                         function(x) length(taxon_ids) + x,
-                                         {{n_subtaxa}},
-                                         taxon_ids[n_subtaxa[dangerous]],
-                                         reaction(n_subtaxa))))
+                                        function(x) length(taxon_ids) + x,
+                                        {{n_subtaxa}},
+                                        taxon_ids[n_subtaxa[dangerous]],
+                                        reaction(n_subtaxa))))
 })
 
 test_that("Names in invalid expressions can be found by NSE", {
   expect_true(all(c("n_subtaxa")
                   %in% test_obj$names_used(not_a_variable == n_subtaxa,
-                                            aslkadsldsa)))
+                                           aslkadsldsa)))
 })
 
 #### get_data
@@ -212,7 +220,7 @@ test_that("NSE values can be found", {
 })
 
 test_that("All valid NSE values can be found", {
-  expect_equal(names(all_data(test_obj)), unname(all_names(test_obj)))
+  expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
 
@@ -225,6 +233,8 @@ test_that("Mapping between table observations and the edge list works", {
   expect_true(all(sapply(result, class) == "integer"))
   expect_identical(names(result), test_obj$taxon_ids())
   expect_identical(result[["1"]], 1:4)
+  expect_identical(result, test_obj$obs("phylopic_ids"))
+  expect_identical(result, test_obj$obs("foods"))
 })
 
 test_that("Mapping between a subset of observations and the edge list works", {
@@ -261,27 +271,40 @@ test_that("Default taxon filtering works", {
   expect_equal(result$taxon_names(), c("11" = "Solanum"))
   expect_equal(as.character(result$data$info$name), c("tomato", "potato"))
   expect_true(length(result$data$phylopic_ids) == 2)
+  expect_true(length(result$data$foods) == 2)
 })
 
 test_that("Subtaxa can be included when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", subtaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "lycopersicum", "tuberosum"))
+  expect_equal(filter_taxa(test_obj, 1, subtaxa = TRUE),
+               filter_taxa(test_obj, 1, subtaxa = -1))
+  expect_equal(filter_taxa(test_obj, 1, subtaxa = FALSE),
+               filter_taxa(test_obj, 1, subtaxa = 0))
 })
 
 test_that("Supertaxa can be included when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", supertaxa = TRUE)
   expect_equivalent(result$taxon_names(),
                     c("Solanum", "Solanaceae", "Plantae"))
+  expect_equal(filter_taxa(test_obj, 16, supertaxa = TRUE),
+               filter_taxa(test_obj, 16, supertaxa = -1))
+  expect_equal(filter_taxa(test_obj, 16, supertaxa = FALSE),
+               filter_taxa(test_obj, 16, supertaxa = 0))
 })
 
 test_that("Observations can be preserved when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", reassign_obs = FALSE)
   expect_equal(nrow(result$data$info), 0)
+  expect_equal(length(result$data$phylopic_ids), 0)
+  expect_equal(length(result$data$foods), 0)
   result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE)
   expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "11", "11"))
+  expect_equal(names(result$data$phylopic_ids), c(NA, NA, NA, NA, "11", "11"))
+  expect_equal(names(result$data$foods), c(NA, NA, NA, NA, "11", "11"))
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE,
                         reassign_obs = FALSE)
   expect_true(all(is.na(result$data$info$taxon_id)))
@@ -310,6 +333,11 @@ test_that("Edge cases return reasonable outputs", {
 test_that("Default observation filtering works", {
   result <- filter_obs(test_obj, "info", n_legs == 2, dangerous == TRUE)
   expect_equivalent(as.character(result$data$info$name), "human")
+  result <- filter_obs(test_obj, "phylopic_ids", n_legs == 2, dangerous == TRUE)
+  expect_equal(length(result$data$phylopic_ids), 1)
+  result <- filter_obs(test_obj, "foods", n_legs == 2, dangerous == TRUE)
+  expect_equal(result$data$foods[[1]],
+               "Most things, but especially anything rare or expensive")
 })
 
 test_that("Removing taxa when filtering observations work", {
@@ -339,8 +367,11 @@ test_that("Edge cases return reasonable outputs during observation column subset
   result <- select_obs(test_obj, "info")
   expect_equal(colnames(result$data$info), c("taxon_id"))
   expect_error(select_obs(test_obj, "not_valid"),
-                          "not the name of a data set. Valid targets ")
+               "not the name of a data set. Valid targets ")
   expect_error(select_obs(test_obj), " missing, with no default")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 
@@ -362,6 +393,9 @@ test_that("Edge cases for observation column addition",  {
   expect_equal(mutate_obs(test_obj, "info"), test_obj)
   expect_error(mutate_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 
@@ -387,6 +421,9 @@ test_that("Edge cases for observation column addition (transmute) ",  {
   expect_equal("taxon_id", colnames(result$data$info))
   expect_error(transmute_obs(test_obj, "not_valid"),
                "not the name of a data set. Valid targets ")
+  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "phylopic_ids"),
+               'The dataset "phylopic_ids" is not a table')
 })
 
 
@@ -395,13 +432,17 @@ test_that("Edge cases for observation column addition (transmute) ",  {
 test_that("Sorting observations work",  {
   result <- arrange_obs(test_obj, "info", dangerous, name)
   expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
-                                                  test_obj$data$info$name)],
+                                                 test_obj$data$info$name)],
                result$data$info$taxon_id)
   result <- arrange_obs(test_obj, "info", desc(dangerous), desc(name))
   expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$dangerous,
-                                                  test_obj$data$info$name,
-                                                  decreasing = TRUE)],
+                                                 test_obj$data$info$name,
+                                                 decreasing = TRUE)],
                result$data$info$taxon_id)
+  list_results <- arrange_obs(test_obj, "foods", desc(dangerous), desc(name))
+  expect_equal(result$data$info$taxon_id, names(list_results$data$foods))
+  list_results <- arrange_obs(test_obj, "phylopic_ids", desc(dangerous), desc(name))
+  expect_equal(result$data$info$taxon_id, names(list_results$data$phylopic_ids))
 })
 
 test_that("Sorting observations with non-target NSE values",  {
@@ -438,7 +479,31 @@ test_that("Sampling observations works",  {
   expect_equal(nrow(result$data$info), 3)
   result <- sample_n_obs(test_obj, "info", size = 30, replace = TRUE)
   expect_equal(nrow(result$data$info), 30)
+  result <- sample_n_obs(test_obj, "foods", size = 3)
+  expect_equal(length(result$data$foods), 3)
+  result <- sample_n_obs(test_obj, "phylopic_ids", size = 3)
+  expect_equal(length(result$data$phylopic_ids), 3)
 })
+
+test_that("Sampling using data from supertaxa works",  { # Not complete
+  expect_equal({
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = 0)
+  },
+  {
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = FALSE)
+  })
+  expect_equal({
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = -1)
+  },
+  {
+    set.seed(1)
+    sample_n_obs(test_obj, "info", size = 3, use_supertaxa = TRUE)
+  })
+})
+
 
 test_that("Edge cases during sampling observations",  {
   expect_error(sample_n_obs(test_obj),
@@ -453,12 +518,35 @@ test_that("Edge cases during sampling observations",  {
 test_that("Sampling observations works",  {
   result <- sample_n_taxa(test_obj, size = 3)
   expect_equal(length(result$taxon_ids()), 3)
+  expect_equal(length(result$data$foods), 3)
+  expect_equal(length(result$data$phylopic_ids), 3)
 })
+
 
 test_that("Edge cases during sampling observations",  {
   expect_error(sample_n_taxa(test_obj),
                "missing, with no default")
   expect_error(sample_n_taxa(),
                "missing, with no default")
+})
+
+
+test_that("Sampling observations using data from subtaxa works", { # Not complete
+  expect_equal({
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = 0)
+  },
+  {
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = FALSE)
+  })
+  expect_equal({
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = -1)
+  },
+  {
+    set.seed(1)
+    sample_n_taxa(test_obj, size = 3, use_subtaxa = TRUE)
+  })
 })
 

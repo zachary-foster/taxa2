@@ -8,11 +8,6 @@
 #'
 #' @return An `R6Class` object of class `TaxonDatabase`
 #'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
-#'
 #' @examples
 #' # create a database entry
 #' (x <- taxon_database(

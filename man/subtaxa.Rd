@@ -11,9 +11,13 @@ information to be queried.}
 \code{taxon_data} for which supertaxa will be returned. Default: All taxa
 in \code{obj} will be used.}
 
-\item{recursive}{(\code{logical}) If \code{FALSE}, only return the subtaxa
-one level bwlow the target taxa. If \code{TRUE}, return all the subtaxa of
-every subtaxa, etc.}
+\item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the subtaxa
+one rank below the target taxa. If \code{TRUE}, return all the subtaxa of every
+subtaxa, etc. Positive numbers indicate the number of ranks below the
+immediate subtaxa to return. \code{1} is equivalent to \code{FALSE}. Negative numbers
+are equivalent to \code{TRUE}. Since the algorithm is optimized for traversing
+all of large trees, \code{numeric} values greater than 0 for this option
+actually take slightly longer to compute than either TRUE or FALSE.}
 
 \item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results
 into a single vector of unique values.}
@@ -35,4 +39,9 @@ Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object
 of type \code{taxmap} \preformatted{ obj$subtaxa(subset = NULL, recursive =
 TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
 FALSE) subtaxa(obj, ...)}
+}
+\seealso{
+Other taxonomy indexing functions: \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{stems}},
+  \code{\link{supertaxa}}
 }

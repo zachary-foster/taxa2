@@ -15,9 +15,11 @@ taxon ID.}
 \item{subset}{(\code{character}) Taxon IDs or indexes for which observation
 indexes will be returned. Default: All taxa in \code{obj} will be used.}
 
-\item{recursive}{(\code{logical}) If \code{FALSE}, only return the
-observation assigned to the specified input taxa, not subtaxa. If
-\code{TRUE}, return all the observations of every subtaxa, etc.}
+\item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
+observation assigned to the specified input taxa, not subtaxa. If \code{TRUE},
+return all the observations of every subtaxa, etc. Positive numbers
+indicate the number of ranks below the each taxon to get observations for
+\code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
 
 \item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results
 into a single vector of unique observation indexes.}
@@ -31,8 +33,9 @@ taxa are returned in a single vector.
 \description{
 Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each
 taxon in a given table included in that \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{ obj$obs(data, subset = NULL, recursive = TRUE, simplify =
-FALSE) obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
+\preformatted{
+obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
+obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 }
 \examples{
 # Get indexes of rows corresponding to each taxon
@@ -50,7 +53,4 @@ ex_taxmap$obs("info", recursive = FALSE)
 # Lump all row indexes in a single vector
 ex_taxmap$obs("info", simplify = TRUE)
 
-}
-\seealso{
-Other taxmap taxonomy functions: \code{\link{supertaxa}}
 }

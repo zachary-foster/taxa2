@@ -14,11 +14,15 @@ row indexes of \code{obj$edge_list}} \item{\code{logical}}{A
 \code{obj$edge_list}} } Any variable name that appears in
 \code{obj$all_names()} can be used as if it was a vector on its own.}
 
-\item{subtaxa}{(\code{logical} of length 1) If \code{TRUE}, include subtaxa
-of taxa passing the filter.}
+\item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include
+subtaxa of taxa passing the filter. Positive numbers indicate the number of
+ranks below the target taxa to return. \code{0} is equivalent to \code{FALSE}.
+Negative numbers are equivalent to \code{TRUE}.}
 
-\item{supertaxa}{(\code{logical} of length 1) If \code{TRUE}, include
-supertaxa of taxa passing the filter.}
+\item{supertaxa}{(\code{logical}  or \code{numeric} of length 1) If \code{TRUE}, include
+supertaxa of taxa passing the filter. Positive numbers indicate the number
+of ranks above the target taxa to return. \code{0} is equivalent to \code{FALSE}.
+Negative numbers are equivalent to \code{TRUE}.}
 
 \item{taxonless}{(\code{logical}) If \code{TRUE}, include observations even
 if the taxon they are assigned to is filtered out. Observations assigned to
@@ -61,7 +65,8 @@ this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R
 functions. However, calling the function using the \code{filter_taxa(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
-\preformatted{ obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
+\preformatted{
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
 taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
 filter_taxa(obj, ...)}
 }
@@ -82,9 +87,11 @@ filter_taxa(ex_taxmap, dangerous_taxa)
 
 # Include supertaxa
 filter_taxa(ex_taxmap, 12, supertaxa = TRUE)
+filter_taxa(ex_taxmap, 12, supertaxa = 2)
 
 # Include subtaxa
 filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
+filter_taxa(ex_taxmap, 1, subtaxa = 2)
 
 # Remove rows in data corresponding to removed taxa
 filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))
@@ -94,7 +101,7 @@ filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{mutate_obs}}, \code{\link{sample_frac_obs}},
   \code{\link{sample_frac_taxa}},

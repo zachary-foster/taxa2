@@ -1,20 +1,16 @@
 #' Taxon class
 #'
 #' @export
-#' @param name (character) an TaxonName object or character. if character
+#' @param name a TaxonName object [taxon_name] or character string. if character
 #' passed in, we'll coerce to a TaxonName object internally, required
-#' @param rank (character) an TaxonRank object. if character
+#' @param rank a TaxonRank object [taxon_rank] or character string. if character
 #' passed in, we'll coerce to a TaxonRank object internally, required
-#' @param id (character) an TaxonId object. if character
-#' passed in, we'll coerce to a TaxonId object internally, required
-#' @param authority (character) an TaxonAuthority object, optional
+#' @param id a TaxonId object [taxon_id], numeric/integer, or character string.
+#' if numeric/integer/character passed in, we'll coerce to a TaxonId object
+#' internally, required
+#' @param authority (character) a character string, optional
 #'
 #' @return An `R6Class` object of class `Taxon`
-#'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
 #'
 #' @examples
 #' (x <- taxon(
@@ -69,12 +65,44 @@ Taxon <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
-      cat(paste0(indent, paste0("  name: ", self$name$name %||% "none", "\n")))
-      cat(paste0(indent, paste0("  rank: ", self$rank$name %||% "none", "\n")))
-      cat(paste0(indent, paste0("  id: ", self$id$id %||% "none", "\n")))
+      cat(paste0(indent, paste0("  name: ",
+                                private$get_name() %||% "none", "\n")))
+      cat(paste0(indent, paste0("  rank: ",
+                                private$get_rank() %||% "none", "\n")))
+      cat(paste0(indent, paste0("  id: ",
+                                private$get_id() %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
-                                self$authority$name %||% "none", "\n")))
+                                private$authority %||% "none", "\n")))
       invisible(self)
+    }
+  ),
+
+  private = list(
+    get_name = function() {
+      if ("TaxonName" %in% class(self$name)) {
+        output <- self$name$name
+      } else {
+        output <- self$name
+      }
+      return(output)
+    },
+
+    get_rank = function() {
+      if ("TaxonRank" %in% class(self$rank)) {
+        output <- self$rank$name
+      } else {
+        output <- self$rank
+      }
+      return(output)
+    },
+
+    get_id = function() {
+      if ("TaxonId" %in% class(self$id)) {
+        output <- self$id$id
+      } else {
+        output <- self$id
+      }
+      return(output)
     }
   )
 )

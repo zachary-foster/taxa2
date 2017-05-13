@@ -18,15 +18,17 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 Replace columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
 Any variable name that appears in \code{obj$all_names()} can be used as if it
 was a vector on its own. See \code{\link[dplyr:transmute]{dplyr::transmute()}} for the
-inspiration for this function and more information. \preformatted{
-obj$transmute_obs(target, ...) transmute_obs(obj, target, ...)}
+inspiration for this function and more information.
+\preformatted{
+obj$transmute_obs(target, ...)
+transmute_obs(obj, target, ...)}
 }
 \examples{
 transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{mutate_obs}},
   \code{\link{sample_frac_obs}},

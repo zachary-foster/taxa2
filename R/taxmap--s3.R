@@ -79,22 +79,6 @@ data_used.Taxmap <- function(obj, ...) {
 
 
 #' @export
-all_data <- function(obj, ...) {
-  UseMethod("all_data")
-}
-
-#' @export
-all_data.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-all_data.Taxmap <- function(obj, ...) {
-  obj$all_data(...)
-}
-
-
-#' @export
 filter_taxa <- function(obj, ...) {
   UseMethod("filter_taxa")
 }

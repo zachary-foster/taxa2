@@ -58,3 +58,21 @@ limited_print <- function(chars, prefix = "",
 }
 
 
+#' Return name of database
+#'
+#' This is meant to return the name of a database when it is not known if the
+#' input is a `TaxonDatabase` object or a simple character vecotor.
+#'
+#' @param input Either a character vector or `TaxonDatabase` class
+#'
+#' @return The name of the database
+#'
+#' @keywords internal
+get_database_name <- function(input) {
+  if ("TaxonDatabase" %in% class(input)) {
+    database_name <- input$name
+  } else {
+    database_name <- input
+  }
+  return(database_name)
+}

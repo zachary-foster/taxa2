@@ -25,11 +25,13 @@ calculated). \code{obs_target} must be used with this option.}
 \code{obj$data} that values in \code{obs_weight} corresponds to. Must be
 used when \code{obs_weight} is used.}
 
-\item{use_subtaxa}{(\code{logical} of length 1) Affects how the
+\item{use_subtaxa}{(\code{logical} or \code{numeric} of length 1) Affects how the
 \code{obs_weight} option is used. If \code{TRUE}, the weights for each
 taxon in an observation's classification are multiplied to get the
-observation weight. Otherwise, just the taxonomic level the observation is
-assign to it considered.}
+observation weight. If \code{TRUE} just the taxonomic level the observation is
+assign to it considered. Positive numbers indicate the number of ranks below the
+target taxa to return. \code{0} is equivalent to \code{FALSE}. Negative numbers
+are equivalent to \code{TRUE}.}
 
 \item{collapse_func}{(\code{function} of length 1) If \code{taxon_weight} is
 used and \code{supertaxa} is \code{TRUE}, the weights for each taxon in an
@@ -46,8 +48,9 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 Randomly sample some proportion of taxa from a \code{\link[=taxmap]{taxmap()}} object.
 Weights can be specified for taxa or the observations assigned to them. See
 \code{\link[dplyr:sample_frac]{dplyr::sample_frac()}} for the inspiration for this function.
-\preformatted{ obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight =
-NULL, obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
+\preformatted{
+obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL,
+obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
 sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
 obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
 }
@@ -56,7 +59,7 @@ sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{mutate_obs}},
   \code{\link{sample_frac_obs}},

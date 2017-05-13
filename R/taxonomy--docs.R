@@ -9,6 +9,8 @@
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
+#' @family taxonomy data functions
+#'
 #' @name taxon_ids
 NULL
 
@@ -23,6 +25,8 @@ NULL
 #' taxon_names(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @family taxonomy data functions
 #'
 #' @name taxon_names
 NULL
@@ -40,14 +44,16 @@ NULL
 #'   information to be queried.
 #' @param subset (`character`) `taxon_ids` or indexes of
 #'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#'   in `obj` will be used.
-#' @param recursive (`logical`) If `FALSE`, only return the supertaxa
-#'   one level above the target taxa. If `TRUE`, return all the supertaxa
-#'   of every supertaxa, etc.
-#' @param simplify (`logical`) If `TRUE`, then combine all the results
-#'   into a single vector of unique values.
-#' @param include_input (`logical`) If `TRUE`, the input taxa are
-#'   included in the output
+#' in `obj` will be used.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   supertaxa one rank above the target taxa. If `TRUE`, return all the
+#'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks above the target taxon to return). `1` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
+#' @param include_input (`logical`) If `TRUE`, the input taxa are included in
+#'   the output
 #' @param return_type (`logical`) Controls output type: "index", "id",
 #'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
 #'   not the taxon list.
@@ -60,7 +66,7 @@ NULL
 #'   corresponding to the `subset` argument. If `simplify = TRUE`,
 #'   then unique values are returned in a single vector.
 #'
-#' @family taxmap taxonomy functions
+#' @family taxonomy indexing functions
 #'
 #' @name supertaxa
 NULL
@@ -82,6 +88,8 @@ NULL
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of
 #'   [taxonomy()]
 #'
+#' @family taxonomy indexing functions
+#'
 #' @return `character`
 #'
 #' @name roots
@@ -100,9 +108,13 @@ NULL
 #' @param subset (`character`) `taxon_ids` or indexes of
 #'   `taxon_data` for which supertaxa will be returned. Default: All taxa
 #'   in `obj` will be used.
-#' @param recursive (`logical`) If `FALSE`, only return the subtaxa
-#'   one level bwlow the target taxa. If `TRUE`, return all the subtaxa of
-#'   every subtaxa, etc.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the subtaxa
+#'   one rank below the target taxa. If `TRUE`, return all the subtaxa of every
+#'   subtaxa, etc. Positive numbers indicate the number of ranks below the
+#'   immediate subtaxa to return. `1` is equivalent to `FALSE`. Negative numbers
+#'   are equivalent to `TRUE`. Since the algorithm is optimized for traversing
+#'   all of large trees, `numeric` values greater than 0 for this option
+#'   actually take slightly longer to compute than either TRUE or FALSE.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results
 #'   into a single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are
@@ -114,6 +126,8 @@ NULL
 #' @return If `simplify = FALSE`, then a list of vectors are returned
 #'   corresponding to the `target` argument. If `simplify = TRUE`,
 #'   then the unique values are returned in a single vector.
+#'
+#' @family taxonomy indexing functions
 #'
 #' @name subtaxa
 NULL
@@ -142,6 +156,8 @@ NULL
 #'
 #' @return `character`
 #'
+#' @family taxonomy indexing functions
+#'
 #' @name stems
 NULL
 
@@ -164,6 +180,8 @@ NULL
 #'
 #' @return `character`
 #'
+#' @family taxonomy indexing functions
+#'
 #' @name leaves
 NULL
 
@@ -184,7 +202,7 @@ NULL
 #' @examples
 #' id_classifications(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name id_classifications
 NULL
@@ -206,7 +224,7 @@ NULL
 #' @examples
 #' name_classifications(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name name_classifications
 NULL
@@ -224,7 +242,7 @@ NULL
 #' @examples
 #' n_supertaxa(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_supertaxa
 NULL
@@ -242,7 +260,7 @@ NULL
 #' @examples
 #' n_subtaxa(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_subtaxa
 NULL
@@ -262,7 +280,7 @@ NULL
 #' @examples
 #' n_subtaxa_1(ex_taxmap)
 #'
-#' @family taxon_funcs
+#' @family taxonomy data functions
 #'
 #' @name n_subtaxa_1
 NULL

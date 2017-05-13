@@ -6,16 +6,10 @@
 #'
 #' @return An `R6Class` object of class `TaxonRank`
 #'
-#' @section Methods:
-#' \itemize{
-#'  \item print - print method
-#' }
-#'
 #' @examples
 #' taxon_rank("species")
 #' taxon_rank("genus")
 #' taxon_rank("kingdom")
-#' # taxon_rank("stuff")  # should fail
 #'
 #' (x <- taxon_rank(
 #'   "species",
@@ -46,7 +40,8 @@ TaxonRank <- R6::R6Class(
     print = function(indent = "") {
       cat(paste0(indent, sprintf("<TaxonRank> %s\n", self$name)))
       cat(paste0(indent, paste0("  database: ",
-                                self$database$name %||% "none", "\n")))
+                                get_database_name(self$database) %||% "none",
+                                "\n")))
       invisible(self)
     }
   )

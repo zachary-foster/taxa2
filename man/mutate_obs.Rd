@@ -22,7 +22,9 @@ this function and more information. Calling the function using the
 \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R
 functions. However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
-\preformatted{ obj$mutate_obs(target, ...) mutate_obs(obj, target, ...)}
+\preformatted{
+obj$mutate_obs(target, ...)
+mutate_obs(obj, target, ...)}
 }
 \examples{
 mutate_obs(ex_taxmap, "info",
@@ -31,7 +33,7 @@ mutate_obs(ex_taxmap, "info",
 
 }
 \seealso{
-Other dplyr-like functions: \code{\link{arrange_obs}},
+Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{arrange_taxa}}, \code{\link{filter_obs}},
   \code{\link{filter_taxa}}, \code{\link{sample_frac_obs}},
   \code{\link{sample_frac_taxa}},

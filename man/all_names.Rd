@@ -26,7 +26,8 @@ besides tables.}
 }
 \description{
 Return all the valid names that can be used with non-standard evalulation in
-manipulation functions like \code{filter_taxa}. \preformatted{
+manipulation functions like \code{filter_taxa}.
+\preformatted{
 obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
 }
@@ -39,7 +40,6 @@ ex_taxmap$all_names(funcs = FALSE)
 
 }
 \seealso{
-Other accessors: \code{\link{all_data}},
-  \code{\link{data_used}}, \code{\link{get_data}},
-  \code{\link{names_used}}
+Other accessors: \code{\link{data_used}},
+  \code{\link{get_data}}, \code{\link{names_used}}
 }

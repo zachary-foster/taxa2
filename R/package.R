@@ -1,39 +1,24 @@
 #' taxa
 #'
+#' `taxa` defines taxonomic classes and functions to manipulate them. The
+#' goal is to use these classes as low level fundamental taxonomic classes
+#' that other R packages can build on and use.
+#'
+#' There are two distinct types of classes in `taxa`:
+#' * Classes that are concerned only with taxonomic information: `taxon`,
+#' `taxonomy`, `hierarchy`, etc.
+#' * A class called `taxmap` that is concerned with combining taxonomic
+#' data with user-defined data of any type (e.g. molecular sequences,
+#' abundance counts etc.)
+#'
+#' Checkout the vignette (`browseVignettes("taxa")`) for detailed introduction
+#' and examples.
+#'
 #' @import R6 jsonlite
 #' @name taxa-package
 #' @aliases taxa
 #' @docType package
 #' @keywords package
-NULL
-
-#' A data.frame representing a taxonomic classification.
-#'
-#' Data is from GBIF for the taxon *Bison bison*
-#'
-#' It has the following columns
-#'
-#' \itemize{
-#'   \item name. taxon name
-#'   \item rank. taxon rank
-#'   \item id. taxon id
-#' }
-#'
-#' @name bison_bison
-#' @docType data
-#' @keywords data
-NULL
-
-#' Lookup-table for IDs of taxonomic ranks
-#'
-#' Composed of two columns:
-#' \itemize{
-#'  \item rankid - the ordered identifer value. lower values mean higher rank
-#'  \item ranks - all the rank names that belong to the same level, with
-#'  different variants that mean essentially the same thing
-#' }
-#'
-#' @name ranks_ref
-#' @docType data
-#' @keywords data
+#' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
+#' @author Zachary Foster \email{zacharyfoster1989@@gmail.com}
 NULL
