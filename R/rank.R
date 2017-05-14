@@ -30,9 +30,15 @@ TaxonRank <- R6::R6Class(
     name = NULL,
     database = NULL,
 
-    initialize = function(
-      name = NULL, database = NULL
-    ) {
+    initialize = function(name = NULL, database = NULL) {
+      assert(name, c("character", "TaxonName"))
+      assert(database, c("character", "TaxonDatabase"))
+
+      # Convert characters to appropriate classes
+      if (is.character(database)) {
+        database <- taxon_database(database)
+      }
+
       self$name <- name
       self$database <- database
     },

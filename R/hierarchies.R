@@ -43,6 +43,10 @@
 hierarchies <- function(..., .list = NULL) {
   x <- list(...)
   if (!is.null(.list)) x <- .list
+  if (!all(vapply(x, inherits, logical(1), what = "Hierarchy"))) {
+    stop("all inputs to 'hierarchies' must be of class 'Hierarchy'",
+         call. = FALSE)
+  }
   structure(x, class = "hierarchies")
 }
 
@@ -50,12 +54,18 @@ hierarchies <- function(..., .list = NULL) {
 print.hierarchies <- function(x, ...) {
   cat("<Hierarchies>", "\n")
   cat("  no. hierarchies: ", length(x), "\n")
-  for (i in seq_along(x[1:min(10, length(x))])) {
-    cat(
-      paste0("  ", paste0(vapply(x[[i]]$taxa, function(x) x$name$name, ""),
-                          collapse = " / ")),
-      "\n"
-    )
+  if (length(x)) {
+    for (i in seq_along(x[1:min(10, length(x))])) {
+      if (is.null(x[[i]]$taxa)) {
+        cat("  Empty hierarchy", sep = "\n")
+      } else {
+        cat(
+          paste0("  ", paste0(vapply(x[[i]]$taxa, function(x) x$name$name, ""),
+                              collapse = " / ")),
+          "\n"
+        )
+      }
+    }
   }
   if (length(x) > 10) cat("  ...")
 }

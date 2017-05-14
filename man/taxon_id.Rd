@@ -7,9 +7,9 @@
 taxon_id(id, database = NULL)
 }
 \arguments{
-\item{id}{(character) a taxonomic id required}
+\item{id}{(character/integer/numeric) a taxonomic id, required}
 
-\item{database}{database class object, optional}
+\item{database}{(database) database class object, optional}
 }
 \value{
 An \code{R6Class} object of class \code{TaxonId}

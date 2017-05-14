@@ -1,7 +1,4 @@
-## Testing `hierarchy` class
-
-library(taxa)
-context("Testing the `hierarchy` object")
+context("hierarchy")
 
 ## Creating test data
 plantae <- taxon(
@@ -13,12 +10,85 @@ solanaceae <- taxon(
 solanum <- taxon(
   name = taxon_name("Solanum")
 )
-lycopersicum <- taxon(
-  name = taxon_name("lycopersicum")
+sl <- taxon(
+  name = taxon_name("Solanum lycopersicum")
 )
 
 
 test_that("Characters as inputs", {
-  expect_equal(hierarchy(plantae, solanaceae, solanum, lycopersicum),
-               hierarchy("Plantae", "Solanaceae", "Solanum", "lycopersicum"))
+  aa <- hierarchy(plantae, solanaceae, solanum, sl)
+
+  expect_is(aa, "Hierarchy")
+  expect_is(aa$taxa, "list")
+  expect_is(aa$taxa[[1]], "Taxon")
+  expect_is(aa$print, "function")
+  expect_equal(
+    aa,
+    hierarchy("Plantae", "Solanaceae", "Solanum", "Solanum lycopersicum")
+  )
+})
+
+
+test_that("hierarchy - empty", {
+  aa <- hierarchy()
+
+  expect_is(aa, "Hierarchy")
+  expect_null(aa$taxa)
+  expect_null(aa$ranklist)
+
+  # prints 'Empty hierarchy'
+  expect_output(
+    print(hierarchy()),
+    "Empty hierarchy"
+  )
+  expect_output(
+    print(hierarchy()),
+    "<Hierarchy>"
+  )
+})
+
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = "kingdom"
+)
+solanaceae <- taxon(
+  name = taxon_name("Solanaceae"),
+  rank = "family"
+)
+solanum <- taxon(
+  name = taxon_name("Solanum"),
+  rank = "genus"
+)
+sl <- taxon(
+  name = taxon_name("Solanum lycopersicum"),
+  rank = "species"
+)
+
+test_that("hierarchy - print when not empty", {
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Plantae / kingdom /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanaceae / family /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanum / genus /"
+  )
+  expect_output(
+    print(hierarchy(plantae, solanaceae, solanum, sl)),
+    "Solanum lycopersicum / species /"
+  )
+})
+
+
+test_that("hierarchy fails well", {
+  expect_error(
+    hierarchy(4),
+    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+  expect_error(
+    hierarchy(solanum, 5),
+    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
 })
