@@ -15,6 +15,22 @@ taxon_ids.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+taxon_indexes <- function(obj, ...) {
+  UseMethod("taxon_indexes")
+}
+
+#' @export
+taxon_indexes.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+taxon_indexes.Taxonomy <- function(obj, ...) {
+  obj$taxon_indexes(...)
+}
+
+
+#' @export
 taxon_names <- function(obj, ...) {
   UseMethod("taxon_names")
 }

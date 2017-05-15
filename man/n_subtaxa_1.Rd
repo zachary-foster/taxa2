@@ -23,5 +23,6 @@ n_subtaxa_1(ex_taxmap)
 Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
   \code{\link{name_classifications}},
-  \code{\link{taxon_ids}}, \code{\link{taxon_names}}
+  \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
+  \code{\link{taxon_names}}
 }
