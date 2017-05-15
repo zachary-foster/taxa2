@@ -19,8 +19,8 @@
 #'   id = taxon_id(93036)
 #' ))
 #' x$name
+#' x$rank
 #' x$id
-#' x$database
 taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
   Taxon$new(
     name = name,
@@ -41,6 +41,11 @@ Taxon <- R6::R6Class(
     initialize = function(
       name = NULL, rank = NULL, id = NULL, authority = NULL
     ) {
+      assert(name, c('TaxonName', 'character'))
+      assert(rank, c('TaxonRank', 'character'))
+      assert(id, c('TaxonId', 'character', 'numeric', 'integer'))
+      assert(authority, 'character')
+
       # Convert characters to appropriate classes
       if (is.character(name)) {
         name <- taxon_name(name)

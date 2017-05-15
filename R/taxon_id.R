@@ -1,8 +1,8 @@
 #' TaxonId class
 #'
 #' @export
-#' @param id (character) a taxonomic id required
-#' @param database database class object, optional
+#' @param id (character/integer/numeric) a taxonomic id, required
+#' @param database (database) database class object, optional
 #'
 #' @return An `R6Class` object of class `TaxonId`
 #'
@@ -30,9 +30,15 @@ TaxonId <- R6::R6Class(
     id = NULL,
     database = NULL,
 
-    initialize = function(
-      id = NULL, database = NULL
-    ) {
+    initialize = function(id = NULL, database = NULL) {
+      assert(id, c("character", "integer", "numeric"))
+      assert(database, c("character", "TaxonDatabase"))
+
+      # Convert characters to appropriate classes
+      if (is.character(database)) {
+        database <- taxon_database(database)
+      }
+
       self$id <- id
       self$database <- database
     },

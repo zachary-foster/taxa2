@@ -7,7 +7,8 @@
 hierarchy(...)
 }
 \arguments{
-\item{...}{Any number of object of class \code{Taxon}}
+\item{...}{Any number of object of class \code{Taxon} or taxonomic names as
+character strings}
 }
 \value{
 An \code{R6Class} object of class \code{Hierarchy}
