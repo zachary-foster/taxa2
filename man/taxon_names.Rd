@@ -20,5 +20,5 @@ Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}},
   \code{\link{n_supertaxa}},
   \code{\link{name_classifications}},
-  \code{\link{taxon_ids}}
+  \code{\link{taxon_ids}}, \code{\link{taxon_indexes}}
 }

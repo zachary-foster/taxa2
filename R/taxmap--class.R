@@ -181,7 +181,7 @@ Taxmap <- R6::R6Class(
       self$get_data(my_names_used)
     },
 
-    obs = function(data, subset = NULL, recursive = TRUE, simplify = FALSE) {
+    obs = function(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
       subset <- format_taxon_subset(names(self$taxa), subset)
       if (length(data) == 1 && # data is name/index of dataset in object
@@ -211,6 +211,12 @@ Taxmap <- R6::R6Class(
       )
       is_null <- vapply(output, is.null, logical(1))
       output[is_null] <- lapply(1:sum(is_null), function(x) numeric(0))
+
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- get_data(ex_taxmap, value)[[1]]
+        output <- lapply(output, function(i) possible_values[i])
+      }
 
       # Reduce dimensionality
       if (simplify) {
@@ -665,8 +671,8 @@ Taxmap <- R6::R6Class(
   ),
 
   private = list(
-    nse_accessible_funcs = c("taxon_names", "taxon_ids", "n_supertaxa",
-                             "n_subtaxa", "n_subtaxa_1"),
+    nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
+                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1"),
 
     check_dataset_name = function(target) {
       if (! target %in% names(self$data)) {

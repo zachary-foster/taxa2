@@ -34,6 +34,10 @@ Taxonomy <- R6::R6Class(
              function(x) x$name$name, character(1))
     },
 
+    # A simple wrapper to make future changes easier
+    taxon_indexes = function() {
+      seq_len(nrow(self$edge_list))
+    },
 
     initialize = function(...) {
       input <- list(...)

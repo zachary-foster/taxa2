@@ -14,6 +14,22 @@
 #' @name taxon_ids
 NULL
 
+#' Get taxon indexes
+#'
+#' Return the taxon indexes in a [taxmap()] object.
+#' They are the indexes of the edge list rows.
+#'
+#' \preformatted{
+#' obj$taxon_indexes()
+#' taxon_indexes(obj, ...)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @family taxonomy data functions
+#'
+#' @name taxon_indexes
+NULL
+
 
 #' Get taxon names
 #'

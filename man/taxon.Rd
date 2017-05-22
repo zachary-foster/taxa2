@@ -32,6 +32,6 @@ Taxon class
   id = taxon_id(93036)
 ))
 x$name
+x$rank
 x$id
-x$database
 }

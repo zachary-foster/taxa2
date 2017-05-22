@@ -4,13 +4,19 @@
 \alias{obs}
 \title{Get data indexes associated with taxa}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The \code{\link[=taxmap]{taxmap()}} object containing
-taxon information to be queried.}
+\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The \code{\link[=taxmap]{taxmap()}} object containing taxon information to
+be queried.}
 
 \item{data}{Either the name of something in \code{obj$data} that has taxon
 information or a an external object with taxon information. For tables,
 there must be a column named "taxon_id" and lists/vectors must be named by
 taxon ID.}
+
+\item{value}{What data to return. This is usually the name of column in a
+table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
+usually only makes sense to use columns in the dataset specified by the
+\code{data} option. By default, the indexes of observation in \code{data} are
+returned.}
 
 \item{subset}{(\code{character}) Taxon IDs or indexes for which observation
 indexes will be returned. Default: All taxa in \code{obj} will be used.}
@@ -21,20 +27,19 @@ return all the observations of every subtaxa, etc. Positive numbers
 indicate the number of ranks below the each taxon to get observations for
 \code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
 
-\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results
-into a single vector of unique observation indexes.}
+\item{simplify}{(\code{logical}) If \code{TRUE}, then combine all the results into a
+single vector of unique observation indexes.}
 }
 \value{
-If \code{simplify = FALSE}, then a list of vectors of observation
-indexes are returned corresponding to the \code{target} argument. If
-\code{simplify = TRUE}, then the observation indexes for all \code{target}
-taxa are returned in a single vector.
+If \code{simplify = FALSE}, then a list of vectors of observation indexes
+are returned corresponding to the \code{target} argument. If \code{simplify = TRUE},
+then the observation indexes for all \code{target} taxa are returned in a single
+vector.
 }
 \description{
-Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each
-taxon in a given table included in that \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{
-obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
+Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each taxon in a
+given table included in that \code{\link[=taxmap]{taxmap()}} object.
+\preformatted{obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
 obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
 }
 \examples{
@@ -52,5 +57,8 @@ ex_taxmap$obs("info", recursive = FALSE)
 
 # Lump all row indexes in a single vector
 ex_taxmap$obs("info", simplify = TRUE)
+
+# Return values from a dataset instead of indexes
+ex_taxmap$obs("info", value = "name")
 
 }
