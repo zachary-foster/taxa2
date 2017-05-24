@@ -119,67 +119,6 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
-    # Looks for names of data in a expression for use with NSE
-    names_used = function(...) {
-      decompose <- function(x) {
-        if (class(x) %in% c("call", "(", "{")) {
-          return(lapply(1:length(x), function(i) decompose(x[[i]])))
-        } else {
-          return(as.character(x))
-        }
-      }
-
-      expressions <- lapply(lazyeval::lazy_dots(...), function(x) x$expr)
-      if (length(expressions) == 0) {
-        return(character(0))
-      } else {
-        names_used <- unlist(lapply(1:length(expressions),
-                                    function(i) decompose(expressions[[i]])))
-        my_names <- self$all_names()
-        return(my_names[my_names %in% names_used])
-      }
-    },
-
-    # Get data by name
-    get_data = function(name = NULL, ...) {
-      # Get default if name is NULL
-      if (is.null(name)) {
-        name = self$all_names(...)
-      }
-
-      # Check that names provided are valid
-      my_names <- self$all_names(...)
-      if (any(unknown <- !name %in% my_names)) {
-        stop(paste0("Cannot find the following data: ",
-                    paste0(name[unknown], collapse = ", "), "\n ",
-                    "Valid choices include: ",
-                    paste0(my_names, collapse = ", "), "\n "))
-      }
-
-      # Format output
-      name <- my_names[match(name, my_names)]
-      output <- lapply(names(name),
-                       function(x) eval(parse(text = paste0("self$", x))))
-      names(output) <- name
-
-      # Run any functions and return their results instead
-      is_func <- vapply(output, is.function, logical(1))
-      output[is_func] <- lapply(output[is_func], function(f) {
-        if (length(formals(f)) == 0) {
-          return(f())
-        } else {
-          return(f(self))
-        }
-      })
-
-      return(output)
-    },
-
-    # Get a list of all data in an expression used with non-standard evaluation
-    data_used = function(...) {
-      my_names_used <- self$names_used(...)
-      self$get_data(my_names_used)
-    },
 
     obs = function(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE) {
       # Parse arguments
@@ -357,12 +296,8 @@ Taxmap <- R6::R6Class(
       unused_output <- lapply(seq_along(self$data), process_one)
 
 
-
       # Remove filtered taxa
-      self$taxa <- self$taxa[self$taxon_ids()[taxa_subset]]
-      self$edge_list <- self$edge_list[taxa_subset, , drop = FALSE]
-      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
-        as.character(NA)
+      private$remove_taxa(taxa_subset)
 
       return(self)
     },

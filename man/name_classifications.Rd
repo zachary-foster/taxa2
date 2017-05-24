@@ -4,7 +4,7 @@
 \alias{name_classifications}
 \title{Get classifications of taxa}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
+\item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}})}
 
 \item{sep}{(\code{character} of length 1) The character(s) to place between
 taxon names}
@@ -13,7 +13,7 @@ taxon names}
 \code{character}
 }
 \description{
-Get classification strings of taxa in an object of type \code{\link[=taxmap]{taxmap()}}
+Get classification strings of taxa in an object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
 composed of taxon names. Each classification is constructed by concatenating
 the taxon names of the given taxon and its supertaxa. \preformatted{
 obj$name_classifications(sep = ";") name_classifications(obj, sep = ";")}

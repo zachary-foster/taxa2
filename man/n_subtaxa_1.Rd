@@ -4,14 +4,14 @@
 \alias{n_subtaxa_1}
 \title{Get number of subtaxa}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
+\item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}})}
 }
 \value{
 \code{numeric}
 }
 \description{
 Get number of subtaxa for each taxon in an object of type
-\code{\link[=taxmap]{taxmap()}}, not including subtaxa of subtaxa etc. This does not
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}, not including subtaxa of subtaxa etc. This does not
 include subtaxa assigned to subtaxa. \preformatted{ obj$n_subtaxa_1()
 n_subtaxa_1(obj)}
 }

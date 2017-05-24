@@ -70,6 +70,83 @@ Taxonomy <- R6::R6Class(
       invisible(self)
     },
 
+    # Returns the names of things to be accessible using non-standard evaluation
+    all_names = function() {
+      output <- c()
+
+      # Add functions included in the package
+      output <- c(output, private$nse_accessible_funcs)
+
+      # Add the name to the name of the name and return
+      names(output) <- paste0(names(output),
+                              ifelse(names(output) == "", "", "$"), output)
+      return(output)
+    },
+
+
+    # Looks for names of data in a expression for use with NSE
+    names_used = function(...) {
+      decompose <- function(x) {
+        if (class(x) %in% c("call", "(", "{")) {
+          return(lapply(1:length(x), function(i) decompose(x[[i]])))
+        } else {
+          return(as.character(x))
+        }
+      }
+
+      expressions <- lapply(lazyeval::lazy_dots(...), function(x) x$expr)
+      if (length(expressions) == 0) {
+        return(character(0))
+      } else {
+        names_used <- unlist(lapply(1:length(expressions),
+                                    function(i) decompose(expressions[[i]])))
+        my_names <- self$all_names()
+        return(my_names[my_names %in% names_used])
+      }
+    },
+
+    # Get data by name
+    get_data = function(name = NULL, ...) {
+      # Get default if name is NULL
+      if (is.null(name)) {
+        name = self$all_names(...)
+      }
+
+      # Check that names provided are valid
+      my_names <- self$all_names(...)
+      if (any(unknown <- !name %in% my_names)) {
+        stop(paste0("Cannot find the following data: ",
+                    paste0(name[unknown], collapse = ", "), "\n ",
+                    "Valid choices include: ",
+                    paste0(my_names, collapse = ", "), "\n "))
+      }
+
+      # Format output
+      name <- my_names[match(name, my_names)]
+      output <- lapply(names(name),
+                       function(x) eval(parse(text = paste0("self$", x))))
+      names(output) <- name
+
+      # Run any functions and return their results instead
+      is_func <- vapply(output, is.function, logical(1))
+      output[is_func] <- lapply(output[is_func], function(f) {
+        if (length(formals(f)) == 0) {
+          return(f())
+        } else {
+          return(f(self))
+        }
+      })
+
+      return(output)
+    },
+
+    # Get a list of all data in an expression used with non-standard evaluation
+    data_used = function(...) {
+      my_names_used <- self$names_used(...)
+      self$get_data(my_names_used)
+    },
+
+
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
                          include_input = FALSE, return_type = "id",
                          na = FALSE) {
@@ -322,11 +399,113 @@ Taxonomy <- R6::R6Class(
       vapply(self$subtaxa(recursive = FALSE, include_input = FALSE,
                           return_type = "index"),
              length, numeric(1))
+    },
+
+    filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
+                           taxonless = FALSE,
+                           reassign_taxa = TRUE, invert = FALSE) {
+
+      # non-standard argument evaluation
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+                                       data = self$data_used(...))
+
+      # convert taxon_ids to logical
+      is_char <- vapply(selection, is.character, logical(1))
+      selection[is_char] <- lapply(selection[is_char],
+                                   function(x) self$taxon_ids() %in% x)
+
+      # convert indexes to logical
+      is_index <- vapply(selection, is.numeric, logical(1))
+      selection[is_index] <- lapply(selection[is_index],
+                                    function(x) 1:nrow(self$edge_list) %in% x)
+
+      # combine filters
+      selection <- Reduce(`&`, selection)
+
+      # default to all taxa if no selection is provided
+      if (is.null(selection)) {
+        selection <- rep(TRUE, length(self$taxon_ids()))
+      }
+
+      # Get taxa of subset
+      if (is.logical(subtaxa) && subtaxa == FALSE) {
+        subtaxa = 0
+      }
+      if (is.logical(supertaxa) && supertaxa == FALSE) {
+        supertaxa = 0
+      }
+      taxa_subset <- unique(c(which(selection),
+                              self$subtaxa(subset = selection,
+                                           recursive = subtaxa,
+                                           return_type = "index",
+                                           include_input = FALSE,
+                                           simplify = TRUE),
+                              self$supertaxa(subset = selection,
+                                             recursive = supertaxa,
+                                             return_type = "index",
+                                             na = FALSE, simplify = TRUE,
+                                             include_input = FALSE)
+      ))
+
+      # Invert selection
+      if (invert) {
+        taxa_subset <- (1:nrow(self$edge_list))[-taxa_subset]
+      }
+
+      # Reassign subtaxa
+      if (reassign_taxa) {
+        reassign_one <- function(parents) {
+          included_parents <- parents[parents %in% taxa_subset]
+          return(self$taxon_ids()[included_parents[1]])
+        }
+
+        to_reassign <- ! self$edge_list$from %in% self$taxon_ids()[taxa_subset]
+        supertaxa_key <- self$supertaxa(
+          subset = unique(self$taxon_ids()[to_reassign]),
+          recursive = TRUE, simplify = FALSE, include_input = FALSE,
+          return_type = "index", na = FALSE)
+        reassign_key <- vapply(supertaxa_key, reassign_one, character(1)
+        )
+        self$edge_list[to_reassign, "from"] <-
+          reassign_key[self$taxon_ids()[to_reassign]]
+      }
+
+
+      # Remove taxonless observations
+      taxonless <- parse_possibly_named_logical(
+        taxonless,
+        self$data,
+        default = formals(self$filter_taxa)$taxonless
+      )
+      process_one <- function(my_index) {
+
+        # Get the taxon ids of the current object
+        if (is.null((data_taxon_ids <-
+                     get_data_taxon_ids(self$data[[my_index]])))) {
+          return(NULL) # if there is no taxon id info, dont change anything
+        }
+
+        obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
+        private$remove_obs(dataset = my_index,
+                           indexes = obs_subset,
+                           unname_only = taxonless[my_index])
+      }
+      unused_output <- lapply(seq_along(self$data), process_one)
+
+
+      # Remove filtered taxa
+      private$remove_taxa(taxa_subset)
+
+      return(self)
     }
+
 
   ),
 
   private = list(
+    nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
+                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1"),
+
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")
     },
@@ -352,6 +531,18 @@ Taxonomy <- R6::R6Class(
                    'must be one of the following:',
                    paste(return_type, collapse = ", ")))
       }
+    },
+
+    remove_taxa = function(el_indexes) {
+      # Remove taxa objects
+      self$taxa <- self$taxa[self$taxon_ids()[el_indexes]]
+
+      # Remove corresponding rows in the edge list
+      self$edge_list <- self$edge_list[el_indexes, , drop = FALSE]
+
+      # Replace and edges going to removed taxa with NA
+      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
+        as.character(NA)
     }
   )
 )

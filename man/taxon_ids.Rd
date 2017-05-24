@@ -7,7 +7,7 @@
 \item{obj}{The \code{taxonomy} or \code{taxmap} object.}
 }
 \description{
-Return the taxon IDs in a \code{\link[=taxmap]{taxmap()}} object.
+Return the taxon IDs in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 They are in the order they appear in the edge list.
 }
 \details{

@@ -21,7 +21,7 @@ not the taxon list.}
 \code{character}
 }
 \description{
-Return the leaf taxa for a \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
+Return the leaf taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
 with no subtaxa. \preformatted{ obj$leaves(subset = NULL, return_type = "id")
 leaves(obj, ...)}
 }

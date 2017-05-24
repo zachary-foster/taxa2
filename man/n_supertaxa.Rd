@@ -4,14 +4,14 @@
 \alias{n_supertaxa}
 \title{Get number of supertaxa}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
+\item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}})}
 }
 \value{
 \code{numeric}
 }
 \description{
 Get number of supertaxa for each taxon in an object of type
-\code{\link[=taxmap]{taxmap()}} \preformatted{ obj$n_supertaxa() n_supertaxa(obj)}
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} \preformatted{ obj$n_supertaxa() n_supertaxa(obj)}
 }
 \examples{
 n_supertaxa(ex_taxmap)

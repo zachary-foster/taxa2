@@ -21,7 +21,7 @@ not the taxon list.}
 \code{character}
 }
 \description{
-Return the root taxa for a \code{\link[=taxmap]{taxmap()}} object. Can also be used to
+Return the root taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Can also be used to
 get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
 return_type = "id") roots(obj, ...)}
 }
