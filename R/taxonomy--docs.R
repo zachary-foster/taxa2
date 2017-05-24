@@ -412,20 +412,22 @@ NULL
 #' as if it was a vector on its own. See [dplyr::filter()] for the inspiration
 #' for this function and more information. Calling the function using the
 #' `obj$filter_taxa(...)` style edits "obj" in place, unlike most R functions.
-#' However, calling the function using the `filter_taxa(obj, ...)` mitates R's
+#' However, calling the function using the `filter_taxa(obj, ...)` immitates R's
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
-#' a changed version would be returned, like most R functions. \preformatted{
-#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
-#' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE) filter_taxa(obj,
-#' ...)}
+#' a changed version would be returned, like most R functions.
+#' \preformatted{filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+#' taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless =
+#' FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
-#' @param ... One or more filtering conditions. Each filtering condition can be
-#'   one of three things: \describe{ \item{`character`}{One or more taxon IDs
-#'   contained in `obj$edge_list$to`} \item{`integer`}{One or more row indexes
-#'   of `obj$edge_list`} \item{`logical`}{A `TRUE`/`FALSE` vector of length
-#'   equal to the number of rows in `obj$edge_list`} } Any variable name that
-#'   appears in `obj$all_names()` can be used as if it was a vector on its own.
+#' @param ... One or more filtering conditions. Each filtering condition must
+#'   resolve to one of three things: \describe{ \item{`character`}{One or more
+#'   taxon IDs contained in `obj$edge_list$to`} \item{`integer`}{One or more row
+#'   indexes of `obj$edge_list`} \item{`logical`}{A `TRUE`/`FALSE` vector of
+#'   length equal to the number of rows in `obj$edge_list`} } Any variable name
+#'   that appears in `obj$all_names()` can be used as if it was a vector on its
+#'   own.
 #' @param subtaxa (`logical` or `numeric` of length 1) If `TRUE`, include
 #'   subtaxa of taxa passing the filter. Positive numbers indicate the number of
 #'   ranks below the target taxa to return. `0` is equivalent to `FALSE`.
@@ -434,20 +436,20 @@ NULL
 #'   supertaxa of taxa passing the filter. Positive numbers indicate the number
 #'   of ranks above the target taxa to return. `0` is equivalent to `FALSE`.
 #'   Negative numbers are equivalent to `TRUE`.
-#' @param taxonless (`logical`) If `TRUE`, include observations even if the
-#'   taxon they are assigned to is filtered out. Observations assigned to
-#'   removed taxa will be assigned to \code{NA}. This option can be either
-#'   simply `TRUE`/`FALSE`, meaning that all data sets will be treated the same,
-#'   or a logical vector can be supplied with names corresponding one or more
-#'   data sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)`
-#'   would inlcude observations whose taxon was filtered out in
-#'   `obj$data$abundance`, but not in `obj$data$stats`. See the `reassign_obs`
-#'   option below for further complications.
+#' @param taxonless (`logical`)  This option only applies to [taxmap()] objects.
+#'   If `TRUE`, include observations even if the taxon they are assigned to is
+#'   filtered out. Observations assigned to removed taxa will be assigned to
+#'   \code{NA}. This option can be either simply `TRUE`/`FALSE`, meaning that
+#'   all data sets will be treated the same, or a logical vector can be supplied
+#'   with names corresponding one or more data sets in `obj$data`. For example,
+#'   `c(abundance = TRUE, stats = FALSE)` would inlcude observations whose taxon
+#'   was filtered out in `obj$data$abundance`, but not in `obj$data$stats`. See
+#'   the `reassign_obs` option below for further complications.
 #' @param reassign_obs (`logical` of length 1) This option only applies to
-#'   `taxmap` objects. If `TRUE`, observations assigned to removed taxa will be
-#'   reassigned to the closest supertaxon that passed the filter. If there are
-#'   no supertaxa of such an observation that passed the filter, they will be
-#'   filtered out if `taxonless` is `TRUE`. This option can be either simply
+#'   [taxmap()] objects. If `TRUE`, observations assigned to removed taxa will
+#'   be reassigned to the closest supertaxon that passed the filter. If there
+#'   are no supertaxa of such an observation that passed the filter, they will
+#'   be filtered out if `taxonless` is `TRUE`. This option can be either simply
 #'   `TRUE`/`FALSE`, meaning that all data sets will be treated the same, or a
 #'   logical vector can be supplied with names corresponding one or more data
 #'   sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
@@ -497,3 +499,144 @@ NULL
 #' @name filter_taxa
 NULL
 
+
+#' Sort the edge list of [taxmap()] objects
+#'
+#' Sort the edge list in [taxonomy()] or [taxmap()] objects. Any variable name that
+#' appears in `obj$all_names()` can be used as if it was a vector on its
+#' own. See [dplyr::arrange()] for the inspiration for this function
+#' and more information.
+#' \preformatted{
+#' obj$arrange_taxa(...)
+#' arrange_taxa(obj, ...)}
+#'
+#' @param obj [taxonomy()] or [taxmap()]
+#' @param ... One or more column names to sort on.
+#'
+#' @return An object of type [taxonomy()] or [taxmap()]
+#'
+#' @examples
+#' arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
+#'
+#' @family taxmap manipulation functions
+#'
+#' @name arrange_taxa
+NULL
+
+#' Sample n taxa from [taxonomy()] or [taxmap()]
+#'
+#' Randomly sample some number of taxa from a [taxonomy()] or [taxmap()] object.
+#' Weights can be specified for taxa or the observations assigned to them. See
+#' [dplyr::sample_n()] for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
+#'
+#' @param obj ([taxonomy()] or [taxmap()]) The object to sample from.
+#' @param size (`numeric` of length 1) The number of taxa to sample.
+#' @param taxon_weight (`numeric`) Non-negative sampling weights of each
+#'   taxon. If `obs_weight` is also specified, the two weights are
+#' multiplied (after `obs_weight` for each taxon is calculated).
+#' @param obs_weight (`numeric`)  This option only applies to [taxmap()]
+#'   objects. Sampling weights of each observation. The weights for each
+#'   observation assigned to a given taxon are supplied to `collapse_func` to
+#'   get the taxon weight. If `use_subtaxa` is `TRUE` then the observations
+#'   assigned to every subtaxa are also used. Any variable name that appears in
+#'   `obj$all_names()` can be used as if it was a vector on its own. If
+#'   `taxon_weight` is also specified, the two weights are multiplied (after
+#'   `obs_weight` for each observation is calculated). `obs_target` must be used
+#'   with this option.
+#' @param obs_target (`character` of length 1)  This option only applies to
+#'   [taxmap()] objects. The name of the data set in `obj$data` that values in
+#'   `obs_weight` corresponds to. Must be used when `obs_weight` is used.
+#' @param use_subtaxa (`logical` or `numeric` of length 1) Affects how the
+#'   `obs_weight` option is used. If `TRUE`, the weights for each taxon in an
+#'   observation's classification are multiplied to get the observation weight.
+#'   If `FALSE` just the taxonomic level the observation is assign to it
+#'   considered. Positive numbers indicate the number of ranks below the each
+#'   taxon to use. `0` is equivalent to `FALSE`. Negative numbers are equivalent
+#'   to `TRUE`.
+#' @param collapse_func (`function` of length 1) If `taxon_weight` is used and
+#'   `supertaxa` is `TRUE`, the weights for each taxon in an observation's
+#'   classification are supplied to `collapse_func` to get the observation
+#'   weight. This function should take  numeric vector and return a single
+#'   number.
+#' @param ... Additional options are passed to [filter_taxa()].
+#'
+#' @return An object of type [taxonomy()] or [taxmap()]
+#'
+#' @examples
+#' # Randomly sample three taxa
+#' sample_n_taxa(ex_taxmap, 3)
+#'
+#' # Include supertaxa
+#' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE)
+#'
+#' # Include subtaxa
+#' sample_n_taxa(ex_taxmap, 1, subtaxa = TRUE)
+#'
+#' # Sample some taxa more often then others
+#' sample_n_taxa(ex_taxmap, 3, supertaxa = TRUE,
+#'               obs_weight = n_legs, obs_target = "info")
+#'
+#' @family taxmap manipulation functions
+#'
+#' @name sample_n_taxa
+NULL
+
+
+#' Sample a proportion of taxa from [taxonomy()] or [taxmap()]
+#'
+#' Randomly sample some proportion of taxa from a [taxonomy()] or [taxmap()]
+#' object. Weights can be specified for taxa or the observations assigned to
+#' them. See
+#' [dplyr::sample_frac()] for the inspiration for this function.
+#' \preformatted{
+#' obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
+#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
+#'
+#' @param obj ([taxonomy()] or [taxmap()]) The object to sample from.
+#' @param size (`numeric` of length 1) The proportion of taxa to sample.
+#' @param taxon_weight (`numeric`) Non-negative sampling weights of each
+#'   taxon. If `obs_weight` is also specified, the two weights are
+#' multiplied (after `obs_weight` for each taxon is calculated).
+#' @param obs_weight (`numeric`)  This option only applies to [taxmap()]
+#'   objects. Sampling weights of each observation. The weights for each
+#'   observation assigned to a given taxon are supplied to `collapse_func` to
+#'   get the taxon weight. If `use_subtaxa` is `TRUE` then the observations
+#'   assigned to every subtaxa are also used. Any variable name that appears in
+#'   `obj$all_names()` can be used as if it was a vector on its own. If
+#'   `taxon_weight` is also specified, the two weights are multiplied (after
+#'   `obs_weight` for each observation is calculated). `obs_target` must be used
+#'   with this option.
+#' @param obs_target (`character` of length 1)  This option only applies to
+#'   [taxmap()] objects. The name of the data set in `obj$data` that values in
+#'   `obs_weight` corresponds to. Must be used when `obs_weight` is used.
+#' @param use_subtaxa (`logical` or `numeric` of length 1) Affects how the
+#'   `obs_weight` option is used. If `TRUE`, the weights for each taxon in an
+#'   observation's classification are multiplied to get the observation weight.
+#'   If `TRUE` just the taxonomic level the observation is assign to it
+#'   considered. Positive numbers indicate the number of ranks below the target
+#'   taxa to return. `0` is equivalent to `FALSE`. Negative numbers are
+#'   equivalent to `TRUE`.
+#' @param collapse_func (`function` of length 1) If `taxon_weight` is
+#'   used and `supertaxa` is `TRUE`, the weights for each taxon in an
+#'   observation's classification are supplied to `collapse_func` to get
+#'   the observation weight. This function should take  numeric vector and
+#'   return a single number.
+#' @param ... Additional options are passed to [filter_taxa()].
+#'
+#' @return An object of type [taxonomy()] or [taxmap()]
+#'
+#'
+#' @examples
+#' sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
+#'
+#' @family taxmap manipulation functions
+#'
+#' @name sample_frac_taxa
+NULL

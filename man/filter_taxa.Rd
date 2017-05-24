@@ -6,12 +6,13 @@
 \arguments{
 \item{obj}{An object of class \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}}
 
-\item{...}{One or more filtering conditions. Each filtering condition can be
-one of three things: \describe{ \item{\code{character}}{One or more taxon IDs
-contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row indexes
-of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of length
-equal to the number of rows in \code{obj$edge_list}} } Any variable name that
-appears in \code{obj$all_names()} can be used as if it was a vector on its own.}
+\item{...}{One or more filtering conditions. Each filtering condition must
+resolve to one of three things: \describe{ \item{\code{character}}{One or more
+taxon IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row
+indexes of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of
+length equal to the number of rows in \code{obj$edge_list}} } Any variable name
+that appears in \code{obj$all_names()} can be used as if it was a vector on its
+own.}
 
 \item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include
 subtaxa of taxa passing the filter. Positive numbers indicate the number of
@@ -23,21 +24,21 @@ supertaxa of taxa passing the filter. Positive numbers indicate the number
 of ranks above the target taxa to return. \code{0} is equivalent to \code{FALSE}.
 Negative numbers are equivalent to \code{TRUE}.}
 
-\item{taxonless}{(\code{logical}) If \code{TRUE}, include observations even if the
-taxon they are assigned to is filtered out. Observations assigned to
-removed taxa will be assigned to \code{NA}. This option can be either
-simply \code{TRUE}/\code{FALSE}, meaning that all data sets will be treated the same,
-or a logical vector can be supplied with names corresponding one or more
-data sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)}
-would inlcude observations whose taxon was filtered out in
-\code{obj$data$abundance}, but not in \code{obj$data$stats}. See the \code{reassign_obs}
-option below for further complications.}
+\item{taxonless}{(\code{logical})  This option only applies to \code{\link[=taxmap]{taxmap()}} objects.
+If \code{TRUE}, include observations even if the taxon they are assigned to is
+filtered out. Observations assigned to removed taxa will be assigned to
+\code{NA}. This option can be either simply \code{TRUE}/\code{FALSE}, meaning that
+all data sets will be treated the same, or a logical vector can be supplied
+with names corresponding one or more data sets in \code{obj$data}. For example,
+\code{c(abundance = TRUE, stats = FALSE)} would inlcude observations whose taxon
+was filtered out in \code{obj$data$abundance}, but not in \code{obj$data$stats}. See
+the \code{reassign_obs} option below for further complications.}
 
 \item{reassign_obs}{(\code{logical} of length 1) This option only applies to
-\code{taxmap} objects. If \code{TRUE}, observations assigned to removed taxa will be
-reassigned to the closest supertaxon that passed the filter. If there are
-no supertaxa of such an observation that passed the filter, they will be
-filtered out if \code{taxonless} is \code{TRUE}. This option can be either simply
+\code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE}, observations assigned to removed taxa will
+be reassigned to the closest supertaxon that passed the filter. If there
+are no supertaxa of such an observation that passed the filter, they will
+be filtered out if \code{taxonless} is \code{TRUE}. This option can be either simply
 \code{TRUE}/\code{FALSE}, meaning that all data sets will be treated the same, or a
 logical vector can be supplied with names corresponding one or more data
 sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
@@ -62,12 +63,13 @@ conditions. Any variable name that appears in \code{obj$all_names()} can be used
 as if it was a vector on its own. See \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration
 for this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R functions.
-However, calling the function using the \code{filter_taxa(obj, ...)} mitates R's
+However, calling the function using the \code{filter_taxa(obj, ...)} immitates R's
 traditional copy-on-modify semantics, so "obj" would not be changed; instead
-a changed version would be returned, like most R functions. \preformatted{
-obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
-reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE) filter_taxa(obj,
-...)}
+a changed version would be returned, like most R functions.
+\preformatted{filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless =
+FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 }
 \examples{
 # Filter by index

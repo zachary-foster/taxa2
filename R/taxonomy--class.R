@@ -402,8 +402,22 @@ Taxonomy <- R6::R6Class(
     },
 
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
-                           taxonless = FALSE,
+                           taxonless = FALSE, reassign_obs = TRUE,
                            reassign_taxa = TRUE, invert = FALSE) {
+      # Check that a taxmap option is not used with a taxonomy object
+      is_taxmap <- "Taxmap" %in% class(self)
+      if (!is_taxmap) {
+        if (!missing(reassign_obs)) {
+          warning(paste('The option "reassign_obs" can only be used with',
+                        '`taxmap` objects. It will have no effect on a',
+                        '`taxonomy` object.'))
+        }
+        if (!missing(taxonless)) {
+          warning(paste('The option "taxonless" can only be used with',
+                        '`taxmap` objects. It will have no effect on a',
+                        '`taxonomy` object.'))
+        }
+      }
 
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
@@ -452,6 +466,47 @@ Taxonomy <- R6::R6Class(
         taxa_subset <- (1:nrow(self$edge_list))[-taxa_subset]
       }
 
+      # Reassign taxonless observations
+      if (is_taxmap) {
+        reassign_obs <- parse_possibly_named_logical(
+          reassign_obs,
+          self$data,
+          default = formals(self$filter_taxa)$reassign_obs
+        )
+        process_one <- function(data_index) {
+
+          reassign_one <- function(parents) {
+            included_parents <- parents[parents %in% taxa_subset]
+            return(self$taxon_ids()[included_parents[1]])
+          }
+
+          # Get the taxon ids of the current object
+          if (is.null((data_taxon_ids <-
+                       get_data_taxon_ids(self$data[[data_index]])))) {
+            return(NULL) # if there is no taxon id info, dont change anything
+          }
+
+          # Generate replacement taxon ids
+          to_reassign <- ! data_taxon_ids %in% self$taxon_ids()[taxa_subset]
+          supertaxa_key <- self$supertaxa(
+            subset = unique(data_taxon_ids[to_reassign]),
+            recursive = TRUE, simplify = FALSE, include_input = FALSE,
+            return_type = "index", na = FALSE
+          )
+          reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
+          new_data_taxon_ids <- reassign_key[data_taxon_ids[to_reassign]]
+
+          # Replace taxon ids
+          if (is.data.frame(self$data[[data_index]])) {
+            self$data[[data_index]][to_reassign, "taxon_id"] <- new_data_taxon_ids
+          } else {
+            names(self$data[[data_index]])[to_reassign] <- new_data_taxon_ids
+          }
+        }
+
+        unused_output <- lapply(seq_along(self$data)[reassign_obs], process_one)
+      }
+
       # Reassign subtaxa
       if (reassign_taxa) {
         reassign_one <- function(parents) {
@@ -470,35 +525,117 @@ Taxonomy <- R6::R6Class(
           reassign_key[self$taxon_ids()[to_reassign]]
       }
 
-
       # Remove taxonless observations
-      taxonless <- parse_possibly_named_logical(
-        taxonless,
-        self$data,
-        default = formals(self$filter_taxa)$taxonless
-      )
-      process_one <- function(my_index) {
+      if (is_taxmap) {
+        taxonless <- parse_possibly_named_logical(
+          taxonless,
+          self$data,
+          default = formals(self$filter_taxa)$taxonless
+        )
+        process_one <- function(my_index) {
 
-        # Get the taxon ids of the current object
-        if (is.null((data_taxon_ids <-
-                     get_data_taxon_ids(self$data[[my_index]])))) {
-          return(NULL) # if there is no taxon id info, dont change anything
+          # Get the taxon ids of the current object
+          if (is.null((data_taxon_ids <-
+                       get_data_taxon_ids(self$data[[my_index]])))) {
+            return(NULL) # if there is no taxon id info, dont change anything
+          }
+
+          obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
+          private$remove_obs(dataset = my_index,
+                             indexes = obs_subset,
+                             unname_only = taxonless[my_index])
         }
-
-        obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
-        private$remove_obs(dataset = my_index,
-                           indexes = obs_subset,
-                           unname_only = taxonless[my_index])
+        unused_output <- lapply(seq_along(self$data), process_one)
       }
-      unused_output <- lapply(seq_along(self$data), process_one)
-
 
       # Remove filtered taxa
       private$remove_taxa(taxa_subset)
 
       return(self)
-    }
+    },
 
+    arrange_taxa = function(...) {
+      data_used <- self$data_used(...)
+      data_used <- data_used[! names(data_used) %in% names(self$edge_list)]
+      if (length(data_used) == 0) {
+        self$edge_list <- dplyr::arrange(self$edge_list, ...)
+      } else {
+        target_with_extra_cols <- dplyr::bind_cols(data_used, self$edge_list)
+        self$edge_list <-
+          dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      }
+
+      return(self)
+    },
+
+    sample_n_taxa = function(size, taxon_weight = NULL, obs_weight = NULL,
+                             obs_target = NULL, use_subtaxa = TRUE,
+                             collapse_func = mean, ...) {
+      # Check that a taxmap option is not used with a taxonomy object
+      is_taxmap <- "Taxmap" %in% class(self)
+      if (!is_taxmap) {
+        if (!missing(obs_weight)) {
+          warning(paste('The option "obs_weight" can only be used with',
+                        '`taxmap` objects. It will have no effect on a',
+                        '`taxonomy` object.'))
+        }
+        if (!missing(obs_target)) {
+          warning(paste('The option "obs_target" can only be used with',
+                        '`taxmap` objects. It will have no effect on a',
+                        '`taxonomy` object.'))
+        }
+      }
+
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
+                                          data = data_used)
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
+                                        data = data_used)
+
+      # Calculate observation component of taxon weights
+      if (is.null(obs_weight) || !is_taxmap) {
+        taxon_obs_weight <- rep(1, nrow(self$edge_list))
+      } else {
+        if (is.null(obs_target)) {
+          stop(paste("If the option `obs_weight` is used, then `obs_target`",
+                     "must also be defined."))
+        }
+        my_obs <- self$obs(obs_target, recursive = use_subtaxa,
+                           simplify = FALSE)
+        taxon_obs_weight <- vapply(my_obs,
+                                   function(x) collapse_func(obs_weight[x]),
+                                   numeric(1))
+      }
+      taxon_obs_weight <- taxon_obs_weight / sum(taxon_obs_weight)
+
+      # Calculate taxon component of taxon weights
+      if (is.null(taxon_weight)) {
+        taxon_weight <- rep(1, nrow(self$edge_list))
+      }
+      taxon_weight <- taxon_weight / sum(taxon_weight)
+
+      # Combine observation and taxon weight components
+      combine_func <- prod
+      weight <- mapply(taxon_weight, taxon_obs_weight,
+                       FUN = function(x, y) combine_func(c(x,y)))
+      weight <- weight / sum(weight)
+
+      # Sample
+      sampled_rows <- sample.int(nrow(self$edge_list), size = size,
+                                 replace = FALSE, prob = weight)
+      self$filter_taxa(sampled_rows, ...)
+    },
+
+    sample_frac_taxa = function(size = 1, taxon_weight = NULL,
+                                obs_weight = NULL, obs_target = NULL,
+                                use_subtaxa = TRUE, collapse_func = mean, ...) {
+      self$sample_n_taxa(size = size * nrow(self$edge_list),
+                         taxon_weight = taxon_weight,
+                         obs_weight = obs_weight, obs_target = obs_target,
+                         use_subtaxa = use_subtaxa,
+                         collapse_func = collapse_func, ...)
+    }
 
   ),
 

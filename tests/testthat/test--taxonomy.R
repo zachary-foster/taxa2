@@ -277,5 +277,29 @@ test_that("Finding leaves", {
 
   # Hierarchy return type
   expect_type(x$leaves(return_type = "hierarchies"), "list")
-  expect_equal(class(x$leaves(return_type = "hierarchies")[[1]]), c("Hierarchy", "R6"))
+  expect_equal(class(x$leaves(return_type = "hierarchies")[[1]]),
+               c("Hierarchy", "R6"))
 })
+
+test_that("Filtering taxa", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+
+  result <- filter_taxa(x, taxon_names == "Solanum")
+  expect_equal(result$taxon_names(), c("11" = "Solanum"))
+  expect_warning(filter_taxa(x, taxon_names == "Solanum", taxonless = TRUE))
+  expect_warning(filter_taxa(x, taxon_names == "Solanum", reassign_obs = TRUE))
+})
+
+
+test_that("Sampling taxa",  {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+
+  result <- sample_n_taxa(x, size = 3)
+  expect_equal(length(result$taxon_ids()), 3)
+  expect_warning(sample_n_taxa(x, size = 3, obs_weight = 1))
+  expect_warning(sample_n_taxa(x, size = 3, obs_target = 1))
+})
+
+

@@ -285,3 +285,55 @@ filter_taxa.Taxonomy <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE)
   obj$filter_taxa(...)
 }
+
+
+#' @export
+arrange_taxa <- function(obj, ...) {
+  UseMethod("arrange_taxa")
+}
+
+#' @export
+arrange_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+arrange_taxa.Taxonomy <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$arrange_taxa(...)
+}
+
+
+#' @export
+sample_n_taxa <- function(obj, ...) {
+  UseMethod("sample_n_taxa")
+}
+
+#' @export
+sample_n_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_n_taxa.Taxonomy <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$sample_n_taxa(...)
+}
+
+
+#' @export
+sample_frac_taxa <- function(obj, ...) {
+  UseMethod("sample_frac_taxa")
+}
+
+#' @export
+sample_frac_taxa.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+sample_frac_taxa.Taxonomy <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$sample_frac_taxa(...)
+}
+
