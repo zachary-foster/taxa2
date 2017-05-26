@@ -255,7 +255,7 @@ Taxonomy <- R6::R6Class(
         if (length(children) == 0 && ! exclude_leaves) {
           output <- taxon
         } else if (length(children) == 1) {
-          output <- c(taxon, recursive_part(supertaxon))
+          output <- c(taxon, recursive_part(children))
         } else {
           output <- taxon
         }
