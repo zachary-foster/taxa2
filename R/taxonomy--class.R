@@ -30,13 +30,18 @@ Taxonomy <- R6::R6Class(
 
     # A simple wrapper to make future changes easier
     taxon_names = function() {
-      vapply(self$taxa[self$edge_list$to],
+      vapply(self$taxa[self$taxon_ids()],
              function(x) x$name$name, character(1))
+    },
+
+    taxon_ranks = function() {
+      vapply(self$taxa[self$taxon_ids()],
+             function(x) x$rank$name, character(1))
     },
 
     # A simple wrapper to make future changes easier
     taxon_indexes = function() {
-      seq_len(nrow(self$edge_list))
+      stats::setNames(seq_len(nrow(self$edge_list)), self$taxon_ids())
     },
 
     initialize = function(...) {
@@ -395,10 +400,28 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
-    n_subtaxa_1 = function(obj) {
+    n_subtaxa_1 = function() {
       vapply(self$subtaxa(recursive = FALSE, include_input = FALSE,
                           return_type = "index"),
              length, numeric(1))
+    },
+
+    is_root = function() {
+      stats::setNames(is.na(self$edge_list$from), self$taxon_ids())
+    },
+
+    is_leaf = function() {
+      self$n_subtaxa() == 0
+    },
+
+    is_stem = function() {
+      stats::setNames(self$taxon_ids() %in% self$stems(simplify = TRUE),
+                      self$taxon_ids())
+    },
+
+    is_branch = function() {
+      stats::setNames(! (self$is_root() | self$is_leaf() | self$is_stem()),
+                      self$taxon_ids())
     },
 
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
@@ -641,7 +664,9 @@ Taxonomy <- R6::R6Class(
 
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
-                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1"),
+                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1",
+                             "taxon_ranks", "is_root", "is_stem", "is_branch",
+                             "is_leaf"),
 
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")

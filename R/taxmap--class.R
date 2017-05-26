@@ -403,7 +403,9 @@ Taxmap <- R6::R6Class(
 
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
-                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1"),
+                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1",
+                             "taxon_ranks", "is_root", "is_stem", "is_branch",
+                             "is_leaf"),
 
     check_dataset_name = function(target) {
       if (! target %in% names(self$data)) {

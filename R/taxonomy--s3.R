@@ -41,6 +41,21 @@ taxon_names.default <- function(obj, ...) {
 }
 
 #' @export
+taxon_ranks.Taxonomy <- function(obj, ...) {
+  obj$taxon_ranks(...)
+}
+
+#' @export
+taxon_ranks <- function(obj, ...) {
+  UseMethod("taxon_ranks")
+}
+
+#' @export
+taxon_ranks.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
 taxon_names.Taxonomy <- function(obj, ...) {
   obj$taxon_names(...)
 }
@@ -337,3 +352,66 @@ sample_frac_taxa.Taxonomy <- function(obj, ...) {
   obj$sample_frac_taxa(...)
 }
 
+
+#' @export
+is_root <- function(obj, ...) {
+  UseMethod("is_root")
+}
+
+#' @export
+is_root.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+is_root.Taxonomy <- function(obj, ...) {
+  obj$is_root(...)
+}
+
+
+#' @export
+is_stem <- function(obj, ...) {
+  UseMethod("is_root")
+}
+
+#' @export
+is_stem.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+is_stem.Taxonomy <- function(obj, ...) {
+  obj$is_stem(...)
+}
+
+
+#' @export
+is_branch <- function(obj, ...) {
+  UseMethod("is_branch")
+}
+
+#' @export
+is_branch.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+is_branch.Taxonomy <- function(obj, ...) {
+  obj$is_branch(...)
+}
+
+
+#' @export
+is_leaf <- function(obj, ...) {
+  UseMethod("is_leaf")
+}
+
+#' @export
+is_leaf.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+is_leaf.Taxonomy <- function(obj, ...) {
+  obj$is_leaf(...)
+}

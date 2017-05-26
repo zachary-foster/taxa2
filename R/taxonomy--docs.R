@@ -47,6 +47,23 @@ NULL
 #' @name taxon_names
 NULL
 
+#' Get taxon ranks
+#'
+#' Return the taxon ranks in a [taxonomy()] or [taxmap()] object.
+#' They are in the order taxa appear in the edge list.
+#'
+#' \preformatted{
+#' obj$taxon_ranks()
+#' taxon_ranks(obj, ...)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @family taxonomy data functions
+#'
+#' @name taxon_ranks
+NULL
+
+
 
 #' Get all supertaxa of a taxon
 #'
@@ -640,3 +657,75 @@ NULL
 #'
 #' @name sample_frac_taxa
 NULL
+
+
+#' Test if taxa are roots
+#'
+#' Test if taxa are roots in a [taxonomy()] or [taxmap()] object. Roots are taxa
+#' without supertaxa, typically things like "Bacteria", or "Life".
+#' \preformatted{obj$is_root()
+#' is_root(obj)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @return A `logical` of length equal to the number of taxa.
+#'
+#' @family taxonomy data functions
+#'
+#' @name is_root
+NULL
+
+
+#' Test if taxa are stems
+#'
+#' Test if taxa are stems in a [taxonomy()] or [taxmap()] object. Stems are taxa
+#' from the [roots()] taxa to the first taxon with more than one subtaxon. These
+#' can usually be filtered out of the taxonomy without removing any information
+#' on how the reminaing taxa are related.
+#' \preformatted{obj$is_stem()
+#' is_stem(obj)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @return A `logical` of length equal to the number of taxa.
+#'
+#' @family taxonomy data functions
+#'
+#' @name is_stem
+NULL
+
+
+#' Test if taxa are branches
+#'
+#' Test if taxa are branches in a [taxonomy()] or [taxmap()] object. Branches
+#' are taxa in the interior of the tree that are not [roots()], [stems()], or
+#' [leaves()].
+#' \preformatted{obj$is_branch()
+#' is_branch(obj)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @return A `logical` of length equal to the number of taxa.
+#'
+#' @family taxonomy data functions
+#'
+#' @name is_branch
+NULL
+
+
+#' Test if taxa are leaves
+#'
+#' Test if taxa are leaves in a [taxonomy()] or [taxmap()] object. Leaves are taxa
+#' without subtaxa, typically species.
+#' \preformatted{obj$is_leaf()
+#' is_leaf(obj)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object.
+#'
+#' @return A `logical` of length equal to the number of taxa.
+#'
+#' @family taxonomy data functions
+#'
+#' @name is_leaf
+NULL
+
