@@ -31,39 +31,6 @@ format_taxon_subset <- function(taxon_ids, index) {
 }
 
 
-#' Find taxon id info in data set
-#'
-#' Look for taxon ids in an object.
-#' For tables, this would be a "taxon_id" column.
-#' For lists/vectors, it would be names.
-#'
-#' @param x Something to look for taxon ids in.
-#'
-#' @return Taxon ids if found, otherwise throw an error.
-#'
-#' @examples
-#' taxa:::extract_taxon_ids(ex_taxmap$data$info)
-#'
-#' @keywords internal
-extract_taxon_ids <- function(x) {
-  if (is.data.frame(x)) {
-    if ("taxon_id" %in% colnames(x)) {
-      return(x$taxon_id)
-    } else {
-      stop('There is no "taxon_id" column in the specified table.')
-    }
-  } else if (is.list(x) || is.vector(x)) {
-    if (is.null(names(x))) {
-      stop('The specified object is a list/vector, but not named by taxon ID.')
-    } else {
-      return(names(x))
-    }
-  } else {
-    stop("Invalid object type supplied.")
-  }
-}
-
-
 #' Convert `data` input for Taxamp
 #'
 #' Make sure `data` is in the right format and complain if it is not.
@@ -183,16 +150,6 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
   invisible(data)
 }
 
-
-#' @keywords internal
-get_data_taxon_ids <- function(x) {
-  if (is.data.frame(x)) {
-    data_taxon_ids <- x$taxon_id
-  } else {
-    data_taxon_ids <- names(x)
-  }
-  return(data_taxon_ids)
-}
 
 
 #' used to parse inputs to `taxonless` and `reassign_obs`

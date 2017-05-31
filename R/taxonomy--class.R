@@ -132,6 +132,20 @@ Taxonomy <- R6::R6Class(
                        function(x) eval(parse(text = paste0("self$", x))))
       names(output) <- name
 
+      # Name each thing returned by taxon id if possibile
+      #   This only applies to taxmap objects
+      output[] <- lapply(seq_len(length(output)), function(index) {
+        data_location <- names(my_names[index])
+        if (startsWith(data_location, "data$")) {
+          data_name <- strsplit(data_location,
+                                split =  "$", fixed = TRUE)[[1]][2]
+          return(stats::setNames(output[[index]],
+                                 private$get_data_taxon_ids(data_name)))
+        } else {
+          return(output[[index]])
+        }
+      })
+
       # Run any functions and return their results instead
       is_func <- vapply(output, is.function, logical(1))
       output[is_func] <- lapply(output[is_func], function(f) {
@@ -505,7 +519,7 @@ Taxonomy <- R6::R6Class(
 
           # Get the taxon ids of the current object
           if (is.null((data_taxon_ids <-
-                       get_data_taxon_ids(self$data[[data_index]])))) {
+                       private$get_data_taxon_ids(data_index)))) {
             return(NULL) # if there is no taxon id info, dont change anything
           }
 
@@ -559,7 +573,7 @@ Taxonomy <- R6::R6Class(
 
           # Get the taxon ids of the current object
           if (is.null((data_taxon_ids <-
-                       get_data_taxon_ids(self$data[[my_index]])))) {
+                       private$get_data_taxon_ids(my_index)))) {
             return(NULL) # if there is no taxon id info, dont change anything
           }
 
