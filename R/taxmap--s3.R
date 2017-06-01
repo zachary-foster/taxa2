@@ -13,6 +13,20 @@ obs.Taxmap <- function(obj, ...) {
   obj$obs(...)
 }
 
+#' @export
+obs_apply <- function(obj, ...) {
+  UseMethod("obs_apply")
+}
+
+#' @export
+obs_apply.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+obs_apply.Taxmap <- function(obj, ...) {
+  obj$obs_apply(...)
+}
 
 #' @export
 filter_obs <- function(obj, ...) {

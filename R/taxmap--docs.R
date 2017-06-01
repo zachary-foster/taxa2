@@ -54,6 +54,47 @@
 #'
 NULL
 
+#' Apply function to observations per taxon
+#'
+#' Apply a function to data for the observations for each taxon. This is similar
+#' to using [obs()] with [lapply()] or [sapply()].
+#' \preformatted{obj$obs_apply(data, func, simplify = FALSE, value = NULL,
+#'               subset = NULL, recursive = TRUE, ...)
+#' obs(obj, data, func, simplify = FALSE,
+#'     value = NULL, subset = NULL, recursive = TRUE, ...)}
+#'
+#' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
+#'   be queried.
+#' @param data Either the name of something in `obj$data` that has taxon
+#'   information or a an external object with taxon information. For tables,
+#'   there must be a column named "taxon_id" and lists/vectors must be named by
+#'   taxon ID.
+#' @param func (`function`) The function to apply.
+#' @param simplify (`logical`) If `TRUE`, convert lists to vectors.
+#' @param value What data to give to the function. This is usually the name of
+#'   column in a table in `obj$data`. Any result of `all_names(obj)` can be
+#'   used, but it usually only makes sense to use columns in the dataset
+#'   specified by the `data` option. By default, the indexes of observation in
+#'   `data` are returned.
+#' @param subset (`character`) Taxon IDs or indexes for which observation
+#'   indexes will be returned. Default: All taxa in `obj` will be used.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   observation assigned to the specified input taxa, not subtaxa. If `TRUE`,
+#'   return all the observations of every subtaxa, etc. Positive numbers
+#'   indicate the number of ranks below the each taxon to get observations for
+#'   `0` is equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#'
+#' @name obs_apply
+#'
+#' @examples
+#' # Find the average number of legs in each taxon
+#' ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = T)
+#'
+#' # One way to implement `n_obs` and find the number of observations per taxon
+#' ex_taxmap$obs_apply("info", length, simplify = T)
+#'
+NULL
+
 
 #' Filter observations with a list of conditions
 #'

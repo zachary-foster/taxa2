@@ -160,6 +160,17 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
+    obs_apply = function(data, func, simplify = FALSE, value = NULL, subset = NULL,
+              recursive = TRUE, ...) {
+      my_obs <- self$obs(data, simplify = FALSE, value = value, subset = subset,
+                         recursive = recursive)
+      output <- lapply(my_obs, func, ...)
+      if (simplify) {
+        output <- unlist(output)
+      }
+      return(output)
+    },
+
 
     filter_obs = function(target, ..., unobserved = TRUE) {
       # Check that the target data exists
