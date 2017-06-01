@@ -313,7 +313,7 @@ test_that("Observations can be preserved when filtering taxa", {
 
 test_that("Taxon ids can be preserved when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names != "Solanum", reassign_taxa = FALSE)
-  expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(return_type = "name")))
+  expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(value = "taxon_names")))
 })
 
 test_that("The selection of taxa to be filtered can be inverted", {

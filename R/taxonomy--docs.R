@@ -70,7 +70,7 @@ NULL
 #' Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
 #' taxa are a part of) in an object of type [taxonomy()] or
 #' [taxmap()]. \preformatted{ obj$supertaxa(subset = NULL, recursive =
-#' TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
+#' TRUE, simplify = FALSE, include_input = FALSE, value = NULL, na =
 #' FALSE) supertaxa(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
@@ -87,9 +87,10 @@ NULL
 #'   single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are included in
 #'   the output
-#' @param return_type (`logical`) Controls output type: "index", "id",
-#'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
-#'   not the taxon list.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
 #' @param na (`logical`) If `TRUE`, return `NA` where information
 #'   is not available.
 #' @param ... U Used by the S3 method to pass the parameters to the R6 method of
@@ -109,15 +110,16 @@ NULL
 #'
 #' Return the root taxa for a [taxonomy()] or [taxmap()] object. Can also be used to
 #' get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
-#' return_type = "id") roots(obj, ...)}
+#' value = NULL) roots(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which root taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
-#' @param return_type (`logical`) Controls output type: "index", "id",
-#'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
-#'   not the taxon list.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of
 #'   [taxonomy()]
 #'
@@ -133,7 +135,7 @@ NULL
 #'
 #' Return the taxon IDs or `taxon_data` indexes of all subtaxa in an object
 #' of type `taxmap` \preformatted{ obj$subtaxa(subset = NULL, recursive =
-#' TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
+#' TRUE, simplify = FALSE, include_input = FALSE, value = NULL, na =
 #' FALSE) subtaxa(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
@@ -152,9 +154,10 @@ NULL
 #'   into a single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are
 #'   included in the output
-#' @param return_type (`logical`) Controls output type: "index", "id",
-#'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
-#'   not the taxon list.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
 #'
 #' @return If `simplify = FALSE`, then a list of vectors are returned
 #'   corresponding to the `target` argument. If `simplify = TRUE`,
@@ -171,15 +174,16 @@ NULL
 #' Return the stem taxa for a [taxonomy()] or a [taxmap()]
 #' object. Stem taxa are all those from the roots to the first taxon with more
 #' than one subtaxon. \preformatted{ obj$stems(subset = NULL, simplify = FALSE,
-#' return_type = "id", exclude_leaves = FALSE) stems(obj, ...)}
+#' value = NULL, exclude_leaves = FALSE) stems(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which stem taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
-#' @param return_type (`logical`) Controls output type: "index", "id",
-#'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
-#'   not the taxon list.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results
 #'   into a single vector of unique values.
 #' @param exclude_leaves (`logical`) If `TRUE`, the do not include
@@ -198,16 +202,17 @@ NULL
 #' Get leaf taxa
 #'
 #' Return the leaf taxa for a [taxonomy()] or [taxmap()] object. Leaf taxa are taxa
-#' with no subtaxa. \preformatted{ obj$leaves(subset = NULL, return_type = "id")
+#' with no subtaxa. \preformatted{ obj$leaves(subset = NULL, value = NULL)
 #' leaves(obj, ...)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which leaf taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
-#' @param return_type (`logical`) Controls output type: "index", "id",
-#'   "taxa", or "hierarchies". Note that "index" is the index of the edge list,
-#'   not the taxon list.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
 #' @param ... Used by the S3 method to pass the parameters to the R6 method of
 #'   [taxonomy()]
 #'

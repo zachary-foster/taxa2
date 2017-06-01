@@ -121,8 +121,10 @@ Taxmap <- R6::R6Class(
 
 
     obs = function(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE) {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
       obs_taxon_ids <- private$get_data_taxon_ids(data, require = TRUE)
 
       # Get observations of taxa
@@ -132,7 +134,8 @@ Taxmap <- R6::R6Class(
       if (recursive || is.numeric(recursive)) {
         my_subtaxa <- self$subtaxa(subset = unname(subset),
                                    recursive = recursive,
-                                   include_input = TRUE, return_type = "index")
+                                   include_input = TRUE,
+                                   value = "taxon_indexes")
         #unname is neede for some reason.. something to look into...
       } else {
         my_subtaxa <- subset
@@ -148,7 +151,7 @@ Taxmap <- R6::R6Class(
 
       # Look up values
       if (!is.null(value)) {
-        possible_values <- get_data(ex_taxmap, value)[[1]]
+        possible_values <- self$get_data(value)[[1]]
         output <- lapply(output, function(i) possible_values[i])
       }
 
@@ -160,8 +163,8 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
-    obs_apply = function(data, func, simplify = FALSE, value = NULL, subset = NULL,
-              recursive = TRUE, ...) {
+    obs_apply = function(data, func, simplify = FALSE, value = NULL,
+                         subset = NULL, recursive = TRUE, ...) {
       my_obs <- self$obs(data, simplify = FALSE, value = value, subset = subset,
                          recursive = recursive)
       output <- lapply(my_obs, func, ...)
@@ -213,7 +216,7 @@ Taxmap <- R6::R6Class(
         unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]),
                                           na = FALSE, recursive = TRUE,
                                           simplify = TRUE, include_input = TRUE,
-                                          return_type = "index")
+                                          value = "taxon_indexes")
         taxa_to_remove <- 1:nrow(self$edge_list) %in%
           unobserved_taxa & vapply(self$obs(target), length, numeric(1)) == 0
         self$taxa <- self$taxa[self$taxon_ids()[! taxa_to_remove]]
@@ -346,7 +349,8 @@ Taxmap <- R6::R6Class(
                            self$taxon_ids())
         my_supertaxa <- self$supertaxa(recursive = use_supertaxa,
                                        simplify = FALSE, include_input = TRUE,
-                                       return_type = "index", na = FALSE)
+                                       na = FALSE,
+                                       value = "taxon_indexes")
         taxon_weight_product <- vapply(
           my_supertaxa,
           function(x) collapse_func(taxon_weight[x]),

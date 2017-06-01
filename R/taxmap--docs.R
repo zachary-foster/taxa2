@@ -2,8 +2,8 @@
 #'
 #' Given a [taxmap()] object, return the indexes associated with each taxon in a
 #' given table included in that [taxmap()] object.
-#' \preformatted{obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
-#' obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
+#' \preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
+#' obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
 #'
 #' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
 #'   be queried.
@@ -88,10 +88,10 @@ NULL
 #'
 #' @examples
 #' # Find the average number of legs in each taxon
-#' ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = T)
+#' ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = TRUE)
 #'
 #' # One way to implement `n_obs` and find the number of observations per taxon
-#' ex_taxmap$obs_apply("info", length, simplify = T)
+#' ex_taxmap$obs_apply("info", length, simplify = TRUE)
 #'
 NULL
 

@@ -41,9 +41,9 @@ obs(obj, data, func, simplify = FALSE,
 }
 \examples{
 # Find the average number of legs in each taxon
-ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = T)
+ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = TRUE)
 
 # One way to implement `n_obs` and find the number of observations per taxon
-ex_taxmap$obs_apply("info", length, simplify = T)
+ex_taxmap$obs_apply("info", length, simplify = TRUE)
 
 }

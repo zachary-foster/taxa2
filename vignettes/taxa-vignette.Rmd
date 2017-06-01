@@ -260,23 +260,23 @@ Taxon IDs (character) or edge list indexes (integer) can be supplied to the `sub
 supertaxa(tax, subset = "12")
 ```
 
-What is returned can be modified with the `return_type` option.
+What is returned can be modified with the `value` option.
 
 ```{r}
-supertaxa(tax, subset = "12", return_type = "index")
+supertaxa(tax, subset = "12", value = "taxon_indexes")
 ```
 
 ```{r}
-supertaxa(tax, subset = "12", return_type = "taxa")
+supertaxa(tax, subset = "12", value = "taxon_names")
 ```
 
 ```{r}
-supertaxa(tax, subset = "12", return_type = "name")
+supertaxa(tax, subset = "12", value = "taxon_ranks")
 ```
 
 
-The `subset` and `return_type` work the same for most of the following functions as well.
-
+The `subset` and `value` work the same for most of the following functions as well.
+See `tax$all_names()` for what can be used with `value`.
 
 #### subtaxa
 
@@ -285,7 +285,7 @@ For example, *sapiens* is a subtaxon of *Homo*.
 The `subtaxa` function returns all subtaxa for each taxon in a `taxonomy` object.
 
 ```{r}
-subtaxa(tax, return_type = "name")
+subtaxa(tax, value = "taxon_names")
 ```
 
 #### roots
@@ -294,7 +294,7 @@ We call taxa that have no supertaxa "roots".
 The `roots` function returns these taxa.
 
 ```{r}
-roots(tax, return_type = "name")
+roots(tax, value = "taxon_names")
 ```
 
 
@@ -304,7 +304,7 @@ We call taxa without any subtaxa "leaves".
 The `leaves` function returns these taxa.
 
 ```{r}
-leaves(tax, return_type = "name")
+leaves(tax, value = "taxon_names")
 ```
 
 #### other functions

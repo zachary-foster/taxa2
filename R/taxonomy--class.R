@@ -167,10 +167,11 @@ Taxonomy <- R6::R6Class(
 
 
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
-                         include_input = FALSE, return_type = "id",
-                         na = FALSE) {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+                         include_input = FALSE, value = "taxon_ids", na = FALSE) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
       # Get supertaxa
       parent_index <- match(self$edge_list$from, self$edge_list$to)
@@ -214,9 +215,12 @@ Taxonomy <- R6::R6Class(
         output <- lapply(output, function(x) x[!is.na(x)])
       }
 
-      # Convert to return type
-      output <- lapply(output, private$get_return_type,
-                       return_type = return_type)
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        output <- lapply(output, function(i) possible_values[i])
+      }
+
 
       # Reduce dimensionality
       if (simplify) {
@@ -226,13 +230,15 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    roots = function(subset = NULL, return_type = "id") {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+    roots = function(subset = NULL, value = "taxon_ids") {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
       # Get roots
       parents <- self$supertaxa(subset = subset, recursive = TRUE,
-                                include_input = TRUE, return_type = "index",
+                                include_input = TRUE, value = "taxon_indexes",
                                 na = FALSE)
       is_global_root <- vapply(parents, length, numeric(1)) == 1
       if (missing(subset)) {
@@ -244,23 +250,25 @@ Taxonomy <- R6::R6Class(
       }
       output <- unname(subset[is_root])
 
-      # Convert to return type
-      output <- stats::setNames(
-        private$get_return_type(output, return_type = return_type),
-        self$edge_list$to[output]
-      )
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        output <- possible_values[output]
+      }
 
       return(output)
     },
 
 
-    stems = function(subset = NULL, return_type = "id", simplify = FALSE,
+    stems = function(subset = NULL, value = "taxon_ids", simplify = FALSE,
                      exclude_leaves = FALSE) {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
       # Get roots to start search
-      my_roots <- self$roots(subset = subset, return_type = "index")
+      my_roots <- self$roots(subset = subset, value = "taxon_indexes")
 
       # Search until taxa with multiple subtaxa are found
       parent_index <- match(self$edge_list$from, self$edge_list$to)
@@ -277,10 +285,11 @@ Taxonomy <- R6::R6Class(
       }
       output <- lapply(my_roots, recursive_part)
 
-      # Convert to return type
-      output <- stats::setNames(lapply(output, private$get_return_type,
-                                       return_type = return_type),
-                                self$edge_list$to[my_roots])
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        output <- lapply(output, function(i) possible_values[i])
+      }
 
       # Reduce dimensionality
       if (simplify) {
@@ -291,20 +300,22 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    leaves = function(subset = NULL, return_type = "id") {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+    leaves = function(subset = NULL, value = "taxon_ids") {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
       # Find taxa without subtaxa
       my_subtaxa <- self$subtaxa(subset = subset, recursive = TRUE,
-                                 include_input = TRUE, return_type = "index")
+                                 include_input = TRUE, value = "taxon_indexes")
       output <- unlist(my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 1])
 
-      # Convert to return type
-      output <- stats::setNames(
-        private$get_return_type(output,return_type = return_type),
-        self$edge_list$to[output]
-      )
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        output <- possible_values[output]
+      }
 
       return(output)
     },
@@ -313,9 +324,11 @@ Taxonomy <- R6::R6Class(
 
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,
-                       return_type = "id") {
-      # Parse arguments
-      subset <- format_taxon_subset(names(self$taxa), subset)
+                       value = "taxon_ids") {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
       # Get subtaxa
       parent_index <- match(self$edge_list$from, self$edge_list$to)
@@ -341,7 +354,7 @@ Taxonomy <- R6::R6Class(
 
       if (recursive) {
         starting_taxa <- unname(self$roots(subset = subset,
-                                           return_type = "index"))
+                                           value = "taxon_indexes"))
         output <- stats::setNames(
           unlist(lapply(starting_taxa, recursive_part),
                  recursive = FALSE)[as.character(subset)],
@@ -377,10 +390,11 @@ Taxonomy <- R6::R6Class(
         names(output) <- output_names
       }
 
-      # Convert to return type
-      output <- lapply(output, private$get_return_type,
-                       return_type = return_type)
-
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        output <- lapply(output, function(i) possible_values[i])
+      }
 
       # Reduce dimensionality
       if (simplify) {
@@ -392,31 +406,31 @@ Taxonomy <- R6::R6Class(
 
     id_classifications = function(sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
-                            return_type = "id", na = FALSE),
+                            value = "taxon_ids", na = FALSE),
              function(x) paste0(rev(x), collapse = sep), character(1))
     },
 
     name_classifications = function(sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
-                            return_type = "name", na = FALSE),
+                            value = "taxon_names", na = FALSE),
              function(x) paste0(rev(x), collapse = sep), character(1))
     },
 
     n_supertaxa = function() {
       vapply(self$supertaxa(recursive = TRUE, include_input = FALSE,
-                            return_type = "index", na = FALSE),
+                            value = "taxon_indexes", na = FALSE),
              length, numeric(1))
     },
 
     n_subtaxa = function() {
       vapply(self$subtaxa(recursive = TRUE, include_input = FALSE,
-                          return_type = "index"),
+                          value = "taxon_indexes"),
              length, numeric(1))
     },
 
     n_subtaxa_1 = function() {
       vapply(self$subtaxa(recursive = FALSE, include_input = FALSE,
-                          return_type = "index"),
+                          value = "taxon_indexes"),
              length, numeric(1))
     },
 
@@ -429,7 +443,8 @@ Taxonomy <- R6::R6Class(
     },
 
     is_stem = function() {
-      stats::setNames(self$taxon_ids() %in% self$stems(simplify = TRUE),
+      stats::setNames(self$taxon_ids() %in% self$stems(simplify = TRUE,
+                                                       value = "taxon_indexes"),
                       self$taxon_ids())
     },
 
@@ -457,26 +472,7 @@ Taxonomy <- R6::R6Class(
       }
 
       # non-standard argument evaluation
-      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
-                                       data = self$data_used(...))
-
-      # convert taxon_ids to logical
-      is_char <- vapply(selection, is.character, logical(1))
-      selection[is_char] <- lapply(selection[is_char],
-                                   function(x) self$taxon_ids() %in% x)
-
-      # convert indexes to logical
-      is_index <- vapply(selection, is.numeric, logical(1))
-      selection[is_index] <- lapply(selection[is_index],
-                                    function(x) 1:nrow(self$edge_list) %in% x)
-
-      # combine filters
-      selection <- Reduce(`&`, selection)
-
-      # default to all taxa if no selection is provided
-      if (is.null(selection)) {
-        selection <- rep(TRUE, length(self$taxon_ids()))
-      }
+      selection <- private$parse_nse_taxon_subset(...)
 
       # Get taxa of subset
       if (is.logical(subtaxa) && subtaxa == FALSE) {
@@ -485,15 +481,15 @@ Taxonomy <- R6::R6Class(
       if (is.logical(supertaxa) && supertaxa == FALSE) {
         supertaxa = 0
       }
-      taxa_subset <- unique(c(which(selection),
+      taxa_subset <- unique(c(selection,
                               self$subtaxa(subset = selection,
                                            recursive = subtaxa,
-                                           return_type = "index",
+                                           value = "taxon_indexes",
                                            include_input = FALSE,
                                            simplify = TRUE),
                               self$supertaxa(subset = selection,
                                              recursive = supertaxa,
-                                             return_type = "index",
+                                             value = "taxon_indexes",
                                              na = FALSE, simplify = TRUE,
                                              include_input = FALSE)
       ))
@@ -528,7 +524,7 @@ Taxonomy <- R6::R6Class(
           supertaxa_key <- self$supertaxa(
             subset = unique(data_taxon_ids[to_reassign]),
             recursive = TRUE, simplify = FALSE, include_input = FALSE,
-            return_type = "index", na = FALSE
+            value = "taxon_indexes", na = FALSE
           )
           reassign_key <- vapply(supertaxa_key, reassign_one, character(1))
           new_data_taxon_ids <- reassign_key[data_taxon_ids[to_reassign]]
@@ -555,7 +551,7 @@ Taxonomy <- R6::R6Class(
         supertaxa_key <- self$supertaxa(
           subset = unique(self$taxon_ids()[to_reassign]),
           recursive = TRUE, simplify = FALSE, include_input = FALSE,
-          return_type = "index", na = FALSE)
+          value = "taxon_indexes", na = FALSE)
         reassign_key <- vapply(supertaxa_key, reassign_one, character(1)
         )
         self$edge_list[to_reassign, "from"] <-
@@ -686,29 +682,6 @@ Taxonomy <- R6::R6Class(
       apply(self$edge_list, 1, paste0, collapse = "->")
     },
 
-    get_return_type = function(
-      indexes,
-      return_type = c("index", "id", "taxa", "hierarchies", "name")) {
-      return_type <- match.arg(return_type)
-      if (return_type == "index") {
-        return(as.integer(indexes))
-      } else if (return_type == "id") {
-        return(self$edge_list$to[indexes])
-      } else if (return_type == "taxa") {
-        return(self$taxa[self$edge_list$to[indexes]])
-      } else if (return_type == "hierarchies") {
-        return(lapply(self$supertaxa(indexes, include_input = TRUE,
-                                     return_type = "taxa"),
-                      function(t) do.call(hierarchy, t)))
-      } else if (return_type == "name") {
-        return(self$taxon_names()[indexes])
-      } else {
-        stop(paste('Invailed return type: "return_type"',
-                   'must be one of the following:',
-                   paste(return_type, collapse = ", ")))
-      }
-    },
-
     remove_taxa = function(el_indexes) {
       # Remove taxa objects
       self$taxa <- self$taxa[self$taxon_ids()[el_indexes]]
@@ -719,6 +692,38 @@ Taxonomy <- R6::R6Class(
       # Replace and edges going to removed taxa with NA
       self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
         as.character(NA)
+    },
+
+    # Takes one ore more NSE expressions and resolves them to indexes of edgelist rows
+    # Each expression can resolve to taxon ids, edgelist indexes, or logical.
+    parse_nse_taxon_subset = function(...) {
+      # non-standard argument evaluation
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+                                       data = self$data_used(...))
+
+      # convert taxon_ids to logical
+      is_char <- vapply(selection, is.character, logical(1))
+      selection[is_char] <- lapply(selection[is_char],
+                                   function(x) self$taxon_ids() %in% x)
+
+      # convert indexes to logical
+      is_index <- vapply(selection, is.numeric, logical(1))
+      selection[is_index] <- lapply(selection[is_index],
+                                    function(x) 1:nrow(self$edge_list) %in% x)
+
+      # combine filters
+      selection <- Reduce(`&`, selection)
+
+      # default to all taxa if no selection is provided
+      if (is.null(selection)) {
+        selection <- rep(TRUE, length(self$taxon_ids()))
+      }
+
+      # convert to indexes, named by taxon id
+      names(selection) <- self$taxon_ids()
+      selection <- which(selection)
+
+      return(selection)
     }
   )
 )

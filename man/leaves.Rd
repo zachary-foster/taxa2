@@ -10,9 +10,10 @@ information to be queried.}
 \item{subset}{(\code{character}) Taxon IDs for which leaf taxa will be
 returned. Default: All taxon in \code{obj} will be used.}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id",
-"taxa", or "hierarchies". Note that "index" is the index of the edge list,
-not the taxon list.}
+\item{value}{What data to return. This is usually the name of column in a
+table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
+usually only makes sense to data that corresponds to taxa 1:1, such as
+\code{\link[=taxon_ranks]{taxon_ranks()}}. By default, taxon indexes are returned.}
 
 \item{...}{Used by the S3 method to pass the parameters to the R6 method of
 \code{\link[=taxonomy]{taxonomy()}}}
@@ -22,7 +23,7 @@ not the taxon list.}
 }
 \description{
 Return the leaf taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
-with no subtaxa. \preformatted{ obj$leaves(subset = NULL, return_type = "id")
+with no subtaxa. \preformatted{ obj$leaves(subset = NULL, value = NULL)
 leaves(obj, ...)}
 }
 \seealso{

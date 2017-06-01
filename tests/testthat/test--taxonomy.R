@@ -146,18 +146,10 @@ test_that("Finding roots", {
   expect_equal(x$roots(), roots(x))
 
   # Index return type
-  expect_type(x$roots(return_type = "index"), "integer")
+  expect_type(x$roots(value = "taxon_indexes"), "integer")
 
   # Taxon ID return type
-  expect_type(x$roots(return_type = "id"), "character")
-
-  # Taxon object return type
-  expect_type(x$roots(return_type = "taxa"), "list")
-  expect_equal(class(x$roots(return_type = "taxa")[[1]]), c("Taxon", "R6"))
-
-  # Hierarchy return type
-  expect_type(x$roots(return_type = "hierarchies"), "list")
-  expect_equal(class(x$roots(return_type = "hierarchies")[[1]]), c("Hierarchy", "R6"))
+  expect_type(x$roots(value = "taxon_ids"), "character")
 })
 
 
@@ -167,26 +159,12 @@ test_that("Finding supertaxa", {
   expect_equal(x$supertaxa(), supertaxa(x))
 
   # Index return type
-  expect_type(x$supertaxa(return_type = "index")[[1]], "integer")
-  expect_type(x$supertaxa(return_type = "index", simplify = TRUE), "integer")
+  expect_type(x$supertaxa(value = "taxon_indexes")[[1]], "integer")
+  expect_type(x$supertaxa(value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$supertaxa(return_type = "id")[[1]], "character")
-  expect_type(x$supertaxa(return_type = "id", simplify = TRUE), "character")
-
-  # Taxon object return type
-  expect_type(x$supertaxa(return_type = "taxa"), "list")
-  expect_type(x$supertaxa(return_type = "taxa")[[1]], "list")
-  expect_equal(class(x$supertaxa(return_type = "taxa")[[3]][[1]]), c("Taxon", "R6"))
-  expect_type(x$supertaxa(return_type = "taxa", simplify = TRUE), "list")
-  expect_equal(class(x$supertaxa(return_type = "taxa", simplify = TRUE)[[1]]), c("Taxon", "R6"))
-
-  # Hierarchy return type
-  expect_type(x$supertaxa(return_type = "hierarchies"), "list")
-  expect_type(x$supertaxa(return_type = "hierarchies")[[1]], "list")
-  expect_equal(class(x$supertaxa(return_type = "hierarchies")[[3]][[1]]), c("Hierarchy", "R6"))
-  expect_type(x$supertaxa(return_type = "hierarchies", simplify = TRUE), "list")
-  expect_equal(class(x$supertaxa(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+  expect_type(x$supertaxa(value = "taxon_ids")[[1]], "character")
+  expect_type(x$supertaxa(value = "taxon_ids", simplify = TRUE), "character")
 
   # Recursion settings
   expect_equal(supertaxa(x, recursive = TRUE), supertaxa(x, recursive = -1))
@@ -201,26 +179,12 @@ test_that("Finding subtaxa", {
   expect_equal(x$subtaxa(), subtaxa(x))
 
   # Index return type
-  expect_type(x$subtaxa(return_type = "index")[[1]], "integer")
-  expect_type(x$subtaxa(return_type = "index", simplify = TRUE), "integer")
+  expect_type(x$subtaxa(value = "taxon_indexes")[[1]], "integer")
+  expect_type(x$subtaxa(value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$subtaxa(return_type = "id")[[1]], "character")
-  expect_type(x$subtaxa(return_type = "id", simplify = TRUE), "character")
-
-  # Taxon object return type
-  expect_type(x$subtaxa(return_type = "taxa"), "list")
-  expect_type(x$subtaxa(return_type = "taxa")[[1]], "list")
-  expect_equal(class(x$subtaxa(return_type = "taxa")[[3]][[1]]), c("Taxon", "R6"))
-  expect_type(x$subtaxa(return_type = "taxa", simplify = TRUE), "list")
-  expect_equal(class(x$subtaxa(return_type = "taxa", simplify = TRUE)[[1]]), c("Taxon", "R6"))
-
-  # Hierarchy return type
-  expect_type(x$subtaxa(return_type = "hierarchies"), "list")
-  expect_type(x$subtaxa(return_type = "hierarchies")[[1]], "list")
-  expect_equal(class(x$subtaxa(return_type = "hierarchies")[[3]][[1]]), c("Hierarchy", "R6"))
-  expect_type(x$subtaxa(return_type = "hierarchies", simplify = TRUE), "list")
-  expect_equal(class(x$subtaxa(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+  expect_type(x$subtaxa(value = "taxon_ids")[[1]], "character")
+  expect_type(x$subtaxa(value = "taxon_ids", simplify = TRUE), "character")
 
   # Recursion settings
   expect_equal(subtaxa(x, recursive = TRUE), subtaxa(x, recursive = -1))
@@ -237,26 +201,12 @@ test_that("Finding stems", {
   expect_equal(x$stems(), stems(x))
 
   # Index return type
-  expect_type(x$stems(return_type = "index")[[1]], "integer")
-  expect_type(x$stems(return_type = "index", simplify = TRUE), "integer")
+  expect_type(x$stems(value = "taxon_indexes")[[1]], "integer")
+  expect_type(x$stems(value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$stems(return_type = "id")[[1]], "character")
-  expect_type(x$stems(return_type = "id", simplify = TRUE), "character")
-
-  # Taxon object return type
-  expect_type(x$stems(return_type = "taxa"), "list")
-  expect_type(x$stems(return_type = "taxa")[[1]], "list")
-  expect_equal(class(x$stems(return_type = "taxa")[[1]][[1]]), c("Taxon", "R6"))
-  expect_type(x$stems(return_type = "taxa", simplify = TRUE), "list")
-  expect_equal(class(x$stems(return_type = "taxa", simplify = TRUE)[[1]]), c("Taxon", "R6"))
-
-  # Hierarchy return type
-  expect_type(x$stems(return_type = "hierarchies"), "list")
-  expect_type(x$stems(return_type = "hierarchies")[[1]], "list")
-  expect_equal(class(x$stems(return_type = "hierarchies")[[1]][[1]]), c("Hierarchy", "R6"))
-  expect_type(x$stems(return_type = "hierarchies", simplify = TRUE), "list")
-  expect_equal(class(x$stems(return_type = "hierarchies", simplify = TRUE)[[1]]), c("Hierarchy", "R6"))
+  expect_type(x$stems(value = "taxon_ids")[[1]], "character")
+  expect_type(x$stems(value = "taxon_ids", simplify = TRUE), "character")
 })
 
 
@@ -266,19 +216,11 @@ test_that("Finding leaves", {
   expect_equal(x$leaves(), leaves(x))
 
   # Index return type
-  expect_type(x$leaves(return_type = "index"), "integer")
+  expect_type(x$leaves(value = "taxon_indexes"), "integer")
 
   # Taxon ID return type
-  expect_type(x$leaves(return_type = "id"), "character")
+  expect_type(x$leaves(value = "taxon_ids"), "character")
 
-  # Taxon object return type
-  expect_type(x$leaves(return_type = "taxa"), "list")
-  expect_equal(class(x$leaves(return_type = "taxa")[[1]]), c("Taxon", "R6"))
-
-  # Hierarchy return type
-  expect_type(x$leaves(return_type = "hierarchies"), "list")
-  expect_equal(class(x$leaves(return_type = "hierarchies")[[1]]),
-               c("Hierarchy", "R6"))
 })
 
 test_that("Filtering taxa", {
