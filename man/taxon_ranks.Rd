@@ -9,11 +9,9 @@
 \description{
 Return the taxon ranks in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 They are in the order taxa appear in the edge list.
-}
-\details{
 \preformatted{
 obj$taxon_ranks()
-taxon_ranks(obj, ...)}
+taxon_ranks(obj)}
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},

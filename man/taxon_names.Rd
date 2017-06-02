@@ -9,11 +9,9 @@
 \description{
 Return the taxon names in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 They are in the order they appear in the edge list.
-}
-\details{
 \preformatted{
 obj$taxon_names()
-taxon_names(obj, ...)}
+taxon_names(obj)}
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},

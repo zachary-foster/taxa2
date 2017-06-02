@@ -2,10 +2,9 @@
 #'
 #' Return the taxon IDs in a [taxonomy()] or [taxmap()] object.
 #' They are in the order they appear in the edge list.
-#'
 #' \preformatted{
 #' obj$taxon_ids()
-#' taxon_ids(obj, ...)}
+#' taxon_ids(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
@@ -18,10 +17,9 @@ NULL
 #'
 #' Return the taxon indexes in a [taxonomy()] or [taxmap()] object.
 #' They are the indexes of the edge list rows.
-#'
 #' \preformatted{
 #' obj$taxon_indexes()
-#' taxon_indexes(obj, ...)}
+#' taxon_indexes(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
@@ -35,10 +33,9 @@ NULL
 #'
 #' Return the taxon names in a [taxonomy()] or [taxmap()] object.
 #' They are in the order they appear in the edge list.
-#'
 #' \preformatted{
 #' obj$taxon_names()
-#' taxon_names(obj, ...)}
+#' taxon_names(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
@@ -51,10 +48,9 @@ NULL
 #'
 #' Return the taxon ranks in a [taxonomy()] or [taxmap()] object.
 #' They are in the order taxa appear in the edge list.
-#'
 #' \preformatted{
 #' obj$taxon_ranks()
-#' taxon_ranks(obj, ...)}
+#' taxon_ranks(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
@@ -131,8 +127,9 @@ NULL
 #' Get root taxa
 #'
 #' Return the root taxa for a [taxonomy()] or [taxmap()] object. Can also be used to
-#' get the roots of a subset of taxa. \preformatted{ obj$roots(subset = NULL,
-#' value = NULL) roots(obj, ...)}
+#' get the roots of a subset of taxa.
+#' \preformatted{obj$roots(subset = NULL, value = NULL)
+#' roots(obj, subset = NULL, value = NULL)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
@@ -142,8 +139,6 @@ NULL
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
 #'   [taxon_ranks()]. By default, taxon indexes are returned.
-#' @param ... Used by the S3 method to pass the parameters to the R6 method of
-#'   [taxonomy()]
 #'
 #' @family taxonomy indexing functions
 #'
@@ -156,9 +151,11 @@ NULL
 #' Get subtaxa
 #'
 #' Return the taxon IDs or `taxon_data` indexes of all subtaxa in an object
-#' of type `taxmap` \preformatted{ obj$subtaxa(subset = NULL, recursive =
-#' TRUE, simplify = FALSE, include_input = FALSE, value = NULL, na =
-#' FALSE) subtaxa(obj, ...)}
+#' of type `taxmap`.
+#' \preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
+#' include_input = FALSE, value = NULL)
+#' subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
+#' include_input = FALSE, value = NULL)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
@@ -217,8 +214,11 @@ NULL
 #'
 #' Return the stem taxa for a [taxonomy()] or a [taxmap()]
 #' object. Stem taxa are all those from the roots to the first taxon with more
-#' than one subtaxon. \preformatted{ obj$stems(subset = NULL, simplify = FALSE,
-#' value = NULL, exclude_leaves = FALSE) stems(obj, ...)}
+#' than one subtaxon.
+#' \preformatted{obj$stems(subset = NULL, simplify = FALSE,
+#' value = NULL, exclude_leaves = FALSE)
+#' stems(obj, subset = NULL, simplify = FALSE,
+#' value = NULL, exclude_leaves = FALSE)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
@@ -232,8 +232,6 @@ NULL
 #'   into a single vector of unique values.
 #' @param exclude_leaves (`logical`) If `TRUE`, the do not include
 #'   taxa with no subtaxa.
-#' @param ... Used by the S3 method to pass the parameters to the R6 method of
-#'   [taxonomy()]
 #'
 #' @return `character`
 #'
@@ -246,8 +244,9 @@ NULL
 #' Get leaf taxa
 #'
 #' Return the leaf taxa for a [taxonomy()] or [taxmap()] object. Leaf taxa are taxa
-#' with no subtaxa. \preformatted{ obj$leaves(subset = NULL, value = NULL)
-#' leaves(obj, ...)}
+#' with no subtaxa.
+#' \preformatted{obj$leaves(subset = NULL, value = NULL)
+#' leaves(obj, subset = NULL, value = NULL)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
@@ -257,8 +256,6 @@ NULL
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
 #'   [taxon_ranks()]. By default, taxon indexes are returned.
-#' @param ... Used by the S3 method to pass the parameters to the R6 method of
-#'   [taxonomy()]
 #'
 #' @return `character`
 #'

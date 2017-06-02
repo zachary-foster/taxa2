@@ -20,9 +20,6 @@ into a single vector of unique values.}
 
 \item{exclude_leaves}{(\code{logical}) If \code{TRUE}, the do not include
 taxa with no subtaxa.}
-
-\item{...}{Used by the S3 method to pass the parameters to the R6 method of
-\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 \code{character}
@@ -30,8 +27,11 @@ taxa with no subtaxa.}
 \description{
 Return the stem taxa for a \code{\link[=taxonomy]{taxonomy()}} or a \code{\link[=taxmap]{taxmap()}}
 object. Stem taxa are all those from the roots to the first taxon with more
-than one subtaxon. \preformatted{ obj$stems(subset = NULL, simplify = FALSE,
-value = NULL, exclude_leaves = FALSE) stems(obj, ...)}
+than one subtaxon.
+\preformatted{obj$stems(subset = NULL, simplify = FALSE,
+value = NULL, exclude_leaves = FALSE)
+stems(obj, subset = NULL, simplify = FALSE,
+value = NULL, exclude_leaves = FALSE)}
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},

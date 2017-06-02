@@ -14,17 +14,15 @@ returned. Default: All taxon in \code{obj} will be used.}
 table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
 usually only makes sense to data that corresponds to taxa 1:1, such as
 \code{\link[=taxon_ranks]{taxon_ranks()}}. By default, taxon indexes are returned.}
-
-\item{...}{Used by the S3 method to pass the parameters to the R6 method of
-\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 \code{character}
 }
 \description{
 Return the leaf taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
-with no subtaxa. \preformatted{ obj$leaves(subset = NULL, value = NULL)
-leaves(obj, ...)}
+with no subtaxa.
+\preformatted{obj$leaves(subset = NULL, value = NULL)
+leaves(obj, subset = NULL, value = NULL)}
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{roots}},

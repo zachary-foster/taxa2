@@ -9,11 +9,9 @@
 \description{
 Return the taxon indexes in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 They are the indexes of the edge list rows.
-}
-\details{
 \preformatted{
 obj$taxon_indexes()
-taxon_indexes(obj, ...)}
+taxon_indexes(obj)}
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
