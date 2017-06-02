@@ -12,10 +12,9 @@
 #'   there must be a column named "taxon_id" and lists/vectors must be named by
 #'   taxon ID.
 #' @param value What data to return. This is usually the name of column in a
-#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
-#'   usually only makes sense to use columns in the dataset specified by the
-#'   `data` option. By default, the indexes of observation in `data` are
-#'   returned.
+#'   table in `obj$data`. Any result of `all_names(obj)` can be used. If the
+#'   value used has names, it is assumed that the names are taxon ids and the
+#'   taxon ids are used to look up the correct values.
 #' @param subset (`character`) Taxon IDs or indexes for which observation
 #'   indexes will be returned. Default: All taxa in `obj` will be used.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the

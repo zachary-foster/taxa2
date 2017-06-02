@@ -152,7 +152,12 @@ Taxmap <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- lapply(output, function(i) possible_values[i])
+        if (is.null(names(possible_values))) {
+          output <- lapply(output, function(i) possible_values[i])
+        } else {
+          output <- lapply(output, function(i) possible_values[private$get_data_taxon_ids(data)[i]])
+        }
+
       }
 
       # Reduce dimensionality

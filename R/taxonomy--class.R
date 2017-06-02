@@ -24,8 +24,9 @@ Taxonomy <- R6::R6Class(
     input_ids = NULL, # Only used by `Taxmap` right now
 
     # A simple wrapper to make future changes easier
+    # it returns ids named by ids for consistency with other funcs
     taxon_ids = function() {
-      self$edge_list$to
+      stats::setNames(self$edge_list$to, self$edge_list$to)
     },
 
     # A simple wrapper to make future changes easier
@@ -135,7 +136,7 @@ Taxonomy <- R6::R6Class(
       # Name each thing returned by taxon id if possibile
       #   This only applies to taxmap objects
       output[] <- lapply(seq_len(length(output)), function(index) {
-        data_location <- names(my_names[index])
+        data_location <- names(name[index])
         if (startsWith(data_location, "data$")) {
           data_name <- strsplit(data_location,
                                 split =  "$", fixed = TRUE)[[1]][2]
