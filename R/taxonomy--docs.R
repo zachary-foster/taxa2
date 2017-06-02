@@ -69,9 +69,11 @@ NULL
 #'
 #' Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
 #' taxa are a part of) in an object of type [taxonomy()] or
-#' [taxmap()]. \preformatted{ obj$supertaxa(subset = NULL, recursive =
-#' TRUE, simplify = FALSE, include_input = FALSE, value = NULL, na =
-#' FALSE) supertaxa(obj, ...)}
+#' [taxmap()].
+#' \preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
+#' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
+#' supertaxa(obj, subset = NULL, recursive = TRUE,
+#' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object containing taxon
 #'   information to be queried.
@@ -93,8 +95,6 @@ NULL
 #'   [taxon_ranks()]. By default, taxon indexes are returned.
 #' @param na (`logical`) If `TRUE`, return `NA` where information
 #'   is not available.
-#' @param ... U Used by the S3 method to pass the parameters to the R6 method of
-#'   [taxonomy()]
 #'
 #' @return If `simplify = FALSE`, then a list of vectors are returned
 #'   corresponding to the `subset` argument. If `simplify = TRUE`,
@@ -103,6 +103,28 @@ NULL
 #' @family taxonomy indexing functions
 #'
 #' @name supertaxa
+#'
+#' @examples
+#' # return the indexes for supertaxa for each taxon
+#' ex_taxmap$supertaxa()
+#'
+#' # Only return data for some taxa using taxon indexes
+#' ex_taxmap$supertaxa(subset = 1:3)
+#'
+#' # Only return data for some taxa using taxon ids
+#' ex_taxmap$supertaxa(subset = c("3", "4"))
+#'
+#' # Only return data for some taxa using logical tests
+#' ex_taxmap$supertaxa(subset = taxon_ranks == "species")
+#'
+#' # Only return supertaxa one level above
+#' ex_taxmap$supertaxa(recursive = FALSE)
+#'
+#' # Only return supertaxa some number of ranks above
+#' ex_taxmap$supertaxa(recursive = 2)
+#'
+#' # Return something besides taxon indexes
+#' ex_taxmap$supertaxa(value = "taxon_names")
 NULL
 
 
@@ -166,6 +188,28 @@ NULL
 #' @family taxonomy indexing functions
 #'
 #' @name subtaxa
+#'
+#' @examples
+#' # return the indexes for subtaxa for each taxon
+#' ex_taxmap$subtaxa()
+#'
+#' # Only return data for some taxa using taxon indexes
+#' ex_taxmap$subtaxa(subset = 1:3)
+#'
+#' # Only return data for some taxa using taxon ids
+#' ex_taxmap$subtaxa(subset = c("3", "4"))
+#'
+#' # Only return data for some taxa using logical tests
+#' ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+#'
+#' # Only return subtaxa one level below
+#' ex_taxmap$subtaxa(recursive = FALSE)
+#'
+#' # Only return subtaxa some number of ranks below
+#' ex_taxmap$subtaxa(recursive = 2)
+#'
+#' # Return something besides taxon indexes
+#' ex_taxmap$subtaxa(value = "taxon_names")
 NULL
 
 

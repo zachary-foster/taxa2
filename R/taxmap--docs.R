@@ -42,6 +42,9 @@
 #' # Get only a subset of taxon IDs
 #' ex_taxmap$obs("info", subset = c("1", "2"))
 #'
+#' # Get only a subset of taxa using logical tests
+#' ex_taxmap$obs("info", subset = taxon_ranks == "genus")
+#'
 #' # Only return indexes of rows assinged to each taxon explicitly
 #' ex_taxmap$obs("info", recursive = FALSE)
 #'

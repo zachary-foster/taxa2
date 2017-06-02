@@ -120,7 +120,8 @@ Taxmap <- R6::R6Class(
     },
 
 
-    obs = function(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE) {
+    obs = function(data, value = NULL, subset = NULL, recursive = TRUE,
+                   simplify = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -157,7 +158,6 @@ Taxmap <- R6::R6Class(
         } else {
           output <- lapply(output, function(i) possible_values[private$get_data_taxon_ids(data)[i]])
         }
-
       }
 
       # Reduce dimensionality
@@ -170,8 +170,8 @@ Taxmap <- R6::R6Class(
 
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
-      my_obs <- self$obs(data, simplify = FALSE, value = value, subset = subset,
-                         recursive = recursive)
+      my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value, subset = subset,
+                         recursive = recursive)))
       output <- lapply(my_obs, func, ...)
       if (simplify) {
         output <- unlist(output)

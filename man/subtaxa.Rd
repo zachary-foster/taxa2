@@ -41,6 +41,28 @@ of type \code{taxmap} \preformatted{ obj$subtaxa(subset = NULL, recursive =
 TRUE, simplify = FALSE, include_input = FALSE, value = NULL, na =
 FALSE) subtaxa(obj, ...)}
 }
+\examples{
+# return the indexes for subtaxa for each taxon
+ex_taxmap$subtaxa()
+
+# Only return data for some taxa using taxon indexes
+ex_taxmap$subtaxa(subset = 1:3)
+
+# Only return data for some taxa using taxon ids
+ex_taxmap$subtaxa(subset = c("3", "4"))
+
+# Only return data for some taxa using logical tests
+ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+
+# Only return subtaxa one level below
+ex_taxmap$subtaxa(recursive = FALSE)
+
+# Only return subtaxa some number of ranks below
+ex_taxmap$subtaxa(recursive = 2)
+
+# Return something besides taxon indexes
+ex_taxmap$subtaxa(value = "taxon_names")
+}
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},
   \code{\link{roots}}, \code{\link{stems}},

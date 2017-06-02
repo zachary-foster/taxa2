@@ -168,7 +168,7 @@ Taxonomy <- R6::R6Class(
 
 
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
-                         include_input = FALSE, value = "taxon_ids", na = FALSE) {
+                         include_input = FALSE, value = NULL, na = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -219,9 +219,12 @@ Taxonomy <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- lapply(output, function(i) possible_values[i])
+        if (is.null(names(possible_values))) {
+          output <- lapply(output, function(i) possible_values[i])
+        } else {
+          output <- lapply(output, function(i) possible_values[self$taxon_ids()[i]])
+        }
       }
-
 
       # Reduce dimensionality
       if (simplify) {
@@ -231,7 +234,7 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    roots = function(subset = NULL, value = "taxon_ids") {
+    roots = function(subset = NULL, value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -254,14 +257,18 @@ Taxonomy <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- possible_values[output]
+        if (is.null(names(possible_values))) {
+          output <- possible_values[output]
+        } else {
+          output <- possible_values[self$taxon_ids()[output]]
+        }
       }
 
       return(output)
     },
 
 
-    stems = function(subset = NULL, value = "taxon_ids", simplify = FALSE,
+    stems = function(subset = NULL, value = NULL, simplify = FALSE,
                      exclude_leaves = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
@@ -289,7 +296,11 @@ Taxonomy <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- lapply(output, function(i) possible_values[i])
+        if (is.null(names(possible_values))) {
+          output <- lapply(output, function(i) possible_values[i])
+        } else {
+          output <- lapply(output, function(i) possible_values[self$taxon_ids()[i]])
+        }
       }
 
       # Reduce dimensionality
@@ -301,7 +312,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    leaves = function(subset = NULL, value = "taxon_ids") {
+    leaves = function(subset = NULL, value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -315,7 +326,11 @@ Taxonomy <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- possible_values[output]
+        if (is.null(names(possible_values))) {
+          output <- possible_values[output]
+        } else {
+          output <- possible_values[self$taxon_ids()[output]]
+        }
       }
 
       return(output)
@@ -325,7 +340,7 @@ Taxonomy <- R6::R6Class(
 
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,
-                       value = "taxon_ids") {
+                       value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -394,7 +409,11 @@ Taxonomy <- R6::R6Class(
       # Look up values
       if (!is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
-        output <- lapply(output, function(i) possible_values[i])
+        if (is.null(names(possible_values))) {
+          output <- lapply(output, function(i) possible_values[i])
+        } else {
+          output <- lapply(output, function(i) possible_values[self$taxon_ids()[i]])
+        }
       }
 
       # Reduce dimensionality
