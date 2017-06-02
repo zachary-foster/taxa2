@@ -24,6 +24,17 @@ get the roots of a subset of taxa.
 \preformatted{obj$roots(subset = NULL, value = NULL)
 roots(obj, subset = NULL, value = NULL)}
 }
+\examples{
+# Return indexes of root taxa
+roots(ex_taxmap)
+
+# Return indexes for a subset of taxa
+roots(ex_taxmap, subset = 2:17)
+
+# Return something besides taxon indexes
+roots(ex_taxmap, value = "taxon_names")
+
+}
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},
   \code{\link{stems}}, \code{\link{subtaxa}},

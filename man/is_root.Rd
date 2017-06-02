@@ -12,8 +12,13 @@ A \code{logical} of length equal to the number of taxa.
 \description{
 Test if taxa are roots in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Roots are taxa
 without supertaxa, typically things like "Bacteria", or "Life".
-\preformatted{obj$is_root()
+\preformatted{
+obj$is_root()
 is_root(obj)}
+}
+\examples{
+is_root(ex_taxmap)
+
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},

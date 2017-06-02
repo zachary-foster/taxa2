@@ -15,8 +15,10 @@ taxon names}
 \description{
 Get classification strings of taxa in an object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
 composed of taxon names. Each classification is constructed by concatenating
-the taxon names of the given taxon and its supertaxa. \preformatted{
-obj$name_classifications(sep = ";") name_classifications(obj, sep = ";")}
+the taxon names of the given taxon and its supertaxa.
+\preformatted{
+obj$name_classifications(sep = ";")
+name_classifications(obj, sep = ";")}
 }
 \examples{
 name_classifications(ex_taxmap)

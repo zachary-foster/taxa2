@@ -13,8 +13,13 @@ A \code{logical} of length equal to the number of taxa.
 Test if taxa are branches in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Branches
 are taxa in the interior of the tree that are not \code{\link[=roots]{roots()}}, \code{\link[=stems]{stems()}}, or
 \code{\link[=leaves]{leaves()}}.
-\preformatted{obj$is_branch()
+\preformatted{
+obj$is_branch()
 is_branch(obj)}
+}
+\examples{
+is_branch(ex_taxmap)
+
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},

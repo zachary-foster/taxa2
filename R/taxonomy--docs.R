@@ -10,8 +10,12 @@
 #'
 #' @family taxonomy data functions
 #'
+#' @examples
+#' taxon_ids(ex_taxmap)
+#'
 #' @name taxon_ids
 NULL
+
 
 #' Get taxon indexes
 #'
@@ -24,6 +28,9 @@ NULL
 #' @param obj The `taxonomy` or `taxmap` object.
 #'
 #' @family taxonomy data functions
+#'
+#' @examples
+#' taxon_indexes(ex_taxmap)
 #'
 #' @name taxon_indexes
 NULL
@@ -41,8 +48,12 @@ NULL
 #'
 #' @family taxonomy data functions
 #'
+#' @examples
+#' taxon_names(ex_taxmap)
+#'
 #' @name taxon_names
 NULL
+
 
 #' Get taxon ranks
 #'
@@ -56,9 +67,11 @@ NULL
 #'
 #' @family taxonomy data functions
 #'
+#' @examples
+#' taxon_ranks(ex_taxmap)
+#'
 #' @name taxon_ranks
 NULL
-
 
 
 #' Get all supertaxa of a taxon
@@ -85,10 +98,8 @@ NULL
 #'   single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are included in
 #'   the output
-#' @param value What data to return. This is usually the name of column in a
-#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
-#'   usually only makes sense to data that corresponds to taxa 1:1, such as
-#'   [taxon_ranks()]. By default, taxon indexes are returned.
+#' @param value What data to return. Any result of `all_names(obj)` can be used, but it
+#'   usually only makes sense to use data that has an associated taxon id.
 #' @param na (`logical`) If `TRUE`, return `NA` where information
 #'   is not available.
 #'
@@ -143,6 +154,16 @@ NULL
 #' @family taxonomy indexing functions
 #'
 #' @return `character`
+#'
+#' @examples
+#' # Return indexes of root taxa
+#' roots(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' roots(ex_taxmap, subset = 2:17)
+#'
+#' # Return something besides taxon indexes
+#' roots(ex_taxmap, value = "taxon_names")
 #'
 #' @name roots
 NULL
@@ -237,6 +258,16 @@ NULL
 #'
 #' @family taxonomy indexing functions
 #'
+#' @examples
+#' # Return indexes of stem taxa
+#' stems(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' stems(ex_taxmap, subset = 2:17)
+#'
+#' # Return something besides taxon indexes
+#' stems(ex_taxmap, value = "taxon_names")
+#'
 #' @name stems
 NULL
 
@@ -260,6 +291,16 @@ NULL
 #' @return `character`
 #'
 #' @family taxonomy indexing functions
+#'
+#' @examples
+#' # Return indexes of leaf taxa
+#' leaves(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' leaves(ex_taxmap, subset = 2:17)
+#'
+#' # Return something besides taxon indexes
+#' leaves(ex_taxmap, value = "taxon_names")
 #'
 #' @name leaves
 NULL
@@ -291,8 +332,10 @@ NULL
 #'
 #' Get classification strings of taxa in an object of type [taxonomy()] or [taxmap()]
 #' composed of taxon names. Each classification is constructed by concatenating
-#' the taxon names of the given taxon and its supertaxa. \preformatted{
-#' obj$name_classifications(sep = ";") name_classifications(obj, sep = ";")}
+#' the taxon names of the given taxon and its supertaxa.
+#' \preformatted{
+#' obj$name_classifications(sep = ";")
+#' name_classifications(obj, sep = ";")}
 #'
 #' @param obj ([taxonomy()] or [taxmap()])
 #' @param sep (`character` of length 1) The character(s) to place between
@@ -312,7 +355,10 @@ NULL
 #' Get number of supertaxa
 #'
 #' Get number of supertaxa for each taxon in an object of type
-#' [taxonomy()] or [taxmap()] \preformatted{ obj$n_supertaxa() n_supertaxa(obj)}
+#' [taxonomy()] or [taxmap()]
+#' \preformatted{
+#' obj$n_supertaxa()
+#' n_supertaxa(obj)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()])
 #'
@@ -330,7 +376,10 @@ NULL
 #' Get number of subtaxa
 #'
 #' Get number of subtaxa for each taxon in an object of type
-#' [taxonomy()] or [taxmap()] \preformatted{ obj$n_subtaxa() n_subtaxa(obj)}
+#' [taxonomy()] or [taxmap()]
+#' \preformatted{
+#' obj$n_subtaxa()
+#' n_subtaxa(obj)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()])
 #'
@@ -349,7 +398,9 @@ NULL
 #'
 #' Get number of subtaxa for each taxon in an object of type
 #' [taxonomy()] or [taxmap()], not including subtaxa of subtaxa etc. This does not
-#' include subtaxa assigned to subtaxa. \preformatted{ obj$n_subtaxa_1()
+#' include subtaxa assigned to subtaxa.
+#' \preformatted{
+#' obj$n_subtaxa_1()
 #' n_subtaxa_1(obj)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()])
@@ -427,7 +478,10 @@ NULL
 #' Get data in a taxmap object by name
 #'
 #' Given a vector of names, return a list of data contained in a [taxonomy()] or
-#' [taxmap()] object. \preformatted{ obj$get_data(name) get_data(obj, name)}
+#' [taxmap()] object.
+#' \preformatted{
+#' obj$get_data(name)
+#' get_data(obj, name)}
 #'
 #' @param obj A [taxonomy()] or [taxmap()]  object
 #' @param name (`character`) Names of data to return.
@@ -438,7 +492,11 @@ NULL
 #' @return `list`
 #'
 #' @examples
-#' ex_taxmap$get_data("reaction")
+#' # Get specific values
+#' get_data(ex_taxmap, c("reaction", "n_legs", "taxon_ranks"))
+#'
+#' # Get all values
+#' get_data(ex_taxmap)
 #'
 #' @family accessors
 #'
@@ -460,7 +518,7 @@ NULL
 #' @return `list`
 #'
 #' @examples
-#' ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
+#' data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
@@ -471,17 +529,18 @@ NULL
 #' Filter taxa with a list of conditions
 #'
 #' Filter taxa in a [taxonomy()] or [taxmap()] object with a series of
-#' conditions. Any variable name that appears in `obj$all_names()` can be used
+#' conditions. Any variable name that appears in [all_names()] can be used
 #' as if it was a vector on its own. See [dplyr::filter()] for the inspiration
 #' for this function and more information. Calling the function using the
 #' `obj$filter_taxa(...)` style edits "obj" in place, unlike most R functions.
 #' However, calling the function using the `filter_taxa(obj, ...)` immitates R's
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
 #' a changed version would be returned, like most R functions.
-#' \preformatted{filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
-#' taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless =
-#' FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
+#' \preformatted{
+#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
 #' @param ... One or more filtering conditions. Each filtering condition must
@@ -489,8 +548,7 @@ NULL
 #'   taxon IDs contained in `obj$edge_list$to`} \item{`integer`}{One or more row
 #'   indexes of `obj$edge_list`} \item{`logical`}{A `TRUE`/`FALSE` vector of
 #'   length equal to the number of rows in `obj$edge_list`} } Any variable name
-#'   that appears in `obj$all_names()` can be used as if it was a vector on its
-#'   own.
+#'   that appears in [all_names()] can be used as if it was a vector on its own.
 #' @param subtaxa (`logical` or `numeric` of length 1) If `TRUE`, include
 #'   subtaxa of taxa passing the filter. Positive numbers indicate the number of
 #'   ranks below the target taxa to return. `0` is equivalent to `FALSE`.
@@ -566,7 +624,7 @@ NULL
 #' Sort the edge list of [taxmap()] objects
 #'
 #' Sort the edge list in [taxonomy()] or [taxmap()] objects. Any variable name that
-#' appears in `obj$all_names()` can be used as if it was a vector on its
+#' appears in [all_names()] can be used as if it was a vector on its
 #' own. See [dplyr::arrange()] for the inspiration for this function
 #' and more information.
 #' \preformatted{
@@ -607,7 +665,7 @@ NULL
 #'   observation assigned to a given taxon are supplied to `collapse_func` to
 #'   get the taxon weight. If `use_subtaxa` is `TRUE` then the observations
 #'   assigned to every subtaxa are also used. Any variable name that appears in
-#'   `obj$all_names()` can be used as if it was a vector on its own. If
+#'   [all_names()] can be used as if it was a vector on its own. If
 #'   `taxon_weight` is also specified, the two weights are multiplied (after
 #'   `obs_weight` for each observation is calculated). `obs_target` must be used
 #'   with this option.
@@ -672,7 +730,7 @@ NULL
 #'   observation assigned to a given taxon are supplied to `collapse_func` to
 #'   get the taxon weight. If `use_subtaxa` is `TRUE` then the observations
 #'   assigned to every subtaxa are also used. Any variable name that appears in
-#'   `obj$all_names()` can be used as if it was a vector on its own. If
+#'   [all_names()] can be used as if it was a vector on its own. If
 #'   `taxon_weight` is also specified, the two weights are multiplied (after
 #'   `obs_weight` for each observation is calculated). `obs_target` must be used
 #'   with this option.
@@ -697,6 +755,7 @@ NULL
 #'
 #'
 #' @examples
+#' # sample half of the taxa
 #' sample_frac_taxa(ex_taxmap, 0.5, supertaxa = TRUE)
 #'
 #' @family taxmap manipulation functions
@@ -709,7 +768,8 @@ NULL
 #'
 #' Test if taxa are roots in a [taxonomy()] or [taxmap()] object. Roots are taxa
 #' without supertaxa, typically things like "Bacteria", or "Life".
-#' \preformatted{obj$is_root()
+#' \preformatted{
+#' obj$is_root()
 #' is_root(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
@@ -717,6 +777,9 @@ NULL
 #' @return A `logical` of length equal to the number of taxa.
 #'
 #' @family taxonomy data functions
+#'
+#' @examples
+#' is_root(ex_taxmap)
 #'
 #' @name is_root
 NULL
@@ -728,7 +791,8 @@ NULL
 #' from the [roots()] taxa to the first taxon with more than one subtaxon. These
 #' can usually be filtered out of the taxonomy without removing any information
 #' on how the reminaing taxa are related.
-#' \preformatted{obj$is_stem()
+#' \preformatted{
+#' obj$is_stem()
 #' is_stem(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
@@ -736,6 +800,9 @@ NULL
 #' @return A `logical` of length equal to the number of taxa.
 #'
 #' @family taxonomy data functions
+#'
+#' @examples
+#' is_stem(ex_taxmap)
 #'
 #' @name is_stem
 NULL
@@ -746,7 +813,8 @@ NULL
 #' Test if taxa are branches in a [taxonomy()] or [taxmap()] object. Branches
 #' are taxa in the interior of the tree that are not [roots()], [stems()], or
 #' [leaves()].
-#' \preformatted{obj$is_branch()
+#' \preformatted{
+#' obj$is_branch()
 #' is_branch(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
@@ -754,6 +822,9 @@ NULL
 #' @return A `logical` of length equal to the number of taxa.
 #'
 #' @family taxonomy data functions
+#'
+#' @examples
+#' is_branch(ex_taxmap)
 #'
 #' @name is_branch
 NULL
@@ -763,7 +834,8 @@ NULL
 #'
 #' Test if taxa are leaves in a [taxonomy()] or [taxmap()] object. Leaves are taxa
 #' without subtaxa, typically species.
-#' \preformatted{obj$is_leaf()
+#' \preformatted{
+#' obj$is_leaf()
 #' is_leaf(obj)}
 #'
 #' @param obj The `taxonomy` or `taxmap` object.
@@ -771,6 +843,9 @@ NULL
 #' @return A `logical` of length equal to the number of taxa.
 #'
 #' @family taxonomy data functions
+#'
+#' @examples
+#' is_leaf(ex_taxmap)
 #'
 #' @name is_leaf
 NULL

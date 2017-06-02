@@ -33,6 +33,17 @@ value = NULL, exclude_leaves = FALSE)
 stems(obj, subset = NULL, simplify = FALSE,
 value = NULL, exclude_leaves = FALSE)}
 }
+\examples{
+# Return indexes of stem taxa
+stems(ex_taxmap)
+
+# Return indexes for a subset of taxa
+stems(ex_taxmap, subset = 2:17)
+
+# Return something besides taxon indexes
+stems(ex_taxmap, value = "taxon_names")
+
+}
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},
   \code{\link{roots}}, \code{\link{subtaxa}},

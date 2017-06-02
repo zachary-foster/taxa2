@@ -24,6 +24,17 @@ with no subtaxa.
 \preformatted{obj$leaves(subset = NULL, value = NULL)
 leaves(obj, subset = NULL, value = NULL)}
 }
+\examples{
+# Return indexes of leaf taxa
+leaves(ex_taxmap)
+
+# Return indexes for a subset of taxa
+leaves(ex_taxmap, subset = 2:17)
+
+# Return something besides taxon indexes
+leaves(ex_taxmap, value = "taxon_names")
+
+}
 \seealso{
 Other taxonomy indexing functions: \code{\link{roots}},
   \code{\link{stems}}, \code{\link{subtaxa}},

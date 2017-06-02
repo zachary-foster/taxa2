@@ -12,7 +12,9 @@
 \description{
 Get number of subtaxa for each taxon in an object of type
 \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}, not including subtaxa of subtaxa etc. This does not
-include subtaxa assigned to subtaxa. \preformatted{ obj$n_subtaxa_1()
+include subtaxa assigned to subtaxa.
+\preformatted{
+obj$n_subtaxa_1()
 n_subtaxa_1(obj)}
 }
 \examples{

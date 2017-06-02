@@ -17,10 +17,17 @@ supplied or what kinds are allowed if \code{name} is supplied.}
 }
 \description{
 Given a vector of names, return a list of data contained in a \code{\link[=taxonomy]{taxonomy()}} or
-\code{\link[=taxmap]{taxmap()}} object. \preformatted{ obj$get_data(name) get_data(obj, name)}
+\code{\link[=taxmap]{taxmap()}} object.
+\preformatted{
+obj$get_data(name)
+get_data(obj, name)}
 }
 \examples{
-ex_taxmap$get_data("reaction")
+# Get specific values
+get_data(ex_taxmap, c("reaction", "n_legs", "taxon_ranks"))
+
+# Get all values
+get_data(ex_taxmap)
 
 }
 \seealso{

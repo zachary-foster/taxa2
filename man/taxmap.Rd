@@ -23,6 +23,10 @@ information is available), see \link{ranks_ref} for the reference rank names and
 orders
 }
 \examples{
+# The code below shows how to contruct a taxmap object from scratch.
+# Typically, taxmap objects would be the output of a parsing function,
+#  not created from scratch, but this is for demostration purposes.
+
 notoryctidae <- taxon(
 name = taxon_name("Notoryctidae"),
 rank = taxon_rank("family"),

@@ -11,8 +11,7 @@ resolve to one of three things: \describe{ \item{\code{character}}{One or more
 taxon IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row
 indexes of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of
 length equal to the number of rows in \code{obj$edge_list}} } Any variable name
-that appears in \code{obj$all_names()} can be used as if it was a vector on its
-own.}
+that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include
 subtaxa of taxa passing the filter. Positive numbers indicate the number of
@@ -59,17 +58,18 @@ An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{ta
 }
 \description{
 Filter taxa in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object with a series of
-conditions. Any variable name that appears in \code{obj$all_names()} can be used
+conditions. Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used
 as if it was a vector on its own. See \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration
 for this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R functions.
 However, calling the function using the \code{filter_taxa(obj, ...)} immitates R's
 traditional copy-on-modify semantics, so "obj" would not be changed; instead
 a changed version would be returned, like most R functions.
-\preformatted{filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
-taxonless = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless =
-FALSE, reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
+\preformatted{
+filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 }
 \examples{
 # Filter by index

@@ -34,10 +34,11 @@ indicate the number of ranks below the each taxon to get observations for
 \description{
 Apply a function to data for the observations for each taxon. This is similar
 to using \code{\link[=obs]{obs()}} with \code{\link[=lapply]{lapply()}} or \code{\link[=sapply]{sapply()}}.
-\preformatted{obj$obs_apply(data, func, simplify = FALSE, value = NULL,
+\preformatted{
+obj$obs_apply(data, func, simplify = FALSE, value = NULL,
               subset = NULL, recursive = TRUE, ...)
-obs(obj, data, func, simplify = FALSE,
-    value = NULL, subset = NULL, recursive = TRUE, ...)}
+obs_apply(obj, data, func, simplify = FALSE, value = NULL,
+          subset = NULL, recursive = TRUE, ...)}
 }
 \examples{
 # Find the average number of legs in each taxon
@@ -45,5 +46,4 @@ ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = TRUE)
 
 # One way to implement `n_obs` and find the number of observations per taxon
 ex_taxmap$obs_apply("info", length, simplify = TRUE)
-
 }

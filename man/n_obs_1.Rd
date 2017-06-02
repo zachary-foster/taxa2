@@ -25,7 +25,7 @@ obj$n_obs_1(target)
 n_obs_1(obj, target)}
 }
 \examples{
-#' n_obs_1(ex_taxmap, "info")
+n_obs_1(ex_taxmap, "info")
 
 }
 \seealso{

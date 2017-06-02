@@ -12,8 +12,13 @@ A \code{logical} of length equal to the number of taxa.
 \description{
 Test if taxa are leaves in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Leaves are taxa
 without subtaxa, typically species.
-\preformatted{obj$is_leaf()
+\preformatted{
+obj$is_leaf()
 is_leaf(obj)}
+}
+\examples{
+is_leaf(ex_taxmap)
+
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},

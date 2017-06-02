@@ -19,7 +19,7 @@ obj$data_used(...)
 data_used(obj, ...)}
 }
 \examples{
-ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
+data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 
 }
 \seealso{

@@ -13,6 +13,10 @@ They are in the order taxa appear in the edge list.
 obj$taxon_ranks()
 taxon_ranks(obj)}
 }
+\examples{
+taxon_ranks(ex_taxmap)
+
+}
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{is_branch}}, \code{\link{is_leaf}},

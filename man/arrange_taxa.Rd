@@ -13,7 +13,7 @@ An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{ta
 }
 \description{
 Sort the edge list in \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} objects. Any variable name that
-appears in \code{obj$all_names()} can be used as if it was a vector on its
+appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its
 own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function
 and more information.
 \preformatted{

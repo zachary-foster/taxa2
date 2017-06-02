@@ -23,10 +23,8 @@ single vector of unique values.}
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in
 the output}
 
-\item{value}{What data to return. This is usually the name of column in a
-table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
-usually only makes sense to data that corresponds to taxa 1:1, such as
-\code{\link[=taxon_ranks]{taxon_ranks()}}. By default, taxon indexes are returned.}
+\item{value}{What data to return. Any result of \code{all_names(obj)} can be used, but it
+usually only makes sense to use data that has an associated taxon id.}
 
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information
 is not available.}

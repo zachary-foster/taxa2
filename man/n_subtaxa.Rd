@@ -11,7 +11,10 @@
 }
 \description{
 Get number of subtaxa for each taxon in an object of type
-\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} \preformatted{ obj$n_subtaxa() n_subtaxa(obj)}
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
+\preformatted{
+obj$n_subtaxa()
+n_subtaxa(obj)}
 }
 \examples{
 n_subtaxa(ex_taxmap)

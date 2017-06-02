@@ -17,7 +17,7 @@ objects. Sampling weights of each observation. The weights for each
 observation assigned to a given taxon are supplied to \code{collapse_func} to
 get the taxon weight. If \code{use_subtaxa} is \code{TRUE} then the observations
 assigned to every subtaxa are also used. Any variable name that appears in
-\code{obj$all_names()} can be used as if it was a vector on its own. If
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. If
 \code{taxon_weight} is also specified, the two weights are multiplied (after
 \code{obs_weight} for each observation is calculated). \code{obs_target} must be used
 with this option.}

@@ -13,6 +13,10 @@ They are the indexes of the edge list rows.
 obj$taxon_indexes()
 taxon_indexes(obj)}
 }
+\examples{
+taxon_indexes(ex_taxmap)
+
+}
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{is_branch}}, \code{\link{is_leaf}},

@@ -13,6 +13,10 @@ They are in the order they appear in the edge list.
 obj$taxon_ids()
 taxon_ids(obj)}
 }
+\examples{
+taxon_ids(ex_taxmap)
+
+}
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{is_branch}}, \code{\link{is_leaf}},

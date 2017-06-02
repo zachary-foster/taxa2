@@ -321,7 +321,8 @@ Taxonomy <- R6::R6Class(
       # Find taxa without subtaxa
       my_subtaxa <- self$subtaxa(subset = subset, recursive = TRUE,
                                  include_input = TRUE, value = "taxon_indexes")
-      output <- unlist(my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 1])
+      childless_taxa <- my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 1]
+      output <- stats::setNames(unlist(childless_taxa), names(childless_taxa))
 
       # Look up values
       if (!is.null(value)) {
