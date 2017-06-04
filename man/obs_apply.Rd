@@ -30,20 +30,22 @@ observation assigned to the specified input taxa, not subtaxa. If \code{TRUE},
 return all the observations of every subtaxa, etc. Positive numbers
 indicate the number of ranks below the each taxon to get observations for
 \code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
+
+\item{...}{Extra arguments are pased to the function.}
 }
 \description{
 Apply a function to data for the observations for each taxon. This is similar
 to using \code{\link[=obs]{obs()}} with \code{\link[=lapply]{lapply()}} or \code{\link[=sapply]{sapply()}}.
-\preformatted{
-obj$obs_apply(data, func, simplify = FALSE, value = NULL,
+\preformatted{obj$obs_apply(data, func, simplify = FALSE, value = NULL,
               subset = NULL, recursive = TRUE, ...)
-obs_apply(obj, data, func, simplify = FALSE, value = NULL,
-          subset = NULL, recursive = TRUE, ...)}
+obs(obj, data, func, simplify = FALSE,
+    value = NULL, subset = NULL, recursive = TRUE, ...)}
 }
 \examples{
 # Find the average number of legs in each taxon
-ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = TRUE)
+obs_apply(ex_taxmap, "info", mean, value = "n_legs", simplify = TRUE)
 
 # One way to implement `n_obs` and find the number of observations per taxon
-ex_taxmap$obs_apply("info", length, simplify = TRUE)
+obs_apply(ex_taxmap, "info", length, simplify = TRUE)
+
 }

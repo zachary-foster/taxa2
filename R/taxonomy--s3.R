@@ -78,6 +78,22 @@ supertaxa.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+supertaxa_apply <- function(obj, ...) {
+  UseMethod("supertaxa_apply")
+}
+
+#' @export
+supertaxa_apply.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+supertaxa_apply.Taxonomy <- function(obj, ...) {
+  obj$supertaxa_apply(...)
+}
+
+
+#' @export
 roots <- function(obj, ...) {
   UseMethod("roots")
 }
@@ -106,6 +122,22 @@ subtaxa.default <- function(obj, ...) {
 #' @export
 subtaxa.Taxonomy <- function(obj, ...) {
   obj$subtaxa(...)
+}
+
+
+#' @export
+subtaxa_apply <- function(obj, ...) {
+  UseMethod("subtaxa_apply")
+}
+
+#' @export
+subtaxa_apply.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+subtaxa_apply.Taxonomy <- function(obj, ...) {
+  obj$subtaxa_apply(...)
 }
 
 

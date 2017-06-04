@@ -2,11 +2,8 @@
 #'
 #' Given a [taxmap()] object, return the indexes associated with each taxon in a
 #' given table included in that [taxmap()] object.
-#' \preformatted{
-#' obj$obs(data, value = NULL, subset = NULL, recursive = TRUE,
-#'         simplify = FALSE)
-#' obs(obj, data, value = NULL, subset = NULL, recursive = TRUE,
-#'     simplify = FALSE)}
+#' \preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
+#' obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
 #'
 #' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
 #'   be queried.
@@ -27,6 +24,7 @@
 #'   `0` is equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results into a
 #'   single vector of unique observation indexes.
+#'
 #' @return If `simplify = FALSE`, then a list of vectors of observation indexes
 #'   are returned corresponding to the `target` argument. If `simplify = TRUE`,
 #'   then the observation indexes for all `target` taxa are returned in a single
@@ -62,11 +60,10 @@ NULL
 #'
 #' Apply a function to data for the observations for each taxon. This is similar
 #' to using [obs()] with [lapply()] or [sapply()].
-#' \preformatted{
-#' obj$obs_apply(data, func, simplify = FALSE, value = NULL,
+#' \preformatted{obj$obs_apply(data, func, simplify = FALSE, value = NULL,
 #'               subset = NULL, recursive = TRUE, ...)
-#' obs_apply(obj, data, func, simplify = FALSE, value = NULL,
-#'           subset = NULL, recursive = TRUE, ...)}
+#' obs(obj, data, func, simplify = FALSE,
+#'     value = NULL, subset = NULL, recursive = TRUE, ...)}
 #'
 #' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
 #'   be queried.
@@ -88,15 +85,17 @@ NULL
 #'   return all the observations of every subtaxa, etc. Positive numbers
 #'   indicate the number of ranks below the each taxon to get observations for
 #'   `0` is equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param ... Extra arguments are pased to the function.
 #'
 #' @name obs_apply
 #'
 #' @examples
 #' # Find the average number of legs in each taxon
-#' ex_taxmap$obs_apply("info", mean, value = "n_legs", simplify = TRUE)
+#' obs_apply(ex_taxmap, "info", mean, value = "n_legs", simplify = TRUE)
 #'
 #' # One way to implement `n_obs` and find the number of observations per taxon
-#' ex_taxmap$obs_apply("info", length, simplify = TRUE)
+#' obs_apply(ex_taxmap, "info", length, simplify = TRUE)
+#'
 NULL
 
 
@@ -423,8 +422,7 @@ NULL
 #'
 #' @return `numeric`
 #'
-#' @examples
-#' n_obs_1(ex_taxmap, "info")
+#' @examples#' n_obs_1(ex_taxmap, "info")
 #'
 #' @family taxmap data functions
 #'

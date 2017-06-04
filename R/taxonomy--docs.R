@@ -135,6 +135,49 @@ NULL
 NULL
 
 
+#' Apply function to supertaxa of each taxon
+#'
+#' Apply a function to the supertaxa for each taxon. This is similar
+#' to using [supertaxa()] with [lapply()] or [sapply()].
+#' \preformatted{
+#' obj$supertaxa_apply(func, subset = NULL, recursive = TRUE,
+#'                     simplify = FALSE, include_input = FALSE,
+#'                     value = NULL, na = FALSE, ...)
+#' supertaxa_apply(obj, func, subset = NULL, recursive = TRUE,
+#'                 simplify = FALSE, include_input = FALSE,
+#'                 value = NULL, na = FALSE, ....)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#'   information to be queried.
+#' @param func (`function`) The function to apply.
+#' @param subset (`character`) `taxon_ids` or indexes of
+#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
+#' in `obj` will be used.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   supertaxa one rank above the target taxa. If `TRUE`, return all the
+#'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks above the target taxon to return). `1` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
+#' @param include_input (`logical`) If `TRUE`, the input taxa are included in
+#'   the output
+#' @param value What data to give to the function. Any result of
+#'   `all_names(obj)` can be used, but it usually only makes sense to use data
+#'   that has an associated taxon id.
+#' @param na (`logical`) If `TRUE`, return `NA` where information
+#'   is not available.
+#' @param ... Extra arguments are pased to the function.
+#'
+#' @name supertaxa_apply
+#'
+#' @examples
+#' # Get classifications for each taxon
+#' supertaxa_apply(ex_taxmap, paste, collapse = ";", include_input = TRUE,
+#'                 value = "taxon_names")
+NULL
+
+
 #' Get root taxa
 #'
 #' Return the root taxa for a [taxonomy()] or [taxmap()] object. Can also be used to
@@ -229,6 +272,45 @@ NULL
 #' # Return something besides taxon indexes
 #' ex_taxmap$subtaxa(value = "taxon_names")
 NULL
+
+
+#' Apply function to subtaxa of each taxon
+#'
+#' Apply a function to the subtaxa for each taxon. This is similar
+#' to using [subtaxa()] with [lapply()] or [sapply()].
+#' \preformatted{
+#' obj$subtaxa_apply(func, subset = NULL, recursive = TRUE, simplify = FALSE,
+#'                   include_input = FALSE, value = NULL, ...)
+#' subtaxa_apply(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
+#'               include_input = FALSE, value = NULL, ...)}
+#'
+#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#'   information to be queried.
+#' @param func (`function`) The function to apply.
+#' @param subset (`character`) `taxon_ids` or indexes of
+#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
+#' in `obj` will be used.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   supertaxa one rank above the target taxa. If `TRUE`, return all the
+#'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks above the target taxon to return). `1` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
+#' @param include_input (`logical`) If `TRUE`, the input taxa are included in
+#'   the output
+#' @param value What data to give to the function. Any result of
+#'   `all_names(obj)` can be used, but it usually only makes sense to use data
+#'   that has an associated taxon id.
+#' @param ... Extra arguments are pased to the function.
+#'
+#' @name subtaxa_apply
+#'
+#' @examples
+#' # Count number of subtaxa in each taxon
+#' subtaxa_apply(ex_taxmap, length)
+NULL
+
 
 
 #' Get stem taxa

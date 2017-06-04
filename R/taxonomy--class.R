@@ -234,6 +234,24 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
+
+    supertaxa_apply = function(func, subset = NULL, recursive = TRUE,
+                               simplify = FALSE, include_input = FALSE,
+                               value = NULL, na = FALSE, ...) {
+      my_sup <- eval(substitute(self$supertaxa(subset = subset,
+                                               recursive = recursive,
+                                               simplify = FALSE,
+                                               include_input = include_input,
+                                               value = value,
+                                               na = na)))
+      output <- lapply(my_sup, func, ...)
+      if (simplify) {
+        output <- unlist(output)
+      }
+      return(output)
+    },
+
+
     roots = function(subset = NULL, value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
@@ -424,6 +442,23 @@ Taxonomy <- R6::R6Class(
 
       return(output)
     },
+
+
+    subtaxa_apply = function(func, subset = NULL, recursive = TRUE,
+                             simplify = FALSE, include_input = FALSE,
+                             value = NULL, ...) {
+      my_sub <- eval(substitute(self$subtaxa(subset = subset,
+                                             recursive = recursive,
+                                             simplify = FALSE,
+                                             include_input = include_input,
+                                             value = value)))
+      output <- lapply(my_sub, func, ...)
+      if (simplify) {
+        output <- unlist(output)
+      }
+      return(output)
+    },
+
 
     id_classifications = function(sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
