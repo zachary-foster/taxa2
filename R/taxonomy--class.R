@@ -324,6 +324,22 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     }
 
+    # pop = function(ranks = NULL, names = NULL, ids = NULL) {
+    #   taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
+    #   taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
+    #   taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
+    #   todrop <- which(taxa_rks %in% ranks |
+    #                     taxa_nms %in% names |
+    #                     taxa_ids %in% ids)
+    #   tmp_taxa <- self$taxa
+    #   tmp_taxa[todrop] <- NULL
+    #   parsed_data <- parse_heirarchies_to_taxonomy(hierarchy(tmp_taxa))
+    #   self$taxa <- parsed_data$taxa
+    #   self$edge_list <- parsed_data$edge_list
+    #   self$input_ids <- parsed_data$input_ids
+    #   return(self)
+    # }
+
   ),
 
   private = list(

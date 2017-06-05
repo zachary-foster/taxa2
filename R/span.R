@@ -1,6 +1,6 @@
-#' @title Pick taxa
+#' @title Span taxa
 #'
-#' @description Pick out specific taxa, while others are dropped
+#' @description Select a range of taxa
 #'
 #' @export
 #' @param .data Input, object of class [Hierarchy], or [hierarchies]
@@ -9,23 +9,23 @@
 #' @details supports `Hierarchy` and `hierarchies` objects
 #' @return an object of the same class as passed in
 #' @template pick_egs
-pick <- function(.data, ...) {
-  UseMethod("pick")
+span <- function(.data, ...) {
+  UseMethod("span")
 }
 
 #' @export
-pick.default <- function(.data, ...) {
-  stop("no 'pick' method for ", class(.data), call. = FALSE)
+span.default <- function(.data, ...) {
+  stop("no 'span' method for ", class(.data), call. = FALSE)
 }
 
 #' @export
-pick.Hierarchy <- function(.data, ...) {
+span.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
   tmp <- unlist(lapply(lazyeval::lazy_dots(...), lazyeval::lazy_eval), FALSE)
-  .data$pick(ranks = tmp$ranks, names = tmp$names, ids = tmp$ids)
+  .data$span(ranks = tmp$ranks, names = tmp$names, ids = tmp$ids)
 }
 
 #' @export
-pick.hierarchies <- function(.data, ...) {
-  hierarchies(.list = lapply(.data, pick, ...))
+span.hierarchies <- function(.data, ...) {
+  hierarchies(.list = lapply(.data, span, ...))
 }

@@ -27,3 +27,9 @@ assert <- function(x, y) {
     }
   }
 }
+
+csep2vec <- function(z, uniq = TRUE) {
+  tmp <- unlist(lapply(z, function(w) strsplit(w, split = ",")[[1]]), FALSE)
+  if (uniq) return(unique(tmp))
+  return(tmp)
+}

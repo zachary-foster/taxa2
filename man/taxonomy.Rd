@@ -82,7 +82,4 @@ n <- taxon(
 
 # make taxonomy
 taxonomy(hier1, hier2, hier3)
-
-
-
 }
