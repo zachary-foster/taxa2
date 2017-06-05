@@ -6,21 +6,24 @@
 \arguments{
 \item{obj}{A \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}  object}
 
-\item{name}{(\code{character}) Names of data to return.}
+\item{name}{(\code{character}) Names of data to return. If not supplied, return
+all data listed in \code{\link[=all_names]{all_names()}}.}
 
 \item{...}{Passed to \code{\link[=all_names]{all_names()}}. Used to filter what kind of data is
 returned (e.g. columns in tables or function output?) if \code{name} is not
 supplied or what kinds are allowed if \code{name} is supplied.}
 }
 \value{
-\code{list}
+\code{list} of vectors or lists. Each vector or list will be named by
+associated taxon ids if possible.
 }
 \description{
-Given a vector of names, return a list of data contained in a \code{\link[=taxonomy]{taxonomy()}} or
-\code{\link[=taxmap]{taxmap()}} object.
+Given a vector of names, return a list of data (usually lists/vectors)
+contained in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Each item will be named by
+taxon ids were possible.
 \preformatted{
-obj$get_data(name)
-get_data(obj, name)}
+obj$get_data(name = NULL)
+get_data(obj, name = NULL)}
 }
 \examples{
 # Get specific values
