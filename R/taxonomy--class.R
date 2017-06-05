@@ -32,12 +32,26 @@ Taxonomy <- R6::R6Class(
     # A simple wrapper to make future changes easier
     taxon_names = function() {
       vapply(self$taxa[self$taxon_ids()],
-             function(x) x$name$name, character(1))
+             function(x) {
+               if (is.null(x$name$name)) {
+                 return(NA_character_)
+               } else {
+                 return(x$name$name)
+               }
+             },
+             character(1))
     },
 
     taxon_ranks = function() {
       vapply(self$taxa[self$taxon_ids()],
-             function(x) x$rank$name, character(1))
+             function(x) {
+               if (is.null(x$rank$name)) {
+                 return(NA_character_)
+               } else {
+                 return(x$rank$name)
+               }
+             },
+             character(1))
     },
 
     # A simple wrapper to make future changes easier
@@ -724,6 +738,48 @@ Taxonomy <- R6::R6Class(
                          obs_weight = obs_weight, obs_target = obs_target,
                          use_subtaxa = use_subtaxa,
                          collapse_func = collapse_func, ...)
+    },
+
+
+    map_data = function(from, to, warn = TRUE) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(from, to)))
+      # to_data <- lazyeval::lazy_eval(lazyeval::lazy(to), data = data_used)
+      # from_data <- lazyeval::lazy_eval(lazyeval::lazy(from), data = data_used)
+
+      # check that arguments have taxon ids and evaluate
+      validate_and_eval <- function(unparsed) {
+        parsed <- lazyeval::lazy_eval(lazyeval::lazy(unparsed),
+                                      data = data_used)
+        if (! private$valid_taxon_ids(names(parsed))) {
+          stop(paste0("The value `", deparse(match.call()$unparsed),
+                      "` is not named by taxon id or contains invalid ids. ",
+                      "Use `taxon_ids()` to see the valid ids. ",
+                      "Use `warn = FALSE` to ignore this."))
+        }
+        return(parsed)
+      }
+      to_data <- eval(substitute(validate_and_eval(to)))
+      from_data <- eval(substitute(validate_and_eval(from)))
+
+      # Check for multiple different values of `to` for each `from`
+      is_one_to_one <- vapply(unique(names(to_data)),
+                              function(n) {
+                                length(unique(to_data[names(to_data)==n])) == 1
+                              },
+                              logical(1))
+      if (warn && any(! is_one_to_one)) {
+        warning(paste0('There are multiple unique values of "',
+                       deparse(match.call()$to),
+                       '" for at least one value of "',
+                       deparse(match.call()$from),
+                       '". Only the first instance will be returned. ',
+                       'To get all instances, use the `obs` function.'))
+      }
+
+      # Map values using taxon ids
+      stats::setNames(to_data[match(names(from_data), names(to_data))],
+                      from_data)
     }
 
   ),
@@ -780,6 +836,12 @@ Taxonomy <- R6::R6Class(
       selection <- which(selection)
 
       return(selection)
+    },
+
+    # check if a set of putative taxon ids are valid.
+    # returns TRUE/FALSE
+    valid_taxon_ids = function(ids) {
+      !is.null(ids) && all(ids %in% self$taxon_ids())
     }
   )
 )

@@ -245,3 +245,13 @@ test_that("Sampling taxa",  {
 })
 
 
+test_that("Mapping vairables",  {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  result <- x$map_data(taxon_names, taxon_ranks)
+  expect_equivalent(result, x$taxon_ranks())
+  expect_equivalent(names(result), x$taxon_names())
+  expect_warning(map_data(x, taxon_names, c("4" = "A", "4" = "B")))
+  expect_silent(map_data(x, taxon_names, c("4" = "A", "4" = "B"), warn = FALSE))
+  expect_error(map_data(x, taxon_names, 1:10))
+})

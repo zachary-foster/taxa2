@@ -559,19 +559,22 @@ NULL
 
 #' Get data in a taxmap object by name
 #'
-#' Given a vector of names, return a list of data contained in a [taxonomy()] or
-#' [taxmap()] object.
+#' Given a vector of names, return a list of data (usually lists/vectors)
+#' contained in a [taxonomy()] or [taxmap()] object. Each item will be named by
+#' taxon ids were possible.
 #' \preformatted{
-#' obj$get_data(name)
-#' get_data(obj, name)}
+#' obj$get_data(name = NULL)
+#' get_data(obj, name = NULL)}
 #'
 #' @param obj A [taxonomy()] or [taxmap()]  object
-#' @param name (`character`) Names of data to return.
+#' @param name (`character`) Names of data to return. If not supplied, return
+#'   all data listed in [all_names()].
 #' @param ... Passed to [all_names()]. Used to filter what kind of data is
 #'   returned (e.g. columns in tables or function output?) if `name` is not
 #'   supplied or what kinds are allowed if `name` is supplied.
 #'
-#' @return `list`
+#' @return `list` of vectors or lists. Each vector or list will be named by
+#'   associated taxon ids if possible.
 #'
 #' @examples
 #' # Get specific values
@@ -930,5 +933,40 @@ NULL
 #' is_leaf(ex_taxmap)
 #'
 #' @name is_leaf
+NULL
+
+
+#' Create a mapping between two varaibles
+#'
+#' Creates a named vector that maps the values of two variables associated with
+#' taxa in a [taxonomy()] or [taxmap()] object. Both values must be named by
+#' taxon ids.
+#' \preformatted{
+#' obj$map_data(from, to, warn = TRUE)
+#' map_data(obj, from, to, warn = TRUE)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object.
+#' @param from The value used to name the output. There will be one output value
+#'   for each value in `from`. Any variable that appears in [all_names()] can be
+#'   used as if it was a variable on its own.
+#' @param to The value returned in the output. Any variable that appears in
+#'   [all_names()] can be used as if it was a variable on its own.
+#' @param warn If `TRUE`, issue a warning if there are multiple unique values of
+#'   `to` for each value of `from`.
+#'
+#' @return A vector of `to` values named by values in `from`.
+#'
+#' @family taxonomy data functions
+#'
+#' @examples
+#' # Mapping between two variables in `all_names(ex_taxmap)`
+#' ex_taxmap$map_data(from = taxon_names, to = n_legs > 0)
+#'
+#' # Mapping with external variables
+#' x = c("3" = "looks like a cat", "7" = "big scary cats",
+#'       "8" = "smaller cats", "12" = "might eat you", "13" = "meow! Feed me!")
+#' ex_taxmap$map_data(from = taxon_names, to = x)
+#'
+#' @name map_data
 NULL
 

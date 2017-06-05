@@ -447,3 +447,20 @@ is_leaf.default <- function(obj, ...) {
 is_leaf.Taxonomy <- function(obj, ...) {
   obj$is_leaf(...)
 }
+
+
+#' @export
+map_data <- function(obj, ...) {
+  UseMethod("map_data")
+}
+
+#' @export
+map_data.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+map_data.Taxonomy <- function(obj, ...) {
+  obj$map_data(...)
+}
+

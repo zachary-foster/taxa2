@@ -24,7 +24,8 @@ n_supertaxa(ex_taxmap)
 Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{is_branch}}, \code{\link{is_leaf}},
   \code{\link{is_root}}, \code{\link{is_stem}},
-  \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}},
+  \code{\link{map_data}}, \code{\link{n_subtaxa_1}},
+  \code{\link{n_subtaxa}},
   \code{\link{name_classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
