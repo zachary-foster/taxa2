@@ -185,7 +185,7 @@ Taxonomy <- R6::R6Class(
                          include_input = FALSE, value = NULL, na = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Get supertaxa
@@ -269,7 +269,7 @@ Taxonomy <- R6::R6Class(
     roots = function(subset = NULL, value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Get roots
@@ -304,7 +304,7 @@ Taxonomy <- R6::R6Class(
                      exclude_leaves = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Get roots to start search
@@ -347,7 +347,7 @@ Taxonomy <- R6::R6Class(
     leaves = function(subset = NULL, value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Find taxa without subtaxa
@@ -376,7 +376,7 @@ Taxonomy <- R6::R6Class(
                        value = NULL) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Return empty list if `subset` has no values
@@ -700,9 +700,9 @@ Taxonomy <- R6::R6Class(
 
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
-      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
+      taxon_weight <- rlang::eval_tidy(rlang::enquo(taxon_weight),
                                           data = data_used)
-      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
+      obs_weight <- rlang::eval_tidy(rlang::enquo(obs_weight),
                                         data = data_used)
 
       # Calculate observation component of taxon weights
@@ -753,12 +753,12 @@ Taxonomy <- R6::R6Class(
     map_data = function(from, to, warn = TRUE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(from, to)))
-      # to_data <- lazyeval::lazy_eval(lazyeval::lazy(to), data = data_used)
-      # from_data <- lazyeval::lazy_eval(lazyeval::lazy(from), data = data_used)
+      # to_data <- rlang::eval_tidy(rlang::enquo(to), data = data_used)
+      # from_data <- rlang::eval_tidy(rlang::enquo(from), data = data_used)
 
       # check that arguments have taxon ids and evaluate
       validate_and_eval <- function(unparsed) {
-        parsed <- lazyeval::lazy_eval(lazyeval::lazy(unparsed),
+        parsed <- rlang::eval_tidy(rlang::enquo(unparsed),
                                       data = data_used)
         if (! private$valid_taxon_ids(names(parsed))) {
           stop(paste0("The value `", deparse(match.call()$unparsed),
@@ -819,7 +819,7 @@ Taxonomy <- R6::R6Class(
     # Each expression can resolve to taxon ids, edgelist indexes, or logical.
     parse_nse_taxon_subset = function(...) {
       # non-standard argument evaluation
-      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+      selection <- rlang::eval_tidy(rlang::quos(...),
                                        data = self$data_used(...))
 
       # convert taxon_ids to logical

@@ -124,7 +124,7 @@ Taxmap <- R6::R6Class(
                    simplify = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
       obs_taxon_ids <- private$get_data_taxon_ids(data, require = TRUE)
 
@@ -185,7 +185,7 @@ Taxmap <- R6::R6Class(
       private$check_dataset_name(target)
 
       # non-standard argument evaluation
-      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
+      selection <- rlang::eval_tidy(rlang::quos(...),
                                        data = self$data_used(...))
 
       # If no selection is supplied, match all rows
@@ -260,9 +260,9 @@ Taxmap <- R6::R6Class(
       }
 
       data_used <- self$data_used(...)
-      unevaluated <- lazyeval::lazy_dots(...)
+      unevaluated <- rlang::quos(...)
       for (index in seq_along(unevaluated)) {
-        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+        new_col <- rlang::eval_tidy(unevaluated[index], data = data_used)
         # Allow this col to be used in evaluating the next cols
         data_used <- c(data_used, new_col)
         self$data[[target]][[names(new_col)]] <- new_col[[1]]
@@ -286,9 +286,9 @@ Taxmap <- R6::R6Class(
         result <- list()
       }
       data_used <- self$data_used(...)
-      unevaluated <- lazyeval::lazy_dots(...)
+      unevaluated <- rlang::quos(...)
       for (index in seq_along(unevaluated)) {
-        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+        new_col <- rlang::eval_tidy(unevaluated[index], data = data_used)
         # Allow this col to be used in evaluating the next cols
         data_used <- c(data_used, new_col)
         result[[names(new_col)]] <- new_col[[1]]
@@ -334,9 +334,9 @@ Taxmap <- R6::R6Class(
 
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
-      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
+      taxon_weight <- rlang::eval_tidy(rlang::enquo(taxon_weight),
                                           data = data_used)
-      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
+      obs_weight <- rlang::eval_tidy(rlang::enquo(obs_weight),
                                         data = data_used)
 
       # Get length of target
