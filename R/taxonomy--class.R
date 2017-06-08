@@ -752,33 +752,24 @@ Taxonomy <- R6::R6Class(
 
     map_data = function(from, to, warn = TRUE) {
       # non-standard argument evaluation
-      data_used <- structure(list(taxon_names = structure(c("Mammalia", "Plantae",
-                                                            "Felidae", "Notoryctidae", "Solanaceae", "unidentified", "unidentified",
-                                                            "Panthera", "Puma", "Notoryctes", "Solanum", "tigris", "concolor",
-                                                            "typhlops", "lycopersicum", "tuberosum"), .Names = c("1", "2",
-                                                                                                                 "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
-                                                                                                                 "15", "16")), taxon_ranks = structure(c("class", "kingdom", "family",
-                                                                                                                                                         "family", "family", NA, NA, "genus", "genus", "genus", "genus",
-                                                                                                                                                         "species", "species", "species", "species", "species"), .Names = c("1",
-                                                                                                                                                                                                                            "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
-                                                                                                                                                                                                                            "14", "15", "16"))), .Names = c("taxon_names", "taxon_ranks"))
-      to_data <- lazyeval::lazy_eval(lazyeval::lazy(to), data = data_used)
-      from_data <- lazyeval::lazy_eval(lazyeval::lazy(from), data = data_used)
+      data_used <- eval(substitute(self$data_used(from, to)))
+      # to_data <- lazyeval::lazy_eval(lazyeval::lazy(to), data = data_used)
+      # from_data <- lazyeval::lazy_eval(lazyeval::lazy(from), data = data_used)
 
-      # # check that arguments have taxon ids and evaluate
-      # validate_and_eval <- function(unparsed) {
-      #   parsed <- lazyeval::lazy_eval(lazyeval::lazy(unparsed),
-      #                                 data = data_used)
-      #   if (! private$valid_taxon_ids(names(parsed))) {
-      #     stop(paste0("The value `", deparse(match.call()$unparsed),
-      #                 "` is not named by taxon id or contains invalid ids. ",
-      #                 "Use `taxon_ids()` to see the valid ids. ",
-      #                 "Use `warn = FALSE` to ignore this."))
-      #   }
-      #   return(parsed)
-      # }
-      # to_data <- eval(substitute(validate_and_eval(to)))
-      # from_data <- eval(substitute(validate_and_eval(from)))
+      # check that arguments have taxon ids and evaluate
+      validate_and_eval <- function(unparsed) {
+        parsed <- lazyeval::lazy_eval(lazyeval::lazy(unparsed),
+                                      data = data_used)
+        if (! private$valid_taxon_ids(names(parsed))) {
+          stop(paste0("The value `", deparse(match.call()$unparsed),
+                      "` is not named by taxon id or contains invalid ids. ",
+                      "Use `taxon_ids()` to see the valid ids. ",
+                      "Use `warn = FALSE` to ignore this."))
+        }
+        return(parsed)
+      }
+      to_data <- eval(substitute(validate_and_eval(to)))
+      from_data <- eval(substitute(validate_and_eval(from)))
 
       # Check for multiple different values of `to` for each `from`
       is_one_to_one <- vapply(unique(names(to_data)),
