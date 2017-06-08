@@ -72,7 +72,8 @@ Taxmap <- R6::R6Class(
 
       # Add functions included in the package
       if (builtin_funcs) {
-        output <- c(output, private$nse_accessible_funcs)
+        output <- c(output, stats::setNames(private$nse_accessible_funcs,
+                                            private$nse_accessible_funcs))
       }
 
       # Get column names in each table, removing 'taxon_id'
@@ -82,16 +83,29 @@ Taxmap <- R6::R6Class(
         names(table_col_names) <- paste0("data$",
                                          rep(names(self$data[is_table]),
                                              vapply(self$data[is_table],
-                                                    ncol, integer(1))))
+                                                    ncol, integer(1))),
+                                         "$",
+                                         table_col_names)
         table_col_names <- table_col_names[table_col_names != "taxon_id"]
         output <- c(output, table_col_names)
+      }
+
+      # Add taxon id columns for each table
+      table_names <- names(self$data[is_table])
+      table_names <- table_names[private$has_taxon_ids(table_names)]
+      if (tables && length(table_names) > 0) {
+        table_taxon_id_names <- paste0(table_names, "_taxon_id")
+        table_taxon_id_values <- paste0("data$", table_names, "$taxon_id")
+        output <- c(output,
+                    stats::setNames(table_taxon_id_names,
+                                    table_taxon_id_values))
       }
 
       # Get other object names in data
       is_other <- !is_table
       if (others && length(self$data[is_other]) > 0) {
         other_names <- names(self$data[is_other])
-        names(other_names) <- rep("data", length(other_names))
+        names(other_names) <- paste0("data$", other_names)
         output <- c(output, other_names)
       }
 
@@ -99,7 +113,7 @@ Taxmap <- R6::R6Class(
       # Get function names
       if (funcs && length(self$funcs) > 0) {
         func_names <- names(self$funcs)
-        names(func_names) <- rep("funcs", length(func_names))
+        names(func_names) <-  paste0("funcs$", func_names)
         output <- c(output, func_names)
       }
 
@@ -112,10 +126,6 @@ Taxmap <- R6::R6Class(
         }
       }
 
-
-      # Add the name to the name of the name and return
-      names(output) <- paste0(names(output),
-                              ifelse(names(output) == "", "", "$"), output)
       return(output)
     },
 
@@ -484,6 +494,13 @@ Taxmap <- R6::R6Class(
 
       # Return NULL if taxon ids cannot be found
       return(NULL)
+    },
+
+    # Checks if datasets have taxon id information
+    has_taxon_ids = function(dataset_names = names(self$data)) {
+      vapply(dataset_names,
+             function(n) ! is.null(private$get_data_taxon_ids(n)),
+             logical(1))
     }
 
   )
