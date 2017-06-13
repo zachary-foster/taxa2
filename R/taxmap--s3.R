@@ -13,87 +13,20 @@ obs.Taxmap <- function(obj, ...) {
   obj$obs(...)
 }
 
-
 #' @export
-all_names <- function(obj, ...) {
-  UseMethod("all_names")
+obs_apply <- function(obj, ...) {
+  UseMethod("obs_apply")
 }
 
 #' @export
-all_names.default <- function(obj, ...) {
+obs_apply.default <- function(obj, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-all_names.Taxmap <- function(obj, ...) {
-  obj$all_names(...)
+obs_apply.Taxmap <- function(obj, ...) {
+  obj$obs_apply(...)
 }
-
-
-#' @export
-names_used <- function(obj, ...) {
-  UseMethod("names_used")
-}
-
-#' @export
-names_used.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-names_used.Taxmap <- function(obj, ...) {
-  obj$names_used(...)
-}
-
-
-#' @export
-get_data <- function(obj, ...) {
-  UseMethod("get_data")
-}
-
-#' @export
-get_data.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-get_data.Taxmap <- function(obj, ...) {
-  obj$get_data(...)
-}
-
-
-#' @export
-data_used <- function(obj, ...) {
-  UseMethod("data_used")
-}
-
-#' @export
-data_used.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-data_used.Taxmap <- function(obj, ...) {
-  obj$data_used(...)
-}
-
-
-#' @export
-filter_taxa <- function(obj, ...) {
-  UseMethod("filter_taxa")
-}
-
-#' @export
-filter_taxa.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-filter_taxa.Taxmap <- function(obj, ...) {
-  obj <- obj$clone(deep = TRUE)
-  obj$filter_taxa(...)
-}
-
 
 #' @export
 filter_obs <- function(obj, ...) {
@@ -181,23 +114,6 @@ arrange_obs.Taxmap <- function(obj, ...) {
 
 
 #' @export
-arrange_taxa <- function(obj, ...) {
-  UseMethod("arrange_taxa")
-}
-
-#' @export
-arrange_taxa.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-arrange_taxa.Taxmap <- function(obj, ...) {
-  obj <- obj$clone(deep = TRUE)
-  obj$arrange_taxa(...)
-}
-
-
-#' @export
 sample_n_obs <- function(obj, ...) {
   UseMethod("sample_n_obs")
 }
@@ -228,40 +144,6 @@ sample_frac_obs.default <- function(obj, ...) {
 sample_frac_obs.Taxmap <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE)
   obj$sample_frac_obs(...)
-}
-
-
-#' @export
-sample_n_taxa <- function(obj, ...) {
-  UseMethod("sample_n_taxa")
-}
-
-#' @export
-sample_n_taxa.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-sample_n_taxa.Taxmap <- function(obj, ...) {
-  obj <- obj$clone(deep = TRUE)
-  obj$sample_n_taxa(...)
-}
-
-
-#' @export
-sample_frac_taxa <- function(obj, ...) {
-  UseMethod("sample_frac_taxa")
-}
-
-#' @export
-sample_frac_taxa.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-sample_frac_taxa.Taxmap <- function(obj, ...) {
-  obj <- obj$clone(deep = TRUE)
-  obj$sample_frac_taxa(...)
 }
 
 

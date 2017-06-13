@@ -2,12 +2,7 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{n_obs_1}
 \alias{n_obs_1}
-\title{Count observation assigned in \code{\link[=taxmap]{taxmap()}}
-Count observations assigned to a specific taxon in an \code{\link[=taxmap]{taxmap()}}.
-This does not include observations assigned to subtaxa.
-\preformatted{
-obj$n_obs_1(target)
-n_obs_1(obj, target)}}
+\title{Count observation assigned in \code{\link[=taxmap]{taxmap()}}}
 \arguments{
 \item{obj}{(\code{\link[=taxmap]{taxmap()}})}
 
@@ -17,7 +12,6 @@ n_obs_1(obj, target)}}
 \code{numeric}
 }
 \description{
-Count observation assigned in \code{\link[=taxmap]{taxmap()}}
 Count observations assigned to a specific taxon in an \code{\link[=taxmap]{taxmap()}}.
 This does not include observations assigned to subtaxa.
 \preformatted{

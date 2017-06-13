@@ -16,7 +16,7 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
 Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects. Any
-variable name that appears in \code{obj$all_names()} can be used as if it was
+variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was
 a vector on its own. See \code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for
 this function and more information. Calling the function using the
 \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R

@@ -7,18 +7,23 @@
 \item{obj}{The \code{taxonomy} or \code{taxmap} object.}
 }
 \description{
-Return the taxon names in a \code{\link[=taxmap]{taxmap()}} object.
+Return the taxon names in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 They are in the order they appear in the edge list.
-}
-\details{
 \preformatted{
 obj$taxon_names()
-taxon_names(obj, ...)}
+taxon_names(obj)}
+}
+\examples{
+taxon_names(ex_taxmap)
+
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
-  \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}},
-  \code{\link{n_supertaxa}},
+  \code{\link{is_branch}}, \code{\link{is_leaf}},
+  \code{\link{is_root}}, \code{\link{is_stem}},
+  \code{\link{map_data}}, \code{\link{n_subtaxa_1}},
+  \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
   \code{\link{name_classifications}},
-  \code{\link{taxon_ids}}, \code{\link{taxon_indexes}}
+  \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
+  \code{\link{taxon_ranks}}
 }

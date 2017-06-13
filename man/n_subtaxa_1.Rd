@@ -4,15 +4,17 @@
 \alias{n_subtaxa_1}
 \title{Get number of subtaxa}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}})}
+\item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}})}
 }
 \value{
 \code{numeric}
 }
 \description{
 Get number of subtaxa for each taxon in an object of type
-\code{\link[=taxmap]{taxmap()}}, not including subtaxa of subtaxa etc. This does not
-include subtaxa assigned to subtaxa. \preformatted{ obj$n_subtaxa_1()
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}, not including subtaxa of subtaxa etc. This does not
+include subtaxa assigned to subtaxa.
+\preformatted{
+obj$n_subtaxa_1()
 n_subtaxa_1(obj)}
 }
 \examples{
@@ -21,8 +23,11 @@ n_subtaxa_1(ex_taxmap)
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
-  \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
+  \code{\link{is_branch}}, \code{\link{is_leaf}},
+  \code{\link{is_root}}, \code{\link{is_stem}},
+  \code{\link{map_data}}, \code{\link{n_subtaxa}},
+  \code{\link{n_supertaxa}},
   \code{\link{name_classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
-  \code{\link{taxon_names}}
+  \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }

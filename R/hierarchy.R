@@ -1,12 +1,15 @@
-#' Hierarchy class
+#' The Hierarchy class
+#'
+#' A class containing an ordered list of [taxon()] objects that represent a
+#' hierachical classification.
 #'
 #' @export
 #' @param ... Any number of object of class `Taxon` or taxonomic names as
 #' character strings
 #' @return An `R6Class` object of class `Hierarchy`
 #'
-#' @details on initialize, function sorts the taxon list, see
-#' [ranks_ref] for the reference rank names and orders
+#' @details On initialization, taxa are sorted if they have ranks with a known
+#'   order.
 #'
 #' **Methods**
 #'   \describe{
@@ -22,6 +25,7 @@
 #'     }
 #'   }
 #'
+#' @family classes
 #' @examples
 #' (x <- taxon(
 #'   name = taxon_name("Poaceae"),

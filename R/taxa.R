@@ -1,8 +1,12 @@
-#' Make a set of many Taxon class objects
+#' A class for multiple taxon objects
+#'
+#' Stores one or more [taxon()] objects. This is just a thin wrapper for a list
+#' of [taxon()] objects.
 #'
 #' @export
 #' @param ... Any number of object of class `Taxon`
 #' @return An `R6Class` object of class `Taxon`
+#' @family classes
 #' @examples
 #' (x <- taxon(
 #'   name = taxon_name("Poa annua"),

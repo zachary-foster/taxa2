@@ -1,10 +1,14 @@
-#' TaxonId class
+#' Taxon ID class
+#'
+#' Used to store taxon IDs, either arbitrary or from a taxonomy database. This
+#' is typically used to store taxon IDs in [taxon()] objects.
 #'
 #' @export
 #' @param id (character/integer/numeric) a taxonomic id, required
 #' @param database (database) database class object, optional
 #'
 #' @return An `R6Class` object of class `TaxonId`
+#' @family classes
 #'
 #' @examples
 #' (x <- taxon_id(12345))

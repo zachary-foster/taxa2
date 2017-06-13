@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxa.R
 \name{taxa_}
 \alias{taxa_}
-\title{Make a set of many Taxon class objects}
+\title{A class for multiple taxon objects}
 \usage{
 taxa_(...)
 }
@@ -13,7 +13,8 @@ taxa_(...)
 An \code{R6Class} object of class \code{Taxon}
 }
 \description{
-Make a set of many Taxon class objects
+Stores one or more \code{\link[=taxon]{taxon()}} objects. This is just a thin wrapper for a list
+of \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 (x <- taxon(
@@ -22,4 +23,11 @@ Make a set of many Taxon class objects
   id = taxon_id(93036)
 ))
 taxa_(x, x, x)
+}
+\seealso{
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxmap}}, \code{\link{taxon_database}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }

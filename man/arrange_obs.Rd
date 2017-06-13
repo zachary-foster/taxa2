@@ -4,18 +4,18 @@
 \alias{arrange_obs}
 \title{Sort columns of \code{\link[=taxmap]{taxmap()}} objects}
 \arguments{
-\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
+\item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}.}
 
-\item{target}{The name of the table in \code{obj$data} to filter}
+\item{target}{The name of the table in \code{obj$data} to filter.}
 
-\item{...}{One or more column names to sort on.}
+\item{...}{One or more expressions (e.g. column names) to sort on.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
 Sort columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
-Any variable name that appears in \code{obj$all_names()} can be used as if it
+Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it
 was a vector on its own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration
 for this function and more information.
 \preformatted{

@@ -1,4 +1,7 @@
-#' TaxonDatabase class
+#' Taxonomy database class
+#'
+#' Used to store information about taxonomy databases. This is typically used to
+#' store where taxon information came from in [taxon()] objects.
 #'
 #' @export
 #' @param name (character) name of the database
@@ -8,6 +11,7 @@
 #'
 #' @return An `R6Class` object of class `TaxonDatabase`
 #'
+#' @family classes
 #' @examples
 #' # create a database entry
 #' (x <- taxon_database(

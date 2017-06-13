@@ -23,15 +23,11 @@ single vector of unique values.}
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in
 the output}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id",
-"taxa", or "hierarchies". Note that "index" is the index of the edge list,
-not the taxon list.}
+\item{value}{What data to return. Any result of \code{all_names(obj)} can be used, but it
+usually only makes sense to use data that has an associated taxon id.}
 
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information
 is not available.}
-
-\item{...}{U Used by the S3 method to pass the parameters to the R6 method of
-\code{\link[=taxonomy]{taxonomy()}}}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned
@@ -41,9 +37,33 @@ then unique values are returned in a single vector.
 \description{
 Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
 taxa are a part of) in an object of type \code{\link[=taxonomy]{taxonomy()}} or
-\code{\link[=taxmap]{taxmap()}}. \preformatted{ obj$supertaxa(subset = NULL, recursive =
-TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
-FALSE) supertaxa(obj, ...)}
+\code{\link[=taxmap]{taxmap()}}.
+\preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
+simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
+supertaxa(obj, subset = NULL, recursive = TRUE,
+simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
+}
+\examples{
+# return the indexes for supertaxa for each taxon
+ex_taxmap$supertaxa()
+
+# Only return data for some taxa using taxon indexes
+ex_taxmap$supertaxa(subset = 1:3)
+
+# Only return data for some taxa using taxon ids
+ex_taxmap$supertaxa(subset = c("3", "4"))
+
+# Only return data for some taxa using logical tests
+ex_taxmap$supertaxa(subset = taxon_ranks == "species")
+
+# Only return supertaxa one level above
+ex_taxmap$supertaxa(recursive = FALSE)
+
+# Only return supertaxa some number of ranks above
+ex_taxmap$supertaxa(recursive = 2)
+
+# Return something besides taxon indexes
+ex_taxmap$supertaxa(value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},

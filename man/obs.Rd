@@ -13,10 +13,9 @@ there must be a column named "taxon_id" and lists/vectors must be named by
 taxon ID.}
 
 \item{value}{What data to return. This is usually the name of column in a
-table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
-usually only makes sense to use columns in the dataset specified by the
-\code{data} option. By default, the indexes of observation in \code{data} are
-returned.}
+table in \code{obj$data}. Any result of \code{all_names(obj)} can be used. If the
+value used has names, it is assumed that the names are taxon ids and the
+taxon ids are used to look up the correct values.}
 
 \item{subset}{(\code{character}) Taxon IDs or indexes for which observation
 indexes will be returned. Default: All taxa in \code{obj} will be used.}
@@ -39,8 +38,8 @@ vector.
 \description{
 Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each taxon in a
 given table included in that \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{obj$obs(data, subset = NULL, recursive = TRUE, simplify = FALSE)
-obs(obj, data, subset = NULL, recursive = TRUE, simplify = FALSE)}
+\preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
+obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
 }
 \examples{
 # Get indexes of rows corresponding to each taxon
@@ -51,6 +50,9 @@ ex_taxmap$obs("info", subset = 1:2)
 
 # Get only a subset of taxon IDs
 ex_taxmap$obs("info", subset = c("1", "2"))
+
+# Get only a subset of taxa using logical tests
+ex_taxmap$obs("info", subset = taxon_ranks == "genus")
 
 # Only return indexes of rows assinged to each taxon explicitly
 ex_taxmap$obs("info", recursive = FALSE)

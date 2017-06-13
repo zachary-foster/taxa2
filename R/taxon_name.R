@@ -1,4 +1,7 @@
-#' TaxonName class
+#' Taxon name class
+#'
+#' Used to store the name of taxa. This is typically used to
+#' store where taxon names in [taxon()] objects.
 #'
 #' @export
 #' @param name (character) a taxonomic name. required
@@ -6,6 +9,7 @@
 #'
 #' @return An `R6Class` object of class `TaxonName`
 #'
+#' @family classes
 #' @examples
 #' (poa <- taxon_name("Poa"))
 #' (undef <- taxon_name("undefined"))

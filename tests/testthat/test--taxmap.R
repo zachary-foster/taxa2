@@ -211,9 +211,10 @@ test_that("Names in invalid expressions can be found by NSE", {
 #### get_data
 
 test_that("NSE values can be found", {
-  expect_identical(test_obj$get_data(c("n_subtaxa", "n_legs", "reaction")),
+  expect_equal(test_obj$get_data(c("n_subtaxa", "n_legs", "reaction")),
                    list(n_subtaxa = test_obj$n_subtaxa(),
-                        n_legs = test_obj$data$info$n_legs,
+                        n_legs = stats::setNames(test_obj$data$info$n_legs,
+                                                 test_obj$data$info$taxon_id),
                         reaction = test_obj$funcs$reaction(test_obj)))
   expect_error(test_obj$get_data(c("n_subtaxa", "not_valid")),
                "Cannot find the following data: not_valid")
@@ -231,7 +232,7 @@ test_that("All valid NSE values can be found", {
 test_that("Mapping between table observations and the edge list works", {
   result <- test_obj$obs("info")
   expect_true(all(sapply(result, class) == "integer"))
-  expect_identical(names(result), test_obj$taxon_ids())
+  expect_identical(names(result), unname(test_obj$taxon_ids()))
   expect_identical(result[["1"]], 1:4)
   expect_identical(result, test_obj$obs("phylopic_ids"))
   expect_identical(result, test_obj$obs("foods"))
@@ -313,7 +314,7 @@ test_that("Observations can be preserved when filtering taxa", {
 
 test_that("Taxon ids can be preserved when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names != "Solanum", reassign_taxa = FALSE)
-  expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(return_type = "name")))
+  expect_true(all(c("lycopersicum", "tuberosum") %in% result$roots(value = "taxon_names")))
 })
 
 test_that("The selection of taxa to be filtered can be inverted", {

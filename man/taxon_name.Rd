@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxon_name.R
 \name{taxon_name}
 \alias{taxon_name}
-\title{TaxonName class}
+\title{Taxon name class}
 \usage{
 taxon_name(name, database = NULL)
 }
@@ -15,7 +15,8 @@ taxon_name(name, database = NULL)
 An \code{R6Class} object of class \code{TaxonName}
 }
 \description{
-TaxonName class
+Used to store the name of taxa. This is typically used to
+store where taxon names in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 (poa <- taxon_name("Poa"))
@@ -33,4 +34,11 @@ x$database
 ))
 x$rank
 x$database
+}
+\seealso{
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxa_}}, \code{\link{taxmap}},
+  \code{\link{taxon_database}}, \code{\link{taxon_id}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }

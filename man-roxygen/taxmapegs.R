@@ -1,4 +1,8 @@
 #' @examples
+#' # The code below shows how to contruct a taxmap object from scratch.
+#' # Typically, taxmap objects would be the output of a parsing function,
+#' #  not created from scratch, but this is for demostration purposes.
+#'
 #' notoryctidae <- taxon(
 #' name = taxon_name("Notoryctidae"),
 #' rank = taxon_rank("family"),
@@ -102,6 +106,11 @@
 #'                    n_legs = c(4, 4, 4, 2, 0, 0),
 #'                    dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
 #'
+#' abund <- data.frame(code = rep(c("T", "C", "M", "H"), 2),
+#'                     sample = rep(c("A", "B"), each = 2),
+#'                     count = c(1,2,5,2,6,2,4,0),
+#'                     taxon_index = rep(1:4, 2))
+#'
 #' phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
 #'                   "12899ba0-9923-4feb-a7f9-758c3c7d5e13",
 #'                   "11b783d5-af1c-4f4e-8ab5-a51470652b47",
@@ -125,5 +134,6 @@
 #' ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
 #'                     data = list(info = info,
 #'                                 phylopic_ids = phylopic_ids,
-#'                                 foods = foods),
+#'                                 foods = foods,
+#'                                 abund = abund),
 #'                     funcs = list(reaction = reaction))

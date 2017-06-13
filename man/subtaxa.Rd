@@ -25,9 +25,10 @@ into a single vector of unique values.}
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are
 included in the output}
 
-\item{return_type}{(\code{logical}) Controls output type: "index", "id",
-"taxa", or "hierarchies". Note that "index" is the index of the edge list,
-not the taxon list.}
+\item{value}{What data to return. This is usually the name of column in a
+table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
+usually only makes sense to data that corresponds to taxa 1:1, such as
+\code{\link[=taxon_ranks]{taxon_ranks()}}. By default, taxon indexes are returned.}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors are returned
@@ -36,9 +37,33 @@ then the unique values are returned in a single vector.
 }
 \description{
 Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object
-of type \code{taxmap} \preformatted{ obj$subtaxa(subset = NULL, recursive =
-TRUE, simplify = FALSE, include_input = FALSE, return_type = "id", na =
-FALSE) subtaxa(obj, ...)}
+of type \code{taxmap}.
+\preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
+include_input = FALSE, value = NULL)
+subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
+include_input = FALSE, value = NULL)}
+}
+\examples{
+# return the indexes for subtaxa for each taxon
+ex_taxmap$subtaxa()
+
+# Only return data for some taxa using taxon indexes
+ex_taxmap$subtaxa(subset = 1:3)
+
+# Only return data for some taxa using taxon ids
+ex_taxmap$subtaxa(subset = c("3", "4"))
+
+# Only return data for some taxa using logical tests
+ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+
+# Only return subtaxa one level below
+ex_taxmap$subtaxa(recursive = FALSE)
+
+# Only return subtaxa some number of ranks below
+ex_taxmap$subtaxa(recursive = 2)
+
+# Return something besides taxon indexes
+ex_taxmap$subtaxa(value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},

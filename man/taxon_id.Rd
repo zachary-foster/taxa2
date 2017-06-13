@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxon_id.R
 \name{taxon_id}
 \alias{taxon_id}
-\title{TaxonId class}
+\title{Taxon ID class}
 \usage{
 taxon_id(id, database = NULL)
 }
@@ -15,7 +15,8 @@ taxon_id(id, database = NULL)
 An \code{R6Class} object of class \code{TaxonId}
 }
 \description{
-TaxonId class
+Used to store taxon IDs, either arbitrary or from a taxonomy database. This
+is typically used to store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 (x <- taxon_id(12345))
@@ -28,4 +29,11 @@ x$database
 ))
 x$id
 x$database
+}
+\seealso{
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxa_}}, \code{\link{taxmap}},
+  \code{\link{taxon_database}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }

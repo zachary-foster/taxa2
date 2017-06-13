@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxon_database.R
 \name{taxon_database}
 \alias{taxon_database}
-\title{TaxonDatabase class}
+\title{Taxonomy database class}
 \usage{
 taxon_database(name = NULL, url = NULL, description = NULL,
   id_regex = NULL)
@@ -20,7 +20,8 @@ taxon_database(name = NULL, url = NULL, description = NULL,
 An \code{R6Class} object of class \code{TaxonDatabase}
 }
 \description{
-TaxonDatabase class
+Used to store information about taxonomy databases. This is typically used to
+store where taxon information came from in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 # create a database entry
@@ -36,4 +37,11 @@ x$url
 # use pre-created database objects
 database_list
 database_list$ncbi
+}
+\seealso{
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxa_}}, \code{\link{taxmap}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
