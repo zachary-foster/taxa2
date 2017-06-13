@@ -26,7 +26,7 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 \description{
 Subsets columns in a \code{\link[=taxmap]{taxmap()}} object. Takes and returns a
 \code{\link[=taxmap]{taxmap()}} object. Any variable name that appears in
-\code{obj$all_names()} can be used as if it was a vector on its own. See
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. See
 \code{\link[dplyr:select]{dplyr::select()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$select_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function

@@ -20,10 +20,10 @@ associated taxon ids if possible.
 \description{
 Given a vector of names, return a list of data (usually lists/vectors)
 contained in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Each item will be named by
-taxon ids were possible.
+taxon ids when possible.
 \preformatted{
-obj$get_data(name = NULL)
-get_data(obj, name = NULL)}
+obj$get_data(name = NULL, ...)
+get_data(obj, name = NULL, ...)}
 }
 \examples{
 # Get specific values

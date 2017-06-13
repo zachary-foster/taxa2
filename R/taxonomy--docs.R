@@ -393,7 +393,8 @@ NULL
 #' Get classification strings of taxa in an object of type [taxonomy()] or [taxmap()]
 #' composed of taxon IDs. Each classification is constructed by concatenating
 #' the taxon ids of the given taxon and its supertaxa. \preformatted{
-#' obj$id_classifications(sep = ";") id_classifications(obj, sep = ";")}
+#' obj$id_classifications(sep = ";")
+#' id_classifications(obj, sep = ";")}
 #'
 #' @param obj ([taxonomy()] or [taxmap()])
 #' @param sep (`character` of length 1) The character(s) to place between
@@ -500,8 +501,10 @@ NULL
 
 #' Return names of data in a [taxonomy()] or [taxmap()]
 #'
-#' Return all the valid names that can be used with non-standard evalulation in
-#' manipulation functions like `filter_taxa`.
+#' Return the names of datasets that can be used with functions in the taxa
+#' package that use [non-standard
+#' evalulation](http://adv-r.had.co.nz/Computing-on-the-language.html), like
+#' [filter_taxa()].
 #' \preformatted{
 #' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 #' all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
@@ -517,17 +520,16 @@ NULL
 #' @param builtin_funcs This option only applies to [taxmap()] objects. If
 #'   `TRUE`, include functions like [n_supertaxa()] that provide information for
 #'   each taxon.
-#' @param warn This option only applies to [taxmap()] objects. If `TRUE`, warn
-#'   if there are duplicate names.
+#' @param warn If `TRUE`, warn if there are duplicate names.
 #'
 #' @return `character`
 #'
 #' @examples
 #' # Get the names of all data accesible by non-standard evaluation
-#' ex_taxmap$all_names()
+#' all_names(ex_taxmap)
 #'
-#' # Dont include the names of functions
-#' ex_taxmap$all_names(funcs = FALSE)
+#' # Dont include the names of automatically included functions.
+#' all_names(ex_taxmap, builtin_funcs = FALSE)
 #'
 #' @family accessors
 #'
@@ -561,10 +563,10 @@ NULL
 #'
 #' Given a vector of names, return a list of data (usually lists/vectors)
 #' contained in a [taxonomy()] or [taxmap()] object. Each item will be named by
-#' taxon ids were possible.
+#' taxon ids when possible.
 #' \preformatted{
-#' obj$get_data(name = NULL)
-#' get_data(obj, name = NULL)}
+#' obj$get_data(name = NULL, ...)
+#' get_data(obj, name = NULL, ...)}
 #'
 #' @param obj A [taxonomy()] or [taxmap()]  object
 #' @param name (`character`) Names of data to return. If not supplied, return
@@ -591,7 +593,9 @@ NULL
 
 #' Get values of data used in expressions
 #'
-#' Get values of data in a [taxonomy()] or [taxmap()] used in expressions.
+#' Get values availabe for [non-standard
+#' evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) in a
+#' [taxonomy()] or [taxmap()] object used in expressions.
 #' Expressions are not evaluated and do not need to make sense.
 #' \preformatted{
 #' obj$data_used(...)
@@ -722,7 +726,11 @@ NULL
 #' @return An object of type [taxonomy()] or [taxmap()]
 #'
 #' @examples
-#' arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
+#' # Sort taxa in ascending order
+#' arrange_taxa(ex_taxmap, taxon_names)
+#'
+#' # Sort taxa in decending order
+#' arrange_taxa(ex_taxmap, desc(taxon_names))
 #'
 #' @family taxmap manipulation functions
 #'

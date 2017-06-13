@@ -1,16 +1,19 @@
 #' Taxon class
 #'
+#' A class used to define a taxon.
+#'
 #' @export
-#' @param name a TaxonName object [taxon_name] or character string. if character
+#' @param name a TaxonName object [taxon_name()] or character string. if character
 #' passed in, we'll coerce to a TaxonName object internally, required
-#' @param rank a TaxonRank object [taxon_rank] or character string. if character
+#' @param rank a TaxonRank object [taxon_rank()] or character string. if character
 #' passed in, we'll coerce to a TaxonRank object internally, required
-#' @param id a TaxonId object [taxon_id], numeric/integer, or character string.
+#' @param id a TaxonId object [taxon_id()], numeric/integer, or character string.
 #' if numeric/integer/character passed in, we'll coerce to a TaxonId object
 #' internally, required
 #' @param authority (character) a character string, optional
 #'
 #' @return An `R6Class` object of class `Taxon`
+#' @family classes
 #'
 #' @examples
 #' (x <- taxon(

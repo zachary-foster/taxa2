@@ -2,18 +2,19 @@
 % Please edit documentation in R/hierarchies.R
 \name{hierarchies}
 \alias{hierarchies}
-\title{Make a set of many Hierarchy class objects}
+\title{Make a set of many \code{\link[=hierarchy]{hierarchy()}} class objects}
 \usage{
 hierarchies(...)
 }
 \arguments{
-\item{...}{Any number of object of class \code{Hierarchy}}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}}}
 }
 \value{
-An \code{R6Class} object of class \code{Hierarchy}
+An \code{R6Class} object of class \code{\link[=hierarchy]{hierarchy()}}
 }
 \description{
-Make a set of many Hierarchy class objects
+Make a set of many \code{\link[=hierarchy]{hierarchy()}} class objects.
+This is just a thin wrapper over a standard list.
 }
 \examples{
 x <- taxon(
@@ -51,4 +52,11 @@ c <- taxon(
 hier2 <- hierarchy(c, b, a)
 
 hierarchies(hier1, hier2)
+}
+\seealso{
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxa_}}, \code{\link{taxmap}},
+  \code{\link{taxon_database}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }

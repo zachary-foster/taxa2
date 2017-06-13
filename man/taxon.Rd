@@ -7,13 +7,13 @@
 taxon(name, rank = NULL, id = NULL, authority = NULL)
 }
 \arguments{
-\item{name}{a TaxonName object \link{taxon_name} or character string. if character
+\item{name}{a TaxonName object \code{\link[=taxon_name]{taxon_name()}} or character string. if character
 passed in, we'll coerce to a TaxonName object internally, required}
 
-\item{rank}{a TaxonRank object \link{taxon_rank} or character string. if character
+\item{rank}{a TaxonRank object \code{\link[=taxon_rank]{taxon_rank()}} or character string. if character
 passed in, we'll coerce to a TaxonRank object internally, required}
 
-\item{id}{a TaxonId object \link{taxon_id}, numeric/integer, or character string.
+\item{id}{a TaxonId object \code{\link[=taxon_id]{taxon_id()}}, numeric/integer, or character string.
 if numeric/integer/character passed in, we'll coerce to a TaxonId object
 internally, required}
 
@@ -23,7 +23,7 @@ internally, required}
 An \code{R6Class} object of class \code{Taxon}
 }
 \description{
-Taxon class
+A class used to define a taxon.
 }
 \examples{
 (x <- taxon(
@@ -34,4 +34,11 @@ Taxon class
 x$name
 x$rank
 x$id
+}
+\seealso{
+Other classes: \code{\link{hierarchies}},
+  \code{\link{hierarchy}}, \code{\link{taxa_}},
+  \code{\link{taxmap}}, \code{\link{taxon_database}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }

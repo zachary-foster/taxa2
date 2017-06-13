@@ -65,7 +65,7 @@ NULL
 #' obs(obj, data, func, simplify = FALSE,
 #'     value = NULL, subset = NULL, recursive = TRUE, ...)}
 #'
-#' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
+#' @param obj The [taxmap()] object containing taxon information to
 #'   be queried.
 #' @param data Either the name of something in `obj$data` that has taxon
 #'   information or a an external object with taxon information. For tables,
@@ -101,13 +101,13 @@ NULL
 
 #' Filter observations with a list of conditions
 #'
-#' Filter data in a [taxmap()] (in `obj$data`) object with a
-#' series of conditions. Any variable name that appears in
-#' `obj$all_names()` can be used as if it was a vector on its own. See
+#' Filter data in a [taxmap()] object (in `obj$data`) with a
+#' set of conditions. Any variable name that appears in
+#' [all_names()] can be used as if it was a vector on its own. See
 #' [dplyr::filter()] for the inspiration for this function and more
 #' information. Calling the function using the `obj$filter_obs(...)` style
 #' edits "obj" in place, unlike most R functions. However, calling the function
-#' using the `filter_obs(obj, ...)` mitates R's traditional copy-on-modify
+#' using the `filter_obs(obj, ...)` imitates R's traditional copy-on-modify
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
@@ -122,7 +122,7 @@ NULL
 #'   row indexes of `obj$edge_list`} \item{`logical`}{A
 #'   `TRUE`/`FALSE` vector of length equal to the number of rows in
 #'   `obj$edge_list`} } Any variable name that appears in
-#'   `obj$all_names()` can be used as if it was a vector on its own.
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param unobserved (`logical` of length 1) If `TRUE`, preserve taxa
 #'   even if all of their observations are filtered out. If `FALSE`, remove
 #'   taxa for which all observations were filtered out. Note that only taxa that
@@ -151,7 +151,7 @@ NULL
 #'
 #' Subsets columns in a [taxmap()] object. Takes and returns a
 #' [taxmap()] object. Any variable name that appears in
-#' `obj$all_names()` can be used as if it was a vector on its own. See
+#' [all_names()] can be used as if it was a vector on its own. See
 #' [dplyr::select()] for the inspiration for this function and more
 #' information. Calling the function using the `obj$select_obs(...)` style
 #' edits "obj" in place, unlike most R functions. However, calling the function
@@ -193,7 +193,7 @@ NULL
 #' Add columns to [taxmap()] objects
 #'
 #' Add columns to tables in `obj$data` in [taxmap()] objects. Any
-#' variable name that appears in `obj$all_names()` can be used as if it was
+#' variable name that appears in [all_names()] can be used as if it was
 #' a vector on its own. See [dplyr::mutate()] for the inspiration for
 #' this function and more information. Calling the function using the
 #' `obj$mutate_obs(...)` style edits "obj" in place, unlike most R
@@ -224,7 +224,7 @@ NULL
 #' Replace columns in [taxmap()] objects
 #'
 #' Replace columns of tables in `obj$data` in [taxmap()] objects.
-#' Any variable name that appears in `obj$all_names()` can be used as if it
+#' Any variable name that appears in [all_names()] can be used as if it
 #' was a vector on its own. See [dplyr::transmute()] for the
 #' inspiration for this function and more information.
 #' \preformatted{
@@ -249,16 +249,16 @@ NULL
 #' Sort columns of [taxmap()] objects
 #'
 #' Sort columns of tables in `obj$data` in [taxmap()] objects.
-#' Any variable name that appears in `obj$all_names()` can be used as if it
+#' Any variable name that appears in [all_names()] can be used as if it
 #' was a vector on its own. See [dplyr::arrange()] for the inspiration
 #' for this function and more information.
 #' \preformatted{
 #' obj$arrange_obs(target, ...)
 #' arrange_obs(obj, target, ...)}
 #'
-#' @param obj An object of type [taxmap()]
-#' @param target The name of the table in `obj$data` to filter
-#' @param ... One or more column names to sort on.
+#' @param obj An object of type [taxmap()].
+#' @param target The name of the table in `obj$data` to filter.
+#' @param ... One or more expressions (e.g. column names) to sort on.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -280,7 +280,7 @@ NULL
 #'
 #' Randomly sample some number of observations from a [taxmap()]
 #' object. Weights can be specified for observations or the taxa they are taxmap
-#' by. Any variable name that appears in `obj$all_names()` can be used as
+#' by. Any variable name that appears in [all_names()] can be used as
 #' if it was a vector on its own. See [dplyr::sample_n()] for the inspiration
 #' for this function.
 #' \preformatted{
@@ -411,6 +411,7 @@ NULL
 
 
 #' Count observation assigned in [taxmap()]
+#'
 #' Count observations assigned to a specific taxon in an [taxmap()].
 #' This does not include observations assigned to subtaxa.
 #' \preformatted{

@@ -13,11 +13,10 @@ taxonomy(...)
 An \code{R6Class} object of class \code{Taxonomy}
 }
 \description{
-Used to store taxonomic tree structures.
-}
-\details{
-on initialize, we parse the inputs and find all duplicate
-taxonomic names of the same rank, make an edge list
+Stores a taxonomy composed of \code{\link[=taxon]{taxon()}} objects organized in a tree
+structure. This differs from the \code{\link[=hierarchies]{hierarchies()}} class in how the \code{\link[=taxon]{taxon()}}
+objects are stored. Unlike \code{\link[=hierarchies]{hierarchies()}}, each taxon is only stored once
+and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edgelist}.
 }
 \examples{
 # Mammalia
@@ -85,4 +84,11 @@ taxonomy(hier1, hier2, hier3)
 
 
 
+}
+\seealso{
+Other classes: \code{\link{hierarchies}},
+  \code{\link{hierarchy}}, \code{\link{taxa_}},
+  \code{\link{taxmap}}, \code{\link{taxon_database}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxon}}
 }

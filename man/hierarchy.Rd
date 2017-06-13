@@ -2,7 +2,7 @@
 % Please edit documentation in R/hierarchy.R
 \name{hierarchy}
 \alias{hierarchy}
-\title{Hierarchy class}
+\title{The Hierarchy class}
 \usage{
 hierarchy(...)
 }
@@ -14,11 +14,12 @@ character strings}
 An \code{R6Class} object of class \code{Hierarchy}
 }
 \description{
-Hierarchy class
+A class containing an ordered list of \code{\link[=taxon]{taxon()}} objects that represent a
+hierachical classification.
 }
 \details{
-on initialize, function sorts the taxon list, see
-\link{ranks_ref} for the reference rank names and orders
+On initialization, taxa are sorted if they have ranks with a known
+order.
 
 \strong{Methods}
 \describe{
@@ -55,4 +56,11 @@ res$ranklist
 
 # pop off a rank
 res$pop("family")
+}
+\seealso{
+Other classes: \code{\link{hierarchies}},
+  \code{\link{taxa_}}, \code{\link{taxmap}},
+  \code{\link{taxon_database}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }

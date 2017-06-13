@@ -21,7 +21,11 @@ obj$arrange_taxa(...)
 arrange_taxa(obj, ...)}
 }
 \examples{
-arrange_taxa(ex_taxmap, desc(ex_taxmap$taxon_names()))
+# Sort taxa in ascending order
+arrange_taxa(ex_taxmap, taxon_names)
+
+# Sort taxa in decending order
+arrange_taxa(ex_taxmap, desc(taxon_names))
 
 }
 \seealso{

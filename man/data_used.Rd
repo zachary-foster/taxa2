@@ -12,7 +12,8 @@
 \code{list}
 }
 \description{
-Get values of data in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} used in expressions.
+Get values availabe for \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standardevaluation} in a
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object used in expressions.
 Expressions are not evaluated and do not need to make sense.
 \preformatted{
 obj$data_used(...)

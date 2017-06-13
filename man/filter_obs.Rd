@@ -14,7 +14,7 @@ IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more
 row indexes of \code{obj$edge_list}} \item{\code{logical}}{A
 \code{TRUE}/\code{FALSE} vector of length equal to the number of rows in
 \code{obj$edge_list}} } Any variable name that appears in
-\code{obj$all_names()} can be used as if it was a vector on its own.}
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{unobserved}{(\code{logical} of length 1) If \code{TRUE}, preserve taxa
 even if all of their observations are filtered out. If \code{FALSE}, remove
@@ -26,13 +26,13 @@ taxa without observations to begin with that will not be removed.}
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Filter data in a \code{\link[=taxmap]{taxmap()}} (in \code{obj$data}) object with a
-series of conditions. Any variable name that appears in
-\code{obj$all_names()} can be used as if it was a vector on its own. See
+Filter data in a \code{\link[=taxmap]{taxmap()}} object (in \code{obj$data}) with a
+set of conditions. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. See
 \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$filter_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
-using the \code{filter_obs(obj, ...)} mitates R's traditional copy-on-modify
+using the \code{filter_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{

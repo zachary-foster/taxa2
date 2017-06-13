@@ -1,8 +1,16 @@
 #' Taxmap class
 #'
+#' A class designed to store a taxonomy and associated information.
+#' This class builds on the [taxonomy()] class.
+#' User defined data can be stored in the list `obj$data`, where `obs` is a taxmap object.
+#' Data that is associated with taxa can be manipulated in a variety of ways using functions like `filter_taxa` and `filter_obs`.
+#' To associate the items of lists/vectors with taxa, name them by [taxon_ids()].
+#' For tables, add a column named `taxon_id` that stores [taxon_ids()].
+#'
 #' @export
 #' @param ... Any number of object of class [hierarchy()] or character vectors.
 #' @param data A list of tables with data associated with the taxa.
+#' @family classes
 #' @return An `R6Class` object of class [taxmap()]
 #'
 #' @details on initialize, function sorts the taxon list based on rank (if rank
@@ -72,8 +80,7 @@ Taxmap <- R6::R6Class(
 
       # Add functions included in the package
       if (builtin_funcs) {
-        output <- c(output, stats::setNames(private$nse_accessible_funcs,
-                                            private$nse_accessible_funcs))
+        output <- c(output, private$nse_accessible_funcs)
       }
 
       # Get column names in each table, removing 'taxon_id'
@@ -83,29 +90,16 @@ Taxmap <- R6::R6Class(
         names(table_col_names) <- paste0("data$",
                                          rep(names(self$data[is_table]),
                                              vapply(self$data[is_table],
-                                                    ncol, integer(1))),
-                                         "$",
-                                         table_col_names)
+                                                    ncol, integer(1))))
         table_col_names <- table_col_names[table_col_names != "taxon_id"]
         output <- c(output, table_col_names)
-      }
-
-      # Add taxon id columns for each table
-      table_names <- names(self$data[is_table])
-      table_names <- table_names[private$has_taxon_ids(table_names)]
-      if (tables && length(table_names) > 0) {
-        table_taxon_id_names <- paste0(table_names, "_taxon_id")
-        table_taxon_id_values <- paste0("data$", table_names, "$taxon_id")
-        output <- c(output,
-                    stats::setNames(table_taxon_id_names,
-                                    table_taxon_id_values))
       }
 
       # Get other object names in data
       is_other <- !is_table
       if (others && length(self$data[is_other]) > 0) {
         other_names <- names(self$data[is_other])
-        names(other_names) <- paste0("data$", other_names)
+        names(other_names) <- rep("data", length(other_names))
         output <- c(output, other_names)
       }
 
@@ -113,7 +107,7 @@ Taxmap <- R6::R6Class(
       # Get function names
       if (funcs && length(self$funcs) > 0) {
         func_names <- names(self$funcs)
-        names(func_names) <-  paste0("funcs$", func_names)
+        names(func_names) <- rep("funcs", length(func_names))
         output <- c(output, func_names)
       }
 
@@ -126,6 +120,10 @@ Taxmap <- R6::R6Class(
         }
       }
 
+
+      # Add the name to the name of the name and return
+      names(output) <- paste0(names(output),
+                              ifelse(names(output) == "", "", "$"), output)
       return(output)
     },
 
@@ -134,7 +132,7 @@ Taxmap <- R6::R6Class(
                    simplify = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
-      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+      subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
       obs_taxon_ids <- private$get_data_taxon_ids(data, require = TRUE)
 
@@ -178,10 +176,22 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
+
+    map_data = function(to = "taxon_names", from = "taxon_ids") {
+      from_data <- self$get_data(from)[[1]]
+      to_data <- self$get_data(to)[[1]]
+      stats::setNames(to_data[match(names(from_data), names(to_data))],
+                      from_data)
+
+
+
+    },
+
+
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
-      my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value,
-                                         subset = subset, recursive = recursive)))
+      my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value, subset = subset,
+                         recursive = recursive)))
       output <- lapply(my_obs, func, ...)
       if (simplify) {
         output <- unlist(output)
@@ -195,7 +205,7 @@ Taxmap <- R6::R6Class(
       private$check_dataset_name(target)
 
       # non-standard argument evaluation
-      selection <- rlang::eval_tidy(rlang::quos(...),
+      selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
 
       # If no selection is supplied, match all rows
@@ -270,9 +280,9 @@ Taxmap <- R6::R6Class(
       }
 
       data_used <- self$data_used(...)
-      unevaluated <- rlang::quos(...)
+      unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
-        new_col <- rlang::eval_tidy(unevaluated[index], data = data_used)
+        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
         # Allow this col to be used in evaluating the next cols
         data_used <- c(data_used, new_col)
         self$data[[target]][[names(new_col)]] <- new_col[[1]]
@@ -296,9 +306,9 @@ Taxmap <- R6::R6Class(
         result <- list()
       }
       data_used <- self$data_used(...)
-      unevaluated <- rlang::quos(...)
+      unevaluated <- lazyeval::lazy_dots(...)
       for (index in seq_along(unevaluated)) {
-        new_col <- rlang::eval_tidy(unevaluated[index], data = data_used)
+        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
         # Allow this col to be used in evaluating the next cols
         data_used <- c(data_used, new_col)
         result[[names(new_col)]] <- new_col[[1]]
@@ -344,9 +354,9 @@ Taxmap <- R6::R6Class(
 
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
-      taxon_weight <- rlang::eval_tidy(rlang::enquo(taxon_weight),
+      taxon_weight <- lazyeval::lazy_eval(lazyeval::lazy(taxon_weight),
                                           data = data_used)
-      obs_weight <- rlang::eval_tidy(rlang::enquo(obs_weight),
+      obs_weight <- lazyeval::lazy_eval(lazyeval::lazy(obs_weight),
                                         data = data_used)
 
       # Get length of target
@@ -494,13 +504,6 @@ Taxmap <- R6::R6Class(
 
       # Return NULL if taxon ids cannot be found
       return(NULL)
-    },
-
-    # Checks if datasets have taxon id information
-    has_taxon_ids = function(dataset_names = names(self$data)) {
-      vapply(dataset_names,
-             function(n) ! is.null(private$get_data_taxon_ids(n)),
-             logical(1))
     }
 
   )

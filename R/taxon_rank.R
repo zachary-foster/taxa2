@@ -1,10 +1,14 @@
-#' TaxonRank class
+#' Taxon rank class
+#'
+#' Stores the rank of a taxon. This is typically used to store where taxon
+#' information came from in [taxon()] objects.
 #'
 #' @export
 #' @param name (character) rank name. required
 #' @param database (character) database class object, optional
 #'
 #' @return An `R6Class` object of class `TaxonRank`
+#' @family classes
 #'
 #' @examples
 #' taxon_rank("species")

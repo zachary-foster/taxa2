@@ -1,8 +1,12 @@
-#' Make a set of many Hierarchy class objects
+#' Make a set of many [hierarchy()] class objects
+#'
+#' Make a set of many [hierarchy()] class objects.
+#' This is just a thin wrapper over a standard list.
 #'
 #' @export
-#' @param ... Any number of object of class `Hierarchy`
-#' @return An `R6Class` object of class `Hierarchy`
+#' @param ... Any number of object of class [hierarchy()]
+#' @return An `R6Class` object of class [hierarchy()]
+#' @family classes
 #' @examples
 #' x <- taxon(
 #'   name = taxon_name("Poaceae"),

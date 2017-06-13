@@ -4,7 +4,7 @@
 \alias{obs_apply}
 \title{Apply function to observations per taxon}
 \arguments{
-\item{obj}{(\code{\link[=taxmap]{taxmap()}}) The \code{\link[=taxmap]{taxmap()}} object containing taxon information to
+\item{obj}{The \code{\link[=taxmap]{taxmap()}} object containing taxon information to
 be queried.}
 
 \item{data}{Either the name of something in \code{obj$data} that has taxon

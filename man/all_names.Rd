@@ -20,25 +20,25 @@ include the names of data in \code{obj$data} besides tables.}
 \code{TRUE}, include functions like \code{\link[=n_supertaxa]{n_supertaxa()}} that provide information for
 each taxon.}
 
-\item{warn}{This option only applies to \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE}, warn
-if there are duplicate names.}
+\item{warn}{If \code{TRUE}, warn if there are duplicate names.}
 }
 \value{
 \code{character}
 }
 \description{
-Return all the valid names that can be used with non-standard evalulation in
-manipulation functions like \code{filter_taxa}.
+Return the names of datasets that can be used with functions in the taxa
+package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standardevalulation}, like
+\code{\link[=filter_taxa]{filter_taxa()}}.
 \preformatted{
 obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
 }
 \examples{
 # Get the names of all data accesible by non-standard evaluation
-ex_taxmap$all_names()
+all_names(ex_taxmap)
 
-# Dont include the names of functions
-ex_taxmap$all_names(funcs = FALSE)
+# Dont include the names of automatically included functions.
+all_names(ex_taxmap, builtin_funcs = FALSE)
 
 }
 \seealso{

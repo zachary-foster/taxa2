@@ -15,7 +15,12 @@ taxmap(..., data = NULL)
 An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Taxmap class
+A class designed to store a taxonomy and associated information.
+This class builds on the \code{\link[=taxonomy]{taxonomy()}} class.
+User defined data can be stored in the list \code{obj$data}, where \code{obs} is a taxmap object.
+Data that is associated with taxa can be manipulated in a variety of ways using functions like \code{filter_taxa} and \code{filter_obs}.
+To associate the items of lists/vectors with taxa, name them by \code{\link[=taxon_ids]{taxon_ids()}}.
+For tables, add a column named \code{taxon_id} that stores \code{\link[=taxon_ids]{taxon_ids()}}.
 }
 \details{
 on initialize, function sorts the taxon list based on rank (if rank
@@ -161,4 +166,11 @@ ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                                 foods = foods,
                                 abund = abund),
                     funcs = list(reaction = reaction))
+}
+\seealso{
+Other classes: \code{\link{hierarchies}},
+  \code{\link{hierarchy}}, \code{\link{taxa_}},
+  \code{\link{taxon_database}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }

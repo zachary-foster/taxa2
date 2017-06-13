@@ -1,13 +1,15 @@
 #' Taxonomy class
 #'
-#' Used to store taxonomic tree structures.
+#' Stores a taxonomy composed of [taxon()] objects organized in a tree
+#' structure. This differs from the [hierarchies()] class in how the [taxon()]
+#' objects are stored. Unlike [hierarchies()], each taxon is only stored once
+#' and the relationships between taxa are stored in an [edge
+#' list](https://en.wikipedia.org/wiki/Adjacency_list).
 #'
 #' @export
 #' @param ... Any number of object of class [hierarchy()]
 #' @return An `R6Class` object of class `Taxonomy`
-#'
-#' @details on initialize, we parse the inputs and find all duplicate
-#' taxonomic names of the same rank, make an edge list
+#' @family classes
 #'
 #' @template taxonomyegs
 
