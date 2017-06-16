@@ -28,6 +28,5 @@ Imports:
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
-    rmarkdown (>= 0.9.6),
-    covr
+    rmarkdown (>= 0.9.6)
 RoxygenNote: 6.0.1
