@@ -19,6 +19,6 @@
 #' @aliases taxa
 #' @docType package
 #' @keywords package
-#' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
+#' @author Scott Chamberlain \email{myrmecocystus+r@@gmail.com}
 #' @author Zachary Foster \email{zacharyfoster1989@@gmail.com}
 NULL
