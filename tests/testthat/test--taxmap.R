@@ -129,10 +129,10 @@ reaction <- function(x) {
 }
 
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
-                    data = list(info = info,
-                                phylopic_ids = phylopic_ids,
-                                foods = foods),
-                    funcs = list(reaction = reaction))
+                   data = list(info = info,
+                               phylopic_ids = phylopic_ids,
+                               foods = foods),
+                   funcs = list(reaction = reaction))
 
 
 ### Print methods
@@ -212,10 +212,10 @@ test_that("Names in invalid expressions can be found by NSE", {
 
 test_that("NSE values can be found", {
   expect_equal(test_obj$get_data(c("n_subtaxa", "n_legs", "reaction")),
-                   list(n_subtaxa = test_obj$n_subtaxa(),
-                        n_legs = stats::setNames(test_obj$data$info$n_legs,
-                                                 test_obj$data$info$taxon_id),
-                        reaction = test_obj$funcs$reaction(test_obj)))
+               list(n_subtaxa = test_obj$n_subtaxa(),
+                    n_legs = stats::setNames(test_obj$data$info$n_legs,
+                                             test_obj$data$info$taxon_id),
+                    reaction = test_obj$funcs$reaction(test_obj)))
   expect_error(test_obj$get_data(c("n_subtaxa", "not_valid")),
                "Cannot find the following data: not_valid")
 })
@@ -551,3 +551,18 @@ test_that("Sampling observations using data from subtaxa works", { # Not complet
   })
 })
 
+
+
+
+test_that("Taxmap can be intialized from complex data", {
+  vec_result <- parse_tax_data(c("A;B;C;D", "A;E;F;G", "A;B;H;I"))
+  list_result <- parse_tax_data(list("A;B;C;D", "A;E;F;G", c("A;B", "H;I")))
+  frame_result <- parse_tax_data(data.frame(tax = c("A;B;C", "A;E;F", "A;B;H"),
+                                            species = c("D", "G", "I"),
+                                            stringsAsFactors = FALSE),
+                                 class_cols = c("tax", "species"))
+  frames_result <- parse_tax_data(list(data.frame(tax = c("A", "B", "C", "D"), stringsAsFactors = FALSE),
+                                       data.frame(tax = c("A", "E", "F", "G"), stringsAsFactors = FALSE),
+                                       data.frame(tax = c("A", "B", "H", "I"), stringsAsFactors = FALSE)))
+
+})

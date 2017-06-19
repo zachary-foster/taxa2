@@ -191,7 +191,7 @@ Taxmap <- R6::R6Class(
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
       my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value, subset = subset,
-                         recursive = recursive)))
+                                         recursive = recursive)))
       output <- lapply(my_obs, func, ...)
       if (simplify) {
         output <- unlist(output)
@@ -509,3 +509,84 @@ Taxmap <- R6::R6Class(
   )
 )
 
+
+
+#' Convert one or more data sets to taxmap
+#'
+#' Parses taxonomic information and assoiacted data and stores it in a
+#' [taxa::taxmap()] object.
+#'
+#' @param ... One or more tables, lists, or vectors to parse. The first must
+#'   contain the names of taxa that represent [taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms).
+#'    If the first is a table, the classification can be spread out over
+#'   multiple columns specified by `class_cols`. If the first is a list of
+#'   tables, it will be assumed that each table represents a classification with
+#'   the `class_cols` column containing a single taxon name in each row. Names
+#'   of objects will be used in the output.
+#' @param class_cols (`character` or `integer`) The names or indexes of columns
+#'   that contain classifications (e.g.
+#'   `"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"`) if the first input
+#'   is a table. Single taxon names (e.g. `"sapiens"`) can be thought of as a
+#'   classification with only one rank. If mutliple columns are specified, they
+#'   will be combined in the order given.
+#' @param class_sep (`character`) One or more separators that delineate taxon
+#'   names in a classification. For example, if one column had `"Homo sapiens"`
+#'   and another had `"Animalia;Chordata;Mammalia;Primates;Hominidae"`, then
+#'   `class_sep = c(" ", ";")`. All separators are applied to each column so
+#'   order does not matter.
+#' @param sep_is_regex (`TRUE`/`FALSE`) Whether or not `class_sep` should be
+#'   used as a [regular expression](https://en.wikipedia.org/wiki/Regular_expression).
+#' @param mappings (named `character`) This defines how the taxonomic
+#'   information in the first input applies to the other inputs. This option
+#'   should have one fewer values than `...`, with values corresponding to each
+#'   input besides the first. The names of values should be a column in the
+#'   first input and the values theselves should be the corresponding column in
+#'   additional inputs that contains the same ID varaibles. If there are no
+#'   shared variables, you can add `NA` as a placeholder, but you could just
+#'   leave that data out since it is not benifiting from being in the taxmap
+#'   object. In addition to column names, the names/values can be one of the
+#'   following:
+#'   * `"{{index}}"` : This means to use the index of rows/items
+#'   * `"{{name}}"` : This means to use row/item names.
+#'
+#' @export
+parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
+                           sep_is_regex = FALSE, mappings = NULL) {
+  datasets <- list(...)
+  tax_data <- datasets[[1]]
+  add_data <- datasets[-1]
+
+  # Deal if edge cases
+  if (length(tax_data)) {
+    #TODO
+  }
+
+  # Get classificaitons
+  if (is.character(tax_data)) { # is a character vector
+    parsed_tax <- strsplit(tax_data, fixed = !sep_is_regex, split = class_sep)
+  } else if (is.data.frame(tax_data)) { # is a data.frame
+    parsed_tax <- lapply(seq_len(nrow(tax_data)),
+                         function(i) {
+                           unname(unlist(strsplit(unlist(tax_data[i, class_cols]),
+                                                  fixed = !sep_is_regex,
+                                                  split = class_sep)))})
+  } else if (is.list(tax_data) && is.data.frame(tax_data[[1]])) { # is a list of data.frames
+    if (length(class_cols) > 1) {
+      stop("When the taxonomy source is a list of data.frames, it does not make sense to specify multiple columns.")
+    }
+    parsed_tax <- unlist(lapply(tax_data, function(x) {
+      lapply(seq_len(nrow(x)), function(i) {
+        x[1:i, class_cols]
+      })
+    }), recursive = FALSE)
+    tax_data <- do.call(rbind, tax_data)
+  } else if (is.list(tax_data) && is.character(tax_data[[1]])) { # is a list of characters
+    parsed_tax <- lapply(tax_data, function(x) unlist(strsplit(x, split = class_sep)))
+  } else {
+    stop("Unknown format for first input. Cannot parse taxonomic information.")
+  }
+
+  # Create taxmap object
+  do.call(taxmap, parsed_tax)
+
+}
