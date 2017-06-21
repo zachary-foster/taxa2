@@ -547,18 +547,44 @@ Taxmap <- R6::R6Class(
 #'   object. In addition to column names, the names/values can be one of the
 #'   following:
 #'   * `"{{index}}"` : This means to use the index of rows/items
-#'   * `"{{name}}"` : This means to use row/item names.
+#'   * `"{{name}}"`  : This means to use row/item names.
+#'   * `"{{value}}"` : This means to use the values in vectors or lists.
+#'     Lists will be converted to vectors using [unlist()].
 #'
 #' @export
 parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
                            sep_is_regex = FALSE, mappings = NULL) {
+
   datasets <- list(...)
   tax_data <- datasets[[1]]
   add_data <- datasets[-1]
 
+  # Check for nonsensical options
+  if (length(add_data) != length(mappings)) {
+    stop(paste0('The `mappings` option must have one fewer values (',
+                length(add_data), ') than primary inputs to the function. ',
+                'They should corrspond to each input after the first.'))
+  }
+  if (is.null(names(mappings))) {
+    stop(paste0('The mapping options must be named.'))
+  }
+  for (i in seq_len(length(add_data))) {
+    valid_mappings <- c("{{index}}", "{{name}}", "{{value}}")
+    if (is.data.frame(add_data)) {
+      valid_mappings <- c(valid_mappings, colnames(add_data[[i]]))
+    }
+    mappings_used <- c(mappings, names(mappings))
+    invalids <- mappings_used[! mappings_used %in% valid_mappings]
+    if (length(invalids) > 0) {
+      stop(paste0('Invalid inputs to the `mappings` found for input ', index, '. ',
+                  'The names and values of `mappings` must be one of the following: ',
+                  paste0(valid_mappings, collapse = ", ")))
+    }
+  }
+
   # Deal if edge cases
   if (length(tax_data)) {
-    #TODO
+    return(taxmap())
   }
 
   # Get classificaitons
@@ -587,6 +613,48 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
   }
 
   # Create taxmap object
-  do.call(taxmap, parsed_tax)
+  output <- do.call(taxmap, parsed_tax)
 
+  # Add additional data sets
+  get_sort_var <- function(data, var) {
+    if (var == "{{index}}") {
+      if (is.data.frame(data)) {
+        return(seq_len(nrow(data)))
+      } else {
+        return(seq_len(length(data)))
+      }
+    } else if (var == "{{name}}") {
+      if (is.data.frame(data)) {
+        return(rownames(data))
+      } else {
+        return(names(data))
+      }
+    }  else if (var == "{{value}}") {
+      if (is.data.frame(data)) {
+        stop("The `{{value}}` setting of the `mappings` option cannot be used with data.frames.")
+      } else {
+        return(unlist(data))
+      }
+    } else if (is.data.frame(data) && var %in% colnames(data)) {
+        return(data[[var]])
+    } else {
+      stop(paste0('No column named "', var, '"."'))
+    }
+  }
+
+  name_datset <- function(dataset, sort_var) {
+    target_value <- get_sort_var(dataset, sort_var)
+    source_value <- get_sort_var(tax_data, names(sort_var))
+    obs_taxon_ids <- output$taxon_ids()[match(target_value, source_value)]
+    if (is.data.frame(dataset)) {
+      dataset$taxon_id <- obs_taxon_ids
+    } else {
+      names(dataset) <- obs_taxon_ids
+    }
+    return(dataset)
+  }
+
+  output$data <- lapply(seq_len(length(add_data)),
+                        function(i) name_datset(add_data[[i]], mappings[i]))
+  return(output)
 }

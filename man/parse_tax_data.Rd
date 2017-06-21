@@ -44,7 +44,9 @@ object. In addition to column names, the names/values can be one of the
 following:
 \itemize{
 \item \code{"{{index}}"} : This means to use the index of rows/items
-\item \code{"{{name}}"} : This means to use row/item names.
+\item \code{"{{name}}"}  : This means to use row/item names.
+\item \code{"{{value}}"} : This means to use the values in vectors or lists.
+Lists will be converted to vectors using \code{\link[=unlist]{unlist()}}.
 }}
 }
 \description{

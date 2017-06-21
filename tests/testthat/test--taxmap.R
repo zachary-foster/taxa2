@@ -555,14 +555,21 @@ test_that("Sampling observations using data from subtaxa works", { # Not complet
 
 
 test_that("Taxmap can be intialized from complex data", {
-  vec_result <- parse_tax_data(c("A;B;C;D", "A;E;F;G", "A;B;H;I"))
-  list_result <- parse_tax_data(list("A;B;C;D", "A;E;F;G", c("A;B", "H;I")))
-  frame_result <- parse_tax_data(data.frame(tax = c("A;B;C", "A;E;F", "A;B;H"),
-                                            species = c("D", "G", "I"),
-                                            stringsAsFactors = FALSE),
-                                 class_cols = c("tax", "species"))
-  frames_result <- parse_tax_data(list(data.frame(tax = c("A", "B", "C", "D"), stringsAsFactors = FALSE),
-                                       data.frame(tax = c("A", "E", "F", "G"), stringsAsFactors = FALSE),
-                                       data.frame(tax = c("A", "B", "H", "I"), stringsAsFactors = FALSE)))
+  vec <- c("A;B;C;D", "A;E;F;G", "A;B;H;I")
+  my_list <- list("A;B;C;D", "A;E;F;G", c("A;B", "H;I"))
+  frame <- data.frame(tax = c("A;B;C", "A;E;F", "A;B;H"),
+                      species = c("D", "G", "I"),
+                      stringsAsFactors = FALSE)
+  frames <- list(data.frame(tax = c("A", "B", "C", "D"), stringsAsFactors = FALSE),
+                 data.frame(tax = c("A", "E", "F", "G"), stringsAsFactors = FALSE),
+                 data.frame(tax = c("A", "B", "H", "I"), stringsAsFactors = FALSE))
 
+  vec_result <- parse_tax_data(vec)
+  list_result <- parse_tax_data(my_list)
+  frame_result <- parse_tax_data(frame, class_cols = c("tax", "species"))
+  frames_result <- parse_tax_data(frames)
+
+
+
+  parse_tax_data(vec, letters[1:3], mappings = c("{{index}}" = "{{index}}"))
 })
