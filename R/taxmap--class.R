@@ -51,18 +51,27 @@ Taxmap <- R6::R6Class(
       )
       cat(gsub(taxonomy_output, pattern = "Taxonomy", replacement = "Taxmap"))
 
+      # Get item names
+      if (is.null(names(self$data))) {
+        data_names <- paste0("[[", seq_len(length(self$data)), "]]")
+      } else {
+        data_names <- names(self$data)
+        data_names[data_names == ""] <- paste0("[[", which(data_names == ""),
+                                                "]]")
+      }
+
       # Print a subset of each item, up to a max number, then just print names
       cat(paste0("  ", length(self$data), " data sets:\n"))
       if (length(self$data) > 0) {
         for (i in 1:min(c(max_items, length(self$data)))) {
           print_item(self$data[[i]],
-                     name = names(self$data[i]), max_rows = max_rows,
+                     name = data_names[i], max_rows = max_rows,
                      max_width = max_width, prefix = "    ")
         }
         if (length(self$data) > max_items) {
           cat(paste0("    And ", length(self$data) - max_items,
                      " more data sets:"))
-          limited_print(names(self$data)[(max_items + 1):length(self$data)])
+          limited_print(data_names[(max_items + 1):length(self$data)])
         }
       }
 
@@ -582,8 +591,8 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
     }
   }
 
-  # Deal if edge cases
-  if (length(tax_data)) {
+  # Deal with edge cases
+  if (length(tax_data) == 0) {
     return(taxmap())
   }
 
@@ -593,9 +602,11 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
   } else if (is.data.frame(tax_data)) { # is a data.frame
     parsed_tax <- lapply(seq_len(nrow(tax_data)),
                          function(i) {
-                           unname(unlist(strsplit(unlist(tax_data[i, class_cols]),
+                           class_source <- as.character(unlist(tax_data[i, class_cols]))
+                           unname(unlist(strsplit(class_source,
                                                   fixed = !sep_is_regex,
-                                                  split = class_sep)))})
+                                                  split = class_sep)))
+                         })
   } else if (is.list(tax_data) && is.data.frame(tax_data[[1]])) { # is a list of data.frames
     if (length(class_cols) > 1) {
       stop("When the taxonomy source is a list of data.frames, it does not make sense to specify multiple columns.")
@@ -614,6 +625,10 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
 
   # Create taxmap object
   output <- do.call(taxmap, parsed_tax)
+
+  # Convert additional tables to tibbles
+  are_tables <- vapply(add_data, is.data.frame, logical(1))
+  add_data[are_tables] <- lapply(add_data[are_tables], dplyr::as.tbl)
 
   # Add additional data sets
   get_sort_var <- function(data, var) {
@@ -636,7 +651,7 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
         return(unlist(data))
       }
     } else if (is.data.frame(data) && var %in% colnames(data)) {
-        return(data[[var]])
+      return(data[[var]])
     } else {
       stop(paste0('No column named "', var, '"."'))
     }
@@ -645,9 +660,10 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
   name_datset <- function(dataset, sort_var) {
     target_value <- get_sort_var(dataset, sort_var)
     source_value <- get_sort_var(tax_data, names(sort_var))
-    obs_taxon_ids <- output$taxon_ids()[match(target_value, source_value)]
+    obs_taxon_ids <- output$input_ids[match(target_value, source_value)]
     if (is.data.frame(dataset)) {
-      dataset$taxon_id <- obs_taxon_ids
+      dataset <- dplyr::bind_cols(dplyr::tibble(taxon_id = obs_taxon_ids),
+                                  dataset)
     } else {
       names(dataset) <- obs_taxon_ids
     }
@@ -656,5 +672,9 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
 
   output$data <- lapply(seq_len(length(add_data)),
                         function(i) name_datset(add_data[[i]], mappings[i]))
+
+  # Name additional datasets
+  names(output$data) <- names(add_data)
+
   return(output)
 }
