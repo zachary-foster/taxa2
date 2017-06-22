@@ -523,21 +523,29 @@ Taxmap <- R6::R6Class(
 #' Convert one or more data sets to taxmap
 #'
 #' Parses taxonomic information and assoiacted data and stores it in a
-#' [taxa::taxmap()] object.
+#' [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
+#' must be present somewhere in the first input.
 #'
-#' @param ... One or more tables, lists, or vectors to parse. The first must
+#' @param ... One or more tables, lists, or vectors to parse. The **first** must
 #'   contain the names of taxa that represent [taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms).
-#'    If the first is a table, the classification can be spread out over
-#'   multiple columns specified by `class_cols`. If the first is a list of
-#'   tables, it will be assumed that each table represents a classification with
-#'   the `class_cols` column containing a single taxon name in each row. Names
-#'   of objects will be used in the output.
+#'    **Additional inputs** can be any vector/list/table. Valid representations
+#'   of classifications include:
+#'   * A list/vector or table with column(s) of taxon names:
+#'   Something like `"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"`. What
+#'   separator is used can be changed with the `class_sep` option. For tables,
+#'   the classification can be spread over multiple columns and the separator
+#'   will be applied to each column, although each column could just be single
+#'   taxon names with no separator. Use the `class_cols` option to specify which
+#'   columns have taxon names.
+#'   * A list in which each entry is a classificaiton. For example,
+#'   `list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae",
+#'   "Homo"), ...)`.
+#'   * A list of data.frames where each represents a classification with one
+#'   taxon per row. The column that contains taxon names is specified using the
+#'   `class_cols` option.
 #' @param class_cols (`character` or `integer`) The names or indexes of columns
-#'   that contain classifications (e.g.
-#'   `"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"`) if the first input
-#'   is a table. Single taxon names (e.g. `"sapiens"`) can be thought of as a
-#'   classification with only one rank. If mutliple columns are specified, they
-#'   will be combined in the order given.
+#'   that contain classifications if the first input is a table. If mutliple
+#'   columns are specified, they will be combined in the order given.
 #' @param class_sep (`character`) One or more separators that delineate taxon
 #'   names in a classification. For example, if one column had `"Homo sapiens"`
 #'   and another had `"Animalia;Chordata;Mammalia;Primates;Hominidae"`, then
@@ -597,13 +605,22 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
   }
 
   # Get classificaitons
+  multi_sep_split <- function(input, split, ...) {
+    lapply(input, function(x) {
+      for (sep in split) {
+        x <- unlist(strsplit(x, split = sep, ...))
+      }
+      return(x)
+    })
+  }
+
   if (is.character(tax_data)) { # is a character vector
-    parsed_tax <- strsplit(tax_data, fixed = !sep_is_regex, split = class_sep)
+    parsed_tax <- multi_sep_split(tax_data, fixed = !sep_is_regex, split = class_sep)
   } else if (is.data.frame(tax_data)) { # is a data.frame
     parsed_tax <- lapply(seq_len(nrow(tax_data)),
                          function(i) {
                            class_source <- as.character(unlist(tax_data[i, class_cols]))
-                           unname(unlist(strsplit(class_source,
+                           unname(unlist(multi_sep_split(class_source,
                                                   fixed = !sep_is_regex,
                                                   split = class_sep)))
                          })
@@ -618,7 +635,7 @@ parse_tax_data <- function(..., class_cols = 1, class_sep = ";",
     }), recursive = FALSE)
     tax_data <- do.call(rbind, tax_data)
   } else if (is.list(tax_data) && is.character(tax_data[[1]])) { # is a list of characters
-    parsed_tax <- lapply(tax_data, function(x) unlist(strsplit(x, split = class_sep)))
+    parsed_tax <- lapply(tax_data, function(x) unlist(multi_sep_split(x, split = class_sep)))
   } else {
     stop("Unknown format for first input. Cannot parse taxonomic information.")
   }

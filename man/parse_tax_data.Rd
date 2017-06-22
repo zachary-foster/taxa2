@@ -8,20 +8,28 @@ parse_tax_data(..., class_cols = 1, class_sep = ";", sep_is_regex = FALSE,
   mappings = NULL)
 }
 \arguments{
-\item{...}{One or more tables, lists, or vectors to parse. The first must
+\item{...}{One or more tables, lists, or vectors to parse. The \strong{first} must
 contain the names of taxa that represent \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{taxonomic classifications}.
-If the first is a table, the classification can be spread out over
-multiple columns specified by \code{class_cols}. If the first is a list of
-tables, it will be assumed that each table represents a classification with
-the \code{class_cols} column containing a single taxon name in each row. Names
-of objects will be used in the output.}
+\strong{Additional inputs} can be any vector/list/table. Valid representations
+of classifications include:
+\itemize{
+\item A list/vector or table with column(s) of taxon names:
+Something like \code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}. What
+separator is used can be changed with the \code{class_sep} option. For tables,
+the classification can be spread over multiple columns and the separator
+will be applied to each column, although each column could just be single
+taxon names with no separator. Use the \code{class_cols} option to specify which
+columns have taxon names.
+\item A list in which each entry is a classificaiton. For example,
+\code{list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae", "Homo"), ...)}.
+\item A list of data.frames where each represents a classification with one
+taxon per row. The column that contains taxon names is specified using the
+\code{class_cols} option.
+}}
 
 \item{class_cols}{(\code{character} or \code{integer}) The names or indexes of columns
-that contain classifications (e.g.
-\code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}) if the first input
-is a table. Single taxon names (e.g. \code{"sapiens"}) can be thought of as a
-classification with only one rank. If mutliple columns are specified, they
-will be combined in the order given.}
+that contain classifications if the first input is a table. If mutliple
+columns are specified, they will be combined in the order given.}
 
 \item{class_sep}{(\code{character}) One or more separators that delineate taxon
 names in a classification. For example, if one column had \code{"Homo sapiens"}
@@ -51,5 +59,6 @@ Lists will be converted to vectors using \code{\link[=unlist]{unlist()}}.
 }
 \description{
 Parses taxonomic information and assoiacted data and stores it in a
-\code{\link[taxa:taxmap]{taxa::taxmap()}} object.
+\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
+must be present somewhere in the first input.
 }
