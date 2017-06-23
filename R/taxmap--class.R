@@ -693,6 +693,12 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Create taxmap object
   output <- do.call(taxmap, parsed_tax)
 
+  # Add taxonomic source to datasets
+  if (include_tax_data) {
+    datasets <- c(list(tax_data = tax_data), datasets)
+    mappings <- c("{{index}}" = "{{index}}", mappings)
+  }
+
   # Convert additional tables to tibbles
   are_tables <- vapply(datasets, is.data.frame, logical(1))
   datasets[are_tables] <- lapply(datasets[are_tables], dplyr::as.tbl)
@@ -737,10 +743,6 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     return(dataset)
   }
 
-  if (include_tax_data) {
-    datasets <- c(list(tax_data = tax_data), datasets)
-    mappings <- c("{{index}}" = "{{index}}", mappings)
-  }
   output$data <- lapply(seq_len(length(datasets)),
                         function(i) name_datset(datasets[[i]], mappings[i]))
 
