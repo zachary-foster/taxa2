@@ -4,28 +4,34 @@
 \alias{parse_tax_data}
 \title{Convert one or more data sets to taxmap}
 \usage{
-parse_tax_data(..., class_cols = 1, class_sep = ";", sep_is_regex = FALSE,
-  mappings = NULL)
+parse_tax_data(tax_data, datasets = list(), class_cols = 1,
+  class_sep = ";", sep_is_regex = FALSE, mappings = c(),
+  include_tax_data = TRUE)
 }
 \arguments{
-\item{...}{One or more tables, lists, or vectors to parse. The \strong{first} must
-contain the names of taxa that represent \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{taxonomic classifications}.
-\strong{Additional inputs} can be any vector/list/table. Valid representations
-of classifications include:
+\item{tax_data}{A table, list, or vector that contains the names of taxa that
+represent \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{taxonomic classifications}.
+Accepted representations of classifications include:
 \itemize{
-\item A list/vector or table with column(s) of taxon names:
-Something like \code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}. What
-separator is used can be changed with the \code{class_sep} option. For tables,
-the classification can be spread over multiple columns and the separator
-will be applied to each column, although each column could just be single
-taxon names with no separator. Use the \code{class_cols} option to specify which
-columns have taxon names.
+\item A list/vector or table with column(s) of taxon names: Something like
+\code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}. What separator(s)
+is used (";" in this example) can be changed with the \code{class_sep} option.
+For tables, the classification can be spread over multiple columns and the
+separator(s) will be applied to each column, although each column could
+just be single taxon names with no separator. Use the \code{class_cols} option
+to specify which columns have taxon names.
 \item A list in which each entry is a classificaiton. For example,
 \code{list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae", "Homo"), ...)}.
 \item A list of data.frames where each represents a classification with one
 taxon per row. The column that contains taxon names is specified using the
-\code{class_cols} option.
+\code{class_cols} option. In this instance, it only makes sense to specify a
+single column.
 }}
+
+\item{datasets}{Additional lists/vectors/tables that should be included in
+the resulting \code{taxmap} object. The \code{mappings} option is use to specify how
+these data sets relate to the \code{tax_data} and, by inference, what taxa apply
+to each item.}
 
 \item{class_cols}{(\code{character} or \code{integer}) The names or indexes of columns
 that contain classifications if the first input is a table. If mutliple
@@ -38,27 +44,74 @@ and another had \code{"Animalia;Chordata;Mammalia;Primates;Hominidae"}, then
 order does not matter.}
 
 \item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be
-used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}.}
+used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regularexpression}.}
 
 \item{mappings}{(named \code{character}) This defines how the taxonomic
-information in the first input applies to the other inputs. This option
-should have one fewer values than \code{...}, with values corresponding to each
-input besides the first. The names of values should be a column in the
-first input and the values theselves should be the corresponding column in
-additional inputs that contains the same ID varaibles. If there are no
-shared variables, you can add \code{NA} as a placeholder, but you could just
-leave that data out since it is not benifiting from being in the taxmap
-object. In addition to column names, the names/values can be one of the
-following:
+information in \code{tax_data} applies to data set in \code{datasets}. This option
+should have the same number of inputs as \code{datasets}, with values
+corresponding to each data set. The names of the character vector specify
+what information in \code{tax_data} is shared with info in each \code{dataset}, which
+is specified by the corresponding values of the character vector. If there
+are no shared variables, you can add \code{NA} as a placeholder, but you could
+just leave that data out since it is not benifiting from being in the
+taxmap object. The names/values can be one of the following:
 \itemize{
+\item For tables, the names of columns can be used.
 \item \code{"{{index}}"} : This means to use the index of rows/items
 \item \code{"{{name}}"}  : This means to use row/item names.
-\item \code{"{{value}}"} : This means to use the values in vectors or lists.
-Lists will be converted to vectors using \code{\link[=unlist]{unlist()}}.
+\item \code{"{{value}}"} : This means to use the values in vectors or lists. Lists
+will be converted to vectors using \code{\link[=unlist]{unlist()}}.
 }}
+
+\item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data}
+as a dataset, like those in \code{datasets}.}
 }
 \description{
 Parses taxonomic information and assoiacted data and stores it in a
-\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
+\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomicclassifications}
 must be present somewhere in the first input.
+}
+\examples{
+  # Make example data with taxonomic classifications
+  species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
+                                          "Mammalia;Carnivora;Felidae",
+                                          "Mammalia;Carnivora;Ursidae"),
+                             species = c("Panthera leo",
+                                         "Panthera tigris",
+                                         "Ursus americanus"),
+                             species_id = c("A", "B", "C"))
+
+  # Make example data associated with the taxonomic data
+  # Note how this does not contain classifications, but
+  # does have a varaible in common with "species_data" ("id" = "species_id")
+  abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
+                          sample = c(1, 1, 1, 2, 2, 2),
+                          counts = c(23, 4, 3, 34, 5, 13))
+
+  # Make another related data set named by species id
+  common_names <- c(A = "Lion", B = "Tiger", C = "Bear", "Oh my!")
+
+  # Make another related data set with no names
+  foods <- list(c("ungulates", "boar"),
+                c("ungulates", "boar"),
+                c("salmon", "fruit", "nuts"))
+
+  # Make a taxmap object with these three datasets
+  x = parse_tax_data(species_data,
+                     datasets = list(counts = abundance,
+                                     names = common_names,
+                                     foods = foods),
+                     mappings = c("species_id" = "id",
+                                  "species_id" = "{{name}}",
+                                  "{{index}}" = "{{index}}"),
+                     class_cols = c("taxonomy", "species"),
+                     class_sep = c(" ", ";"))
+
+  # Note how all the datasets have taxon ids now
+  x$data
+
+  # This allows for complex mappings between variables that other functions use
+  map_data(x, "foods", "names")
+  map_data(x, "names", "counts")
+
 }
