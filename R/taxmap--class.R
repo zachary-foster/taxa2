@@ -51,18 +51,27 @@ Taxmap <- R6::R6Class(
       )
       cat(gsub(taxonomy_output, pattern = "Taxonomy", replacement = "Taxmap"))
 
+      # Get item names
+      if (is.null(names(self$data))) {
+        data_names <- paste0("[[", seq_len(length(self$data)), "]]")
+      } else {
+        data_names <- names(self$data)
+        data_names[data_names == ""] <- paste0("[[", which(data_names == ""),
+                                                "]]")
+      }
+
       # Print a subset of each item, up to a max number, then just print names
       cat(paste0("  ", length(self$data), " data sets:\n"))
       if (length(self$data) > 0) {
         for (i in 1:min(c(max_items, length(self$data)))) {
           print_item(self$data[[i]],
-                     name = names(self$data[i]), max_rows = max_rows,
+                     name = data_names[i], max_rows = max_rows,
                      max_width = max_width, prefix = "    ")
         }
         if (length(self$data) > max_items) {
           cat(paste0("    And ", length(self$data) - max_items,
                      " more data sets:"))
-          limited_print(names(self$data)[(max_items + 1):length(self$data)])
+          limited_print(data_names[(max_items + 1):length(self$data)])
         }
       }
 
@@ -191,7 +200,7 @@ Taxmap <- R6::R6Class(
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
       my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value, subset = subset,
-                         recursive = recursive)))
+                                         recursive = recursive)))
       output <- lapply(my_obs, func, ...)
       if (simplify) {
         output <- unlist(output)
@@ -509,3 +518,236 @@ Taxmap <- R6::R6Class(
   )
 )
 
+
+
+#' Convert one or more data sets to taxmap
+#'
+#' Parses taxonomic information and assoiacted data and stores it in a
+#' [taxa::taxmap()] object. [Taxonomic
+#' classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
+#' must be present somewhere in the first input.
+#'
+#' @param tax_data A table, list, or vector that contains the names of taxa that
+#'   represent [taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms).
+#'    Accepted representations of classifications include:
+#'   * A list/vector or table with column(s) of taxon names: Something like
+#'   `"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"`. What separator(s)
+#'   is used (";" in this example) can be changed with the `class_sep` option.
+#'   For tables, the classification can be spread over multiple columns and the
+#'   separator(s) will be applied to each column, although each column could
+#'   just be single taxon names with no separator. Use the `class_cols` option
+#'   to specify which columns have taxon names.
+#'   * A list in which each entry is a classificaiton. For example,
+#'   `list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae",
+#'   "Homo"), ...)`.
+#'   * A list of data.frames where each represents a classification with one
+#'   taxon per row. The column that contains taxon names is specified using the
+#'   `class_cols` option. In this instance, it only makes sense to specify a
+#'   single column.
+#' @param datasets Additional lists/vectors/tables that should be included in
+#'   the resulting `taxmap` object. The `mappings` option is use to specify how
+#'   these data sets relate to the `tax_data` and, by inference, what taxa apply
+#'   to each item.
+#' @param class_cols (`character` or `integer`) The names or indexes of columns
+#'   that contain classifications if the first input is a table. If mutliple
+#'   columns are specified, they will be combined in the order given.
+#' @param class_sep (`character`) One or more separators that delineate taxon
+#'   names in a classification. For example, if one column had `"Homo sapiens"`
+#'   and another had `"Animalia;Chordata;Mammalia;Primates;Hominidae"`, then
+#'   `class_sep = c(" ", ";")`. All separators are applied to each column so
+#'   order does not matter.
+#' @param sep_is_regex (`TRUE`/`FALSE`) Whether or not `class_sep` should be
+#'   used as a [regular
+#'   expression](https://en.wikipedia.org/wiki/Regular_expression).
+#' @param mappings (named `character`) This defines how the taxonomic
+#'   information in `tax_data` applies to data set in `datasets`. This option
+#'   should have the same number of inputs as `datasets`, with values
+#'   corresponding to each data set. The names of the character vector specify
+#'   what information in `tax_data` is shared with info in each `dataset`, which
+#'   is specified by the corresponding values of the character vector. If there
+#'   are no shared variables, you can add `NA` as a placeholder, but you could
+#'   just leave that data out since it is not benifiting from being in the
+#'   taxmap object. The names/values can be one of the following:
+#'   * For tables, the names of columns can be used.
+#'   * `"{{index}}"` : This means to use the index of rows/items
+#'   * `"{{name}}"`  : This means to use row/item names.
+#'   * `"{{value}}"` : This means to use the values in vectors or lists. Lists
+#'   will be converted to vectors using [unlist()].
+#' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
+#'   as a dataset, like those in `datasets`.
+#'
+#' @examples
+#'   # Make example data with taxonomic classifications
+#'   species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
+#'                                           "Mammalia;Carnivora;Felidae",
+#'                                           "Mammalia;Carnivora;Ursidae"),
+#'                              species = c("Panthera leo",
+#'                                          "Panthera tigris",
+#'                                          "Ursus americanus"),
+#'                              species_id = c("A", "B", "C"))
+#'
+#'   # Make example data associated with the taxonomic data
+#'   # Note how this does not contain classifications, but
+#'   # does have a varaible in common with "species_data" ("id" = "species_id")
+#'   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
+#'                           sample = c(1, 1, 1, 2, 2, 2),
+#'                           counts = c(23, 4, 3, 34, 5, 13))
+#'
+#'   # Make another related data set named by species id
+#'   common_names <- c(A = "Lion", B = "Tiger", C = "Bear", "Oh my!")
+#'
+#'   # Make another related data set with no names
+#'   foods <- list(c("ungulates", "boar"),
+#'                 c("ungulates", "boar"),
+#'                 c("salmon", "fruit", "nuts"))
+#'
+#'   # Make a taxmap object with these three datasets
+#'   x = parse_tax_data(species_data,
+#'                      datasets = list(counts = abundance,
+#'                                      names = common_names,
+#'                                      foods = foods),
+#'                      mappings = c("species_id" = "id",
+#'                                   "species_id" = "{{name}}",
+#'                                   "{{index}}" = "{{index}}"),
+#'                      class_cols = c("taxonomy", "species"),
+#'                      class_sep = c(" ", ";"))
+#'
+#'   # Note how all the datasets have taxon ids now
+#'   x$data
+#'
+#'   # This allows for complex mappings between variables that other functions use
+#'   map_data(x, "foods", "names")
+#'   map_data(x, "names", "counts")
+#'
+#' @export
+parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
+                           class_sep = ";", sep_is_regex = FALSE,
+                           mappings = c(), include_tax_data = TRUE) {
+
+  # Check for nonsensical options
+  if (length(datasets) != length(mappings)) {
+    stop(paste0('The `mappings` option must have the same number of values (',
+                length(datasets), ') as the `datasets` option.'))
+  }
+  if (length(mappings) > 0 && is.null(names(mappings))) {
+    stop(paste0('The mapping options must be named.'))
+  }
+  for (i in seq_len(length(datasets))) {
+    valid_mappings <- c("{{index}}", "{{name}}", "{{value}}")
+    if (is.data.frame(datasets[[i]])) {
+      valid_mappings <- c(valid_mappings, colnames(datasets[[i]]))
+    }
+    if (is.data.frame(tax_data)) {
+      valid_mappings <- c(valid_mappings, colnames(tax_data))
+    }
+    mappings_used <- c(mappings[[i]], names(mappings[[i]]))
+    invalids <- mappings_used[! mappings_used %in% valid_mappings]
+    if (length(invalids) > 0) {
+      stop(paste0('Invalid inputs to the `mappings` found for input "', invalids[1], '". ',
+                  'The names and values of `mappings` must be one of the following: ',
+                  paste0(valid_mappings, collapse = ", ")))
+    }
+  }
+
+  # Deal with edge cases
+  if (length(tax_data) == 0) {
+    return(taxmap())
+  }
+
+  # Get classificaitons
+  multi_sep_split <- function(input, split, ...) {
+    lapply(input, function(x) {
+      for (sep in split) {
+        x <- unlist(strsplit(x, split = sep, ...))
+      }
+      return(x)
+    })
+  }
+
+  if (is.character(tax_data)) { # is a character vector
+    parsed_tax <- multi_sep_split(tax_data, fixed = !sep_is_regex, split = class_sep)
+  } else if (is.data.frame(tax_data)) { # is a data.frame
+    parsed_tax <- lapply(seq_len(nrow(tax_data)),
+                         function(i) {
+                           class_source <- as.character(unlist(tax_data[i, class_cols]))
+                           unname(unlist(multi_sep_split(class_source,
+                                                  fixed = !sep_is_regex,
+                                                  split = class_sep)))
+                         })
+  } else if (is.list(tax_data) && is.data.frame(tax_data[[1]])) { # is a list of data.frames
+    if (length(class_cols) > 1) {
+      stop("When the taxonomy source is a list of data.frames, it does not make sense to specify multiple columns.")
+    }
+    parsed_tax <- unlist(lapply(tax_data, function(x) {
+      lapply(seq_len(nrow(x)), function(i) {
+        as.character(x[1:i, class_cols])
+      })
+    }), recursive = FALSE)
+    tax_data <- do.call(rbind, tax_data)
+  } else if (is.list(tax_data) && is.character(tax_data[[1]])) { # is a list of characters
+    parsed_tax <- lapply(tax_data, function(x) unlist(multi_sep_split(x, split = class_sep)))
+  } else {
+    stop("Unknown format for first input. Cannot parse taxonomic information.")
+  }
+
+  # Create taxmap object
+  output <- do.call(taxmap, parsed_tax)
+
+  # Add taxonomic source to datasets
+  if (include_tax_data) {
+    datasets <- c(list(tax_data = tax_data), datasets)
+    mappings <- c("{{index}}" = "{{index}}", mappings)
+  }
+
+  # Convert additional tables to tibbles
+  are_tables <- vapply(datasets, is.data.frame, logical(1))
+  datasets[are_tables] <- lapply(datasets[are_tables], dplyr::as.tbl)
+
+  # Add additional data sets
+  get_sort_var <- function(data, var) {
+    if (var == "{{index}}") {
+      if (is.data.frame(data)) {
+        return(seq_len(nrow(data)))
+      } else {
+        return(seq_len(length(data)))
+      }
+    } else if (var == "{{name}}") {
+      if (is.data.frame(data)) {
+        return(rownames(data))
+      } else {
+        return(names(data))
+      }
+    }  else if (var == "{{value}}") {
+      if (is.data.frame(data)) {
+        stop("The `{{value}}` setting of the `mappings` option cannot be used with data.frames.")
+      } else {
+        return(unlist(data))
+      }
+    } else if (is.data.frame(data) && var %in% colnames(data)) {
+      return(data[[var]])
+    } else {
+      stop(paste0('No column named "', var, '"."'))
+    }
+  }
+
+  name_datset <- function(dataset, sort_var) {
+    target_value <- get_sort_var(dataset, sort_var)
+    source_value <- get_sort_var(tax_data, names(sort_var))
+    obs_taxon_ids <- output$input_ids[match(target_value, source_value)]
+    if (is.data.frame(dataset)) {
+      dataset <- dplyr::bind_cols(dplyr::tibble(taxon_id = obs_taxon_ids),
+                                  dataset)
+    } else {
+      names(dataset) <- obs_taxon_ids
+    }
+    return(dataset)
+  }
+
+  output$data <- lapply(seq_len(length(datasets)),
+                        function(i) name_datset(datasets[[i]], mappings[i]))
+
+  # Name additional datasets
+  names(output$data) <- names(datasets)
+
+  return(output)
+}

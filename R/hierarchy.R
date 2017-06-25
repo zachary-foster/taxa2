@@ -79,6 +79,10 @@ Hierarchy <- R6::R6Class(
           call. = FALSE)
       }
 
+      # Convert factors to characters
+      fact_input_index <- which(lapply(input, class) == "factor")
+      input[fact_input_index] <- lapply(input[fact_input_index], as.character)
+
       # If character strings are supplied, convert to taxa
       char_input_index <- which(lapply(input, class) == "character")
       input[char_input_index] <- lapply(input[char_input_index], taxon)

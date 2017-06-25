@@ -132,8 +132,12 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
     if (length(name) > 0 && ! is.na(name)) {
       cat(paste0(prefix, name, ":\n"))
     }
-    prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows,
-                   width = max_width)
+    if (dplyr::is.tbl(data)) {
+      prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows,
+                     width = max_width)
+    } else {
+      prefixed_print(data, prefix = paste0(prefix, "  "))
+    }
   } else if (is.list(data)) {
     if (length(data) < 1) {
       prefixed_print(list(), prefix = prefix)
