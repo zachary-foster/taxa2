@@ -63,6 +63,7 @@ res$ranklist
 res$pop("family")
 
 # pick a rank
+(res <- hierarchy(z, y, x))
 res$pick("family")
 }
 \seealso{

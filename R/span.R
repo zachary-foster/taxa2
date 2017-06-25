@@ -3,7 +3,7 @@
 #' @description Select a range of taxa
 #'
 #' @export
-#' @param .data Input, object of class [Hierarchy], or [hierarchies]
+#' @param .data Input, object of class `Hierarchy`, or `hierarchies`
 #' @param ... unquoted rank names (e.g., family), taxon names (e.g.,
 #' Poa annua), or taxnomic IDs (e.g., 93036)
 #' @details supports `Hierarchy` and `hierarchies` objects

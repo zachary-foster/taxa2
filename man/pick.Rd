@@ -7,7 +7,7 @@
 pick(.data, ...)
 }
 \arguments{
-\item{.data}{Input, object of class \link{Hierarchy}, or \link{hierarchies}}
+\item{.data}{Input, object of class \code{Hierarchy}, or \code{hierarchies}}
 
 \item{...}{unquoted rank names (e.g., family), taxon names (e.g.,
 Poa annua), or taxnomic IDs (e.g., 93036)}
@@ -36,17 +36,18 @@ ex_hierarchy1 \%>\% pick(ids(4479, 4544))
 ex_hierarchy1 \%>\% pick(ranks(family), ids(4544))
 
 ## single taxonomic group
-ex_hierarchy1 \%>\% pick(family)
+ex_hierarchy1 \%>\% pick(ranks(family))
 ### more than 1 - remake res object above first
-ex_hierarchy1 \%>\% pick(family, genus)
+ex_hierarchy1 \%>\% pick(ranks(family, genus))
 
 
 # hierarchies
 # single taxonomic group
 invisible(lapply(ex_hierarchies, print))
-ex_hierarchies \%>\% pick(family) \%>\% lapply(., print) \%>\% invisible
+ex_hierarchies \%>\% pick(ranks(family)) \%>\% lapply(., print) \%>\% invisible
 
 ## more than one taxonomic group
 invisible(lapply(ex_hierarchies, print))
-ex_hierarchies \%>\% pick(family, genus) \%>\% lapply(., print) \%>\% invisible
+ex_hierarchies \%>\% pick(ranks(family, genus)) \%>\% lapply(., print) \%>\%
+  invisible
 }

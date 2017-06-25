@@ -7,7 +7,7 @@
 pop(.data, ...)
 }
 \arguments{
-\item{.data}{Input, object of class \link{Hierarchy}, or \link{hierarchies}}
+\item{.data}{Input, object of class \code{Hierarchy}, or \code{hierarchies}}
 
 \item{...}{unquoted rank names (e.g., family), taxon names (e.g.,
 Poa annua), or taxnomic IDs (e.g., 93036)}

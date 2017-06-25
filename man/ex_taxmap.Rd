@@ -17,4 +17,9 @@ An example taxmap object built from the ground up. Typically, data stored in
 taxmap would be parsed from an input file, but this data set is just for
 demonstration purposes.
 }
+\seealso{
+Other taxa-datasets: \code{\link{ex_hierarchies}},
+  \code{\link{ex_hierarchy1}}, \code{\link{ex_hierarchy2}},
+  \code{\link{ex_taxonomy}}
+}
 \keyword{datasets}

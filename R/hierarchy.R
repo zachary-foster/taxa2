@@ -54,6 +54,7 @@
 #' res$pop("family")
 #'
 #' # pick a rank
+#' (res <- hierarchy(z, y, x))
 #' res$pick("family")
 
 hierarchy <- function(...) {
@@ -112,7 +113,7 @@ Hierarchy <- R6::R6Class(
       invisible(self)
     },
 
-    pop = function(ranks, names, ids) {
+    pop = function(ranks = NULL, names = NULL, ids = NULL) {
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
       taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
