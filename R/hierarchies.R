@@ -43,6 +43,9 @@
 #' hier2 <- hierarchy(c, b, a)
 #'
 #' hierarchies(hier1, hier2)
+#'
+#' # pass into the .list parameter
+#' hierarchies(.list = list(hier1, hier2))
 hierarchies <- function(..., .list = NULL) {
   x <- list(...)
   if (!is.null(.list)) x <- .list

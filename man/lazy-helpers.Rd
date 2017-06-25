@@ -11,7 +11,10 @@ ranks(...)
 
 nms(...)
 
-ids(..., .list = NULL)
+ids(...)
+}
+\arguments{
+\item{...}{unquoted variables}
 }
 \description{
 Lazy
@@ -37,17 +40,20 @@ These are not used by themselves but inside of \code{\link[=pop]{pop()}}, \code{
 
 \section{ranks}{
 
-asdfasdf
+Ranks can be any character string in the set of acceptable rank
+names.
 }
 
 \section{nms}{
 
-asdfasdf
+\code{nms} is named to avoid using \code{names} which would collide with the
+fxn \code{\link[base:names]{base::names()}} in Base R. Can pass in any character taxonomic names.
 }
 
 \section{ids}{
 
-asdfasdf
+Ids are any alphanumeric taxonomic identifier. Some database providers
+use all digits, but some use a combination of digits and characters.
 }
 
 \examples{

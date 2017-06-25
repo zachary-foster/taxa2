@@ -22,34 +22,29 @@ That is, drop them
 supports \code{Hierarchy} and \code{hierarchies} objects
 }
 \examples{
+# With Hierarchy class object
 ex_hierarchy1
-# ranks
+## ranks
 pop(ex_hierarchy1, ranks(family))
 ex_hierarchy1 \%>\% pop(ranks(family))
 ex_hierarchy1 \%>\% pop(ranks(family, genus))
-# taxon names
+## taxon names
 ex_hierarchy1 \%>\% pop(nms(Poa))
 ex_hierarchy1 \%>\% pop(nms(Poaceae, Poa))
-# taxon ids
+## taxon ids
 ex_hierarchy1 \%>\% pop(ids(4479))
 ex_hierarchy1 \%>\% pop(ids(4479, 4544))
-# mixed: ids and names
+## mixed: ids and names
 ex_hierarchy1 \%>\% pop(ranks(family), ids(4544))
 
-
-## single taxonomic group
-ex_hierarchy1 \%>\% pop(family)
-### more than 1 - remake res object above first
-ex_hierarchy1 \%>\% pop(family, genus)
-
-# hierarchies
+# With hierarchies class object
 # single taxonomic group
 invisible(lapply(ex_hierarchies, print))
 ex_hierarchies \%>\% pop(family) \%>\% lapply(., print) \%>\% invisible
-
 ## more than one taxonomic group
 invisible(lapply(ex_hierarchies, print))
-ex_hierarchies \%>\% pop(family, genus) \%>\% lapply(., print) \%>\% invisible
+ex_hierarchies \%>\% pop(ranks(family, genus)) \%>\% lapply(., print) \%>\%
+  invisible
 
 # Taxonomy class
 # ex_taxonomy$pop(ranks(family), NULL, NULL)

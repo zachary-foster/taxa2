@@ -21,7 +21,7 @@ pick.default <- function(.data, ...) {
 #' @export
 pick.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
-  tmp <- unlist(lapply(lazyeval::lazy_dots(...), lazyeval::lazy_eval), FALSE)
+  tmp <- c(...)
   .data$pick(ranks = tmp$ranks, names = tmp$names, ids = tmp$ids)
 }
 

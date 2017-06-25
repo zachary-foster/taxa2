@@ -21,8 +21,8 @@ span.default <- function(.data, ...) {
 #' @export
 span.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
-  tmp <- unlist(lapply(lazyeval::lazy_dots(...), lazyeval::lazy_eval), FALSE)
-  .data$span(ranks = tmp$ranks, names = tmp$names, ids = tmp$ids)
+  tmp <- Taxapickers$new(...)
+  .data$span(ranks = tmp$ranks(), names = tmp$names(), ids = tmp$ids())
 }
 
 #' @export

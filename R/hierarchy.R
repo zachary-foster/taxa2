@@ -139,19 +139,25 @@ Hierarchy <- R6::R6Class(
     span = function(ranks = NULL, names = NULL, ids = NULL) {
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
 
-      if (!is.null(attr(ranks, "operator"))) {
-        if (attr(ranks, "operator") == ":") {
-          ranks <- private$make_ranks(ranks$ranks)
+      if (length(ranks) != 0) {
+        if (!is.null(attr(ranks[[1]], "operator"))) {
+          ranks <- private$make_ranks(ranks[[1]])
+        } else {
+          ranks <- private$do_ranks(ranks[[1]]$ranks)
         }
       }
-      if (!is.null(attr(names, "operator"))) {
-        if (attr(names, "operator") == ":") {
-          ranks <- private$make_ranks(private$taxa2rank(names$names))
+      if (length(names) != 0) {
+        if (!is.null(attr(names, "operator"))) {
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]))
+        } else {
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
         }
       }
-      if (!is.null(attr(ids, "operator"))) {
-        if (attr(ids, "operator") == ":") {
-          ranks <- private$make_ranks(private$ids2rank(ids$ids))
+      if (length(ids) != 0) {
+        if (!is.null(attr(ids, "operator"))) {
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]))
+        } else {
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
         }
       }
 
@@ -188,11 +194,33 @@ Hierarchy <- R6::R6Class(
       )
     },
 
-    make_ranks = function(x) {
-      # FIXME: only deals with `:` right now
+    do_ranks = function(x) {
       idz <- vapply(x, which_ranks, numeric(1), USE.NAMES = FALSE)
       keep <- ranks_ref[ranks_ref$rankid >= idz[1] &
                           ranks_ref$rankid <= idz[2], ]
+      csep2vec(keep$ranks)
+    },
+
+    make_ranks = function(x) {
+      idz <- vapply(x$ranks, which_ranks, numeric(1), USE.NAMES = FALSE)
+      op <- attr(x, "operator")
+      keep <- switch(op,
+        `:` = {
+          ranks_ref[ranks_ref$rankid >= idz[1] &
+                      ranks_ref$rankid <= idz[2], ]
+        },
+        `::` = {
+          ranks_ref[ranks_ref$rankid > idz[1] &
+                      ranks_ref$rankid < idz[2], ]
+        },
+        `. <` = {
+          ranks_ref[ranks_ref$rankid <= idz[2], ]
+        },
+        `. >` = {
+          ranks_ref[ranks_ref$rankid > idz[1], ]
+        },
+        stop("operator ", op, " not supported - see ?`lazy-helpers`", call. = FALSE)
+      )
       csep2vec(keep$ranks)
     },
 
@@ -203,9 +231,9 @@ Hierarchy <- R6::R6Class(
     },
 
     ids2rank = function(w) {
-      tmp <- vapply(self$taxa, function(z) z$ids$ids, "")
+      tmp <- vapply(self$taxa, function(z) z$id$id, 1)
       rcks <- vapply(self$taxa, function(z) z$rank$name, "")
-      rcks[which(tmp %in% x)]
+      rcks[which(tmp %in% w)]
     }
   )
 )

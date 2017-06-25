@@ -33,3 +33,5 @@ csep2vec <- function(z, uniq = TRUE) {
   if (uniq) return(unique(tmp))
   return(tmp)
 }
+
+strex <- function(str, pattern) regmatches(str, regexpr(pattern, str))

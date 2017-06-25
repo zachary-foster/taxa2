@@ -13,16 +13,17 @@
 #' ex_hierarchy1 %>% pick(ranks(family), ids(4544))
 #'
 #' ## single taxonomic group
-#' ex_hierarchy1 %>% pick(family)
+#' ex_hierarchy1 %>% pick(ranks(family))
 #' ### more than 1 - remake res object above first
-#' ex_hierarchy1 %>% pick(family, genus)
+#' ex_hierarchy1 %>% pick(ranks(family, genus))
 #'
 #'
 #' # hierarchies
 #' # single taxonomic group
 #' invisible(lapply(ex_hierarchies, print))
-#' ex_hierarchies %>% pick(family) %>% lapply(., print) %>% invisible
+#' ex_hierarchies %>% pick(ranks(family)) %>% lapply(., print) %>% invisible
 #'
 #' ## more than one taxonomic group
 #' invisible(lapply(ex_hierarchies, print))
-#' ex_hierarchies %>% pick(family, genus) %>% lapply(., print) %>% invisible
+#' ex_hierarchies %>% pick(ranks(family, genus)) %>% lapply(., print) %>%
+#'   invisible
