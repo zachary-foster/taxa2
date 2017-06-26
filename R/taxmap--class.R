@@ -664,6 +664,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     })
   }
 
+  is_list_of_frames <- FALSE
   if (is.character(tax_data)) { # is a character vector
     parsed_tax <- multi_sep_split(tax_data, fixed = !sep_is_regex, split = class_sep)
   } else if (is.data.frame(tax_data)) { # is a data.frame
@@ -684,6 +685,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       })
     }), recursive = FALSE)
     tax_data <- do.call(rbind, tax_data)
+    is_list_of_frames <- TRUE
   } else if (is.list(tax_data) && is.character(tax_data[[1]])) { # is a list of characters
     parsed_tax <- lapply(tax_data, function(x) unlist(multi_sep_split(x, split = class_sep)))
   } else {
@@ -748,6 +750,11 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # Name additional datasets
   names(output$data) <- names(datasets)
+
+  # Fix incorrect taxon ids in data if a list of data.frames is given
+  if (is_list_of_frames && include_tax_data) {
+    output$data[[1]] <- output$data[[1]][!duplicated(output$data[[1]]), ]
+  }
 
   return(output)
 }

@@ -579,7 +579,7 @@ test_that("Taxmap can be intialized from complex data", {
   expect_equal(vector_result, list_2_result)
   expect_equal(vector_result, frame_result)
 
-  # With datasets
+  # Basic parsing with datasets
   test_obj <- parse_tax_data(my_vector, list(test = letters[1:3]),
                              mappings = c("{{index}}" = "{{index}}"))
   expect_equal(test_obj$map_data("taxon_names", "test"),
@@ -604,5 +604,16 @@ test_that("Taxmap can be intialized from complex data", {
                              datasets = list(my_data = a_dataset),
                              mappings = c("tax_key" = "dataset_key"))
   expect_equal(test_obj$data$my_data$taxon_id, c("9", "8"))
+
+  # Parsing lists of data frames with data
+  my_frames <- list(data.frame(tax = c("A", "B", "C", "D"),
+                               rank = c("P", "C", "O", "F")),
+                    data.frame(tax = c("A", "E", "F", "G"),
+                               rank = c("P", "C", "O", "F")),
+                    data.frame(tax = c("A", "B", "H", "I"),
+                               rank = c("P", "C", "O", "F")))
+  test_obj <- parse_tax_data(my_frames, class_cols = "tax")
+  expect_equal(length(test_obj$taxon_ids()), nrow(test_obj$data$tax_data))
+  expect_true("rank" %in% colnames(test_obj$data$tax_data))
 })
 
