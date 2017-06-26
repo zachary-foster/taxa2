@@ -66,12 +66,9 @@ test_that("pick: ids", {
 })
 
 
-# no variables given to pick just gives back same thing
-test_that("pick gives back same .data object if no things asked to be removed", {
-  expect_equal(
-    length(pick(ex_hierarchy1)$taxa),
-    length(ex_hierarchy1$taxa)
-  )
+# no variables given to pick - errors
+test_that("no variables given to pick - errors", {
+  expect_error(pick(ex_hierarchy1), "no acceptable selectors passed in")
 })
 
 test_that("pick fails well", {
@@ -81,6 +78,9 @@ test_that("pick fails well", {
                "no 'pick' method for numeric")
   expect_error(pick("adf", 5),
                "no 'pick' method for character")
+
+  expect_error(pick(ex_hierarchy1, ranks()),
+               "one of 'ranks', 'names'")
 })
 
 test_that("pick: mixed ranks, names and ids", {

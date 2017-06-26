@@ -118,6 +118,10 @@ Hierarchy <- R6::R6Class(
     },
 
     pop = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
       taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
@@ -130,6 +134,10 @@ Hierarchy <- R6::R6Class(
     },
 
     pick = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
       taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))

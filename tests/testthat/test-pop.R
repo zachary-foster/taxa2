@@ -66,11 +66,8 @@ test_that("pop: ids", {
 })
 
 
-# no variables given to pop just gives back same thing
-test_that("pop gives back same .data object if no things asked to be removed", {
-  ## FIXME: the ranklist elements are actually different, which they probably
-  ## shouldn’t be
-  expect_equal(length(pop(ex_hierarchy1)$taxa), length(ex_hierarchy1$taxa))
+test_that("no variables given to pick - errors", {
+  expect_error(pop(ex_hierarchy1), "no acceptable selectors passed in")
 })
 
 test_that("pop fails well", {

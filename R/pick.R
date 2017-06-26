@@ -22,7 +22,7 @@ pick.default <- function(.data, ...) {
 pick.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
   tmp <- Taxapickers$new(...)
-  if (length(tmp$x) == 0) return(.data)
+  if (length(tmp$x) == 0) stop("no acceptable selectors passed in")
   .data$pick(ranks = unlist(lapply(tmp$ranks(), function(z) z$ranks)),
              names = unlist(lapply(tmp$names(), function(z) z$names)),
              ids = unlist(lapply(tmp$ids(), function(z) z$ids)))
