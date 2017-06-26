@@ -68,11 +68,10 @@ test_that("pick: ids", {
 
 # no variables given to pick just gives back same thing
 test_that("pick gives back same .data object if no things asked to be removed", {
-  ## FIXME: the ranklist elements are actually different, which they probably
-  ## shouldn’t be
-  #expect_equal(length(pick(ex_hierarchy1)$taxa), length(ex_hierarchy1$taxa))
-  expect_equal(length(pick(ex_hierarchy1)$taxa), 0)
-  expect_equal(length(ex_hierarchy1$taxa), 3)
+  expect_equal(
+    length(pick(ex_hierarchy1)$taxa),
+    length(ex_hierarchy1$taxa)
+  )
 })
 
 test_that("pick fails well", {

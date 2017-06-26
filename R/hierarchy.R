@@ -152,14 +152,14 @@ Hierarchy <- R6::R6Class(
         }
       }
       if (length(names) != 0) {
-        if (!is.null(attr(names, "operator"))) {
+        if (!is.null(attr(names[[1]], "operator"))) {
           ranks <- private$do_ranks(private$taxa2rank(names[[1]]))
         } else {
           ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
         }
       }
       if (length(ids) != 0) {
-        if (!is.null(attr(ids, "operator"))) {
+        if (!is.null(attr(ids[[1]], "operator"))) {
           ranks <- private$do_ranks(private$ids2rank(ids[[1]]))
         } else {
           ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
