@@ -5,7 +5,7 @@
 \title{Print a subset of a character vector}
 \usage{
 limited_print(chars, prefix = "", max_chars = getOption("width") -
-  nchar(prefix) - 5)
+  nchar(prefix) - 5, type = "message")
 }
 \arguments{
 \item{chars}{(\code{character}) What to print.}
@@ -15,6 +15,8 @@ limited_print(chars, prefix = "", max_chars = getOption("width") -
 
 \item{max_chars}{(\code{numeric} of length 1) The maximum number of
 characters to print.}
+
+\item{type}{(\code{"error"}, \code{"warning"}, \code{"message"}, \code{"cat"}, \code{"print"}, `"silent"``)}
 }
 \value{
 \code{NULL}

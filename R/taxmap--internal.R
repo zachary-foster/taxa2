@@ -147,7 +147,7 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
     }
   } else if (is.vector(data)) {
     cat(paste0(prefix, name, ": "))
-    limited_print(data, max_chars = max_width)
+    limited_print(data, max_chars = max_width, type = "cat")
   } else {
     prefixed_print(data, prefix = prefix)
   }
