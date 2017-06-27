@@ -707,32 +707,6 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   datasets[are_tables] <- lapply(datasets[are_tables], dplyr::as.tbl)
 
   # Add additional data sets
-  get_sort_var <- function(data, var) {
-    if (var == "{{index}}") {
-      if (is.data.frame(data)) {
-        return(seq_len(nrow(data)))
-      } else {
-        return(seq_len(length(data)))
-      }
-    } else if (var == "{{name}}") {
-      if (is.data.frame(data)) {
-        return(rownames(data))
-      } else {
-        return(names(data))
-      }
-    }  else if (var == "{{value}}") {
-      if (is.data.frame(data)) {
-        stop("The `{{value}}` setting of the `mappings` option cannot be used with data.frames.")
-      } else {
-        return(unlist(data))
-      }
-    } else if (is.data.frame(data) && var %in% colnames(data)) {
-      return(data[[var]])
-    } else {
-      stop(paste0('No column named "', var, '"."'))
-    }
-  }
-
   name_datset <- function(dataset, sort_var) {
     target_value <- get_sort_var(dataset, sort_var)
     source_value <- get_sort_var(tax_data, names(sort_var))
@@ -804,6 +778,49 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset, like those in `datasets`.
 #'
+#' @examples
+#'   # Make example data with taxonomic classifications
+#'   species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
+#'                                           "Mammalia;Carnivora;Felidae",
+#'                                           "Mammalia;Carnivora;Ursidae"),
+#'                              species = c("Panthera leo",
+#'                                          "Panthera tigris",
+#'                                          "Ursus americanus"),
+#'                              species_id = c("A", "B", "C"))
+#'
+#'   # Make example data associated with the taxonomic data
+#'   # Note how this does not contain classifications, but
+#'   # does have a varaible in common with "species_data" ("id" = "species_id")
+#'   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
+#'                           sample = c(1, 1, 1, 2, 2, 2),
+#'                           counts = c(23, 4, 3, 34, 5, 13))
+#'
+#'   # Make another related data set named by species id
+#'   common_names <- c(A = "Lion", B = "Tiger", C = "Bear", "Oh my!")
+#'
+#'   # Make another related data set with no names
+#'   foods <- list(c("ungulates", "boar"),
+#'                 c("ungulates", "boar"),
+#'                 c("salmon", "fruit", "nuts"))
+#'
+#'   # Make a taxmap object with these three datasets
+#'   x = lookup_tax_data(species_data,
+#'                       type = "taxon_name",
+#'                       datasets = list(counts = abundance,
+#'                                       names = common_names,
+#'                                       foods = foods),
+#'                       mappings = c("species_id" = "id",
+#'                                    "species_id" = "{{name}}",
+#'                                    "{{index}}" = "{{index}}"),
+#'                       column = "species")
+#'
+#'   # Note how all the datasets have taxon ids now
+#'   x$data
+#'
+#'   # This allows for complex mappings between variables that other functions use
+#'   map_data(x, "foods", "names")
+#'   map_data(x, "names", "counts")
+#'
 #' @export
 lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                             mappings = c(), database = "ncbi",
@@ -811,6 +828,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   # Hidden parameters
   batch_size <- 100
   max_print <- 10
+  internal_class_sep <- "||||"
+  internal_class_name <- "___class_string___"
 
   # Define lookup functions
   use_taxon_id <- function(ids) {
@@ -876,17 +895,53 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                 paste0(names(lookup_funcs), collapse = ", ")))
   }
   classifications <- lookup_funcs[[type]](query)
+  class_strings <- unlist(lapply(classifications, function(x) {
+    lapply(seq_len(nrow(x)), function(i) {
+      paste(as.character(x[1:i, 1]), collapse = internal_class_sep)
+    })
+  }))
+  combined_class <- do.call(rbind, unname(classifications))
+  internal_class_frame <- stats::setNames(data.frame(class_strings,
+                                                     stringsAsFactors = FALSE),
+                                          internal_class_name)
+  combined_class <- cbind(internal_class_frame, combined_class)
 
-  # Make taxmap object
+  # Add mapping columns to classfication data
+  tax_data_indexes <- cumsum(vapply(classifications, nrow, numeric(1)))
+  mappping_cols <- unique(c(names(mappings), "{{index}}", "{{name}}"))
+  if (!is.data.frame(tax_data)) {
+    mappping_cols <- c(mappping_cols, "{{value}}")
+  }
+  for (col in mappping_cols) {
+    combined_class[tax_data_indexes, col] <- get_sort_var(tax_data, col)
+  }
+
+  # Add input data to datasets included in the resulting object
   if (include_tax_data) {
     datasets <- c(list(query_data = tax_data), datasets)
     mappings <- c("{{index}}" = "{{index}}", mappings)
   }
-  parse_tax_data(tax_data = classifications,
-                 datasets = datasets,
-                 class_cols = 1,
-                 mappings = mappings,
-                 include_tax_data = include_tax_data)
+
+  # Make taxmap object
+  output <- parse_tax_data(tax_data = combined_class,
+                           datasets = datasets,
+                           class_cols = 1,
+                           class_sep = internal_class_sep,
+                           mappings = mappings,
+                           include_tax_data = include_tax_data)
+
+  # Remove mapping columns from output
+  output$data$tax_data[mappping_cols] <- NULL
+
+  # Remove class column from output
+  output$data$tax_data[internal_class_name] <- NULL
+
+  # Fix incorrect taxon ids for tax_data
+  #   This is due to the "{{index}}" being interpreted as a column name,
+  #   which is needed for the user-defined data sets to be parsed right.
+  output$data$tax_data$taxon_id <- output$input_ids
+
+  return(output)
 }
 
 
@@ -912,3 +967,41 @@ map_unique <- function(input, func, ...) {
   class(unique_input) <- input_class
   func(unique_input, ...)[unique_mapping(input)]
 }
+
+
+#' Get a vector from a vector/list/table to be used in mapping
+#'
+#' @param data A vector/list/table
+#' @param var What to get.
+#'   * For tables, the names of columns can be used.
+#'   * `"{{index}}"` : This means to use the index of rows/items
+#'   * `"{{name}}"`  : This means to use row/item names.
+#'   * `"{{value}}"` : This means to use the values in vectors or lists. Lists
+#'
+#' @keywords internal
+get_sort_var <- function(data, var) {
+  if (is.data.frame(data) && var %in% colnames(data)) {
+    return(data[[var]])
+  } else if (var == "{{index}}") {
+    if (is.data.frame(data)) {
+      return(seq_len(nrow(data)))
+    } else {
+      return(seq_len(length(data)))
+    }
+  } else if (var == "{{name}}") {
+    if (is.data.frame(data)) {
+      return(rownames(data))
+    } else {
+      return(names(data))
+    }
+  }  else if (var == "{{value}}") {
+    if (is.data.frame(data)) {
+      stop("The `{{value}}` setting of the `mappings` option cannot be used with data.frames.")
+    } else {
+      return(unlist(data))
+    }
+  }  else {
+    stop(paste0('No column named "', var, '"."'))
+  }
+}
+

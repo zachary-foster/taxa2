@@ -82,10 +82,12 @@ Taxonomy <- R6::R6Class(
       if (length(self$taxa) > 0) {
         limited_print(paste(taxon_ids, taxon_names, sep = ". "),
                       prefix = paste0(indent, "  ",
-                                      length(self$taxa), " taxa:"))
+                                      length(self$taxa), " taxa:"),
+                      type = "cat")
         limited_print(private$make_graph(),
                       prefix = paste0(indent, "  ",
-                                      nrow(self$edge_list), " edges:"))
+                                      nrow(self$edge_list), " edges:"),
+                      type = "cat")
       } else {
         cat("Empty taxonomy")
       }

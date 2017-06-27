@@ -58,3 +58,47 @@ Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
 that are present in a dataset. Also can incorperate additional assocaited
 datasets.
 }
+\examples{
+  # Make example data with taxonomic classifications
+  species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
+                                          "Mammalia;Carnivora;Felidae",
+                                          "Mammalia;Carnivora;Ursidae"),
+                             species = c("Panthera leo",
+                                         "Panthera tigris",
+                                         "Ursus americanus"),
+                             species_id = c("A", "B", "C"))
+
+  # Make example data associated with the taxonomic data
+  # Note how this does not contain classifications, but
+  # does have a varaible in common with "species_data" ("id" = "species_id")
+  abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
+                          sample = c(1, 1, 1, 2, 2, 2),
+                          counts = c(23, 4, 3, 34, 5, 13))
+
+  # Make another related data set named by species id
+  common_names <- c(A = "Lion", B = "Tiger", C = "Bear", "Oh my!")
+
+  # Make another related data set with no names
+  foods <- list(c("ungulates", "boar"),
+                c("ungulates", "boar"),
+                c("salmon", "fruit", "nuts"))
+
+  # Make a taxmap object with these three datasets
+  x = lookup_tax_data(species_data,
+                      type = "taxon_name",
+                      datasets = list(counts = abundance,
+                                      names = common_names,
+                                      foods = foods),
+                      mappings = c("species_id" = "id",
+                                   "species_id" = "{{name}}",
+                                   "{{index}}" = "{{index}}"),
+                      column = "species")
+
+  # Note how all the datasets have taxon ids now
+  x$data
+
+  # This allows for complex mappings between variables that other functions use
+  map_data(x, "foods", "names")
+  map_data(x, "names", "counts")
+
+}
