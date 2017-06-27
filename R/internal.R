@@ -8,6 +8,7 @@
 #'   `chars`, on the same line.
 #' @param max_chars (`numeric` of length 1) The maximum number of
 #'   characters to print.
+#' @param type (`"error"`, `"warning"`, `"message"`, `"cat"`, `"print"`, `"silent"``)
 #'
 #' @return `NULL`
 #'
@@ -18,7 +19,8 @@
 #'
 #' @keywords internal
 limited_print <- function(chars, prefix = "",
-                          max_chars = getOption("width") - nchar(prefix) - 5) {
+                          max_chars = getOption("width") - nchar(prefix) - 5,
+                          type = "message") {
 
   if (length(chars) == 0) {
     cat(prefix)
@@ -53,8 +55,22 @@ limited_print <- function(chars, prefix = "",
   } else {
     output <- paste0(paste0(collapse = ", ", chars), "\n")
   }
-  cat(paste(prefix, output, collapse = ""))
-  return(invisible(NULL))
+  output <- paste(prefix, output, collapse = "")
+
+  if (type == "error") {
+    stop(output)
+  } else if (type == "warning") {
+    warning(output)
+  } else if (type == "message") {
+    message(output)
+  } else if (type == "cat") {
+    cat(output)
+  } else if (type == "print") {
+    print(output)
+  } else if (type != "silent") {
+    stop("invalid type option")
+  }
+  return(invisible(output))
 }
 
 
