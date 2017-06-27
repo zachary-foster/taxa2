@@ -92,3 +92,51 @@ get_database_name <- function(input) {
   }
   return(database_name)
 }
+
+
+#' Like `strsplit`, but with multiple separators
+#'
+#' Splits items in a vector by multiple separators.
+#'
+#' @param input A character vector
+#' @param split One or more seperators to use to split `input`
+#' @param ... Passed to [base::strsplit()]
+#'
+#' @keywords internal
+multi_sep_split <- function(input, split, ...) {
+  lapply(input, function(x) {
+    for (sep in split) {
+      x <- unlist(strsplit(x, split = sep, ...))
+    }
+    return(x)
+  })
+}
+
+
+#' Get indexes of a unique set of the input
+#'
+#' @keywords internal
+unique_mapping <- function(input) {
+  unique_input <- unique(input)
+  vapply(input, function(x) {if (is.na(x)) which(is.na(unique_input)) else which(x == unique_input)}, numeric(1))
+}
+
+
+#' Run a function on unique values of a iterable
+#'
+#' Runs a function on unique values of a list/vector and then reformats the
+#' output so there is a one-to-one relationship with the input. Basically
+#' imitates `lapply`.
+#'
+#' @param input What to pass to \code{func}
+#' @param func (\code{function})
+#' @param ... passend to \code{func}
+#'
+#' @keywords internal
+map_unique <- function(input, func, ...) {
+  input_class <- class(input)
+  unique_input <- unique(input)
+  class(unique_input) <- input_class
+  func(unique_input, ...)[unique_mapping(input)]
+}
+
