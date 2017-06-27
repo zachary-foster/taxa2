@@ -25,9 +25,9 @@ of \code{\link[=taxon]{taxon()}} objects.
 taxa_(x, x, x)
 }
 \seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
-  \code{\link{taxon_database}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+Other classes: \code{\link{hierarchy}},
+  \code{\link{taxmap}}, \code{\link{taxon_database}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }

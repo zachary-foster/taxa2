@@ -5,8 +5,8 @@
 #'
 #' @export
 #' @param ... Any number of object of class [hierarchy()]
+#' @param .list Any number of object of class [hierarchy()] in a list
 #' @return An `R6Class` object of class [hierarchy()]
-#' @family classes
 #' @examples
 #' x <- taxon(
 #'   name = taxon_name("Poaceae"),
@@ -42,14 +42,18 @@
 #' )
 #' hier2 <- hierarchy(c, b, a)
 #'
-#' hierarchies(hier1, hier2)
-hierarchies <- function(...) {
-  hiers <- list(...)
-  if (!all(vapply(hiers, inherits, logical(1), what = "Hierarchy"))) {
+#' hiers <- hierarchies(hier1, hier2)
+#'
+#' # pass into the .list parameter
+#' hierarchies(.list = list(hier1, hier2))
+hierarchies <- function(..., .list = NULL) {
+  x <- list(...)
+  if (!is.null(.list)) x <- .list
+  if (!all(vapply(x, inherits, logical(1), what = "Hierarchy"))) {
     stop("all inputs to 'hierarchies' must be of class 'Hierarchy'",
          call. = FALSE)
   }
-  structure(hiers, class = "hierarchies")
+  structure(x, class = "hierarchies")
 }
 
 #' @export

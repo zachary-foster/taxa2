@@ -1,38 +1,14 @@
-#' @title Pop names out
+#' @title Pop taxa out
 #'
 #' @description That is, drop them
 #'
 #' @export
-#' @param .data Input, object of class taxon
-#' @param ... unquoted rank names, e.g., family
-#' @details Only supports `Hierarchy` objects for now
+#' @param .data Input, object of class `Hierarchy`, or `hierarchies`
+#' @param ... unquoted rank names (e.g., family), taxon names (e.g.,
+#' Poa annua), or taxnomic IDs (e.g., 93036)
+#' @details supports `Hierarchy` and `hierarchies` objects
 #' @return an object of the same class as passed in
-#' @examples
-#' (x <- taxon(
-#'   name = taxon_name("Poaceae"),
-#'   rank = taxon_rank("family"),
-#'   id = taxon_id(4479)
-#' ))
-#'
-#' (y <- taxon(
-#'   name = taxon_name("Poa"),
-#'   rank = taxon_rank("genus"),
-#'   id = taxon_id(4544)
-#' ))
-#'
-#' (z <- taxon(
-#'   name = taxon_name("Poa annua"),
-#'   rank = taxon_rank("species"),
-#'   id = taxon_id(93036)
-#' ))
-#'
-#' (res <- hierarchy(z, y, x))
-#'
-#' ## single taxonomic group
-#' res %>% pop(family)
-#' ### more than 1 - remake res object above first
-#' # res %>% pop(family, genus)
-
+#' @template pop_egs
 pop <- function(.data, ...) {
   UseMethod("pop")
 }
@@ -43,18 +19,22 @@ pop.default <- function(.data, ...) {
 }
 
 #' @export
-pop.Hierarchy <- function(.data, ...){
-  nms <- dplyr::vars(...)
-  nms <- vapply(nms, function(z) as.character(z$expr), "", USE.NAMES = FALSE)
-  .data$pop(nms)
+pop.Hierarchy <- function(.data, ...) {
+  .data <- .data$clone(deep = TRUE)
+  tmp <- Taxapickers$new(...)
+  if (length(tmp$x) == 0) stop("no acceptable selectors passed in")
+  .data$pop(ranks = unlist(lapply(tmp$ranks(), function(z) z$ranks)),
+             names = unlist(lapply(tmp$names(), function(z) z$names)),
+             ids = unlist(lapply(tmp$ids(), function(z) z$ids)))
 }
 
-# pop.taxa <- function(.data, ...){
-#   taxa(lapply(.data, pop, ...))
-# }
+#' @export
+pop.hierarchies <- function(.data, ...){
+  hierarchies(.list = lapply(.data, pop, ...))
+}
 
-# pop.taxondf <- function(.data, ...){
-#   var <- vars(...)
-#   check_vars(var, names(.data))
-#   select_(.data, .dots = paste("-", var, sep = ""))
+# pop.Taxonomy <- function(.data, ...){
+#   .data <- .data$clone(deep = TRUE)
+#   tmp <- unlist(lapply(lazyeval::lazy_dots(...), lazyeval::lazy_eval), FALSE)
+#   .data$pop(ranks = tmp$ranks, names = tmp$names, ids = tmp$ids)
 # }

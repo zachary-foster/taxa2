@@ -24,7 +24,7 @@ Checkout the vignette (\code{browseVignettes("taxa")}) for detailed introduction
 and examples.
 }
 \author{
-Scott Chamberlain \email{myrmecocystus@gmail.com}
+Scott Chamberlain \email{myrmecocystus+r@gmail.com}
 
 Zachary Foster \email{zacharyfoster1989@gmail.com}
 }

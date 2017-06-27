@@ -14,9 +14,14 @@
 #' **Methods**
 #'   \describe{
 #'     \item{`pop(rank_names)`}{
-#'       Remove `Taxon` elements by rank name. The change happens in place,
-#'       so you don't need to assign output to a new object. returns self
-#'       - rank_names (character) a vector of rank names
+#'       Remove `Taxon` elements by rank name, taxon name or taxon ID. The
+#'       change happens in place, so you don't need to assign output to a new
+#'       object. returns self - rank_names (character) a vector of rank names
+#'     }
+#'     \item{`pick(rank_names)`}{
+#'       Select `Taxon` elements by rank name, taxon name or taxon ID. The
+#'       change happens in place, so you don't need to assign output to a new
+#'       object. returns self - rank_names (character) a vector of rank names
 #'     }
 #'   }
 #'
@@ -47,6 +52,10 @@
 #'
 #' # pop off a rank
 #' res$pop("family")
+#'
+#' # pick a rank
+#' (res <- hierarchy(z, y, x))
+#' res$pick("family")
 
 hierarchy <- function(...) {
   Hierarchy$new(...)
@@ -108,13 +117,86 @@ Hierarchy <- R6::R6Class(
       invisible(self)
     },
 
-    pop = function(rank_names) {
+    pop = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
-      todrop <- which(taxa_rks %in% rank_names)
+      taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
+      taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
+      todrop <- which(taxa_rks %in% ranks |
+                        taxa_nms %in% names |
+                        taxa_ids %in% ids)
       self$taxa[todrop] <- NULL
-      self$ranklist[names(self$ranklist) %in% rank_names] <- NULL
-      self
+      private$sort_hierarchy(self$taxa)
+      return(self)
+    },
+
+    pick = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
+      taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
+      taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
+      taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
+      todrop <- which(!(taxa_rks %in% ranks |
+                        taxa_nms %in% names |
+                        taxa_ids %in% ids))
+      self$taxa[todrop] <- NULL
+      private$sort_hierarchy(self$taxa)
+      return(self)
+    },
+
+    span = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
+
+      taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
+
+      if (length(ranks) != 0) {
+        if (!is.null(attr(ranks[[1]], "operator"))) {
+          ranks <- private$make_ranks(ranks[[1]])
+        } else {
+          # if no operator, names must be length > 1
+          if (length(ranks[[1]]$ranks) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
+          ranks <- private$do_ranks(ranks[[1]]$ranks)
+        }
+      }
+      if (length(names) != 0) {
+        if (!is.null(attr(names[[1]], "operator"))) {
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
+        } else {
+          # if no operator, names must be length > 1
+          if (length(names[[1]]$names) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
+        }
+      }
+      if (length(ids) != 0) {
+        if (!is.null(attr(ids[[1]], "operator"))) {
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
+        } else {
+          # if no operator, names must be length > 1
+          if (length(ids[[1]]$ids) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
+        }
+      }
+
+      todrop <- which(!taxa_rks %in% unique(ranks))
+      self$taxa[todrop] <- NULL
+      private$sort_hierarchy(self$taxa)
+      return(self)
     }
+
   ),
 
   private = list(
@@ -140,6 +222,48 @@ Hierarchy <- R6::R6Class(
           sapply(ranks_ref$ranks, strsplit, split = ",", USE.NAMES = FALSE)
         )
       )
+    },
+
+    do_ranks = function(x) {
+      idz <- vapply(x, which_ranks, numeric(1), USE.NAMES = FALSE)
+      keep <- ranks_ref[ranks_ref$rankid >= idz[1] &
+                          ranks_ref$rankid <= idz[2], ]
+      csep2vec(keep$ranks)
+    },
+
+    make_ranks = function(x) {
+      idz <- vapply(x$ranks, which_ranks, numeric(1), USE.NAMES = FALSE)
+      op <- attr(x, "operator")
+      keep <- switch(op,
+        `:` = {
+          ranks_ref[ranks_ref$rankid >= idz[1] &
+                      ranks_ref$rankid <= idz[2], ]
+        },
+        `::` = {
+          ranks_ref[ranks_ref$rankid > idz[1] &
+                      ranks_ref$rankid < idz[2], ]
+        },
+        `. <` = {
+          ranks_ref[ranks_ref$rankid <= idz[2], ]
+        },
+        `. >` = {
+          ranks_ref[ranks_ref$rankid > idz[1], ]
+        },
+        stop("operator ", op, " not supported - see ?`lazy-helpers`", call. = FALSE)
+      )
+      csep2vec(keep$ranks)
+    },
+
+    taxa2rank = function(x) {
+      tmp <- vapply(self$taxa, function(z) z$name$name, "")
+      rcks <- vapply(self$taxa, function(z) z$rank$name, "")
+      rcks[which(tmp %in% x)]
+    },
+
+    ids2rank = function(w) {
+      tmp <- vapply(self$taxa, function(z) z$id$id, 1)
+      rcks <- vapply(self$taxa, function(z) z$rank$name, "")
+      rcks[which(tmp %in% w)]
     }
   )
 )

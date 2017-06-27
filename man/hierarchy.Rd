@@ -24,9 +24,14 @@ order.
 \strong{Methods}
 \describe{
 \item{\code{pop(rank_names)}}{
-Remove \code{Taxon} elements by rank name. The change happens in place,
-so you don't need to assign output to a new object. returns self
-- rank_names (character) a vector of rank names
+Remove \code{Taxon} elements by rank name, taxon name or taxon ID. The
+change happens in place, so you don't need to assign output to a new
+object. returns self - rank_names (character) a vector of rank names
+}
+\item{\code{pick(rank_names)}}{
+Select \code{Taxon} elements by rank name, taxon name or taxon ID. The
+change happens in place, so you don't need to assign output to a new
+object. returns self - rank_names (character) a vector of rank names
 }
 }
 }
@@ -56,10 +61,13 @@ res$ranklist
 
 # pop off a rank
 res$pop("family")
+
+# pick a rank
+(res <- hierarchy(z, y, x))
+res$pick("family")
 }
 \seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{taxa_}}, \code{\link{taxmap}},
+Other classes: \code{\link{taxa_}}, \code{\link{taxmap}},
   \code{\link{taxon_database}}, \code{\link{taxon_id}},
   \code{\link{taxon_name}}, \code{\link{taxon_rank}},
   \code{\link{taxonomy}}, \code{\link{taxon}}
