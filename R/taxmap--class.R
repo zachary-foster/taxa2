@@ -758,3 +758,122 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   return(output)
 }
+
+
+
+#' Convert one or more data sets to taxmap
+#'
+#'
+#' Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
+#' that are present in a dataset. Also can incorperate additional assocaited
+#' datasets.
+#'
+#' @param tax_data A table, list, or vector that contain sequence IDs, taxon
+#'   IDs, or taxon names.
+#'   * tables: The `columns` option must be used to specify which column
+#'   contains the sequence IDs, taxon IDs, or taxon names.
+#'   * lists: There must be only one item per list entry unless the `columns`
+#'   option is used to specify what item to use in each list entry.
+#'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
+#' @param columns (`character` or `integer`) The names or indexes of columns
+#'   that contain classifications if the first input is a table. If mutliple
+#'   columns are specified, they will be combined in the order given.
+#' @param type (`"seq_id"`, `"taxon_id"`, `"taxon_name"`) What type of
+#'   information can be used to look up the classifications.
+#' @param datasets Additional lists/vectors/tables that should be included in
+#'   the resulting `taxmap` object. The `mappings` option is use to specify how
+#'   these data sets relate to the `tax_data` and, by inference, what taxa apply
+#'   to each item.
+#' @param mappings (named `character`) This defines how the taxonomic
+#'   information in `tax_data` applies to data set in `datasets`. This option
+#'   should have the same number of inputs as `datasets`, with values
+#'   corresponding to each data set. The names of the character vector specify
+#'   what information in `tax_data` is shared with info in each `dataset`, which
+#'   is specified by the corresponding values of the character vector. If there
+#'   are no shared variables, you can add `NA` as a placeholder, but you could
+#'   just leave that data out since it is not benifiting from being in the
+#'   taxmap object. The names/values can be one of the following:
+#'   * For tables, the names of columns can be used.
+#'   * `"{{index}}"` : This means to use the index of rows/items
+#'   * `"{{name}}"`  : This means to use row/item names.
+#'   * `"{{value}}"` : This means to use the values in vectors or lists. Lists
+#'   will be converted to vectors using [unlist()].
+#' @param database (`character`) The name of a database to use to look up
+#'   classifications.
+#' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
+#'   as a dataset, like those in `datasets`.
+#'
+#' @export
+lookup_tax_data <- function(tax_data, columns, type, datasets, mappings,
+                            database, include_tax_data) {
+  # Hidden parameters
+  batch_size <- 100
+  max_print <- 10
+
+  # Define lookup functions
+  use_taxon_id <- function(ids) {
+    result <- map_unique(ids, taxize::classification, ask = FALSE, rows = 1,
+                         db = database)
+    # Rename columns of result
+    failed_queries <- is.na(result)
+    result[! failed_queries] <- lapply(result[! failed_queries],
+                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
+                                                                        paste0(database, "_rank"),
+                                                                        paste0(database, "_id"))))
+    return(result)
+  }
+
+  use_seq_id <- function(ids) {
+    # Look up classifications
+    result <- stats::setNames(taxize::classification(taxize::genbank2uid(ids, batch_size = batch_size)),
+                              ids)
+    # Rename columns of result
+    failed_queries <- is.na(result)
+    result[! failed_queries] <- lapply(result[! failed_queries],
+                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
+                                                                        paste0(database, "_rank"),
+                                                                        paste0(database, "_id"))))
+  }
+
+  use_taxon_name <- function(names) {
+    # Look up classifications
+    result <- map_unique(names, taxize::classification, ask = FALSE, rows = 1, db = database)
+    # Complain about failed queries
+    failed_queries <- is.na(result)
+    if (sum(failed_queries) > 0) {
+      warning(paste0('The following ', sum(failed_queries),
+                     ' taxon name could not be looked up:\n  ',
+                     limited_print(names(failed_queries), type = "silent")))
+    }
+    # Rename columns of result
+    result[! failed_queries] <- lapply(result[! failed_queries],
+                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
+                                                                        paste0(database, "_rank"),
+                                                                        paste0(database, "_id"))))
+    return(result)
+  }
+}
+
+
+#' get indexes of a unique set of the input
+#'
+#' @keywords internal
+unique_mapping <- function(input) {
+  unique_input <- unique(input)
+  vapply(input, function(x) {if (is.na(x)) which(is.na(unique_input)) else which(x == unique_input)}, numeric(1))
+}
+
+
+#' Run a function on unique values of a iterable
+#'
+#' @param input What to pass to \code{func}
+#' @param func (\code{function})
+#' @param ... passend to \code{func}
+#'
+#' @keywords internal
+map_unique <- function(input, func, ...) {
+  input_class <- class(input)
+  unique_input <- unique(input)
+  class(unique_input) <- input_class
+  func(unique_input, ...)[unique_mapping(input)]
+}
