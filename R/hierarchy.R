@@ -170,7 +170,7 @@ Hierarchy <- R6::R6Class(
       }
       if (length(names) != 0) {
         if (!is.null(attr(names[[1]], "operator"))) {
-          ranks <- private$do_ranks(private$taxa2rank(names[[1]]))
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
         } else {
           # if no operator, names must be length > 1
           if (length(names[[1]]$names) != 2) {
@@ -181,7 +181,7 @@ Hierarchy <- R6::R6Class(
       }
       if (length(ids) != 0) {
         if (!is.null(attr(ids[[1]], "operator"))) {
-          ranks <- private$do_ranks(private$ids2rank(ids[[1]]))
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
         } else {
           # if no operator, names must be length > 1
           if (length(ids[[1]]$ids) != 2) {
