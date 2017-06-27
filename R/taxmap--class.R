@@ -71,13 +71,14 @@ Taxmap <- R6::R6Class(
         if (length(self$data) > max_items) {
           cat(paste0("    And ", length(self$data) - max_items,
                      " more data sets:"))
-          limited_print(data_names[(max_items + 1):length(self$data)])
+          limited_print(data_names[(max_items + 1):length(self$data)],
+                        type = "cat")
         }
       }
 
       # Print the names of functions
       cat(paste0("  ", length(self$funcs), " functions:\n"))
-      limited_print(names(self$funcs))
+      limited_print(names(self$funcs), type = "cat")
 
       invisible(self)
     },
@@ -770,16 +771,16 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #' @param tax_data A table, list, or vector that contain sequence IDs, taxon
 #'   IDs, or taxon names.
-#'   * tables: The `columns` option must be used to specify which column
+#'   * tables: The `column` option must be used to specify which column
 #'   contains the sequence IDs, taxon IDs, or taxon names.
-#'   * lists: There must be only one item per list entry unless the `columns`
+#'   * lists: There must be only one item per list entry unless the `column`
 #'   option is used to specify what item to use in each list entry.
 #'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
-#' @param columns (`character` or `integer`) The names or indexes of columns
-#'   that contain classifications if the first input is a table. If mutliple
-#'   columns are specified, they will be combined in the order given.
 #' @param type (`"seq_id"`, `"taxon_id"`, `"taxon_name"`) What type of
 #'   information can be used to look up the classifications.
+#' @param column (`character` or `integer`) The name or index of the column that
+#'   contains information used to lookup classifications. This only applies when
+#'   a table or list is supplied to `tax_data`.
 #' @param datasets Additional lists/vectors/tables that should be included in
 #'   the resulting `taxmap` object. The `mappings` option is use to specify how
 #'   these data sets relate to the `tax_data` and, by inference, what taxa apply
@@ -804,8 +805,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   as a dataset, like those in `datasets`.
 #'
 #' @export
-lookup_tax_data <- function(tax_data, columns, type, datasets, mappings,
-                            database, include_tax_data) {
+lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
+                            mappings = c(), database = "ncbi",
+                            include_tax_data = TRUE) {
   # Hidden parameters
   batch_size <- 100
   max_print <- 10
@@ -852,6 +854,39 @@ lookup_tax_data <- function(tax_data, columns, type, datasets, mappings,
                                                                         paste0(database, "_id"))))
     return(result)
   }
+
+  lookup_funcs <- list("seq_id" = use_seq_id,
+                       "taxon_id" = use_taxon_id,
+                       "taxon_name" = use_taxon_name)
+
+  # Get query information
+  if (is.data.frame(tax_data)) { # is table
+    query <- as.character(tax_data[[column]])
+  } else if (is.list(tax_data)) { # is list
+    query <- vapply(tax_data,
+                    function(x) as.character(x[[column]]),
+                    character(1))
+  } else if (is.vector(tax_data)) { # is vector
+    query <- as.character(tax_data)
+  }
+
+  # Look up taxonomic classifications
+  if (! type %in% names(lookup_funcs)) {
+    stop(paste0('Invalid "type" option. It must be one of the following:\n  ',
+                paste0(names(lookup_funcs), collapse = ", ")))
+  }
+  classifications <- lookup_funcs[[type]](query)
+
+  # Make taxmap object
+  if (include_tax_data) {
+    datasets <- c(list(query_data = tax_data), datasets)
+    mappings <- c("{{index}}" = "{{index}}", mappings)
+  }
+  parse_tax_data(tax_data = classifications,
+                 datasets = datasets,
+                 class_cols = 1,
+                 mappings = mappings,
+                 include_tax_data = include_tax_data)
 }
 
 

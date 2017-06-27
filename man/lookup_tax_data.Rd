@@ -4,26 +4,26 @@
 \alias{lookup_tax_data}
 \title{Convert one or more data sets to taxmap}
 \usage{
-lookup_tax_data(tax_data, columns, type, datasets, mappings, database,
-  include_tax_data)
+lookup_tax_data(tax_data, type, column = 1, datasets = list(),
+  mappings = c(), database = "ncbi", include_tax_data = TRUE)
 }
 \arguments{
 \item{tax_data}{A table, list, or vector that contain sequence IDs, taxon
 IDs, or taxon names.
 \itemize{
-\item tables: The \code{columns} option must be used to specify which column
+\item tables: The \code{column} option must be used to specify which column
 contains the sequence IDs, taxon IDs, or taxon names.
-\item lists: There must be only one item per list entry unless the \code{columns}
+\item lists: There must be only one item per list entry unless the \code{column}
 option is used to specify what item to use in each list entry.
 \item vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
 }}
 
-\item{columns}{(\code{character} or \code{integer}) The names or indexes of columns
-that contain classifications if the first input is a table. If mutliple
-columns are specified, they will be combined in the order given.}
-
 \item{type}{(\code{"seq_id"}, \code{"taxon_id"}, \code{"taxon_name"}) What type of
 information can be used to look up the classifications.}
+
+\item{column}{(\code{character} or \code{integer}) The name or index of the column that
+contains information used to lookup classifications. This only applies when
+a table or list is supplied to \code{tax_data}.}
 
 \item{datasets}{Additional lists/vectors/tables that should be included in
 the resulting \code{taxmap} object. The \code{mappings} option is use to specify how
