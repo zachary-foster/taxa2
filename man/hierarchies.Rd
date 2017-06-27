@@ -4,10 +4,12 @@
 \alias{hierarchies}
 \title{Make a set of many \code{\link[=hierarchy]{hierarchy()}} class objects}
 \usage{
-hierarchies(...)
+hierarchies(..., .list = NULL)
 }
 \arguments{
 \item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}}}
+
+\item{.list}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} in a list}
 }
 \value{
 An \code{R6Class} object of class \code{\link[=hierarchy]{hierarchy()}}
@@ -51,12 +53,8 @@ c <- taxon(
 )
 hier2 <- hierarchy(c, b, a)
 
-hierarchies(hier1, hier2)
-}
-\seealso{
-Other classes: \code{\link{hierarchy}},
-  \code{\link{taxa_}}, \code{\link{taxmap}},
-  \code{\link{taxon_database}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+hiers <- hierarchies(hier1, hier2)
+
+# pass into the .list parameter
+hierarchies(.list = list(hier1, hier2))
 }

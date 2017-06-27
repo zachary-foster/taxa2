@@ -2,14 +2,15 @@
 % Please edit documentation in R/pop.R
 \name{pop}
 \alias{pop}
-\title{Pop names out}
+\title{Pop taxa out}
 \usage{
 pop(.data, ...)
 }
 \arguments{
-\item{.data}{Input, object of class taxon}
+\item{.data}{Input, object of class \code{Hierarchy}, or \code{hierarchies}}
 
-\item{...}{unquoted rank names, e.g., family}
+\item{...}{unquoted rank names (e.g., family), taxon names (e.g.,
+Poa annua), or taxnomic IDs (e.g., 93036)}
 }
 \value{
 an object of the same class as passed in
@@ -18,31 +19,30 @@ an object of the same class as passed in
 That is, drop them
 }
 \details{
-Only supports \code{Hierarchy} objects for now
+supports \code{Hierarchy} and \code{hierarchies} objects
 }
 \examples{
-(x <- taxon(
-  name = taxon_name("Poaceae"),
-  rank = taxon_rank("family"),
-  id = taxon_id(4479)
-))
+# With Hierarchy class object
+ex_hierarchy1
+## ranks
+pop(ex_hierarchy1, ranks(family))
+ex_hierarchy1 \%>\% pop(ranks(family))
+ex_hierarchy1 \%>\% pop(ranks(family, genus))
+## taxon names
+ex_hierarchy1 \%>\% pop(nms(Poa))
+ex_hierarchy1 \%>\% pop(nms(Poaceae, Poa))
+## taxon ids
+ex_hierarchy1 \%>\% pop(ids(4479))
+ex_hierarchy1 \%>\% pop(ids(4479, 4544))
+## mixed: ids and names
+ex_hierarchy1 \%>\% pop(ranks(family), ids(4544))
 
-(y <- taxon(
-  name = taxon_name("Poa"),
-  rank = taxon_rank("genus"),
-  id = taxon_id(4544)
-))
-
-(z <- taxon(
-  name = taxon_name("Poa annua"),
-  rank = taxon_rank("species"),
-  id = taxon_id(93036)
-))
-
-(res <- hierarchy(z, y, x))
-
-## single taxonomic group
-res \%>\% pop(family)
-### more than 1 - remake res object above first
-# res \%>\% pop(family, genus)
+# With hierarchies class object
+# single taxonomic group
+invisible(lapply(ex_hierarchies, print))
+ex_hierarchies \%>\% pop(ranks(family)) \%>\% lapply(., print) \%>\% invisible
+## more than one taxonomic group
+invisible(lapply(ex_hierarchies, print))
+ex_hierarchies \%>\% pop(ranks(family, genus)) \%>\% lapply(., print) \%>\%
+  invisible
 }
