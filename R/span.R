@@ -23,6 +23,7 @@ span.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
   tmp <- Taxapickers$new(...)
   if (length(tmp$x) == 0) return(.data)
+  #ist(ranks = tmp$ranks(), names = tmp$names(), ids = tmp$ids())
   .data$span(ranks = tmp$ranks(), names = tmp$names(), ids = tmp$ids())
 }
 

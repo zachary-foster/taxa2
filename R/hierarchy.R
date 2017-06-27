@@ -150,12 +150,21 @@ Hierarchy <- R6::R6Class(
     },
 
     span = function(ranks = NULL, names = NULL, ids = NULL) {
+      alldat <- ct(unlist(c(ranks, names, ids), TRUE))
+      if (is.null(alldat) || length(alldat) == 0) {
+        stop("one of 'ranks', 'names', or 'ids' must be used")
+      }
+
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
 
       if (length(ranks) != 0) {
         if (!is.null(attr(ranks[[1]], "operator"))) {
           ranks <- private$make_ranks(ranks[[1]])
         } else {
+          # if no operator, names must be length > 1
+          if (length(ranks[[1]]$ranks) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
           ranks <- private$do_ranks(ranks[[1]]$ranks)
         }
       }
@@ -163,6 +172,10 @@ Hierarchy <- R6::R6Class(
         if (!is.null(attr(names[[1]], "operator"))) {
           ranks <- private$do_ranks(private$taxa2rank(names[[1]]))
         } else {
+          # if no operator, names must be length > 1
+          if (length(names[[1]]$names) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
           ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
         }
       }
@@ -170,6 +183,10 @@ Hierarchy <- R6::R6Class(
         if (!is.null(attr(ids[[1]], "operator"))) {
           ranks <- private$do_ranks(private$ids2rank(ids[[1]]))
         } else {
+          # if no operator, names must be length > 1
+          if (length(ids[[1]]$ids) != 2) {
+            stop("if no operator, must pass in 2 names")
+          }
           ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
         }
       }
