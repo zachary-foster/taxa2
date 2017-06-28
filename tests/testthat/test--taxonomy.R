@@ -1,7 +1,7 @@
 ## Testing `taxonomy` class
 
 library(taxa)
-context("Testing the `taxonomy` object")
+context("taxonomy")
 
 
 ## Creating test data
