@@ -16,7 +16,6 @@
 #'
 #' @import R6 jsonlite
 #' @name taxa-package
-#' @aliases taxa
 #' @docType package
 #' @keywords package
 #' @author Scott Chamberlain \email{myrmecocystus+r@@gmail.com}

@@ -13,12 +13,11 @@
 #'   rank = taxon_rank("species"),
 #'   id = taxon_id(93036)
 #' ))
-#' taxa_(x, x, x)
-taxa_ <- function(...) {
+#' taxa(x, x, x)
+taxa <- function(...) {
   tt <- list(...)
-  #if (length(tt) < 1) stop("must give at least 1 input", call. = FALSE)
   if (!all(vapply(tt, inherits, logical(1), what = "Taxon"))) {
-    stop("all inputs to 'taxa_' must be of class 'Taxon'",
+    stop("all inputs to 'taxa' must be of class 'Taxon'",
          call. = FALSE)
   }
   structure(tt, class = "taxa")

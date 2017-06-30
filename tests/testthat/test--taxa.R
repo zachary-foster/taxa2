@@ -7,7 +7,7 @@ x <- taxon(
 )
 
 test_that("taxa works", {
-  aa <- taxa_(x, x, x)
+  aa <- taxa(x, x, x)
 
   expect_is(aa, "taxa")
   expect_is(unlist(aa), "list")
@@ -17,7 +17,7 @@ test_that("taxa works", {
 })
 
 test_that("taxa - empty", {
-  aa <- taxa_()
+  aa <- taxa()
 
   expect_is(aa, "taxa")
   expect_is(unclass(aa), "list")
@@ -26,15 +26,15 @@ test_that("taxa - empty", {
 
 test_that("taxa - print method", {
   # no inputs
-  expect_output(print(taxa_()), "<taxa>")
-  expect_output(print(taxa_()), "no\\. taxa:  0")
-  expect_output(print(taxa_(x)), "no\\. taxa:  1")
-  expect_output(print(taxa_(x)), "Poa annua / species / 93036")
+  expect_output(print(taxa()), "<taxa>")
+  expect_output(print(taxa()), "no\\. taxa:  0")
+  expect_output(print(taxa(x)), "no\\. taxa:  1")
+  expect_output(print(taxa(x)), "Poa annua / species / 93036")
 })
 
 test_that("taxa fails well", {
-  expect_error(taxa_(5), "all inputs to 'taxa_' must be of class 'Taxon'")
-  expect_error(taxa_(mtcars), "all inputs to 'taxa_' must be of class 'Taxon'")
-  expect_error(taxa_(4, x, "adff"),
-               "all inputs to 'taxa_' must be of class 'Taxon'")
+  expect_error(taxa(5), "all inputs to 'taxa' must be of class 'Taxon'")
+  expect_error(taxa(mtcars), "all inputs to 'taxa' must be of class 'Taxon'")
+  expect_error(taxa(4, x, "adff"),
+               "all inputs to 'taxa' must be of class 'Taxon'")
 })

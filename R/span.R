@@ -8,7 +8,7 @@
 #' Poa annua), or taxnomic IDs (e.g., 93036)
 #' @details supports `Hierarchy` and `hierarchies` objects
 #' @return an object of the same class as passed in
-#' @template pick_egs
+#' @template span_egs
 span <- function(.data, ...) {
   UseMethod("span")
 }
