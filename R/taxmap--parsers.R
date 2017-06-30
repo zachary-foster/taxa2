@@ -454,3 +454,79 @@ get_sort_var <- function(data, var) {
     stop(paste0('No column named "', var, '"."'))
   }
 }
+
+
+
+#' Extracts taxonomy info from vectors with regex
+#'
+#' The location and identity of important information in the input is specified
+#' using a regular expression with capture groups and an corresponding key. An
+#' object of type `taxmap` is returned containing the specifed information.
+#'
+#' @param tax_data A vector from which to extract taxonomy information.
+#' @param key (`character`) The identity of the capturing groups defined using
+#'   `regex`. The length of `key` must be equal to the number of capturing
+#'   groups specified in `regex`. Any names added to the terms will be used as
+#'   column names in the output. Only `"info"` can be used multiple times. Each
+#'   term must be one of those decribed below:
+#'   * `taxon_id`: A unique numeric id for a taxon for a particular `database`
+#'   (e.g. ncbi accession number). Requires an internet connection.
+#'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
+#'   interpretable by a particular `database`. Requires an internet connection.
+#'   * `class`: A list of taxa information that constitutes the full taxonomic
+#'   classification from broad to specific (see `class_rev`) for a particular
+#'   `database`. Individual taxa are separated by the `class_sep` argument and
+#'   the information is parsed by the `class_regex` and `class_key` arguments.
+#'   * `info`: Arbitrary taxon info you want included in the output. Can be used
+#'   more than once.
+#' @param regex (`character; length == 1`) A regular expression with capturing
+#'   groups indicating the locations of relevant information. The identity of
+#'   the information must be specified using the `key` argument.
+#' @param class_key (`character` of length 1) The identity of the capturing
+#'   groups defined using `class_regex`. The length of `class_key` must be equal
+#'   to the number of capturing groups specified in `class_regex`. Any names
+#'   added to the terms will be used as column names in the output. At least
+#'   `"taxon_id"` or `"name"` must be specified. Only `"taxon_info"` can be used
+#'   multiple times. Each term must be one of those decribed below:
+#'   * `taxon_id`: A unique numeric id for a taxon for a particular `database`
+#'   (e.g. ncbi accession number). Requires an internet connection.
+#'   * `name`: The name of a taxon. Not necessarily unique, but are
+#'   interpretable by a particular `database`. Requires an internet connection.
+#'   * `info`: Arbitrary taxon info you want included in the output. Can be used
+#'   more than once.
+#' @param class_regex (`character` of length 1)
+#'   A regular expression with capturing groups indicating the locations of data
+#'   for each taxon in the `class` term in the `key` argument. The identity of
+#'   the information must be specified using the `class_key` argument. The
+#'   `class_sep` option can be used to split the classification into data for
+#'   each taxon before matching. If `class_sep` is `NULL`, each match of
+#'   `class_regex` defines a taxon in the classification.
+#' @param class_sep (`character` of length 1)
+#'   Used with the `class` term in the `key` argument. The character(s) used to
+#'   separate individual taxa within a classification. After the string defined
+#'   by the `class` capture group in `regex` is split by `class_sep`, its
+#'   capture groups are extracted by `class_regex` and defined by `class_key`.
+#'   If `NULL`, every match of `class_regex` is used instead with first
+#'   splitting by `class_sep`.
+#' @param class_rev (`logical` of length 1)
+#'   Used with the `class` term in the `key` argument. If `TRUE`, the order of
+#'   taxon data in a classfication is reversed to be specific to broad.
+#' @param database (`character` of length 1) The name of the database that
+#'   patterns given in `parser` will apply to. Valid databases include "ncbi",
+#'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
+#'   database to be quired; use this if you want to not use the internet. NOTE:
+#'   Only `"ncbi"` has been tested so far.
+#' @param return_match (`logical` of length 1) If `TRUE`, include the part of
+#'   the input matched by `regex` in the output object.
+#' @param return_input (`logical` of length 1) If `TRUE`, include the input in
+#'   the output object.
+#'
+#' @return Returns an object of type `taxmap`
+#'
+#' @export
+extract_tax_data <- function(tax_data, key, regex, class_key = "name",
+                             class_regex = "(.*)", class_sep = NULL,
+                             class_rev = FALSE, database = "ncbi",
+                             return_match = FALSE, return_input = FALSE) {
+
+}

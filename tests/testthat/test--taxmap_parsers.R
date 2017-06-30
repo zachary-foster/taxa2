@@ -121,3 +121,12 @@ test_that("Taxmap can be intialized from queried data", {
   expect_equal(name_result, id_result)
   expect_equal(name_result, seq_result)
 })
+
+
+
+test_that("Taxmap can be intialized from raw strings", {
+  raw_data <- c(">var_1:A--var_2:1--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+                ">var_1:B--var_2:2--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
+                ">var_1:C--var_2:3--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+
+})
