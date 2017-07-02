@@ -3,7 +3,6 @@
 \docType{package}
 \name{taxa-package}
 \alias{taxa-package}
-\alias{taxa}
 \title{taxa}
 \description{
 \code{taxa} defines taxonomic classes and functions to manipulate them. The

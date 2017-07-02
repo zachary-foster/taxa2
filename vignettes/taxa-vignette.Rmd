@@ -146,7 +146,7 @@ It is meant to store an arbitrary list of `taxon`.
   rank = taxon_rank("species"),
   id = taxon_id(93036)
 ))
-taxa_(x, x, x)
+taxa(x, x, x)
 ```
 
 ### The "hierarchy" class

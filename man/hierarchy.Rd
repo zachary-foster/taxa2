@@ -67,7 +67,7 @@ res$pop("family")
 res$pick("family")
 }
 \seealso{
-Other classes: \code{\link{taxa_}}, \code{\link{taxmap}},
+Other classes: \code{\link{taxa}}, \code{\link{taxmap}},
   \code{\link{taxon_database}}, \code{\link{taxon_id}},
   \code{\link{taxon_name}}, \code{\link{taxon_rank}},
   \code{\link{taxonomy}}, \code{\link{taxon}}
