@@ -199,7 +199,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {
-    taxon_info$taxon_ids <- unlist(lapply(output$supertaxa(output$input_ids,
+    taxon_info$taxon_id <- unlist(lapply(output$supertaxa(output$input_ids,
                                                            include_input = TRUE),
                                           rev))
     output$data$class_data <- taxon_info
