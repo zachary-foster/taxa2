@@ -5,7 +5,8 @@
 \title{Convert one or more data sets to taxmap}
 \usage{
 parse_tax_data(tax_data, datasets = list(), class_cols = 1,
-  class_sep = ";", sep_is_regex = FALSE, mappings = c(),
+  class_sep = ";", sep_is_regex = FALSE, class_key = "taxon_name",
+  class_regex = "(.*)", include_match = TRUE, mappings = c(),
   include_tax_data = TRUE)
 }
 \arguments{
@@ -45,6 +46,30 @@ order does not matter.}
 
 \item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be
 used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regularexpression}.}
+
+\item{class_key}{(\code{character} of length 1) The identity of the capturing
+groups defined using \code{class_regex}. The length of \code{class_key} must be equal
+to the number of capturing groups specified in \code{class_regex}. Any names
+added to the terms will be used as column names in the output. At least
+\code{"taxon_id"} or \code{"name"} must be specified. Only \code{"taxon_info"} can be used
+multiple times. Each term must be one of those decribed below:
+\itemize{
+\item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
+interpretable by a particular \code{database}. Requires an internet connection.
+\item \code{info}: Arbitrary taxon info you want included in the output. Can be used
+more than once.
+}}
+
+\item{class_regex}{(\code{character} of length 1)
+A regular expression with capturing groups indicating the locations of data
+for each taxon in the \code{class} term in the \code{key} argument. The identity of
+the information must be specified using the \code{class_key} argument. The
+\code{class_sep} option can be used to split the classification into data for
+each taxon before matching. If \code{class_sep} is \code{NULL}, each match of
+\code{class_regex} defines a taxon in the classification.}
+
+\item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
+the input matched by \code{class_regex} in the output object.}
 
 \item{mappings}{(named \code{character}) This defines how the taxonomic
 information in \code{tax_data} applies to data set in \code{datasets}. This option

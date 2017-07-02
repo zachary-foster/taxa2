@@ -63,6 +63,15 @@ test_that("Taxmap can be intialized from complex data", {
   test_obj <- parse_tax_data(my_frames, class_cols = "tax")
   expect_equal(length(test_obj$taxon_ids()), nrow(test_obj$data$tax_data))
   expect_true("rank" %in% colnames(test_obj$data$tax_data))
+
+  # Parsing complex classifications
+  raw_data <- c("K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+                "K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
+                "K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+  parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
+                 class_key = c(rank = "info", tax_name = "taxon_name"),
+                 return_match = FALSE)
+
 })
 
 
@@ -125,8 +134,18 @@ test_that("Taxmap can be intialized from queried data", {
 
 
 test_that("Taxmap can be intialized from raw strings", {
-  raw_data <- c(">var_1:A--var_2:1--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
-                ">var_1:B--var_2:2--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
-                ">var_1:C--var_2:3--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+  raw_data <- c(">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+                ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
+                ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+  extract_tax_data(raw_data,
+                   key = c(var_1 = "info", var_2 = "info", tax = "class"),
+                   regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
+                   class_sep = ";", class_regex = "^(.+)__(.+)$",
+                   class_key = c(rank = "info", tax_name = "taxon_name"))
+
+
+  extract_tax_data(raw_data,
+                   key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
+                   regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
 
 })

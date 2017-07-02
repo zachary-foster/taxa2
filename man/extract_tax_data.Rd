@@ -4,9 +4,9 @@
 \alias{extract_tax_data}
 \title{Extracts taxonomy info from vectors with regex}
 \usage{
-extract_tax_data(tax_data, key, regex, class_key = "name",
+extract_tax_data(tax_data, key, regex, class_key = "taxon_name",
   class_regex = "(.*)", class_sep = NULL, class_rev = FALSE,
-  database = "ncbi", return_match = FALSE, return_input = FALSE)
+  database = "ncbi", include_match = FALSE, include_tax_data = TRUE)
 }
 \arguments{
 \item{tax_data}{A vector from which to extract taxonomy information.}
@@ -74,11 +74,11 @@ patterns given in \code{parser} will apply to. Valid databases include "ncbi",
 database to be quired; use this if you want to not use the internet. NOTE:
 Only \code{"ncbi"} has been tested so far.}
 
-\item{return_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
+\item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
 the input matched by \code{regex} in the output object.}
 
-\item{return_input}{(\code{logical} of length 1) If \code{TRUE}, include the input in
-the output object.}
+\item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data}
+as a dataset.}
 }
 \value{
 Returns an object of type \code{taxmap}

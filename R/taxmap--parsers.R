@@ -37,6 +37,25 @@
 #' @param sep_is_regex (`TRUE`/`FALSE`) Whether or not `class_sep` should be
 #'   used as a [regular
 #'   expression](https://en.wikipedia.org/wiki/Regular_expression).
+#' @param class_key (`character` of length 1) The identity of the capturing
+#'   groups defined using `class_regex`. The length of `class_key` must be equal
+#'   to the number of capturing groups specified in `class_regex`. Any names
+#'   added to the terms will be used as column names in the output. At least
+#'   `"taxon_id"` or `"name"` must be specified. Only `"taxon_info"` can be used
+#'   multiple times. Each term must be one of those decribed below:
+#'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
+#'   interpretable by a particular `database`. Requires an internet connection.
+#'   * `info`: Arbitrary taxon info you want included in the output. Can be used
+#'   more than once.
+#' @param class_regex (`character` of length 1)
+#'   A regular expression with capturing groups indicating the locations of data
+#'   for each taxon in the `class` term in the `key` argument. The identity of
+#'   the information must be specified using the `class_key` argument. The
+#'   `class_sep` option can be used to split the classification into data for
+#'   each taxon before matching. If `class_sep` is `NULL`, each match of
+#'   `class_regex` defines a taxon in the classification.
+#' @param include_match (`logical` of length 1) If `TRUE`, include the part of
+#'   the input matched by `class_regex` in the output object.
 #' @param mappings (named `character`) This defines how the taxonomic
 #'   information in `tax_data` applies to data set in `datasets`. This option
 #'   should have the same number of inputs as `datasets`, with values
@@ -100,6 +119,8 @@
 #' @export
 parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                            class_sep = ";", sep_is_regex = FALSE,
+                           class_key = "taxon_name", class_regex = "(.*)",
+                           include_match = TRUE,
                            mappings = c(), include_tax_data = TRUE) {
 
   # Check for nonsensical options
@@ -125,6 +146,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                   'The names and values of `mappings` must be one of the following: ',
                   paste0(valid_mappings, collapse = ", ")))
     }
+  }
+  if (! "taxon_name" %in% class_key) {
+    stop('At least one value in "class_key" must be "taxon_name".')
   }
 
   # Deal with edge cases
@@ -161,8 +185,28 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     stop("Unknown format for first input. Cannot parse taxonomic information.")
   }
 
+  # Extract out any taxon info
+  taxon_info <- lapply(parsed_tax, function(x)
+    data.frame(stringr::str_match(x, class_regex), stringsAsFactors = FALSE))
+  taxon_info <- do.call(rbind, taxon_info)
+  names(taxon_info) <- c("match", names(class_key))
+  parsed_tax <- split(taxon_info[, which(class_key == "taxon_name") + 1],
+                      rep(seq_len(length(parsed_tax)),
+                          vapply(parsed_tax, length, integer(1))))
+
   # Create taxmap object
   output <- do.call(taxmap, parsed_tax)
+
+  # Add taxon ids to extracted info and add to data
+  if (ncol(taxon_info) > 2) {
+    taxon_info$taxon_ids <- unlist(lapply(output$supertaxa(output$input_ids,
+                                                           include_input = TRUE),
+                                          rev))
+    output$data$class_data <- taxon_info
+    if (!include_match) {
+      output$data$class_data$match  <- NULL
+    }
+  }
 
   # Add taxonomic source to datasets
   if (include_tax_data) {
@@ -188,15 +232,15 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     return(dataset)
   }
 
-  output$data <- lapply(seq_len(length(datasets)),
-                        function(i) name_datset(datasets[[i]], mappings[i]))
-
-  # Name additional datasets
-  names(output$data) <- names(datasets)
+  output$data <- c(output$data,
+                   stats::setNames(lapply(seq_len(length(datasets)),
+                                          function(i) name_datset(datasets[[i]],
+                                                                  mappings[i])),
+                                   names(datasets)))
 
   # Fix incorrect taxon ids in data if a list of data.frames is given
   if (is_list_of_frames && include_tax_data) {
-    output$data[[1]] <- output$data[[1]][!duplicated(output$data[[1]]), ]
+    output$data$tax_data <- output$data$tax_data[!duplicated(output$data[[1]]), ]
   }
 
   return(output)
@@ -516,17 +560,190 @@ get_sort_var <- function(data, var) {
 #'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
 #'   database to be quired; use this if you want to not use the internet. NOTE:
 #'   Only `"ncbi"` has been tested so far.
-#' @param return_match (`logical` of length 1) If `TRUE`, include the part of
+#' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `regex` in the output object.
-#' @param return_input (`logical` of length 1) If `TRUE`, include the input in
-#'   the output object.
+#' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
+#'   as a dataset.
 #'
 #' @return Returns an object of type `taxmap`
 #'
 #' @export
-extract_tax_data <- function(tax_data, key, regex, class_key = "name",
+extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
                              class_regex = "(.*)", class_sep = NULL,
                              class_rev = FALSE, database = "ncbi",
-                             return_match = FALSE, return_input = FALSE) {
+                             include_match = FALSE, include_tax_data = TRUE) {
+  # Check regex/keys
+  key <- validate_regex_key_pair(regex, key, multiple_allowed = "info")
+  class_key <- validate_regex_key_pair(class_regex, class_key, multiple_allowed = "info")
+  # classification sep
+  if (!is.null(class_sep) && (class(class_sep) != "character" | length(class_sep) != 1)) {
+    stop('"class_sep" must be a character vector of length 1 or NULL')
+  }
+  # Boolean options
+  if (class(class_rev) != "logical" | length(class_rev) != 1) {
+    stop('"class_rev" must be TRUE/FALSE')
+  }
+  if (class(include_match) != "logical" | length(include_match) != 1) {
+    stop('"include_match" must be TRUE/FALSE')
+  }
+  if (class(include_tax_data) != "logical" | length(include_tax_data) != 1) {
+    stop('"include_tax_data" must be TRUE/FALSE')
+  }
+  # database
+  valid_databases <- c(names(database_list), "none")
+  if (! database %in% valid_databases) {
+    stop(paste0('Unknown database "', database,
+                '". Accepted database names include:\n    "',
+                paste0(valid_databases, collapse = ", ")))
+  }
+
+  # Extract capture groups
+  parsed_input <- data.frame(stringr::str_match(tax_data, regex), stringsAsFactors = FALSE)
+  colnames(parsed_input) <- c("match", names(key))
+
+  # Use parse_tax_data if the input is a classification
+  if ("class" %in% key) {
+    output <- parse_tax_data(tax_data = parsed_input,
+                             class_cols = which(key == "class") + 1,
+                             class_sep = class_sep, class_key = class_key,
+                             class_regex = class_regex,
+                             include_match = include_match,
+                             include_tax_data = include_tax_data)
+    if (!include_match) {
+      output$data$tax_data$match <- NULL
+    }
+  }
+
+
+  # Use lookup_tax_data for taxon names, ids, and sequence ids
+  if (any(key %in% c("taxon_name", "taxon_id", "seq_id"))) {
+    my_type <- key[key != "info"][1]
+    output <- lookup_tax_data(tax_data = parsed_input, type = my_type,
+                              column = which(key == my_type) + 1,
+                              database = database,
+                              include_tax_data = include_tax_data)
+
+    if (!include_match) {
+      output$data$query_data$match <- NULL
+    }
+  }
+
+  return(output)
+
 
 }
+
+
+
+#' Check that all match input
+#'
+#' Ensure that all of a character vector matches a regex.
+#' Inputs that do not match are excluded.
+#'
+#' @param input (\code{character})
+#' @param regex (\code{character} of length 1)
+#' @param max_print  (\code{numeric} of length 1)
+#' The maximum number of lines to print in error/warning messages.
+#'
+#' @return \code{character} Parts of \code{input} matching \code{regex}
+#'
+#' @keywords internal
+validate_regex_match <- function(input, regex, max_print = 10) {
+  # check which input values match
+  input <- as.character(input)
+  not_matching <- ! grepl(pattern = regex, x = input)
+  # complain about those that dont
+  if (sum(not_matching) > 0) {
+    invalid_list <- paste("   ", which(not_matching), ": ", input[not_matching], "\n")
+    if (length(invalid_list) > max_print) {
+      invalid_list <- c(invalid_list[1:max_print], "    ...")
+    }
+    vigilant_report(paste0(collapse = "",
+                           c("The following ", sum(not_matching), " of ", length(input),
+                             " input(s) could not be matched by the regex supplied:\n",
+                             invalid_list)))
+  }
+  # return matching inputs
+  return(input[! not_matching])
+}
+
+
+#' Check a regex-key pair
+#'
+#' Checks that the number of capture groups in the regex matches the length of the key.
+#' Checks that only certain values of \code{key} can appear more that once.
+#' Adds names to keys that will be used for column names in the output of \code{extract_taxonomy}.
+#' Uses non-standard evaluation to get the name of input variables.
+#'
+#' @param regex (\code{character})
+#' A regex with capture groups
+#' @param key (\code{character})
+#' A key corresponding to \code{regex}
+#' @param multiple_allowed (\code{character})
+#' Values of \code{key_options} that can appear more than once.
+#'
+#' @return Returns the result of \code{\link{match.arg}} on the key.
+#'
+#' @keywords internal
+#' @rdname validate_regex_key_pair
+validate_regex_key_pair <- function(regex, key, multiple_allowed) {
+
+  # Non-standard evaluation
+  regex_var_name <- deparse(substitute(regex))
+  key_var_name <- deparse(substitute(key))
+
+  # Check that the keys used are valid
+  allowed <- c("taxon_id", "taxon_name", "info", "class")
+  invalid_keys <- key[! key %in% allowed]
+  if (length(invalid_keys) > 0) {
+    stop(paste0('Invalid key value "', invalid_keys[1], '" given.\n',
+                'Valid options are: ', paste0(collapse = ", ", allowed)))
+  }
+
+  # Check key length
+  regex_capture_group_count <- count_capture_groups(regex)
+  key_length <- length(key)
+  if (key_length != regex_capture_group_count) {
+    stop(paste0(collapse = "",
+                'The number of capture groups in "', regex_var_name, '" and the length of "',
+                key_var_name, '" do not match.\n',
+                'The key has ', key_length, ' term(s) and the regex has ', regex_capture_group_count))
+  }
+
+  # Check that only keys in `multiple_allowed` appear more than once
+  counts <- table(key)
+  duplicated_keys <- names(counts[counts > 1])
+  invalid_duplicates <- duplicated_keys[! duplicated_keys %in% multiple_allowed]
+  if (length(invalid_duplicates) > 0) {
+    stop(paste0(collapse = "",
+                'The following values in `', key_var_name, '` have been used more than once: ',
+                paste0(collapse =", ", invalid_duplicates), '\n',
+                '  Only the following keys can be duplicated: ',
+                paste0(collapse =", ", multiple_allowed)))
+  }
+
+  # Apply key name defaults
+  key_names <- names(key)
+  if (is.null(key_names)) { key_names <- rep("", length(key)) }
+  key_names[key_names == ""] <- key[key_names == ""]
+
+  names(key) <- key_names
+  return(key)
+}
+
+#' Count capture groups
+#'
+#' Count the number of capture groups in a regular expression.
+#'
+#' @param regex (\code{character} of length 1)
+#'
+#' @return \code{numeric} of length 1
+#'
+#' @source http://stackoverflow.com/questions/16046620/regex-to-count-the-number-of-capturing-groups-in-a-regex
+#'
+#' @keywords internal
+count_capture_groups <- function(regex) {
+  new_regex <- paste0(regex, "|") # Allow the regex to match nothing
+  ncol(stringr::str_match(string = "", pattern = new_regex)) - 1
+}
+
