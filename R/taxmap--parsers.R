@@ -567,6 +567,24 @@ get_sort_var <- function(data, var) {
 #'
 #' @return Returns an object of type `taxmap`
 #'
+#' @examples
+#'   raw_data <- c(
+#'   ">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+#'   ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
+#'   ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus"
+#'   )
+#'   extract_tax_data(raw_data,
+#'                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
+#'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
+#'                    class_sep = ";", class_regex = "^(.+)__(.+)$",
+#'                    class_key = c(rank = "info", tax_name = "taxon_name"))
+#'
+#'
+#'   extract_tax_data(raw_data,
+#'                    key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
+#'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
+#'
+#'
 #' @export
 extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
                              class_regex = "(.*)", class_sep = NULL,
