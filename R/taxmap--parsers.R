@@ -45,6 +45,8 @@
 #'   multiple times. Each term must be one of those decribed below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
 #'   interpretable by a particular `database`. Requires an internet connection.
+#'   * `seq_id`: Sequence ID for a particular database that is associated with a
+#'   taxonomic classification. Currently only works with the "ncbi" database.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -521,6 +523,8 @@ get_sort_var <- function(data, var) {
 #'   classification from broad to specific (see `class_rev`) for a particular
 #'   `database`. Individual taxa are separated by the `class_sep` argument and
 #'   the information is parsed by the `class_regex` and `class_key` arguments.
+#'   * `seq_id`: Sequence ID for a particular database that is associated with a
+#'   taxonomic classification. Currently only works with the "ncbi" database.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param regex (`character; length == 1`) A regular expression with capturing
@@ -573,12 +577,12 @@ get_sort_var <- function(data, var) {
 #'   ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
 #'   ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus"
 #'   )
+#'
 #'   extract_tax_data(raw_data,
 #'                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
 #'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
 #'                    class_sep = ";", class_regex = "^(.+)__(.+)$",
 #'                    class_key = c(rank = "info", tax_name = "taxon_name"))
-#'
 #'
 #'   extract_tax_data(raw_data,
 #'                    key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
@@ -711,7 +715,7 @@ validate_regex_key_pair <- function(regex, key, multiple_allowed) {
   key_var_name <- deparse(substitute(key))
 
   # Check that the keys used are valid
-  allowed <- c("taxon_id", "taxon_name", "info", "class")
+  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id")
   invalid_keys <- key[! key %in% allowed]
   if (length(invalid_keys) > 0) {
     stop(paste0('Invalid key value "', invalid_keys[1], '" given.\n',

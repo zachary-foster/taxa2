@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="parsing_guide.svg">
+   sodipodi:docname="parsing_guide.svg"
+   inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/scratch/parsing_guide.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="637.18273"
-     inkscape:cy="331.6417"
+     inkscape:zoom="0.5"
+     inkscape:cx="-101.30467"
+     inkscape:cy="510.9279"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
@@ -35,9 +38,9 @@
      guidetolerance="10000"
      objecttolerance="10000"
      inkscape:object-nodes="true"
-     inkscape:window-width="1855"
-     inkscape:window-height="1176"
-     inkscape:window-x="1345"
+     inkscape:window-width="1215"
+     inkscape:window-height="1000"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1">
     <inkscape:grid
@@ -60,6 +63,22 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="Background">
+    <rect
+       style="fill:#ffffff"
+       id="rect3771"
+       width="889.37006"
+       height="570.47247"
+       x="-4.2632564e-14"
+       y="20.905487"
+       rx="0"
+       ry="0"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+  </g>
   <g
      inkscape:label="Grid"
      inkscape:groupmode="layer"
@@ -121,7 +140,7 @@
            height="35.433075"
            x="212.59842"
            y="68.74015" /></flowRegion><flowPara
-         id="flowPara4048"></flowPara></flowRoot>  </g>
+         id="flowPara4048" /></flowRoot>  </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
@@ -149,7 +168,7 @@
          sodipodi:role="line"
          id="tspan4157"
          x="283.46457"
-         y="139.60629"></tspan></text>
+         y="139.60629" /></text>
     <flowRoot
        transform="matrix(0,-1,1.1188353,0,-33.996222,779.45208)"
        xml:space="preserve"
@@ -438,7 +457,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4780"><flowSpan
            style="font-weight:bold"
-           id="flowSpan4728"></flowSpan></flowPara><flowPara
+           id="flowSpan4728" /></flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4937"><flowSpan
    style="font-weight:bold"
@@ -465,15 +484,11 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4714-0" /><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
-         id="flowPara4776"><flowSpan
-           style="font-weight:bold"
-           id="flowSpan4728-2"></flowSpan></flowPara><flowPara
+         id="flowPara4776" /><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
-         id="flowPara4941"><flowSpan
-           style="font-weight:bold"
-           id="flowSpan4943"></flowSpan></flowPara><flowPara
+         id="flowPara4941" /><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
-         id="flowPara4945"><flowSpan
+         id="flowPara4945">&gt; <flowSpan
    style="font-weight:bold"
    id="flowSpan4947">lookup_tax_data</flowSpan>(data,</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
@@ -500,7 +515,9 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4776-6"><flowSpan
    style="font-weight:bold"
-   id="flowSpan4728-2-1">lookup_tax_data</flowSpan>(data,</flowPara><flowPara
+   id="flowSpan4728-2-1"><flowSpan
+   style="font-weight:normal"
+   id="flowSpan3775">&gt;</flowSpan> lookup_tax_data</flowSpan>(data,</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4778-1">   type = &quot;taxon_name&quot;)</flowPara></flowRoot>    <flowRoot
        transform="matrix(1.1188353,0,0,1,50.61428,454.87097)"
@@ -521,7 +538,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4714-0-9-9" /><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
-         id="flowPara4776-6-3"><flowSpan
+         id="flowPara4776-6-3">&gt; <flowSpan
    style="font-weight:bold"
    id="flowSpan4728-2-1-7">lookup_tax_data</flowSpan>(data,</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
@@ -649,5 +666,140 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
          id="flowPara4935-8-6-6">   type = &quot;seq_id&quot;,</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
-         id="flowPara4782-0-1-2-8">   column = &quot;ncbi_id&quot;)</flowPara></flowRoot>  </g>
+         id="flowPara4782-0-1-2-8">   column = &quot;ncbi_id&quot;)</flowPara></flowRoot>    <flowRoot
+       transform="matrix(1.1188353,0,0,1,478.41753,102.65224)"
+       xml:space="preserve"
+       id="flowRoot4159-3-2-7-3"
+       style="font-style:normal;font-weight:normal;font-size:9.45402908px;line-height:125%;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4161-2-9-1-6"><rect
+           id="rect4163-1-7-7-7"
+           width="177.34976"
+           height="99.212601"
+           x="180.45322"
+           y="63.528839"
+           style="font-size:9.45402908px;text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4182-8-38-4-5">&gt; print(data)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4931-2">[1] &quot;&gt;id:a-tax:Primates;Hom...&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3596">[2] &quot;&gt;id:b-tax:Primates;Hap...&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4714-2-9" /><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4780-8-1">&gt; <flowSpan
+   style="font-weight:bold"
+   id="flowSpan3600">extract_tax_data</flowSpan>(data,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4935-0">   regex = &quot;&gt;id:(.+)-tax:(.+)&quot;,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4782-0-9">   key = c(&quot;info&quot;, &quot;class&quot;),</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3602">   class_sep = &quot;;&quot;)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3604">);&quot;sdf</flowPara></flowRoot>    <flowRoot
+       transform="matrix(1.1188353,0,0,1,439.91753,197.21917)"
+       xml:space="preserve"
+       id="flowRoot4159-3-2-7-3-3"
+       style="font-style:normal;font-weight:normal;font-size:9.45402908px;line-height:125%;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4161-2-9-1-6-6"><rect
+           id="rect4163-1-7-7-7-0"
+           width="177.34978"
+           height="99.212601"
+           x="214.864"
+           y="75.261124"
+           style="font-size:9.45402908px;text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4182-8-38-4-5-6">&gt; print(data)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4931-2-2">[1] &quot;&gt;id:a-tax:9606&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3596-6">[2] &quot;&gt;id:b-tax:100937&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4714-2-9-1" /><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4780-8-1-8">&gt; <flowSpan
+   style="font-weight:bold"
+   id="flowSpan3600-7">extract_tax_data</flowSpan>(data,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4935-0-9">   regex = &quot;&gt;id:(.+)-tax:(.+)&quot;,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3602-0">   key = c(&quot;info&quot;, &quot;taxon_id&quot;),</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3659">   database = &quot;ncbi&quot;)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3604-2" /></flowRoot>    <flowRoot
+       transform="matrix(1.1188353,0,0,1,394.74042,294.0928)"
+       xml:space="preserve"
+       id="flowRoot4159-3-2-7-3-3-3"
+       style="font-style:normal;font-weight:normal;font-size:9.45402908px;line-height:125%;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4161-2-9-1-6-6-7"><rect
+           id="rect4163-1-7-7-7-0-5"
+           width="186.85066"
+           height="99.212593"
+           x="255.24269"
+           y="84.686707"
+           style="font-size:9.45402908px;text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4182-8-38-4-5-6-9">&gt; print(data)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4931-2-2-2">[1] &quot;&gt;id:a-tax:Homo sapiens&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3596-6-2">[2] &quot;&gt;id:b-tax:Primates&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4714-2-9-1-8" /><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4780-8-1-8-9">&gt; <flowSpan
+   style="font-weight:bold"
+   id="flowSpan3600-7-7">extract_tax_data</flowSpan>(data,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4935-0-9-3">   regex = &quot;&gt;id:(.+)-tax:(.+)&quot;,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3602-0-6">   key = c(&quot;info&quot;,&quot;taxon_name&quot;),</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3659-1">   database = &quot;ncbi&quot;)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3604-2-2" /></flowRoot>    <flowRoot
+       transform="matrix(1.1188353,0,0,1,372.34565,389.31007)"
+       xml:space="preserve"
+       id="flowRoot4159-3-2-7-3-3-3-9"
+       style="font-style:normal;font-weight:normal;font-size:9.45402908px;line-height:125%;font-family:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4161-2-9-1-6-6-7-3"><rect
+           id="rect4163-1-7-7-7-0-5-1"
+           width="183.68369"
+           height="99.212601"
+           x="275.25885"
+           y="95.768646"
+           style="font-size:9.45402908px;text-align:start;text-anchor:start" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4182-8-38-4-5-6-9-9">&gt; print(data)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4931-2-2-2-4">[1] &quot;&gt;id:a-tax:AC073210&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3596-6-2-7">[2] &quot;&gt;id:b-tax:KC312885&quot;</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4714-2-9-1-8-8" /><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4780-8-1-8-9-4">&gt; <flowSpan
+   style="font-weight:bold"
+   id="flowSpan3600-7-7-5">extract_tax_data</flowSpan>(data,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara4935-0-9-3-0">   regex = &quot;&gt;id:(.+)-tax:(.+)&quot;,</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3602-0-6-3">   key = c(&quot;info&quot;,&quot;seq_id&quot;),</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3659-1-6">   database = &quot;ncbi&quot;)</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.45402908px;font-family:monospace;-inkscape-font-specification:monospace;text-align:start;text-anchor:start"
+         id="flowPara3604-2-2-1" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="106.29921"
+       y="233.50391"
+       id="text3763"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3765"
+         x="106.29921"
+         y="233.50391" /></text>
+  </g>
 </svg>

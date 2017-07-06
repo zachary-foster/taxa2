@@ -73,6 +73,15 @@ Taxonomy <- R6::R6Class(
       self$taxa <- parsed_data$taxa
       self$edge_list <- parsed_data$edge_list
       self$input_ids <- parsed_data$input_ids
+
+      # Convert numeric IDs to alpha
+      if (length(self$taxa) > 0) {
+        id_len <- as.integer(log(length(self$taxa), 25) + 1)
+        self$input_ids <- convert_base(self$input_ids, min_length = id_len)
+        self$edge_list$to <- convert_base(self$edge_list$to, min_length = id_len)
+        self$edge_list$from <- convert_base(self$edge_list$from, min_length = id_len)
+        names(self$taxa) <- convert_base(names(self$taxa), min_length = id_len)
+      }
     },
 
     print = function(indent = "") {

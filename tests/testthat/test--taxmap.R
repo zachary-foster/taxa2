@@ -233,20 +233,20 @@ test_that("Mapping between table observations and the edge list works", {
   result <- test_obj$obs("info")
   expect_true(all(sapply(result, class) == "integer"))
   expect_identical(names(result), unname(test_obj$taxon_ids()))
-  expect_identical(result[["1"]], 1:4)
+  expect_identical(result[["b"]], 1:4)
   expect_identical(result, test_obj$obs("phylopic_ids"))
   expect_identical(result, test_obj$obs("foods"))
 })
 
 test_that("Mapping between a subset of observations and the edge list works", {
-  expect_identical(test_obj$obs("info", subset = "1"), list("1" = 1:4))
-  expect_identical(test_obj$obs("info", subset = 1), list("1" = 1:4))
+  expect_identical(test_obj$obs("info", subset = "b"), list("b" = 1:4))
+  expect_identical(test_obj$obs("info", subset = 1), list("b" = 1:4))
 })
 
 test_that("Mapping non-recursivly between observations and the edge list works", {
   result <- test_obj$obs("info", recursive = FALSE)
   expect_true(all(sapply(result[roots(test_obj)], length) == 0))
-  expect_equal(result[["17"]], 6)
+  expect_equal(result[["r"]], 6)
 })
 
 test_that("Mapping simplification between observations and the edge list works", {
@@ -254,9 +254,9 @@ test_that("Mapping simplification between observations and the edge list works",
 })
 
 test_that("Mapping observations in external tables", {
-  external_table <- data.frame(taxon_id = c("15", "13"),
+  external_table <- data.frame(taxon_id = c("p", "n"),
                                my_name = c("Joe", "Fluffy"))
-  expect_equal(test_obj$obs(external_table)$`1`, c(2, 1))
+  expect_equal(test_obj$obs(external_table)$`b`, c(2, 1))
   external_table <- data.frame(my_name = c("Joe", "Fluffy"))
   expect_error(test_obj$obs(external_table), 'no "taxon_id" column')
 })
@@ -269,7 +269,7 @@ test_that("Mapping observations in external tables", {
 
 test_that("Default taxon filtering works", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum")
-  expect_equal(result$taxon_names(), c("11" = "Solanum"))
+  expect_equal(result$taxon_names(), c("l" = "Solanum"))
   expect_equal(as.character(result$data$info$name), c("tomato", "potato"))
   expect_true(length(result$data$phylopic_ids) == 2)
   expect_true(length(result$data$foods) == 2)

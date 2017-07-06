@@ -56,6 +56,8 @@ multiple times. Each term must be one of those decribed below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
 interpretable by a particular \code{database}. Requires an internet connection.
+\item \code{seq_id}: Sequence ID for a particular database that is associated with a
+taxonomic classification. Currently only works with the "ncbi" database.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
