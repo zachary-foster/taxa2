@@ -187,17 +187,6 @@ Taxmap <- R6::R6Class(
     },
 
 
-    map_data = function(to = "taxon_names", from = "taxon_ids") {
-      from_data <- self$get_data(from)[[1]]
-      to_data <- self$get_data(to)[[1]]
-      stats::setNames(to_data[match(names(from_data), names(to_data))],
-                      from_data)
-
-
-
-    },
-
-
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
       my_obs <- eval(substitute(self$obs(data, simplify = FALSE, value = value, subset = subset,

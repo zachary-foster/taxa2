@@ -51,13 +51,11 @@ used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regularexpress
 groups defined using \code{class_regex}. The length of \code{class_key} must be equal
 to the number of capturing groups specified in \code{class_regex}. Any names
 added to the terms will be used as column names in the output. At least
-\code{"taxon_id"} or \code{"name"} must be specified. Only \code{"taxon_info"} can be used
+one \code{"taxon_name"} must be specified. Only \code{"info"} can be used
 multiple times. Each term must be one of those decribed below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
 interpretable by a particular \code{database}. Requires an internet connection.
-\item \code{seq_id}: Sequence ID for a particular database that is associated with a
-taxonomic classification. Currently only works with the "ncbi" database.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
@@ -126,7 +124,7 @@ must be present somewhere in the first input.
   # Make a taxmap object with these three datasets
   x = parse_tax_data(species_data,
                      datasets = list(counts = abundance,
-                                     names = common_names,
+                                     my_names = common_names,
                                      foods = foods),
                      mappings = c("species_id" = "id",
                                   "species_id" = "{{name}}",
@@ -138,7 +136,7 @@ must be present somewhere in the first input.
   x$data
 
   # This allows for complex mappings between variables that other functions use
-  map_data(x, "foods", "names")
-  map_data(x, "names", "counts")
+  map_data(x, my_names, foods)
+  map_data(x, counts, my_names)
 
 }

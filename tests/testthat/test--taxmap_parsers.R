@@ -30,7 +30,7 @@ test_that("Taxmap can be intialized from complex data", {
   # Basic parsing with datasets
   test_obj <- parse_tax_data(my_vector, list(test = letters[1:3]),
                              mappings = c("{{index}}" = "{{index}}"))
-  expect_equal(test_obj$map_data("taxon_names", "test"),
+  expect_equal(test_obj$map_data(test, taxon_names),
                structure(c("D", "G", "I"), .Names = c("a", "b", "c")))
 
   a_dataset <- data.frame(my_index = c(3, 2),
@@ -70,7 +70,7 @@ test_that("Taxmap can be intialized from complex data", {
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
   parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
                  class_key = c(rank = "info", tax_name = "taxon_name"),
-                 return_match = FALSE)
+                 include_match = FALSE)
 
 })
 

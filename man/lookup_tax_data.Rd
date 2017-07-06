@@ -88,7 +88,7 @@ datasets.
   x = lookup_tax_data(species_data,
                       type = "taxon_name",
                       datasets = list(counts = abundance,
-                                      names = common_names,
+                                      my_names = common_names,
                                       foods = foods),
                       mappings = c("species_id" = "id",
                                    "species_id" = "{{name}}",
@@ -99,7 +99,7 @@ datasets.
   x$data
 
   # This allows for complex mappings between variables that other functions use
-  map_data(x, "foods", "names")
-  map_data(x, "names", "counts")
+  map_data(x, my_names, foods)
+  map_data(x, counts, my_names)
 
 }

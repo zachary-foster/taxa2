@@ -448,7 +448,8 @@ Taxonomy <- R6::R6Class(
       # recursions are simulated by filtering the results of tarversing the
       # entire tree and comparing rank depth between each taxon and its subtaxa.
       if (is.numeric(recursive) && recursive >= 0) {
-        all_taxa <- unique(c(names(output), unlist(output)))
+        all_taxa <- unique(c(self$map_data(taxon_ids, taxon_indexes)[names(output)],
+                             unlist(output)))
         rank_depth <- vapply(self$supertaxa(all_taxa), length, numeric(1))
         output_names <- names(output)
         output <- lapply(seq_along(output), function(i) {
@@ -785,9 +786,11 @@ Taxonomy <- R6::R6Class(
       from_data <- eval(substitute(validate_and_eval(from)))
 
       # Check for multiple different values of `to` for each `from`
-      is_one_to_one <- vapply(unique(names(to_data)),
+      is_one_to_one <- vapply(unique(names(from_data)),
                               function(n) {
-                                length(unique(to_data[names(to_data)==n])) == 1
+                                matches <- to_data[names(to_data)==n]
+                                matches <- matches[!is.na(matches)]
+                                length(unique(matches)) <= 1
                               },
                               logical(1))
       if (warn && any(! is_one_to_one)) {
@@ -879,7 +882,7 @@ Taxonomy <- R6::R6Class(
     # check if a set of putative taxon ids are valid.
     # returns TRUE/FALSE
     valid_taxon_ids = function(ids) {
-      !is.null(ids) && all(ids %in% self$taxon_ids())
+      !is.null(ids) && all(ids %in% self$taxon_ids() | is.na(ids))
     }
   )
 )

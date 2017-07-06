@@ -157,10 +157,10 @@ convert_base <- function(numbers, symbols = letters, base = length(symbols),
                          min_length = 0) {
 
   # A modification of the `dec2base` function in the `oro.dicom` package
+  #    Copyright (c) 2015, Brandon Whitcher
   convert_one <- function (n)  {
     if (is.na(n)) {
       return(NA_character_)
-
     }
     max_length <- max(trunc(log(max(n, 1))/log(base)) + 1, min_length)
     power <- rep(1, length(n)) * base^((max_length - 1):0)

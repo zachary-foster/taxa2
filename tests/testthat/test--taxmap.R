@@ -303,9 +303,9 @@ test_that("Observations can be preserved when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE)
-  expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "11", "11"))
-  expect_equal(names(result$data$phylopic_ids), c(NA, NA, NA, NA, "11", "11"))
-  expect_equal(names(result$data$foods), c(NA, NA, NA, NA, "11", "11"))
+  expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "l", "l"))
+  expect_equal(names(result$data$phylopic_ids), c(NA, NA, NA, NA, "l", "l"))
+  expect_equal(names(result$data$foods), c(NA, NA, NA, NA, "l", "l"))
   result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE,
                         reassign_obs = FALSE)
   expect_true(all(is.na(result$data$info$taxon_id)))

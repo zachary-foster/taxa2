@@ -233,7 +233,7 @@ test_that("Filtering taxa", {
                 unidentified_plant, unidentified_animal)
 
   result <- filter_taxa(x, taxon_names == "Solanum")
-  expect_equal(result$taxon_names(), c("11" = "Solanum"))
+  expect_equal(result$taxon_names(), c("l" = "Solanum"))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", taxonless = TRUE))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", reassign_obs = TRUE))
 })
@@ -255,7 +255,7 @@ test_that("Mapping vairables",  {
   result <- x$map_data(taxon_names, taxon_ranks)
   expect_equivalent(result, x$taxon_ranks())
   expect_equivalent(names(result), x$taxon_names())
-  expect_warning(map_data(x, taxon_names, c("4" = "A", "4" = "B")))
-  expect_silent(map_data(x, taxon_names, c("4" = "A", "4" = "B"), warn = FALSE))
+  expect_warning(map_data(x, taxon_names, c("e" = "A", "e" = "B")))
+  expect_silent(map_data(x, taxon_names, c("e" = "A", "e" = "B"), warn = FALSE))
   expect_error(map_data(x, taxon_names, 1:10))
 })

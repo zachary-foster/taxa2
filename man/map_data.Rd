@@ -33,8 +33,8 @@ map_data(obj, from, to, warn = TRUE)}
 ex_taxmap$map_data(from = taxon_names, to = n_legs > 0)
 
 # Mapping with external variables
-x = c("3" = "looks like a cat", "7" = "big scary cats",
-      "8" = "smaller cats", "12" = "might eat you", "13" = "meow! Feed me!")
+x = c("d" = "looks like a cat", "h" = "big scary cats",
+      "i" = "smaller cats", "m" = "might eat you", "n" = "Meow! (Feed me!)")
 ex_taxmap$map_data(from = taxon_names, to = x)
 }
 }

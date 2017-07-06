@@ -41,12 +41,10 @@
 #'   groups defined using `class_regex`. The length of `class_key` must be equal
 #'   to the number of capturing groups specified in `class_regex`. Any names
 #'   added to the terms will be used as column names in the output. At least
-#'   `"taxon_id"` or `"name"` must be specified. Only `"taxon_info"` can be used
+#'   one `"taxon_name"` must be specified. Only `"info"` can be used
 #'   multiple times. Each term must be one of those decribed below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
 #'   interpretable by a particular `database`. Requires an internet connection.
-#'   * `seq_id`: Sequence ID for a particular database that is associated with a
-#'   taxonomic classification. Currently only works with the "ncbi" database.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -103,7 +101,7 @@
 #'   # Make a taxmap object with these three datasets
 #'   x = parse_tax_data(species_data,
 #'                      datasets = list(counts = abundance,
-#'                                      names = common_names,
+#'                                      my_names = common_names,
 #'                                      foods = foods),
 #'                      mappings = c("species_id" = "id",
 #'                                   "species_id" = "{{name}}",
@@ -115,8 +113,8 @@
 #'   x$data
 #'
 #'   # This allows for complex mappings between variables that other functions use
-#'   map_data(x, "foods", "names")
-#'   map_data(x, "names", "counts")
+#'   map_data(x, my_names, foods)
+#'   map_data(x, counts, my_names)
 #'
 #' @export
 parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
@@ -202,7 +200,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {
     taxon_info$taxon_id <- unlist(lapply(output$supertaxa(output$input_ids,
-                                                           include_input = TRUE),
+                                                          value = "taxon_ids",
+                                                          include_input = TRUE),
                                           rev))
     output$data$class_data <- taxon_info
     if (!include_match) {
@@ -322,7 +321,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   x = lookup_tax_data(species_data,
 #'                       type = "taxon_name",
 #'                       datasets = list(counts = abundance,
-#'                                       names = common_names,
+#'                                       my_names = common_names,
 #'                                       foods = foods),
 #'                       mappings = c("species_id" = "id",
 #'                                    "species_id" = "{{name}}",
@@ -333,8 +332,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   x$data
 #'
 #'   # This allows for complex mappings between variables that other functions use
-#'   map_data(x, "foods", "names")
-#'   map_data(x, "names", "counts")
+#'   map_data(x, my_names, foods)
+#'   map_data(x, counts, my_names)
 #'
 #' @export
 lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
@@ -533,13 +532,11 @@ get_sort_var <- function(data, var) {
 #' @param class_key (`character` of length 1) The identity of the capturing
 #'   groups defined using `class_regex`. The length of `class_key` must be equal
 #'   to the number of capturing groups specified in `class_regex`. Any names
-#'   added to the terms will be used as column names in the output. At least
-#'   `"taxon_id"` or `"name"` must be specified. Only `"taxon_info"` can be used
-#'   multiple times. Each term must be one of those decribed below:
-#'   * `taxon_id`: A unique numeric id for a taxon for a particular `database`
-#'   (e.g. ncbi accession number). Requires an internet connection.
-#'   * `name`: The name of a taxon. Not necessarily unique, but are
-#'   interpretable by a particular `database`. Requires an internet connection.
+#'   added to the terms will be used as column names in the output. Only
+#'   `"info"` can be used multiple times. Each term must be one of those
+#'   decribed below:
+#'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
+#'   interpretable by a particular `database`.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
