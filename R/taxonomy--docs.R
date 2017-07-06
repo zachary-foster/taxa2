@@ -978,3 +978,19 @@ NULL
 #' @name map_data
 NULL
 
+
+
+#' Replace taxon ids
+#'
+#' Replace taxon ids in a [taxmap()] or [taxonomy()] object.
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object.
+#' @param new_ids A vector of new ids, one per taxon. They must be unique and in
+#'   the same order as the corresponding ids in `obj$taxon_ids()`.
+#'
+#' @return A [taxonomy()] or [taxmap()] object with new taxon ids
+#' @name replace_taxon_ids
+#' @examples \dontrun{
+#' replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
+#' }
+NULL

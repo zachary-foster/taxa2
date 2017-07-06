@@ -75,13 +75,9 @@ Taxonomy <- R6::R6Class(
       self$input_ids <- parsed_data$input_ids
 
       # Convert numeric IDs to alpha
-      if (length(self$taxa) > 0) {
-        id_len <- as.integer(log(length(self$taxa), 25) + 1)
-        self$input_ids <- convert_base(self$input_ids, min_length = id_len)
-        self$edge_list$to <- convert_base(self$edge_list$to, min_length = id_len)
-        self$edge_list$from <- convert_base(self$edge_list$from, min_length = id_len)
-        names(self$taxa) <- convert_base(names(self$taxa), min_length = id_len)
-      }
+      id_len <- as.integer(log(length(self$taxa), 25) + 1)
+      self$replace_taxon_ids(convert_base(self$taxon_ids(),
+                                          min_length = id_len))
     },
 
     print = function(indent = "") {
@@ -805,6 +801,48 @@ Taxonomy <- R6::R6Class(
       # Map values using taxon ids
       stats::setNames(to_data[match(names(from_data), names(to_data))],
                       from_data)
+    },
+
+    replace_taxon_ids = function(new_ids) {
+      # Check that new ids are unique
+      duplicate_ids <- unique(new_ids[duplicated(new_ids)])
+      if (any(duplicated(new_ids))) {
+        stop(paste0("New taxon IDs must be unique. ",
+                    "The following ", length(duplicate_ids),
+                    " taxon ids are not unique:\n",
+                    limited_print(duplicate_ids, type = "silent")))
+      }
+
+      # Check that new ids are the same length as old ids
+      if (length(new_ids) != length(self$taxon_ids())) {
+        stop(paste0('The number of new taxon IDs (', length(new_ids),
+                    ') is different than the current number of taxa (',
+                    length(self$taxon_ids()), ').'))
+      }
+
+      # Replace taxon ids in datasets
+      names(new_ids) <- self$taxon_ids()
+      if (!is.null(self$data)) {
+        self$data <- lapply(self$data, function(x) {
+          if (is.data.frame(x) && "taxon_id" %in% colnames(x) && private$valid_taxon_ids(x$taxon_id)) {
+            x$taxon_id <- new_ids[x$taxon_id]
+          } else if (!is.null(names(x)) && private$valid_taxon_ids(names(x))) {
+            names(x) <- new_ids[names(x)]
+          }
+          return(x)
+        })
+      }
+
+      # Replace taxon ids
+      if (length(self$taxa) > 0) {
+        self$input_ids <- new_ids[self$input_ids]
+        self$edge_list$to <- new_ids[self$edge_list$to]
+        self$edge_list$from <- new_ids[self$edge_list$from]
+        names(self$taxa) <- new_ids[names(self$taxa)]
+      }
+
+      # Return modified object
+      return(self)
     }
 
     # pop = function(ranks = NULL, names = NULL, ids = NULL) {
