@@ -4,51 +4,60 @@
 #' taxmap would be parsed from an input file, but this data set is just for
 #' demonstration purposes.
 #'
+#' @name ex_taxmap
 #' @format A [taxmap()] object.
 #' @source Created from the example code in the [taxmap()]
 #'   documentation.
 #' @family taxa-datasets
-"ex_taxmap"
+#' @keywords data
+NULL
 
 #' An example Taxonomy object
 #'
 #' An example Taxonomy object built from the ground up.
 #'
+#' @name ex_taxonomy
 #' @format A [taxonomy()] object.
 #' @source Created from the example code in the [taxonomy()]
 #'   documentation.
 #' @family taxa-datasets
-"ex_taxonomy"
+#' @keywords data
+NULL
 
 #' An example Hierarchy object
 #'
 #' An example Hierarchy object built from the ground up.
 #'
+#' @name ex_hierarchy1
 #' @format A [hierarchy()] object.
 #' @source Created from the example code in the [hierarchy()]
 #'   documentation.
 #' @family taxa-datasets
-"ex_hierarchy1"
+#' @keywords data
+NULL
 
 #' An example Hierarchy object
 #'
 #' An example Hierarchy object built from the ground up.
 #'
+#' @name ex_hierarchy2
 #' @format A [hierarchy()] object.
 #' @source Created from the example code in the [hierarchy()]
 #'   documentation.
 #' @family taxa-datasets
-"ex_hierarchy2"
-
+#' @keywords data
+NULL
 #' An example hierarchies object
 #'
 #' An example hierarchies object built from the ground up.
 #'
+#' @name ex_hierarchies
 #' @format A [hierarchies()] object.
 #' @source Created from the example code in the [hierarchies()]
 #'   documentation.
 #' @family taxa-datasets
-"ex_hierarchies"
+#' @keywords data
+NULL
 
 #' Lookup-table for IDs of taxonomic ranks
 #'
@@ -62,4 +71,4 @@
 #' @name ranks_ref
 #' @docType data
 #' @keywords data
-"ranks_ref"
+NULL

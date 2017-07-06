@@ -4,10 +4,6 @@
 \name{ranks_ref}
 \alias{ranks_ref}
 \title{Lookup-table for IDs of taxonomic ranks}
-\format{An object of class \code{data.frame} with 34 rows and 2 columns.}
-\usage{
-ranks_ref
-}
 \description{
 Composed of two columns:
 \itemize{
