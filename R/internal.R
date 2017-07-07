@@ -172,3 +172,21 @@ convert_base <- function(numbers, symbols = letters, base = length(symbols),
   vapply(as.integer(numbers), convert_one, character(1))
 
 }
+
+
+#' check for packages
+#'
+#' check for packages, and stop if not installed
+#'
+#' @param package The name of the package
+#'
+#' @return `TRUE` if package is present
+#'
+#' @keywords internal
+check_for_pkg <- function(package) {
+  if (!requireNamespace(package, quietly = TRUE)) {
+    stop("Please install ", package, call. = FALSE)
+  } else {
+    invisible(TRUE)
+  }
+}

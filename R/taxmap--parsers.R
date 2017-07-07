@@ -341,6 +341,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                             mappings = c(), database = "ncbi",
                             include_tax_data = TRUE, use_database_ids = TRUE) {
+  # Make sure taxize is installed
+  check_for_pkg("taxize")
+
   # Hidden parameters
   batch_size <- 100
   max_print <- 10
