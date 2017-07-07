@@ -7,7 +7,8 @@
 #' list](https://en.wikipedia.org/wiki/Adjacency_list).
 #'
 #' @export
-#' @param ... Any number of object of class [hierarchy()]
+#' @param ... Any number of object of class [hierarchy()] or character
+#'   vectors.
 #' @return An `R6Class` object of class `Taxonomy`
 #' @family classes
 #'

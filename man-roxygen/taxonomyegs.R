@@ -1,6 +1,13 @@
 #' @examples
-#' # Mammalia
-#' ## Notoryctidae
+#'
+#' # Making a taxonomy object with vectors
+#' taxonomy(c("mammalia", "felidae", "panthera", "tigris"),
+#'          c("mammalia", "felidae", "panthera", "leo"),
+#'          c("mammalia", "felidae", "felis", "catus"))
+#'
+#' # Making a taxonomy object from scratch
+#' #   Note: This information would usually come from a parsing function.
+#' #         This is just for demonstration.
 #' x <- taxon(
 #'   name = taxon_name("Notoryctidae"),
 #'   rank = taxon_rank("family"),
@@ -17,8 +24,6 @@
 #'   id = taxon_id(93036)
 #' )
 #'
-#' # Mammalia
-#' ## Felidae
 #' a <- taxon(
 #'   name = taxon_name("Mammalia"),
 #'   rank = taxon_rank("class"),
@@ -52,12 +57,10 @@
 #'   id = taxon_id(9696)
 #' )
 #'
-#' # make hierarchies
 #' (hier1 <- hierarchy(z, y, x, a))
 #' (hier2 <- hierarchy(c, b, a, d))
 #' (hier3 <- hierarchy(n, m, b, a))
 #'
 #' (hrs <- hierarchies(hier1, hier2, hier3))
 #'
-#' # make taxonomy
 #' taxonomy(hier1, hier2, hier3)

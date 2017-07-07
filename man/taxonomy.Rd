@@ -7,7 +7,8 @@
 taxonomy(...)
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}}}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
+vectors.}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}
@@ -19,8 +20,15 @@ objects are stored. Unlike \code{\link[=hierarchies]{hierarchies()}}, each taxon
 and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edgelist}.
 }
 \examples{
-# Mammalia
-## Notoryctidae
+
+# Making a taxonomy object with vectors
+taxonomy(c("mammalia", "felidae", "panthera", "tigris"),
+         c("mammalia", "felidae", "panthera", "leo"),
+         c("mammalia", "felidae", "felis", "catus"))
+
+# Making a taxonomy object from scratch
+#   Note: This information would usually come from a parsing function.
+#         This is just for demonstration.
 x <- taxon(
   name = taxon_name("Notoryctidae"),
   rank = taxon_rank("family"),
@@ -37,8 +45,6 @@ z <- taxon(
   id = taxon_id(93036)
 )
 
-# Mammalia
-## Felidae
 a <- taxon(
   name = taxon_name("Mammalia"),
   rank = taxon_rank("class"),
@@ -72,14 +78,12 @@ n <- taxon(
   id = taxon_id(9696)
 )
 
-# make hierarchies
 (hier1 <- hierarchy(z, y, x, a))
 (hier2 <- hierarchy(c, b, a, d))
 (hier3 <- hierarchy(n, m, b, a))
 
 (hrs <- hierarchies(hier1, hier2, hier3))
 
-# make taxonomy
 taxonomy(hier1, hier2, hier3)
 }
 \seealso{
