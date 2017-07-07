@@ -75,9 +75,11 @@ Taxonomy <- R6::R6Class(
       self$input_ids <- parsed_data$input_ids
 
       # Convert numeric IDs to alpha
-      id_len <- as.integer(log(length(self$taxa), 25) + 1)
-      self$replace_taxon_ids(convert_base(self$taxon_ids(),
-                                          min_length = id_len))
+      if (length(self$taxa) > 0) {
+        id_len <- as.integer(log(length(self$taxa), 25) + 1)
+        self$replace_taxon_ids(convert_base(self$taxon_ids(),
+                                            min_length = id_len))
+      }
     },
 
     print = function(indent = "") {

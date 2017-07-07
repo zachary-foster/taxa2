@@ -291,6 +291,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'  and "nbn".
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset, like those in `datasets`.
+#' @param use_database_ids (`TRUE`/`FALSE`) Whether or not to use downloaded
+#'   database taxon ids instead of arbitrary, automatically-generated taxon ids.
 #'
 #' @examples
 #'   # Make example data with taxonomic classifications
@@ -338,7 +340,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #' @export
 lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                             mappings = c(), database = "ncbi",
-                            include_tax_data = TRUE) {
+                            include_tax_data = TRUE, use_database_ids = TRUE) {
   # Hidden parameters
   batch_size <- 100
   max_print <- 10
@@ -444,22 +446,28 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                            mappings = mappings,
                            include_tax_data = include_tax_data)
 
-  # Remove mapping columns from output
-  output$data$tax_data[mappping_cols] <- NULL
-
-  # Remove class column from output
-  output$data$tax_data[internal_class_name] <- NULL
-
-  # Fix incorrect taxon ids for tax_data
-  #   This is due to the "{{index}}" being interpreted as a column name,
-  #   which is needed for the user-defined data sets to be parsed right.
-  output$data$tax_data$taxon_id <- output$input_ids
-
-  # Remove duplicates from `tax_data`
-  output$data[[1]] <- output$data[[1]][!duplicated(output$data[[1]]), ]
   if (include_tax_data) {
+    # Remove mapping columns from output
+    output$data$tax_data[mappping_cols] <- NULL
+
+    # Remove class column from output
+    output$data$tax_data[internal_class_name] <- NULL
+
+    # Fix incorrect taxon ids for tax_data
+    #   This is due to the "{{index}}" being interpreted as a column name,
+    #   which is needed for the user-defined data sets to be parsed right.
+    output$data$tax_data$taxon_id <- output$input_ids
+
+    # Remove duplicates from `tax_data`
     output$data$tax_data <- output$data$tax_data[!duplicated(output$data$tax_data), ]
   }
+
+  # Replace standard taxon ids with database taxon ids
+  if (use_database_ids) {
+    taxon_id_col <- paste0(database, "_id")
+    output$replace_taxon_ids(unique(combined_class)[["ncbi_id"]])
+  }
+
   return(output)
 }
 

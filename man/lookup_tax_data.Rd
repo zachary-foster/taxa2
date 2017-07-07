@@ -5,7 +5,8 @@
 \title{Convert one or more data sets to taxmap}
 \usage{
 lookup_tax_data(tax_data, type, column = 1, datasets = list(),
-  mappings = c(), database = "ncbi", include_tax_data = TRUE)
+  mappings = c(), database = "ncbi", include_tax_data = TRUE,
+  use_database_ids = TRUE)
 }
 \arguments{
 \item{tax_data}{A table, list, or vector that contain sequence IDs, taxon
@@ -53,6 +54,9 @@ and "nbn".}
 
 \item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data}
 as a dataset, like those in \code{datasets}.}
+
+\item{use_database_ids}{(\code{TRUE}/\code{FALSE}) Whether or not to use downloaded
+database taxon ids instead of arbitrary, automatically-generated taxon ids.}
 }
 \description{
 Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
