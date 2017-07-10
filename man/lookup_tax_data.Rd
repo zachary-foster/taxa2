@@ -65,9 +65,9 @@ datasets.
 }
 \examples{
   # Make example data with taxonomic classifications
-  species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
-                                          "Mammalia;Carnivora;Felidae",
-                                          "Mammalia;Carnivora;Ursidae"),
+  species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+                                     "Mammalia;Carnivora;Felidae",
+                                     "Mammalia;Carnivora;Ursidae"),
                              species = c("Panthera leo",
                                          "Panthera tigris",
                                          "Ursus americanus"),
@@ -77,7 +77,7 @@ datasets.
   # Note how this does not contain classifications, but
   # does have a varaible in common with "species_data" ("id" = "species_id")
   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
-                          sample = c(1, 1, 1, 2, 2, 2),
+                          sample_id = c(1, 1, 1, 2, 2, 2),
                           counts = c(23, 4, 3, 34, 5, 13))
 
   # Make another related data set named by species id

@@ -99,7 +99,7 @@ object of type \code{taxmap} is returned containing the specifed information.
                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
                    class_sep = ";", class_regex = "^(.+)__(.+)$",
-                   class_key = c(rank = "info", tax_name = "taxon_name"))
+                   class_key = c(my_rank = "info", tax_name = "taxon_name"))
 
   extract_tax_data(raw_data,
                    key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),

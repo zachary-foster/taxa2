@@ -190,3 +190,42 @@ parse_possibly_named_logical <- function(input, data, default) {
   return(output)
 }
 
+#' Get list of usable functions
+#'
+#' Returns the names of all functions that can be called from any envrionment
+#'
+#' @return vector
+#'
+#' @keywords internal
+all_functions <- function() {
+  objects <- unlist(lapply(seq_len(length(search())), function(i) ls(pos = i)))
+  is_func <- vapply(objects, function(obj) is.function(get(obj)), logical(1))
+  return(objects[is_func])
+}
+
+
+#' Check dataset format
+#'
+#' Check that the datasets in a [taxmap()] object are in the correct format.
+#' * Checks that column names are not the names of functions
+#'
+#' @param obj A [taxmap()] object
+#'
+#' @return NULL
+#'
+#' @keywords internal
+check_taxmap_data <- function(obj) {
+  #  Check that column names are not the names of functions
+  data_names <- all_names(obj, funcs = FALSE, builtin_funcs = FALSE)
+  suspect_names <- data_names[data_names %in% all_functions()]
+  if (length(suspect_names) > 0) {
+    warning(paste0("Naming table columns/vectors/lists the same name as ",
+                   "functions can sometimes interfere with non-standard ",
+                   "evaluation. The following data shares names with ",
+                   "functions:\n", limited_print(names(suspect_names),
+                                                 type = "silent")),
+            call. = FALSE)
+  }
+
+  return(invisible(NULL))
+}

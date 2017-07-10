@@ -75,9 +75,9 @@
 #'
 #' @examples
 #'   # Make example data with taxonomic classifications
-#'   species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
-#'                                           "Mammalia;Carnivora;Felidae",
-#'                                           "Mammalia;Carnivora;Ursidae"),
+#'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+#'                                      "Mammalia;Carnivora;Felidae",
+#'                                      "Mammalia;Carnivora;Ursidae"),
 #'                              species = c("Panthera leo",
 #'                                          "Panthera tigris",
 #'                                          "Ursus americanus"),
@@ -87,7 +87,7 @@
 #'   # Note how this does not contain classifications, but
 #'   # does have a varaible in common with "species_data" ("id" = "species_id")
 #'   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
-#'                           sample = c(1, 1, 1, 2, 2, 2),
+#'                           sample_id = c(1, 1, 1, 2, 2, 2),
 #'                           counts = c(23, 4, 3, 34, 5, 13))
 #'
 #'   # Make another related data set named by species id
@@ -106,7 +106,7 @@
 #'                      mappings = c("species_id" = "id",
 #'                                   "species_id" = "{{name}}",
 #'                                   "{{index}}" = "{{index}}"),
-#'                      class_cols = c("taxonomy", "species"),
+#'                      class_cols = c("tax", "species"),
 #'                      class_sep = c(" ", ";"))
 #'
 #'   # Note how all the datasets have taxon ids now
@@ -244,6 +244,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     output$data$tax_data <- output$data$tax_data[!duplicated(output$data[[1]]), ]
   }
 
+  # Check format of data sets
+  check_taxmap_data(output)
+
   return(output)
 }
 
@@ -296,9 +299,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #' @examples
 #'   # Make example data with taxonomic classifications
-#'   species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
-#'                                           "Mammalia;Carnivora;Felidae",
-#'                                           "Mammalia;Carnivora;Ursidae"),
+#'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+#'                                      "Mammalia;Carnivora;Felidae",
+#'                                      "Mammalia;Carnivora;Ursidae"),
 #'                              species = c("Panthera leo",
 #'                                          "Panthera tigris",
 #'                                          "Ursus americanus"),
@@ -308,7 +311,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   # Note how this does not contain classifications, but
 #'   # does have a varaible in common with "species_data" ("id" = "species_id")
 #'   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
-#'                           sample = c(1, 1, 1, 2, 2, 2),
+#'                           sample_id = c(1, 1, 1, 2, 2, 2),
 #'                           counts = c(23, 4, 3, 34, 5, 13))
 #'
 #'   # Make another related data set named by species id
@@ -590,7 +593,7 @@ get_sort_var <- function(data, var) {
 #'                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
 #'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
 #'                    class_sep = ";", class_regex = "^(.+)__(.+)$",
-#'                    class_key = c(rank = "info", tax_name = "taxon_name"))
+#'                    class_key = c(my_rank = "info", tax_name = "taxon_name"))
 #'
 #'   extract_tax_data(raw_data,
 #'                    key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
@@ -629,7 +632,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
 
   # Extract capture groups
   parsed_input <- data.frame(stringr::str_match(tax_data, regex), stringsAsFactors = FALSE)
-  colnames(parsed_input) <- c("match", names(key))
+  colnames(parsed_input) <- c("input", names(key))
 
   # Use parse_tax_data if the input is a classification
   if ("class" %in% key) {
@@ -659,8 +662,6 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   }
 
   return(output)
-
-
 }
 
 

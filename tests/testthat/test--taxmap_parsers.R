@@ -55,31 +55,38 @@ test_that("Taxmap can be intialized from complex data", {
 
   # Parsing lists of data frames with data
   my_frames <- list(data.frame(tax = c("A", "B", "C", "D"),
-                               rank = c("P", "C", "O", "F")),
+                               my_rank = c("P", "C", "O", "F")),
                     data.frame(tax = c("A", "E", "F", "G"),
-                               rank = c("P", "C", "O", "F")),
+                               my_rank = c("P", "C", "O", "F")),
                     data.frame(tax = c("A", "B", "H", "I"),
-                               rank = c("P", "C", "O", "F")))
+                               my_rank = c("P", "C", "O", "F")))
   test_obj <- parse_tax_data(my_frames, class_cols = "tax")
   expect_equal(length(test_obj$taxon_ids()), nrow(test_obj$data$tax_data))
-  expect_true("rank" %in% colnames(test_obj$data$tax_data))
+  expect_true("my_rank" %in% colnames(test_obj$data$tax_data))
 
   # Parsing complex classifications
   raw_data <- c("K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
   parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
-                 class_key = c(rank = "info", tax_name = "taxon_name"),
+                 class_key = c(my_rank = "info", tax_name = "taxon_name"),
                  include_match = FALSE)
+
+  # Check for data names that are the same as function names
+  expect_warning(parse_tax_data(raw_data, class_sep = ";",
+                                class_regex = "^(.+)__(.+)$",
+                                class_key = c(rank = "info",
+                                              tax_name = "taxon_name"),
+                                include_match = FALSE))
 
 })
 
 
 test_that("Taxmap can be intialized from queried data", {
   # Make test data
-  raw_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
-                                      "Mammalia;Carnivora;Felidae",
-                                      "Mammalia;Carnivora;Ursidae"),
+  raw_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+                                 "Mammalia;Carnivora;Felidae",
+                                 "Mammalia;Carnivora;Ursidae"),
                          species = c("Panthera leo",
                                      "Panthera tigris",
                                      "Ursus americanus"),
@@ -87,7 +94,7 @@ test_that("Taxmap can be intialized from queried data", {
                          my_seq = c("AB548412", "FJ358423", "DQ334818"),
                          species_id = c("A", "B", "C"))
   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
-                          sample = c(1, 1, 1, 2, 2, 2),
+                          sample_id = c(1, 1, 1, 2, 2, 2),
                           counts = c(23, 4, 3, 34, 5, 13))
   common_names <- c(A = "Lion", B = "Tiger", C = "Bear", "Oh my!")
   foods <- list(c("ungulates", "boar"),
@@ -98,7 +105,7 @@ test_that("Taxmap can be intialized from queried data", {
   name_result = lookup_tax_data(raw_data,
                                 type = "taxon_name",
                                 datasets = list(counts = abundance,
-                                                names = common_names,
+                                                my_names = common_names,
                                                 foods = foods),
                                 mappings = c("species_id" = "id",
                                              "species_id" = "{{name}}",
@@ -109,7 +116,7 @@ test_that("Taxmap can be intialized from queried data", {
   id_result = lookup_tax_data(raw_data,
                               type = "taxon_id",
                               datasets = list(counts = abundance,
-                                              names = common_names,
+                                              my_names = common_names,
                                               foods = foods),
                               mappings = c("species_id" = "id",
                                            "species_id" = "{{name}}",
@@ -120,7 +127,7 @@ test_that("Taxmap can be intialized from queried data", {
   seq_result = lookup_tax_data(raw_data,
                                type = "seq_id",
                                datasets = list(counts = abundance,
-                                               names = common_names,
+                                               my_names = common_names,
                                                foods = foods),
                                mappings = c("species_id" = "id",
                                             "species_id" = "{{name}}",
@@ -141,7 +148,7 @@ test_that("Taxmap can be intialized from raw strings", {
                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
                    class_sep = ";", class_regex = "^(.+)__(.+)$",
-                   class_key = c(rank = "info", tax_name = "taxon_name"))
+                   class_key = c(my_rank = "info", tax_name = "taxon_name"))
 
 
   extract_tax_data(raw_data,

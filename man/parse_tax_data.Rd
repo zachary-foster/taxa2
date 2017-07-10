@@ -98,9 +98,9 @@ must be present somewhere in the first input.
 }
 \examples{
   # Make example data with taxonomic classifications
-  species_data <- data.frame(taxonomy = c("Mammalia;Carnivora;Felidae",
-                                          "Mammalia;Carnivora;Felidae",
-                                          "Mammalia;Carnivora;Ursidae"),
+  species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+                                     "Mammalia;Carnivora;Felidae",
+                                     "Mammalia;Carnivora;Ursidae"),
                              species = c("Panthera leo",
                                          "Panthera tigris",
                                          "Ursus americanus"),
@@ -110,7 +110,7 @@ must be present somewhere in the first input.
   # Note how this does not contain classifications, but
   # does have a varaible in common with "species_data" ("id" = "species_id")
   abundance <- data.frame(id = c("A", "B", "C", "A", "B", "C"),
-                          sample = c(1, 1, 1, 2, 2, 2),
+                          sample_id = c(1, 1, 1, 2, 2, 2),
                           counts = c(23, 4, 3, 34, 5, 13))
 
   # Make another related data set named by species id
@@ -129,7 +129,7 @@ must be present somewhere in the first input.
                      mappings = c("species_id" = "id",
                                   "species_id" = "{{name}}",
                                   "{{index}}" = "{{index}}"),
-                     class_cols = c("taxonomy", "species"),
+                     class_cols = c("tax", "species"),
                      class_sep = c(" ", ";"))
 
   # Note how all the datasets have taxon ids now

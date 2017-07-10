@@ -36,6 +36,7 @@ Taxmap <- R6::R6Class(
 
       # Make sure `data` is in the right format and add to object
       self$data <- validate_taxmap_data(data, self$input_ids)
+      check_taxmap_data(self)
 
       # Make sure `funcs` is in the right format and add to object
       self$funcs <- validate_taxmap_funcs(funcs)
@@ -86,7 +87,7 @@ Taxmap <- R6::R6Class(
     # Returns the names of things to be accessible using non-standard evaluation
     all_names = function(tables = TRUE, funcs = TRUE, others = TRUE,
                          builtin_funcs = TRUE, warn = FALSE) {
-      output <- c()
+      output <- character(0)
 
       # Add functions included in the package
       if (builtin_funcs) {
