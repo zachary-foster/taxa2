@@ -234,7 +234,7 @@ test_that("Filtering taxa", {
 
   result <- filter_taxa(x, taxon_names == "Solanum")
   expect_equal(result$taxon_names(), c("l" = "Solanum"))
-  expect_warning(filter_taxa(x, taxon_names == "Solanum", taxonless = TRUE))
+  expect_warning(filter_taxa(x, taxon_names == "Solanum", drop_obs = FALSE))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", reassign_obs = TRUE))
 })
 

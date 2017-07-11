@@ -111,7 +111,7 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$filter_obs(target, ..., unobserved = TRUE)
+#' obj$filter_obs(target, ..., drop_taxa = FALSE)
 #' filter_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]
@@ -123,8 +123,8 @@ NULL
 #'   `TRUE`/`FALSE` vector of length equal to the number of rows in
 #'   `obj$edge_list`} } Any variable name that appears in
 #'   [all_names()] can be used as if it was a vector on its own.
-#' @param unobserved (`logical` of length 1) If `TRUE`, preserve taxa
-#'   even if all of their observations are filtered out. If `FALSE`, remove
+#' @param drop_taxa (`logical` of length 1) If `FALSE`, preserve taxa
+#'   even if all of their observations are filtered out. If `TRUE`, remove
 #'   taxa for which all observations were filtered out. Note that only taxa that
 #'   are unobserved due to this filtering will be removed; there might be other
 #'   taxa without observations to begin with that will not be removed.
@@ -139,7 +139,7 @@ NULL
 #' filter_obs(ex_taxmap, "info", dangerous == FALSE)
 #'
 #' # Remove taxa whose obserservation were filtered out
-#' filter_obs(ex_taxmap, "info", dangerous == FALSE, unobserved = FALSE)
+#' filter_obs(ex_taxmap, "info", dangerous == FALSE, drop_taxa = TRUE)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -159,7 +159,7 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$select_obs(target, ..., unobserved = TRUE)
+#' obj$select_obs(target, ...)
 #' select_obs(obj, target, ...)}
 #'
 #' @param obj An object of type [taxmap()]

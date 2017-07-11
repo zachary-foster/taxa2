@@ -200,7 +200,7 @@ Taxmap <- R6::R6Class(
     },
 
 
-    filter_obs = function(target, ..., unobserved = TRUE) {
+    filter_obs = function(target, ..., drop_taxa = FALSE) {
       # Check that the target data exists
       private$check_dataset_name(target)
 
@@ -237,7 +237,7 @@ Taxmap <- R6::R6Class(
       private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
-      if (! unobserved & ! is.null(data_taxon_ids)) {
+      if (drop_taxa & ! is.null(data_taxon_ids)) {
         unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]),
                                           na = FALSE, recursive = TRUE,
                                           simplify = TRUE, include_input = TRUE,

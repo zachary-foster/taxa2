@@ -2,11 +2,11 @@
 % Please edit documentation in R/taxmap--internal.R
 \name{parse_possibly_named_logical}
 \alias{parse_possibly_named_logical}
-\title{used to parse inputs to \code{taxonless} and \code{reassign_obs}}
+\title{used to parse inputs to \code{drop_obs} and \code{reassign_obs}}
 \usage{
 parse_possibly_named_logical(input, data, default)
 }
 \description{
-used to parse inputs to \code{taxonless} and \code{reassign_obs}
+used to parse inputs to \code{drop_obs} and \code{reassign_obs}
 }
 \keyword{internal}

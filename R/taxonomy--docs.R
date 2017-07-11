@@ -631,9 +631,9 @@ NULL
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
 #' a changed version would be returned, like most R functions.
 #' \preformatted{
-#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 #' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 #' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
@@ -651,20 +651,20 @@ NULL
 #'   supertaxa of taxa passing the filter. Positive numbers indicate the number
 #'   of ranks above the target taxa to return. `0` is equivalent to `FALSE`.
 #'   Negative numbers are equivalent to `TRUE`.
-#' @param taxonless (`logical`)  This option only applies to [taxmap()] objects.
-#'   If `TRUE`, include observations even if the taxon they are assigned to is
+#' @param drop_obs (`logical`)  This option only applies to [taxmap()] objects.
+#'   If `FALSE`, include observations even if the taxon they are assigned to is
 #'   filtered out. Observations assigned to removed taxa will be assigned to
 #'   \code{NA}. This option can be either simply `TRUE`/`FALSE`, meaning that
 #'   all data sets will be treated the same, or a logical vector can be supplied
 #'   with names corresponding one or more data sets in `obj$data`. For example,
-#'   `c(abundance = TRUE, stats = FALSE)` would inlcude observations whose taxon
+#'   `c(abundance = FALSE, stats = TRUE)` would inlcude observations whose taxon
 #'   was filtered out in `obj$data$abundance`, but not in `obj$data$stats`. See
 #'   the `reassign_obs` option below for further complications.
 #' @param reassign_obs (`logical` of length 1) This option only applies to
 #'   [taxmap()] objects. If `TRUE`, observations assigned to removed taxa will
 #'   be reassigned to the closest supertaxon that passed the filter. If there
 #'   are no supertaxa of such an observation that passed the filter, they will
-#'   be filtered out if `taxonless` is `TRUE`. This option can be either simply
+#'   be filtered out if `drop_obs` is `FALSE`. This option can be either simply
 #'   `TRUE`/`FALSE`, meaning that all data sets will be treated the same, or a
 #'   logical vector can be supplied with names corresponding one or more data
 #'   sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
@@ -703,8 +703,8 @@ NULL
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
 #' filter_taxa(ex_taxmap, 1, subtaxa = 2)
 #'
-#' # Remove rows in data corresponding to removed taxa
-#' filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))
+#' # Dont remove rows in data corresponding to removed taxa
+#' filter_taxa(ex_taxmap, 2, drop_obs = c(info = FALSE))
 #'
 #' # Remove a taxon and it subtaxa
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)

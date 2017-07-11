@@ -23,13 +23,13 @@ supertaxa of taxa passing the filter. Positive numbers indicate the number
 of ranks above the target taxa to return. \code{0} is equivalent to \code{FALSE}.
 Negative numbers are equivalent to \code{TRUE}.}
 
-\item{taxonless}{(\code{logical})  This option only applies to \code{\link[=taxmap]{taxmap()}} objects.
-If \code{TRUE}, include observations even if the taxon they are assigned to is
+\item{drop_obs}{(\code{logical})  This option only applies to \code{\link[=taxmap]{taxmap()}} objects.
+If \code{FALSE}, include observations even if the taxon they are assigned to is
 filtered out. Observations assigned to removed taxa will be assigned to
 \code{NA}. This option can be either simply \code{TRUE}/\code{FALSE}, meaning that
 all data sets will be treated the same, or a logical vector can be supplied
 with names corresponding one or more data sets in \code{obj$data}. For example,
-\code{c(abundance = TRUE, stats = FALSE)} would inlcude observations whose taxon
+\code{c(abundance = FALSE, stats = TRUE)} would inlcude observations whose taxon
 was filtered out in \code{obj$data$abundance}, but not in \code{obj$data$stats}. See
 the \code{reassign_obs} option below for further complications.}
 
@@ -37,7 +37,7 @@ the \code{reassign_obs} option below for further complications.}
 \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE}, observations assigned to removed taxa will
 be reassigned to the closest supertaxon that passed the filter. If there
 are no supertaxa of such an observation that passed the filter, they will
-be filtered out if \code{taxonless} is \code{TRUE}. This option can be either simply
+be filtered out if \code{drop_obs} is \code{FALSE}. This option can be either simply
 \code{TRUE}/\code{FALSE}, meaning that all data sets will be treated the same, or a
 logical vector can be supplied with names corresponding one or more data
 sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
@@ -66,9 +66,9 @@ However, calling the function using the \code{filter_taxa(obj, ...)} immitates R
 traditional copy-on-modify semantics, so "obj" would not be changed; instead
 a changed version would be returned, like most R functions.
 \preformatted{
-filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 }
 \examples{
@@ -94,8 +94,8 @@ filter_taxa(ex_taxmap, 12, supertaxa = 2)
 filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
 filter_taxa(ex_taxmap, 1, subtaxa = 2)
 
-# Remove rows in data corresponding to removed taxa
-filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))
+# Dont remove rows in data corresponding to removed taxa
+filter_taxa(ex_taxmap, 2, drop_obs = c(info = FALSE))
 
 # Remove a taxon and it subtaxa
 filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)

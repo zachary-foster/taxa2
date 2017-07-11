@@ -107,7 +107,7 @@
 #'                    dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
 #'
 #' abund <- data.frame(code = rep(c("T", "C", "M", "H"), 2),
-#'                     sample = rep(c("A", "B"), each = 2),
+#'                     sample_id = rep(c("A", "B"), each = 2),
 #'                     count = c(1,2,5,2,6,2,4,0),
 #'                     taxon_index = rep(1:4, 2))
 #'

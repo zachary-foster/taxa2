@@ -156,7 +156,7 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
 
 
 
-#' used to parse inputs to `taxonless` and `reassign_obs`
+#' used to parse inputs to `drop_obs` and `reassign_obs`
 #'
 #' @keywords internal
 parse_possibly_named_logical <- function(input, data, default) {

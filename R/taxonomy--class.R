@@ -546,7 +546,7 @@ Taxonomy <- R6::R6Class(
     },
 
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
-                           taxonless = FALSE, reassign_obs = TRUE,
+                           drop_obs = TRUE, reassign_obs = TRUE,
                            reassign_taxa = TRUE, invert = FALSE) {
       # Check that a taxmap option is not used with a taxonomy object
       is_taxmap <- "Taxmap" %in% class(self)
@@ -556,8 +556,8 @@ Taxonomy <- R6::R6Class(
                         '`taxmap` objects. It will have no effect on a',
                         '`taxonomy` object.'))
         }
-        if (!missing(taxonless)) {
-          warning(paste('The option "taxonless" can only be used with',
+        if (!missing(drop_obs)) {
+          warning(paste('The option "drop_obs" can only be used with',
                         '`taxmap` objects. It will have no effect on a',
                         '`taxonomy` object.'))
         }
@@ -652,10 +652,10 @@ Taxonomy <- R6::R6Class(
 
       # Remove taxonless observations
       if (is_taxmap) {
-        taxonless <- parse_possibly_named_logical(
-          taxonless,
+        drop_obs <- parse_possibly_named_logical(
+          drop_obs,
           self$data,
-          default = formals(self$filter_taxa)$taxonless
+          default = formals(self$filter_taxa)$drop_obs
         )
         process_one <- function(my_index) {
 
@@ -668,7 +668,7 @@ Taxonomy <- R6::R6Class(
           obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
           private$remove_obs(dataset = my_index,
                              indexes = obs_subset,
-                             unname_only = taxonless[my_index])
+                             unname_only = ! drop_obs[my_index])
         }
         unused_output <- lapply(seq_along(self$data), process_one)
       }

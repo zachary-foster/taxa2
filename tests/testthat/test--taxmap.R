@@ -302,11 +302,11 @@ test_that("Observations can be preserved when filtering taxa", {
   expect_equal(length(result$data$foods), 0)
   result <- filter_taxa(test_obj, taxon_names == "tuberosum", reassign_obs = FALSE)
   expect_equivalent(result$taxon_names(), "tuberosum")
-  result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE)
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", drop_obs = FALSE)
   expect_equal(result$data$info$taxon_id, c(NA, NA, NA, NA, "l", "l"))
   expect_equal(names(result$data$phylopic_ids), c(NA, NA, NA, NA, "l", "l"))
   expect_equal(names(result$data$foods), c(NA, NA, NA, NA, "l", "l"))
-  result <- filter_taxa(test_obj, taxon_names == "Solanum", taxonless = TRUE,
+  result <- filter_taxa(test_obj, taxon_names == "Solanum", drop_obs = FALSE,
                         reassign_obs = FALSE)
   expect_true(all(is.na(result$data$info$taxon_id)))
   expect_equal(nrow(result$data$info), 6)
@@ -342,7 +342,7 @@ test_that("Default observation filtering works", {
 })
 
 test_that("Removing taxa when filtering observations work", {
-  result <- filter_obs(test_obj, "info", n_legs == 2, unobserved = FALSE)
+  result <- filter_obs(test_obj, "info", n_legs == 2, drop_taxa = TRUE)
   expect_equivalent(as.character(result$data$info$name), "human")
   expect_equivalent(result$taxon_names(),
                     c("Mammalia", "Hominidae", "homo", "sapiens"))
