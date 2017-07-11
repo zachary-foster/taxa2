@@ -382,7 +382,7 @@ filter_taxa(my_taxmap, startsWith(taxon_names, "t"))
 There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes.
 
 ```{r eval=FALSE} 
-filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "17")
+filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "r")
 ```
 
 There are many options for `filter_taxa` that make it very flexible.
