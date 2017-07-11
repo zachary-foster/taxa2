@@ -116,25 +116,25 @@ NULL
 #'
 #' @examples
 #' # return the indexes for supertaxa for each taxon
-#' ex_taxmap$supertaxa()
+#' supertaxa(ex_taxmap)
 #'
 #' # Only return data for some taxa using taxon indexes
-#' ex_taxmap$supertaxa(subset = 1:3)
+#' supertaxa(ex_taxmap, subset = 1:3)
 #'
 #' # Only return data for some taxa using taxon ids
-#' ex_taxmap$supertaxa(subset = c("3", "4"))
+#' supertaxa(ex_taxmap, subset = c("3", "4"))
 #'
 #' # Only return data for some taxa using logical tests
-#' ex_taxmap$supertaxa(subset = taxon_ranks == "species")
+#' supertaxa(ex_taxmap, subset = taxon_ranks == "species")
 #'
 #' # Only return supertaxa one level above
-#' ex_taxmap$supertaxa(recursive = FALSE)
+#' supertaxa(ex_taxmap, recursive = FALSE)
 #'
 #' # Only return supertaxa some number of ranks above
-#' ex_taxmap$supertaxa(recursive = 2)
+#' supertaxa(ex_taxmap, recursive = 2)
 #'
 #' # Return something besides taxon indexes
-#' ex_taxmap$supertaxa(value = "taxon_names")
+#' supertaxa(ex_taxmap, value = "taxon_names")
 NULL
 
 
@@ -255,25 +255,25 @@ NULL
 #'
 #' @examples
 #' # return the indexes for subtaxa for each taxon
-#' ex_taxmap$subtaxa()
+#' subtaxa(ex_taxmap)
 #'
 #' # Only return data for some taxa using taxon indexes
-#' ex_taxmap$subtaxa(subset = 1:3)
+#' subtaxa(ex_taxmap, subset = 1:3)
 #'
 #' # Only return data for some taxa using taxon ids
-#' ex_taxmap$subtaxa(subset = c("3", "4"))
+#' subtaxa(ex_taxmap, subset = c("3", "4"))
 #'
 #' # Only return data for some taxa using logical tests
-#' ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+#' subtaxa(ex_taxmap, subset = taxon_ranks == "genus")
 #'
 #' # Only return subtaxa one level below
-#' ex_taxmap$subtaxa(recursive = FALSE)
+#' subtaxa(ex_taxmap, recursive = FALSE)
 #'
 #' # Only return subtaxa some number of ranks below
-#' ex_taxmap$subtaxa(recursive = 2)
+#' subtaxa(ex_taxmap, recursive = 2)
 #'
 #' # Return something besides taxon indexes
-#' ex_taxmap$subtaxa(value = "taxon_names")
+#' subtaxa(ex_taxmap, value = "taxon_names")
 NULL
 
 
@@ -972,13 +972,14 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples \dontrun{
+#'
 #' # Mapping between two variables in `all_names(ex_taxmap)`
-#' ex_taxmap$map_data(from = taxon_names, to = n_legs > 0)
+#' map_data(ex_taxmap, from = taxon_names, to = n_legs > 0)
 #'
 #' # Mapping with external variables
 #' x = c("d" = "looks like a cat", "h" = "big scary cats",
 #'       "i" = "smaller cats", "m" = "might eat you", "n" = "Meow! (Feed me!)")
-#' ex_taxmap$map_data(from = taxon_names, to = x)
+#' map_data(ex_taxmap, from = taxon_names, to = x)
 #' }
 #' @name map_data
 NULL
@@ -996,6 +997,7 @@ NULL
 #' @return A [taxonomy()] or [taxmap()] object with new taxon ids
 #' @name replace_taxon_ids
 #' @examples \dontrun{
+#'
 #' replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
 #' }
 NULL

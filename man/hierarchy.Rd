@@ -60,11 +60,11 @@ res$taxa
 res$ranklist
 
 # pop off a rank
-res$pop("family")
+pop(res, ranks("family"))
 
 # pick a rank
 (res <- hierarchy(z, y, x))
-res$pick("family")
+pick(res, ranks("family"))
 }
 \seealso{
 Other classes: \code{\link{taxa}}, \code{\link{taxmap}},

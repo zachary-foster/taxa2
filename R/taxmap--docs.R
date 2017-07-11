@@ -34,25 +34,25 @@
 #'
 #' @examples
 #' # Get indexes of rows corresponding to each taxon
-#' ex_taxmap$obs("info")
+#' obs(ex_taxmap, "info")
 #'
 #' # Get only a subset of taxon indexes
-#' ex_taxmap$obs("info", subset = 1:2)
+#' obs(ex_taxmap, "info", subset = 1:2)
 #'
 #' # Get only a subset of taxon IDs
-#' ex_taxmap$obs("info", subset = c("1", "2"))
+#' obs(ex_taxmap, "info", subset = c("1", "2"))
 #'
 #' # Get only a subset of taxa using logical tests
-#' ex_taxmap$obs("info", subset = taxon_ranks == "genus")
+#' obs(ex_taxmap, "info", subset = taxon_ranks == "genus")
 #'
 #' # Only return indexes of rows assinged to each taxon explicitly
-#' ex_taxmap$obs("info", recursive = FALSE)
+#' obs(ex_taxmap, "info", recursive = FALSE)
 #'
 #' # Lump all row indexes in a single vector
-#' ex_taxmap$obs("info", simplify = TRUE)
+#' obs(ex_taxmap, "info", simplify = TRUE)
 #'
 #' # Return values from a dataset instead of indexes
-#' ex_taxmap$obs("info", value = "name")
+#' obs(ex_taxmap, "info", value = "name")
 #'
 NULL
 
@@ -423,7 +423,8 @@ NULL
 #'
 #' @return `numeric`
 #'
-#' @examples#' n_obs_1(ex_taxmap, "info")
+#' @examples
+#' n_obs_1(ex_taxmap, "info")
 #'
 #' @family taxmap data functions
 #'
