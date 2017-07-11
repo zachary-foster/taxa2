@@ -11,6 +11,8 @@
 #'
 #' @return An `R6Class` object of class `TaxonDatabase`
 #'
+#' @seealso [database_list]
+#'
 #' @family classes
 #' @examples
 #' # create a database entry
@@ -63,9 +65,23 @@ TaxonDatabase <- R6::R6Class(
   )
 )
 
-#' database list
-#' @rdname database
+#' Database list
+#'
 #' @export
+#' @details List of databases with pre-filled details, where each has the
+#' format:
+#' \itemize{
+#'  \item url: A base URL for the database source.
+#'  \item description: Description of the database source.
+#'  \item id regex: identifier regex.
+#' }
+#' @seealso [taxon_database]
+#' @examples
+#' database_list
+#' database_list$ncbi
+#' database_list$ncbi$name
+#' database_list$ncbi$description
+#' database_list$ncbi$url
 database_list <- list(
   ncbi = taxon_database(
     "ncbi",
