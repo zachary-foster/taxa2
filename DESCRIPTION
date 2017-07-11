@@ -24,7 +24,8 @@ Imports:
     magrittr,
     tibble,
     knitr,
-    rlang
+    rlang,
+    stringr
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,

@@ -680,7 +680,7 @@ NULL
 #' filter_taxa(ex_taxmap, 1:3)
 #'
 #' # Filter by taxon ID
-#' filter_taxa(ex_taxmap, c("1", "2", "3"))
+#' filter_taxa(ex_taxmap, c("b", "c", "d"))
 #'
 #' # Fiter by TRUE/FALSE
 #' filter_taxa(ex_taxmap, taxon_names == "Plantae", subtaxa = TRUE)

@@ -685,14 +685,15 @@ validate_regex_match <- function(input, regex, max_print = 10) {
   not_matching <- ! grepl(pattern = regex, x = input)
   # complain about those that dont
   if (sum(not_matching) > 0) {
-    invalid_list <- paste("   ", which(not_matching), ": ", input[not_matching], "\n")
+    invalid_list <- paste("   ", which(not_matching), ": ", input[not_matching],
+                          "\n")
     if (length(invalid_list) > max_print) {
       invalid_list <- c(invalid_list[1:max_print], "    ...")
     }
-    vigilant_report(paste0(collapse = "",
-                           c("The following ", sum(not_matching), " of ", length(input),
-                             " input(s) could not be matched by the regex supplied:\n",
-                             invalid_list)))
+    warning(paste0(collapse = "",
+                   c("The following ", sum(not_matching), " of ", length(input),
+                     " input(s) could not be matched by the regex supplied:\n",
+                     invalid_list)))
   }
   # return matching inputs
   return(input[! not_matching])
