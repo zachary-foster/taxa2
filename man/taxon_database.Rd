@@ -39,6 +39,8 @@ database_list
 database_list$ncbi
 }
 \seealso{
+\link{database_list}
+
 Other classes: \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxmap}}, \code{\link{taxon_id}},
   \code{\link{taxon_name}}, \code{\link{taxon_rank}},
