@@ -11,9 +11,10 @@
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_ids(ex_taxmap)
+#' taxa:::taxon_ids(ex_taxmap)
 #'
 #' @name taxon_ids
+#' @keywords internal
 NULL
 
 
@@ -49,9 +50,10 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_names(ex_taxmap)
+#' taxa:::taxon_names(ex_taxmap)
 #'
 #' @name taxon_names
+#' @keywords internal
 NULL
 
 
@@ -68,9 +70,10 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_ranks(ex_taxmap)
+#' taxa:::taxon_ranks(ex_taxmap)
 #'
 #' @name taxon_ranks
+#' @keywords internal
 NULL
 
 
@@ -551,11 +554,12 @@ NULL
 #' @return Named `character`
 #'
 #' @examples
-#' ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
+#' taxa:::names_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name names_used
+#' @keywords internal
 NULL
 
 
@@ -607,11 +611,12 @@ NULL
 #' @return `list`
 #'
 #' @examples
-#' data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+#' taxa:::data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name data_used
+#' @keywords internal
 NULL
 
 
