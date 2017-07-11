@@ -9,7 +9,7 @@ r:
   - release
   - devel
 
-r_check_args: "--as-cran"
+r_check_args: "--as-cran --run-dontrun"
 
 after_success:
   - Rscript -e 'library(covr);codecov()'

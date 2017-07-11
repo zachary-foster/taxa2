@@ -381,7 +381,7 @@ filter_taxa(my_taxmap, startsWith(taxon_names, "t"))
 ```
 There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes.
 
-```{r}
+```{r eval=FALSE} 
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "17")
 ```
 
