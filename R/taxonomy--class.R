@@ -9,13 +9,15 @@
 #' @export
 #' @param ... Any number of object of class [hierarchy()] or character
 #'   vectors.
+#' @param .list An alternate to the `...` input. Any number of object of class
+#'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
 #' @return An `R6Class` object of class `Taxonomy`
 #' @family classes
 #'
 #' @template taxonomyegs
 
-taxonomy <- function(...) {
-  Taxonomy$new(...)
+taxonomy <- function(..., .list = NULL) {
+  Taxonomy$new(..., .list = .list)
 }
 
 Taxonomy <- R6::R6Class(
@@ -62,8 +64,9 @@ Taxonomy <- R6::R6Class(
       stats::setNames(seq_len(nrow(self$edge_list)), self$taxon_ids())
     },
 
-    initialize = function(...) {
-      input <- list(...)
+    initialize = function(..., .list = NULL) {
+      # Get intput
+      input <- get_dots_or_list(..., .list = .list)
 
       # If character strings are supplied, convert to hierarcies
       char_input_index <- which(lapply(input, class) == "character")

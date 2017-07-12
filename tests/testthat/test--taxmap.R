@@ -550,3 +550,17 @@ test_that("Sampling observations using data from subtaxa works", { # Not complet
     sample_n_taxa(test_obj, size = 3, use_subtaxa = TRUE)
   })
 })
+
+
+test_that("dots and .list return the same output", {
+  expect_equal(taxmap(tiger, cat, mole, human, tomato, potato,
+                      data = list(info = info,
+                                  phylopic_ids = phylopic_ids,
+                                  foods = foods),
+                      funcs = list(reaction = reaction)),
+               taxmap(.list = list(tiger, cat, mole, human, tomato, potato),
+                      data = list(info = info,
+                                  phylopic_ids = phylopic_ids,
+                                  foods = foods),
+                      funcs = list(reaction = reaction)))
+})

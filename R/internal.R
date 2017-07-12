@@ -190,3 +190,29 @@ check_for_pkg <- function(package) {
     invisible(TRUE)
   }
 }
+
+
+#' Get input from dots or list
+#'
+#' Get input from dots or list, but not both.
+#' Throws an error if both are supplied.
+#'
+#' @param ... Dots input
+#' @param .list List input
+#'
+#' @return A list of inputs
+#'
+#' @keywords internal
+get_dots_or_list <- function(..., .list = NULL) {
+  dots_input <- list(...)
+  list_input <- .list
+  if (length(dots_input) > 0 && length(list_input) == 0) {
+    return(dots_input)
+  } else if (length(dots_input) == 0 && length(list_input) > 0) {
+    return(list_input)
+  } else if (length(dots_input) > 0 && length(list_input) > 0) {
+    stop("Both `...` and `.list` were supplied. Only one can be used at a time.")
+  } else {
+    return(list())
+  }
+}

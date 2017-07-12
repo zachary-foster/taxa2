@@ -38,3 +38,8 @@ test_that("taxa fails well", {
   expect_error(taxa(4, x, "adff"),
                "all inputs to 'taxa' must be of class 'Taxon'")
 })
+
+test_that("dots and .list return the same output", {
+  expect_equal(taxa(x, x, x), taxa(.list = list(x, x, x)))
+})
+

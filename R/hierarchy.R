@@ -6,6 +6,8 @@
 #' @export
 #' @param ... Any number of object of class `Taxon` or taxonomic names as
 #' character strings
+#' @param .list An alternate to the `...` input. Any number of object of class
+#'   [taxon()] or character vectors in a list. Cannot be used with `...`.
 #' @return An `R6Class` object of class `Hierarchy`
 #'
 #' @details On initialization, taxa are sorted if they have ranks with a known
@@ -57,8 +59,8 @@
 #' (res <- hierarchy(z, y, x))
 #' pick(res, ranks("family"))
 
-hierarchy <- function(...) {
-  Hierarchy$new(...)
+hierarchy <- function(..., .list = NULL) {
+  Hierarchy$new(..., .list = .list)
 }
 
 Hierarchy <- R6::R6Class(
@@ -68,8 +70,9 @@ Hierarchy <- R6::R6Class(
     taxa = NULL,
     ranklist = NULL,
 
-    initialize = function(...) {
-      input <- unlist(list(...))
+    initialize = function(..., .list = NULL) {
+      # Get intput
+      input <- unlist(get_dots_or_list(..., .list = .list))
 
       if (!all(vapply(input, function(x)
         any(class(x) %in% c('character', 'Taxon')), logical(1)))

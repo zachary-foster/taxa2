@@ -259,3 +259,9 @@ test_that("Mapping vairables",  {
   expect_silent(map_data(x, taxon_names, c("e" = "A", "e" = "B"), warn = FALSE))
   expect_error(map_data(x, taxon_names, 1:10))
 })
+
+
+test_that("dots and .list return the same output", {
+  expect_equal(taxonomy(tiger, cougar, mole, tomato, potato),
+               taxonomy(.list = list(tiger, cougar, mole, tomato, potato)))
+})

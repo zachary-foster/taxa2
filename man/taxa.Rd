@@ -4,10 +4,13 @@
 \alias{taxa}
 \title{A class for multiple taxon objects}
 \usage{
-taxa(...)
+taxa(..., .list = NULL)
 }
 \arguments{
-\item{...}{Any number of object of class \code{Taxon}}
+\item{...}{Any number of object of class \code{\link[=taxon]{taxon()}}}
+
+\item{.list}{An alternate to the \code{...} input. Any number of object of class
+\code{\link[=taxon]{taxon()}}. Cannot be used with \code{...}.}
 }
 \value{
 An \code{R6Class} object of class \code{Taxon}

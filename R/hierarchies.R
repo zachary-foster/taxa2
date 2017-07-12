@@ -47,13 +47,14 @@
 #' # pass into the .list parameter
 #' hierarchies(.list = list(hier1, hier2))
 hierarchies <- function(..., .list = NULL) {
-  x <- list(...)
-  if (!is.null(.list)) x <- .list
-  if (!all(vapply(x, inherits, logical(1), what = "Hierarchy"))) {
+  # Get intput
+  input <- get_dots_or_list(..., .list = .list)
+
+  if (!all(vapply(input, inherits, logical(1), what = "Hierarchy"))) {
     stop("all inputs to 'hierarchies' must be of class 'Hierarchy'",
          call. = FALSE)
   }
-  structure(x, class = "hierarchies")
+  structure(input, class = "hierarchies")
 }
 
 #' @export

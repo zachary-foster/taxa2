@@ -92,3 +92,9 @@ test_that("hierarchy fails well", {
     hierarchy(solanum, 5),
     "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
 })
+
+
+test_that("dots and .list return the same output", {
+  expect_equal(hierarchy(plantae, solanaceae, solanum, sl),
+               hierarchy(.list = list(plantae, solanaceae, solanum, sl)))
+})
