@@ -45,25 +45,25 @@ include_input = FALSE, value = NULL)}
 }
 \examples{
 # return the indexes for subtaxa for each taxon
-ex_taxmap$subtaxa()
+subtaxa(ex_taxmap)
 
 # Only return data for some taxa using taxon indexes
-ex_taxmap$subtaxa(subset = 1:3)
+subtaxa(ex_taxmap, subset = 1:3)
 
 # Only return data for some taxa using taxon ids
-ex_taxmap$subtaxa(subset = c("3", "4"))
+subtaxa(ex_taxmap, subset = c("3", "4"))
 
 # Only return data for some taxa using logical tests
-ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+subtaxa(ex_taxmap, subset = taxon_ranks == "genus")
 
 # Only return subtaxa one level below
-ex_taxmap$subtaxa(recursive = FALSE)
+subtaxa(ex_taxmap, recursive = FALSE)
 
 # Only return subtaxa some number of ranks below
-ex_taxmap$subtaxa(recursive = 2)
+subtaxa(ex_taxmap, recursive = 2)
 
 # Return something besides taxon indexes
-ex_taxmap$subtaxa(value = "taxon_names")
+subtaxa(ex_taxmap, value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},

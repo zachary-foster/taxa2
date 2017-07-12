@@ -14,7 +14,7 @@ obj$taxon_names()
 taxon_names(obj)}
 }
 \examples{
-taxon_names(ex_taxmap)
+taxa:::taxon_names(ex_taxmap)
 
 }
 \seealso{
@@ -27,3 +27,4 @@ Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_ranks}}
 }
+\keyword{internal}

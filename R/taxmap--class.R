@@ -1,15 +1,26 @@
 #' Taxmap class
 #'
-#' A class designed to store a taxonomy and associated information.
-#' This class builds on the [taxonomy()] class.
-#' User defined data can be stored in the list `obj$data`, where `obs` is a taxmap object.
-#' Data that is associated with taxa can be manipulated in a variety of ways using functions like `filter_taxa` and `filter_obs`.
-#' To associate the items of lists/vectors with taxa, name them by [taxon_ids()].
-#' For tables, add a column named `taxon_id` that stores [taxon_ids()].
+#' A class designed to store a taxonomy and associated information. This class
+#' builds on the [taxonomy()] class. User defined data can be stored in the list
+#' `obj$data`, where `obj` is a taxmap object. Data that is associated with taxa
+#' can be manipulated in a variety of ways using functions like `filter_taxa`
+#' and `filter_obs`. To associate the items of lists/vectors with taxa, name
+#' them by [taxon_ids()]. For tables, add a column named `taxon_id` that stores
+#' [taxon_ids()].
+#'
+#' To initialize a `taxmap` object with assocaited data sets, use the parsing
+#' functions [parse_tax_data()], [lookup_tax_data()], and [extract_tax_data()].
 #'
 #' @export
 #' @param ... Any number of object of class [hierarchy()] or character vectors.
+#'   Cannot be used with `.list`.
+#' @param .list An alternate to the `...` input. Any number of object of class
+#'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
 #' @param data A list of tables with data associated with the taxa.
+#' @param funcs A named list of functions to includ in the class. Referring to
+#'   the names of these in functions like `filter_taxa` will execute the
+#'   function and return the results. If the function has at least one argument,
+#'   the taxamap object is passed to it.
 #' @family classes
 #' @return An `R6Class` object of class [taxmap()]
 #'
@@ -18,8 +29,8 @@
 #'   orders
 #'
 #' @template taxmapegs
-taxmap <- function(..., data = NULL) {
-  Taxmap$new(..., data = data)
+taxmap <- function(..., .list = NULL, data = NULL, funcs = list()) {
+  Taxmap$new(..., .list = .list, data = data, funcs = funcs)
 }
 
 Taxmap <- R6::R6Class(
@@ -29,10 +40,10 @@ Taxmap <- R6::R6Class(
     data = list(),
     funcs = list(),
 
-    initialize = function(..., data = list(), funcs = list()) {
+    initialize = function(..., .list = NULL, data = list(), funcs = list()) {
 
       # Call `taxonomy` constructor
-      super$initialize(...)
+      super$initialize(..., .list = .list)
 
       # Make sure `data` is in the right format and add to object
       self$data <- validate_taxmap_data(data, self$input_ids)
@@ -200,7 +211,7 @@ Taxmap <- R6::R6Class(
     },
 
 
-    filter_obs = function(target, ..., unobserved = TRUE) {
+    filter_obs = function(target, ..., drop_taxa = FALSE) {
       # Check that the target data exists
       private$check_dataset_name(target)
 
@@ -237,7 +248,7 @@ Taxmap <- R6::R6Class(
       private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
-      if (! unobserved & ! is.null(data_taxon_ids)) {
+      if (drop_taxa & ! is.null(data_taxon_ids)) {
         unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]),
                                           na = FALSE, recursive = TRUE,
                                           simplify = TRUE, include_input = TRUE,

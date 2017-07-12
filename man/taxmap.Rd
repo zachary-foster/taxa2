@@ -4,25 +4,38 @@
 \alias{taxmap}
 \title{Taxmap class}
 \usage{
-taxmap(..., data = NULL)
+taxmap(..., .list = NULL, data = NULL, funcs = list())
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character vectors.}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character vectors.
+Cannot be used with \code{.list}.}
+
+\item{.list}{An alternate to the \code{...} input. Any number of object of class
+\code{\link[=hierarchy]{hierarchy()}} or character vectors in a list. Cannot be used with \code{...}.}
 
 \item{data}{A list of tables with data associated with the taxa.}
+
+\item{funcs}{A named list of functions to includ in the class. Referring to
+the names of these in functions like \code{filter_taxa} will execute the
+function and return the results. If the function has at least one argument,
+the taxamap object is passed to it.}
 }
 \value{
 An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-A class designed to store a taxonomy and associated information.
-This class builds on the \code{\link[=taxonomy]{taxonomy()}} class.
-User defined data can be stored in the list \code{obj$data}, where \code{obs} is a taxmap object.
-Data that is associated with taxa can be manipulated in a variety of ways using functions like \code{filter_taxa} and \code{filter_obs}.
-To associate the items of lists/vectors with taxa, name them by \code{\link[=taxon_ids]{taxon_ids()}}.
-For tables, add a column named \code{taxon_id} that stores \code{\link[=taxon_ids]{taxon_ids()}}.
+A class designed to store a taxonomy and associated information. This class
+builds on the \code{\link[=taxonomy]{taxonomy()}} class. User defined data can be stored in the list
+\code{obj$data}, where \code{obj} is a taxmap object. Data that is associated with taxa
+can be manipulated in a variety of ways using functions like \code{filter_taxa}
+and \code{filter_obs}. To associate the items of lists/vectors with taxa, name
+them by \code{\link[=taxon_ids]{taxon_ids()}}. For tables, add a column named \code{taxon_id} that stores
+\code{\link[=taxon_ids]{taxon_ids()}}.
 }
 \details{
+To initialize a \code{taxmap} object with assocaited data sets, use the parsing
+functions \code{\link[=parse_tax_data]{parse_tax_data()}}, \code{\link[=lookup_tax_data]{lookup_tax_data()}}, and \code{\link[=extract_tax_data]{extract_tax_data()}}.
+
 on initialize, function sorts the taxon list based on rank (if rank
 information is available), see \link{ranks_ref} for the reference rank names and
 orders
@@ -136,7 +149,7 @@ info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato")
                    dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
 
 abund <- data.frame(code = rep(c("T", "C", "M", "H"), 2),
-                    sample = rep(c("A", "B"), each = 2),
+                    sample_id = rep(c("A", "B"), each = 2),
                     count = c(1,2,5,2,6,2,4,0),
                     taxon_index = rep(1:4, 2))
 

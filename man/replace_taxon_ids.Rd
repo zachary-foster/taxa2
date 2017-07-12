@@ -17,6 +17,7 @@ Replace taxon ids in a \code{\link[=taxmap]{taxmap()}} or \code{\link[=taxonomy]
 }
 \examples{
 \dontrun{
+
 replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
 }
 }

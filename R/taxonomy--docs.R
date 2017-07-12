@@ -11,9 +11,10 @@
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_ids(ex_taxmap)
+#' taxa:::taxon_ids(ex_taxmap)
 #'
 #' @name taxon_ids
+#' @keywords internal
 NULL
 
 
@@ -49,9 +50,10 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_names(ex_taxmap)
+#' taxa:::taxon_names(ex_taxmap)
 #'
 #' @name taxon_names
+#' @keywords internal
 NULL
 
 
@@ -68,9 +70,10 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxon_ranks(ex_taxmap)
+#' taxa:::taxon_ranks(ex_taxmap)
 #'
 #' @name taxon_ranks
+#' @keywords internal
 NULL
 
 
@@ -113,25 +116,25 @@ NULL
 #'
 #' @examples
 #' # return the indexes for supertaxa for each taxon
-#' ex_taxmap$supertaxa()
+#' supertaxa(ex_taxmap)
 #'
 #' # Only return data for some taxa using taxon indexes
-#' ex_taxmap$supertaxa(subset = 1:3)
+#' supertaxa(ex_taxmap, subset = 1:3)
 #'
 #' # Only return data for some taxa using taxon ids
-#' ex_taxmap$supertaxa(subset = c("3", "4"))
+#' supertaxa(ex_taxmap, subset = c("3", "4"))
 #'
 #' # Only return data for some taxa using logical tests
-#' ex_taxmap$supertaxa(subset = taxon_ranks == "species")
+#' supertaxa(ex_taxmap, subset = taxon_ranks == "species")
 #'
 #' # Only return supertaxa one level above
-#' ex_taxmap$supertaxa(recursive = FALSE)
+#' supertaxa(ex_taxmap, recursive = FALSE)
 #'
 #' # Only return supertaxa some number of ranks above
-#' ex_taxmap$supertaxa(recursive = 2)
+#' supertaxa(ex_taxmap, recursive = 2)
 #'
 #' # Return something besides taxon indexes
-#' ex_taxmap$supertaxa(value = "taxon_names")
+#' supertaxa(ex_taxmap, value = "taxon_names")
 NULL
 
 
@@ -252,25 +255,25 @@ NULL
 #'
 #' @examples
 #' # return the indexes for subtaxa for each taxon
-#' ex_taxmap$subtaxa()
+#' subtaxa(ex_taxmap)
 #'
 #' # Only return data for some taxa using taxon indexes
-#' ex_taxmap$subtaxa(subset = 1:3)
+#' subtaxa(ex_taxmap, subset = 1:3)
 #'
 #' # Only return data for some taxa using taxon ids
-#' ex_taxmap$subtaxa(subset = c("3", "4"))
+#' subtaxa(ex_taxmap, subset = c("3", "4"))
 #'
 #' # Only return data for some taxa using logical tests
-#' ex_taxmap$subtaxa(subset = taxon_ranks == "genus")
+#' subtaxa(ex_taxmap, subset = taxon_ranks == "genus")
 #'
 #' # Only return subtaxa one level below
-#' ex_taxmap$subtaxa(recursive = FALSE)
+#' subtaxa(ex_taxmap, recursive = FALSE)
 #'
 #' # Only return subtaxa some number of ranks below
-#' ex_taxmap$subtaxa(recursive = 2)
+#' subtaxa(ex_taxmap, recursive = 2)
 #'
 #' # Return something besides taxon indexes
-#' ex_taxmap$subtaxa(value = "taxon_names")
+#' subtaxa(ex_taxmap, value = "taxon_names")
 NULL
 
 
@@ -551,11 +554,12 @@ NULL
 #' @return Named `character`
 #'
 #' @examples
-#' ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
+#' taxa:::names_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name names_used
+#' @keywords internal
 NULL
 
 
@@ -607,11 +611,12 @@ NULL
 #' @return `list`
 #'
 #' @examples
-#' data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+#' taxa:::data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
 #' @name data_used
+#' @keywords internal
 NULL
 
 
@@ -626,9 +631,9 @@ NULL
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
 #' a changed version would be returned, like most R functions.
 #' \preformatted{
-#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 #' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, taxonless = FALSE,
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
 #' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
@@ -646,20 +651,20 @@ NULL
 #'   supertaxa of taxa passing the filter. Positive numbers indicate the number
 #'   of ranks above the target taxa to return. `0` is equivalent to `FALSE`.
 #'   Negative numbers are equivalent to `TRUE`.
-#' @param taxonless (`logical`)  This option only applies to [taxmap()] objects.
-#'   If `TRUE`, include observations even if the taxon they are assigned to is
+#' @param drop_obs (`logical`)  This option only applies to [taxmap()] objects.
+#'   If `FALSE`, include observations even if the taxon they are assigned to is
 #'   filtered out. Observations assigned to removed taxa will be assigned to
 #'   \code{NA}. This option can be either simply `TRUE`/`FALSE`, meaning that
 #'   all data sets will be treated the same, or a logical vector can be supplied
 #'   with names corresponding one or more data sets in `obj$data`. For example,
-#'   `c(abundance = TRUE, stats = FALSE)` would inlcude observations whose taxon
+#'   `c(abundance = FALSE, stats = TRUE)` would inlcude observations whose taxon
 #'   was filtered out in `obj$data$abundance`, but not in `obj$data$stats`. See
 #'   the `reassign_obs` option below for further complications.
 #' @param reassign_obs (`logical` of length 1) This option only applies to
 #'   [taxmap()] objects. If `TRUE`, observations assigned to removed taxa will
 #'   be reassigned to the closest supertaxon that passed the filter. If there
 #'   are no supertaxa of such an observation that passed the filter, they will
-#'   be filtered out if `taxonless` is `TRUE`. This option can be either simply
+#'   be filtered out if `drop_obs` is `FALSE`. This option can be either simply
 #'   `TRUE`/`FALSE`, meaning that all data sets will be treated the same, or a
 #'   logical vector can be supplied with names corresponding one or more data
 #'   sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
@@ -698,8 +703,8 @@ NULL
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
 #' filter_taxa(ex_taxmap, 1, subtaxa = 2)
 #'
-#' # Remove rows in data corresponding to removed taxa
-#' filter_taxa(ex_taxmap, 2, taxonless = c(info = FALSE))
+#' # Dont remove rows in data corresponding to removed taxa
+#' filter_taxa(ex_taxmap, 2, drop_obs = c(info = FALSE))
 #'
 #' # Remove a taxon and it subtaxa
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
@@ -967,13 +972,14 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples \dontrun{
+#'
 #' # Mapping between two variables in `all_names(ex_taxmap)`
-#' ex_taxmap$map_data(from = taxon_names, to = n_legs > 0)
+#' map_data(ex_taxmap, from = taxon_names, to = n_legs > 0)
 #'
 #' # Mapping with external variables
 #' x = c("d" = "looks like a cat", "h" = "big scary cats",
 #'       "i" = "smaller cats", "m" = "might eat you", "n" = "Meow! (Feed me!)")
-#' ex_taxmap$map_data(from = taxon_names, to = x)
+#' map_data(ex_taxmap, from = taxon_names, to = x)
 #' }
 #' @name map_data
 NULL
@@ -991,6 +997,7 @@ NULL
 #' @return A [taxonomy()] or [taxmap()] object with new taxon ids
 #' @name replace_taxon_ids
 #' @examples \dontrun{
+#'
 #' replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
 #' }
 NULL

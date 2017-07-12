@@ -45,25 +45,25 @@ simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
 }
 \examples{
 # return the indexes for supertaxa for each taxon
-ex_taxmap$supertaxa()
+supertaxa(ex_taxmap)
 
 # Only return data for some taxa using taxon indexes
-ex_taxmap$supertaxa(subset = 1:3)
+supertaxa(ex_taxmap, subset = 1:3)
 
 # Only return data for some taxa using taxon ids
-ex_taxmap$supertaxa(subset = c("3", "4"))
+supertaxa(ex_taxmap, subset = c("3", "4"))
 
 # Only return data for some taxa using logical tests
-ex_taxmap$supertaxa(subset = taxon_ranks == "species")
+supertaxa(ex_taxmap, subset = taxon_ranks == "species")
 
 # Only return supertaxa one level above
-ex_taxmap$supertaxa(recursive = FALSE)
+supertaxa(ex_taxmap, recursive = FALSE)
 
 # Only return supertaxa some number of ranks above
-ex_taxmap$supertaxa(recursive = 2)
+supertaxa(ex_taxmap, recursive = 2)
 
 # Return something besides taxon indexes
-ex_taxmap$supertaxa(value = "taxon_names")
+supertaxa(ex_taxmap, value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{leaves}},

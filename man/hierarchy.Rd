@@ -4,11 +4,14 @@
 \alias{hierarchy}
 \title{The Hierarchy class}
 \usage{
-hierarchy(...)
+hierarchy(..., .list = NULL)
 }
 \arguments{
 \item{...}{Any number of object of class \code{Taxon} or taxonomic names as
 character strings}
+
+\item{.list}{An alternate to the \code{...} input. Any number of object of class
+\code{\link[=taxon]{taxon()}} or character vectors in a list. Cannot be used with \code{...}.}
 }
 \value{
 An \code{R6Class} object of class \code{Hierarchy}
@@ -60,11 +63,11 @@ res$taxa
 res$ranklist
 
 # pop off a rank
-res$pop("family")
+pop(res, ranks("family"))
 
 # pick a rank
 (res <- hierarchy(z, y, x))
-res$pick("family")
+pick(res, ranks("family"))
 }
 \seealso{
 Other classes: \code{\link{taxa}}, \code{\link{taxmap}},

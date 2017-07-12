@@ -195,7 +195,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                           vapply(parsed_tax, length, integer(1))))
 
   # Create taxmap object
-  output <- do.call(taxmap, parsed_tax)
+  output <- taxmap(.list = parsed_tax)
 
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {

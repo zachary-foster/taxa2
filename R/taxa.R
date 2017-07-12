@@ -4,7 +4,9 @@
 #' of [taxon()] objects.
 #'
 #' @export
-#' @param ... Any number of object of class `Taxon`
+#' @param ... Any number of object of class [taxon()]
+#' @param .list An alternate to the `...` input. Any number of object of class
+#'   [taxon()]. Cannot be used with `...`.
 #' @return An `R6Class` object of class `Taxon`
 #' @family classes
 #' @examples
@@ -14,8 +16,8 @@
 #'   id = taxon_id(93036)
 #' ))
 #' taxa(x, x, x)
-taxa <- function(...) {
-  tt <- list(...)
+taxa <- function(..., .list = NULL) {
+  tt <- get_dots_or_list(..., .list = .list)
   if (!all(vapply(tt, inherits, logical(1), what = "Taxon"))) {
     stop("all inputs to 'taxa' must be of class 'Taxon'",
          call. = FALSE)

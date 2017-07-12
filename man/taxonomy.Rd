@@ -4,11 +4,14 @@
 \alias{taxonomy}
 \title{Taxonomy class}
 \usage{
-taxonomy(...)
+taxonomy(..., .list = NULL)
 }
 \arguments{
 \item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
 vectors.}
+
+\item{.list}{An alternate to the \code{...} input. Any number of object of class
+\code{\link[=hierarchy]{hierarchy()}} or character vectors in a list. Cannot be used with \code{...}.}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}

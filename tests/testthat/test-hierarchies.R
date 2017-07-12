@@ -99,3 +99,9 @@ test_that("hierarchies fails well", {
   expect_error(hierarchies(hier1, "c"),
                "all inputs to 'hierarchies' must be of class 'Hierarchy'")
 })
+
+
+test_that("dots and .list return the same output", {
+  expect_equal(hierarchies(hier1, hier2),
+               hierarchies(.list = list(hier1, hier2)))
+})

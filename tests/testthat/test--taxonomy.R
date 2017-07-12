@@ -234,7 +234,7 @@ test_that("Filtering taxa", {
 
   result <- filter_taxa(x, taxon_names == "Solanum")
   expect_equal(result$taxon_names(), c("l" = "Solanum"))
-  expect_warning(filter_taxa(x, taxon_names == "Solanum", taxonless = TRUE))
+  expect_warning(filter_taxa(x, taxon_names == "Solanum", drop_obs = FALSE))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", reassign_obs = TRUE))
 })
 
@@ -258,4 +258,10 @@ test_that("Mapping vairables",  {
   expect_warning(map_data(x, taxon_names, c("e" = "A", "e" = "B")))
   expect_silent(map_data(x, taxon_names, c("e" = "A", "e" = "B"), warn = FALSE))
   expect_error(map_data(x, taxon_names, 1:10))
+})
+
+
+test_that("dots and .list return the same output", {
+  expect_equal(taxonomy(tiger, cougar, mole, tomato, potato),
+               taxonomy(.list = list(tiger, cougar, mole, tomato, potato)))
 })

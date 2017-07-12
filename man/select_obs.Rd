@@ -34,7 +34,7 @@ using the \code{select_obs(obj, ...)} mitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
-obj$select_obs(target, ..., unobserved = TRUE)
+obj$select_obs(target, ...)
 select_obs(obj, target, ...)}
 }
 \examples{
