@@ -90,10 +90,6 @@ print.taxapicker <- function(x, ...) {
   ), sep = "\n")
 }
 
-# pickers <- function(...) {
-#   xx <- Filter(function(x) inherits(x, "taxapicker"), list(...))
-#   structure(xx, class = "taxapickers")
-# }
 
 Taxapickers <- R6::R6Class(
   "Taxapickers",
@@ -126,13 +122,3 @@ Taxapickers <- R6::R6Class(
     }
   )
 )
-
-# print.taxapickers <- function(x, ...) {
-#   cat(paste0("<taxapickers> n=", length(x)), sep = "\n")
-#   for (i in seq_along(x)) {
-#     cat(sprintf(
-#       "  (%s): %s", attr(x[[i]], "type"),
-#       paste0(unclass(x[[i]][[1]]), collapse = ", ")
-#     ), sep = "\n")
-#   }
-# }
