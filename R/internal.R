@@ -211,7 +211,8 @@ get_dots_or_list <- function(..., .list = NULL) {
   } else if (length(dots_input) == 0 && length(list_input) > 0) {
     return(list_input)
   } else if (length(dots_input) > 0 && length(list_input) > 0) {
-    stop("Both `...` and `.list` were supplied. Only one can be used at a time.")
+    stop("Both `...` and `.list` were supplied. Only one can be used at a time.",
+         call. = FALSE)
   } else {
     return(list())
   }
