@@ -4,11 +4,14 @@
 #'
 #' @export
 #' @param .data Input, object of class `Hierarchy`, or `hierarchies`
-#' @param ... unquoted rank names (e.g., family), taxon names (e.g.,
-#' Poa annua), or taxnomic IDs (e.g., 93036)
+#' @param ... quoteds rank names (e.g., family) via [ranks()], taxon names
+#' (e.g., Poa annua) via [nms()], or taxnomic IDs (e.g., 93036) via [ids()].
+#' You can't pass in arbitrary strings or numbers.
 #' @details supports `Hierarchy` and `hierarchies` objects
 #' @return an object of the same class as passed in
 #' @template pop_egs
+#' @seealso See [filtering-helpers], including for more explanation
+#' of how this function works.
 pop <- function(.data, ...) {
   UseMethod("pop")
 }
@@ -23,9 +26,9 @@ pop.Hierarchy <- function(.data, ...) {
   .data <- .data$clone(deep = TRUE)
   tmp <- Taxapickers$new(...)
   if (length(tmp$x) == 0) stop("no acceptable selectors passed in")
-  .data$pop(ranks = unlist(lapply(tmp$ranks(), function(z) z$ranks)),
-             names = unlist(lapply(tmp$names(), function(z) z$names)),
-             ids = unlist(lapply(tmp$ids(), function(z) z$ids)))
+  .data$pop(ranks = unlist(tmp$ranks()),
+             names = unlist(tmp$names()),
+             ids = unlist(tmp$ids()))
 }
 
 #' @export

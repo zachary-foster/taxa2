@@ -4,20 +4,20 @@ test_that("pop: ranks", {
   expect_equal(names(ex_hierarchy1$ranklist), c('species', 'genus', 'family'))
 
   # without piping
-  aa1 <- pop(ex_hierarchy1, ranks(family))
+  aa1 <- pop(ex_hierarchy1, ranks("family"))
   expect_is(aa1, "Hierarchy")
   expect_equal(names(aa1$ranklist), c('genus', 'species'))
   expect_equal(length(aa1$taxa), 2)
 
   # with piping
-  aa2 <- ex_hierarchy1 %>% pop(ranks(family))
+  aa2 <- ex_hierarchy1 %>% pop(ranks("family"))
   expect_is(aa2, "Hierarchy")
   expect_equal(names(aa2$ranklist), c('genus', 'species'))
   expect_equal(length(aa2$taxa), 2)
   expect_equal(aa1, aa2)
 
   # with piping, many entries
-  aa3 <- ex_hierarchy1 %>% pop(ranks(family, genus))
+  aa3 <- ex_hierarchy1 %>% pop(ranks("family", "genus"))
   expect_is(aa3, "Hierarchy")
   expect_equal(names(aa3$ranklist), 'species')
   expect_equal(length(aa3$taxa), 1)
@@ -25,20 +25,20 @@ test_that("pop: ranks", {
 
 test_that("pop: names", {
   # without piping
-  aa1 <- pop(ex_hierarchy1, nms(Poa))
+  aa1 <- pop(ex_hierarchy1, nms("Poa"))
   expect_is(aa1, "Hierarchy")
   expect_equal(names(aa1$ranklist), c('family', 'species'))
   expect_equal(length(aa1$taxa), 2)
 
   # with piping
-  aa2 <- ex_hierarchy1 %>% pop(nms(Poa))
+  aa2 <- ex_hierarchy1 %>% pop(nms("Poa"))
   expect_is(aa2, "Hierarchy")
   expect_equal(names(aa2$ranklist), c('family', 'species'))
   expect_equal(length(aa2$taxa), 2)
   expect_equal(aa1, aa2)
 
   # with piping, many entries
-  aa3 <- ex_hierarchy1 %>% pop(nms(Poaceae, Poa))
+  aa3 <- ex_hierarchy1 %>% pop(nms("Poaceae", "Poa"))
   expect_is(aa3, "Hierarchy")
   expect_equal(names(aa3$ranklist), 'species')
   expect_equal(length(aa3$taxa), 1)
@@ -80,7 +80,7 @@ test_that("pop fails well", {
 })
 
 test_that("pop: mixed ranks, names and ids", {
-  aa1 <- ex_hierarchy1 %>% pop(ranks(family), ids(4544))
+  aa1 <- ex_hierarchy1 %>% pop(ranks("family"), ids(4544))
 
   expect_is(aa1, "Hierarchy")
   expect_equal(names(aa1$ranklist), 'species')

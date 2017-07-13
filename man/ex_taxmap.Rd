@@ -16,6 +16,6 @@ demonstration purposes.
 \seealso{
 Other taxa-datasets: \code{\link{ex_hierarchies}},
   \code{\link{ex_hierarchy1}}, \code{\link{ex_hierarchy2}},
-  \code{\link{ex_taxonomy}}
+  \code{\link{ex_hierarchy3}}, \code{\link{ex_taxonomy}}
 }
 \keyword{data}

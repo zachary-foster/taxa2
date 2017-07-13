@@ -14,6 +14,6 @@ An example Taxonomy object built from the ground up.
 \seealso{
 Other taxa-datasets: \code{\link{ex_hierarchies}},
   \code{\link{ex_hierarchy1}}, \code{\link{ex_hierarchy2}},
-  \code{\link{ex_taxmap}}
+  \code{\link{ex_hierarchy3}}, \code{\link{ex_taxmap}}
 }
 \keyword{data}

@@ -9,8 +9,9 @@ pick(.data, ...)
 \arguments{
 \item{.data}{Input, object of class \code{Hierarchy}, or \code{hierarchies}}
 
-\item{...}{unquoted rank names (e.g., family), taxon names (e.g.,
-Poa annua), or taxnomic IDs (e.g., 93036)}
+\item{...}{quoteds rank names (e.g., family) via \code{\link[=ranks]{ranks()}}, taxon names
+(e.g., Poa annua) via \code{\link[=nms]{nms()}}, or taxnomic IDs (e.g., 93036) via \code{\link[=ids]{ids()}}.
+You can't pass in arbitrary strings or numbers.}
 }
 \value{
 an object of the same class as passed in
@@ -24,30 +25,35 @@ supports \code{Hierarchy} and \code{hierarchies} objects
 \examples{
 # ranks
 ex_hierarchy1
-ex_hierarchy1 \%>\% pick(ranks(family))
-ex_hierarchy1 \%>\% pick(ranks(family, genus))
+ex_hierarchy1 \%>\% pick(ranks("family"))
+ex_hierarchy1 \%>\% pick(ranks("family", "genus"))
 # taxon names
-ex_hierarchy1 \%>\% pick(nms(Poa))
-ex_hierarchy1 \%>\% pick(nms(Poaceae, Poa))
+ex_hierarchy1 \%>\% pick(nms('Poa'))
+ex_hierarchy1 \%>\% pick(nms("Poaceae", "Poa"))
 # taxon ids
 ex_hierarchy1 \%>\% pick(ids(4479))
 ex_hierarchy1 \%>\% pick(ids(4479, 4544))
 # mixed: ids and names
-ex_hierarchy1 \%>\% pick(ranks(family), ids(4544))
+ex_hierarchy1 \%>\% pick(ranks("family"), ids(4544))
 
 ## single taxonomic group
-ex_hierarchy1 \%>\% pick(ranks(family))
+ex_hierarchy1 \%>\% pick(ranks("family"))
+pick(ex_hierarchy1, ranks("family"))
 ### more than 1 - remake res object above first
-ex_hierarchy1 \%>\% pick(ranks(family, genus))
+ex_hierarchy1 \%>\% pick(ranks("family", "genus"))
 
 
 # hierarchies
 # single taxonomic group
 invisible(lapply(ex_hierarchies, print))
-ex_hierarchies \%>\% pick(ranks(family)) \%>\% lapply(., print) \%>\% invisible
+ex_hierarchies \%>\% pick(ranks("family")) \%>\% lapply(., print) \%>\% invisible
 
 ## more than one taxonomic group
 invisible(lapply(ex_hierarchies, print))
-ex_hierarchies \%>\% pick(ranks(family, genus)) \%>\% lapply(., print) \%>\%
+ex_hierarchies \%>\% pick(ranks("family", "genus")) \%>\% lapply(., print) \%>\%
   invisible
+}
+\seealso{
+See \link{filtering-helpers}, including for more explanation
+of how this function works.
 }

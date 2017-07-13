@@ -29,7 +29,13 @@ NULL
 #' An example Hierarchy object built from the ground up.
 #'
 #' @name ex_hierarchy1
-#' @format A [hierarchy()] object.
+#' @format A [hierarchy()] object with
+#' \itemize{
+#'  \item name: Poaceae / rank: family / id: 4479
+#'  \item name: Poa / rank: genus / id: 4544
+#'  \item name: Poa annua / rank: species / id: 93036
+#' }
+#' Based on NCBI taxonomic classification
 #' @source Created from the example code in the [hierarchy()]
 #'   documentation.
 #' @family taxa-datasets
@@ -41,12 +47,40 @@ NULL
 #' An example Hierarchy object built from the ground up.
 #'
 #' @name ex_hierarchy2
-#' @format A [hierarchy()] object.
+#' @format A [hierarchy()] object with
+#' \itemize{
+#'  \item name: Felidae / rank: family / id: 9681
+#'  \item name: Puma / rank: genus / id: 146712
+#'  \item name: Puma concolor / rank: species / id: 9696
+#' }
+#' Based on NCBI taxonomic classification
 #' @source Created from the example code in the [hierarchy()]
 #'   documentation.
 #' @family taxa-datasets
 #' @keywords data
 NULL
+
+#' An example Hierarchy object
+#'
+#' An example Hierarchy object built from the ground up.
+#'
+#' @name ex_hierarchy3
+#' @format A [hierarchy()] object with
+#' \itemize{
+#'  \item name: Chordata / rank: phylum / id: 158852
+#'  \item name: Vertebrata / rank: subphylum / id: 331030
+#'  \item name: Teleostei / rank: class / id: 161105
+#'  \item name: Salmonidae / rank: family / id: 161931
+#'  \item name: Salmo / rank: genus / id: 161994
+#'  \item name: Salmo salar / rank: species / id: 161996
+#' }
+#' Based on ITIS taxonomic classification
+#' @source Created from the example code in the [hierarchy()]
+#'   documentation.
+#' @family taxa-datasets
+#' @keywords data
+NULL
+
 #' An example hierarchies object
 #'
 #' An example hierarchies object built from the ground up.

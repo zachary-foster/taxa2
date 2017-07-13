@@ -162,35 +162,35 @@ Hierarchy <- R6::R6Class(
 
       if (length(ranks) != 0) {
         if (!is.null(attr(ranks[[1]], "operator"))) {
-          ranks <- private$make_ranks(ranks[[1]])
+          ranks <- private$make_ranks2(ranks)
         } else {
           # if no operator, names must be length > 1
-          if (length(ranks[[1]]$ranks) != 2) {
+          if (length(ranks[[1]]) != 2) {
             stop("if no operator, must pass in 2 names")
           }
-          ranks <- private$do_ranks(ranks[[1]]$ranks)
+          ranks <- private$do_ranks(ranks[[1]])
         }
       }
       if (length(names) != 0) {
         if (!is.null(attr(names[[1]], "operator"))) {
-          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
+          ranks <- private$make_ranks2(private$taxaswaprank(names))
         } else {
           # if no operator, names must be length > 1
-          if (length(names[[1]]$names) != 2) {
+          if (length(names[[1]]) != 2) {
             stop("if no operator, must pass in 2 names")
           }
-          ranks <- private$do_ranks(private$taxa2rank(names[[1]]$names))
+          ranks <- private$do_ranks(private$taxa2rank(names[[1]]))
         }
       }
       if (length(ids) != 0) {
         if (!is.null(attr(ids[[1]], "operator"))) {
-          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
+          ranks <- private$make_ranks2(private$idsswaprank(ids))
         } else {
           # if no operator, names must be length > 1
-          if (length(ids[[1]]$ids) != 2) {
+          if (length(ids[[1]]) != 2) {
             stop("if no operator, must pass in 2 names")
           }
-          ranks <- private$do_ranks(private$ids2rank(ids[[1]]$ids))
+          ranks <- private$do_ranks(private$ids2rank(ids[[1]]))
         }
       }
 
@@ -234,40 +234,61 @@ Hierarchy <- R6::R6Class(
       csep2vec(keep$ranks)
     },
 
-    make_ranks = function(x) {
-      idz <- vapply(x$ranks, which_ranks, numeric(1), USE.NAMES = FALSE)
-      op <- attr(x, "operator")
-      keep <- switch(op,
-        `:` = {
-          ranks_ref[ranks_ref$rankid >= idz[1] &
-                      ranks_ref$rankid <= idz[2], ]
-        },
-        `::` = {
-          ranks_ref[ranks_ref$rankid > idz[1] &
-                      ranks_ref$rankid < idz[2], ]
-        },
-        `. <` = {
-          ranks_ref[ranks_ref$rankid <= idz[2], ]
-        },
-        `. >` = {
-          ranks_ref[ranks_ref$rankid > idz[1], ]
-        },
-        stop("operator ", op, " not supported - see ?`lazy-helpers`", call. = FALSE)
-      )
+    make_ranks2 = function(x) {
+      idz <- vapply(x, which_ranks, numeric(1), USE.NAMES = FALSE)
+      op <- vapply(x, attr, "", which = "operator")
+      funs <- lapply(op, function(z) {
+        switch(z, `>` = `<`, `>=` = `<=`, `<` = `>`, `<=` = `>=`)
+      })
+      logs <- if (length(idz) > 1) {
+        do.call(`&`, Map(function(a, b) eval(a)(as.numeric(ranks_ref$rankid), b), funs, idz))
+      } else {
+        eval(funs[[1]])(as.numeric(ranks_ref$rankid), idz[[1]])
+      }
+      keep <- ranks_ref[logs, ]
       csep2vec(keep$ranks)
     },
 
     taxa2rank = function(x) {
       tmp <- vapply(self$taxa, function(z) z$name$name, "")
       rcks <- vapply(self$taxa, function(z) z$rank$name, "")
-      rcks[which(tmp %in% x)]
+      rcks[which(tmp %in% unlist(x))]
+    },
+
+    taxaswaprank = function(x) {
+      tmp <- vapply(self$taxa, function(z) z$name$name, "")
+      rcks <- vapply(self$taxa, function(z) z$rank$name, "")
+      for (i in seq_along(x)) {
+        x[[i]] <- structure(
+          rcks[which(tmp %in% x[[i]][[1]])],
+          type = "ranks",
+          operator = attr(x[[i]], "operator"),
+          class = "taxapicker"
+        )
+      }
+      return(x)
     },
 
     ids2rank = function(w) {
       tmp <- vapply(self$taxa, function(z) z$id$id, 1)
       rcks <- vapply(self$taxa, function(z) z$rank$name, "")
       rcks[which(tmp %in% w)]
+    },
+
+    idsswaprank = function(x) {
+      tmp <- vapply(self$taxa, function(z) z$id$id, 1)
+      rcks <- vapply(self$taxa, function(z) z$rank$name, "")
+      for (i in seq_along(x)) {
+        x[[i]] <- structure(
+          rcks[which(tmp %in% x[[i]][[1]])],
+          type = "ranks",
+          operator = attr(x[[i]], "operator"),
+          class = "taxapicker"
+        )
+      }
+      return(x)
     }
+
   )
 )
 
