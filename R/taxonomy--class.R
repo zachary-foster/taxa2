@@ -683,6 +683,7 @@ Taxonomy <- R6::R6Class(
     },
 
     arrange_taxa = function(...) {
+      # Sort edge list
       data_used <- self$data_used(...)
       data_used <- data_used[! names(data_used) %in% names(self$edge_list)]
       if (length(data_used) == 0) {
@@ -692,6 +693,9 @@ Taxonomy <- R6::R6Class(
         self$edge_list <-
           dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
       }
+
+      # Reorder taxa list to be the same order
+      self$taxa <- self$taxa[self$edge_list$to]
 
       return(self)
     },
