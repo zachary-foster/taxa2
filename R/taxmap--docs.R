@@ -1,6 +1,6 @@
 #' Get data indexes associated with taxa
 #'
-#' Given a [taxmap()] object, return the indexes associated with each taxon in a
+#' Given a [taxmap()] object, return data associated with each taxon in a
 #' given table included in that [taxmap()] object.
 #' \preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
 #' obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
@@ -102,8 +102,7 @@ NULL
 #' Filter observations with a list of conditions
 #'
 #' Filter data in a [taxmap()] object (in `obj$data`) with a
-#' set of conditions. Any variable name that appears in
-#' [all_names()] can be used as if it was a vector on its own. See
+#' set of conditions.  See
 #' [dplyr::filter()] for the inspiration for this function and more
 #' information. Calling the function using the `obj$filter_obs(...)` style
 #' edits "obj" in place, unlike most R functions. However, calling the function
@@ -116,13 +115,12 @@ NULL
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the list/vector/table in `obj$data` to filter
-#' @param ... One or more filtering conditions. Each filtering condition can be
-#'   one of three things: \describe{ \item{`character`}{One or more taxon
-#'   IDs contained in `obj$edge_list$to`} \item{`integer`}{One or more
-#'   row indexes of `obj$edge_list`} \item{`logical`}{A
-#'   `TRUE`/`FALSE` vector of length equal to the number of rows in
-#'   `obj$edge_list`} } Any variable name that appears in
-#'   [all_names()] can be used as if it was a vector on its own.
+#' @param ... One or more filtering conditions. Any variable name that appears
+#'   in [all_names()] can be used as if it was a vector on its own. Each
+#'   filtering condition can be one of three things:
+#'   * `integer`: One or more row indexes of `obj[target]`
+#'   * `logical`: A `TRUE`/`FALSE` vector of length equal to the number of
+#'   rows in `obj[target]`
 #' @param drop_taxa (`logical` of length 1) If `FALSE`, preserve taxa
 #'   even if all of their observations are filtered out. If `TRUE`, remove
 #'   taxa for which all observations were filtered out. Note that only taxa that
@@ -170,7 +168,7 @@ NULL
 #'   a varaible on its own.} \item{`numeric`}{Indexes of columns in
 #'   `obj$data[[target]]`} } To match column names with a character vector,
 #'   use `matches("my_col_name")`. To match a logical vector, convert it to
-#'   a column index using [base::which()].
+#'   a column index using `which`.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -192,9 +190,7 @@ NULL
 
 #' Add columns to [taxmap()] objects
 #'
-#' Add columns to tables in `obj$data` in [taxmap()] objects. Any
-#' variable name that appears in [all_names()] can be used as if it was
-#' a vector on its own. See [dplyr::mutate()] for the inspiration for
+#' Add columns to tables in `obj$data` in [taxmap()] objects.  See [dplyr::mutate()] for the inspiration for
 #' this function and more information. Calling the function using the
 #' `obj$mutate_obs(...)` style edits "obj" in place, unlike most R
 #' functions. However, calling the function using the `mutate_obs(obj,
@@ -207,7 +203,8 @@ NULL
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the table in `obj$data` to filter
 #' @param ... One or more named columns to add. Newly created columns can be
-#'   referenced in the same function call.
+#'   referenced in the same function call. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -223,10 +220,9 @@ NULL
 
 #' Replace columns in [taxmap()] objects
 #'
-#' Replace columns of tables in `obj$data` in [taxmap()] objects.
-#' Any variable name that appears in [all_names()] can be used as if it
-#' was a vector on its own. See [dplyr::transmute()] for the
-#' inspiration for this function and more information.
+#' Replace columns of tables in `obj$data` in [taxmap()] objects. See
+#' [dplyr::transmute()] for the inspiration for this function and more
+#' information.
 #' \preformatted{
 #' obj$transmute_obs(target, ...)
 #' transmute_obs(obj, target, ...)}
@@ -234,7 +230,8 @@ NULL
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the table in `obj$data` to filter
 #' @param ... One or more named columns to add. Newly created columns can be
-#'   referenced in the same function call.
+#'   referenced in the same function call. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #'
 #' @return An object of type [taxmap()]
 #' @examples
@@ -279,7 +276,7 @@ NULL
 #' Sample n observations from [taxmap()]
 #'
 #' Randomly sample some number of observations from a [taxmap()]
-#' object. Weights can be specified for observations or the taxa they are taxmap
+#' object. Weights can be specified for observations or the taxa they are classified
 #' by. Any variable name that appears in [all_names()] can be used as
 #' if it was a vector on its own. See [dplyr::sample_n()] for the inspiration
 #' for this function.
@@ -339,7 +336,7 @@ NULL
 
 #' Sample a proportion of observations from [taxmap()]
 #'
-#' Randomly sample some propoortion of observations from a [taxmap()]
+#' Randomly sample some proportion of observations from a [taxmap()]
 #' object. Weights can be specified for observations or their taxa. See
 #' [dplyr::sample_frac()] for the inspiration for this function.
 #' \preformatted{

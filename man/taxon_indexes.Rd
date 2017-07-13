@@ -4,7 +4,7 @@
 \alias{taxon_indexes}
 \title{Get taxon indexes}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object.}
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.}
 }
 \description{
 Return the taxon indexes in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.

@@ -8,13 +8,14 @@
 
 \item{target}{The name of the list/vector/table in \code{obj$data} to filter}
 
-\item{...}{One or more filtering conditions. Each filtering condition can be
-one of three things: \describe{ \item{\code{character}}{One or more taxon
-IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more
-row indexes of \code{obj$edge_list}} \item{\code{logical}}{A
-\code{TRUE}/\code{FALSE} vector of length equal to the number of rows in
-\code{obj$edge_list}} } Any variable name that appears in
-\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
+\item{...}{One or more filtering conditions. Any variable name that appears
+in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. Each
+filtering condition can be one of three things:
+\itemize{
+\item \code{integer}: One or more row indexes of \code{obj[target]}
+\item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of
+rows in \code{obj[target]}
+}}
 
 \item{drop_taxa}{(\code{logical} of length 1) If \code{FALSE}, preserve taxa
 even if all of their observations are filtered out. If \code{TRUE}, remove
@@ -27,8 +28,7 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
 Filter data in a \code{\link[=taxmap]{taxmap()}} object (in \code{obj$data}) with a
-set of conditions. Any variable name that appears in
-\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. See
+set of conditions.  See
 \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$filter_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function

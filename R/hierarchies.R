@@ -6,7 +6,11 @@
 #' @export
 #' @param ... Any number of object of class [hierarchy()]
 #' @param .list Any number of object of class [hierarchy()] in a list
+#'
+#' @family classes
+#'
 #' @return An `R6Class` object of class [hierarchy()]
+#'
 #' @examples
 #' x <- taxon(
 #'   name = taxon_name("Poaceae"),

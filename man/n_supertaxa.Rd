@@ -11,7 +11,7 @@
 }
 \description{
 Get number of supertaxa for each taxon in an object of type
-\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}.
 \preformatted{
 obj$n_supertaxa()
 n_supertaxa(obj)}

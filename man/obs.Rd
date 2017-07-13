@@ -36,7 +36,7 @@ then the observation indexes for all \code{target} taxa are returned in a single
 vector.
 }
 \description{
-Given a \code{\link[=taxmap]{taxmap()}} object, return the indexes associated with each taxon in a
+Given a \code{\link[=taxmap]{taxmap()}} object, return data associated with each taxon in a
 given table included in that \code{\link[=taxmap]{taxmap()}} object.
 \preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
 obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}

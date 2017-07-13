@@ -6,7 +6,7 @@
 #' obj$taxon_ids()
 #' taxon_ids(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @family taxonomy data functions
 #'
@@ -26,7 +26,7 @@ NULL
 #' obj$taxon_indexes()
 #' taxon_indexes(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @family taxonomy data functions
 #'
@@ -45,7 +45,7 @@ NULL
 #' obj$taxon_names()
 #' taxon_names(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @family taxonomy data functions
 #'
@@ -65,7 +65,7 @@ NULL
 #' obj$taxon_ranks()
 #' taxon_ranks(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @family taxonomy data functions
 #'
@@ -79,15 +79,14 @@ NULL
 
 #' Get all supertaxa of a taxon
 #'
-#' Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
-#' taxa are a part of) in an object of type [taxonomy()] or
-#' [taxmap()].
+#' Return data for supertaxa (i.e. all taxa the target
+#' taxa are a part of) of each taxon in a [taxonomy()] or [taxmap()] object.
 #' \preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
 #' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
 #' supertaxa(obj, subset = NULL, recursive = TRUE,
 #' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) `taxon_ids` or indexes of
 #'   `taxon_data` for which supertaxa will be returned. Default: All taxa
@@ -101,7 +100,7 @@ NULL
 #'   single vector of unique values.
 #' @param include_input (`logical`) If `TRUE`, the input taxa are included in
 #'   the output
-#' @param value What data to return. Any result of `all_names(obj)` can be used, but it
+#' @param value What data to return. Any result of [all_names()] can be used, but it
 #'   usually only makes sense to use data that has an associated taxon id.
 #' @param na (`logical`) If `TRUE`, return `NA` where information
 #'   is not available.
@@ -150,7 +149,7 @@ NULL
 #'                 simplify = FALSE, include_input = FALSE,
 #'                 value = NULL, na = FALSE, ....)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param func (`function`) The function to apply.
 #' @param subset (`character`) `taxon_ids` or indexes of
@@ -188,7 +187,7 @@ NULL
 #' \preformatted{obj$roots(subset = NULL, value = NULL)
 #' roots(obj, subset = NULL, value = NULL)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which root taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
@@ -217,18 +216,17 @@ NULL
 
 #' Get subtaxa
 #'
-#' Return the taxon IDs or `taxon_data` indexes of all subtaxa in an object
-#' of type `taxmap`.
+#' Return data for the subtaxa of each taxon in an [taxonomy()] or [taxmap()]
+#' object.
 #' \preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
 #' include_input = FALSE, value = NULL)
 #' subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
 #' include_input = FALSE, value = NULL)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) `taxon_ids` or indexes of
-#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#'   in `obj` will be used.
+#' @param subset (`character`) `taxon_ids` or taxon indexes for which supertaxa
+#'   will be returned. Default: All taxa in `obj` will be used.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the subtaxa
 #'   one rank below the target taxa. If `TRUE`, return all the subtaxa of every
 #'   subtaxa, etc. Positive numbers indicate the number of ranks below the
@@ -241,7 +239,7 @@ NULL
 #' @param include_input (`logical`) If `TRUE`, the input taxa are
 #'   included in the output
 #' @param value What data to return. This is usually the name of column in a
-#'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
+#'   table in `obj$data`. Any result of [all_names()] can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
 #'   [taxon_ranks()]. By default, taxon indexes are returned.
 #'
@@ -287,7 +285,7 @@ NULL
 #' subtaxa_apply(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
 #'               include_input = FALSE, value = NULL, ...)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param func (`function`) The function to apply.
 #' @param subset (`character`) `taxon_ids` or indexes of
@@ -326,7 +324,7 @@ NULL
 #' stems(obj, subset = NULL, simplify = FALSE,
 #' value = NULL, exclude_leaves = FALSE)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which stem taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
@@ -364,7 +362,7 @@ NULL
 #' \preformatted{obj$leaves(subset = NULL, value = NULL)
 #' leaves(obj, subset = NULL, value = NULL)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object containing taxon
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param subset (`character`) Taxon IDs for which leaf taxa will be
 #'   returned. Default: All taxon in `obj` will be used.
@@ -441,7 +439,7 @@ NULL
 #' Get number of supertaxa
 #'
 #' Get number of supertaxa for each taxon in an object of type
-#' [taxonomy()] or [taxmap()]
+#' [taxonomy()] or [taxmap()].
 #' \preformatted{
 #' obj$n_supertaxa()
 #' n_supertaxa(obj)}
@@ -502,12 +500,11 @@ NULL
 NULL
 
 
-#' Return names of data in a [taxonomy()] or [taxmap()]
+#' Return names of data in [taxonomy()] or [taxmap()]
 #'
-#' Return the names of datasets that can be used with functions in the taxa
-#' package that use [non-standard
-#' evalulation](http://adv-r.had.co.nz/Computing-on-the-language.html), like
-#' [filter_taxa()].
+#' Return the names of data that can be used with functions in the taxa
+#' package that use [non-standard evalulation](http://adv-r.had.co.nz/Computing-on-the-language.html),
+#' like [filter_taxa()].
 #' \preformatted{
 #' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 #' all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
@@ -717,16 +714,17 @@ NULL
 
 #' Sort the edge list of [taxmap()] objects
 #'
-#' Sort the edge list in [taxonomy()] or [taxmap()] objects. Any variable name that
-#' appears in [all_names()] can be used as if it was a vector on its
-#' own. See [dplyr::arrange()] for the inspiration for this function
-#' and more information.
+#' Sort the edge list and taxon list in [taxonomy()] or [taxmap()] objects. See
+#' [dplyr::arrange()] for the inspiration for this function and more
+#' information.
 #' \preformatted{
 #' obj$arrange_taxa(...)
 #' arrange_taxa(obj, ...)}
 #'
 #' @param obj [taxonomy()] or [taxmap()]
-#' @param ... One or more column names to sort on.
+#' @param ... One or more expressions (e.g. column names) to sort on. Any
+#'   variable name that appears in [all_names()] can be used as if it was a
+#'   vector on its own.
 #'
 #' @return An object of type [taxonomy()] or [taxmap()]
 #'
@@ -736,6 +734,9 @@ NULL
 #'
 #' # Sort taxa in decending order
 #' arrange_taxa(ex_taxmap, desc(taxon_names))
+#'
+#' # Sort using an expression. List genera first.
+#' arrange_taxa(ex_taxmap, taxon_ranks != "genus")
 #'
 #' @family taxmap manipulation functions
 #'
@@ -870,7 +871,7 @@ NULL
 #' obj$is_root()
 #' is_root(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @return A `logical` of length equal to the number of taxa.
 #'
@@ -893,7 +894,7 @@ NULL
 #' obj$is_stem()
 #' is_stem(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @return A `logical` of length equal to the number of taxa.
 #'
@@ -915,7 +916,7 @@ NULL
 #' obj$is_branch()
 #' is_branch(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @return A `logical` of length equal to the number of taxa.
 #'
@@ -936,7 +937,7 @@ NULL
 #' obj$is_leaf()
 #' is_leaf(obj)}
 #'
-#' @param obj The `taxonomy` or `taxmap` object.
+#' @param obj The [taxonomy()] or [taxmap()] object.
 #'
 #' @return A `logical` of length equal to the number of taxa.
 #'

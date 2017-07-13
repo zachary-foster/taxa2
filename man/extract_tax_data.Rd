@@ -5,8 +5,9 @@
 \title{Extracts taxonomy info from vectors with regex}
 \usage{
 extract_tax_data(tax_data, key, regex, class_key = "taxon_name",
-  class_regex = "(.*)", class_sep = NULL, class_rev = FALSE,
-  database = "ncbi", include_match = FALSE, include_tax_data = TRUE)
+  class_regex = "(.*)", class_sep = NULL, sep_is_regex = FALSE,
+  class_rev = FALSE, database = "ncbi", include_match = FALSE,
+  include_tax_data = TRUE)
 }
 \arguments{
 \item{tax_data}{A vector from which to extract taxonomy information.}
@@ -19,19 +20,20 @@ term must be one of those decribed below:
 \itemize{
 \item \code{taxon_id}: A unique numeric id for a taxon for a particular \code{database}
 (e.g. ncbi accession number). Requires an internet connection.
-\item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
-interpretable by a particular \code{database}. Requires an internet connection.
-\item \code{class}: A list of taxa information that constitutes the full taxonomic
-classification from broad to specific (see \code{class_rev}) for a particular
-\code{database}. Individual taxa are separated by the \code{class_sep} argument and
-the information is parsed by the \code{class_regex} and \code{class_key} arguments.
+\item \code{taxon_name}: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
+Not necessarily unique, but interpretable by a particular \code{database}.
+Requires an internet connection.
+\item \code{class}: A list of taxon information that constitutes the full taxonomic
+classification (e.g. "K_Mammalia;P_Carnivora;C_Felidae"). Individual
+taxa are separated by the \code{class_sep} argument and the information is
+parsed by the \code{class_regex} and \code{class_key} arguments.
 \item \code{seq_id}: Sequence ID for a particular database that is associated with a
 taxonomic classification. Currently only works with the "ncbi" database.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
 
-\item{regex}{(\code{character; length == 1}) A regular expression with capturing
+\item{regex}{(\code{character} of length 1) A regular expression with capturing
 groups indicating the locations of relevant information. The identity of
 the information must be specified using the \code{key} argument.}
 
@@ -42,8 +44,7 @@ added to the terms will be used as column names in the output. Only
 \code{"info"} can be used multiple times. Each term must be one of those
 decribed below:
 \itemize{
-\item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
-interpretable by a particular \code{database}.
+\item \code{taxon_name}: The name of a taxon. Not necessarily unique.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
@@ -64,6 +65,9 @@ capture groups are extracted by \code{class_regex} and defined by \code{class_ke
 If \code{NULL}, every match of \code{class_regex} is used instead with first
 splitting by \code{class_sep}.}
 
+\item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be
+used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}.}
+
 \item{class_rev}{(\code{logical} of length 1)
 Used with the \code{class} term in the \code{key} argument. If \code{TRUE}, the order of
 taxon data in a classfication is reversed to be specific to broad.}
@@ -72,7 +76,7 @@ taxon data in a classfication is reversed to be specific to broad.}
 patterns given in \code{parser} will apply to. Valid databases include "ncbi",
 "itis", "eol", "col", "tropicos", "nbn", and "none". \code{"none"} will cause no
 database to be quired; use this if you want to not use the internet. NOTE:
-Only \code{"ncbi"} has been tested so far.}
+Only \code{"ncbi"} has been tested extensivly so far.}
 
 \item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
 the input matched by \code{regex} in the output object.}
@@ -81,29 +85,53 @@ the input matched by \code{regex} in the output object.}
 as a dataset.}
 }
 \value{
-Returns an object of type \code{taxmap}
+Returns an object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
+Parse taxonomic information in a character vector into a \code{\link[=taxmap]{taxmap()}} object.
 The location and identity of important information in the input is specified
-using a regular expression with capture groups and an corresponding key. An
-object of type \code{taxmap} is returned containing the specifed information.
+using a regular expression with capture groups and a corresponding key. An
+object of type \code{\link[=taxmap]{taxmap()}} is returned containing the specifed information.
+See the \code{key} option for accepted sources of taxonomic information.
 }
 \examples{
+\dontrun{
+
+  # For demonstration purposes, the following example dataset has all the
+  # types of data that can be used, but any one of them alone would work.
   raw_data <- c(
-  ">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
-  ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
-  ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus"
+  ">id:AB548412-tid:9689-Panthera leo-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Panthera;S_leo",
+  ">id:FJ358423-tid:9694-Panthera tigris-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Panthera;S_tigris",
+  ">id:DQ334818-tid:9643-Ursus americanus-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Ursus;S_americanus"
   )
 
+  # Build a taxmap object from classificaitons
   extract_tax_data(raw_data,
-                   key = c(var_1 = "info", var_2 = "info", tax = "class"),
-                   regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
-                   class_sep = ";", class_regex = "^(.+)__(.+)$",
+                   key = c(my_seq = "info", my_tid = "info", org = "info", tax = "class"),
+                   regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$",
+                   class_sep = ";", class_regex = "^(.+)_(.+)$",
                    class_key = c(my_rank = "info", tax_name = "taxon_name"))
 
+  # Build a taxmap object from taxon ids
+  # Note: this requires an internet connection
   extract_tax_data(raw_data,
-                   key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
-                   regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
+                   key = c(my_seq = "info", my_tid = "taxon_id", org = "info", tax = "info"),
+                   regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
 
+  # Build a taxmap object from ncbi sequence accession numbers
+  # Note: this requires an internet connection
+  extract_tax_data(raw_data,
+                   key = c(my_seq = "seq_id", my_tid = "info", org = "info", tax = "info"),
+                   regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
 
+  # Build a taxmap object from taxon names
+  # Note: this requires an internet connection
+  extract_tax_data(raw_data,
+                   key = c(my_seq = "info", my_tid = "info", org = "taxon_name", tax = "info"),
+                   regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
+}
+}
+\seealso{
+Other parsers: \code{\link{lookup_tax_data}},
+  \code{\link{parse_tax_data}}
 }

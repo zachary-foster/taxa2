@@ -4,12 +4,11 @@
 \alias{subtaxa}
 \title{Get subtaxa}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
-\item{subset}{(\code{character}) \code{taxon_ids} or indexes of
-\code{taxon_data} for which supertaxa will be returned. Default: All taxa
-in \code{obj} will be used.}
+\item{subset}{(\code{character}) \code{taxon_ids} or taxon indexes for which supertaxa
+will be returned. Default: All taxa in \code{obj} will be used.}
 
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the subtaxa
 one rank below the target taxa. If \code{TRUE}, return all the subtaxa of every
@@ -26,7 +25,7 @@ into a single vector of unique values.}
 included in the output}
 
 \item{value}{What data to return. This is usually the name of column in a
-table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
+table in \code{obj$data}. Any result of \code{\link[=all_names]{all_names()}} can be used, but it
 usually only makes sense to data that corresponds to taxa 1:1, such as
 \code{\link[=taxon_ranks]{taxon_ranks()}}. By default, taxon indexes are returned.}
 }
@@ -36,8 +35,8 @@ corresponding to the \code{target} argument. If \code{simplify = TRUE},
 then the unique values are returned in a single vector.
 }
 \description{
-Return the taxon IDs or \code{taxon_data} indexes of all subtaxa in an object
-of type \code{taxmap}.
+Return data for the subtaxa of each taxon in an \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
+object.
 \preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
 include_input = FALSE, value = NULL)
 subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,

@@ -4,7 +4,7 @@
 \alias{taxon_names}
 \title{Get taxon names}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object.}
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.}
 }
 \description{
 Return the taxon names in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.

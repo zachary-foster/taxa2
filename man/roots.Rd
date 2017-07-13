@@ -4,7 +4,7 @@
 \alias{roots}
 \title{Get root taxa}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
 \item{subset}{(\code{character}) Taxon IDs for which root taxa will be

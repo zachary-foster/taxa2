@@ -32,9 +32,9 @@ these data sets relate to the \code{tax_data} and, by inference, what taxa apply
 to each item.}
 
 \item{mappings}{(named \code{character}) This defines how the taxonomic
-information in \code{tax_data} applies to data set in \code{datasets}. This option
+information in \code{tax_data} applies to data in \code{datasets}. This option
 should have the same number of inputs as \code{datasets}, with values
-corresponding to each data set. The names of the character vector specify
+corresponding to each dataset. The names of the character vector specify
 what information in \code{tax_data} is shared with info in each \code{dataset}, which
 is specified by the corresponding values of the character vector. If there
 are no shared variables, you can add \code{NA} as a placeholder, but you could
@@ -106,4 +106,8 @@ datasets.
   map_data(x, my_names, foods)
   map_data(x, counts, my_names)
 
+}
+\seealso{
+Other parsers: \code{\link{extract_tax_data}},
+  \code{\link{parse_tax_data}}
 }

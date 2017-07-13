@@ -46,7 +46,7 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
 Randomly sample some number of observations from a \code{\link[=taxmap]{taxmap()}}
-object. Weights can be specified for observations or the taxa they are taxmap
+object. Weights can be specified for observations or the taxa they are classified
 by. Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as
 if it was a vector on its own. See \code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration
 for this function.

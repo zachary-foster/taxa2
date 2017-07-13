@@ -4,7 +4,7 @@
 \alias{is_stem}
 \title{Test if taxa are stems}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object.}
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.}
 }
 \value{
 A \code{logical} of length equal to the number of taxa.

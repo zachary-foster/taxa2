@@ -4,7 +4,7 @@
 \alias{is_branch}
 \title{Test if taxa are branches}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object.}
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.}
 }
 \value{
 A \code{logical} of length equal to the number of taxa.

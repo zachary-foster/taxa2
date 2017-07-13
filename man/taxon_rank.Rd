@@ -31,7 +31,8 @@ x$rank
 x$database
 }
 \seealso{
-Other classes: \code{\link{hierarchy}}, \code{\link{taxa}},
+Other classes: \code{\link{hierarchies}},
+  \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxmap}}, \code{\link{taxon_database}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxonomy}}, \code{\link{taxon}}

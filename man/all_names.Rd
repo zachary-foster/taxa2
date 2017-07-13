@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxonomy--docs.R
 \name{all_names}
 \alias{all_names}
-\title{Return names of data in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}}
+\title{Return names of data in \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}}
 \arguments{
 \item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}) The object containing
 taxon information to be queried.}
@@ -26,9 +26,9 @@ each taxon.}
 \code{character}
 }
 \description{
-Return the names of datasets that can be used with functions in the taxa
-package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standardevalulation}, like
-\code{\link[=filter_taxa]{filter_taxa()}}.
+Return the names of data that can be used with functions in the taxa
+package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standard evalulation},
+like \code{\link[=filter_taxa]{filter_taxa()}}.
 \preformatted{
 obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
 all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}

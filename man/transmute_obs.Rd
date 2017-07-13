@@ -9,16 +9,16 @@
 \item{target}{The name of the table in \code{obj$data} to filter}
 
 \item{...}{One or more named columns to add. Newly created columns can be
-referenced in the same function call.}
+referenced in the same function call. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Replace columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
-Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it
-was a vector on its own. See \code{\link[dplyr:transmute]{dplyr::transmute()}} for the
-inspiration for this function and more information.
+Replace columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects. See
+\code{\link[dplyr:transmute]{dplyr::transmute()}} for the inspiration for this function and more
+information.
 \preformatted{
 obj$transmute_obs(target, ...)
 transmute_obs(obj, target, ...)}

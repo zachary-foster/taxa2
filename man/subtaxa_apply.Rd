@@ -4,7 +4,7 @@
 \alias{subtaxa_apply}
 \title{Apply function to subtaxa of each taxon}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
 \item{func}{(\code{function}) The function to apply.}

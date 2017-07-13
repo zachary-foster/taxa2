@@ -9,15 +9,14 @@
 \item{target}{The name of the table in \code{obj$data} to filter}
 
 \item{...}{One or more named columns to add. Newly created columns can be
-referenced in the same function call.}
+referenced in the same function call. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects. Any
-variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was
-a vector on its own. See \code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for
+Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.  See \code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for
 this function and more information. Calling the function using the
 \code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R
 functions. However, calling the function using the \code{mutate_obs(obj, ...)} mitates R's traditional copy-on-modify semantics, so "obj" would not be

@@ -4,7 +4,7 @@
 \alias{supertaxa}
 \title{Get all supertaxa of a taxon}
 \arguments{
-\item{obj}{The \code{taxonomy} or \code{taxmap} object containing taxon
+\item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
 \item{subset}{(\code{character}) \code{taxon_ids} or indexes of
@@ -23,7 +23,7 @@ single vector of unique values.}
 \item{include_input}{(\code{logical}) If \code{TRUE}, the input taxa are included in
 the output}
 
-\item{value}{What data to return. Any result of \code{all_names(obj)} can be used, but it
+\item{value}{What data to return. Any result of \code{\link[=all_names]{all_names()}} can be used, but it
 usually only makes sense to use data that has an associated taxon id.}
 
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information
@@ -35,9 +35,8 @@ corresponding to the \code{subset} argument. If \code{simplify = TRUE},
 then unique values are returned in a single vector.
 }
 \description{
-Return the taxon IDs or indexes of all supertaxa (i.e. all taxa the target
-taxa are a part of) in an object of type \code{\link[=taxonomy]{taxonomy()}} or
-\code{\link[=taxmap]{taxmap()}}.
+Return data for supertaxa (i.e. all taxa the target
+taxa are a part of) of each taxon in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 \preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
 simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
 supertaxa(obj, subset = NULL, recursive = TRUE,

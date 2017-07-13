@@ -1,8 +1,7 @@
 #' Convert one or more data sets to taxmap
 #'
 #' Parses taxonomic information and assoiacted data and stores it in a
-#' [taxa::taxmap()] object. [Taxonomic
-#' classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
+#' [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
 #' must be present somewhere in the first input.
 #'
 #' @param tax_data A table, list, or vector that contains the names of taxa that
@@ -35,8 +34,7 @@
 #'   `class_sep = c(" ", ";")`. All separators are applied to each column so
 #'   order does not matter.
 #' @param sep_is_regex (`TRUE`/`FALSE`) Whether or not `class_sep` should be
-#'   used as a [regular
-#'   expression](https://en.wikipedia.org/wiki/Regular_expression).
+#'   used as a [regular expression](https://en.wikipedia.org/wiki/Regular_expression).
 #' @param class_key (`character` of length 1) The identity of the capturing
 #'   groups defined using `class_regex`. The length of `class_key` must be equal
 #'   to the number of capturing groups specified in `class_regex`. Any names
@@ -72,6 +70,8 @@
 #'   will be converted to vectors using [unlist()].
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset, like those in `datasets`.
+#'
+#' @family parsers
 #'
 #' @examples
 #'   # Make example data with taxonomic classifications
@@ -276,9 +276,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   these data sets relate to the `tax_data` and, by inference, what taxa apply
 #'   to each item.
 #' @param mappings (named `character`) This defines how the taxonomic
-#'   information in `tax_data` applies to data set in `datasets`. This option
+#'   information in `tax_data` applies to data in `datasets`. This option
 #'   should have the same number of inputs as `datasets`, with values
-#'   corresponding to each data set. The names of the character vector specify
+#'   corresponding to each dataset. The names of the character vector specify
 #'   what information in `tax_data` is shared with info in each `dataset`, which
 #'   is specified by the corresponding values of the character vector. If there
 #'   are no shared variables, you can add `NA` as a placeholder, but you could
@@ -296,6 +296,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   as a dataset, like those in `datasets`.
 #' @param use_database_ids (`TRUE`/`FALSE`) Whether or not to use downloaded
 #'   database taxon ids instead of arbitrary, automatically-generated taxon ids.
+#'
+#' @family parsers
 #'
 #' @examples
 #'   # Make example data with taxonomic classifications
@@ -518,9 +520,11 @@ get_sort_var <- function(data, var) {
 
 #' Extracts taxonomy info from vectors with regex
 #'
+#' Parse taxonomic information in a character vector into a [taxmap()] object.
 #' The location and identity of important information in the input is specified
-#' using a regular expression with capture groups and an corresponding key. An
-#' object of type `taxmap` is returned containing the specifed information.
+#' using a regular expression with capture groups and a corresponding key. An
+#' object of type [taxmap()] is returned containing the specifed information.
+#' See the `key` option for accepted sources of taxonomic information.
 #'
 #' @param tax_data A vector from which to extract taxonomy information.
 #' @param key (`character`) The identity of the capturing groups defined using
@@ -530,17 +534,18 @@ get_sort_var <- function(data, var) {
 #'   term must be one of those decribed below:
 #'   * `taxon_id`: A unique numeric id for a taxon for a particular `database`
 #'   (e.g. ncbi accession number). Requires an internet connection.
-#'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
-#'   interpretable by a particular `database`. Requires an internet connection.
-#'   * `class`: A list of taxa information that constitutes the full taxonomic
-#'   classification from broad to specific (see `class_rev`) for a particular
-#'   `database`. Individual taxa are separated by the `class_sep` argument and
-#'   the information is parsed by the `class_regex` and `class_key` arguments.
+#'   * `taxon_name`: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
+#'   Not necessarily unique, but interpretable by a particular `database`.
+#'   Requires an internet connection.
+#'   * `class`: A list of taxon information that constitutes the full taxonomic
+#'   classification (e.g. "K_Mammalia;P_Carnivora;C_Felidae"). Individual
+#'   taxa are separated by the `class_sep` argument and the information is
+#'   parsed by the `class_regex` and `class_key` arguments.
 #'   * `seq_id`: Sequence ID for a particular database that is associated with a
 #'   taxonomic classification. Currently only works with the "ncbi" database.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
-#' @param regex (`character; length == 1`) A regular expression with capturing
+#' @param regex (`character` of length 1) A regular expression with capturing
 #'   groups indicating the locations of relevant information. The identity of
 #'   the information must be specified using the `key` argument.
 #' @param class_key (`character` of length 1) The identity of the capturing
@@ -549,8 +554,7 @@ get_sort_var <- function(data, var) {
 #'   added to the terms will be used as column names in the output. Only
 #'   `"info"` can be used multiple times. Each term must be one of those
 #'   decribed below:
-#'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
-#'   interpretable by a particular `database`.
+#'   * `taxon_name`: The name of a taxon. Not necessarily unique.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -567,42 +571,64 @@ get_sort_var <- function(data, var) {
 #'   capture groups are extracted by `class_regex` and defined by `class_key`.
 #'   If `NULL`, every match of `class_regex` is used instead with first
 #'   splitting by `class_sep`.
-#' @param class_rev (`logical` of length 1)
+#' @param sep_is_regex (`TRUE`/`FALSE`) Whether or not `class_sep` should be
+#'   used as a [regular expression](https://en.wikipedia.org/wiki/Regular_expression).
+##' @param class_rev (`logical` of length 1)
 #'   Used with the `class` term in the `key` argument. If `TRUE`, the order of
 #'   taxon data in a classfication is reversed to be specific to broad.
 #' @param database (`character` of length 1) The name of the database that
 #'   patterns given in `parser` will apply to. Valid databases include "ncbi",
 #'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
 #'   database to be quired; use this if you want to not use the internet. NOTE:
-#'   Only `"ncbi"` has been tested so far.
+#'   Only `"ncbi"` has been tested extensivly so far.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `regex` in the output object.
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset.
 #'
-#' @return Returns an object of type `taxmap`
+#' @family parsers
 #'
-#' @examples
+#' @return Returns an object of type [taxmap()]
+#'
+#' @examples \dontrun{
+#'
+#'   # For demonstration purposes, the following example dataset has all the
+#'   # types of data that can be used, but any one of them alone would work.
 #'   raw_data <- c(
-#'   ">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
-#'   ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
-#'   ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus"
+#'   ">id:AB548412-tid:9689-Panthera leo-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Panthera;S_leo",
+#'   ">id:FJ358423-tid:9694-Panthera tigris-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Panthera;S_tigris",
+#'   ">id:DQ334818-tid:9643-Ursus americanus-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Ursus;S_americanus"
 #'   )
 #'
+#'   # Build a taxmap object from classificaitons
 #'   extract_tax_data(raw_data,
-#'                    key = c(var_1 = "info", var_2 = "info", tax = "class"),
-#'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
-#'                    class_sep = ";", class_regex = "^(.+)__(.+)$",
+#'                    key = c(my_seq = "info", my_tid = "info", org = "info", tax = "class"),
+#'                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$",
+#'                    class_sep = ";", class_regex = "^(.+)_(.+)$",
 #'                    class_key = c(my_rank = "info", tax_name = "taxon_name"))
 #'
+#'   # Build a taxmap object from taxon ids
+#'   # Note: this requires an internet connection
 #'   extract_tax_data(raw_data,
-#'                    key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
-#'                    regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
+#'                    key = c(my_seq = "info", my_tid = "taxon_id", org = "info", tax = "info"),
+#'                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
 #'
+#'   # Build a taxmap object from ncbi sequence accession numbers
+#'   # Note: this requires an internet connection
+#'   extract_tax_data(raw_data,
+#'                    key = c(my_seq = "seq_id", my_tid = "info", org = "info", tax = "info"),
+#'                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
 #'
+#'   # Build a taxmap object from taxon names
+#'   # Note: this requires an internet connection
+#'   extract_tax_data(raw_data,
+#'                    key = c(my_seq = "info", my_tid = "info", org = "taxon_name", tax = "info"),
+#'                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$")
+#' }
 #' @export
 extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
                              class_regex = "(.*)", class_sep = NULL,
+                             sep_is_regex = FALSE,
                              class_rev = FALSE, database = "ncbi",
                              include_match = FALSE, include_tax_data = TRUE) {
   # Check regex/keys
@@ -639,6 +665,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
     output <- parse_tax_data(tax_data = parsed_input,
                              class_cols = which(key == "class") + 1,
                              class_sep = class_sep, class_key = class_key,
+                             sep_is_regex = sep_is_regex,
                              class_regex = class_regex,
                              include_match = include_match,
                              include_tax_data = include_tax_data)

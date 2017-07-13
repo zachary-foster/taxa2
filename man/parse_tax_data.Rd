@@ -45,7 +45,7 @@ and another had \code{"Animalia;Chordata;Mammalia;Primates;Hominidae"}, then
 order does not matter.}
 
 \item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be
-used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regularexpression}.}
+used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}.}
 
 \item{class_key}{(\code{character} of length 1) The identity of the capturing
 groups defined using \code{class_regex}. The length of \code{class_key} must be equal
@@ -93,7 +93,7 @@ as a dataset, like those in \code{datasets}.}
 }
 \description{
 Parses taxonomic information and assoiacted data and stores it in a
-\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomicclassifications}
+\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
 must be present somewhere in the first input.
 }
 \examples{
@@ -139,4 +139,8 @@ must be present somewhere in the first input.
   map_data(x, my_names, foods)
   map_data(x, counts, my_names)
 
+}
+\seealso{
+Other parsers: \code{\link{extract_tax_data}},
+  \code{\link{lookup_tax_data}}
 }

@@ -6,16 +6,17 @@
 \arguments{
 \item{obj}{\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}}
 
-\item{...}{One or more column names to sort on.}
+\item{...}{One or more expressions (e.g. column names) to sort on. Any
+variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a
+vector on its own.}
 }
 \value{
 An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Sort the edge list in \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} objects. Any variable name that
-appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its
-own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function
-and more information.
+Sort the edge list and taxon list in \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} objects. See
+\code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function and more
+information.
 \preformatted{
 obj$arrange_taxa(...)
 arrange_taxa(obj, ...)}
@@ -26,6 +27,9 @@ arrange_taxa(ex_taxmap, taxon_names)
 
 # Sort taxa in decending order
 arrange_taxa(ex_taxmap, desc(taxon_names))
+
+# Sort using an expression. List genera first.
+arrange_taxa(ex_taxmap, taxon_ranks != "genus")
 
 }
 \seealso{
