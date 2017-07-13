@@ -53,8 +53,40 @@ c <- taxon(
 )
 hier2 <- hierarchy(c, b, a)
 
-hiers <- hierarchies(hier1, hier2)
+d <- taxon(
+  name = taxon_name("Chordata"),
+  rank = taxon_rank("phylum"),
+  id = taxon_id(158852)
+)
+e <- taxon(
+  name = taxon_name("Vertebrata"),
+  rank = taxon_rank("subphylum"),
+  id = taxon_id(331030)
+)
+f <- taxon(
+  name = taxon_name("Teleostei"),
+  rank = taxon_rank("class"),
+  id = taxon_id(161105)
+)
+g <- taxon(
+  name = taxon_name("Salmonidae"),
+  rank = taxon_rank("family"),
+  id = taxon_id(161931)
+)
+h <- taxon(
+  name = taxon_name("Salmo"),
+  rank = taxon_rank("genus"),
+  id = taxon_id(161994)
+)
+i <- taxon(
+  name = taxon_name("Salmo salar"),
+  rank = taxon_rank("species"),
+  id = taxon_id(161996)
+)
+hier3 <- hierarchy(d, e, f, g, h, i)
+
+hiers <- hierarchies(hier1, hier2, hier3)
 
 # pass into the .list parameter
-hierarchies(.list = list(hier1, hier2))
+hierarchies(.list = list(hier1, hier2, hier3))
 }

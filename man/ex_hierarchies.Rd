@@ -13,7 +13,7 @@ An example hierarchies object built from the ground up.
 }
 \seealso{
 Other taxa-datasets: \code{\link{ex_hierarchy1}},
-  \code{\link{ex_hierarchy2}}, \code{\link{ex_taxmap}},
-  \code{\link{ex_taxonomy}}
+  \code{\link{ex_hierarchy2}}, \code{\link{ex_hierarchy3}},
+  \code{\link{ex_taxmap}}, \code{\link{ex_taxonomy}}
 }
 \keyword{data}
