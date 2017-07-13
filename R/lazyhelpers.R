@@ -1,20 +1,35 @@
-#' Lazy
+#' Taxonomic filtering helpers
 #'
-#' @name lazy-helpers
-#' @param ... unquoted variables
+#' @name filtering-helpers
+#' @param ... quoted rank names, taxonomic names, taxonomic ids, or
+#' any of those with supported operators (See \strong{Suppoted Relational
+#' Operators} below)
+#'
+#' @note NSE is not supported at the moment, but may be in the future
+#'
 #' @section How do these functions work?:
-#' Each function is a light wrapper around [dplyr::vars()], to use lazy
-#' evaluation to be able to pass in unquote variables to save some typing,
-#' though you can still quote and get the same result
+#' Each function assigns some metadata so we can more easily process
+#' your query downstream. In addition, we check for whether you've
+#' used any relational operators and pull those out to make dowstream
+#' processing easier
 #'
-#' These are not used by themselves but inside of [pop()], [pick()], [span()]
+#' The goal of these functions is to make it easy to combine queries
+#' based on each of rank names, taxonomic names, and taxonomic ids.
 #'
-#' @section Symbols:
+#' These are designed to be used inside of [pop()], [pick()], [span()]. Inside
+#' of those functions, we figure out what rank names you want to filter
+#' on, then check against a reference dataset ([ranks_ref]) to allow
+#' ordered queries like \emph{I want all taxa between Class and Genus}. If you
+#' provide rank names, we just use those, then do the filtering you requestd.
+#' If you provide taxonomic names or ids we figure out what rank names you are
+#' referring to, then we can proceed as in the previous sentence.
+#'
+#' @section Suppoted Relational Operators:
 #' \itemize{
-#'  \item `:`: items between x and y, inclusive
-#'  \item `::`: items between x and y, exclusive
-#'  \item `. <`: all items below rank of x
-#'  \item `. >`: all items above rank of x
+#'  \item `>` all items above rank of x
+#'  \item `>=` all items above rank of x, inclusive
+#'  \item `<` all items below rank of x
+#'  \item `<=` all items below rank of x, inclusive
 #' }
 #'
 #' @section ranks:
@@ -30,66 +45,59 @@
 #' use all digits, but some use a combination of digits and characters.
 #'
 #' @examples
-#' ranks(order)
-#' ranks(order, genus)
-#' ranks(order:genus)
-#' ranks(. > genus)
+#' ranks("genus")
+#' ranks("order", "genus")
+#' ranks("> genus")
 #'
-#' nms(Poaceae)
-#' nms(Poaceae, Poa)
-#' nms(Poaceae:Poa)
-#' nms(. < Poaceae)
+#' nms("Poaceae")
+#' nms("Poaceae", "Poa")
+#' nms("< Poaceae")
 #'
 #' ids(4544)
 #' ids(4544, 4479)
-#' ids(4544:4479)
-#' ids(. < 4479)
+#' ids("< 4479")
 NULL
 
 #' @export
-#' @rdname lazy-helpers
+#' @rdname filtering-helpers
 ranks <- function(...) {
-  helpers_fxn("ranks", ...)
+  helpers_fxn_se("ranks", ...)
 }
 
 #' @export
-#' @rdname lazy-helpers
+#' @rdname filtering-helpers
 nms <- function(...) {
-  helpers_fxn("names", ...)
+  helpers_fxn_se("names", ...)
 }
 
 #' @export
-#' @rdname lazy-helpers
+#' @rdname filtering-helpers
 ids <- function(...) {
-  helpers_fxn("ids", ...)
+  helpers_fxn_se("ids", ...)
 }
 
 ###### ---------------------
-helpers_fxn <- function(name, ...) {
-  rks <- rlang::quos(...)
-  clzzs <- vapply(rks, function(z) class(rlang::quo_expr(z)), "",
-                  USE.NAMES = FALSE)
-  if (any(clzzs == "call")) {
-    rlang::quo_expr(rks[[1]])
-    tmp <- as.character(rlang::quo_expr(rks[[1]]))
-    ops <- paste0(rev(strex(tmp, "^>$|^<$|^\\.$|^:$|^::$")), collapse = " ")
-    structure(list(strex(tmp, "[A-Za-z0-9]+")),
-              operator = ops, names = name,
-              class = 'taxapicker', type = name)
-  } else {
-    tmp <- vapply(rks, function(z) rlang::quo_name(z), "", USE.NAMES = FALSE)
-    structure(list(tmp), names = name, class = 'taxapicker', type = name)
+helpers_fxn_se <- function(name, ...) {
+  x <- unlist(list(...))
+  if (is.null(x)) {
+    stop("you must pass in one or more values, see ?filtering-helpers")
   }
+  # check for operators
+  op <- NULL
+  if (any(grepl(">|>=|<|<=", x))) {
+    op <- strex(x, ">|>=|<|<=")
+    x <- gsub(">|>=|<|<=|\\s+", "", x)
+  }
+  structure(x, class = 'taxapicker', type = name, operator = op)
 }
 
 print.taxapicker <- function(x, ...) {
   cat("<taxapicker>", sep = "\n")
   cat(sprintf(
     "  (%s) (operator: `%s`): %s", attr(x, "type"), attr(x, "operator") %||% "",
-    paste0(unclass(x[[1]]), collapse = ", ")
+    paste0(unclass(x), collapse = ", ")
   ), sep = "\n")
 }
-
 
 Taxapickers <- R6::R6Class(
   "Taxapickers",
@@ -106,7 +114,7 @@ Taxapickers <- R6::R6Class(
       for (i in seq_along(self$x)) {
         cat(sprintf(
           "  (%s): %s", attr(self$x[[i]], "type"),
-          paste0(unclass(self$x[[i]][[1]]), collapse = ", ")
+          paste0(unclass(self$x[[i]]), collapse = ", ")
         ), sep = "\n")
       }
     },
@@ -122,3 +130,24 @@ Taxapickers <- R6::R6Class(
     }
   )
 )
+
+
+## keeping around if/when we want to support NSE
+# helpers_fxn <- function(name, ...) {
+#   rks <- rlang::quos(...)
+#   clzzs <- vapply(rks, function(z) class(rlang::quo_expr(z)), "",
+#                   USE.NAMES = FALSE)
+#   if (any(clzzs == "call")) {
+#     rlang::quo_expr(rks[[1]])
+#     tmp <- as.character(rlang::quo_expr(rks[[1]]))
+#     ops <- paste0(rev(strex(tmp, "^>$|^<$|^\\.$|^:$|^::$")), collapse = " ")
+#     structure(list(strex(tmp, "[A-Za-z0-9]+")),
+#               operator = ops, names = name,
+#               class = 'taxapicker', type = name)
+#   } else if (any(clzzs == "name")) {
+#     rlang::eval_tidy(rks[[1]])
+#   } else {
+#     tmp <- vapply(rks, function(z) rlang::quo_name(z), "", USE.NAMES = FALSE)
+#     structure(list(tmp), names = name, class = 'taxapicker', type = name)
+#   }
+# }
