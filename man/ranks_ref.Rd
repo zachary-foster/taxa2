@@ -7,7 +7,7 @@
 \description{
 Composed of two columns:
 \itemize{
-\item rankid - the ordered identifer value. lower values mean higher rank
+\item rankid - the ordered identifier value. lower values mean higher rank
 \item ranks - all the rank names that belong to the same level, with
 different variants that mean essentially the same thing
 }

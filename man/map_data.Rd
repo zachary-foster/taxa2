@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxonomy--docs.R
 \name{map_data}
 \alias{map_data}
-\title{Create a mapping between two varaibles}
+\title{Create a mapping between two variables}
 \arguments{
 \item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.}
 

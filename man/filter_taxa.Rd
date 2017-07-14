@@ -29,7 +29,7 @@ filtered out. Observations assigned to removed taxa will be assigned to
 \code{NA}. This option can be either simply \code{TRUE}/\code{FALSE}, meaning that
 all data sets will be treated the same, or a logical vector can be supplied
 with names corresponding one or more data sets in \code{obj$data}. For example,
-\code{c(abundance = FALSE, stats = TRUE)} would inlcude observations whose taxon
+\code{c(abundance = FALSE, stats = TRUE)} would include observations whose taxon
 was filtered out in \code{obj$data$abundance}, but not in \code{obj$data$stats}. See
 the \code{reassign_obs} option below for further complications.}
 
@@ -62,7 +62,7 @@ conditions. Any variable name that appears in \code{\link[=all_names]{all_names(
 as if it was a vector on its own. See \code{\link[dplyr:filter]{dplyr::filter()}} for the inspiration
 for this function and more information. Calling the function using the
 \code{obj$filter_taxa(...)} style edits "obj" in place, unlike most R functions.
-However, calling the function using the \code{filter_taxa(obj, ...)} immitates R's
+However, calling the function using the \code{filter_taxa(obj, ...)} imitates R's
 traditional copy-on-modify semantics, so "obj" would not be changed; instead
 a changed version would be returned, like most R functions.
 \preformatted{

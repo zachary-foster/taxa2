@@ -8,7 +8,7 @@
 #'   `numeric`, then it should be row indexes of `taxon_data`. If a `logical`,
 #'   then it should correspond to rows of `taxon_data`.
 #'
-#' @return (`integer`) row indexes of the edge list in a `taxmap` object nammed
+#' @return (`integer`) row indexes of the edge list in a `taxmap` object named
 #'   by corresponding taxon ids
 #'
 #' @keywords internal
@@ -39,7 +39,7 @@ format_taxon_subset <- function(taxon_ids, index) {
 #' @param data The `data` variable passed to the `Taxmap` constructor
 #' @param input_ids
 #'
-#' @return A `data` varaible with the right format
+#' @return A `data` variable with the right format
 #'
 #' @keywords internal
 validate_taxmap_data <- function(data, input_ids) {
@@ -92,7 +92,7 @@ validate_taxmap_data <- function(data, input_ids) {
 #'
 #' @param funcs The `funcs` variable passed to the `Taxmap` constructor
 #'
-#' @return A `funcs` varaible with the right format
+#' @return A `funcs` variable with the right format
 #'
 #' @keywords internal
 validate_taxmap_funcs <- function(funcs) {
@@ -192,7 +192,7 @@ parse_possibly_named_logical <- function(input, data, default) {
 
 #' Get list of usable functions
 #'
-#' Returns the names of all functions that can be called from any envrionment
+#' Returns the names of all functions that can be called from any environment
 #'
 #' @return vector
 #'

@@ -31,7 +31,7 @@ return all the observations of every subtaxa, etc. Positive numbers
 indicate the number of ranks below the each taxon to get observations for
 \code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to \code{TRUE}.}
 
-\item{...}{Extra arguments are pased to the function.}
+\item{...}{Extra arguments are passed to the function.}
 }
 \description{
 Apply a function to data for the observations for each taxon. This is similar

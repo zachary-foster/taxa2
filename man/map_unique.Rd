@@ -11,7 +11,7 @@ map_unique(input, func, ...)
 
 \item{func}{(\code{function})}
 
-\item{...}{passend to \code{func}}
+\item{...}{passed to \code{func}}
 }
 \description{
 Runs a function on unique values of a list/vector and then reformats the

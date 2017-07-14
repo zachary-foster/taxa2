@@ -14,6 +14,6 @@ The name of the database
 }
 \description{
 This is meant to return the name of a database when it is not known if the
-input is a \code{TaxonDatabase} object or a simple character vecotor.
+input is a \code{TaxonDatabase} object or a simple character vector.
 }
 \keyword{internal}

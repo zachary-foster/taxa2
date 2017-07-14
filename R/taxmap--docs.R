@@ -85,7 +85,7 @@ NULL
 #'   return all the observations of every subtaxa, etc. Positive numbers
 #'   indicate the number of ranks below the each taxon to get observations for
 #'   `0` is equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
-#' @param ... Extra arguments are pased to the function.
+#' @param ... Extra arguments are passed to the function.
 #'
 #' @name obs_apply
 #'
@@ -153,7 +153,7 @@ NULL
 #' [dplyr::select()] for the inspiration for this function and more
 #' information. Calling the function using the `obj$select_obs(...)` style
 #' edits "obj" in place, unlike most R functions. However, calling the function
-#' using the `select_obs(obj, ...)` mitates R's traditional copy-on-modify
+#' using the `select_obs(obj, ...)` imitates R's traditional copy-on-modify
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
@@ -165,7 +165,7 @@ NULL
 #' @param ... One or more column names to return in the new object. Each can be
 #'   one of two things: \describe{ \item{expression with unquoted column
 #'   name}{The name of a column in `obj$data[[target]]` typed as if it was
-#'   a varaible on its own.} \item{`numeric`}{Indexes of columns in
+#'   a variable on its own.} \item{`numeric`}{Indexes of columns in
 #'   `obj$data[[target]]`} } To match column names with a character vector,
 #'   use `matches("my_col_name")`. To match a logical vector, convert it to
 #'   a column index using `which`.
@@ -194,7 +194,7 @@ NULL
 #' this function and more information. Calling the function using the
 #' `obj$mutate_obs(...)` style edits "obj" in place, unlike most R
 #' functions. However, calling the function using the `mutate_obs(obj,
-#' ...)` mitates R's traditional copy-on-modify semantics, so "obj" would not be
+#' ...)` imitates R's traditional copy-on-modify semantics, so "obj" would not be
 #' changed; instead a changed version would be returned, like most R functions.
 #' \preformatted{
 #' obj$mutate_obs(target, ...)

@@ -21,7 +21,7 @@ For tables, the classification can be spread over multiple columns and the
 separator(s) will be applied to each column, although each column could
 just be single taxon names with no separator. Use the \code{class_cols} option
 to specify which columns have taxon names.
-\item A list in which each entry is a classificaiton. For example,
+\item A list in which each entry is a classifications. For example,
 \code{list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae", "Homo"), ...)}.
 \item A list of data.frames where each represents a classification with one
 taxon per row. The column that contains taxon names is specified using the
@@ -35,7 +35,7 @@ these data sets relate to the \code{tax_data} and, by inference, what taxa apply
 to each item.}
 
 \item{class_cols}{(\code{character} or \code{integer}) The names or indexes of columns
-that contain classifications if the first input is a table. If mutliple
+that contain classifications if the first input is a table. If multiple
 columns are specified, they will be combined in the order given.}
 
 \item{class_sep}{(\code{character}) One or more separators that delineate taxon
@@ -52,7 +52,7 @@ groups defined using \code{class_regex}. The length of \code{class_key} must be 
 to the number of capturing groups specified in \code{class_regex}. Any names
 added to the terms will be used as column names in the output. At least
 one \code{"taxon_name"} must be specified. Only \code{"info"} can be used
-multiple times. Each term must be one of those decribed below:
+multiple times. Each term must be one of those described below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
 interpretable by a particular \code{database}. Requires an internet connection.
@@ -78,7 +78,7 @@ corresponding to each data set. The names of the character vector specify
 what information in \code{tax_data} is shared with info in each \code{dataset}, which
 is specified by the corresponding values of the character vector. If there
 are no shared variables, you can add \code{NA} as a placeholder, but you could
-just leave that data out since it is not benifiting from being in the
+just leave that data out since it is not benefiting from being in the
 taxmap object. The names/values can be one of the following:
 \itemize{
 \item For tables, the names of columns can be used.
@@ -92,7 +92,7 @@ will be converted to vectors using \code{\link[=unlist]{unlist()}}.
 as a dataset, like those in \code{datasets}.}
 }
 \description{
-Parses taxonomic information and assoiacted data and stores it in a
+Parses taxonomic information and associated data and stores it in a
 \code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
 must be present somewhere in the first input.
 }

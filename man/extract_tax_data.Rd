@@ -16,7 +16,7 @@ extract_tax_data(tax_data, key, regex, class_key = "taxon_name",
 \code{regex}. The length of \code{key} must be equal to the number of capturing
 groups specified in \code{regex}. Any names added to the terms will be used as
 column names in the output. Only \code{"info"} can be used multiple times. Each
-term must be one of those decribed below:
+term must be one of those described below:
 \itemize{
 \item \code{taxon_id}: A unique numeric id for a taxon for a particular \code{database}
 (e.g. ncbi accession number). Requires an internet connection.
@@ -42,7 +42,7 @@ groups defined using \code{class_regex}. The length of \code{class_key} must be 
 to the number of capturing groups specified in \code{class_regex}. Any names
 added to the terms will be used as column names in the output. Only
 \code{"info"} can be used multiple times. Each term must be one of those
-decribed below:
+described below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
@@ -70,13 +70,13 @@ used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expres
 
 \item{class_rev}{(\code{logical} of length 1)
 Used with the \code{class} term in the \code{key} argument. If \code{TRUE}, the order of
-taxon data in a classfication is reversed to be specific to broad.}
+taxon data in a classification is reversed to be specific to broad.}
 
 \item{database}{(\code{character} of length 1) The name of the database that
 patterns given in \code{parser} will apply to. Valid databases include "ncbi",
 "itis", "eol", "col", "tropicos", "nbn", and "none". \code{"none"} will cause no
 database to be quired; use this if you want to not use the internet. NOTE:
-Only \code{"ncbi"} has been tested extensivly so far.}
+Only \code{"ncbi"} has been tested extensively so far.}
 
 \item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
 the input matched by \code{regex} in the output object.}
@@ -91,7 +91,7 @@ Returns an object of type \code{\link[=taxmap]{taxmap()}}
 Parse taxonomic information in a character vector into a \code{\link[=taxmap]{taxmap()}} object.
 The location and identity of important information in the input is specified
 using a regular expression with capture groups and a corresponding key. An
-object of type \code{\link[=taxmap]{taxmap()}} is returned containing the specifed information.
+object of type \code{\link[=taxmap]{taxmap()}} is returned containing the specified information.
 See the \code{key} option for accepted sources of taxonomic information.
 }
 \examples{
@@ -105,7 +105,7 @@ See the \code{key} option for accepted sources of taxonomic information.
   ">id:DQ334818-tid:9643-Ursus americanus-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Ursus;S_americanus"
   )
 
-  # Build a taxmap object from classificaitons
+  # Build a taxmap object from classifications
   extract_tax_data(raw_data,
                    key = c(my_seq = "info", my_tid = "info", org = "info", tax = "class"),
                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$",

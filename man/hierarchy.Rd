@@ -18,7 +18,7 @@ An \code{R6Class} object of class \code{Hierarchy}
 }
 \description{
 A class containing an ordered list of \code{\link[=taxon]{taxon()}} objects that represent a
-hierachical classification.
+hierarchical classification.
 }
 \details{
 On initialization, taxa are sorted if they have ranks with a known

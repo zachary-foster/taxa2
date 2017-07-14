@@ -22,7 +22,7 @@ characters to print.}
 \code{NULL}
 }
 \description{
-Prints the start and end values for a character vecotr. The number of values
+Prints the start and end values for a character vector. The number of values
 printed depend on the width of the screen by default.
 }
 \examples{

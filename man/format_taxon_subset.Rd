@@ -14,7 +14,7 @@ format_taxon_subset(taxon_ids, index)
 then it should correspond to rows of \code{taxon_data}.}
 }
 \value{
-(\code{integer}) row indexes of the edge list in a \code{taxmap} object nammed
+(\code{integer}) row indexes of the edge list in a \code{taxmap} object named
 by corresponding taxon ids
 }
 \description{

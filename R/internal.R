@@ -1,6 +1,6 @@
 #' Print a subset of a character vector
 #'
-#' Prints the start and end values for a character vecotr. The number of values
+#' Prints the start and end values for a character vector. The number of values
 #' printed depend on the width of the screen by default.
 #'
 #' @param chars (`character`) What to print.
@@ -77,7 +77,7 @@ limited_print <- function(chars, prefix = "",
 #' Return name of database
 #'
 #' This is meant to return the name of a database when it is not known if the
-#' input is a `TaxonDatabase` object or a simple character vecotor.
+#' input is a `TaxonDatabase` object or a simple character vector.
 #'
 #' @param input Either a character vector or `TaxonDatabase` class
 #'
@@ -99,7 +99,7 @@ get_database_name <- function(input) {
 #' Splits items in a vector by multiple separators.
 #'
 #' @param input A character vector
-#' @param split One or more seperators to use to split `input`
+#' @param split One or more separators to use to split `input`
 #' @param ... Passed to [base::strsplit()]
 #'
 #' @keywords internal
@@ -130,7 +130,7 @@ unique_mapping <- function(input) {
 #'
 #' @param input What to pass to \code{func}
 #' @param func (\code{function})
-#' @param ... passend to \code{func}
+#' @param ... passed to \code{func}
 #'
 #' @keywords internal
 map_unique <- function(input, func, ...) {

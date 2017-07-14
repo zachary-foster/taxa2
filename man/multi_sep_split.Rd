@@ -9,7 +9,7 @@ multi_sep_split(input, split, ...)
 \arguments{
 \item{input}{A character vector}
 
-\item{split}{One or more seperators to use to split \code{input}}
+\item{split}{One or more separators to use to split \code{input}}
 
 \item{...}{Passed to \code{\link[base:strsplit]{base::strsplit()}}}
 }

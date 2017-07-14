@@ -11,7 +11,7 @@ taxon information to be queried.}
 include the names of columns of tables in \code{obj$data}}
 
 \item{funcs}{This option only applies to \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE},
-include the names of user-definable functionsin \code{obj$funcs}.}
+include the names of user-definable functions in \code{obj$funcs}.}
 
 \item{others}{This option only applies to \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE},
 include the names of data in \code{obj$data} besides tables.}
@@ -27,7 +27,7 @@ each taxon.}
 }
 \description{
 Return the names of data that can be used with functions in the taxa
-package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standard evalulation},
+package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standard evaluation},
 like \code{\link[=filter_taxa]{filter_taxa()}}.
 \preformatted{
 obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)

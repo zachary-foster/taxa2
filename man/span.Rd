@@ -9,8 +9,8 @@ span(.data, ...)
 \arguments{
 \item{.data}{Input, object of class \code{Hierarchy}, or \code{hierarchies}}
 
-\item{...}{quoteds rank names (e.g., family) via \code{\link[=ranks]{ranks()}}, taxon names
-(e.g., Poa annua) via \code{\link[=nms]{nms()}}, or taxnomic IDs (e.g., 93036) via \code{\link[=ids]{ids()}}.
+\item{...}{quoted rank names (e.g., family) via \code{\link[=ranks]{ranks()}}, taxon names
+(e.g., Poa annua) via \code{\link[=nms]{nms()}}, or taxonomic IDs (e.g., 93036) via \code{\link[=ids]{ids()}}.
 You can't pass in arbitrary strings or numbers.}
 }
 \value{

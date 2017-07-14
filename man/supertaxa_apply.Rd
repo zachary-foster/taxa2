@@ -32,7 +32,7 @@ that has an associated taxon id.}
 \item{na}{(\code{logical}) If \code{TRUE}, return \code{NA} where information
 is not available.}
 
-\item{...}{Extra arguments are pased to the function.}
+\item{...}{Extra arguments are passed to the function.}
 }
 \description{
 Apply a function to the supertaxa for each taxon. This is similar

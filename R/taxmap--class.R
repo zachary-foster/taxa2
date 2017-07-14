@@ -8,7 +8,7 @@
 #' them by [taxon_ids()]. For tables, add a column named `taxon_id` that stores
 #' [taxon_ids()].
 #'
-#' To initialize a `taxmap` object with assocaited data sets, use the parsing
+#' To initialize a `taxmap` object with associated data sets, use the parsing
 #' functions [parse_tax_data()], [lookup_tax_data()], and [extract_tax_data()].
 #'
 #' @export
@@ -17,10 +17,10 @@
 #' @param .list An alternate to the `...` input. Any number of object of class
 #'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
 #' @param data A list of tables with data associated with the taxa.
-#' @param funcs A named list of functions to includ in the class. Referring to
+#' @param funcs A named list of functions to include in the class. Referring to
 #'   the names of these in functions like `filter_taxa` will execute the
 #'   function and return the results. If the function has at least one argument,
-#'   the taxamap object is passed to it.
+#'   the taxmap object is passed to it.
 #' @family classes
 #' @return An `R6Class` object of class [taxmap()]
 #'

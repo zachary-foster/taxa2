@@ -5,8 +5,8 @@
 #'
 #' @export
 #' @param .data Input, object of class `Hierarchy`, or `hierarchies`
-#' @param ... quoteds rank names (e.g., family) via [ranks()], taxon names
-#' (e.g., Poa annua) via [nms()], or taxnomic IDs (e.g., 93036) via [ids()].
+#' @param ... quoted rank names (e.g., family) via [ranks()], taxon names
+#' (e.g., Poa annua) via [nms()], or taxonomic IDs (e.g., 93036) via [ids()].
 #' You can't pass in arbitrary strings or numbers.
 #' @details supports `Hierarchy` and `hierarchies` objects
 #' @return an object of the same class as passed in

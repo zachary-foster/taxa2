@@ -1,6 +1,6 @@
 #' Convert one or more data sets to taxmap
 #'
-#' Parses taxonomic information and assoiacted data and stores it in a
+#' Parses taxonomic information and associated data and stores it in a
 #' [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
 #' must be present somewhere in the first input.
 #'
@@ -14,7 +14,7 @@
 #'   separator(s) will be applied to each column, although each column could
 #'   just be single taxon names with no separator. Use the `class_cols` option
 #'   to specify which columns have taxon names.
-#'   * A list in which each entry is a classificaiton. For example,
+#'   * A list in which each entry is a classifications. For example,
 #'   `list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae",
 #'   "Homo"), ...)`.
 #'   * A list of data.frames where each represents a classification with one
@@ -26,7 +26,7 @@
 #'   these data sets relate to the `tax_data` and, by inference, what taxa apply
 #'   to each item.
 #' @param class_cols (`character` or `integer`) The names or indexes of columns
-#'   that contain classifications if the first input is a table. If mutliple
+#'   that contain classifications if the first input is a table. If multiple
 #'   columns are specified, they will be combined in the order given.
 #' @param class_sep (`character`) One or more separators that delineate taxon
 #'   names in a classification. For example, if one column had `"Homo sapiens"`
@@ -40,7 +40,7 @@
 #'   to the number of capturing groups specified in `class_regex`. Any names
 #'   added to the terms will be used as column names in the output. At least
 #'   one `"taxon_name"` must be specified. Only `"info"` can be used
-#'   multiple times. Each term must be one of those decribed below:
+#'   multiple times. Each term must be one of those described below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
 #'   interpretable by a particular `database`. Requires an internet connection.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
@@ -61,7 +61,7 @@
 #'   what information in `tax_data` is shared with info in each `dataset`, which
 #'   is specified by the corresponding values of the character vector. If there
 #'   are no shared variables, you can add `NA` as a placeholder, but you could
-#'   just leave that data out since it is not benifiting from being in the
+#'   just leave that data out since it is not benefiting from being in the
 #'   taxmap object. The names/values can be one of the following:
 #'   * For tables, the names of columns can be used.
 #'   * `"{{index}}"` : This means to use the index of rows/items
@@ -156,7 +156,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     return(taxmap())
   }
 
-  # Get classificaitons
+  # Get classificatons
   is_list_of_frames <- FALSE
   if (is.character(tax_data)) { # is a character vector
     parsed_tax <- multi_sep_split(tax_data, fixed = !sep_is_regex, split = class_sep)
@@ -256,7 +256,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #'
 #' Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-#' that are present in a dataset. Also can incorperate additional assocaited
+#' that are present in a dataset. Also can incorporate additional associated
 #' datasets.
 #'
 #' @param tax_data A table, list, or vector that contain sequence IDs, taxon
@@ -282,7 +282,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   what information in `tax_data` is shared with info in each `dataset`, which
 #'   is specified by the corresponding values of the character vector. If there
 #'   are no shared variables, you can add `NA` as a placeholder, but you could
-#'   just leave that data out since it is not benifiting from being in the
+#'   just leave that data out since it is not benefiting from being in the
 #'   taxmap object. The names/values can be one of the following:
 #'   * For tables, the names of columns can be used.
 #'   * `"{{index}}"` : This means to use the index of rows/items
@@ -430,7 +430,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                                           internal_class_name)
   combined_class <- cbind(internal_class_frame, combined_class)
 
-  # Add mapping columns to classfication data
+  # Add mapping columns to classification data
   tax_data_indexes <- cumsum(vapply(classifications, nrow, numeric(1)))
   mappping_cols <- unique(c(names(mappings), "{{index}}", "{{name}}"))
   if (!is.data.frame(tax_data)) {
@@ -523,7 +523,7 @@ get_sort_var <- function(data, var) {
 #' Parse taxonomic information in a character vector into a [taxmap()] object.
 #' The location and identity of important information in the input is specified
 #' using a regular expression with capture groups and a corresponding key. An
-#' object of type [taxmap()] is returned containing the specifed information.
+#' object of type [taxmap()] is returned containing the specified information.
 #' See the `key` option for accepted sources of taxonomic information.
 #'
 #' @param tax_data A vector from which to extract taxonomy information.
@@ -531,7 +531,7 @@ get_sort_var <- function(data, var) {
 #'   `regex`. The length of `key` must be equal to the number of capturing
 #'   groups specified in `regex`. Any names added to the terms will be used as
 #'   column names in the output. Only `"info"` can be used multiple times. Each
-#'   term must be one of those decribed below:
+#'   term must be one of those described below:
 #'   * `taxon_id`: A unique numeric id for a taxon for a particular `database`
 #'   (e.g. ncbi accession number). Requires an internet connection.
 #'   * `taxon_name`: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
@@ -553,7 +553,7 @@ get_sort_var <- function(data, var) {
 #'   to the number of capturing groups specified in `class_regex`. Any names
 #'   added to the terms will be used as column names in the output. Only
 #'   `"info"` can be used multiple times. Each term must be one of those
-#'   decribed below:
+#'   described below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
@@ -575,12 +575,12 @@ get_sort_var <- function(data, var) {
 #'   used as a [regular expression](https://en.wikipedia.org/wiki/Regular_expression).
 ##' @param class_rev (`logical` of length 1)
 #'   Used with the `class` term in the `key` argument. If `TRUE`, the order of
-#'   taxon data in a classfication is reversed to be specific to broad.
+#'   taxon data in a classification is reversed to be specific to broad.
 #' @param database (`character` of length 1) The name of the database that
 #'   patterns given in `parser` will apply to. Valid databases include "ncbi",
 #'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
 #'   database to be quired; use this if you want to not use the internet. NOTE:
-#'   Only `"ncbi"` has been tested extensivly so far.
+#'   Only `"ncbi"` has been tested extensively so far.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `regex` in the output object.
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
@@ -600,7 +600,7 @@ get_sort_var <- function(data, var) {
 #'   ">id:DQ334818-tid:9643-Ursus americanus-tax:K_Mammalia;P_Carnivora;C_Felidae;G_Ursus;S_americanus"
 #'   )
 #'
-#'   # Build a taxmap object from classificaitons
+#'   # Build a taxmap object from classifications
 #'   extract_tax_data(raw_data,
 #'                    key = c(my_seq = "info", my_tid = "info", org = "info", tax = "class"),
 #'                    regex = "^>id:(.+)-tid:(.+)-(.+)-tax:(.+)$",

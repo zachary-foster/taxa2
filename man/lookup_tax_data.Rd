@@ -38,7 +38,7 @@ corresponding to each dataset. The names of the character vector specify
 what information in \code{tax_data} is shared with info in each \code{dataset}, which
 is specified by the corresponding values of the character vector. If there
 are no shared variables, you can add \code{NA} as a placeholder, but you could
-just leave that data out since it is not benifiting from being in the
+just leave that data out since it is not benefiting from being in the
 taxmap object. The names/values can be one of the following:
 \itemize{
 \item For tables, the names of columns can be used.
@@ -60,7 +60,7 @@ database taxon ids instead of arbitrary, automatically-generated taxon ids.}
 }
 \description{
 Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-that are present in a dataset. Also can incorperate additional assocaited
+that are present in a dataset. Also can incorporate additional associated
 datasets.
 }
 \examples{

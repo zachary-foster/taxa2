@@ -1,7 +1,7 @@
 #' The Hierarchy class
 #'
 #' A class containing an ordered list of [taxon()] objects that represent a
-#' hierachical classification.
+#' hierarchical classification.
 #'
 #' @export
 #' @param ... Any number of object of class `Taxon` or taxonomic names as

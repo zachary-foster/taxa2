@@ -10,7 +10,7 @@ validate_taxmap_funcs(funcs)
 \item{funcs}{The \code{funcs} variable passed to the \code{Taxmap} constructor}
 }
 \value{
-A \code{funcs} varaible with the right format
+A \code{funcs} variable with the right format
 }
 \description{
 Make sure \code{funcs} is in the right format and complain if it is not.

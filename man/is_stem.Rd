@@ -13,7 +13,7 @@ A \code{logical} of length equal to the number of taxa.
 Test if taxa are stems in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Stems are taxa
 from the \code{\link[=roots]{roots()}} taxa to the first taxon with more than one subtaxon. These
 can usually be filtered out of the taxonomy without removing any information
-on how the reminaing taxa are related.
+on how the remaining taxa are related.
 \preformatted{
 obj$is_stem()
 is_stem(obj)}

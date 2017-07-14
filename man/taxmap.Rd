@@ -15,10 +15,10 @@ Cannot be used with \code{.list}.}
 
 \item{data}{A list of tables with data associated with the taxa.}
 
-\item{funcs}{A named list of functions to includ in the class. Referring to
+\item{funcs}{A named list of functions to include in the class. Referring to
 the names of these in functions like \code{filter_taxa} will execute the
 function and return the results. If the function has at least one argument,
-the taxamap object is passed to it.}
+the taxmap object is passed to it.}
 }
 \value{
 An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
@@ -33,7 +33,7 @@ them by \code{\link[=taxon_ids]{taxon_ids()}}. For tables, add a column named \c
 \code{\link[=taxon_ids]{taxon_ids()}}.
 }
 \details{
-To initialize a \code{taxmap} object with assocaited data sets, use the parsing
+To initialize a \code{taxmap} object with associated data sets, use the parsing
 functions \code{\link[=parse_tax_data]{parse_tax_data()}}, \code{\link[=lookup_tax_data]{lookup_tax_data()}}, and \code{\link[=extract_tax_data]{extract_tax_data()}}.
 
 on initialize, function sorts the taxon list based on rank (if rank

@@ -2,7 +2,7 @@
 #'
 #' @name filtering-helpers
 #' @param ... quoted rank names, taxonomic names, taxonomic ids, or
-#' any of those with supported operators (See \strong{Suppoted Relational
+#' any of those with supported operators (See \strong{Supported Relational
 #' Operators} below)
 #'
 #' @note NSE is not supported at the moment, but may be in the future
@@ -10,7 +10,7 @@
 #' @section How do these functions work?:
 #' Each function assigns some metadata so we can more easily process
 #' your query downstream. In addition, we check for whether you've
-#' used any relational operators and pull those out to make dowstream
+#' used any relational operators and pull those out to make downstream
 #' processing easier
 #'
 #' The goal of these functions is to make it easy to combine queries
@@ -20,11 +20,11 @@
 #' of those functions, we figure out what rank names you want to filter
 #' on, then check against a reference dataset ([ranks_ref]) to allow
 #' ordered queries like \emph{I want all taxa between Class and Genus}. If you
-#' provide rank names, we just use those, then do the filtering you requestd.
+#' provide rank names, we just use those, then do the filtering you requested.
 #' If you provide taxonomic names or ids we figure out what rank names you are
 #' referring to, then we can proceed as in the previous sentence.
 #'
-#' @section Suppoted Relational Operators:
+#' @section Supported Relational Operators:
 #' \itemize{
 #'  \item `>` all items above rank of x
 #'  \item `>=` all items above rank of x, inclusive

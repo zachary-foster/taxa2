@@ -11,7 +11,7 @@
 \item{...}{One or more column names to return in the new object. Each can be
 one of two things: \describe{ \item{expression with unquoted column
 name}{The name of a column in \code{obj$data[[target]]} typed as if it was
-a varaible on its own.} \item{\code{numeric}}{Indexes of columns in
+a variable on its own.} \item{\code{numeric}}{Indexes of columns in
 \code{obj$data[[target]]}} } To match column names with a character vector,
 use \code{matches("my_col_name")}. To match a logical vector, convert it to
 a column index using \code{which}.
@@ -29,7 +29,7 @@ Subsets columns in a \code{\link[=taxmap]{taxmap()}} object. Takes and returns a
 \code{\link[dplyr:select]{dplyr::select()}} for the inspiration for this function and more
 information. Calling the function using the \code{obj$select_obs(...)} style
 edits "obj" in place, unlike most R functions. However, calling the function
-using the \code{select_obs(obj, ...)} mitates R's traditional copy-on-modify
+using the \code{select_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{

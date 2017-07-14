@@ -12,7 +12,7 @@ validate_taxmap_data(data, input_ids)
 \item{input_ids}{}
 }
 \value{
-A \code{data} varaible with the right format
+A \code{data} variable with the right format
 }
 \description{
 Make sure \code{data} is in the right format and complain if it is not.

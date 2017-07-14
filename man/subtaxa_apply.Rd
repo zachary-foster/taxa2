@@ -29,7 +29,7 @@ the output}
 \code{all_names(obj)} can be used, but it usually only makes sense to use data
 that has an associated taxon id.}
 
-\item{...}{Extra arguments are pased to the function.}
+\item{...}{Extra arguments are passed to the function.}
 }
 \description{
 Apply a function to the subtaxa for each taxon. This is similar

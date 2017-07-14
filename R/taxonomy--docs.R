@@ -169,7 +169,7 @@ NULL
 #'   that has an associated taxon id.
 #' @param na (`logical`) If `TRUE`, return `NA` where information
 #'   is not available.
-#' @param ... Extra arguments are pased to the function.
+#' @param ... Extra arguments are passed to the function.
 #'
 #' @name supertaxa_apply
 #'
@@ -303,7 +303,7 @@ NULL
 #' @param value What data to give to the function. Any result of
 #'   `all_names(obj)` can be used, but it usually only makes sense to use data
 #'   that has an associated taxon id.
-#' @param ... Extra arguments are pased to the function.
+#' @param ... Extra arguments are passed to the function.
 #'
 #' @name subtaxa_apply
 #'
@@ -503,7 +503,7 @@ NULL
 #' Return names of data in [taxonomy()] or [taxmap()]
 #'
 #' Return the names of data that can be used with functions in the taxa
-#' package that use [non-standard evalulation](http://adv-r.had.co.nz/Computing-on-the-language.html),
+#' package that use [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html),
 #' like [filter_taxa()].
 #' \preformatted{
 #' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
@@ -514,7 +514,7 @@ NULL
 #' @param tables This option only applies to [taxmap()] objects. If `TRUE`,
 #'   include the names of columns of tables in `obj$data`
 #' @param funcs This option only applies to [taxmap()] objects. If `TRUE`,
-#'   include the names of user-definable functionsin `obj$funcs`.
+#'   include the names of user-definable functions in `obj$funcs`.
 #' @param others This option only applies to [taxmap()] objects. If `TRUE`,
 #'   include the names of data in `obj$data` besides tables.
 #' @param builtin_funcs This option only applies to [taxmap()] objects. If
@@ -594,10 +594,10 @@ NULL
 
 #' Get values of data used in expressions
 #'
-#' Get values availabe for [non-standard
-#' evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) in a
-#' [taxonomy()] or [taxmap()] object used in expressions.
-#' Expressions are not evaluated and do not need to make sense.
+#' Get values available for
+#' [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html)
+#' in a [taxonomy()] or [taxmap()] object used in expressions. Expressions are
+#' not evaluated and do not need to make sense.
 #' \preformatted{
 #' obj$data_used(...)
 #' data_used(obj, ...)}
@@ -624,7 +624,7 @@ NULL
 #' as if it was a vector on its own. See [dplyr::filter()] for the inspiration
 #' for this function and more information. Calling the function using the
 #' `obj$filter_taxa(...)` style edits "obj" in place, unlike most R functions.
-#' However, calling the function using the `filter_taxa(obj, ...)` immitates R's
+#' However, calling the function using the `filter_taxa(obj, ...)` imitates R's
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
 #' a changed version would be returned, like most R functions.
 #' \preformatted{
@@ -654,7 +654,7 @@ NULL
 #'   \code{NA}. This option can be either simply `TRUE`/`FALSE`, meaning that
 #'   all data sets will be treated the same, or a logical vector can be supplied
 #'   with names corresponding one or more data sets in `obj$data`. For example,
-#'   `c(abundance = FALSE, stats = TRUE)` would inlcude observations whose taxon
+#'   `c(abundance = FALSE, stats = TRUE)` would include observations whose taxon
 #'   was filtered out in `obj$data$abundance`, but not in `obj$data$stats`. See
 #'   the `reassign_obs` option below for further complications.
 #' @param reassign_obs (`logical` of length 1) This option only applies to
@@ -889,7 +889,7 @@ NULL
 #' Test if taxa are stems in a [taxonomy()] or [taxmap()] object. Stems are taxa
 #' from the [roots()] taxa to the first taxon with more than one subtaxon. These
 #' can usually be filtered out of the taxonomy without removing any information
-#' on how the reminaing taxa are related.
+#' on how the remaining taxa are related.
 #' \preformatted{
 #' obj$is_stem()
 #' is_stem(obj)}
@@ -950,7 +950,7 @@ NULL
 NULL
 
 
-#' Create a mapping between two varaibles
+#' Create a mapping between two variables
 #'
 #' Creates a named vector that maps the values of two variables associated with
 #' taxa in a [taxonomy()] or [taxmap()] object. Both values must be named by

@@ -10,6 +10,6 @@ all_functions()
 vector
 }
 \description{
-Returns the names of all functions that can be called from any envrionment
+Returns the names of all functions that can be called from any environment
 }
 \keyword{internal}
