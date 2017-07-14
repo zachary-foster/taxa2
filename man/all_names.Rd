@@ -30,8 +30,10 @@ Return the names of data that can be used with functions in the taxa
 package that use \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standard evaluation},
 like \code{\link[=filter_taxa]{filter_taxa()}}.
 \preformatted{
-obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
-all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
+obj$all_names(tables = TRUE, funcs = TRUE,
+  others = TRUE, warn = FALSE)
+all_names(obj, tables = TRUE, funcs = TRUE,
+  others = TRUE, warn = FALSE)}
 }
 \examples{
 # Get the names of all data accesible by non-standard evaluation

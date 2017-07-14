@@ -37,10 +37,13 @@ then unique values are returned in a single vector.
 \description{
 Return data for supertaxa (i.e. all taxa the target
 taxa are a part of) of each taxon in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
-simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
+\preformatted{
+obj$supertaxa(subset = NULL, recursive = TRUE,
+  simplify = FALSE, include_input = FALSE,
+  value = NULL, na = FALSE)
 supertaxa(obj, subset = NULL, recursive = TRUE,
-simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
+  simplify = FALSE, include_input = FALSE,
+  value = NULL, na = FALSE)}
 }
 \examples{
 # return the indexes for supertaxa for each taxon

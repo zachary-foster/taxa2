@@ -51,10 +51,12 @@ object. Weights can be specified for taxa or the observations assigned to
 them. See
 \code{\link[dplyr:sample_frac]{dplyr::sample_frac()}} for the inspiration for this function.
 \preformatted{
-obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL,
-obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
-sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
-obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
+obj$sample_frac_taxa(size, taxon_weight = NULL,
+  obs_weight = NULL, obs_target = NULL,
+  use_subtaxa = TRUE, collapse_func = mean, ...)
+sample_frac_taxa(obj, size, taxon_weight = NULL,
+  obs_weight = NULL, obs_target = NULL,
+  use_subtaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
 # sample half of the taxa

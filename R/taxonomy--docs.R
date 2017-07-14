@@ -81,10 +81,13 @@ NULL
 #'
 #' Return data for supertaxa (i.e. all taxa the target
 #' taxa are a part of) of each taxon in a [taxonomy()] or [taxmap()] object.
-#' \preformatted{obj$supertaxa(subset = NULL, recursive = TRUE,
-#' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)
+#' \preformatted{
+#' obj$supertaxa(subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, include_input = FALSE,
+#'   value = NULL, na = FALSE)
 #' supertaxa(obj, subset = NULL, recursive = TRUE,
-#' simplify = FALSE, include_input = FALSE, value = NULL, na = FALSE)}
+#'   simplify = FALSE, include_input = FALSE,
+#'   value = NULL, na = FALSE)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -143,11 +146,11 @@ NULL
 #' to using [supertaxa()] with [lapply()] or [sapply()].
 #' \preformatted{
 #' obj$supertaxa_apply(func, subset = NULL, recursive = TRUE,
-#'                     simplify = FALSE, include_input = FALSE,
-#'                     value = NULL, na = FALSE, ...)
+#'   simplify = FALSE, include_input = FALSE, value = NULL,
+#'   na = FALSE, ...)
 #' supertaxa_apply(obj, func, subset = NULL, recursive = TRUE,
-#'                 simplify = FALSE, include_input = FALSE,
-#'                 value = NULL, na = FALSE, ....)}
+#'   simplify = FALSE, include_input = FALSE, value = NULL,
+#'   na = FALSE, ....)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -184,7 +187,8 @@ NULL
 #'
 #' Return the root taxa for a [taxonomy()] or [taxmap()] object. Can also be used to
 #' get the roots of a subset of taxa.
-#' \preformatted{obj$roots(subset = NULL, value = NULL)
+#' \preformatted{
+#' obj$roots(subset = NULL, value = NULL)
 #' roots(obj, subset = NULL, value = NULL)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
@@ -218,10 +222,11 @@ NULL
 #'
 #' Return data for the subtaxa of each taxon in an [taxonomy()] or [taxmap()]
 #' object.
-#' \preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
-#' include_input = FALSE, value = NULL)
-#' subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
-#' include_input = FALSE, value = NULL)}
+#' \preformatted{
+#' obj$subtaxa(subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, include_input = FALSE, value = NULL)
+#' subtaxa(obj, subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, include_input = FALSE, value = NULL)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -280,10 +285,10 @@ NULL
 #' Apply a function to the subtaxa for each taxon. This is similar
 #' to using [subtaxa()] with [lapply()] or [sapply()].
 #' \preformatted{
-#' obj$subtaxa_apply(func, subset = NULL, recursive = TRUE, simplify = FALSE,
-#'                   include_input = FALSE, value = NULL, ...)
-#' subtaxa_apply(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
-#'               include_input = FALSE, value = NULL, ...)}
+#' obj$subtaxa_apply(func, subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, include_input = FALSE, value = NULL, ...)
+#' subtaxa_apply(obj, func, subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, include_input = FALSE, value = NULL, ...)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -319,10 +324,11 @@ NULL
 #' Return the stem taxa for a [taxonomy()] or a [taxmap()]
 #' object. Stem taxa are all those from the roots to the first taxon with more
 #' than one subtaxon.
-#' \preformatted{obj$stems(subset = NULL, simplify = FALSE,
-#' value = NULL, exclude_leaves = FALSE)
+#' \preformatted{
+#' obj$stems(subset = NULL, simplify = FALSE,
+#'   value = NULL, exclude_leaves = FALSE)
 #' stems(obj, subset = NULL, simplify = FALSE,
-#' value = NULL, exclude_leaves = FALSE)}
+#'   value = NULL, exclude_leaves = FALSE)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -359,7 +365,8 @@ NULL
 #'
 #' Return the leaf taxa for a [taxonomy()] or [taxmap()] object. Leaf taxa are taxa
 #' with no subtaxa.
-#' \preformatted{obj$leaves(subset = NULL, value = NULL)
+#' \preformatted{
+#' obj$leaves(subset = NULL, value = NULL)
 #' leaves(obj, subset = NULL, value = NULL)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
@@ -393,7 +400,8 @@ NULL
 #'
 #' Get classification strings of taxa in an object of type [taxonomy()] or [taxmap()]
 #' composed of taxon IDs. Each classification is constructed by concatenating
-#' the taxon ids of the given taxon and its supertaxa. \preformatted{
+#' the taxon ids of the given taxon and its supertaxa.
+#' \preformatted{
 #' obj$id_classifications(sep = ";")
 #' id_classifications(obj, sep = ";")}
 #'
@@ -506,8 +514,10 @@ NULL
 #' package that use [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html),
 #' like [filter_taxa()].
 #' \preformatted{
-#' obj$all_names(tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)
-#' all_names(obj, tables = TRUE, funcs = TRUE, others = TRUE, warn = FALSE)}
+#' obj$all_names(tables = TRUE, funcs = TRUE,
+#'   others = TRUE, warn = FALSE)
+#' all_names(obj, tables = TRUE, funcs = TRUE,
+#'   others = TRUE, warn = FALSE)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()]) The object containing
 #'   taxon information to be queried.
@@ -628,18 +638,21 @@ NULL
 #' traditional copy-on-modify semantics, so "obj" would not be changed; instead
 #' a changed version would be returned, like most R functions.
 #' \preformatted{
-#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
-#' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
-#' reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
+#' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+#'   drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+#'   invert = FALSE)
+#' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
+#'   drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+#'   invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
-#' @param ... One or more filtering conditions. Each filtering condition must
-#'   resolve to one of three things: \describe{ \item{`character`}{One or more
-#'   taxon IDs contained in `obj$edge_list$to`} \item{`integer`}{One or more row
-#'   indexes of `obj$edge_list`} \item{`logical`}{A `TRUE`/`FALSE` vector of
-#'   length equal to the number of rows in `obj$edge_list`} } Any variable name
-#'   that appears in [all_names()] can be used as if it was a vector on its own.
+#' @param ... One or more filtering conditions. Any variable name that appears
+#'   in [all_names()] can be used as if it was a vector on its own. Each
+#'   filtering condition must resolve to one of three things:
+#'   * `character`: One or more taxon IDs contained in `obj$edge_list$to`
+#'   * `integer`: One or more row indexes of `obj$edge_list`
+#'   * `logical`: A `TRUE`/`FALSE` vector of length equal to the number of rows
+#'   in `obj$edge_list`
 #' @param subtaxa (`logical` or `numeric` of length 1) If `TRUE`, include
 #'   subtaxa of taxa passing the filter. Positive numbers indicate the number of
 #'   ranks below the target taxa to return. `0` is equivalent to `FALSE`.
@@ -749,10 +762,12 @@ NULL
 #' Weights can be specified for taxa or the observations assigned to them. See
 #' [dplyr::sample_n()] for the inspiration for this function.
 #' \preformatted{
-#' obj$sample_n_taxa(size, taxon_weight = NULL, obs_weight = NULL,
-#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
-#' sample_n_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
-#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
+#' obj$sample_n_taxa(size, taxon_weight = NULL,
+#'   obs_weight = NULL, obs_target = NULL,
+#'   use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_taxa(obj, size, taxon_weight = NULL,
+#'   obs_weight = NULL, obs_target = NULL,
+#'   use_subtaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()]) The object to sample from.
 #' @param size (`numeric` of length 1) The number of taxa to sample.
@@ -814,10 +829,12 @@ NULL
 #' them. See
 #' [dplyr::sample_frac()] for the inspiration for this function.
 #' \preformatted{
-#' obj$sample_frac_taxa(size, taxon_weight = NULL, obs_weight = NULL,
-#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)
-#' sample_frac_taxa(obj, size, taxon_weight = NULL, obs_weight = NULL,
-#' obs_target = NULL, use_subtaxa = TRUE, collapse_func = mean, ...)}
+#' obj$sample_frac_taxa(size, taxon_weight = NULL,
+#'   obs_weight = NULL, obs_target = NULL,
+#'   use_subtaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_taxa(obj, size, taxon_weight = NULL,
+#'   obs_weight = NULL, obs_target = NULL,
+#'   use_subtaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxonomy()] or [taxmap()]) The object to sample from.
 #' @param size (`numeric` of length 1) The proportion of taxa to sample.
@@ -990,6 +1007,9 @@ NULL
 #' Replace taxon ids
 #'
 #' Replace taxon ids in a [taxmap()] or [taxonomy()] object.
+#' \preformatted{
+#' obj$replace_taxon_ids(new_ids)
+#' replace_taxon_ids(obj, new_ids)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object.
 #' @param new_ids A vector of new ids, one per taxon. They must be unique and in
