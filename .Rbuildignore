@@ -8,3 +8,4 @@ man-roxygen
 ^notes$
 .github
 ^README.html$
+cran-comments.md
