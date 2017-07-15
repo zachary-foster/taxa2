@@ -2,8 +2,11 @@
 #'
 #' Given a [taxmap()] object, return data associated with each taxon in a
 #' given table included in that [taxmap()] object.
-#' \preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
-#' obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
+#' \preformatted{
+#' obj$obs(data, value = NULL, subset = NULL,
+#'   recursive = TRUE, simplify = FALSE)
+#' obs(obj, data, value = NULL, subset = NULL,
+#'   recursive = TRUE, simplify = FALSE)}
 #'
 #' @param obj ([taxmap()]) The [taxmap()] object containing taxon information to
 #'   be queried.
@@ -60,10 +63,11 @@ NULL
 #'
 #' Apply a function to data for the observations for each taxon. This is similar
 #' to using [obs()] with [lapply()] or [sapply()].
-#' \preformatted{obj$obs_apply(data, func, simplify = FALSE, value = NULL,
-#'               subset = NULL, recursive = TRUE, ...)
-#' obs(obj, data, func, simplify = FALSE,
-#'     value = NULL, subset = NULL, recursive = TRUE, ...)}
+#' \preformatted{
+#' obj$obs_apply(data, func, simplify = FALSE, value = NULL,
+#'   subset = NULL, recursive = TRUE, ...)
+#' obs_apply(obj, data, func, simplify = FALSE, value = NULL,
+#'   subset = NULL, recursive = TRUE, ...)}
 #'
 #' @param obj The [taxmap()] object containing taxon information to
 #'   be queried.
@@ -111,7 +115,7 @@ NULL
 #' returned, like most R functions.
 #' \preformatted{
 #' obj$filter_obs(target, ..., drop_taxa = FALSE)
-#' filter_obs(obj, target, ...)}
+#' filter_obs(obj, target, ..., drop_taxa = FALSE)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the list/vector/table in `obj$data` to filter
@@ -281,10 +285,12 @@ NULL
 #' if it was a vector on its own. See [dplyr::sample_n()] for the inspiration
 #' for this function.
 #' \preformatted{
-#' obj$sample_n_obs(target, size, replace = FALSE, taxon_weight = NULL,
-#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
-#' sample_n_obs(obj, target, size, replace = FALSE, taxon_weight = NULL,
-#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
+#' obj$sample_n_obs(target, size, replace = FALSE,
+#'   taxon_weight = NULL, obs_weight = NULL,
+#'   use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_n_obs(obj, target, size, replace = FALSE,
+#'   taxon_weight = NULL, obs_weight = NULL,
+#'   use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
 #' @param target The name of the table in `obj$data` to filter
@@ -340,10 +346,12 @@ NULL
 #' object. Weights can be specified for observations or their taxa. See
 #' [dplyr::sample_frac()] for the inspiration for this function.
 #' \preformatted{
-#' obj$sample_frac_obs(target, size, replace = FALSE, taxon_weight = NULL,
-#' obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
-#' sample_frac_obs(obj, target, size, replace = FALSE, taxon_weight =
-#' NULL, obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
+#' obj$sample_frac_obs(target, size, replace = FALSE,
+#'   taxon_weight = NULL, obs_weight = NULL,
+#'   use_supertaxa = TRUE, collapse_func = mean, ...)
+#' sample_frac_obs(obj, target, size, replace = FALSE,
+#'   taxon_weight = NULL, obs_weight = NULL,
+#'   use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
 #' @param target The name of the table in `obj$data` to filter

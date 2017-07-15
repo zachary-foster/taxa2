@@ -21,7 +21,8 @@ usually only makes sense to data that corresponds to taxa 1:1, such as
 \description{
 Return the leaf taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Leaf taxa are taxa
 with no subtaxa.
-\preformatted{obj$leaves(subset = NULL, value = NULL)
+\preformatted{
+obj$leaves(subset = NULL, value = NULL)
 leaves(obj, subset = NULL, value = NULL)}
 }
 \examples{

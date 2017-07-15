@@ -15,7 +15,8 @@ taxon IDs}
 \description{
 Get classification strings of taxa in an object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
 composed of taxon IDs. Each classification is constructed by concatenating
-the taxon ids of the given taxon and its supertaxa. \preformatted{
+the taxon ids of the given taxon and its supertaxa.
+\preformatted{
 obj$id_classifications(sep = ";")
 id_classifications(obj, sep = ";")}
 }

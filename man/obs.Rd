@@ -38,8 +38,11 @@ vector.
 \description{
 Given a \code{\link[=taxmap]{taxmap()}} object, return data associated with each taxon in a
 given table included in that \code{\link[=taxmap]{taxmap()}} object.
-\preformatted{obj$obs(data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)
-obs(obj, data, value = NULL, subset = NULL, recursive = TRUE, simplify = FALSE)}
+\preformatted{
+obj$obs(data, value = NULL, subset = NULL,
+  recursive = TRUE, simplify = FALSE)
+obs(obj, data, value = NULL, subset = NULL,
+  recursive = TRUE, simplify = FALSE)}
 }
 \examples{
 # Get indexes of rows corresponding to each taxon

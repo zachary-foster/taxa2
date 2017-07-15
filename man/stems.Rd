@@ -28,10 +28,11 @@ taxa with no subtaxa.}
 Return the stem taxa for a \code{\link[=taxonomy]{taxonomy()}} or a \code{\link[=taxmap]{taxmap()}}
 object. Stem taxa are all those from the roots to the first taxon with more
 than one subtaxon.
-\preformatted{obj$stems(subset = NULL, simplify = FALSE,
-value = NULL, exclude_leaves = FALSE)
+\preformatted{
+obj$stems(subset = NULL, simplify = FALSE,
+  value = NULL, exclude_leaves = FALSE)
 stems(obj, subset = NULL, simplify = FALSE,
-value = NULL, exclude_leaves = FALSE)}
+  value = NULL, exclude_leaves = FALSE)}
 }
 \examples{
 # Return indexes of stem taxa

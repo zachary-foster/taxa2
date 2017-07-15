@@ -299,7 +299,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #' @family parsers
 #'
-#' @examples
+#' @examples \dontrun{
+#'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
 #'                                      "Mammalia;Carnivora;Felidae",
@@ -341,7 +342,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   # This allows for complex mappings between variables that other functions use
 #'   map_data(x, my_names, foods)
 #'   map_data(x, counts, my_names)
-#'
+#' }
 #' @export
 lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                             mappings = c(), database = "ncbi",

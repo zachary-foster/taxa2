@@ -21,7 +21,8 @@ usually only makes sense to data that corresponds to taxa 1:1, such as
 \description{
 Return the root taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Can also be used to
 get the roots of a subset of taxa.
-\preformatted{obj$roots(subset = NULL, value = NULL)
+\preformatted{
+obj$roots(subset = NULL, value = NULL)
 roots(obj, subset = NULL, value = NULL)}
 }
 \examples{

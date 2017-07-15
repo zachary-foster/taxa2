@@ -35,10 +35,10 @@ that has an associated taxon id.}
 Apply a function to the subtaxa for each taxon. This is similar
 to using \code{\link[=subtaxa]{subtaxa()}} with \code{\link[=lapply]{lapply()}} or \code{\link[=sapply]{sapply()}}.
 \preformatted{
-obj$subtaxa_apply(func, subset = NULL, recursive = TRUE, simplify = FALSE,
-                  include_input = FALSE, value = NULL, ...)
-subtaxa_apply(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
-              include_input = FALSE, value = NULL, ...)}
+obj$subtaxa_apply(func, subset = NULL, recursive = TRUE,
+  simplify = FALSE, include_input = FALSE, value = NULL, ...)
+subtaxa_apply(obj, func, subset = NULL, recursive = TRUE,
+  simplify = FALSE, include_input = FALSE, value = NULL, ...)}
 }
 \examples{
 # Count number of subtaxa in each taxon

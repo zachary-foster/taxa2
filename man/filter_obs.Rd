@@ -37,7 +37,7 @@ semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
 obj$filter_obs(target, ..., drop_taxa = FALSE)
-filter_obs(obj, target, ...)}
+filter_obs(obj, target, ..., drop_taxa = FALSE)}
 }
 \examples{
 # Filter by row index

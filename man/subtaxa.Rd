@@ -37,10 +37,11 @@ then the unique values are returned in a single vector.
 \description{
 Return data for the subtaxa of each taxon in an \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
 object.
-\preformatted{obj$subtaxa(subset = NULL, recursive = TRUE, simplify = FALSE,
-include_input = FALSE, value = NULL)
-subtaxa(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
-include_input = FALSE, value = NULL)}
+\preformatted{
+obj$subtaxa(subset = NULL, recursive = TRUE,
+  simplify = FALSE, include_input = FALSE, value = NULL)
+subtaxa(obj, subset = NULL, recursive = TRUE,
+  simplify = FALSE, include_input = FALSE, value = NULL)}
 }
 \examples{
 # return the indexes for subtaxa for each taxon

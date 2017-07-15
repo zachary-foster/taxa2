@@ -39,11 +39,11 @@ Apply a function to the supertaxa for each taxon. This is similar
 to using \code{\link[=supertaxa]{supertaxa()}} with \code{\link[=lapply]{lapply()}} or \code{\link[=sapply]{sapply()}}.
 \preformatted{
 obj$supertaxa_apply(func, subset = NULL, recursive = TRUE,
-                    simplify = FALSE, include_input = FALSE,
-                    value = NULL, na = FALSE, ...)
+  simplify = FALSE, include_input = FALSE, value = NULL,
+  na = FALSE, ...)
 supertaxa_apply(obj, func, subset = NULL, recursive = TRUE,
-                simplify = FALSE, include_input = FALSE,
-                value = NULL, na = FALSE, ....)}
+  simplify = FALSE, include_input = FALSE, value = NULL,
+  na = FALSE, ....)}
 }
 \examples{
 # Get classifications for each taxon

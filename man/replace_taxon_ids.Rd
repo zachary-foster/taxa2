@@ -14,6 +14,9 @@ A \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object 
 }
 \description{
 Replace taxon ids in a \code{\link[=taxmap]{taxmap()}} or \code{\link[=taxonomy]{taxonomy()}} object.
+\preformatted{
+obj$replace_taxon_ids(new_ids)
+replace_taxon_ids(obj, new_ids)}
 }
 \examples{
 \dontrun{

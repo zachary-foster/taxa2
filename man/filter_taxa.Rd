@@ -6,12 +6,15 @@
 \arguments{
 \item{obj}{An object of class \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}}
 
-\item{...}{One or more filtering conditions. Each filtering condition must
-resolve to one of three things: \describe{ \item{\code{character}}{One or more
-taxon IDs contained in \code{obj$edge_list$to}} \item{\code{integer}}{One or more row
-indexes of \code{obj$edge_list}} \item{\code{logical}}{A \code{TRUE}/\code{FALSE} vector of
-length equal to the number of rows in \code{obj$edge_list}} } Any variable name
-that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
+\item{...}{One or more filtering conditions. Any variable name that appears
+in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. Each
+filtering condition must resolve to one of three things:
+\itemize{
+\item \code{character}: One or more taxon IDs contained in \code{obj$edge_list$to}
+\item \code{integer}: One or more row indexes of \code{obj$edge_list}
+\item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of rows
+in \code{obj$edge_list}
+}}
 
 \item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include
 subtaxa of taxa passing the filter. Positive numbers indicate the number of
@@ -66,10 +69,12 @@ However, calling the function using the \code{filter_taxa(obj, ...)} imitates R'
 traditional copy-on-modify semantics, so "obj" would not be changed; instead
 a changed version would be returned, like most R functions.
 \preformatted{
-filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
-reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)
-obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE, drop_obs = FALSE,
-reassign_obs = TRUE, reassign_taxa = TRUE, invert = FALSE)}
+filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+  drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+  invert = FALSE)
+obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
+  drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+  invert = FALSE)}
 }
 \examples{
 # Filter by index

@@ -51,10 +51,12 @@ by. Any variable name that appears in \code{\link[=all_names]{all_names()}} can 
 if it was a vector on its own. See \code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration
 for this function.
 \preformatted{
-obj$sample_n_obs(target, size, replace = FALSE, taxon_weight = NULL,
-obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)
-sample_n_obs(obj, target, size, replace = FALSE, taxon_weight = NULL,
-obs_weight = NULL, use_supertaxa = TRUE, collapse_func = mean, ...)}
+obj$sample_n_obs(target, size, replace = FALSE,
+  taxon_weight = NULL, obs_weight = NULL,
+  use_supertaxa = TRUE, collapse_func = mean, ...)
+sample_n_obs(obj, target, size, replace = FALSE,
+  taxon_weight = NULL, obs_weight = NULL,
+  use_supertaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
 # Sample 2 rows without replacement

@@ -64,6 +64,8 @@ that are present in a dataset. Also can incorporate additional associated
 datasets.
 }
 \examples{
+\dontrun{
+
   # Make example data with taxonomic classifications
   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
                                      "Mammalia;Carnivora;Felidae",
@@ -105,7 +107,7 @@ datasets.
   # This allows for complex mappings between variables that other functions use
   map_data(x, my_names, foods)
   map_data(x, counts, my_names)
-
+}
 }
 \seealso{
 Other parsers: \code{\link{extract_tax_data}},
