@@ -1,7 +1,7 @@
 Package: taxa
 Type: Package
-Title: Taxonomic Classes for R
-Description: The taxa package provides taxonomic classes for
+Title: Taxonomic Classes
+Description: Provides taxonomic classes for
     groupings of taxonomic names without data, and those
     with data. Methods provided are "taxonomically aware", in
     that they know about ordering of ranks, and methods that
