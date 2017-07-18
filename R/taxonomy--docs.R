@@ -989,8 +989,7 @@ NULL
 #'
 #' @family taxonomy data functions
 #'
-#' @examples \dontrun{
-#'
+#' @examples
 #' # Mapping between two variables in `all_names(ex_taxmap)`
 #' map_data(ex_taxmap, from = taxon_names, to = n_legs > 0)
 #'
@@ -998,7 +997,7 @@ NULL
 #' x = c("d" = "looks like a cat", "h" = "big scary cats",
 #'       "i" = "smaller cats", "m" = "might eat you", "n" = "Meow! (Feed me!)")
 #' map_data(ex_taxmap, from = taxon_names, to = x)
-#' }
+#'
 #' @name map_data
 NULL
 

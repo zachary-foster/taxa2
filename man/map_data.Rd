@@ -28,8 +28,6 @@ obj$map_data(from, to, warn = TRUE)
 map_data(obj, from, to, warn = TRUE)}
 }
 \examples{
-\dontrun{
-
 # Mapping between two variables in `all_names(ex_taxmap)`
 map_data(ex_taxmap, from = taxon_names, to = n_legs > 0)
 
@@ -37,7 +35,7 @@ map_data(ex_taxmap, from = taxon_names, to = n_legs > 0)
 x = c("d" = "looks like a cat", "h" = "big scary cats",
       "i" = "smaller cats", "m" = "might eat you", "n" = "Meow! (Feed me!)")
 map_data(ex_taxmap, from = taxon_names, to = x)
-}
+
 }
 \seealso{
 Other taxonomy data functions: \code{\link{id_classifications}},
