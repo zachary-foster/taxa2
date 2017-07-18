@@ -463,7 +463,7 @@ arrange_obs(my_taxmap, "info", name)
 
 The `taxmap` class has the ability to contain and manipulate very complex data.
 However, this can make it difficult to parse the data into a `taxmap` object.
-For this reason there are three functions to help creating `taxmap` objects from nearly any kind of data that a taxonomy can be associated with and derived from.
+For this reason, there are three functions to help creating `taxmap` objects from nearly any kind of data that a taxonomy can be associated with or derived from.
 The figure below shows simplified versions of how to create `taxmap` objects from different types of data in different formats.
 
 ```{r results='asis', echo = FALSE}
