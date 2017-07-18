@@ -7,8 +7,10 @@ Status](https://travis-ci.org/ropensci/taxa.svg?branch=master)](https://travis-c
 [![Project Status: WIP - Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/taxa)](https://github.com/metacran/cranlogs.app)
-[![cran version](http://www.r-pkg.org/badges/version/taxa)](https://cran.r-project.org/package=taxa)
+[![rstudio mirror
+downloads](http://cranlogs.r-pkg.org/badges/taxa)](https://github.com/metacran/cranlogs.app)
+[![cran
+version](http://www.r-pkg.org/badges/version/taxa)](https://cran.r-project.org/package=taxa)
 
 `taxa` defines taxonomic classes and functions to manipulate them. The
 goal is to use these classes as low level fundamental taxonomic classes
@@ -29,6 +31,10 @@ Diagram of class concepts for `taxa` classes:
 Install
 -------
 
+CRAN version
+
+    install.packages("taxa")
+
 Development version from GitHub
 
     devtools::install_github("ropensci/taxa")
@@ -40,11 +46,12 @@ The classes
 
 ### Minor component classes
 
-There a few optional classes used to store information in other classes.
-In most cases, these can be replaced with simple character values but
-using them provides more information and potential functionality.
+There are a few optional classes used to store information in other
+classes. In most cases, these can be replaced with simple character
+values but using them provides more information and potential
+functionality.
 
-#### `database`
+#### database
 
 Taxonomic data usually comes from a database. A common example is the
 [NCBI Taxonomy Database](https://www.ncbi.nlm.nih.gov/taxonomy) used to
@@ -78,50 +85,50 @@ instead of making a new database object (e.g. `"ncbi"` instead of the
     #>   url: http://www.ncbi.nlm.nih.gov/taxonomy
     #>   description: NCBI Taxonomy Database
     #>   id regex: .*
-    #>
+    #> 
     #> $gbif
     #> <database> gbif
     #>   url: http://www.gbif.org/developer/species
     #>   description: GBIF Taxonomic Backbone
     #>   id regex: .*
-    #>
+    #> 
     #> $bold
     #> <database> bold
     #>   url: http://www.boldsystems.org
     #>   description: Barcode of Life
     #>   id regex: .*
-    #>
+    #> 
     #> $col
     #> <database> col
     #>   url: http://www.catalogueoflife.org
     #>   description: Catalogue of Life
     #>   id regex: .*
-    #>
+    #> 
     #> $eol
     #> <database> eol
     #>   url: http://eol.org
     #>   description: Encyclopedia of Life
     #>   id regex: .*
-    #>
+    #> 
     #> $nbn
     #> <database> nbn
     #>   url: https://nbn.org.uk
     #>   description: UK National Biodiversity Network
     #>   id regex: .*
-    #>
+    #> 
     #> $tps
     #> <database> tps
     #>   url: http://www.tropicos.org/
     #>   description: Tropicos
     #>   id regex: .*
-    #>
+    #> 
     #> $itis
     #> <database> itis
     #>   url: http://www.itis.gov
     #>   description: Integrated Taxonomic Information System
     #>   id regex: .*
 
-#### `rank`
+#### rank
 
 Taxa might have defined ranks (e.g. species, family, etc.), ambiguous
 ranks (e.g. "unranked", "unknown"), or no rank information at all. The
@@ -141,7 +148,7 @@ The taxon name can be defined in the same way as rank.
     #> <TaxonName> Poa
     #>   database: ncbi
 
-#### `taxon_id`
+#### taxon\_id
 
 Each database has its set of unique taxon IDs. These IDs are better than
 using the taxon name directly because they are guaranteed to be unique,
@@ -199,10 +206,10 @@ print methods. It is meant to store an arbitrary list of `taxon`.
     #>   id: 93036
     #>   authority: none
     taxa(x, x, x)
-    #> <taxa>
-    #>   no. taxa:  3
-    #>   Poa annua / species / 93036
-    #>   Poa annua / species / 93036
+    #> <taxa> 
+    #>   no. taxa:  3 
+    #>   Poa annua / species / 93036 
+    #>   Poa annua / species / 93036 
     #>   Poa annua / species / 93036
 
 ### The "hierarchy" class
@@ -233,9 +240,9 @@ meant to store all of the taxa in a classification in the correct order.
 
     (hier1 <- hierarchy(z, y, x))
     #> <Hierarchy>
-    #>   no. taxon's:  3
-    #>   Poaceae / family / 4479
-    #>   Poa / genus / 4544
+    #>   no. taxon's:  3 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544 
     #>   Poa annua / species / 93036
 
 Multiple `hierarchy` classes are stored in the `hierarchies` class,
@@ -258,15 +265,15 @@ similar to how multiple `taxon` are stored in `taxa`.
     )
     (hier2 <- hierarchy(c, b, a))
     #> <Hierarchy>
-    #>   no. taxon's:  3
-    #>   Felidae / family / 9681
-    #>   Puma / genus / 146712
+    #>   no. taxon's:  3 
+    #>   Felidae / family / 9681 
+    #>   Puma / genus / 146712 
     #>   Puma concolor / species / 9696
 
     hierarchies(hier1, hier2)
-    #> <Hierarchies>
-    #>   no. hierarchies:  2
-    #>   Poaceae / Poa / Poa annua
+    #> <Hierarchies> 
+    #>   no. hierarchies:  2 
+    #>   Poaceae / Poa / Poa annua 
     #>   Felidae / Puma / Puma concolor
 
 ### The "taxonomy" class
@@ -328,43 +335,43 @@ function returns the supertaxa of all or a subset of the taxa in a
     supertaxa(tax)
     #> $b
     #> integer(0)
-    #>
+    #> 
     #> $c
     #> integer(0)
-    #>
+    #> 
     #> $d
     #> [1] 1
-    #>
+    #> 
     #> $e
     #> [1] 1
-    #>
+    #> 
     #> $f
     #> [1] 2
-    #>
+    #> 
     #> $g
     #> [1] 3 1
-    #>
+    #> 
     #> $h
     #> [1] 3 1
-    #>
+    #> 
     #> $i
     #> [1] 4 1
-    #>
+    #> 
     #> $j
     #> [1] 5 2
-    #>
+    #> 
     #> $k
     #> [1] 6 3 1
-    #>
+    #> 
     #> $l
     #> [1] 7 3 1
-    #>
+    #> 
     #> $m
     #> [1] 8 4 1
-    #>
+    #> 
     #> $n
     #> [1] 9 5 2
-    #>
+    #> 
     #> $o
     #> [1] 9 5 2
 
@@ -381,31 +388,31 @@ What is returned can be modified with the `value` option:
 
     supertaxa(tax, subset = "m", value = "taxon_names")
     #> $m
-    #>           i           e           b
+    #>           i           e           b 
     #>      "homo" "Hominidae"  "Mammalia"
 
     supertaxa(tax, subset = "m", value = "taxon_ranks")
     #> $m
-    #>        i        e        b
+    #>        i        e        b 
     #>  "genus" "family"  "class"
 
 You can also subset based on a logical test:
 
     supertaxa(tax, subset = taxon_ranks == "genus", value = "taxon_names")
     #> $g
-    #>          d          b
-    #>  "Felidae" "Mammalia"
-    #>
+    #>          d          b 
+    #>  "Felidae" "Mammalia" 
+    #> 
     #> $h
-    #>          d          b
-    #>  "Felidae" "Mammalia"
-    #>
+    #>          d          b 
+    #>  "Felidae" "Mammalia" 
+    #> 
     #> $i
-    #>           e           b
-    #> "Hominidae"  "Mammalia"
-    #>
+    #>           e           b 
+    #> "Hominidae"  "Mammalia" 
+    #> 
     #> $j
-    #>            f            c
+    #>            f            c 
     #> "Solanaceae"    "Plantae"
 
 The `subset` and `value` work the same for most of the following
@@ -421,55 +428,55 @@ object.
 
     subtaxa(tax, value = "taxon_names")
     #> $b
-    #>           d           g           k           h           l           e
-    #>   "Felidae"  "Panthera"    "tigris"     "Felis"     "catus" "Hominidae"
-    #>           i           m
-    #>      "homo"   "sapiens"
-    #>
+    #>           d           g           k           h           l           e 
+    #>   "Felidae"  "Panthera"    "tigris"     "Felis"     "catus" "Hominidae" 
+    #>           i           m 
+    #>      "homo"   "sapiens" 
+    #> 
     #> $c
-    #>              f              j              n              o
-    #>   "Solanaceae"      "Solanum" "lycopersicum"    "tuberosum"
-    #>
+    #>              f              j              n              o 
+    #>   "Solanaceae"      "Solanum" "lycopersicum"    "tuberosum" 
+    #> 
     #> $d
-    #>          g          k          h          l
-    #> "Panthera"   "tigris"    "Felis"    "catus"
-    #>
+    #>          g          k          h          l 
+    #> "Panthera"   "tigris"    "Felis"    "catus" 
+    #> 
     #> $e
-    #>         i         m
-    #>    "homo" "sapiens"
-    #>
+    #>         i         m 
+    #>    "homo" "sapiens" 
+    #> 
     #> $f
-    #>              j              n              o
-    #>      "Solanum" "lycopersicum"    "tuberosum"
-    #>
+    #>              j              n              o 
+    #>      "Solanum" "lycopersicum"    "tuberosum" 
+    #> 
     #> $g
-    #>        k
-    #> "tigris"
-    #>
+    #>        k 
+    #> "tigris" 
+    #> 
     #> $h
-    #>       l
-    #> "catus"
-    #>
+    #>       l 
+    #> "catus" 
+    #> 
     #> $i
-    #>         m
-    #> "sapiens"
-    #>
+    #>         m 
+    #> "sapiens" 
+    #> 
     #> $j
-    #>              n              o
-    #> "lycopersicum"    "tuberosum"
-    #>
+    #>              n              o 
+    #> "lycopersicum"    "tuberosum" 
+    #> 
     #> $k
     #> named character(0)
-    #>
+    #> 
     #> $l
     #> named character(0)
-    #>
+    #> 
     #> $m
     #> named character(0)
-    #>
+    #> 
     #> $n
     #> named character(0)
-    #>
+    #> 
     #> $o
     #> named character(0)
 
@@ -479,7 +486,7 @@ We call taxa that have no supertaxa "roots". The `roots` function
 returns these taxa.
 
     roots(tax, value = "taxon_names")
-    #>          b          c
+    #>          b          c 
     #> "Mammalia"  "Plantae"
 
 #### leaves
@@ -488,7 +495,7 @@ We call taxa without any subtaxa "leaves". The `leaves` function returns
 these taxa.
 
     leaves(tax, value = "taxon_names")
-    #>              k              l              m              n              o
+    #>              k              l              m              n              o 
     #>       "tigris"        "catus"      "sapiens" "lycopersicum"    "tuberosum"
 
 #### other functions
@@ -546,17 +553,17 @@ of returning the function itself, the results of the functions are
 returned. To see what variables can be used this way, use `all_names`.
 
     all_names(my_taxmap)
-    #>         taxon_names           taxon_ids       taxon_indexes
-    #>       "taxon_names"         "taxon_ids"     "taxon_indexes"
-    #>         n_supertaxa           n_subtaxa         n_subtaxa_1
-    #>       "n_supertaxa"         "n_subtaxa"       "n_subtaxa_1"
-    #>         taxon_ranks             is_root             is_stem
-    #>       "taxon_ranks"           "is_root"           "is_stem"
-    #>           is_branch             is_leaf      data$info$name
-    #>         "is_branch"           "is_leaf"              "name"
-    #>    data$info$n_legs data$info$dangerous   data$phylopic_ids
-    #>            "n_legs"         "dangerous"      "phylopic_ids"
-    #>          data$foods      funcs$reaction
+    #>         taxon_names           taxon_ids       taxon_indexes 
+    #>       "taxon_names"         "taxon_ids"     "taxon_indexes" 
+    #>         n_supertaxa           n_subtaxa         n_subtaxa_1 
+    #>       "n_supertaxa"         "n_subtaxa"       "n_subtaxa_1" 
+    #>         taxon_ranks             is_root             is_stem 
+    #>       "taxon_ranks"           "is_root"           "is_stem" 
+    #>           is_branch             is_leaf      data$info$name 
+    #>         "is_branch"           "is_leaf"              "name" 
+    #>    data$info$n_legs data$info$dangerous   data$phylopic_ids 
+    #>            "n_legs"         "dangerous"      "phylopic_ids" 
+    #>          data$foods      funcs$reaction 
     #>             "foods"          "reaction"
 
 For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the
@@ -565,120 +572,120 @@ below. To get the values of these variables, use `get_data`.
 
     get_data(my_taxmap)
     #> $taxon_names
-    #>              b              c              d              e              f
-    #>     "Mammalia"      "Plantae"      "Felidae" "Notoryctidae"    "Hominidae"
-    #>              g              h              i              j              k
-    #>   "Solanaceae"     "Panthera"        "Felis"   "Notoryctes"         "homo"
-    #>              l              m              n              o              p
-    #>      "Solanum"       "tigris"        "catus"     "typhlops"      "sapiens"
-    #>              q              r
-    #> "lycopersicum"    "tuberosum"
-    #>
+    #>              b              c              d              e              f 
+    #>     "Mammalia"      "Plantae"      "Felidae" "Notoryctidae"    "Hominidae" 
+    #>              g              h              i              j              k 
+    #>   "Solanaceae"     "Panthera"        "Felis"   "Notoryctes"         "homo" 
+    #>              l              m              n              o              p 
+    #>      "Solanum"       "tigris"        "catus"     "typhlops"      "sapiens" 
+    #>              q              r 
+    #> "lycopersicum"    "tuberosum" 
+    #> 
     #> $taxon_ids
-    #>   b   c   d   e   f   g   h   i   j   k   l   m   n   o   p   q   r
-    #> "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r"
-    #>
+    #>   b   c   d   e   f   g   h   i   j   k   l   m   n   o   p   q   r 
+    #> "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" 
+    #> 
     #> $taxon_indexes
-    #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r
-    #>  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
-    #>
+    #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r 
+    #>  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 
+    #> 
     #> $n_supertaxa
-    #> b c d e f g h i j k l m n o p q r
-    #> 0 0 1 1 1 1 2 2 2 2 2 3 3 3 3 3 3
-    #>
+    #> b c d e f g h i j k l m n o p q r 
+    #> 0 0 1 1 1 1 2 2 2 2 2 3 3 3 3 3 3 
+    #> 
     #> $n_subtaxa
-    #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r
-    #> 11  4  4  2  2  3  1  1  1  1  2  0  0  0  0  0  0
-    #>
+    #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r 
+    #> 11  4  4  2  2  3  1  1  1  1  2  0  0  0  0  0  0 
+    #> 
     #> $n_subtaxa_1
-    #> b c d e f g h i j k l m n o p q r
-    #> 3 1 2 1 1 1 1 1 1 1 2 0 0 0 0 0 0
-    #>
+    #> b c d e f g h i j k l m n o p q r 
+    #> 3 1 2 1 1 1 1 1 1 1 2 0 0 0 0 0 0 
+    #> 
     #> $taxon_ranks
-    #>         b         c         d         e         f         g         h
-    #>   "class" "kingdom"  "family"  "family"  "family"  "family"   "genus"
-    #>         i         j         k         l         m         n         o
-    #>   "genus"   "genus"   "genus"   "genus" "species" "species" "species"
-    #>         p         q         r
-    #> "species" "species" "species"
-    #>
+    #>         b         c         d         e         f         g         h 
+    #>   "class" "kingdom"  "family"  "family"  "family"  "family"   "genus" 
+    #>         i         j         k         l         m         n         o 
+    #>   "genus"   "genus"   "genus"   "genus" "species" "species" "species" 
+    #>         p         q         r 
+    #> "species" "species" "species" 
+    #> 
     #> $is_root
-    #>     b     c     d     e     f     g     h     i     j     k     l     m
-    #>  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-    #>     n     o     p     q     r
-    #> FALSE FALSE FALSE FALSE FALSE
-    #>
+    #>     b     c     d     e     f     g     h     i     j     k     l     m 
+    #>  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE 
+    #>     n     o     p     q     r 
+    #> FALSE FALSE FALSE FALSE FALSE 
+    #> 
     #> $is_stem
-    #>     b     c     d     e     f     g     h     i     j     k     l     m
-    #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-    #>     n     o     p     q     r
-    #> FALSE FALSE FALSE FALSE FALSE
-    #>
+    #>     b     c     d     e     f     g     h     i     j     k     l     m 
+    #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE 
+    #>     n     o     p     q     r 
+    #> FALSE FALSE FALSE FALSE FALSE 
+    #> 
     #> $is_branch
-    #>     b     c     d     e     f     g     h     i     j     k     l     m
-    #> FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-    #>     n     o     p     q     r
-    #> FALSE FALSE FALSE FALSE FALSE
-    #>
+    #>     b     c     d     e     f     g     h     i     j     k     l     m 
+    #> FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE 
+    #>     n     o     p     q     r 
+    #> FALSE FALSE FALSE FALSE FALSE 
+    #> 
     #> $is_leaf
-    #>     b     c     d     e     f     g     h     i     j     k     l     m
-    #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
-    #>     n     o     p     q     r
-    #>  TRUE  TRUE  TRUE  TRUE  TRUE
-    #>
+    #>     b     c     d     e     f     g     h     i     j     k     l     m 
+    #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE 
+    #>     n     o     p     q     r 
+    #>  TRUE  TRUE  TRUE  TRUE  TRUE 
+    #> 
     #> $name
-    #>      m      n      o      p      q      r
-    #>  tiger    cat   mole  human tomato potato
+    #>      m      n      o      p      q      r 
+    #>  tiger    cat   mole  human tomato potato 
     #> Levels: cat human mole potato tiger tomato
-    #>
+    #> 
     #> $n_legs
-    #> m n o p q r
-    #> 4 4 4 2 0 0
-    #>
+    #> m n o p q r 
+    #> 4 4 4 2 0 0 
+    #> 
     #> $dangerous
-    #>     m     n     o     p     q     r
-    #>  TRUE FALSE FALSE  TRUE FALSE FALSE
-    #>
+    #>     m     n     o     p     q     r 
+    #>  TRUE FALSE FALSE  TRUE FALSE FALSE 
+    #> 
     #> $phylopic_ids
-    #>                                      m
-    #> "e148eabb-f138-43c6-b1e4-5cda2180485a"
-    #>                                      n
-    #> "12899ba0-9923-4feb-a7f9-758c3c7d5e13"
-    #>                                      o
-    #> "11b783d5-af1c-4f4e-8ab5-a51470652b47"
-    #>                                      p
-    #> "9fae30cd-fb59-4a81-a39c-e1826a35f612"
-    #>                                      q
-    #> "b6400f39-345a-4711-ab4f-92fd4e22cb1a"
-    #>                                      r
-    #> "63604565-0406-460b-8cb8-1abe954b3f3a"
-    #>
+    #>                                      m 
+    #> "e148eabb-f138-43c6-b1e4-5cda2180485a" 
+    #>                                      n 
+    #> "12899ba0-9923-4feb-a7f9-758c3c7d5e13" 
+    #>                                      o 
+    #> "11b783d5-af1c-4f4e-8ab5-a51470652b47" 
+    #>                                      p 
+    #> "9fae30cd-fb59-4a81-a39c-e1826a35f612" 
+    #>                                      q 
+    #> "b6400f39-345a-4711-ab4f-92fd4e22cb1a" 
+    #>                                      r 
+    #> "63604565-0406-460b-8cb8-1abe954b3f3a" 
+    #> 
     #> $foods
     #> $foods$m
-    #> [1] "mammals" "birds"
-    #>
+    #> [1] "mammals" "birds"  
+    #> 
     #> $foods$n
-    #> [1] "cat food" "mice"
-    #>
+    #> [1] "cat food" "mice"    
+    #> 
     #> $foods$o
     #> [1] "insects"
-    #>
+    #> 
     #> $foods$p
     #> [1] "Most things, but especially anything rare or expensive"
-    #>
+    #> 
     #> $foods$q
-    #> [1] "light" "dirt"
-    #>
+    #> [1] "light" "dirt" 
+    #> 
     #> $foods$r
-    #> [1] "light" "dirt"
-    #>
-    #>
+    #> [1] "light" "dirt" 
+    #> 
+    #> 
     #> $reaction
     #> [1] "Watch out! That tiger might attack!"
-    #> [2] "No worries; its just a cat."
-    #> [3] "No worries; its just a mole."
+    #> [2] "No worries; its just a cat."        
+    #> [3] "No worries; its just a mole."       
     #> [4] "Watch out! That human might attack!"
-    #> [5] "No worries; its just a tomato."
+    #> [5] "No worries; its just a tomato."     
     #> [6] "No worries; its just a potato."
 
 Note how "taxon\_names" and "dangerous" are used below.
@@ -746,6 +753,25 @@ observations in `my_taxmap$data`.
     #> <Taxmap>
     #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
     #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   3 data sets:
+    #>     info:
+    #>       # A tibble: 2 x 4
+    #>           name n_legs dangerous taxon_id
+    #>         <fctr>  <dbl>     <lgl>    <chr>
+    #>       1  tiger      4      TRUE        m
+    #>       2  human      2      TRUE        p
+    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
+    #>     foods: a list with 6 items
+    #>   1 functions:
+    #>  reaction
+
+You can choose to filter out taxa whose observations did not pass the
+filter as well:
+
+    filter_obs(my_taxmap, "info", dangerous == TRUE, drop_taxa = TRUE)
+    #> <Taxmap>
+    #>   7 taxa: b. Mammalia, d. Felidae ... m. tigris, p. sapiens
+    #>   7 edges: NA->b, b->d, b->f, d->h, f->k, h->m, k->p
     #>   3 data sets:
     #>     info:
     #>       # A tibble: 2 x 4
@@ -894,7 +920,7 @@ Sorting the edge list and observations is done using `arrage_taxa` and
 
     arrange_taxa(my_taxmap, taxon_names)
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
+    #>   17 taxa: n. catus, d. Felidae ... r. tuberosum, o. typhlops
     #>   17 edges: i->n, b->d, d->i, b->f ... g->l, h->m, l->r, j->o
     #>   3 data sets:
     #>     info:
@@ -937,7 +963,7 @@ can be associated with and derived from. The figure below shows
 simplified versions of how to create `taxmap` objects from different
 types of data in different formats.
 
-<img src="vignettes/parsing_guide.png" title="parsing diagram" width="718">
+<img src="vignettes/parsing_guide.png" title="parsing diagram" width="800">
 
 The `parse_tax_data` and `lookup_tax_data` have, in addition to the
 functionality above, the ability to include additional data sets that
@@ -946,14 +972,147 @@ identifier). Elements in these datasets will be assigned the taxa
 defined in the source data, so functions like `filter_taxa` and
 `filter_obs` will work on all of the dataset at once.
 
-### For more information
+Parsing Hierarchy and hierarchies objects
+-----------------------------------------
+
+A set of functions are available for parsing objects of class
+`Hierarchy` and `hierarchies`. These functions are being ported from the
+CRAN package `binomen`.
+
+The functions below are "taxonomically aware" so that you can use for
+example `>` and `<` operators to filter your taxonomic names data.
+
+### pick
+
+`pick()` - Pick out specific taxa, while others are dropped
+
+    ex_hierarchy1
+    #> <Hierarchy>
+    #>   no. taxon's:  3 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544 
+    #>   Poa annua / species / 93036
+    # specific ranks by rank name
+    pick(ex_hierarchy1, ranks("family"))
+    #> <Hierarchy>
+    #>   no. taxon's:  1 
+    #>   Poaceae / family / 4479
+    # two elements by taxonomic name
+    pick(ex_hierarchy1, nms("Poaceae", "Poa"))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544
+    # two elements by taxonomic identifier
+    pick(ex_hierarchy1, ids(4479, 4544))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544
+    # combine types
+    pick(ex_hierarchy1, ranks("family"), ids(4544))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544
+
+### pop
+
+`pop()` - Pop out taxa, that is, drop them
+
+    ex_hierarchy1
+    #> <Hierarchy>
+    #>   no. taxon's:  3 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544 
+    #>   Poa annua / species / 93036
+    # specific ranks by rank name
+    pop(ex_hierarchy1, ranks("family"))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poa / genus / 4544 
+    #>   Poa annua / species / 93036
+    # two elements by taxonomic name
+    pop(ex_hierarchy1, nms("Poaceae", "Poa"))
+    #> <Hierarchy>
+    #>   no. taxon's:  1 
+    #>   Poa annua / species / 93036
+    # two elements by taxonomic identifier
+    pop(ex_hierarchy1, ids(4479, 4544))
+    #> <Hierarchy>
+    #>   no. taxon's:  1 
+    #>   Poa annua / species / 93036
+    # combine types
+    pop(ex_hierarchy1, ranks("family"), ids(4544))
+    #> <Hierarchy>
+    #>   no. taxon's:  1 
+    #>   Poa annua / species / 93036
+
+### span
+
+`span()` - Select a range of taxa, either by two names, or relational
+operators
+
+    ex_hierarchy1
+    #> <Hierarchy>
+    #>   no. taxon's:  3 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544 
+    #>   Poa annua / species / 93036
+    # keep all taxa between family and genus
+    # - by rank name, taxonomic name or ID
+    span(ex_hierarchy1, nms("Poaceae", "Poa"))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544
+
+    # keep all taxa greater than genus
+    span(ex_hierarchy1, ranks("> genus"))
+    #> <Hierarchy>
+    #>   no. taxon's:  1 
+    #>   Poaceae / family / 4479
+
+    # keep all taxa greater than or equal to genus
+    span(ex_hierarchy1, ranks(">= genus"))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Poaceae / family / 4479 
+    #>   Poa / genus / 4544
+
+    # keep all taxa less than Felidae
+    span(ex_hierarchy2, nms("< Felidae"))
+    #> <Hierarchy>
+    #>   no. taxon's:  2 
+    #>   Puma / genus / 146712 
+    #>   Puma concolor / species / 9696
+
+    ## Multiple operator statements - useful with larger classifications
+    ex_hierarchy3
+    #> <Hierarchy>
+    #>   no. taxon's:  6 
+    #>   Chordata / phylum / 158852 
+    #>   Vertebrata / subphylum / 331030 
+    #>   Teleostei / class / 161105 
+    #>   Salmonidae / family / 161931 
+    #>   Salmo / genus / 161994 
+    #>   Salmo salar / species / 161996
+    span(ex_hierarchy3, ranks("> genus"), ranks("< phylum"))
+    #> <Hierarchy>
+    #>   no. taxon's:  3 
+    #>   Vertebrata / subphylum / 331030 
+    #>   Teleostei / class / 161105 
+    #>   Salmonidae / family / 161931
+
+For more information
+--------------------
 
 This vignettte is meant to be just an outline of what `taxa` can do. In
 the future, we plan to release additional, in-depth vignettes for
 specific topics. More informaiton for specific functions and examples
-can be found on their man pages by type the name of the function
-prefixed by a `?` in the consol of an R session. For example,
-`?filter_taxa` will pull up the help page for `filter_taxa`.
+can be found on their man pages by typing the name of the function
+prefixed by a `?` in an R session. For example, `?filter_taxa` will pull
+up the help page for `filter_taxa`.
 
 Use cases
 ---------

@@ -64,7 +64,7 @@ library("taxa")
 
 ### Minor component classes
 
-There a few optional classes used to store information in other classes.
+There are a few optional classes used to store information in other classes.
 In most cases, these can be replaced with simple character values but using them provides more information and potential functionality.
 
 #### database
@@ -405,6 +405,11 @@ The `filter_obs` function works in a similar way, but subsets observations in `m
 filter_obs(my_taxmap, "info", dangerous == TRUE)
 ```
 
+You can choose to filter out taxa whose observations did not pass the filter as well:
+
+```{r}
+filter_obs(my_taxmap, "info", dangerous == TRUE, drop_taxa = TRUE)
+```
 
 #### Sampling
 
@@ -463,7 +468,7 @@ The figure below shows simplified versions of how to create `taxmap` objects fro
 
 ```{r results='asis', echo = FALSE}
 fig_path <- "parsing_guide.png"
-width <- 718
+width <- 800
 if (knitr:::child_mode()) { # if run as a child
   fig_path <- file.path("vignettes", fig_path)
 }
