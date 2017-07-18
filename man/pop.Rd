@@ -17,7 +17,7 @@ You can't pass in arbitrary strings or numbers.}
 an object of the same class as passed in
 }
 \description{
-That is, drop them
+Pop out taxa, that is, drop them
 }
 \details{
 supports \code{Hierarchy} and \code{hierarchies} objects

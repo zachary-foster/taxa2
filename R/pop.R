@@ -1,6 +1,6 @@
 #' @title Pop taxa out
 #'
-#' @description That is, drop them
+#' @description Pop out taxa, that is, drop them
 #'
 #' @export
 #' @param .data Input, object of class `Hierarchy`, or `hierarchies`

@@ -44,6 +44,12 @@ cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="
 
 ## Install
 
+CRAN version
+
+```{r eval=FALSE}
+install.packages("taxa")
+```
+
 Development version from GitHub
 
 ```{r eval=FALSE}
@@ -61,7 +67,7 @@ library("taxa")
 There a few optional classes used to store information in other classes.
 In most cases, these can be replaced with simple character values but using them provides more information and potential functionality.
 
-#### `database`
+#### database
 
 Taxonomic data usually comes from a database.
 A common example is the [NCBI Taxonomy Database](https://www.ncbi.nlm.nih.gov/taxonomy) used to provide taxonomic classifications to sequences deposited in [other NCBI databases](https://www.ncbi.nlm.nih.gov/guide/all/).
@@ -85,7 +91,7 @@ database_list
 ```
 
 
-#### `rank`
+#### rank
 
 Taxa might have defined ranks (e.g. species, family, etc.), ambiguous ranks (e.g. "unranked", "unknown"), or no rank information at all.
 The particular selection and format of valid ranks varies with database, so the database can be optionally defined.
@@ -103,7 +109,7 @@ The taxon name can be defined in the same way as rank.
 taxon_name("Poa", database = "ncbi")
 ```
 
-#### `taxon_id`
+#### taxon_id
 
 Each database has its set of unique taxon IDs.
 These IDs are better than using the taxon name directly because they are guaranteed to be unique, whereas there are often duplicates of taxon names (e.g. *Orestias elegans* is the name of both an orchid and a fish).
@@ -200,7 +206,6 @@ c <- taxon(
 ```{r}
 hierarchies(hier1, hier2)
 ```
-
 
 ### The "taxonomy" class
 
@@ -383,7 +388,7 @@ filter_taxa(my_taxmap, startsWith(taxon_names, "t"))
 ```
 There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes.
 
-```{r eval=FALSE} 
+```{r eval=FALSE}
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "r")
 ```
 
@@ -452,7 +457,7 @@ arrange_obs(my_taxmap, "info", name)
 #### Parsing data
 
 The `taxmap` class has the ability to contain and manipulate very complex data.
-However, this can make it difficult to parse the data into a `taxmap` object. 
+However, this can make it difficult to parse the data into a `taxmap` object.
 For this reason there are three functions to help creating `taxmap` objects from nearly any kind of data that a taxonomy can be associated with and derived from.
 The figure below shows simplified versions of how to create `taxmap` objects from different types of data in different formats.
 
@@ -467,12 +472,77 @@ cat(paste0('<img src="', fig_path, '" title="parsing diagram" width="',
 ```
 
 
-The `parse_tax_data` and `lookup_tax_data` have, in addition to the functionality above, the ability to include additional data sets that are somehow associated with the source datasets (e.g. share a common identifier). Elements in these datasets will be assigned the taxa defined in the source data, so functions like `filter_taxa` and `filter_obs` will work on all of the dataset at once. 
+The `parse_tax_data` and `lookup_tax_data` have, in addition to the functionality above, the ability to include additional data sets that are somehow associated with the source datasets (e.g. share a common identifier). Elements in these datasets will be assigned the taxa defined in the source data, so functions like `filter_taxa` and `filter_obs` will work on all of the dataset at once.
 
-### For more information
+## Parsing Hierarchy and hierarchies objects
+
+A set of functions are available for parsing objects of class `Hierarchy` and
+`hierarchies`. These functions are being ported from the CRAN package `binomen`.
+
+The functions below are "taxonomically aware" so that you can use for example
+`>` and `<` operators to filter your taxonomic names data.
+
+### pick
+
+`pick()` - Pick out specific taxa, while others are dropped
+
+```{r}
+ex_hierarchy1
+# specific ranks by rank name
+pick(ex_hierarchy1, ranks("family"))
+# two elements by taxonomic name
+pick(ex_hierarchy1, nms("Poaceae", "Poa"))
+# two elements by taxonomic identifier
+pick(ex_hierarchy1, ids(4479, 4544))
+# combine types
+pick(ex_hierarchy1, ranks("family"), ids(4544))
+```
+
+### pop
+
+`pop()` - Pop out taxa, that is, drop them
+
+```{r}
+ex_hierarchy1
+# specific ranks by rank name
+pop(ex_hierarchy1, ranks("family"))
+# two elements by taxonomic name
+pop(ex_hierarchy1, nms("Poaceae", "Poa"))
+# two elements by taxonomic identifier
+pop(ex_hierarchy1, ids(4479, 4544))
+# combine types
+pop(ex_hierarchy1, ranks("family"), ids(4544))
+```
+
+### span
+
+`span()` - Select a range of taxa, either by two names, or relational operators
+
+```{r}
+ex_hierarchy1
+# keep all taxa between family and genus
+# - by rank name, taxonomic name or ID
+span(ex_hierarchy1, nms("Poaceae", "Poa"))
+
+# keep all taxa greater than genus
+span(ex_hierarchy1, ranks("> genus"))
+
+# keep all taxa greater than or equal to genus
+span(ex_hierarchy1, ranks(">= genus"))
+
+# keep all taxa less than Felidae
+span(ex_hierarchy2, nms("< Felidae"))
+
+## Multiple operator statements - useful with larger classifications
+ex_hierarchy3
+span(ex_hierarchy3, ranks("> genus"), ranks("< phylum"))
+```
+
+
+## For more information
 
 This vignettte is meant to be just an outline of what `taxa` can do.
 In the future, we plan to release additional, in-depth vignettes for specific topics.
-More informaiton for specific functions and examples can be found on their man pages by typing the name of the function prefixed by a `?` in an R session. For example, `?filter_taxa` will  pull up the help page for `filter_taxa`. 
+More informaiton for specific functions and examples can be found on their man pages by typing the name of the function prefixed by a `?` in an R session. For example, `?filter_taxa` will  pull up the help page for `filter_taxa`.
 
 
