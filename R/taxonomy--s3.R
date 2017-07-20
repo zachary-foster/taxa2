@@ -192,18 +192,18 @@ id_classifications.Taxonomy <- function(obj, ...) {
 
 
 #' @export
-name_classifications <- function(obj, ...) {
-  UseMethod("name_classifications")
+classifications <- function(obj, ...) {
+  UseMethod("classifications")
 }
 
 #' @export
-name_classifications.default <- function(obj, ...) {
+classifications.default <- function(obj, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-name_classifications.Taxonomy <- function(obj, ...) {
-  obj$name_classifications(...)
+classifications.Taxonomy <- function(obj, ...) {
+  obj$classifications(...)
 }
 
 

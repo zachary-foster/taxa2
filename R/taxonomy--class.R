@@ -498,17 +498,14 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-
-    id_classifications = function(sep = ";") {
+    classifications = function(value = "taxon_names", sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
-                            value = "taxon_ids", na = FALSE),
+                            value = value, na = FALSE),
              function(x) paste0(rev(x), collapse = sep), character(1))
     },
 
-    name_classifications = function(sep = ";") {
-      vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
-                            value = "taxon_names", na = FALSE),
-             function(x) paste0(rev(x), collapse = sep), character(1))
+    id_classifications = function(sep = ";") {
+      self$classifications(value = "taxon_ids", sep = sep)
     },
 
     n_supertaxa = function() {

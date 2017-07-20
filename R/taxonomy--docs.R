@@ -398,6 +398,41 @@ NULL
 
 #' Get classifications of taxa
 #'
+#' Get classifications of taxa in an object of type [taxonomy()] or [taxmap()]
+#' composed of data assoicated with taxa. Each classification is constructed by
+#' concatenating the data of the given taxon and all of its supertaxa.
+#' \preformatted{
+#' obj$classifications(value = "taxon_names", sep = ";")
+#' classifications(obj, value = "taxon_names", sep = ";")}
+#'
+#' @param obj ([taxonomy()] or [taxmap()])
+#' @param value What data to return. Any result of `all_names(obj)` can be used,
+#'   but it usually only makes sense to data that corresponds to taxa 1:1, such
+#'   as [taxon_ranks()]. By default, taxon indexes are returned.
+#' @param sep (`character` of length 1) The character(s) to place between
+#'   taxon IDs
+#'
+#' @return `character`
+#'
+#' @examples
+#'
+#' # Defualt settings returns taxon names separated by ;
+#' classifications(ex_taxmap)
+#'
+#' # Other values can be returned besides taxon names
+#' classifications(ex_taxmap, value = "taxon_ids")
+#'
+#' # The separator can also be changed
+#' classifications(ex_taxmap, value = "taxon_ranks", sep = "||")
+#'
+#' @family taxonomy data functions
+#'
+#' @name classifications
+NULL
+
+
+#' Get ID classifications of taxa
+#'
 #' Get classification strings of taxa in an object of type [taxonomy()] or [taxmap()]
 #' composed of taxon IDs. Each classification is constructed by concatenating
 #' the taxon ids of the given taxon and its supertaxa.
@@ -417,30 +452,6 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @name id_classifications
-NULL
-
-
-#' Get classifications of taxa
-#'
-#' Get classification strings of taxa in an object of type [taxonomy()] or [taxmap()]
-#' composed of taxon names. Each classification is constructed by concatenating
-#' the taxon names of the given taxon and its supertaxa.
-#' \preformatted{
-#' obj$name_classifications(sep = ";")
-#' name_classifications(obj, sep = ";")}
-#'
-#' @param obj ([taxonomy()] or [taxmap()])
-#' @param sep (`character` of length 1) The character(s) to place between
-#'   taxon names
-#'
-#' @return `character`
-#'
-#' @examples
-#' name_classifications(ex_taxmap)
-#'
-#' @family taxonomy data functions
-#'
-#' @name name_classifications
 NULL
 
 

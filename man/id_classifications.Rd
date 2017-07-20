@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxonomy--docs.R
 \name{id_classifications}
 \alias{id_classifications}
-\title{Get classifications of taxa}
+\title{Get ID classifications of taxa}
 \arguments{
 \item{obj}{(\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}})}
 
@@ -25,12 +25,11 @@ id_classifications(ex_taxmap)
 
 }
 \seealso{
-Other taxonomy data functions: \code{\link{is_branch}},
-  \code{\link{is_leaf}}, \code{\link{is_root}},
-  \code{\link{is_stem}}, \code{\link{map_data}},
-  \code{\link{n_subtaxa_1}}, \code{\link{n_subtaxa}},
-  \code{\link{n_supertaxa}},
-  \code{\link{name_classifications}},
+Other taxonomy data functions: \code{\link{classifications}},
+  \code{\link{is_branch}}, \code{\link{is_leaf}},
+  \code{\link{is_root}}, \code{\link{is_stem}},
+  \code{\link{map_data}}, \code{\link{n_subtaxa_1}},
+  \code{\link{n_subtaxa}}, \code{\link{n_supertaxa}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
