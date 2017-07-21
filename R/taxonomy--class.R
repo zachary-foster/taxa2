@@ -718,9 +718,9 @@ Taxonomy <- R6::R6Class(
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
       taxon_weight <- rlang::eval_tidy(rlang::enquo(taxon_weight),
-                                          data = data_used)
+                                       data = data_used)
       obs_weight <- rlang::eval_tidy(rlang::enquo(obs_weight),
-                                        data = data_used)
+                                     data = data_used)
 
       # Calculate observation component of taxon weights
       if (is.null(obs_weight) || !is_taxmap) {
@@ -776,7 +776,7 @@ Taxonomy <- R6::R6Class(
       # check that arguments have taxon ids and evaluate
       validate_and_eval <- function(unparsed) {
         parsed <- rlang::eval_tidy(rlang::enquo(unparsed),
-                                      data = data_used)
+                                   data = data_used)
         if (! private$valid_taxon_ids(names(parsed))) {
           stop(paste0("The value `", deparse(match.call()$unparsed),
                       "` is not named by taxon id or contains invalid ids. ",
@@ -895,33 +895,42 @@ Taxonomy <- R6::R6Class(
     # Takes one ore more NSE expressions and resolves them to indexes of edgelist rows
     # Each expression can resolve to taxon ids, edgelist indexes, or logical.
     parse_nse_taxon_subset = function(...) {
-      # non-standard argument evaluation
+      # Non-standard argument evaluation
       selection <- rlang::eval_tidy(rlang::quos(...),
-                                       data = self$data_used(...))
+                                    data = self$data_used(...))
 
-      # convert taxon_ids to logical
-      is_char <- vapply(selection, is.character, logical(1))
-      selection[is_char] <- lapply(selection[is_char],
-                                   function(x) self$taxon_ids() %in% x)
-
-      # convert indexes to logical
-      is_index <- vapply(selection, is.numeric, logical(1))
-      selection[is_index] <- lapply(selection[is_index],
-                                    function(x) 1:nrow(self$edge_list) %in% x)
-
-      # combine filters
-      selection <- Reduce(`&`, selection)
-
-      # default to all taxa if no selection is provided
-      if (is.null(selection)) {
-        selection <- rep(TRUE, length(self$taxon_ids()))
+      # Default to all taxa if no selection is provided
+      if (length(selection) == 0) {
+        return(self$taxon_indexes())
       }
 
-      # convert to indexes, named by taxon id
-      names(selection) <- self$taxon_ids()
-      selection <- which(selection)
+      # Convert taxon_ids to indexes
+      is_char <- vapply(selection, is.character, logical(1))
+      selection[is_char] <- lapply(selection[is_char],
+                                   function(x) match(x, self$taxon_ids()))
 
-      return(selection)
+      # Convert logical to indexes
+      is_tf <- vapply(selection, is.logical, logical(1))
+      selection[is_tf] <- lapply(selection[is_tf],
+                                 function(x) which(x))
+
+      # Combine index lists.
+      # Include indexes the minimum number of times it appears in the lists
+      output <- unlist(lapply(unique(unlist(selection)),
+                              function(index) {
+                                counts <- vapply(selection,
+                                                 FUN.VALUE = numeric(1),
+                                                 function(my_filter) {
+                                                   sum(my_filter == index)
+                                                 })
+                                return(rep(index, min(counts)))
+                              }))
+
+
+      # Name by taxon id
+      names(output) <- self$taxon_ids()[output]
+
+      return(output)
     },
 
     # check if a set of putative taxon ids are valid.

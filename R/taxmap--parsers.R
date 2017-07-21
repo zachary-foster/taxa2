@@ -203,7 +203,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                                                           value = "taxon_ids",
                                                           include_input = TRUE),
                                           rev))
-    output$data$class_data <- taxon_info
+    output$data$class_data <- dplyr::as.tbl(unique(taxon_info))
     if (!include_match) {
       output$data$class_data$match  <- NULL
     }
@@ -394,7 +394,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
         taxize::classification(taxize::genbank2uid(i)[1], db = database)
       }), recursive = FALSE),
       ids)
-    
+
     # Rename columns of result
     failed_queries <- is.na(result)
     result[! failed_queries] <- lapply(result[! failed_queries],
