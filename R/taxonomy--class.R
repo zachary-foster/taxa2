@@ -900,7 +900,7 @@ Taxonomy <- R6::R6Class(
                                     data = self$data_used(...))
 
       # Default to all taxa if no selection is provided
-      if (length(selection) == 0) {
+      if (all(vapply(selection, is.null, logical(1)))) {
         return(self$taxon_indexes())
       }
 
@@ -915,17 +915,11 @@ Taxonomy <- R6::R6Class(
                                  function(x) which(x))
 
       # Combine index lists.
-      # Include indexes the minimum number of times it appears in the lists
-      output <- unlist(lapply(unique(unlist(selection)),
-                              function(index) {
-                                counts <- vapply(selection,
-                                                 FUN.VALUE = numeric(1),
-                                                 function(my_filter) {
-                                                   sum(my_filter == index)
-                                                 })
-                                return(rep(index, min(counts)))
-                              }))
-
+      intersect_with_dups <- function(a, b) {
+        #taken from http://r.789695.n4.nabble.com/intersect-without-discarding-duplicates-td2225377.html
+        rep(sort(intersect(a, b)), pmin(table(a[a %in% b]), table(b[b %in% a])))
+      }
+      output <- Reduce(intersect_with_dups, selection)
 
       # Name by taxon id
       names(output) <- self$taxon_ids()[output]
