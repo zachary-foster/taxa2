@@ -136,6 +136,15 @@ test_that("Taxmap can be intialized from queried data", {
 
   expect_equal(name_result, id_result)
   expect_equal(name_result, seq_result)
+
+  # Expect an error if trying to use invalid database
+  expect_error(lookup_tax_data(1:3, type = "seq_id", database = "not valid"),
+               "not a valid database")
+
+  # Expect an error if trying to use invalid database of sequence id
+  expect_error(lookup_tax_data(1:3, type = "seq_id", database = "bold"),
+               "not a valid database")
+
 })
 
 

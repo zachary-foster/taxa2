@@ -350,6 +350,15 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   # Make sure taxize is installed
   check_for_pkg("taxize")
 
+  # Check that a supported database is being used
+  supported_databases <- names(database_list)
+  if (! database %in% supported_databases) {
+    stop(paste0('The database "', database,
+                '" is not a valid database for looking up that taxonomy of ',
+                'sequnece ids. Valid choices include:\n',
+                limited_print(supported_databases, type = "silent")))
+  }
+
   # Hidden parameters
   batch_size <- 100
   max_print <- 10
@@ -370,9 +379,22 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   }
 
   use_seq_id <- function(ids) {
+    # Check that a supported database is being used
+    supported_databases <- c("ncbi")
+    if (! database %in% supported_databases) {
+      stop(paste0('The database "', database,
+                  '" is not a valid database for looking up that taxonomy of ',
+                  'sequnece ids. Valid choices include:\n',
+                  limited_print(supported_databases, type = "silent")))
+    }
+
     # Look up classifications
-    result <- stats::setNames(taxize::classification(taxize::genbank2uid(ids, batch_size = batch_size)),
-                              ids)
+    result <- stats::setNames(
+      unlist(lapply(ids, function(i) {
+        taxize::classification(taxize::genbank2uid(i)[1], db = database)
+      }), recursive = FALSE),
+      ids)
+    
     # Rename columns of result
     failed_queries <- is.na(result)
     result[! failed_queries] <- lapply(result[! failed_queries],
@@ -474,7 +496,10 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   # Replace standard taxon ids with database taxon ids
   if (use_database_ids) {
     taxon_id_col <- paste0(database, "_id")
-    output$replace_taxon_ids(unique(combined_class)[["ncbi_id"]])
+    # I am not sure why the following line works...
+    new_ids <- unique(combined_class[[taxon_id_col]])[match(output$taxon_ids(),
+                                                            unique(output$input_ids))]
+    output$replace_taxon_ids(new_ids)
   }
 
   return(output)
@@ -504,7 +529,11 @@ get_sort_var <- function(data, var) {
     if (is.data.frame(data)) {
       return(rownames(data))
     } else {
-      return(names(data))
+      if (is.null(names(data))) {
+        return(rep(NA_character_, length(data)))
+      } else {
+        return(names(data))
+      }
     }
   }  else if (var == "{{value}}") {
     if (is.data.frame(data)) {
