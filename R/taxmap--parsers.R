@@ -366,16 +366,40 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   internal_class_name <- "___class_string___"
 
   # Define lookup functions
+  format_class_table <- function(class_table) {
+    # Complain about failed queries
+    failed_queries <- is.na(class_table)
+    if (sum(failed_queries) > 0) {
+      warning(paste0('The following ', sum(failed_queries),
+                     ' taxon name could not be looked up:\n  ',
+                     limited_print(names(failed_queries[failed_queries]),
+                                   type = "silent")))
+    }
+
+    # Rename columns of result
+    col_names <- c(paste0(database, "_name"),
+                   paste0(database, "_rank"),
+                   paste0(database, "_id"))
+    class_table[! failed_queries] <- lapply(class_table[! failed_queries],
+                                       function(x) stats::setNames(x, col_names))
+
+    # Add placeholders for failed requests
+    class_table[failed_queries] <- lapply(seq_len(sum(failed_queries)),
+                                     function(i) {
+                                       out <- dplyr::tibble(a = "unknown taxon",
+                                                            b = "unknown rank",
+                                                            c = "unknown")
+                                       colnames(out) <- col_names
+                                       return(out)
+                                     })
+    return(class_table)
+  }
+
+
   use_taxon_id <- function(ids) {
     result <- map_unique(ids, taxize::classification, ask = FALSE, rows = 1,
                          db = database)
-    # Rename columns of result
-    failed_queries <- is.na(result)
-    result[! failed_queries] <- lapply(result[! failed_queries],
-                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
-                                                                        paste0(database, "_rank"),
-                                                                        paste0(database, "_id"))))
-    return(result)
+    format_class_table(result)
   }
 
   use_seq_id <- function(ids) {
@@ -395,30 +419,14 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       }), recursive = FALSE),
       ids)
 
-    # Rename columns of result
-    failed_queries <- is.na(result)
-    result[! failed_queries] <- lapply(result[! failed_queries],
-                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
-                                                                        paste0(database, "_rank"),
-                                                                        paste0(database, "_id"))))
+    format_class_table(result)
   }
 
   use_taxon_name <- function(names) {
     # Look up classifications
     result <- map_unique(names, taxize::classification, ask = FALSE, rows = 1, db = database)
-    # Complain about failed queries
-    failed_queries <- is.na(result)
-    if (sum(failed_queries) > 0) {
-      warning(paste0('The following ', sum(failed_queries),
-                     ' taxon name could not be looked up:\n  ',
-                     limited_print(names(failed_queries), type = "silent")))
-    }
-    # Rename columns of result
-    result[! failed_queries] <- lapply(result[! failed_queries],
-                                       function(x) stats::setNames(x, c(paste0(database, "_name"),
-                                                                        paste0(database, "_rank"),
-                                                                        paste0(database, "_id"))))
-    return(result)
+
+    format_class_table(result)
   }
 
   lookup_funcs <- list("seq_id" = use_seq_id,
@@ -444,7 +452,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   classifications <- lookup_funcs[[type]](query)
   class_strings <- unlist(lapply(classifications, function(x) {
     lapply(seq_len(nrow(x)), function(i) {
-      paste(as.character(x[1:i, 1]), collapse = internal_class_sep)
+      paste(as.character(unlist(x[1:i, 1])), collapse = internal_class_sep)
     })
   }))
   combined_class <- do.call(rbind, unname(classifications))
@@ -453,7 +461,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                                           internal_class_name)
   combined_class <- cbind(internal_class_frame, combined_class)
 
-  # Add mapping columns to classification data
+  # Add mapping columns to classfication data
   tax_data_indexes <- cumsum(vapply(classifications, nrow, numeric(1)))
   mappping_cols <- unique(c(names(mappings), "{{index}}", "{{name}}"))
   if (!is.data.frame(tax_data)) {
