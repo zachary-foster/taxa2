@@ -132,7 +132,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     stop(paste0('The mapping options must be named.'))
   }
   for (i in seq_len(length(datasets))) {
-    valid_mappings <- c("{{index}}", "{{name}}", "{{value}}")
+    valid_mappings <- c("{{index}}", "{{name}}", "{{value}}", NA)
     if (is.data.frame(datasets[[i]])) {
       valid_mappings <- c(valid_mappings, colnames(datasets[[i]]))
     }
@@ -221,14 +221,16 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # Add additional data sets
   name_datset <- function(dataset, sort_var) {
-    target_value <- get_sort_var(dataset, sort_var)
-    source_value <- get_sort_var(tax_data, names(sort_var))
-    obs_taxon_ids <- output$input_ids[match(target_value, source_value)]
-    if (is.data.frame(dataset)) {
-      dataset <- dplyr::bind_cols(dplyr::tibble(taxon_id = obs_taxon_ids),
-                                  dataset)
-    } else {
-      names(dataset) <- obs_taxon_ids
+    if (!is.na(sort_var)) {
+      target_value <- get_sort_var(dataset, sort_var)
+      source_value <- get_sort_var(tax_data, names(sort_var))
+      obs_taxon_ids <- output$input_ids[match(target_value, source_value)]
+      if (is.data.frame(dataset)) {
+        dataset <- dplyr::bind_cols(dplyr::tibble(taxon_id = obs_taxon_ids),
+                                    dataset)
+      } else {
+        names(dataset) <- obs_taxon_ids
+      }
     }
     return(dataset)
   }
