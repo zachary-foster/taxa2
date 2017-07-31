@@ -178,11 +178,11 @@ Taxonomy <- R6::R6Class(
 
       # Run any functions and return their results instead
       is_func <- vapply(output, is.function, logical(1))
-      output[is_func] <- lapply(output[is_func], function(f) {
-        if (length(formals(f)) == 0) {
-          return(f())
+      output[is_func] <- lapply(which(is_func), function(i) {
+        if (length(formals(output[[i]])) > 0 && ! names(output[i]) %in% names(self)) {
+          return(output[[i]](self))
         } else {
-          return(f(self))
+          return(output[[i]]())
         }
       })
 
