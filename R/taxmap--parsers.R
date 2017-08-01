@@ -710,6 +710,14 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   parsed_input <- data.frame(stringr::str_match(tax_data, regex), stringsAsFactors = FALSE)
   colnames(parsed_input) <- c("input", names(key))
 
+  # Complain about failed matches
+  failed <- which(apply(is.na(parsed_input), MARGIN = 1, FUN = all))
+  if (length(failed) > 0) {
+    warning(paste0("The following input indexes failed to match the regex supplied:\n",
+                   limited_print(failed, type = "silent")), call. = FALSE)
+    parsed_input <- parsed_input[-failed, ]
+  }
+
   # Use parse_tax_data if the input is a classification
   if ("class" %in% key) {
     output <- parse_tax_data(tax_data = parsed_input,

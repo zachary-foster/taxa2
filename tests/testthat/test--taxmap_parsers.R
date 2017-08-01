@@ -180,5 +180,16 @@ test_that("Taxmap can be intialized from raw strings", {
   expect_equal(length(result$roots()), 1)
   expect_true("my_rank" %in% colnames(result$data$class_data))
 
+  # Test if it complains about failed matches
+  raw_data <- c(">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+                "not a match",
+                ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+  expect_warning(extract_tax_data(raw_data,
+                             key = c(var_1 = "info", var_2 = "info", tax = "class"),
+                             regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
+                             class_sep = ";", class_regex = "^(.+)__(.+)$",
+                             class_key = c(my_rank = "info", tax_name = "taxon_name")),
+                 "indexes failed to match the regex supplied")
+
 })
 

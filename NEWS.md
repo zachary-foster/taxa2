@@ -12,6 +12,7 @@ taxa [current]
 
 * Make default dataset for `n_obs` and `n_obs_1` and make them available for NSE ([issue #91](https://github.com/ropensci/taxa/issues/91)
 * `parse_tax_data`/`extract_tax_data` can now parse things like `phylum;Nitrosopumilales;order;Nitrosopumilaceae;family;` and split out the rank and taxon names by using multiple matches to the `class_regex` when `class_sep` is NULL. 
+* `extract_tax_data` now gives warnings if a regex does not match.
 
 taxa 0.1.0
 ==========
