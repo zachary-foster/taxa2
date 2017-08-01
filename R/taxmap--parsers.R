@@ -186,13 +186,21 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   }
 
   # Extract out any taxon info
-  taxon_info <- lapply(parsed_tax, function(x)
-    data.frame(stringr::str_match(x, class_regex), stringsAsFactors = FALSE))
-  taxon_info <- do.call(rbind, taxon_info)
-  names(taxon_info) <- c("match", names(class_key))
-  parsed_tax <- split(taxon_info[, which(class_key == "taxon_name") + 1],
-                      rep(seq_len(length(parsed_tax)),
-                          vapply(parsed_tax, length, integer(1))))
+  if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
+    taxon_info <- lapply(parsed_tax, function(x)
+      data.frame(stringr::str_match_all(x, class_regex), stringsAsFactors = FALSE))
+    parsed_tax <- lapply(taxon_info, `[[`, which(class_key == "taxon_name") + 1)
+    taxon_info <- do.call(rbind, taxon_info)
+    names(taxon_info) <- c("match", names(class_key))
+  } else { # only use first match if sep is applied
+    taxon_info <- lapply(parsed_tax, function(x)
+      data.frame(stringr::str_match(x, class_regex), stringsAsFactors = FALSE))
+    taxon_info <- do.call(rbind, taxon_info)
+    names(taxon_info) <- c("match", names(class_key))
+    parsed_tax <- split(taxon_info[, which(class_key == "taxon_name") + 1],
+                        rep(seq_len(length(parsed_tax)),
+                            vapply(parsed_tax, length, integer(1))))
+  }
 
   # Create taxmap object
   output <- taxmap(.list = parsed_tax)
