@@ -14,6 +14,10 @@ taxa [current]
 * `parse_tax_data`/`extract_tax_data` can now parse things like `phylum;Nitrosopumilales;order;Nitrosopumilaceae;family;` and split out the rank and taxon names by using multiple matches to the `class_regex` when `class_sep` is NULL. 
 * `extract_tax_data` now gives warnings if a regex does not match.
 
+### Changes
+
+* In the output of the taxmap parsing functions like `parse_tax_data`, I moved "taxon_id" and "input_index" columns to front and "input" to rear. Also "tax_data" now comes before "class_data".
+
 taxa 0.1.0
 ==========
 

@@ -268,6 +268,12 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Check format of data sets
   check_taxmap_data(output)
 
+  # Put tax_data first
+  if ("tax_data" %in% names(output$data)) {
+    tax_data_index <- which(names(output$data) == "tax_data")
+    output$data <- c(output$data[tax_data_index], output$data[-tax_data_index])
+  }
+
   return(output)
 }
 

@@ -6,7 +6,7 @@ Description: Provides taxonomic classes for
     with data. Methods provided are "taxonomically aware", in
     that they know about ordering of ranks, and methods that
     filter based on taxonomy also filter associated data.
-Version: 0.1.0.9109
+Version: 0.1.0.9110
 Authors@R: c(
     person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus+r@gmail.com"),
     person("Zachary", "Foster", role = "aut", email = "zacharyfoster1989@gmail.com")
