@@ -68,7 +68,7 @@ test_that("Taxmap can be intialized from complex data", {
   raw_data <- c("K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
-  parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
+  result <- parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
                  class_key = c(my_rank = "info", tax_name = "taxon_name"),
                  include_match = FALSE)
 
@@ -77,7 +77,8 @@ test_that("Taxmap can be intialized from complex data", {
                                 class_regex = "^(.+)__(.+)$",
                                 class_key = c(rank = "info",
                                               tax_name = "taxon_name"),
-                                include_match = FALSE))
+                                include_match = FALSE),
+                 "same name as functions")
 
 })
 

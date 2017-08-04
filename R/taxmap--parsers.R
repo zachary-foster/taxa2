@@ -210,11 +210,20 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     my_supertaxa <- output$supertaxa(output$input_ids,
                                      value = "taxon_ids",
                                      include_input = TRUE)
-    taxon_info$taxon_id <- unlist(lapply(my_supertaxa, rev))
-    taxon_info$input_index <- rep(seq_len(length(my_supertaxa)),
+    input_index <- rep(seq_len(length(my_supertaxa)),
                                   vapply(my_supertaxa, length, numeric(1)))
-    output$data$class_data <- dplyr::as.tbl(taxon_info)
-    if (!include_match) {
+    output$data$class_data <- cbind(list(taxon_id = unlist(lapply(my_supertaxa, rev)),
+                                         input_index = rep(seq_len(length(my_supertaxa)),
+                                                           vapply(my_supertaxa, length, numeric(1)))),
+                                    taxon_info,
+                                    stringsAsFactors = FALSE)
+    output$data$class_data <- dplyr::as.tbl(output$data$class_data)
+    if (include_match) {
+      match_col_index <- which(colnames(output$data$class_data) == "match")
+      output$data$class_data <- cbind(output$data$class_data[-match_col_index],
+                                      list(regex_match = output$data$class_data$match),
+                                      stringsAsFactors = FALSE)
+    } else {
       output$data$class_data$match  <- NULL
     }
   }
@@ -471,7 +480,9 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   internal_class_frame <- stats::setNames(data.frame(class_strings,
                                                      stringsAsFactors = FALSE),
                                           internal_class_name)
-  combined_class <- cbind(internal_class_frame, combined_class)
+  combined_class <- cbind(internal_class_frame,
+                          combined_class,
+                          stringsAsFactors = FALSE)
 
   # Add mapping columns to classfication data
   tax_data_indexes <- cumsum(vapply(classifications, nrow, numeric(1)))
@@ -709,6 +720,8 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   # Extract capture groups
   parsed_input <- data.frame(stringr::str_match(tax_data, regex), stringsAsFactors = FALSE)
   colnames(parsed_input) <- c("input", names(key))
+  parsed_input <- cbind(parsed_input[-1], list(input = parsed_input$input),
+                        stringsAsFactors = FALSE)
 
   # Complain about failed matches
   failed <- which(apply(is.na(parsed_input), MARGIN = 1, FUN = all))
@@ -721,8 +734,9 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   # Use parse_tax_data if the input is a classification
   if ("class" %in% key) {
     output <- parse_tax_data(tax_data = parsed_input,
-                             class_cols = which(key == "class") + 1,
-                             class_sep = class_sep, class_key = class_key,
+                             class_cols = which(key == "class"),
+                             class_sep = class_sep,
+                             class_key = class_key,
                              sep_is_regex = sep_is_regex,
                              class_regex = class_regex,
                              include_match = include_match,
