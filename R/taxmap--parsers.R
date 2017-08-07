@@ -217,7 +217,6 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                                                            vapply(my_supertaxa, length, numeric(1)))),
                                     taxon_info,
                                     stringsAsFactors = FALSE)
-    output$data$class_data <- dplyr::as.tbl(output$data$class_data)
     if (include_match) {
       match_col_index <- which(colnames(output$data$class_data) == "match")
       output$data$class_data <- cbind(output$data$class_data[-match_col_index],
@@ -226,6 +225,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     } else {
       output$data$class_data$match  <- NULL
     }
+    output$data$class_data <- dplyr::as.tbl(output$data$class_data)
   }
 
   # Add taxonomic source to datasets
