@@ -7,6 +7,7 @@ taxa [current]
 * Fixed a bug that caused an error when using unnamed vectors ([issue #86](https://github.com/ropensci/taxa/issues/86))
 * Fixed a bug that prevents using sequence accession numbers ([issue #85](https://github.com/ropensci/taxa/issues/85))
 * Fixed bug in `lookup_tax_data` and `extract_tax_data` that caused an error when one of the queries failed too download.
+* Fixed bug that caused "data" argument of `obs_apply` to not work when passed as a varaible ([issue #97](https://github.com/ropensci/taxa/issues/97))
 
 ### Improvements
 
