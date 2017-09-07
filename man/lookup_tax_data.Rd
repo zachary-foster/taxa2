@@ -6,7 +6,7 @@
 \usage{
 lookup_tax_data(tax_data, type, column = 1, datasets = list(),
   mappings = c(), database = "ncbi", include_tax_data = TRUE,
-  use_database_ids = TRUE)
+  use_database_ids = TRUE, ask = TRUE)
 }
 \arguments{
 \item{tax_data}{A table, list, or vector that contain sequence IDs, taxon
@@ -57,6 +57,12 @@ as a dataset, like those in \code{datasets}.}
 
 \item{use_database_ids}{(\code{TRUE}/\code{FALSE}) Whether or not to use downloaded
 database taxon ids instead of arbitrary, automatically-generated taxon ids.}
+
+\item{ask}{(\code{TRUE}/\code{FALSE}) Whether or not to promt the user for input.
+Currently, this would only happen when looking up the taxonomy of a taxon
+name with multiple matches. If \code{FALSE}, taxa with multiple hits are treated
+as if they do not exist in the database. This might change in the future if
+we can find an elegant way of handling this.}
 }
 \description{
 Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
