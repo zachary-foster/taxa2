@@ -476,6 +476,28 @@ NULL
 NULL
 
 
+#' Get number of supertaxa
+#'
+#' Get number of immediate supertaxa (i.e. not supertaxa of supertaxa, etc) for
+#' each taxon in an object of type [taxonomy()] or [taxmap()]. This should
+#' always be either 1 or 0.
+#' \preformatted{
+#' obj$n_supertaxa_1()
+#' n_supertaxa_1(obj)}
+#'
+#' @param obj ([taxonomy()] or [taxmap()])
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_supertaxa_1(ex_taxmap)
+#'
+#' @family taxonomy data functions
+#'
+#' @name n_supertaxa_1
+NULL
+
+
 #' Get number of subtaxa
 #'
 #' Get number of subtaxa for each taxon in an object of type

@@ -224,6 +224,22 @@ n_supertaxa.Taxonomy <- function(obj) {
 
 
 #' @export
+n_supertaxa_1 <- function(obj) {
+  UseMethod("n_supertaxa_1")
+}
+
+#' @export
+n_supertaxa_1.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_supertaxa_1.Taxonomy <- function(obj) {
+  obj$n_supertaxa_1()
+}
+
+
+#' @export
 n_subtaxa <- function(obj) {
   UseMethod("n_subtaxa")
 }

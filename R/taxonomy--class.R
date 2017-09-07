@@ -514,6 +514,12 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
+    n_supertaxa_1 = function() {
+      vapply(self$supertaxa(recursive = FALSE, include_input = FALSE,
+                            value = "taxon_indexes", na = FALSE),
+             length, numeric(1))
+    },
+
     n_subtaxa = function() {
       vapply(self$subtaxa(recursive = TRUE, include_input = FALSE,
                           value = "taxon_indexes"),
@@ -872,9 +878,9 @@ Taxonomy <- R6::R6Class(
 
   private = list(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
-                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1",
-                             "taxon_ranks", "is_root", "is_stem", "is_branch",
-                             "is_leaf"),
+                             "n_supertaxa", "n_supertaxa_1", "n_subtaxa",
+                             "n_subtaxa_1", "taxon_ranks", "is_root", "is_stem",
+                             "is_branch", "is_leaf"),
 
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")
