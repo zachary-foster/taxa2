@@ -53,7 +53,7 @@ Taxmap <- R6::R6Class(
       self$funcs <- validate_taxmap_funcs(funcs)
     },
 
-    print = function(indent = "", max_rows = 3, max_items = 3,
+    print = function(indent = "", max_rows = 3, max_items = 6,
                      max_width = getOption("width") - 10) {
 
       # Call `taxonomy` print method
@@ -463,10 +463,22 @@ Taxmap <- R6::R6Class(
   ),
 
   private = list(
-    nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
-                             "n_supertaxa", "n_subtaxa", "n_subtaxa_1",
-                             "taxon_ranks", "is_root", "is_stem", "is_branch",
-                             "is_leaf", "n_obs", "n_obs_1"),
+    nse_accessible_funcs = c(
+      "taxon_names",
+      "taxon_ids",
+      "taxon_indexes",
+      "n_supertaxa",
+      "n_supertaxa_1",
+      "n_subtaxa",
+      "n_subtaxa_1",
+      "taxon_ranks",
+      "is_root",
+      "is_stem",
+      "is_branch",
+      "is_leaf",
+      "n_obs",
+      "n_obs_1"
+    ),
 
     check_dataset_name = function(target) {
       if (! target %in% names(self$data)) {
