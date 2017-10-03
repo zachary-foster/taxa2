@@ -184,6 +184,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   } else {
     stop("Unknown format for first input. Cannot parse taxonomic information.")
   }
+  
+  # Remove white space
+  parsed_tax <- lapply(parsed_tax, trimws)
 
   # Extract out any taxon info
   if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
