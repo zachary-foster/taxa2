@@ -163,7 +163,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   } else if (is.data.frame(tax_data)) { # is a data.frame
     parsed_tax <- lapply(seq_len(nrow(tax_data)),
                          function(i) {
-                           class_source <- as.character(unlist(tax_data[i, class_cols]))
+                           class_source <- unlist(lapply(tax_data[i, class_cols], as.character))
                            unname(unlist(multi_sep_split(class_source,
                                                          fixed = !sep_is_regex,
                                                          split = class_sep)))
