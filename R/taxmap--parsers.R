@@ -780,7 +780,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   if (any(key %in% c("taxon_name", "taxon_id", "seq_id"))) {
     my_type <- key[key != "info"][1]
     output <- lookup_tax_data(tax_data = parsed_input, type = my_type,
-                              column = which(key == my_type) + 1,
+                              column = names(my_type),
                               database = database,
                               include_tax_data = include_tax_data)
 
