@@ -902,8 +902,7 @@ Taxonomy <- R6::R6Class(
     # Each expression can resolve to taxon ids, edgelist indexes, or logical.
     parse_nse_taxon_subset = function(...) {
       # Non-standard argument evaluation
-      selection <- rlang::eval_tidy(rlang::quos(...),
-                                    data = self$data_used(...))
+      selection <- lapply(rlang::quos(...), rlang::eval_tidy, data = self$data_used(...))
 
       # Default to all taxa if no selection is provided
       if (all(vapply(selection, is.null, logical(1)))) {
