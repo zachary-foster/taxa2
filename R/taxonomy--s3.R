@@ -498,3 +498,20 @@ replace_taxon_ids.Taxonomy <- function(obj, ...) {
   obj <- obj$clone(deep = TRUE)
   obj$replace_taxon_ids(...)
 }
+
+
+#' @export
+remove_redundant_names <- function(obj, ...) {
+  UseMethod("remove_redundant_names")
+}
+
+#' @export
+remove_redundant_names.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+remove_redundant_names.Taxonomy <- function(obj, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$remove_redundant_names(...)
+}

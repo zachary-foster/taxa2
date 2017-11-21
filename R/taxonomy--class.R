@@ -856,6 +856,18 @@ Taxonomy <- R6::R6Class(
 
       # Return modified object
       return(self)
+    },
+
+    remove_redundant_names = function() {
+      new_names <- vapply(supertaxa(self, recursive = FALSE, include_input = TRUE),
+                          function(x) gsub(self$taxon_names()[x[1]],
+                                           pattern = paste0("^", self$taxon_names()[x[2]], "[_ ]+"),
+                                           replacement = ""),
+                          character(1))
+      lapply(seq_along(new_names), function(i) {
+        self$taxa[[i]]$name$name <- new_names[i]
+      })
+      return(self)
     }
 
     # pop = function(ranks = NULL, names = NULL, ids = NULL) {

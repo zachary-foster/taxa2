@@ -1035,7 +1035,6 @@ NULL
 NULL
 
 
-
 #' Replace taxon ids
 #'
 #' Replace taxon ids in a [taxmap()] or [taxonomy()] object.
@@ -1053,4 +1052,19 @@ NULL
 #'
 #' replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
 #' }
+NULL
+
+
+#' Remove redundant parts of taxon names
+#'
+#' Remove the names of parent taxa in the begining of their children's names in a \code{taxonomy} or \code{taxmap} object.
+#' This is useful for removing genus names in species binomials.
+#' \preformatted{
+#' obj$remove_redundant_names()
+#' remove_redundant_names(obj)}
+#'
+#' @param obj A \code{taxonomy} or \code{taxmap} object
+#'
+#' @return A \code{taxonomy} or \code{taxmap} object
+#' @name remove_redundant_names
 NULL
