@@ -672,10 +672,10 @@ NULL
 #' a changed version would be returned, like most R functions.
 #' \preformatted{
 #' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
-#'   drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+#'   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
 #'   invert = FALSE)
 #' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
-#'   drop_obs = FALSE, reassign_obs = TRUE, reassign_taxa = TRUE,
+#'   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
 #'   invert = FALSE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
