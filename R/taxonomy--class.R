@@ -812,8 +812,11 @@ Taxonomy <- R6::R6Class(
       }
 
       # Map values using taxon ids
-      stats::setNames(to_data[match(names(from_data), names(to_data))],
-                      from_data)
+      self$map_data_(from = from_data, to = to_data)
+    },
+
+    map_data_ = function(from, to) {
+      stats::setNames(to[match(names(from), names(to))], from)
     },
 
     replace_taxon_ids = function(new_ids) {

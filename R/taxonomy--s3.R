@@ -484,6 +484,22 @@ map_data.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+map_data_ <- function(obj, ...) {
+  UseMethod("map_data_")
+}
+
+#' @export
+map_data_.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+map_data_.Taxonomy <- function(obj, ...) {
+  obj$map_data_(...)
+}
+
+
+#' @export
 replace_taxon_ids <- function(obj, ...) {
   UseMethod("replace_taxon_ids")
 }

@@ -40,7 +40,7 @@ the \code{reassign_obs} option below for further complications.}
 \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE}, observations assigned to removed taxa will
 be reassigned to the closest supertaxon that passed the filter. If there
 are no supertaxa of such an observation that passed the filter, they will
-be filtered out if \code{drop_obs} is \code{FALSE}. This option can be either simply
+be filtered out if \code{drop_obs} is \code{TRUE}. This option can be either simply
 \code{TRUE}/\code{FALSE}, meaning that all data sets will be treated the same, or a
 logical vector can be supplied with names corresponding one or more data
 sets in \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
