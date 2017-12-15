@@ -189,7 +189,7 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    data_frame = function(...) {
+    get_data_frame = function(...) {
       x <- self$get_data(...)
       if (length(unique(vapply(x, length, 1))) == 1) {
         tibble::as_tibble(data.frame(x, stringsAsFactors = FALSE))

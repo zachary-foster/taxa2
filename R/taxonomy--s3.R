@@ -319,6 +319,22 @@ get_data.Taxonomy <- function(obj, ...) {
 }
 
 
+#' @export
+get_data_frame <- function(obj, ...) {
+  UseMethod("get_data_frame")
+}
+
+#' @export
+get_data_frame.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+get_data_frame.Taxonomy <- function(obj, ...) {
+  obj$get_data_frame(...)
+}
+
+
 #' @keywords internal
 data_used <- function(obj, ...) {
   UseMethod("data_used")

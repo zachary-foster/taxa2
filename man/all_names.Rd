@@ -45,5 +45,6 @@ all_names(ex_taxmap, builtin_funcs = FALSE)
 }
 \seealso{
 Other accessors: \code{\link{data_used}},
-  \code{\link{get_data}}, \code{\link{names_used}}
+  \code{\link{get_data_frame}}, \code{\link{get_data}},
+  \code{\link{names_used}}
 }
