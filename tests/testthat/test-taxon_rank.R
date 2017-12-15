@@ -37,3 +37,11 @@ test_that("taxon_rank fails well", {
   expect_error(taxon_rank("adf", 5),
                "database must be of class character, TaxonDatabase")
 })
+
+test_that("taxon_rank can do null data", {
+  # empty taxon_rank() tested in above block
+  x <- taxon_rank(NULL)
+  expect_is(x, "TaxonRank")
+  expect_null(x$name)
+  expect_null(x$database)
+})

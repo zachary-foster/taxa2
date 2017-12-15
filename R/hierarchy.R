@@ -58,6 +58,12 @@
 #' # pick a rank
 #' (res <- hierarchy(z, y, x))
 #' pick(res, ranks("family"))
+#'
+#'
+#' # null taxa
+#' x <- taxon(NULL)
+#' (res <- hierarchy(x, x, x))
+#' ## similar to hierarchy(), but `taxa` slot is not empty
 
 hierarchy <- function(..., .list = NULL) {
   Hierarchy$new(..., .list = .list)
@@ -103,7 +109,8 @@ Hierarchy <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, "<Hierarchy>\n"))
-      if (length(self$taxa) > 0) {
+      if (length(self$taxa) > 0 &&
+          !all(vapply(self$taxa, function(z) z$is_empty(), logical(1)))) {
         cat("  no. taxon's: ", length(self$taxa), "\n")
         for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
           cat(
@@ -121,6 +128,7 @@ Hierarchy <- R6::R6Class(
     },
 
     pop = function(ranks = NULL, names = NULL, ids = NULL) {
+      if (all_empty(self$taxa)) stop("no taxa found")
       alldat <- ct(unlist(c(ranks, names, ids), TRUE))
       if (is.null(alldat) || length(alldat) == 0) {
         stop("one of 'ranks', 'names', or 'ids' must be used")
@@ -137,6 +145,7 @@ Hierarchy <- R6::R6Class(
     },
 
     pick = function(ranks = NULL, names = NULL, ids = NULL) {
+      if (all_empty(self$taxa)) stop("no taxa found")
       alldat <- ct(unlist(c(ranks, names, ids), TRUE))
       if (is.null(alldat) || length(alldat) == 0) {
         stop("one of 'ranks', 'names', or 'ids' must be used")
@@ -153,6 +162,7 @@ Hierarchy <- R6::R6Class(
     },
 
     span = function(ranks = NULL, names = NULL, ids = NULL) {
+      if (all_empty(self$taxa)) stop("no taxa found")
       alldat <- ct(unlist(c(ranks, names, ids), TRUE))
       if (is.null(alldat) || length(alldat) == 0) {
         stop("one of 'ranks', 'names', or 'ids' must be used")
@@ -296,4 +306,8 @@ which_ranks <- function(x) {
   as.numeric(ranks_ref[which(sapply(ranks_ref$ranks, function(z) {
     any(unlist(strsplit(z, split = ",")) == x)
   }, USE.NAMES = FALSE)), "rankid"])
+}
+
+all_empty <- function(x) {
+  all(vapply(x, function(z) z$is_empty(), logical(1)))
 }

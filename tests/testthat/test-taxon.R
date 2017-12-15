@@ -25,3 +25,10 @@ test_that("taxa fails well", {
   expect_error(taxon("adfadsf", authority = 23),
                "authority must be of class character")
 })
+
+test_that("taxon can do null data", {
+  x <- taxon(NULL)
+  expect_is(x, "Taxon")
+  expect_null(x$name)
+  expect_null(x$id)
+})
