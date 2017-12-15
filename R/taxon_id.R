@@ -21,6 +21,9 @@
 #' ))
 #' x$id
 #' x$database
+#'
+#' # a null taxon_name object
+#' taxon_name(NULL)
 taxon_id <- function(id, database = NULL) {
   TaxonId$new(
     id = id,
@@ -48,7 +51,7 @@ TaxonId <- R6::R6Class(
     },
 
     print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonId> %s\n", self$id)))
+      cat(paste0(indent, sprintf("<TaxonId> %s\n", self$id %||% "none")))
       cat(paste0(indent, paste0("  database: ",
                                 get_database_name(self$database) %||% "none",
                                 "\n")))
