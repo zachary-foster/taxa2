@@ -1,6 +1,7 @@
 ## Testing `taxmap` class
 
 library(taxa)
+library(testthat)
 context("taxmap")
 
 
@@ -108,6 +109,11 @@ info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato")
                    n_legs = c(4, 4, 4, 2, 0, 0),
                    dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
 
+abund <- data.frame(code = rep(c("T", "C", "M", "H"), 2),
+                    sample_id = rep(c("A", "B"), each = 2),
+                    count = c(1,2,5,2,6,2,4,0),
+                    taxon_index = rep(1:4, 2))
+
 phylopic_ids <- c("e148eabb-f138-43c6-b1e4-5cda2180485a",
                   "12899ba0-9923-4feb-a7f9-758c3c7d5e13",
                   "11b783d5-af1c-4f4e-8ab5-a51470652b47",
@@ -129,11 +135,11 @@ reaction <- function(x) {
 }
 
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
-                   data = list(info = info,
-                               phylopic_ids = phylopic_ids,
-                               foods = foods),
-                   funcs = list(reaction = reaction))
-
+                    data = list(info = info,
+                                phylopic_ids = phylopic_ids,
+                                foods = foods,
+                                abund = abund),
+                    funcs = list(reaction = reaction))
 
 ### Print methods
 
@@ -261,6 +267,14 @@ test_that("Mapping observations in external tables", {
   expect_error(test_obj$obs(external_table), 'no "taxon_id" column')
 })
 
+test_that("Mapping observations when there are multiple obs per taxon", {
+  result <- obs(test_obj, "abund")
+  expect_equal(result$m, which(test_obj$data$abund$taxon_id == "m"))
+  expect_equal(result$p, which(test_obj$data$abund$taxon_id == "p"))
+  expect_true(all(result$b %in% 1:nrow(test_obj$data$abund)))
+})
+
+
 
 
 ### Dplyr analogs
@@ -323,11 +337,17 @@ test_that("The selection of taxa to be filtered can be inverted", {
   expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% taxon_names(result)))
 })
 
-
 test_that("Edge cases return reasonable outputs", {
   expect_equal(filter_taxa(test_obj), test_obj)
 })
 
+test_that("Filtering taxa when there are multiple obs per taxon", {
+  result <- filter_taxa(test_obj, taxon_names == "Solanum")
+  expect_equal(nrow(result$data$abund), 0) # There were no plants in that set
+
+  result <- filter_taxa(test_obj, taxon_names == "Felidae", subtaxa = TRUE)
+  expect_equal(nrow(result$data$abund), 4) # There were 2 cats and 2 tigers
+})
 
 #### filter_obs
 
@@ -355,6 +375,12 @@ test_that("Edge cases return reasonable outputs", {
   expect_error(filter_obs(test_obj, "info", "11"),
                "observation filtering with taxon IDs is not currently")
 })
+
+test_that("Filtering ob when there are multiple obs per taxon", {
+  result <- filter_obs(test_obj, "abund", code == "C", drop_taxa = TRUE)
+  expect_equal(nrow(result$data$abund), 2)
+})
+
 
 
 #### select_obs
