@@ -635,6 +635,38 @@ NULL
 NULL
 
 
+#' Get data in a taxmap object by name
+#'
+#' Given a vector of names, return a list of data (usually lists/vectors)
+#' contained in a [taxonomy()] or [taxmap()] object. Each item will be named by
+#' taxon ids when possible.
+#' \preformatted{
+#' obj$get_data_frame(name = NULL, ...)
+#' get_data_frame(obj, name = NULL, ...)}
+#'
+#' @param obj A [taxonomy()] or [taxmap()]  object
+#' @param name (`character`) Names of data to return. If not supplied, return
+#'   all data listed in [all_names()].
+#' @param ... Passed to [all_names()]. Used to filter what kind of data is
+#'   returned (e.g. columns in tables or function output?) if `name` is not
+#'   supplied or what kinds are allowed if `name` is supplied.
+#'
+#' @return `list` of vectors or lists. Each vector or list will be named by
+#'   associated taxon ids if possible.
+#'
+#' @examples
+#' # Get specific values
+#' get_data_frame(ex_taxmap, c("reaction", "n_legs", "taxon_ranks"))
+#'
+#' # Get all values
+#' get_data_frame(ex_taxmap)
+#'
+#' @family accessors
+#'
+#' @name get_data_frame
+NULL
+
+
 #' Get values of data used in expressions
 #'
 #' Get values available for

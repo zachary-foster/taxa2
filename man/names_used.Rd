@@ -24,6 +24,7 @@ taxa:::names_used(ex_taxmap, n_legs + dangerous == invalid_expression)
 }
 \seealso{
 Other accessors: \code{\link{all_names}},
-  \code{\link{data_used}}, \code{\link{get_data}}
+  \code{\link{data_used}}, \code{\link{get_data_frame}},
+  \code{\link{get_data}}
 }
 \keyword{internal}

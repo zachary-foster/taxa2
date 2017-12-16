@@ -189,6 +189,18 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
+    get_data_frame = function(...) {
+      x <- self$get_data(...)
+      if (length(unique(vapply(x, length, 1))) == 1) {
+        tibble::as_tibble(data.frame(x, stringsAsFactors = FALSE))
+      } else {
+        stop("variables not of equal length")
+      }
+
+      tin <- names(self$taxon_indexes())
+      tinmiss <- tin[!tin %in% names(x$foods)]
+    },
+
     # Get a list of all data in an expression used with non-standard evaluation
     data_used = function(...) {
       my_names_used <- self$names_used(...)
