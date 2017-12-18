@@ -196,9 +196,6 @@ Taxonomy <- R6::R6Class(
       } else {
         stop("variables not of equal length")
       }
-
-      tin <- names(self$taxon_indexes())
-      tinmiss <- tin[!tin %in% names(x$foods)]
     },
 
     # Get a list of all data in an expression used with non-standard evaluation
@@ -397,6 +394,75 @@ Taxonomy <- R6::R6Class(
     },
 
 
+    branches = function(subset = NULL, value = NULL) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
+
+      # Return empty list if `subset` has no values
+      if (length(subset) == 0) {
+        return(vector(mode = class(self$get_data(value)[[1]])))
+      }
+
+      # Prefilter subset
+      if (length(subset) == length(self$taxa) && all(subset == seq_len(length(self$taxon_ids())))) {
+        filtered_self <- self
+      } else {
+        filtered_self <- filter_taxa(self, subset)
+      }
+
+      # Get branches
+      output <- which(filtered_self$is_branch())
+
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        if (is.null(names(possible_values))) {
+          output <- possible_values[output]
+        } else {
+          output <- possible_values[self$taxon_ids()[output]]
+        }
+      }
+
+      return(output)
+    },
+
+
+    internodes = function(subset = NULL, value = NULL) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
+
+      # Return empty list if `subset` has no values
+      if (length(subset) == 0) {
+        return(vector(mode = class(self$get_data(value)[[1]])))
+      }
+
+      # Prefilter subset
+      if (length(subset) == length(self$taxa) && all(subset == seq_len(length(self$taxon_ids())))) {
+        filtered_self <- self
+      } else {
+        filtered_self <- filter_taxa(self, subset)
+      }
+
+      # Get branches
+      output <- which(filtered_self$is_internode())
+
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        if (is.null(names(possible_values))) {
+          output <- possible_values[output]
+        } else {
+          output <- possible_values[self$taxon_ids()[output]]
+        }
+      }
+
+      return(output)
+    },
+
 
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,
@@ -560,6 +626,11 @@ Taxonomy <- R6::R6Class(
 
     is_branch = function() {
       stats::setNames(! (self$is_root() | self$is_leaf() | self$is_stem()),
+                      self$taxon_ids())
+    },
+
+    is_internode = function() {
+      stats::setNames(self$n_subtaxa_1() == 1 & self$n_supertaxa_1() == 1,
                       self$taxon_ids())
     },
 
@@ -907,7 +978,7 @@ Taxonomy <- R6::R6Class(
     nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
                              "n_supertaxa", "n_supertaxa_1", "n_subtaxa",
                              "n_subtaxa_1", "taxon_ranks", "is_root", "is_stem",
-                             "is_branch", "is_leaf"),
+                             "is_branch", "is_leaf", "is_internode"),
 
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")

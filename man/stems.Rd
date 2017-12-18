@@ -50,7 +50,8 @@ stems(ex_taxmap, value = "taxon_names", simplify = TRUE)
 
 }
 \seealso{
-Other taxonomy indexing functions: \code{\link{leaves}},
+Other taxonomy indexing functions: \code{\link{branches}},
+  \code{\link{internodes}}, \code{\link{leaves}},
   \code{\link{roots}}, \code{\link{subtaxa}},
   \code{\link{supertaxa}}
 }

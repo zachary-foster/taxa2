@@ -219,6 +219,98 @@ NULL
 NULL
 
 
+#' Get "branch" taxa
+#'
+#' Return the "branch" taxa for a [taxonomy()] or [taxmap()] object. A branch is
+#' anything that is not a root, stem, or, leaf. Its the interior of the tree
+#' after the first split starting from the roots. Can also be used to get the
+#' branches of a subset of taxa.
+#' \preformatted{
+#' obj$branches(subset = NULL, value = NULL)
+#' branches(obj, subset = NULL, value = NULL)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
+#'   information to be queried.
+#' @param subset Taxon IDs or TRUE/FALSE vector used to subset the tree prior to
+#'   determining branches. Default: All taxa in `obj` will be used. Any variable
+#'   name that appears in [all_names()] can be used as if it was a vector on its
+#'   own. Note that branches are determined after the filtering, so a given
+#'   taxon might be a branch on the unfiltered tree, but not a branch
+#'   on the filtered tree.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of [all_names()] can be used, but it
+#'   usually only makes sense to use data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
+#'
+#' @family taxonomy indexing functions
+#'
+#' @return `character`
+#'
+#' @examples
+#' # Return indexes of branch taxa
+#' branches(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' branches(ex_taxmap, subset = 2:17)
+#' branches(ex_taxmap, subset = n_obs > 1)
+#'
+#' # Return something besides taxon indexes
+#' branches(ex_taxmap, value = "taxon_names")
+#'
+#' @name branches
+NULL
+
+
+#' Get "internode" taxa
+#'
+#' Return the "internode" taxa for a [taxonomy()] or [taxmap()] object. An
+#' internode is any taxon with a single immediate supertaxon and a single
+#' immediate subtaxon. They can be removed from a tree without any loss of
+#' information on the relative relationship between remaining taxa. Can also be
+#' used to get the internodes of a subset of taxa.
+#' \preformatted{
+#' obj$internodes(subset = NULL, value = NULL)
+#' internodes(obj, subset = NULL, value = NULL)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
+#'   information to be queried.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon IDs used to subset the tree prior to
+#'   determining internodes. Default: All taxa in `obj` will be used. Any variable
+#'   name that appears in [all_names()] can be used as if it was a vector on its
+#'   own. Note that internodes are determined after the filtering, so a given
+#'   taxon might be a internode on the unfiltered tree, but not a internode
+#'   on the filtered tree.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of [all_names()] can be used, but it
+#'   usually only makes sense to use data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
+#'
+#' @family taxonomy indexing functions
+#'
+#' @return `character`
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Return indexes of branch taxa
+#' internodes(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' internodes(ex_taxmap, subset = 2:17)
+#' internodes(ex_taxmap, subset = n_obs > 1)
+#'
+#' # Return something besides taxon indexes
+#' internodes(ex_taxmap, value = "taxon_names")
+#'
+#' # Visualize which taxa are internodes
+#' library(metacoder)
+#' heat_tree(ex_taxmap, node_label = taxon_names,
+#'           node_color = ifelse(is_internode, "red", "grey"))
+#' }
+#' @name internodes
+NULL
+
+
 #' Get subtaxa
 #'
 #' Return data for the subtaxa of each taxon in an [taxonomy()] or [taxmap()]
@@ -970,6 +1062,29 @@ NULL
 #' is_root(ex_taxmap)
 #'
 #' @name is_root
+NULL
+
+
+#' Test if taxa are "internodes"
+#'
+#' Test if taxa are "internodes" in a [taxonomy()] or [taxmap()] object.  An
+#' internode is any taxon with a single immediate supertaxon and a single immediate
+#' subtaxon. They can be removed from a tree without any loss of information on
+#' the relative relationship between remaining taxa.
+#' \preformatted{
+#' obj$is_internode()
+#' is_internode(obj)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object.
+#'
+#' @return A `logical` of length equal to the number of taxa.
+#'
+#' @family taxonomy data functions
+#'
+#' @examples
+#' is_internode(ex_taxmap)
+#'
+#' @name is_internode
 NULL
 
 
