@@ -69,6 +69,7 @@ supertaxa(ex_taxmap, value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{branches}},
-  \code{\link{leaves}}, \code{\link{roots}},
-  \code{\link{stems}}, \code{\link{subtaxa}}
+  \code{\link{internodes}}, \code{\link{leaves}},
+  \code{\link{roots}}, \code{\link{stems}},
+  \code{\link{subtaxa}}
 }

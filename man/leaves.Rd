@@ -38,6 +38,7 @@ leaves(ex_taxmap, value = "taxon_names")
 }
 \seealso{
 Other taxonomy indexing functions: \code{\link{branches}},
-  \code{\link{roots}}, \code{\link{stems}},
-  \code{\link{subtaxa}}, \code{\link{supertaxa}}
+  \code{\link{internodes}}, \code{\link{roots}},
+  \code{\link{stems}}, \code{\link{subtaxa}},
+  \code{\link{supertaxa}}
 }
