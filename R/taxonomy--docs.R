@@ -218,6 +218,48 @@ NULL
 NULL
 
 
+#' Get "branch" taxa
+#'
+#' Return the "branch" taxa for a [taxonomy()] or [taxmap()] object. A branch is
+#' anything that is not a root, stem, or, leaf. Its the interior of the tree
+#' after the first split starting from the roots. Can also be used to get the
+#' branches of a subset of taxa.
+#' \preformatted{
+#' obj$branches(subset = NULL, value = NULL)
+#' branches(obj, subset = NULL, value = NULL)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
+#'   information to be queried.
+#' @param subset Taxon IDs or TRUE/FALSE vector used to subset the tree prior to
+#'   determining branches. Default: All taxa in `obj` will be used. Any variable
+#'   name that appears in [all_names()] can be used as if it was a vector on its
+#'   own. Note that branches are determined after the filtering, so a given
+#'   taxon might be a branch on the unfiltered tree, but not a branch
+#'   on the filtered tree.
+#' @param value What data to return. This is usually the name of column in a
+#'   table in `obj$data`. Any result of [all_names()] can be used, but it
+#'   usually only makes sense to use data that corresponds to taxa 1:1, such as
+#'   [taxon_ranks()]. By default, taxon indexes are returned.
+#'
+#' @family taxonomy indexing functions
+#'
+#' @return `character`
+#'
+#' @examples
+#' # Return indexes of branch taxa
+#' branches(ex_taxmap)
+#'
+#' # Return indexes for a subset of taxa
+#' branches(ex_taxmap, subset = 2:17)
+#' branches(ex_taxmap, subset = n_obs > 1)
+#'
+#' # Return something besides taxon indexes
+#' branches(ex_taxmap, value = "taxon_names")
+#'
+#' @name branches
+NULL
+
+
 #' Get subtaxa
 #'
 #' Return data for the subtaxa of each taxon in an [taxonomy()] or [taxmap()]

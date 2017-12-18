@@ -112,6 +112,22 @@ roots.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+branches <- function(obj, ...) {
+  UseMethod("branches")
+}
+
+#' @export
+branches.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+branches.Taxonomy <- function(obj, ...) {
+  obj$branches(...)
+}
+
+
+#' @export
 subtaxa <- function(obj, ...) {
   UseMethod("subtaxa")
 }

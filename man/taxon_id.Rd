@@ -29,6 +29,9 @@ x$database
 ))
 x$id
 x$database
+
+# a null taxon_name object
+taxon_name(NULL)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},

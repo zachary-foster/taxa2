@@ -396,7 +396,39 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
+    branches = function(subset = NULL, value = NULL) {
+      # non-standard argument evaluation
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+      subset <- private$parse_nse_taxon_subset(subset)
 
+      # Return empty list if `subset` has no values
+      if (length(subset) == 0) {
+        return(vector(mode = class(self$get_data(value)[[1]])))
+      }
+
+      # Prefilter subset
+      if (length(subset) == length(self$taxa) && all(subset == seq_len(length(self$taxon_ids())))) {
+        filtered_self <- self
+      } else {
+        filtered_self <- filter_taxa(self, subset)
+      }
+
+      # Get branches
+      output <- which(filtered_self$is_branch())
+
+      # Look up values
+      if (!is.null(value)) {
+        possible_values <- self$get_data(value)[[1]]
+        if (is.null(names(possible_values))) {
+          output <- possible_values[output]
+        } else {
+          output <- possible_values[self$taxon_ids()[output]]
+        }
+      }
+
+      return(output)
+    },
 
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,

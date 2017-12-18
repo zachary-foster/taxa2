@@ -68,6 +68,12 @@ pop(res, ranks("family"))
 # pick a rank
 (res <- hierarchy(z, y, x))
 pick(res, ranks("family"))
+
+
+# null taxa
+x <- taxon(NULL)
+(res <- hierarchy(x, x, x))
+## similar to hierarchy(), but `taxa` slot is not empty
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},

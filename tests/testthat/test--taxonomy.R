@@ -153,6 +153,23 @@ test_that("Finding roots", {
 })
 
 
+test_that("Finding branches", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$branches(), branches(x))
+
+  # Index return type
+  expect_type(x$branches(value = "taxon_indexes"), "integer")
+
+  # Taxon ID return type
+  expect_type(x$branches(value = "taxon_ids"), "character")
+
+  # Expected output
+  expect_equal(which(! x$is_root() & ! x$is_leaf()), x$branches())
+
+})
+
+
 test_that("Finding supertaxa", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
