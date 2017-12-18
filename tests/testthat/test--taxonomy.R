@@ -239,6 +239,18 @@ test_that("Filtering taxa", {
   expect_equal(result$taxon_names(), c("l" = "Solanum"))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", drop_obs = FALSE))
   expect_warning(filter_taxa(x, taxon_names == "Solanum", reassign_obs = TRUE))
+
+  # Check that filtering does not change order of taxa
+  result <- filter_taxa(x, taxon_names != "tuberosum")
+  expected_names <- x$taxon_names()
+  expected_names <- expected_names[expected_names != "tuberosum"]
+  expect_true(all(expected_names == result$taxon_names()))
+
+  result <- filter_taxa(x, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
+  expected_names <- x$taxon_names()
+  expected_names <- expected_names[! expected_names %in% c("Solanum", "lycopersicum", "tuberosum")]
+  expect_true(all(expected_names == result$taxon_names()))
+
 })
 
 
