@@ -7,8 +7,9 @@
 \item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
-\item{subset}{(\code{character}) \code{taxon_ids} or taxon indexes for which supertaxa
-will be returned. Default: All taxa in \code{obj} will be used.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes to find subtaxa for.
+Default: All taxa in \code{obj} will be used. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the subtaxa
 one rank below the target taxa. If \code{TRUE}, return all the subtaxa of every

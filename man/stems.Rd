@@ -7,8 +7,9 @@
 \item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
-\item{subset}{(\code{character}) Taxon IDs for which stem taxa will be
-returned. Default: All taxon in \code{obj} will be used.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes to find stems for.
+Default: All taxa in \code{obj} will be used. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{value}{What data to return. This is usually the name of column in a
 table in \code{obj$data}. Any result of \code{all_names(obj)} can be used, but it
@@ -43,6 +44,9 @@ stems(ex_taxmap, subset = 2:17)
 
 # Return something besides taxon indexes
 stems(ex_taxmap, value = "taxon_names")
+
+# Return a vector instead of a list
+stems(ex_taxmap, value = "taxon_names", simplify = TRUE)
 
 }
 \seealso{
