@@ -16,6 +16,7 @@ taxa [current]
 * `parse_tax_data`/`extract_tax_data` can now parse things like `phylum;Nitrosopumilales;order;Nitrosopumilaceae;family;` and split out the rank and taxon names by using multiple matches to the `class_regex` when `class_sep` is NULL. 
 * `extract_tax_data` now gives warnings if a regex does not match.
 * Added `n_supertaxa_1` function to get number of immediate supertaxa (always 1 or 0).
+* Added `branches` function to go with `roots`, `leaves`, and `stems`. ([issue #56](https://github.com/ropensci/taxa/issues/56))
 
 ### Changes
 

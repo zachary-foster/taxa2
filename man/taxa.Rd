@@ -20,12 +20,19 @@ Stores one or more \code{\link[=taxon]{taxon()}} objects. This is just a thin wr
 of \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
-(x <- taxon(
+(a <- taxon(
   name = taxon_name("Poa annua"),
   rank = taxon_rank("species"),
   id = taxon_id(93036)
 ))
+taxa(a, a, a)
+
+# a null set
+x <- taxon(NULL)
 taxa(x, x, x)
+
+# combo non-null and null
+taxa(a, x, a)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},

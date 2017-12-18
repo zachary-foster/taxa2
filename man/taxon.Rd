@@ -25,6 +25,13 @@ An \code{R6Class} object of class \code{Taxon}
 \description{
 A class used to define a taxon.
 }
+\details{
+Note that there is a special use case of this function - you can
+pass \code{NULL} as the first parameter to get an empty \code{taxon} object. It makes
+sense to retain the original behavior where nothing passed in to the first
+parameter leads to an error, and thus creating a \code{NULL} taxon is done very
+explicitly.
+}
 \examples{
 (x <- taxon(
   name = taxon_name("Poa annua"),
@@ -34,6 +41,15 @@ A class used to define a taxon.
 x$name
 x$rank
 x$id
+
+# a null taxon object
+taxon(NULL)
+## with all NULL objects from the other classes
+taxon(
+  name = taxon_name(NULL),
+  rank = taxon_rank(NULL),
+  id = taxon_id(NULL)
+)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
