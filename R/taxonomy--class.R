@@ -196,9 +196,6 @@ Taxonomy <- R6::R6Class(
       } else {
         stop("variables not of equal length")
       }
-
-      tin <- names(self$taxon_indexes())
-      tinmiss <- tin[!tin %in% names(x$foods)]
     },
 
     # Get a list of all data in an expression used with non-standard evaluation
