@@ -128,6 +128,22 @@ branches.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+internodes <- function(obj, ...) {
+  UseMethod("internodes")
+}
+
+#' @export
+internodes.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+internodes.Taxonomy <- function(obj, ...) {
+  obj$internodes(...)
+}
+
+
+#' @export
 subtaxa <- function(obj, ...) {
   UseMethod("subtaxa")
 }
@@ -448,6 +464,22 @@ is_root.default <- function(obj, ...) {
 #' @export
 is_root.Taxonomy <- function(obj, ...) {
   obj$is_root(...)
+}
+
+
+#' @export
+is_internode <- function(obj, ...) {
+  UseMethod("is_internode")
+}
+
+#' @export
+is_internode.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+is_internode.Taxonomy <- function(obj, ...) {
+  obj$is_internode(...)
 }
 
 

@@ -476,6 +476,7 @@ Taxmap <- R6::R6Class(
       "is_stem",
       "is_branch",
       "is_leaf",
+      "is_internode",
       "n_obs",
       "n_obs_1"
     ),
