@@ -12,6 +12,12 @@
 #' internally, required
 #' @param authority (character) a character string, optional
 #'
+#' @details Note that there is a special use case of this function - you can
+#' pass `NULL` as the first parameter to get an empty `taxon` object. It makes
+#' sense to retain the original behavior where nothing passed in to the first
+#' parameter leads to an error, and thus creating a `NULL` taxon is done very
+#' explicitly.
+#'
 #' @return An `R6Class` object of class `Taxon`
 #' @family classes
 #'
@@ -24,6 +30,15 @@
 #' x$name
 #' x$rank
 #' x$id
+#'
+#' # a null taxon object
+#' taxon(NULL)
+#' ## with all NULL objects from the other classes
+#' taxon(
+#'   name = taxon_name(NULL),
+#'   rank = taxon_rank(NULL),
+#'   id = taxon_id(NULL)
+#' )
 taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
   Taxon$new(
     name = name,
@@ -77,6 +92,10 @@ Taxon <- R6::R6Class(
       cat(paste0(indent, paste0("  authority: ",
                                 private$authority %||% "none", "\n")))
       invisible(self)
+    },
+
+    is_empty = function(x) {
+      is.null(self$name) && is.null(self$rank) && is.null(self$id)
     }
   ),
 

@@ -98,3 +98,18 @@ test_that("dots and .list return the same output", {
   expect_equal(hierarchy(plantae, solanaceae, solanum, sl),
                hierarchy(.list = list(plantae, solanaceae, solanum, sl)))
 })
+
+test_that("hierarchy can do null data", {
+  # empty hierarchy()
+  x <- hierarchy()
+  expect_is(x, "Hierarchy")
+  expect_null(x$taxa)
+  expect_null(x$ranklist)
+
+  # specifying NULL
+  x <- hierarchy(NULL)
+  expect_is(x, "Hierarchy")
+  expect_null(x$taxa)
+  expect_null(x$ranklist)
+})
+

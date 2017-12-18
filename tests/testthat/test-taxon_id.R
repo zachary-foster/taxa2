@@ -39,3 +39,11 @@ test_that("taxon_id fails well", {
   expect_error(taxon_id("adf", 5),
                "database must be of class character")
 })
+
+test_that("taxon_id can do null data", {
+  # empty taxon_id() tested in above block
+  x <- taxon_id(NULL)
+  expect_is(x, "TaxonId")
+  expect_null(x$name)
+  expect_null(x$database)
+})

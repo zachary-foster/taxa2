@@ -21,6 +21,9 @@
 #' ))
 #' x$rank
 #' x$database
+#'
+#' # a null taxon_name object
+#' taxon_name(NULL)
 taxon_rank <- function(name, database = NULL) {
   TaxonRank$new(
     name = name,
@@ -48,7 +51,7 @@ TaxonRank <- R6::R6Class(
     },
 
     print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonRank> %s\n", self$name)))
+      cat(paste0(indent, sprintf("<TaxonRank> %s\n", self$name %||% "none")))
       cat(paste0(indent, paste0("  database: ",
                                 get_database_name(self$database) %||% "none",
                                 "\n")))
