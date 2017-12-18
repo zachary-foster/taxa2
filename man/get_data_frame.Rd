@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxonomy--docs.R
 \name{get_data_frame}
 \alias{get_data_frame}
-\title{Get data in a taxmap object by name}
+\title{Get data in a taxonomy or taxmap object by name}
 \arguments{
 \item{obj}{A \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}  object}
 
@@ -14,8 +14,7 @@ returned (e.g. columns in tables or function output?) if \code{name} is not
 supplied or what kinds are allowed if \code{name} is supplied.}
 }
 \value{
-\code{list} of vectors or lists. Each vector or list will be named by
-associated taxon ids if possible.
+\code{data.frame}
 }
 \description{
 Given a vector of names, return a list of data (usually lists/vectors)
@@ -27,10 +26,10 @@ get_data_frame(obj, name = NULL, ...)}
 }
 \examples{
 # Get specific values
-get_data_frame(ex_taxmap, c("reaction", "n_legs", "taxon_ranks"))
+get_data_frame(ex_taxonomy, c("taxon_names", "taxon_indexes", "is_stem"))
 
 # Get all values
-get_data_frame(ex_taxmap)
+get_data_frame(ex_taxonomy)
 
 }
 \seealso{

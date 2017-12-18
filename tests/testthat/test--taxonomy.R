@@ -297,3 +297,16 @@ test_that("dots and .list return the same output", {
   expect_equal(taxonomy(tiger, cougar, mole, tomato, potato),
                taxonomy(.list = list(tiger, cougar, mole, tomato, potato)))
 })
+
+test_that("get data frame", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$get_data_frame(), get_data_frame(x))
+
+  df <- x$get_data_frame()
+  expect_is(df, "data.frame")
+  expect_is(df$taxon_names, "character")
+
+  # select columns to return
+  expect_named(x$get_data_frame("taxon_ids"), "taxon_ids")
+})

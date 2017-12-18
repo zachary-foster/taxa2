@@ -230,6 +230,13 @@ test_that("All valid NSE values can be found", {
   expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
+#### get_data_frame
+
+test_that("get data frame - for now doesn't work on example data", {
+  expect_error(test_obj$get_data_frame(), "variables not of equal length")
+})
+
+
 
 ### Mapping functions
 

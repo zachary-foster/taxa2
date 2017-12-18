@@ -9,3 +9,4 @@ man-roxygen
 .github
 ^README.html$
 cran-comments.md
+scott_notes.md

@@ -727,7 +727,7 @@ NULL
 NULL
 
 
-#' Get data in a taxmap object by name
+#' Get data in a taxonomy or taxmap object by name
 #'
 #' Given a vector of names, return a list of data (usually lists/vectors)
 #' contained in a [taxonomy()] or [taxmap()] object. Each item will be named by
@@ -743,15 +743,14 @@ NULL
 #'   returned (e.g. columns in tables or function output?) if `name` is not
 #'   supplied or what kinds are allowed if `name` is supplied.
 #'
-#' @return `list` of vectors or lists. Each vector or list will be named by
-#'   associated taxon ids if possible.
+#' @return `data.frame`
 #'
 #' @examples
 #' # Get specific values
-#' get_data_frame(ex_taxmap, c("reaction", "n_legs", "taxon_ranks"))
+#' get_data_frame(ex_taxonomy, c("taxon_names", "taxon_indexes", "is_stem"))
 #'
 #' # Get all values
-#' get_data_frame(ex_taxmap)
+#' get_data_frame(ex_taxonomy)
 #'
 #' @family accessors
 #'
