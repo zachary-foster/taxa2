@@ -91,9 +91,9 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) `taxon_ids` or indexes of
-#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#' in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find supertaxa for.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
 #'   supertaxa one rank above the target taxa. If `TRUE`, return all the
 #'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
@@ -155,9 +155,9 @@ NULL
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param func (`function`) The function to apply.
-#' @param subset (`character`) `taxon_ids` or indexes of
-#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#' in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes of taxa to use.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
 #'   supertaxa one rank above the target taxa. If `TRUE`, return all the
 #'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
@@ -193,8 +193,9 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) Taxon IDs for which root taxa will be
-#'   returned. Default: All taxon in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find roots for.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
@@ -230,12 +231,12 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset Taxon IDs or TRUE/FALSE vector used to subset the tree prior to
-#'   determining branches. Default: All taxa in `obj` will be used. Any variable
-#'   name that appears in [all_names()] can be used as if it was a vector on its
-#'   own. Note that branches are determined after the filtering, so a given
-#'   taxon might be a branch on the unfiltered tree, but not a branch
-#'   on the filtered tree.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset
+#'   the tree prior to determining branches. Default: All taxa in `obj` will be
+#'   used. Any variable name that appears in [all_names()] can be used as if it
+#'   was a vector on its own. Note that branches are determined after the
+#'   filtering, so a given taxon might be a branch on the unfiltered tree, but
+#'   not a branch on the filtered tree.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of [all_names()] can be used, but it
 #'   usually only makes sense to use data that corresponds to taxa 1:1, such as
@@ -273,7 +274,7 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon IDs used to subset the tree prior to
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset the tree prior to
 #'   determining internodes. Default: All taxa in `obj` will be used. Any variable
 #'   name that appears in [all_names()] can be used as if it was a vector on its
 #'   own. Note that internodes are determined after the filtering, so a given
@@ -322,8 +323,9 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) `taxon_ids` or taxon indexes for which supertaxa
-#'   will be returned. Default: All taxa in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find subtaxa for.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the subtaxa
 #'   one rank below the target taxa. If `TRUE`, return all the subtaxa of every
 #'   subtaxa, etc. Positive numbers indicate the number of ranks below the
@@ -385,9 +387,9 @@ NULL
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param func (`function`) The function to apply.
-#' @param subset (`character`) `taxon_ids` or indexes of
-#'   `taxon_data` for which supertaxa will be returned. Default: All taxa
-#' in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to use.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
 #'   supertaxa one rank above the target taxa. If `TRUE`, return all the
 #'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
@@ -424,8 +426,9 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) Taxon IDs for which stem taxa will be
-#'   returned. Default: All taxon in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find stems for.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
@@ -449,6 +452,9 @@ NULL
 #' # Return something besides taxon indexes
 #' stems(ex_taxmap, value = "taxon_names")
 #'
+#' # Return a vector instead of a list
+#' stems(ex_taxmap, value = "taxon_names", simplify = TRUE)
+#'
 #' @name stems
 NULL
 
@@ -463,8 +469,9 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset (`character`) Taxon IDs for which leaf taxa will be
-#'   returned. Default: All taxon in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find leaves for.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as

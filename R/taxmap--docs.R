@@ -18,8 +18,9 @@
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used. If the
 #'   value used has names, it is assumed that the names are taxon ids and the
 #'   taxon ids are used to look up the correct values.
-#' @param subset (`character`) Taxon IDs or indexes for which observation
-#'   indexes will be returned. Default: All taxa in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find observations
+#'   for. Default: All taxa in `obj` will be used. Any variable name that
+#'   appears in [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
 #'   observation assigned to the specified input taxa, not subtaxa. If `TRUE`,
 #'   return all the observations of every subtaxa, etc. Positive numbers
@@ -82,8 +83,9 @@ NULL
 #'   used, but it usually only makes sense to use columns in the dataset
 #'   specified by the `data` option. By default, the indexes of observation in
 #'   `data` are returned.
-#' @param subset (`character`) Taxon IDs or indexes for which observation
-#'   indexes will be returned. Default: All taxa in `obj` will be used.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to use.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
 #'   observation assigned to the specified input taxa, not subtaxa. If `TRUE`,
 #'   return all the observations of every subtaxa, etc. Positive numbers

@@ -22,8 +22,9 @@ used, but it usually only makes sense to use columns in the dataset
 specified by the \code{data} option. By default, the indexes of observation in
 \code{data} are returned.}
 
-\item{subset}{(\code{character}) Taxon IDs or indexes for which observation
-indexes will be returned. Default: All taxa in \code{obj} will be used.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes to use.
+Default: All taxa in \code{obj} will be used. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
 observation assigned to the specified input taxa, not subtaxa. If \code{TRUE},

@@ -17,8 +17,9 @@ table in \code{obj$data}. Any result of \code{all_names(obj)} can be used. If th
 value used has names, it is assumed that the names are taxon ids and the
 taxon ids are used to look up the correct values.}
 
-\item{subset}{(\code{character}) Taxon IDs or indexes for which observation
-indexes will be returned. Default: All taxa in \code{obj} will be used.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes to find observations
+for. Default: All taxa in \code{obj} will be used. Any variable name that
+appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
 observation assigned to the specified input taxa, not subtaxa. If \code{TRUE},

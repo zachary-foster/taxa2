@@ -9,9 +9,9 @@ information to be queried.}
 
 \item{func}{(\code{function}) The function to apply.}
 
-\item{subset}{(\code{character}) \code{taxon_ids} or indexes of
-\code{taxon_data} for which supertaxa will be returned. Default: All taxa
-in \code{obj} will be used.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes to use.
+Default: All taxa in \code{obj} will be used. Any variable name that appears in
+\code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
 
 \item{recursive}{(\code{logical} or \code{numeric}) If \code{FALSE}, only return the
 supertaxa one rank above the target taxa. If \code{TRUE}, return all the
