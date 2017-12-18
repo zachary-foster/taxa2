@@ -231,12 +231,12 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset Taxon IDs or TRUE/FALSE vector used to subset the tree prior to
-#'   determining branches. Default: All taxa in `obj` will be used. Any variable
-#'   name that appears in [all_names()] can be used as if it was a vector on its
-#'   own. Note that branches are determined after the filtering, so a given
-#'   taxon might be a branch on the unfiltered tree, but not a branch
-#'   on the filtered tree.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset
+#'   the tree prior to determining branches. Default: All taxa in `obj` will be
+#'   used. Any variable name that appears in [all_names()] can be used as if it
+#'   was a vector on its own. Note that branches are determined after the
+#'   filtering, so a given taxon might be a branch on the unfiltered tree, but
+#'   not a branch on the filtered tree.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of [all_names()] can be used, but it
 #'   usually only makes sense to use data that corresponds to taxa 1:1, such as
@@ -274,7 +274,7 @@ NULL
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
-#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon IDs used to subset the tree prior to
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset the tree prior to
 #'   determining internodes. Default: All taxa in `obj` will be used. Any variable
 #'   name that appears in [all_names()] can be used as if it was a vector on its
 #'   own. Note that internodes are determined after the filtering, so a given

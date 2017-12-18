@@ -7,7 +7,7 @@
 \item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
-\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon IDs used to subset the tree prior to
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset the tree prior to
 determining internodes. Default: All taxa in \code{obj} will be used. Any variable
 name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its
 own. Note that internodes are determined after the filtering, so a given

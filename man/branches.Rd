@@ -7,12 +7,12 @@
 \item{obj}{The \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object containing taxon
 information to be queried.}
 
-\item{subset}{Taxon IDs or TRUE/FALSE vector used to subset the tree prior to
-determining branches. Default: All taxa in \code{obj} will be used. Any variable
-name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its
-own. Note that branches are determined after the filtering, so a given
-taxon might be a branch on the unfiltered tree, but not a branch
-on the filtered tree.}
+\item{subset}{Taxon IDs, TRUE/FALSE vector, or taxon indexes used to subset
+the tree prior to determining branches. Default: All taxa in \code{obj} will be
+used. Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it
+was a vector on its own. Note that branches are determined after the
+filtering, so a given taxon might be a branch on the unfiltered tree, but
+not a branch on the filtered tree.}
 
 \item{value}{What data to return. This is usually the name of column in a
 table in \code{obj$data}. Any result of \code{\link[=all_names]{all_names()}} can be used, but it
