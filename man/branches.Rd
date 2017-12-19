@@ -24,7 +24,7 @@ usually only makes sense to use data that corresponds to taxa 1:1, such as
 }
 \description{
 Return the "branch" taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. A branch is
-anything that is not a root, stem, or, leaf. Its the interior of the tree
+anything that is not a root, stem, or leaf. Its the interior of the tree
 after the first split starting from the roots. Can also be used to get the
 branches of a subset of taxa.
 \preformatted{

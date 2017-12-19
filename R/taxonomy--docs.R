@@ -222,7 +222,7 @@ NULL
 #' Get "branch" taxa
 #'
 #' Return the "branch" taxa for a [taxonomy()] or [taxmap()] object. A branch is
-#' anything that is not a root, stem, or, leaf. Its the interior of the tree
+#' anything that is not a root, stem, or leaf. Its the interior of the tree
 #' after the first split starting from the roots. Can also be used to get the
 #' branches of a subset of taxa.
 #' \preformatted{
@@ -302,10 +302,6 @@ NULL
 #' # Return something besides taxon indexes
 #' internodes(ex_taxmap, value = "taxon_names")
 #'
-#' # Visualize which taxa are internodes
-#' library(metacoder)
-#' heat_tree(ex_taxmap, node_label = taxon_names,
-#'           node_color = ifelse(is_internode, "red", "grey"))
 #' }
 #' @name internodes
 NULL
@@ -736,12 +732,14 @@ NULL
 
 #' Get data in a taxonomy or taxmap object by name
 #'
-#' Given a vector of names, return a list of data (usually lists/vectors)
-#' contained in a [taxonomy()] or [taxmap()] object. Each item will be named by
-#' taxon ids when possible.
+#' Given a vector of names, return a  table of the indicated data
+#' contained in a [taxonomy()] or [taxmap()] object.
 #' \preformatted{
 #' obj$get_data_frame(name = NULL, ...)
 #' get_data_frame(obj, name = NULL, ...)}
+#'
+#' Note: This function will not work with variables in datasets in [taxmap()]
+#' objects unless their rows correspond 1:1 with all taxa.
 #'
 #' @param obj A [taxonomy()] or [taxmap()]  object
 #' @param name (`character`) Names of data to return. If not supplied, return

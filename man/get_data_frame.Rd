@@ -17,12 +17,15 @@ supplied or what kinds are allowed if \code{name} is supplied.}
 \code{data.frame}
 }
 \description{
-Given a vector of names, return a list of data (usually lists/vectors)
-contained in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Each item will be named by
-taxon ids when possible.
+Given a vector of names, return a  table of the indicated data
+contained in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object.
 \preformatted{
 obj$get_data_frame(name = NULL, ...)
 get_data_frame(obj, name = NULL, ...)}
+}
+\details{
+Note: This function will not work with variables in datasets in \code{\link[=taxmap]{taxmap()}}
+objects unless their rows correspond 1:1 with all taxa.
 }
 \examples{
 # Get specific values

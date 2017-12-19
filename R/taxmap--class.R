@@ -3,8 +3,8 @@
 #' A class designed to store a taxonomy and associated information. This class
 #' builds on the [taxonomy()] class. User defined data can be stored in the list
 #' `obj$data`, where `obj` is a taxmap object. Data that is associated with taxa
-#' can be manipulated in a variety of ways using functions like `filter_taxa`
-#' and `filter_obs`. To associate the items of lists/vectors with taxa, name
+#' can be manipulated in a variety of ways using functions like [filter_taxa()]
+#' and [filter_obs()]. To associate the items of lists/vectors with taxa, name
 #' them by [taxon_ids()]. For tables, add a column named `taxon_id` that stores
 #' [taxon_ids()].
 #'
@@ -18,7 +18,7 @@
 #'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
 #' @param data A list of tables with data associated with the taxa.
 #' @param funcs A named list of functions to include in the class. Referring to
-#'   the names of these in functions like `filter_taxa` will execute the
+#'   the names of these in functions like [filter_taxa()] will execute the
 #'   function and return the results. If the function has at least one argument,
 #'   the taxmap object is passed to it.
 #' @family classes
@@ -467,6 +467,7 @@ Taxmap <- R6::R6Class(
       "taxon_names",
       "taxon_ids",
       "taxon_indexes",
+      "classifications",
       "n_supertaxa",
       "n_supertaxa_1",
       "n_subtaxa",

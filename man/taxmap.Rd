@@ -16,7 +16,7 @@ Cannot be used with \code{.list}.}
 \item{data}{A list of tables with data associated with the taxa.}
 
 \item{funcs}{A named list of functions to include in the class. Referring to
-the names of these in functions like \code{filter_taxa} will execute the
+the names of these in functions like \code{\link[=filter_taxa]{filter_taxa()}} will execute the
 function and return the results. If the function has at least one argument,
 the taxmap object is passed to it.}
 }
@@ -27,8 +27,8 @@ An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
 A class designed to store a taxonomy and associated information. This class
 builds on the \code{\link[=taxonomy]{taxonomy()}} class. User defined data can be stored in the list
 \code{obj$data}, where \code{obj} is a taxmap object. Data that is associated with taxa
-can be manipulated in a variety of ways using functions like \code{filter_taxa}
-and \code{filter_obs}. To associate the items of lists/vectors with taxa, name
+can be manipulated in a variety of ways using functions like \code{\link[=filter_taxa]{filter_taxa()}}
+and \code{\link[=filter_obs]{filter_obs()}}. To associate the items of lists/vectors with taxa, name
 them by \code{\link[=taxon_ids]{taxon_ids()}}. For tables, add a column named \code{taxon_id} that stores
 \code{\link[=taxon_ids]{taxon_ids()}}.
 }

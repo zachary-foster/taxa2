@@ -311,13 +311,15 @@ Taxonomy <- R6::R6Class(
       output <- unname(subset[is_root])
 
       # Look up values
-      if (!is.null(value)) {
+      if (! is.null(value)) {
         possible_values <- self$get_data(value)[[1]]
         if (is.null(names(possible_values))) {
           output <- possible_values[output]
         } else {
           output <- possible_values[self$taxon_ids()[output]]
         }
+      } else {
+        names(output) <- self$taxon_ids()[output]
       }
 
       return(output)
@@ -975,10 +977,20 @@ Taxonomy <- R6::R6Class(
   ),
 
   private = list(
-    nse_accessible_funcs = c("taxon_names", "taxon_ids", "taxon_indexes",
-                             "n_supertaxa", "n_supertaxa_1", "n_subtaxa",
-                             "n_subtaxa_1", "taxon_ranks", "is_root", "is_stem",
-                             "is_branch", "is_leaf", "is_internode"),
+    nse_accessible_funcs = c("taxon_names",
+                             "taxon_ids",
+                             "taxon_indexes",
+                             "classifications",
+                             "n_supertaxa",
+                             "n_supertaxa_1",
+                             "n_subtaxa",
+                             "n_subtaxa_1",
+                             "taxon_ranks",
+                             "is_root",
+                             "is_stem",
+                             "is_branch",
+                             "is_leaf",
+                             "is_internode"),
 
     make_graph = function() {
       apply(self$edge_list, 1, paste0, collapse = "->")

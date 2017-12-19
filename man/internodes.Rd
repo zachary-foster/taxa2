@@ -45,10 +45,6 @@ internodes(ex_taxmap, subset = n_obs > 1)
 # Return something besides taxon indexes
 internodes(ex_taxmap, value = "taxon_names")
 
-# Visualize which taxa are internodes
-library(metacoder)
-heat_tree(ex_taxmap, node_label = taxon_names,
-          node_color = ifelse(is_internode, "red", "grey"))
 }
 }
 \seealso{
