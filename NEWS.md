@@ -1,4 +1,4 @@
-taxa [current]
+taxa 0.2.0
 ==========
 
 ### Bug fixes
@@ -18,6 +18,11 @@ taxa [current]
 * Added `n_supertaxa_1` function to get number of immediate supertaxa (always 1 or 0).
 * Added `branches` function to go with `roots`, `leaves`, and `stems`. ([issue #56](https://github.com/ropensci/taxa/issues/56))
 * Added `internodes` and `is_internode` functions to go with `roots`, `leaves`, `branches`, and `stems`. USeful for removing uninformative taxonomic ranks/taxa.
+* Started to incorporate ability for `taxon`, `taxon_name`, `taxon_id`, `taxon_rank`, and `taxa` to handle `NULL` inputs as first class citizens to handle cases when you have essentially a blank taxon (use case comes from `taxize` package) [#95](https://github.com/ropensci/taxa/issues/95) [#107](https://github.com/ropensci/taxa/issues/107)
+* data parsers: Put long, often unused columns last ([issue #93](https://github.com/ropensci/taxa/issues/93))
+* When parsing classifications that have per-taxon info add input id column ([issue #92](https://github.com/ropensci/taxa/issues/92))
+* New function `classification` as an abstraction to get either hierarchy of taxon indexes, names, or ids ([issue #57](https://github.com/ropensci/taxa/issues/57))
+* New function `get_data_frame` for both `Taxonomy` and `Taxmap` objects that wraps around `get_data` to coerce into a `data.frame`. ([issue #58](https://github.com/ropensci/taxa/issues/58)) ([PR #105](https://github.com/ropensci/taxa/issues/105))
 
 ### Changes
 

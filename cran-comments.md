@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.4.1 patched
-* ubuntu 12.04 (on travis-ci), R 3.4.0
+* local OS X install, R 3.4.3 patched
+* ubuntu 12.04 (on travis-ci), R 3.4.3
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -16,12 +16,12 @@
 
 ## Reverse dependencies
 
-This is a new submission, so there are no reverse dependencies.
+There are no reverse dependencies.
 
 ---
 
-This is a new release. I have read and agree to the the CRAN policies at
-https://cran.r-project.org/web/packages/policies.html
+This version includes a number of bug fixes and improvements - of 
+particular importance is a fix for failing CRAN checks.
 
 Thanks!
 Scott Chamberlain
