@@ -7,7 +7,7 @@
 parse_tax_data(tax_data, datasets = list(), class_cols = 1,
   class_sep = ";", sep_is_regex = FALSE, class_key = "taxon_name",
   class_regex = "(.*)", include_match = TRUE, mappings = c(),
-  include_tax_data = TRUE)
+  include_tax_data = TRUE, named_by_rank = FALSE)
 }
 \arguments{
 \item{tax_data}{A table, list, or vector that contains the names of taxa that
@@ -56,6 +56,8 @@ multiple times. Each term must be one of those described below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
 interpretable by a particular \code{database}. Requires an internet connection.
+\item \code{taxon_rank}: The rank of the taxon. This will be used to add rank info
+into the output object that can be accessed by \code{out$taxon_ranks()}.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
@@ -90,6 +92,12 @@ will be converted to vectors using \code{\link[=unlist]{unlist()}}.
 
 \item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data}
 as a dataset, like those in \code{datasets}.}
+
+\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a table
+with columns named by ranks or a list of vectors with each vector named by
+ranks, include that rank info in the output object, so it can be accessed
+by \code{out$taxon_ranks()}. Cannot be used with the \code{sep}, \code{class_regex}, or
+\code{class_key} options.}
 }
 \description{
 Parses taxonomic information and associated data and stores it in a

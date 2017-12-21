@@ -1,3 +1,9 @@
+Current
+=======
+
+* `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #86](https://github.com/ropensci/taxa/issues/113)).
+
+
 taxa 0.2.0
 ==========
 

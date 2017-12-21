@@ -43,6 +43,8 @@
 #'   multiple times. Each term must be one of those described below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique, but are
 #'   interpretable by a particular `database`. Requires an internet connection.
+#'   * `taxon_rank`: The rank of the taxon. This will be used to add rank info
+#'   into the output object that can be accessed by `out$taxon_ranks()`.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -70,6 +72,11 @@
 #'   will be converted to vectors using [unlist()].
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset, like those in `datasets`.
+#' @param named_by_rank (`TRUE`/`FALSE`) If  `TRUE` and the input is a table
+#'   with columns named by ranks or a list of vectors with each vector named by
+#'   ranks, include that rank info in the output object, so it can be accessed
+#'   by `out$taxon_ranks()`. Cannot be used with the `sep`, `class_regex`, or
+#'   `class_key` options.
 #'
 #' @family parsers
 #'
@@ -121,7 +128,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                            class_sep = ";", sep_is_regex = FALSE,
                            class_key = "taxon_name", class_regex = "(.*)",
                            include_match = TRUE,
-                           mappings = c(), include_tax_data = TRUE) {
+                           mappings = c(), include_tax_data = TRUE,
+                           named_by_rank = FALSE) {
 
   # Check for nonsensical options
   if (length(datasets) != length(mappings)) {
@@ -150,6 +158,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   if (! "taxon_name" %in% class_key) {
     stop('At least one value in "class_key" must be "taxon_name".')
   }
+  if ("taxon_rank" %in% class_key && named_by_rank) {
+    stop('"named_by_rank = TRUE" does not make sense when "taxon_rank" is in "class_key".')
+  }
 
   # Deal with edge cases
   if (length(tax_data) == 0) {
@@ -164,9 +175,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     parsed_tax <- lapply(seq_len(nrow(tax_data)),
                          function(i) {
                            class_source <- unlist(lapply(tax_data[i, class_cols], as.character))
-                           unname(unlist(multi_sep_split(class_source,
+                           unlist(multi_sep_split(class_source,
                                                          fixed = !sep_is_regex,
-                                                         split = class_sep)))
+                                                         split = class_sep))
                          })
   } else if (is.list(tax_data) && is.data.frame(tax_data[[1]])) { # is a list of data.frames
     if (length(class_cols) > 1) {
@@ -184,7 +195,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   } else {
     stop("Unknown format for first input. Cannot parse taxonomic information.")
   }
-  
+
   # Remove white space
   parsed_tax <- lapply(parsed_tax, trimws)
 
@@ -192,21 +203,45 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
     taxon_info <- lapply(parsed_tax, function(x)
       data.frame(stringr::str_match_all(x, class_regex), stringsAsFactors = FALSE))
-    parsed_tax <- lapply(taxon_info, `[[`, which(class_key == "taxon_name") + 1)
-    taxon_info <- do.call(rbind, taxon_info)
-    names(taxon_info) <- c("match", names(class_key))
   } else { # only use first match if sep is applied
-    taxon_info <- lapply(parsed_tax, function(x)
-      data.frame(stringr::str_match(x, class_regex), stringsAsFactors = FALSE))
-    taxon_info <- do.call(rbind, taxon_info)
-    names(taxon_info) <- c("match", names(class_key))
-    parsed_tax <- split(taxon_info[, which(class_key == "taxon_name") + 1],
-                        rep(seq_len(length(parsed_tax)),
-                            vapply(parsed_tax, length, integer(1))))
+    taxon_info <- lapply(parsed_tax, function(x) {
+      output <- data.frame(stringr::str_match(x, class_regex),
+                           stringsAsFactors = FALSE)
+      rownames(output) <- names(x)
+      return(output)
+    })
   }
 
+  # Clean up classifications to only include taxon name and rank
+  if ("taxon_rank" %in% class_key) {
+    parsed_tax <- lapply(taxon_info, function(x) {
+      stats::setNames(x[[which(class_key == "taxon_name") + 1]],
+                      x[[which(class_key == "taxon_rank") + 1]])
+    })
+  } else if (named_by_rank)  {
+    parsed_tax <- lapply(taxon_info, function(x) {
+      stats::setNames(x[[which(class_key == "taxon_name") + 1]],
+                      rownames(x))
+    })
+  } else {
+    parsed_tax <- lapply(taxon_info, function(x) {
+      x[[which(class_key == "taxon_name") + 1]]
+    })
+  }
+
+  # combine taxon info into a single table
+  taxon_info <- do.call(rbind, c(taxon_info, make.row.names = FALSE))
+  names(taxon_info) <- c("match", names(class_key))
+
   # Create taxmap object
-  output <- taxmap(.list = parsed_tax)
+  hier_objs <- lapply(parsed_tax, function(x) {
+    output <- hierarchy()
+    output$taxa <- lapply(seq_len(length(x)), function(i) {
+      taxon(x[i], rank = names(x[i]))
+    })
+    return(output)
+  })
+  output <- taxmap(.list = hier_objs)
 
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {

@@ -6,9 +6,9 @@ test_that("Taxmap can be intialized from complex data", {
   # Basic parsing
   my_vector <- c("A;B;C;D", "A;E;F;G", "A;B;H;I")
   my_list_1 <- list("A;B;C;D", "A;E;F;G", c("A;B", "H;I"))
-  my_list_2 <- list(c("A", "B", "C", "D"),
-                    c("A", "E", "F", "G"),
-                    c("A", "B", "H", "I"))
+  my_list_2 <- list(c(Phylum = "A", Class = "B", Order = "C", Family = "D"),
+                    c(Phylum = "A", Class = "E", Order = "F", Family = "G"),
+                    c(Phylum = "A", Class = "B", Order = "H", Family = "I"))
   my_frame <- data.frame(tax = c("A;B;C", "A;E;F", "A;B;H"),
                          species = c("D", "G", "I"))
   my_frames <- list(data.frame(tax = c("A", "B", "C", "D")),
@@ -26,6 +26,11 @@ test_that("Taxmap can be intialized from complex data", {
   expect_equal(vector_result, list_1_result)
   expect_equal(vector_result, list_2_result)
   expect_equal(vector_result, frame_result)
+
+  # Incorperating rank information in lists of vectors
+  result <- parse_tax_data(my_list_2, include_tax_data = FALSE,
+                           named_by_rank = TRUE)
+  expect_true(all(c("Phylum", "Class", "Order", "Family") %in% result$taxon_ranks()))
 
   # Basic parsing with datasets
   test_obj <- parse_tax_data(my_vector, list(test = letters[1:3]),
@@ -69,8 +74,12 @@ test_that("Taxmap can be intialized from complex data", {
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
                 "K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
   result <- parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
-                 class_key = c(my_rank = "info", tax_name = "taxon_name"),
+                 class_key = c(my_rank = "taxon_rank", tax_name = "taxon_name"),
                  include_match = FALSE)
+  expect_true(all(c("K", "P", "C", "G", "S") %in% result$taxon_ranks()))
+  expect_error(parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
+                              class_key = c(my_rank = "taxon_rank", tax_name = "taxon_name"),
+                              include_match = FALSE, named_by_rank = TRUE))
 
   # Check for data names that are the same as function names
   expect_warning(parse_tax_data(raw_data, class_sep = ";",
