@@ -100,62 +100,6 @@ validate_taxmap_funcs <- function(funcs) {
 }
 
 
-#' Print a table
-#'
-#' Used to print each item in the `taxmap` print method.
-#'
-#' @param data The item to be printed
-#' @param max_rows (`numeric` of length 1) The maximum number of rows in
-#'   tables to print.
-#' @param max_items (`numeric` of length 1) The maximum number of list
-#'   items to print.
-#' @param max_width (`numeric` of length 1) The maximum number of
-#'   characters to print.
-#' @param prefix (`numeric` of length 1) What to print in front of each
-#'   line.
-#'
-#' @examples
-#' taxa:::print_item(ex_taxmap$data$info)
-#' taxa:::print_item(1:100)
-#'
-#' @keywords internal
-print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
-                       max_width = getOption("width") - 10, prefix = "") {
-  prefixed_print <- function(x, prefix, ...) {
-    output <- paste0(prefix, utils::capture.output(print(x, ...)))
-    cat(paste0(paste0(output, collapse = "\n"), "\n"))
-  }
-  arrange_obs
-
-  if (is.data.frame(data)) {
-    loadNamespace("dplyr") # used for tibble print methods
-    if (length(name) > 0 && ! is.na(name)) {
-      cat(paste0(prefix, name, ":\n"))
-    }
-    if (dplyr::is.tbl(data)) {
-      prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows,
-                     width = max_width)
-    } else {
-      prefixed_print(data, prefix = paste0(prefix, "  "))
-    }
-  } else if (is.list(data)) {
-    if (length(data) < 1) {
-      prefixed_print(list(), prefix = prefix)
-    } else {
-      cat(paste0(prefix, name, ": a list with ", length(data),
-                 ifelse(length(data) == 1, " item", " items"), "\n"))
-    }
-  } else if (is.vector(data)) {
-    cat(paste0(prefix, name, ": "))
-    limited_print(data, max_chars = max_width, type = "cat")
-  } else {
-    prefixed_print(data, prefix = prefix)
-  }
-  invisible(data)
-}
-
-
-
 #' used to parse inputs to `drop_obs` and `reassign_obs`
 #'
 #' @keywords internal
