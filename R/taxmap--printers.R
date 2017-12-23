@@ -19,30 +19,17 @@
 #' @keywords internal
 print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
                        max_width = getOption("width") - 10, prefix = "") {
-  if (is.data.frame(data)) {
-    loadNamespace("dplyr") # used for tibble print methods
-    if (length(name) > 0 && ! is.na(name)) {
-      cat(paste0(prefix, name, ":\n"))
-    }
-    if (dplyr::is.tbl(data)) {
-      prefixed_print(data, prefix = paste0(prefix, "  "), n = max_rows,
-                     width = max_width)
-    } else {
-      prefixed_print(data, prefix = paste0(prefix, "  "))
-    }
-  } else if (is.list(data)) {
-    if (length(data) < 1) {
-      prefixed_print(list(), prefix = prefix)
-    } else {
-      cat(paste0(prefix, name, ": a list with ", length(data),
-                 ifelse(length(data) == 1, " item", " items"), "\n"))
-    }
-  } else if (is.vector(data)) {
-    cat(paste0(prefix, name, ": "))
-    limited_print(data, max_chars = max_width, type = "cat")
-  } else {
-    prefixed_print(data, prefix = prefix)
-  }
+
+  # Find best print method
+  print_methdods <- c(paste0("print__", class(data)),
+                      "print__default_")
+  applicable_methods <- print_methdods[vapply(print_methdods, function(x) exists(x), logical(1))]
+  best_method <- applicable_methods[1]
+
+  # Call print method
+  get(best_method)(data, name = name, prefix = prefix, max_width = max_width,
+                   max_rows = max_rows)
+
   invisible(data)
 }
 
@@ -104,8 +91,13 @@ print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
-  if (length(name) > 0 && ! is.na(name)) {
-    cat(paste0(prefix, name, ":\n"))
+  cat(paste0(prefix, name, ":\n"))
+  if (nrow(obj) > max_rows) {
+    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame (first ",
+               max_rows, " rows shown)\n"))
+    obj <- obj[1:max_rows, , drop = FALSE]
+  } else {
+    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame\n"))
   }
   prefixed_print(obj, prefix = paste0(prefix, "  "))
 }
@@ -268,9 +260,31 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
   if (nrow(obj) > max_rows) {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix (first ",
                max_rows, " rows shown)\n"))
-    obj <- obj[1:max_rows, ]
+    obj <- obj[1:max_rows, , drop = FALSE]
   } else {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix\n"))
   }
+  prefixed_print(obj, prefix = paste0(prefix, "  "))
+}
+
+
+#' Print method for unsupported
+#'
+#' Print method for unsupported classes for taxmap objects
+#'
+#' Which print method is called is determined by its name, so changing the name
+#' of this function will change when it is called.
+#'
+#' @param obj Something to print
+#' @param name The name of the thing to print
+#' @param prefix What to put before the thing printed. Typically a space.
+#' @param max_width Maximum width in number of characters to print
+#' @param max_rows Maximum number of rows to print
+#'
+#' @family taxmap print methods
+#'
+#' @keywords internal
+print__default_ <- function(obj, name, prefix, max_width, max_rows) {
+  cat(paste0(prefix, name, ":\n"))
   prefixed_print(obj, prefix = paste0(prefix, "  "))
 }
