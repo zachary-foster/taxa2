@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxmap--printers.R
 \name{print_item}
 \alias{print_item}
-\title{Print a table}
+\title{Print a item}
 \usage{
 print_item(data, name = NULL, max_rows = 3, max_items = 3,
   max_width = getOption("width") - 10, prefix = "")

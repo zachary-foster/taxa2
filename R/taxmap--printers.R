@@ -1,4 +1,4 @@
-#' Print a table
+#' Print a item
 #'
 #' Used to print each item in the `taxmap` print method.
 #'
