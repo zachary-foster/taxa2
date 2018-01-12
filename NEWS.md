@@ -7,6 +7,7 @@ Current
 
 ### Bug fixes
 
+* `filter_taxa` now has better error messages for invalid inputs ([issue #117](https://github.com/ropensci/taxa/issues/117)).
 * Fix a bug that caused an error in `filter_taxa` when no taxa pass filter ([issue #116](https://github.com/ropensci/taxa/issues/116)).
 
 taxa 0.2.0

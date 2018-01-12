@@ -687,7 +687,7 @@ Taxonomy <- R6::R6Class(
         reassign_obs <- parse_possibly_named_logical(
           reassign_obs,
           self$data,
-          default = formals(self$filter_taxa)$reassign_obs
+          default <- formals(self$filter_taxa)$reassign_obs
         )
         process_one <- function(data_index) {
 
@@ -996,7 +996,6 @@ Taxonomy <- R6::R6Class(
       apply(self$edge_list, 1, paste0, collapse = "->")
     },
 
-    # Remove taxa not in "el_indexes"
     remove_taxa = function(el_indexes) {
       # Remove taxa objects
       self$taxa <- self$taxa[self$taxon_ids()[el_indexes]]
@@ -1005,10 +1004,8 @@ Taxonomy <- R6::R6Class(
       self$edge_list <- self$edge_list[el_indexes, , drop = FALSE]
 
       # Replace and edges going to removed taxa with NA
-      to_replace <- ! self$edge_list$from %in% self$taxon_ids()
-      if (sum(to_replace) > 0) {
-        self$edge_list[to_replace, "from"] <- as.character(NA)
-      }
+      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
+        as.character(NA)
     },
 
     # Takes one ore more NSE expressions and resolves them to indexes of edgelist rows
@@ -1022,15 +1019,45 @@ Taxonomy <- R6::R6Class(
         return(self$taxon_indexes())
       }
 
+      # Check that index input is valid
+      is_num <- vapply(selection, is.numeric, logical(1))
+      unused <- lapply(selection[is_num],
+                       function(x) {
+                         invalid_indexes <- x[x < 1 | x > length(self$taxon_ids())]
+                         if (length(invalid_indexes) > 0) {
+                           stop(call. = FALSE,
+                                paste0("The following taxon indexes are invalid:\n",
+                                       limited_print(invalid_indexes, type = "silent")))
+                         }
+                       })
+
       # Convert taxon_ids to indexes
       is_char <- vapply(selection, is.character, logical(1))
       selection[is_char] <- lapply(selection[is_char],
-                                   function(x) match(x, self$taxon_ids()))
+                                   function(x) {
+                                     result <- match(x, self$taxon_ids())
+                                     invalid_ids <- x[is.na(result)]
+                                     if (length(invalid_ids) > 0) {
+                                       stop(call. = FALSE,
+                                            paste0("The following taxon IDs do not exist:\n",
+                                                   limited_print(invalid_ids, type = "silent")))
+                                     }
+                                     return(result)
+                                   })
 
       # Convert logical to indexes
       is_tf <- vapply(selection, is.logical, logical(1))
       selection[is_tf] <- lapply(selection[is_tf],
-                                 function(x) which(x))
+                                 function(x) {
+                                   if (length(x) != length(self$taxon_ids())) {
+                                     stop(call. = FALSE,
+                                          paste0("TRUE/FALSE vector (length = ",
+                                                 length(x),
+                                                 ") must be the same length as the number of taxa (",
+                                                 length(self$taxon_ids()), ")"))
+                                   }
+                                   which(x)
+                                 })
 
       # Combine index lists.
       intersect_with_dups <- function(a, b) {

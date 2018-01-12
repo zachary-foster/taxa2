@@ -1,6 +1,7 @@
 ## Testing `taxonomy` class
 
 library(taxa)
+library(testthat)
 context("taxonomy")
 
 
@@ -268,6 +269,14 @@ test_that("Filtering taxa", {
   expected_names <- expected_names[! expected_names %in% c("Solanum", "lycopersicum", "tuberosum")]
   expect_true(all(expected_names == result$taxon_names()))
 
+  # Errors for invalid indexes
+  expect_error(filter_taxa(x, 100), "The following taxon indexes are invalid:")
+
+  # Errors for invalid IDs
+  expect_error(filter_taxa(x, "zzz"), "The following taxon IDs do not exist:")
+
+  # Errors for invalid logical
+  expect_error(filter_taxa(x, TRUE), "must be the same length as the number of taxa")
 })
 
 
