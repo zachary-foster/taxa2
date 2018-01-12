@@ -996,6 +996,7 @@ Taxonomy <- R6::R6Class(
       apply(self$edge_list, 1, paste0, collapse = "->")
     },
 
+    # Remove taxa not in "el_indexes"
     remove_taxa = function(el_indexes) {
       # Remove taxa objects
       self$taxa <- self$taxa[self$taxon_ids()[el_indexes]]
@@ -1004,8 +1005,10 @@ Taxonomy <- R6::R6Class(
       self$edge_list <- self$edge_list[el_indexes, , drop = FALSE]
 
       # Replace and edges going to removed taxa with NA
-      self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
-        as.character(NA)
+      to_replace <- ! self$edge_list$from %in% self$taxon_ids()
+      if (sum(to_replace) > 0) {
+        self$edge_list[to_replace, "from"] <- as.character(NA)
+      }
     },
 
     # Takes one ore more NSE expressions and resolves them to indexes of edgelist rows

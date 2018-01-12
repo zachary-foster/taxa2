@@ -1,8 +1,13 @@
 Current
 =======
 
-* `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #86](https://github.com/ropensci/taxa/issues/113)).
+### Improvements
 
+* `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).
+
+### Bug fixes
+
+* Fix a bug that caused an error in `filter_taxa` when no taxa pass filter ([issue #116](https://github.com/ropensci/taxa/issues/116)).
 
 taxa 0.2.0
 ==========
