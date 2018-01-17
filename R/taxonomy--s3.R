@@ -485,7 +485,7 @@ is_internode.Taxonomy <- function(obj, ...) {
 
 #' @export
 is_stem <- function(obj, ...) {
-  UseMethod("is_root")
+  UseMethod("is_stem")
 }
 
 #' @export

@@ -345,7 +345,7 @@ Taxonomy <- R6::R6Class(
         } else if (length(children) == 1) {
           output <- c(taxon, recursive_part(children))
         } else {
-          output <- taxon
+          output <- numeric(0)
         }
         return(unname(output))
       }
@@ -622,7 +622,7 @@ Taxonomy <- R6::R6Class(
 
     is_stem = function() {
       stats::setNames(self$taxon_ids() %in% self$stems(simplify = TRUE,
-                                                       value = "taxon_indexes"),
+                                                       value = "taxon_ids"),
                       self$taxon_ids())
     },
 
