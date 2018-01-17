@@ -189,6 +189,7 @@ check_taxmap_data <- function(obj) {
 as_id <- function(ids, database, ...) {
   id_constructors <- list(ncbi = taxize::as.uid,
                           itis = taxize::as.tsn,
+                          iucn = taxize::as.iucn,
                           eol = taxize::as.eolid,
                           col = taxize::as.colid,
                           tropicos = taxize::as.tpsid,
