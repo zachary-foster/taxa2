@@ -478,7 +478,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
 
   use_taxon_id <- function(ids) {
-    result <- map_unique(ids, taxize::classification, ask = FALSE, rows = 1,
+    result <- map_unique(as_id(ids, database), taxize::classification, ask = FALSE, rows = 1,
                          db = database)
     format_class_table(result)
   }

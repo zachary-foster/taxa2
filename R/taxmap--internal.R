@@ -173,3 +173,39 @@ check_taxmap_data <- function(obj) {
 
   return(invisible(NULL))
 }
+
+
+#' Convert a vector to database IDs
+#'
+#' This is a convenience function to convert to identifiers of various  data
+#' sources. It wraps the \code{as.*id} functions in \code{\link[taxize]{taxize}}
+#'
+#' @param ids The character or numeric vector of raw taxon IDs.
+#' @param database The database format to convert the IDs to. Either ncbi,
+#'   itis, eol, col, tropicos, gbif, nbn, worms, natserv, bold, or wiki
+#' @param ... Passed to \code{as.*id} function.
+#'
+#' @keywords internal
+as_id <- function(ids, database, ...) {
+  id_constructors <- list(ncbi = taxize::as.uid,
+                          itis = taxize::as.tsn,
+                          eol = taxize::as.eolid,
+                          col = taxize::as.colid,
+                          tropicos = taxize::as.tpsid,
+                          gbif = taxize::as.gbifid,
+                          nbn = taxize::as.nbnid,
+                          worms = taxize::as.wormsid,
+                          natserv = taxize::as.natservid,
+                          bold = taxize::as.boldid,
+                          wiki = taxize::as.wiki)
+
+  if (! database %in% names(id_constructors)) {
+    stop(call. = FALSE,
+         paste0('"', database,
+                '" is not a recognized database name. Must be one of the following:\n',
+                limited_print(names(id_constructors), type = "silent")))
+  }
+
+  id_constructors[[database]](ids, ...)
+}
+
