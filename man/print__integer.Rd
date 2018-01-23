@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxmap--printers.R
 \name{print__integer}
 \alias{print__integer}
-\title{Print a integer}
+\title{Print an integer}
 \usage{
 print__integer(obj, name, prefix, max_width, max_rows)
 }
@@ -18,7 +18,7 @@ print__integer(obj, name, prefix, max_width, max_rows)
 \item{max_rows}{Maximum number of rows to print}
 }
 \description{
-Print a integer for the print method of taxmap objects.
+Print an integer for the print method of taxmap objects.
 }
 \details{
 Which print method is called is determined by its name, so changing the name
@@ -31,6 +31,8 @@ Other taxmap print methods: \code{\link{print__character}},
   \code{\link{print__factor}}, \code{\link{print__list}},
   \code{\link{print__logical}},
   \code{\link{print__matrix}},
-  \code{\link{print__ordered}}, \code{\link{print__tbl_df}}
+  \code{\link{print__numeric}},
+  \code{\link{print__ordered}},
+  \code{\link{print__tbl_df}}, \code{\link{print__vector}}
 }
 \keyword{internal}

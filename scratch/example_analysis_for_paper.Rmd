@@ -1,36 +1,13 @@
+---
+output:
+  pdf_document: default
+---
 
-
-```{r}
-library(taxize)
-specieslist <- c("Abies procera","Pinus contorta")
-classes <- classification(specieslist, db = 'itis')
-```
-
-
-```{r}
-x <- downstream("Primates", downto = "Species", db = "col")
-y = lookup_tax_data(x[[1]], type = "taxon_id", column = "childtaxa_id", database = "col")
-```
-
-
-
-```{r}
-y %>% filter_taxa(! is_stem) %>%
-  heat_tree(node_label = taxon_names,
-            node_size = n_subtaxa, 
-            node_color = n_subtaxa,
-            layout = "da", initial_layout = "re")
-
-```
-
-
-
-### GBIF data
-
-```{r}
+```{r, warning = FALSE, fig.width=12, cache=TRUE}
+# Load "taxa" package
 library(taxa)
 
-# Look up species occurrence data for Oregon
+# Look up plant occurrence data for Oregon
 occ <- rgbif::occ_data(stateProvince = "Oregon",
                        scientificName = "Plantae")
 
@@ -42,7 +19,8 @@ obj <- parse_tax_data(occ$data,
 
 # Plot number of occurrences for each taxon
 obj %>% 
-  filter_obs("tax_data", basisOfRecord == "PRESERVED_SPECIMEN", drop_taxa = TRUE) %>%
+  filter_obs("tax_data", basisOfRecord == "PRESERVED_SPECIMEN",
+             drop_taxa = TRUE) %>%
   filter_taxa(taxon_ranks != "specificEpithet") %>%
   filter_taxa(! is.na(taxon_names)) %>%
   filter_taxa(taxon_names == "Tracheophyta", subtaxa = TRUE) %>%

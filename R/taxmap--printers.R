@@ -67,7 +67,7 @@ prefixed_print <- function(x, prefix, ...) {
 print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
   loadNamespace("dplyr") # used for tibble print methods
   if (length(name) > 0 && ! is.na(name)) {
-    cat(paste0(prefix, name, ":\n"))
+    cat(paste0(prefix, crayon::bold(name), ":\n"))
   }
   prefixed_print(obj, prefix = paste0(prefix, "  "), n = max_rows,
                  width = max_width)
@@ -91,7 +91,7 @@ print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ":\n"))
+  cat(paste0(prefix, crayon::bold(name), ":\n"))
   if (nrow(obj) > max_rows) {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame (first ",
                max_rows, " rows shown)\n"))
@@ -123,15 +123,49 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
   if (length(obj) < 1) {
     prefixed_print(list(), prefix = prefix)
   } else {
-    cat(paste0(prefix, name, ": a list with ", length(obj),
-               ifelse(length(obj) == 1, " item", " items"), "\n"))
+    cat(paste0(prefix, crayon::bold(name), ": a list with ", length(obj),
+               ifelse(length(obj) == 1, " item", " items")))
+    if (is.null(names(obj))) {
+      cat("\n")
+    } else {
+      cat(paste0(" with names:\n  ",
+                 limited_print(names(obj), prefix = prefix, type = "silent")))
+    }
   }
 }
 
 
-#' Print a integer
+#' Generic vector printer
 #'
-#' Print a integer for the print method of taxmap objects.
+#' Print a vector for the print method of taxmap objects.
+#'
+#' Which print method is called is determined by its name, so changing the name
+#' of this function will change when it is called.
+#'
+#' @param obj Something to print
+#' @param name The name of the thing to print
+#' @param prefix What to put before the thing printed. Typically a space.
+#' @param max_width Maximum width in number of characters to print
+#' @param max_rows Maximum number of rows to print
+#' @param type The name of the type of vector to print (e.g. numeric).
+#'
+#' @family taxmap print methods
+#'
+#' @keywords internal
+print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(obj)[1]) {
+  cat(paste0(prefix, crayon::bold(name), ": ", ifelse(is.null(names(obj)), "a ", "a named "), type, " with ", length(obj),
+             " item", ifelse(length(obj) == 1, "", "s"), "\n  ", prefix))
+  if (is.null(names(obj))) {
+    limited_print(obj, max_chars = max_width, type = "cat")
+  } else {
+    limited_print(paste0(names(obj), ". ", obj), max_chars = max_width, type = "cat")
+  }
+}
+
+
+#' Print an integer
+#'
+#' Print an integer for the print method of taxmap objects.
 #'
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
@@ -146,8 +180,29 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__integer <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ": "))
-  limited_print(obj, max_chars = max_width, type = "cat")
+  print__vector(obj, name, prefix, max_width, max_rows)
+}
+
+
+
+#' Print a numeric
+#'
+#' Print a numeric vector for the print method of taxmap objects.
+#'
+#' Which print method is called is determined by its name, so changing the name
+#' of this function will change when it is called.
+#'
+#' @param obj Something to print
+#' @param name The name of the thing to print
+#' @param prefix What to put before the thing printed. Typically a space.
+#' @param max_width Maximum width in number of characters to print
+#' @param max_rows Maximum number of rows to print
+#'
+#' @family taxmap print methods
+#'
+#' @keywords internal
+print__numeric <- function(obj, name, prefix, max_width, max_rows) {
+  print__vector(obj, name, prefix, max_width, max_rows)
 }
 
 
@@ -168,8 +223,7 @@ print__integer <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__character <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ": "))
-  limited_print(obj, max_chars = max_width, type = "cat")
+  print__vector(obj, name, prefix, max_width, max_rows)
 }
 
 
@@ -190,8 +244,7 @@ print__character <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__logical <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ": "))
-  limited_print(obj, max_chars = max_width, type = "cat")
+  print__vector(obj, name, prefix, max_width, max_rows)
 }
 
 
@@ -212,8 +265,7 @@ print__logical <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__factor <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ": "))
-  limited_print(obj, max_chars = max_width, type = "cat")
+  print__vector(obj, name, prefix, max_width, max_rows)
 }
 
 
@@ -234,8 +286,7 @@ print__factor <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__ordered <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ": "))
-  limited_print(obj, max_chars = max_width, type = "cat")
+  print__vector(obj, name, prefix, max_width, max_rows, type = "ordered factor")
 }
 
 
@@ -256,7 +307,7 @@ print__ordered <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__matrix <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ":\n"))
+  cat(paste0(prefix, crayon::bold(name), ":\n"))
   if (nrow(obj) > max_rows) {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix (first ",
                max_rows, " rows shown)\n"))
@@ -285,6 +336,6 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__default_ <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, name, ":\n"))
+  cat(paste0(prefix, crayon::bold(name), ":\n"))
   prefixed_print(obj, prefix = paste0(prefix, "  "))
 }

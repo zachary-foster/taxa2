@@ -4,6 +4,7 @@ Current
 ### Improvements
 
 * `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).
+* `taxmap` print methods now have more information.
 
 ### Bug fixes
 
