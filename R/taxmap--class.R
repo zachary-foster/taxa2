@@ -69,7 +69,7 @@ Taxmap <- R6::R6Class(
       } else {
         data_names <- names(self$data)
         data_names[data_names == ""] <- paste0("[[", which(data_names == ""),
-                                                "]]")
+                                               "]]")
       }
 
       # Print a subset of each item, up to a max number, then just print names
@@ -245,7 +245,7 @@ Taxmap <- R6::R6Class(
       selection <- Reduce(intersect_with_dups, selection)
 
       # Remove observations
-      data_taxon_ids <- private$get_data_taxon_ids(target)
+      data_taxon_ids <- private$get_data_taxon_ids(target, require = drop_taxa)
       private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
@@ -382,7 +382,7 @@ Taxmap <- R6::R6Class(
       if (is.null(taxon_weight)) {
         obs_taxon_weight <- rep(1, target_length)
       } else {
-        obs_index <- match(private$get_data_taxon_ids(target),
+        obs_index <- match(private$get_data_taxon_ids(target, require = TRUE),
                            self$taxon_ids())
         my_supertaxa <- self$supertaxa(recursive = use_supertaxa,
                                        simplify = FALSE, include_input = TRUE,
@@ -511,7 +511,17 @@ Taxmap <- R6::R6Class(
     # Find taxon ids for datasets by dataset name
     #
     # require: if TRUE, require that taxon ids be present, or make an error
-    get_data_taxon_ids = function(dataset_name, require = FALSE) {
+    get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE) {
+      stop_or_warn <- function(text) {
+        if (require) {
+          stop(call. = FALSE, text)
+        }
+        if (warn) {
+          warning(call. = FALSE, text)
+        }
+      }
+
+
       # Get the dataset
       if (length(dataset_name) == 1 && # data is name/index of dataset in object
           (dataset_name %in% names(self$data) || is.numeric(dataset_name))) {
@@ -522,28 +532,40 @@ Taxmap <- R6::R6Class(
       }
 
       # Extract taxon ids if they exist
+      output <- NULL # Return NULL if taxon ids cannot be found
       if (is.data.frame(dataset)) {
         if ("taxon_id" %in% colnames(dataset)) {
-          return(dataset$taxon_id)
-        } else if (require) {
-          stop(paste0('There is no "taxon_id" column in the data set "',
-                      dataset_name, '", so taxon ids cannot be extracted.'))
+          output <- dataset$taxon_id
+        } else {
+          stop_or_warn(paste0('There is no "taxon_id" column in the data set "',
+                              dataset_name, '", so taxon ids cannot be extracted.'))
         }
-      } else if (is.list(dataset) || is.vector(dataset)) {
+      } else if (class(dataset) == "list" || is.vector(dataset)) {
         if (! is.null(names(dataset))) {
-          return(names(dataset))
-        } else if (require) {
-          stop(paste0('The data set "', dataset_name,
-                      '" is a list/vector, but not named, ',
-                      'so taxon ids cannot be extracted.'))
+          output <- names(dataset)
+        } else {
+          stop_or_warn(paste0('The data set "', dataset_name,
+                              '" is a list/vector, but not named, ',
+                              'so taxon ids cannot be extracted.'))
         }
-      } else if (require) {
-        stop(paste0('I dont know how to extract taxon ids from "', dataset_name,
-                    '" of type "', class(dataset)[1], '".'))
+      } else {
+        stop_or_warn(paste0('I dont know how to extract taxon ids from "', dataset_name,
+                            '" of type "', class(dataset)[1], '".'))
       }
 
-      # Return NULL if taxon ids cannot be found
-      return(NULL)
+      # Check that IDs are valid
+      if (! is.null(output)) {
+        invalid_ids <- output[(! output %in% self$taxon_ids()) & (! is.na(output))]
+        if (length(invalid_ids) > 0) {
+          if (any(invalid_ids %in% self$taxon_ids())) {
+            stop_or_warn(paste0('Dataset "', dataset_name, '" appears to be named by taxon IDs, but contains ', length(invalid_ids), ' invalid IDs:\n  ',
+                                limited_print(invalid_ids, type = "silent")))
+          }
+          output <- NULL
+        }
+      }
+
+      return(output)
     }
 
   )
