@@ -39,3 +39,6 @@ Suggests:
     rmarkdown (>= 0.9.6),
     taxize
 RoxygenNote: 6.0.1
+X-schema.org-applicationCategory: Taxonomy
+X-schema.org-keywords: taxonomy, biology, hierarchy
+X-schema.org-isPartOf: https://ropensci.org
