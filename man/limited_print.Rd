@@ -4,8 +4,9 @@
 \alias{limited_print}
 \title{Print a subset of a character vector}
 \usage{
-limited_print(chars, prefix = "", max_chars = getOption("width") -
-  nchar(prefix) - 5, type = "message")
+limited_print(chars, prefix = "", sep = ", ", mid = " ... ",
+  trunc_char = "[truncated]", max_chars = getOption("width") - nchar(prefix)
+  - 5, type = "message")
 }
 \arguments{
 \item{chars}{(\code{character}) What to print.}
@@ -13,10 +14,16 @@ limited_print(chars, prefix = "", max_chars = getOption("width") -
 \item{prefix}{(\code{character} of length 1) What to print before
 \code{chars}, on the same line.}
 
+\item{sep}{What to put between consecutive values}
+
+\item{mid}{What is used to indicate ommited values}
+
 \item{max_chars}{(\code{numeric} of length 1) The maximum number of
 characters to print.}
 
-\item{type}{(\code{"error"}, \code{"warning"}, \code{"message"}, \code{"cat"}, \code{"print"}, `"silent"``)}
+\item{type}{(\code{"error"}, \code{"warning"}, \code{"message"}, \code{"cat"}, \code{"print"}, \code{"silent"}, \code{"plain"})}
+
+\item{trunc}{What is appended onto truncated values}
 }
 \value{
 \code{NULL}

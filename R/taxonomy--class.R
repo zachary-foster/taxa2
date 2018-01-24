@@ -91,11 +91,18 @@ Taxonomy <- R6::R6Class(
       taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
       taxon_ids <- names(self$taxa)
       if (length(self$taxa) > 0) {
-        limited_print(paste(taxon_ids, taxon_names, sep = ". "),
+        limited_print(paste(tid_font(taxon_ids), taxon_names,
+                            sep = punc_font(". ")),
+                      sep = punc_font(", "),
+                      mid = punc_font(" ... "),
+                      trunc_char = punc_font("[truncated]"),
                       prefix = paste0(indent, "  ",
                                       length(self$taxa), " taxa:"),
                       type = "cat")
         limited_print(private$make_graph(),
+                      sep = punc_font(", "),
+                      mid = punc_font(" ... "),
+                      trunc_char = punc_font("[truncated]"),
                       prefix = paste0(indent, "  ",
                                       nrow(self$edge_list), " edges:"),
                       type = "cat")
@@ -993,7 +1000,7 @@ Taxonomy <- R6::R6Class(
                              "is_internode"),
 
     make_graph = function() {
-      apply(self$edge_list, 1, paste0, collapse = "->")
+      apply(self$edge_list, 1, function(x) paste0(tid_font(x), collapse = punc_font("->")))
     },
 
     remove_taxa = function(el_indexes) {

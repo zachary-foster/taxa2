@@ -129,7 +129,12 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
       cat("\n")
     } else {
       cat(paste0(" with names:\n  ",
-                 limited_print(names(obj), prefix = prefix, type = "silent")))
+                 limited_print(tid_font(names(obj)),
+                               prefix = prefix,
+                               sep = punc_font(", "),
+                               mid = punc_font(" ... "),
+                               trunc_char = punc_font("[truncated]"),
+                               type = "silent")))
     }
   }
 }
@@ -156,9 +161,13 @@ print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(o
   cat(paste0(prefix, crayon::bold(name), ": ", ifelse(is.null(names(obj)), "a ", "a named "), type, " with ", length(obj),
              " item", ifelse(length(obj) == 1, "", "s"), "\n  ", prefix))
   if (is.null(names(obj))) {
-    limited_print(obj, max_chars = max_width, type = "cat")
+    limited_print(obj, max_chars = max_width, sep = punc_font(", "),
+                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"), type = "cat")
   } else {
-    limited_print(paste0(names(obj), ". ", obj), max_chars = max_width, type = "cat")
+    limited_print(paste0(tid_font(names(obj)), punc_font(". "), obj),
+                  max_chars = max_width, sep = punc_font(", "),
+                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                  type = "cat")
   }
 }
 
@@ -338,4 +347,33 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
 print__default_ <- function(obj, name, prefix, max_width, max_rows) {
   cat(paste0(prefix, crayon::bold(name), ":\n"))
   prefixed_print(obj, prefix = paste0(prefix, "  "))
+}
+
+
+#' Taxon id formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+tid_font <- function(text) {
+  crayon::green(text)
+}
+
+
+#' Punctuation formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for non-data, formatting characters
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+punc_font <- function(text) {
+  crayon::silver(text)
 }

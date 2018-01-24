@@ -56,12 +56,29 @@ Taxmap <- R6::R6Class(
     print = function(indent = "", max_rows = 3, max_items = 6,
                      max_width = getOption("width") - 10) {
 
-      # Call `taxonomy` print method
-      taxonomy_output <- paste0(
-        paste0(capture.output(super$print(indent = indent)), collapse = "\n"),
-        "\n"
-      )
-      cat(gsub(taxonomy_output, pattern = "Taxonomy", replacement = "Taxmap"))
+      # Print taxonomy
+      cat(paste0(indent, "<Taxmap>\n"))
+      taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
+      taxon_ids <- names(self$taxa)
+      if (length(self$taxa) > 0) {
+        limited_print(paste(tid_font(taxon_ids), taxon_names,
+                            sep = punc_font(". ")),
+                      sep = punc_font(", "),
+                      mid = punc_font(" ... "),
+                      trunc_char = punc_font("[truncated]"),
+                      prefix = paste0(indent, "  ",
+                                      length(self$taxa), " taxa:"),
+                      type = "cat")
+        limited_print(private$make_graph(),
+                      sep = punc_font(", "),
+                      mid = punc_font(" ... "),
+                      trunc_char = punc_font("[truncated]"),
+                      prefix = paste0(indent, "  ",
+                                      nrow(self$edge_list), " edges:"),
+                      type = "cat")
+      } else {
+        cat("Empty taxmap")
+      }
 
       # Get item names
       if (is.null(names(self$data))) {
