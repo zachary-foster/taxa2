@@ -10,3 +10,4 @@ man-roxygen
 ^README.html$
 cran-comments.md
 scott_notes.md
+^codemeta\.json$
