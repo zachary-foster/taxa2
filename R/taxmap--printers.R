@@ -67,10 +67,14 @@ prefixed_print <- function(x, prefix, ...) {
 print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
   loadNamespace("dplyr") # used for tibble print methods
   if (length(name) > 0 && ! is.na(name)) {
-    cat(paste0(prefix, crayon::bold(name), ":\n"))
+    cat(paste0(prefix, name_font(name), ":\n"))
   }
-  prefixed_print(obj, prefix = paste0(prefix, "  "), n = max_rows,
-                 width = max_width)
+  output <- paste0(prefix, utils::capture.output(print(obj, n = max_rows,
+                                                       width = max_width - nchar(prefix))))
+  output[1] <- desc_font(output[1])
+  output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
+  output[3] <- desc_font(output[3])
+  cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
 
@@ -91,7 +95,7 @@ print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, crayon::bold(name), ":\n"))
+  cat(paste0(prefix, name_font(name), ":\n"))
   if (nrow(obj) > max_rows) {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame (first ",
                max_rows, " rows shown)\n"))
@@ -123,7 +127,7 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
   if (length(obj) < 1) {
     prefixed_print(list(), prefix = prefix)
   } else {
-    cat(paste0(prefix, crayon::bold(name), ": a list with ", length(obj),
+    cat(paste0(prefix, name_font(name), ": a list with ", length(obj),
                ifelse(length(obj) == 1, " item", " items")))
     if (is.null(names(obj))) {
       cat("\n")
@@ -158,7 +162,7 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(obj)[1]) {
-  cat(paste0(prefix, crayon::bold(name), ": ", ifelse(is.null(names(obj)), "a ", "a named "), type, " with ", length(obj),
+  cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(obj)), "a ", "a named "), type, " with ", length(obj),
              " item", ifelse(length(obj) == 1, "", "s"), "\n  ", prefix))
   if (is.null(names(obj))) {
     limited_print(obj, max_chars = max_width, sep = punc_font(", "),
@@ -316,7 +320,7 @@ print__ordered <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__matrix <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, crayon::bold(name), ":\n"))
+  cat(paste0(prefix, name_font(name), ":\n"))
   if (nrow(obj) > max_rows) {
     cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix (first ",
                max_rows, " rows shown)\n"))
@@ -345,7 +349,7 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__default_ <- function(obj, name, prefix, max_width, max_rows) {
-  cat(paste0(prefix, crayon::bold(name), ":\n"))
+  cat(paste0(prefix, name_font(name), ":\n"))
   prefixed_print(obj, prefix = paste0(prefix, "  "))
 }
 
@@ -376,4 +380,34 @@ tid_font <- function(text) {
 #' @keywords internal
 punc_font <- function(text) {
   crayon::silver(text)
+}
+
+
+#' Descripton formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for non-data, formatting characters
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+desc_font <- function(text) {
+  crayon::italic(text)
+}
+
+
+#' Variable name formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for non-data, formatting characters
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+name_font <- function(text) {
+  crayon::bold(text)
 }
