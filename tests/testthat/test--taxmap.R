@@ -340,8 +340,8 @@ test_that("Taxon ids can be preserved when filtering taxa", {
 
 test_that("The selection of taxa to be filtered can be inverted", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
-  expect_true(all(! c("tuberosum", "lycopersicum", "Solanum") %in% taxon_names(result)))
-  expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% taxon_names(result)))
+  expect_true(all(! c("tuberosum", "lycopersicum", "Solanum") %in% result$taxon_names()))
+  expect_true(all(c("Mammalia", "Plantae", "sapiens") %in% result$taxon_names()))
 })
 
 test_that("Edge cases return reasonable outputs", {

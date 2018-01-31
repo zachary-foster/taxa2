@@ -213,7 +213,7 @@ Taxonomy <- R6::R6Class(
 
 
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
-                         include_input = FALSE, value = NULL, na = FALSE) {
+                         include_input = FALSE, value = "taxon_indexes", na = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
@@ -273,7 +273,7 @@ Taxonomy <- R6::R6Class(
 
       # Reduce dimensionality
       if (simplify) {
-        output <- unique(unname(unlist(output)))
+        output <- simplify(output)
       }
 
       return(output)
@@ -282,7 +282,7 @@ Taxonomy <- R6::R6Class(
 
     supertaxa_apply = function(func, subset = NULL, recursive = TRUE,
                                simplify = FALSE, include_input = FALSE,
-                               value = NULL, na = FALSE, ...) {
+                               value = "taxon_indexes", na = FALSE, ...) {
       my_sup <- eval(substitute(self$supertaxa(subset = subset,
                                                recursive = recursive,
                                                simplify = FALSE,
@@ -291,13 +291,13 @@ Taxonomy <- R6::R6Class(
                                                na = na)))
       output <- lapply(my_sup, func, ...)
       if (simplify) {
-        output <- unlist(output)
+        output <- simplify(output)
       }
       return(output)
     },
 
 
-    roots = function(subset = NULL, value = NULL) {
+    roots = function(subset = NULL, value = "taxon_indexes") {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
@@ -333,7 +333,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    stems = function(subset = NULL, value = NULL, simplify = FALSE,
+    stems = function(subset = NULL, value = "taxon_indexes", simplify = FALSE,
                      exclude_leaves = FALSE) {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
@@ -370,40 +370,44 @@ Taxonomy <- R6::R6Class(
 
       # Reduce dimensionality
       if (simplify) {
-        output <- unique(unname(unlist(output)))
+        output <- simplify(output)
       }
 
       return(output)
     },
 
 
-    leaves = function(subset = NULL, value = NULL) {
+    leaves = function(subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
 
-      # Find taxa without subtaxa
-      my_subtaxa <- self$subtaxa(subset = subset, recursive = TRUE,
-                                 include_input = TRUE, value = "taxon_indexes")
-      childless_taxa <- my_subtaxa[vapply(my_subtaxa, length, numeric(1)) == 1]
-      output <- stats::setNames(unlist(childless_taxa), names(childless_taxa))
+      # Find taxa without subtaxa (leaves)
+      childless_taxa <- which(self$n_subtaxa_1() == 0)
 
-      # Look up values
-      if (!is.null(value)) {
-        possible_values <- self$get_data(value)[[1]]
-        if (is.null(names(possible_values))) {
-          output <- possible_values[output]
-        } else {
-          output <- possible_values[self$taxon_ids()[output]]
-        }
+      # Subset subtaxa results to just leaves
+      self$subtaxa_apply(func = function(x) x[names(x) %in% names(childless_taxa)],
+                         subset = subset, simplify = simplify, recursive = recursive,
+                         include_input = FALSE, value = value)
+    },
+
+
+    leaves_apply = function(func, subset = NULL, recursive = TRUE, simplify = FALSE,
+                            value = "taxon_indexes", ...) {
+      my_sub <- eval(substitute(self$leaves(subset = subset,
+                                            recursive = recursive,
+                                            simplify = FALSE,
+                                            value = value)))
+      output <- lapply(my_sub, func, ...)
+      if (simplify) {
+        output <- simplify(output)
       }
-
       return(output)
     },
 
 
-    branches = function(subset = NULL, value = NULL) {
+    branches = function(subset = NULL, value = "taxon_indexes") {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
@@ -438,7 +442,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    internodes = function(subset = NULL, value = NULL) {
+    internodes = function(subset = NULL, value = "taxon_indexes") {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
@@ -475,7 +479,7 @@ Taxonomy <- R6::R6Class(
 
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,
-                       value = NULL) {
+                       value = "taxon_indexes") {
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
@@ -563,7 +567,7 @@ Taxonomy <- R6::R6Class(
 
       # Reduce dimensionality
       if (simplify) {
-        output <- unique(unname(unlist(output)))
+        output <- simplify(output)
       }
 
       return(output)
@@ -572,7 +576,7 @@ Taxonomy <- R6::R6Class(
 
     subtaxa_apply = function(func, subset = NULL, recursive = TRUE,
                              simplify = FALSE, include_input = FALSE,
-                             value = NULL, ...) {
+                             value = "taxon_indexes", ...) {
       my_sub <- eval(substitute(self$subtaxa(subset = subset,
                                              recursive = recursive,
                                              simplify = FALSE,
@@ -584,6 +588,7 @@ Taxonomy <- R6::R6Class(
       }
       return(output)
     },
+
 
     classifications = function(value = "taxon_names", sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
@@ -617,6 +622,14 @@ Taxonomy <- R6::R6Class(
       vapply(self$subtaxa(recursive = FALSE, include_input = FALSE,
                           value = "taxon_indexes"),
              length, numeric(1))
+    },
+
+    n_leaves = function() {
+      vapply(self$leaves(recursive = TRUE, value = "taxon_indexes"), length, numeric(1))
+    },
+
+    n_leaves_1 = function() {
+      vapply(self$leaves(recursive = FALSE, value = "taxon_indexes"), length, numeric(1))
     },
 
     is_root = function() {

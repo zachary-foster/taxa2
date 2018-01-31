@@ -23,8 +23,8 @@ usually only makes sense to data that corresponds to taxa 1:1, such as
 Return the root taxa for a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object. Can also be used to
 get the roots of a subset of taxa.
 \preformatted{
-obj$roots(subset = NULL, value = NULL)
-roots(obj, subset = NULL, value = NULL)}
+obj$roots(subset = NULL, value = "taxon_indexes")
+roots(obj, subset = NULL, value = "taxon_indexes")}
 }
 \examples{
 # Return indexes of root taxa

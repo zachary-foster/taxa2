@@ -217,7 +217,7 @@ test_that("Finding subtaxa", {
   # Edge cases
   expect_equal(subtaxa(x, subset = rep(FALSE, length(x$taxa))), list())
   expect_equal(subtaxa(x, subset = rep(FALSE, length(x$taxa)), simplify = TRUE),
-               character(0))
+               integer(0))
 })
 
 
@@ -242,10 +242,10 @@ test_that("Finding leaves", {
   expect_equal(x$leaves(), leaves(x))
 
   # Index return type
-  expect_type(x$leaves(value = "taxon_indexes"), "integer")
+  expect_type(x$leaves(value = "taxon_indexes")[[1]], "integer")
 
   # Taxon ID return type
-  expect_type(x$leaves(value = "taxon_ids"), "character")
+  expect_type(x$leaves(value = "taxon_ids")[[1]], "character")
 
 })
 
@@ -319,3 +319,4 @@ test_that("get data frame", {
   # select columns to return
   expect_named(x$get_data_frame("taxon_ids"), "taxon_ids")
 })
+

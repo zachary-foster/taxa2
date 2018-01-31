@@ -40,10 +40,10 @@ taxa are a part of) of each taxon in a \code{\link[=taxonomy]{taxonomy()}} or \c
 \preformatted{
 obj$supertaxa(subset = NULL, recursive = TRUE,
   simplify = FALSE, include_input = FALSE,
-  value = NULL, na = FALSE)
+  value = "taxon_indexes", na = FALSE)
 supertaxa(obj, subset = NULL, recursive = TRUE,
   simplify = FALSE, include_input = FALSE,
-  value = NULL, na = FALSE)}
+  value = "taxon_indexes", na = FALSE)}
 }
 \examples{
 # return the indexes for supertaxa for each taxon

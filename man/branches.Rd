@@ -28,8 +28,8 @@ anything that is not a root, stem, or leaf. Its the interior of the tree
 after the first split starting from the roots. Can also be used to get the
 branches of a subset of taxa.
 \preformatted{
-obj$branches(subset = NULL, value = NULL)
-branches(obj, subset = NULL, value = NULL)}
+obj$branches(subset = NULL, value = "taxon_indexes")
+branches(obj, subset = NULL, value = "taxon_indexes")}
 }
 \examples{
 # Return indexes of branch taxa

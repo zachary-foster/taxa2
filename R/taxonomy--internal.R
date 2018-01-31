@@ -67,3 +67,24 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
 
   return(list(taxa = unique_taxa, edge_list = edge_list, input_ids = input_ids))
 }
+
+
+#' List to vector of unique elements
+#'
+#' Implements the `simplify` option in many functions like [supertaxa()].
+#' Returns unique name-value pairs if all vectors are named.
+#'
+#' @param input A list of vectors
+#'
+#' @keywords internal
+simplify <- function(input) {
+  if (any(vapply(input, function(x) is.null(names(x)), logical(1)))) { # Any unnamed vectors
+    output <- unique(unlist(unname(lapply(input, unname))))
+  } else {
+    key_value <- data.frame(stringsAsFactors = FALSE,
+                            my_name = unlist(lapply(input, names)), my_value = unlist(input))
+    key_value <- unique(key_value)
+    output <- stats::setNames(key_value$my_value, key_value$my_name)
+  }
+  return(output)
+}

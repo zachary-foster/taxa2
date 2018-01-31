@@ -31,9 +31,9 @@ object. Stem taxa are all those from the roots to the first taxon with more
 than one subtaxon.
 \preformatted{
 obj$stems(subset = NULL, simplify = FALSE,
-  value = NULL, exclude_leaves = FALSE)
+  value = "taxon_indexes", exclude_leaves = FALSE)
 stems(obj, subset = NULL, simplify = FALSE,
-  value = NULL, exclude_leaves = FALSE)}
+  value = "taxon_indexes", exclude_leaves = FALSE)}
 }
 \examples{
 # Return indexes of stem taxa

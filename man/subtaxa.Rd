@@ -40,9 +40,9 @@ Return data for the subtaxa of each taxon in an \code{\link[=taxonomy]{taxonomy(
 object.
 \preformatted{
 obj$subtaxa(subset = NULL, recursive = TRUE,
-  simplify = FALSE, include_input = FALSE, value = NULL)
+  simplify = FALSE, include_input = FALSE, value = "taxon_indexes")
 subtaxa(obj, subset = NULL, recursive = TRUE,
-  simplify = FALSE, include_input = FALSE, value = NULL)}
+  simplify = FALSE, include_input = FALSE, value = "taxon_indexes")}
 }
 \examples{
 # return the indexes for subtaxa for each taxon

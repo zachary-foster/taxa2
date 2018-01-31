@@ -29,8 +29,8 @@ immediate subtaxon. They can be removed from a tree without any loss of
 information on the relative relationship between remaining taxa. Can also be
 used to get the internodes of a subset of taxa.
 \preformatted{
-obj$internodes(subset = NULL, value = NULL)
-internodes(obj, subset = NULL, value = NULL)}
+obj$internodes(subset = NULL, value = "taxon_indexes")
+internodes(obj, subset = NULL, value = "taxon_indexes")}
 }
 \examples{
 \dontrun{

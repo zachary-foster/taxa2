@@ -84,10 +84,10 @@ NULL
 #' \preformatted{
 #' obj$supertaxa(subset = NULL, recursive = TRUE,
 #'   simplify = FALSE, include_input = FALSE,
-#'   value = NULL, na = FALSE)
+#'   value = "taxon_indexes", na = FALSE)
 #' supertaxa(obj, subset = NULL, recursive = TRUE,
 #'   simplify = FALSE, include_input = FALSE,
-#'   value = NULL, na = FALSE)}
+#'   value = "taxon_indexes", na = FALSE)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -146,10 +146,10 @@ NULL
 #' to using [supertaxa()] with [lapply()] or [sapply()].
 #' \preformatted{
 #' obj$supertaxa_apply(func, subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL,
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes",
 #'   na = FALSE, ...)
 #' supertaxa_apply(obj, func, subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL,
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes",
 #'   na = FALSE, ....)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
@@ -188,8 +188,8 @@ NULL
 #' Return the root taxa for a [taxonomy()] or [taxmap()] object. Can also be used to
 #' get the roots of a subset of taxa.
 #' \preformatted{
-#' obj$roots(subset = NULL, value = NULL)
-#' roots(obj, subset = NULL, value = NULL)}
+#' obj$roots(subset = NULL, value = "taxon_indexes")
+#' roots(obj, subset = NULL, value = "taxon_indexes")}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -226,8 +226,8 @@ NULL
 #' after the first split starting from the roots. Can also be used to get the
 #' branches of a subset of taxa.
 #' \preformatted{
-#' obj$branches(subset = NULL, value = NULL)
-#' branches(obj, subset = NULL, value = NULL)}
+#' obj$branches(subset = NULL, value = "taxon_indexes")
+#' branches(obj, subset = NULL, value = "taxon_indexes")}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -269,8 +269,8 @@ NULL
 #' information on the relative relationship between remaining taxa. Can also be
 #' used to get the internodes of a subset of taxa.
 #' \preformatted{
-#' obj$internodes(subset = NULL, value = NULL)
-#' internodes(obj, subset = NULL, value = NULL)}
+#' obj$internodes(subset = NULL, value = "taxon_indexes")
+#' internodes(obj, subset = NULL, value = "taxon_indexes")}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -313,9 +313,9 @@ NULL
 #' object.
 #' \preformatted{
 #' obj$subtaxa(subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL)
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes")
 #' subtaxa(obj, subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL)}
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes")}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -376,9 +376,9 @@ NULL
 #' to using [subtaxa()] with [lapply()] or [sapply()].
 #' \preformatted{
 #' obj$subtaxa_apply(func, subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL, ...)
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes", ...)
 #' subtaxa_apply(obj, func, subset = NULL, recursive = TRUE,
-#'   simplify = FALSE, include_input = FALSE, value = NULL, ...)}
+#'   simplify = FALSE, include_input = FALSE, value = "taxon_indexes", ...)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -387,9 +387,9 @@ NULL
 #'   Default: All taxa in `obj` will be used. Any variable name that appears in
 #'   [all_names()] can be used as if it was a vector on its own.
 #' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
-#'   supertaxa one rank above the target taxa. If `TRUE`, return all the
-#'   supertaxa of every supertaxa, etc. Positive numbers indicate the number of
-#'   recursions (i.e. number of ranks above the target taxon to return). `1` is
+#'   subtaxa one rank below the target taxa. If `TRUE`, return all the
+#'   subtaxa of every subtaxa, etc. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks below the target taxon to return). `1` is
 #'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
 #' @param simplify (`logical`) If `TRUE`, then combine all the results into a
 #'   single vector of unique values.
@@ -416,9 +416,9 @@ NULL
 #' than one subtaxon.
 #' \preformatted{
 #' obj$stems(subset = NULL, simplify = FALSE,
-#'   value = NULL, exclude_leaves = FALSE)
+#'   value = "taxon_indexes", exclude_leaves = FALSE)
 #' stems(obj, subset = NULL, simplify = FALSE,
-#'   value = NULL, exclude_leaves = FALSE)}
+#'   value = "taxon_indexes", exclude_leaves = FALSE)}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
@@ -460,14 +460,21 @@ NULL
 #' Return the leaf taxa for a [taxonomy()] or [taxmap()] object. Leaf taxa are taxa
 #' with no subtaxa.
 #' \preformatted{
-#' obj$leaves(subset = NULL, value = NULL)
-#' leaves(obj, subset = NULL, value = NULL)}
+#' obj$leaves(subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes")
+#' leaves(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes")}
 #'
 #' @param obj The [taxonomy()] or [taxmap()] object containing taxon
 #'   information to be queried.
 #' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find leaves for.
 #'   Default: All taxa in `obj` will be used. Any variable name that appears in
 #'   [all_names()] can be used as if it was a vector on its own.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   leaves if they occur one rank below the target taxa. If `TRUE`, return all of the
+#'   leaves for each taxon. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks below the target taxon to return). `1` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
 #' @param value What data to return. This is usually the name of column in a
 #'   table in `obj$data`. Any result of `all_names(obj)` can be used, but it
 #'   usually only makes sense to data that corresponds to taxa 1:1, such as
@@ -487,7 +494,48 @@ NULL
 #' # Return something besides taxon indexes
 #' leaves(ex_taxmap, value = "taxon_names")
 #'
+#' # Return a vector of all leaves
+#' leaves(ex_taxmap, simplify = TRUE)
+#'
 #' @name leaves
+NULL
+
+
+#' Apply function to leaves of each taxon
+#'
+#' Apply a function to the leaves of each taxon. This is similar
+#' to using [leaves()] with [lapply()] or [sapply()].
+#' \preformatted{
+#' obj$leaves_apply(func, subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, value = "taxon_indexes", ...)
+#' leaves_apply(obj, func, subset = NULL, recursive = TRUE,
+#'   simplify = FALSE, value = "taxon_indexes", ...)}
+#'
+#' @param obj The [taxonomy()] or [taxmap()] object containing taxon
+#'   information to be queried.
+#' @param func (`function`) The function to apply.
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to use.
+#'   Default: All taxa in `obj` will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
+#' @param recursive (`logical` or `numeric`) If `FALSE`, only return the
+#'   leaves if they occur one rank below the target taxa. If `TRUE`, return all of the
+#'   leaves for each taxon. Positive numbers indicate the number of
+#'   recursions (i.e. number of ranks below the target taxon to return). `1` is
+#'   equivalent to `FALSE`. Negative numbers are equivalent to `TRUE`.
+#' @param simplify (`logical`) If `TRUE`, then combine all the results into a
+#'   single vector of unique values.
+#' @param value What data to give to the function. Any result of
+#'   `all_names(obj)` can be used, but it usually only makes sense to use data
+#'   that has an associated taxon id.
+#' @param ... Extra arguments are passed to the function.
+#'
+#' @name leaves_apply
+#'
+#' @examples
+#' # Count number of leaves under each taxon
+#' leaves_apply(ex_taxmap, length, simplify = TRUE)
+#'
+#' # Return
 NULL
 
 
@@ -633,6 +681,48 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @name n_subtaxa_1
+NULL
+
+
+#' Get number of leaves
+#'
+#' Get number of leaves for each taxon in an object of type
+#' [taxonomy()] or [taxmap()]
+#' \preformatted{
+#' obj$n_leaves()
+#' n_leaves(obj)}
+#'
+#' @param obj ([taxonomy()] or [taxmap()])
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_leaves(ex_taxmap)
+#'
+#' @family taxonomy data functions
+#'
+#' @name n_leaves
+NULL
+
+
+#' Get number of leaves
+#'
+#' Get number of leaves for each taxon in an object of type
+#' [taxonomy()] or [taxmap()], not including leaves of subtaxa etc.
+#' \preformatted{
+#' obj$n_leaves_1()
+#' n_leaves_1(obj)}
+#'
+#' @param obj ([taxonomy()] or [taxmap()])
+#'
+#' @return \code{numeric}
+#'
+#' @examples
+#' n_leaves_1(ex_taxmap)
+#'
+#' @family taxonomy data functions
+#'
+#' @name n_leaves_1
 NULL
 
 

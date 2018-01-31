@@ -208,6 +208,22 @@ leaves.Taxonomy <- function(obj, ...) {
 
 
 #' @export
+leaves_apply <- function(obj, ...) {
+  UseMethod("leaves_apply")
+}
+
+#' @export
+leaves_apply.default <- function(obj, ...) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+leaves_apply.Taxonomy <- function(obj, ...) {
+  obj$leaves_apply(...)
+}
+
+
+#' @export
 id_classifications <- function(obj, ...) {
   UseMethod("id_classifications")
 }
@@ -300,6 +316,38 @@ n_subtaxa_1.default <- function(obj) {
 #' @export
 n_subtaxa_1.Taxonomy <- function(obj) {
   obj$n_subtaxa_1()
+}
+
+
+#' @export
+n_leaves <- function(obj) {
+  UseMethod("n_leaves")
+}
+
+#' @export
+n_leaves.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_leaves.Taxonomy <- function(obj) {
+  obj$n_leaves()
+}
+
+
+#' @export
+n_leaves_1 <- function(obj) {
+  UseMethod("n_leaves_1")
+}
+
+#' @export
+n_leaves_1.default <- function(obj) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+n_leaves_1.Taxonomy <- function(obj) {
+  obj$n_leaves_1()
 }
 
 

@@ -209,7 +209,7 @@ Taxmap <- R6::R6Class(
 
       # Reduce dimensionality
       if (simplify) {
-        output <- unique(unname(unlist(output)))
+        output <- simplify(output)
       }
 
       return(output)
@@ -223,7 +223,7 @@ Taxmap <- R6::R6Class(
                          recursive = recursive)
       output <- lapply(my_obs, func, ...)
       if (simplify) {
-        output <- unlist(output)
+        output <- simplify(output)
       }
       return(output)
     },
