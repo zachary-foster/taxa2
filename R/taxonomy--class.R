@@ -378,18 +378,16 @@ Taxonomy <- R6::R6Class(
 
 
     leaves = function(subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
-      # non-standard argument evaluation
-      data_used <- eval(substitute(self$data_used(subset)))
-      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
-      subset <- private$parse_nse_taxon_subset(subset)
-
       # Find taxa without subtaxa (leaves)
       childless_taxa <- which(self$n_subtaxa_1() == 0)
 
       # Subset subtaxa results to just leaves
-      self$subtaxa_apply(func = function(x) x[names(x) %in% names(childless_taxa)],
-                         subset = subset, simplify = simplify, recursive = recursive,
-                         include_input = FALSE, value = value)
+      eval(substitute(self$subtaxa_apply(func = function(x) x[names(x) %in% names(childless_taxa)],
+                                         subset = subset,
+                                         simplify = simplify,
+                                         recursive = recursive,
+                                         include_input = FALSE,
+                                         value = value)))
     },
 
 
