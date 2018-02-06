@@ -33,7 +33,7 @@ user-defined data of any type (e.g. molecular sequences, abundance counts etc.)
 Diagram of class concepts for `taxa` classes:
 
 ```{r results='asis', echo = FALSE}
-flowchart_path <- "taxa_class_ideas.png"
+flowchart_path <- "class_diagram.png"
 width <- 718
 if (knitr:::child_mode()) { # if run as a child
   flowchart_path <- file.path("vignettes", flowchart_path)
@@ -41,6 +41,8 @@ if (knitr:::child_mode()) { # if run as a child
 cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="',
        width, '">'))
 ```
+
+Relationship between classes implemented in the taxa package. Diamond-tipped arrows indicate that objects of a one are used in another class. For example, a database object can stored in the taxon_rank, taxon_name, or taxon_id objects. A standard arrow indicates inheritance. For example, the taxmap class inherits the taxonomy class. `*` means that the object (e.g. a database object) can be replaced by a simple character vector. `?` means that the data is optional.
 
 ## Install
 
