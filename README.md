@@ -26,7 +26,15 @@ There are two distinct types of classes in `taxa`:
 
 Diagram of class concepts for `taxa` classes:
 
-<img src="vignettes/taxa_class_ideas.png" title="taxa classes diagram" width="718">
+<img src="vignettes/class_diagram.png" title="taxa classes diagram" width="718">
+
+Relationship between classes implemented in the taxa package.
+Diamond-tipped arrows indicate that objects of a one are used in another
+class. For example, a database object can stored in the taxon\_rank,
+taxon\_name, or taxon\_id objects. A standard arrow indicates
+inheritance. For example, the taxmap class inherits the taxonomy class.
+`*` means that the object (e.g. a database object) can be replaced by a
+simple character vector. `?` means that the data is optional.
 
 Install
 -------
@@ -313,8 +321,8 @@ object from scratch.
     # make taxonomy
     (tax <- taxonomy(tiger, cat, human, tomato, potato))
     #> <Taxonomy>
-    #>   14 taxa: b. Mammalia ... n. lycopersicum, o. tuberosum
-    #>   14 edges: NA->b, NA->c, b->d ... h->l, i->m, j->n, j->o
+    #>   14 taxa: b. Mammalia, c. Plantae ... o. tuberosum
+    #>   14 edges: NA->b, NA->c, b->d, b->e ... i->m, j->n, j->o
 
 Unlike the `hierarchies` class, each unique `taxon` object is only
 represented once in the `taxonomy` object. Each taxon has a
@@ -334,46 +342,58 @@ function returns the supertaxa of all or a subset of the taxa in a
 
     supertaxa(tax)
     #> $b
-    #> integer(0)
+    #> named integer(0)
     #> 
     #> $c
-    #> integer(0)
+    #> named integer(0)
     #> 
     #> $d
-    #> [1] 1
+    #> b 
+    #> 1 
     #> 
     #> $e
-    #> [1] 1
+    #> b 
+    #> 1 
     #> 
     #> $f
-    #> [1] 2
+    #> c 
+    #> 2 
     #> 
     #> $g
-    #> [1] 3 1
+    #> d b 
+    #> 3 1 
     #> 
     #> $h
-    #> [1] 3 1
+    #> d b 
+    #> 3 1 
     #> 
     #> $i
-    #> [1] 4 1
+    #> e b 
+    #> 4 1 
     #> 
     #> $j
-    #> [1] 5 2
+    #> f c 
+    #> 5 2 
     #> 
     #> $k
-    #> [1] 6 3 1
+    #> g d b 
+    #> 6 3 1 
     #> 
     #> $l
-    #> [1] 7 3 1
+    #> h d b 
+    #> 7 3 1 
     #> 
     #> $m
-    #> [1] 8 4 1
+    #> i e b 
+    #> 8 4 1 
     #> 
     #> $n
-    #> [1] 9 5 2
+    #> j f c 
+    #> 9 5 2 
     #> 
     #> $o
-    #> [1] 9 5 2
+    #> j f c 
+    #> 9 5 2
 
 By default, the taxon IDs for the supertaxa of all taxa are returned in
 the same order they appear in the edge list. Taxon IDs (character) or
@@ -382,7 +402,8 @@ only return information for some taxa.
 
     supertaxa(tax, subset = "m")
     #> $m
-    #> [1] 8 4 1
+    #> i e b 
+    #> 8 4 1
 
 What is returned can be modified with the `value` option:
 
@@ -495,8 +516,56 @@ We call taxa without any subtaxa "leaves". The `leaves` function returns
 these taxa.
 
     leaves(tax, value = "taxon_names")
-    #>              k              l              m              n              o 
-    #>       "tigris"        "catus"      "sapiens" "lycopersicum"    "tuberosum"
+    #> $b
+    #>         k         l         m 
+    #>  "tigris"   "catus" "sapiens" 
+    #> 
+    #> $c
+    #>              n              o 
+    #> "lycopersicum"    "tuberosum" 
+    #> 
+    #> $d
+    #>        k        l 
+    #> "tigris"  "catus" 
+    #> 
+    #> $e
+    #>         m 
+    #> "sapiens" 
+    #> 
+    #> $f
+    #>              n              o 
+    #> "lycopersicum"    "tuberosum" 
+    #> 
+    #> $g
+    #>        k 
+    #> "tigris" 
+    #> 
+    #> $h
+    #>       l 
+    #> "catus" 
+    #> 
+    #> $i
+    #>         m 
+    #> "sapiens" 
+    #> 
+    #> $j
+    #>              n              o 
+    #> "lycopersicum"    "tuberosum" 
+    #> 
+    #> $k
+    #> named character(0)
+    #> 
+    #> $l
+    #> named character(0)
+    #> 
+    #> $m
+    #> named character(0)
+    #> 
+    #> $n
+    #> named character(0)
+    #> 
+    #> $o
+    #> named character(0)
 
 #### other functions
 
@@ -555,16 +624,20 @@ returned. To see what variables can be used this way, use `all_names`.
     all_names(my_taxmap)
     #>         taxon_names           taxon_ids       taxon_indexes 
     #>       "taxon_names"         "taxon_ids"     "taxon_indexes" 
-    #>         n_supertaxa           n_subtaxa         n_subtaxa_1 
-    #>       "n_supertaxa"         "n_subtaxa"       "n_subtaxa_1" 
-    #>         taxon_ranks             is_root             is_stem 
-    #>       "taxon_ranks"           "is_root"           "is_stem" 
-    #>           is_branch             is_leaf      data$info$name 
-    #>         "is_branch"           "is_leaf"              "name" 
-    #>    data$info$n_legs data$info$dangerous   data$phylopic_ids 
-    #>            "n_legs"         "dangerous"      "phylopic_ids" 
-    #>          data$foods      funcs$reaction 
-    #>             "foods"          "reaction"
+    #>     classifications         n_supertaxa       n_supertaxa_1 
+    #>   "classifications"       "n_supertaxa"     "n_supertaxa_1" 
+    #>           n_subtaxa         n_subtaxa_1         taxon_ranks 
+    #>         "n_subtaxa"       "n_subtaxa_1"       "taxon_ranks" 
+    #>             is_root             is_stem           is_branch 
+    #>           "is_root"           "is_stem"         "is_branch" 
+    #>             is_leaf        is_internode               n_obs 
+    #>           "is_leaf"      "is_internode"             "n_obs" 
+    #>             n_obs_1      data$info$name    data$info$n_legs 
+    #>           "n_obs_1"              "name"            "n_legs" 
+    #> data$info$dangerous   data$phylopic_ids          data$foods 
+    #>         "dangerous"      "phylopic_ids"             "foods" 
+    #>      funcs$reaction 
+    #>          "reaction"
 
 For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the
 same effect inside manipulation functions like `filter_taxa` described
@@ -589,9 +662,49 @@ below. To get the values of these variables, use `get_data`.
     #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r 
     #>  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 
     #> 
+    #> $classifications
+    #>                                           b 
+    #>                                  "Mammalia" 
+    #>                                           c 
+    #>                                   "Plantae" 
+    #>                                           d 
+    #>                          "Mammalia;Felidae" 
+    #>                                           e 
+    #>                     "Mammalia;Notoryctidae" 
+    #>                                           f 
+    #>                        "Mammalia;Hominidae" 
+    #>                                           g 
+    #>                        "Plantae;Solanaceae" 
+    #>                                           h 
+    #>                 "Mammalia;Felidae;Panthera" 
+    #>                                           i 
+    #>                    "Mammalia;Felidae;Felis" 
+    #>                                           j 
+    #>          "Mammalia;Notoryctidae;Notoryctes" 
+    #>                                           k 
+    #>                   "Mammalia;Hominidae;homo" 
+    #>                                           l 
+    #>                "Plantae;Solanaceae;Solanum" 
+    #>                                           m 
+    #>          "Mammalia;Felidae;Panthera;tigris" 
+    #>                                           n 
+    #>              "Mammalia;Felidae;Felis;catus" 
+    #>                                           o 
+    #> "Mammalia;Notoryctidae;Notoryctes;typhlops" 
+    #>                                           p 
+    #>           "Mammalia;Hominidae;homo;sapiens" 
+    #>                                           q 
+    #>   "Plantae;Solanaceae;Solanum;lycopersicum" 
+    #>                                           r 
+    #>      "Plantae;Solanaceae;Solanum;tuberosum" 
+    #> 
     #> $n_supertaxa
     #> b c d e f g h i j k l m n o p q r 
     #> 0 0 1 1 1 1 2 2 2 2 2 3 3 3 3 3 3 
+    #> 
+    #> $n_supertaxa_1
+    #> b c d e f g h i j k l m n o p q r 
+    #> 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
     #> 
     #> $n_subtaxa
     #>  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r 
@@ -617,13 +730,13 @@ below. To get the values of these variables, use `get_data`.
     #> 
     #> $is_stem
     #>     b     c     d     e     f     g     h     i     j     k     l     m 
-    #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE 
+    #> FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE 
     #>     n     o     p     q     r 
     #> FALSE FALSE FALSE FALSE FALSE 
     #> 
     #> $is_branch
     #>     b     c     d     e     f     g     h     i     j     k     l     m 
-    #> FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE 
+    #> FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE 
     #>     n     o     p     q     r 
     #> FALSE FALSE FALSE FALSE FALSE 
     #> 
@@ -632,6 +745,20 @@ below. To get the values of these variables, use `get_data`.
     #> FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE 
     #>     n     o     p     q     r 
     #>  TRUE  TRUE  TRUE  TRUE  TRUE 
+    #> 
+    #> $is_internode
+    #>     b     c     d     e     f     g     h     i     j     k     l     m 
+    #> FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE 
+    #>     n     o     p     q     r 
+    #> FALSE FALSE FALSE FALSE FALSE 
+    #> 
+    #> $n_obs
+    #> b c d e f g h i j k l m n o p q r 
+    #> 4 2 2 1 1 2 1 1 1 1 2 1 1 1 1 1 1 
+    #> 
+    #> $n_obs_1
+    #> b c d e f g h i j k l m n o p q r 
+    #> 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 
     #> 
     #> $name
     #>      m      n      o      p      q      r 
@@ -708,14 +835,16 @@ with a name starting with "t":
     #>   3 edges: NA->m, NA->o, NA->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 3 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2   mole      4     FALSE        o
-    #>       3 potato      0     FALSE        r
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 3 items
+    #>     # A tibble: 3 x 4
+    #>       name   n_legs dangerous taxon_id
+    #>       <fct>   <dbl> <lgl>     <chr>   
+    #>     1 tiger    4.00 T         m       
+    #>     2 mole     4.00 F         o       
+    #>     3 potato   0    F         r       
+    #>     phylopic_ids: a named character with 3 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 3 items with names:
+    #>        m, o, r
     #>   1 functions:
     #>  reaction
 
@@ -730,19 +859,21 @@ taxa be preserved.
 
     filter_taxa(my_taxmap, startsWith(taxon_names, "t"), supertaxa = TRUE)
     #> <Taxmap>
-    #>   11 taxa: m. tigris ... g. Solanaceae, c. Plantae
+    #>   11 taxa: m. tigris, o. typhlops ... c. Plantae
     #>   11 edges: h->m, j->o, l->r, d->h ... b->e, g->l, c->g, NA->c
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2    cat      4     FALSE        d
-    #>       3   mole      4     FALSE        o
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 tiger   4.00 T         m       
+    #>     2 cat     4.00 F         d       
+    #>     3 mole    4.00 F         o       
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, d, o, b, l, r
     #>   1 functions:
     #>  reaction
 
@@ -751,17 +882,19 @@ observations in `my_taxmap$data`.
 
     filter_obs(my_taxmap, "info", dangerous == TRUE)
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 2 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2  human      2      TRUE        p
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 2 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 tiger   4.00 T         m       
+    #>     2 human   2.00 T         p       
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
@@ -774,13 +907,15 @@ filter as well:
     #>   7 edges: NA->b, b->d, b->f, d->h, f->k, h->m, k->p
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 2 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2  human      2      TRUE        p
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 2 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 tiger   4.00 T         m       
+    #>     2 human   2.00 T         p       
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
@@ -798,15 +933,17 @@ to the "sample\_" functions
     #>   3 edges: NA->g, NA->i, NA->m
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 4 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2    cat      4     FALSE        i
-    #>       3 tomato      0     FALSE        g
-    #>       # ... with 1 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 4 items
+    #>     # A tibble: 4 x 4
+    #>       name   n_legs dangerous taxon_id
+    #>       <fct>   <dbl> <lgl>     <chr>   
+    #>     1 tiger    4.00 T         m       
+    #>     2 cat      4.00 F         i       
+    #>     3 tomato   0    F         g       
+    #>     # ... with 1 more row
+    #>     phylopic_ids: a named character with 4 items
+    #>        m. e148eabb-f138-43[truncated] ... g. 63604565-0406-46[truncated]
+    #>     foods: a list with 4 items with names:
+    #>        m, i, g, g
     #>   1 functions:
     #>  reaction
     set.seed(1)
@@ -816,15 +953,17 @@ to the "sample\_" functions
     #>   7 edges: c->g, d->i, h->m, NA->c, b->d, NA->b, d->h
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2    cat      4     FALSE        i
-    #>       3   mole      4     FALSE        b
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 tiger   4.00 T         m       
+    #>     2 cat     4.00 F         i       
+    #>     3 mole    4.00 F         b       
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... g. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, i, b, b, g, g
     #>   1 functions:
     #>  reaction
 
@@ -836,19 +975,21 @@ Adding columns to tabular datasets is done using `mutate_obs`.
                new_col = "Im new",
                newer_col = paste0(new_col, "er!"))
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 6
-    #>           name n_legs dangerous taxon_id new_col newer_col
-    #>         <fctr>  <dbl>     <lgl>    <chr>   <chr>     <chr>
-    #>       1  tiger      4      TRUE        m  Im new Im newer!
-    #>       2    cat      4     FALSE        n  Im new Im newer!
-    #>       3   mole      4     FALSE        o  Im new Im newer!
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 6
+    #>       name  n_legs dangerous taxon_id new_col newer_col
+    #>       <fct>  <dbl> <lgl>     <chr>    <chr>   <chr>    
+    #>     1 tiger   4.00 T         m        Im new  Im newer!
+    #>     2 cat     4.00 F         n        Im new  Im newer!
+    #>     3 mole    4.00 F         o        Im new  Im newer!
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
@@ -859,57 +1000,63 @@ Subsetting columns in tabular datasets is done using `select_obs`.
     # Selecting a column by name
     select_obs(my_taxmap, "info", dangerous)
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 2
-    #>         taxon_id dangerous
-    #>            <chr>     <lgl>
-    #>       1        m      TRUE
-    #>       2        n     FALSE
-    #>       3        o     FALSE
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 2
+    #>       taxon_id dangerous
+    #>       <chr>    <lgl>    
+    #>     1 m        T        
+    #>     2 n        F        
+    #>     3 o        F        
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
     # Selecting a column by index
     select_obs(my_taxmap, "info", 3)
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 2
-    #>         taxon_id dangerous
-    #>            <chr>     <lgl>
-    #>       1        m      TRUE
-    #>       2        n     FALSE
-    #>       3        o     FALSE
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 2
+    #>       taxon_id dangerous
+    #>       <chr>    <lgl>    
+    #>     1 m        T        
+    #>     2 n        F        
+    #>     3 o        F        
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
     # Selecting a column by regular expressions
     select_obs(my_taxmap, "info", matches("^dange"))
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 2
-    #>         taxon_id dangerous
-    #>            <chr>     <lgl>
-    #>       1        m      TRUE
-    #>       2        n     FALSE
-    #>       3        o     FALSE
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 2
+    #>       taxon_id dangerous
+    #>       <chr>    <lgl>    
+    #>     1 m        T        
+    #>     2 n        F        
+    #>     3 o        F        
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
@@ -924,32 +1071,36 @@ Sorting the edge list and observations is done using `arrage_taxa` and
     #>   17 edges: i->n, b->d, d->i, b->f ... g->l, h->m, l->r, j->o
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1  tiger      4      TRUE        m
-    #>       2    cat      4     FALSE        n
-    #>       3   mole      4     FALSE        o
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 tiger   4.00 T         m       
+    #>     2 cat     4.00 F         n       
+    #>     3 mole    4.00 F         o       
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
     arrange_obs(my_taxmap, "info", name)
     #> <Taxmap>
-    #>   17 taxa: b. Mammalia ... q. lycopersicum, r. tuberosum
-    #>   17 edges: NA->b, NA->c, b->d ... j->o, k->p, l->q, l->r
+    #>   17 taxa: b. Mammalia, c. Plantae ... r. tuberosum
+    #>   17 edges: NA->b, NA->c, b->d, b->e ... k->p, l->q, l->r
     #>   3 data sets:
     #>     info:
-    #>       # A tibble: 6 x 4
-    #>           name n_legs dangerous taxon_id
-    #>         <fctr>  <dbl>     <lgl>    <chr>
-    #>       1    cat      4     FALSE        n
-    #>       2  human      2      TRUE        p
-    #>       3   mole      4     FALSE        o
-    #>       # ... with 3 more rows
-    #>     phylopic_ids:  e148eabb-f138-43c6-b1e4-5cda2180485a ... 63604565-0406-460b-8cb8-1abe954b3f3a
-    #>     foods: a list with 6 items
+    #>     # A tibble: 6 x 4
+    #>       name  n_legs dangerous taxon_id
+    #>       <fct>  <dbl> <lgl>     <chr>   
+    #>     1 cat     4.00 F         n       
+    #>     2 human   2.00 T         p       
+    #>     3 mole    4.00 F         o       
+    #>     # ... with 3 more rows
+    #>     phylopic_ids: a named character with 6 items
+    #>        m. e148eabb-f138-43[truncated] ... r. 63604565-0406-46[truncated]
+    #>     foods: a list with 6 items with names:
+    #>        m, n, o, p, q, r
     #>   1 functions:
     #>  reaction
 
@@ -957,9 +1108,9 @@ Sorting the edge list and observations is done using `arrage_taxa` and
 
 The `taxmap` class has the ability to contain and manipulate very
 complex data. However, this can make it difficult to parse the data into
-a `taxmap` object. For this reason there are three functions to help
+a `taxmap` object. For this reason, there are three functions to help
 creating `taxmap` objects from nearly any kind of data that a taxonomy
-can be associated with and derived from. The figure below shows
+can be associated with or derived from. The figure below shows
 simplified versions of how to create `taxmap` objects from different
 types of data in different formats.
 
