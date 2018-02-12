@@ -206,8 +206,11 @@ test_that("Same length vector/list data set", {
 
 test_that("Print methods works", {
   x <- test_obj
+  x$data <- list()
   x$data$more_data <- list(1, 2, 3)
-  x$data$even_more <- list(1, 2, 3, 4)
+  x$data$frame <- data.frame(x = 1:10)
+  x$data$mat <- matrix(1:9, nrow = 3)
+  x$data$fac <- factor(1:10)
   expect_output(print(x),
                 "<Taxmap>.+17 taxa.+17 edges.+1 functions.+reaction")
 })

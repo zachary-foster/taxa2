@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 scott_notes.md
+vignettes/*_cache

@@ -89,6 +89,14 @@ test_that("Taxmap can be intialized from complex data", {
                                 include_match = FALSE),
                  "same name as functions")
 
+  # Invalid regex error
+  expect_error(parse_tax_data(raw_data, class_sep = ";",
+                                class_regex = "^(.+)_invalid_(.+)$",
+                                class_key = c(rank = "info",
+                                              tax_name = "taxon_name"),
+                                include_match = FALSE),
+                 "could not be matched by the regex supplied")
+
 })
 
 

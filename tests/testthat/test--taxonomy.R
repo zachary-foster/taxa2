@@ -154,6 +154,61 @@ test_that("Finding roots", {
 })
 
 
+test_that("Finding internodes", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$internodes(), internodes(x))
+
+  # Index return type
+  expect_type(x$internodes(value = "taxon_indexes"), "integer")
+
+  # Taxon ID return type
+  expect_type(x$internodes(value = "taxon_ids"), "character")
+})
+
+
+test_that("Finding id_classifications", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$id_classifications(), id_classifications(x))
+})
+
+
+test_that("Finding id_classifications", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$classifications(), classifications(x))
+})
+
+
+test_that("Finding n_supertaxa", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$n_supertaxa(), n_supertaxa(x))
+})
+
+
+test_that("Finding n_supertaxa_1", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$n_supertaxa_1(), n_supertaxa_1(x))
+})
+
+
+test_that("Finding n_subtaxa", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$n_subtaxa(), n_subtaxa(x))
+})
+
+
+test_that("Finding n_subtaxa_1", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$n_subtaxa_1(), n_subtaxa_1(x))
+})
+
+
 test_that("Finding branches", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
@@ -319,4 +374,29 @@ test_that("get data frame", {
   # select columns to return
   expect_named(x$get_data_frame("taxon_ids"), "taxon_ids")
 })
+
+test_that("S3 wrappers", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  taxon_indexes(x)
+  taxon_names(x)
+})
+
+
+
+test_that("supertaxa_apply function", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(lapply(supertaxa(x), length),
+               supertaxa_apply(x, length))
+})
+
+
+test_that("subtaxa_apply function", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(lapply(subtaxa(x), length),
+               subtaxa_apply(x, length))
+})
+
 

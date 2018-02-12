@@ -205,6 +205,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       data.frame(stringr::str_match_all(x, class_regex), stringsAsFactors = FALSE))
   } else { # only use first match if sep is applied
     taxon_info <- lapply(parsed_tax, function(x) {
+      validate_regex_match(x, class_regex)
       output <- data.frame(stringr::str_match(x, class_regex),
                            stringsAsFactors = FALSE)
       rownames(output) <- names(x)
@@ -836,30 +837,23 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
 #'
 #' @param input (\code{character})
 #' @param regex (\code{character} of length 1)
-#' @param max_print  (\code{numeric} of length 1)
-#' The maximum number of lines to print in error/warning messages.
 #'
 #' @return \code{character} Parts of \code{input} matching \code{regex}
 #'
 #' @keywords internal
-validate_regex_match <- function(input, regex, max_print = 10) {
+validate_regex_match <- function(input, regex) {
   # check which input values match
   input <- as.character(input)
   not_matching <- ! grepl(pattern = regex, x = input)
+
   # complain about those that dont
   if (sum(not_matching) > 0) {
-    invalid_list <- paste("   ", which(not_matching), ": ", input[not_matching],
-                          "\n")
-    if (length(invalid_list) > max_print) {
-      invalid_list <- c(invalid_list[1:max_print], "    ...")
-    }
-    warning(paste0(collapse = "",
-                   c("The following ", sum(not_matching), " of ", length(input),
-                     " input(s) could not be matched by the regex supplied:\n",
-                     invalid_list)))
+    stop(call. = FALSE,
+         paste0(collapse = "",
+                c("The following ", sum(not_matching), " of ", length(input),
+                  " input(s) could not be matched by the regex supplied:\n",
+                  limited_print(input, prefix = "  ", type = "silent"))))
   }
-  # return matching inputs
-  return(input[! not_matching])
 }
 
 

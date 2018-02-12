@@ -4,15 +4,12 @@
 \alias{validate_regex_match}
 \title{Check that all match input}
 \usage{
-validate_regex_match(input, regex, max_print = 10)
+validate_regex_match(input, regex)
 }
 \arguments{
 \item{input}{(\code{character})}
 
 \item{regex}{(\code{character} of length 1)}
-
-\item{max_print}{(\code{numeric} of length 1)
-The maximum number of lines to print in error/warning messages.}
 }
 \value{
 \code{character} Parts of \code{input} matching \code{regex}
