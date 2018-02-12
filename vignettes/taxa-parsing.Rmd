@@ -527,15 +527,83 @@ obj = parse_tax_data(species_data,
 print(obj)
 ```
 
-### Creating `taxonomy` objects
+### Using the `taxmap` constructor
+
+Those more familiar with object oriented programing might be wondering if `taxmap` has a "constructor" (standard initialation function) for creating new objects.
+It does and using it might be the best choice in certain situations.
+It is probably most useful when developing functions that create `taxmap` objects from specific formats.
+The constructor is much less flexible than the parsing functions covered above.
+The taxonomic information must take the form of either:
+
+1. A list of `hierarchy` objects
+1. A list character vectors representing taxonomic classifications
+
+We will use character vectors for these examples, but the same ideas apply to  list of `hierarchy` objects (i.e. `hierarchies`).
+Values can be given as multiple parameters:
+
+```{r}
+taxmap(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+       c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+       c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus"))
+```
+
+Or as a list:
+
+```{r}
+taxmap(.list = list(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+                    c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+                    c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus")))
+```
+
+Any data sets that are added at the time of initalization are assumed to associated with taxa.
+If you want to add data sets not associated with data, add them after initializing with `taxmap` to avoid messages and warings.
+If data sets have the same length as the input classifications, then they are assumed to be in the same order: 
+
+```{r}
+taxmap(.list = list(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+                    c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+                    c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus")),
+       data = list(x = 1:3))
+```
+
+They can also start out named by taxon IDs.
+This is can be useful if taxon IDs are set to reference database IDs, rather than being generated automatically.
+
+```{r}
+taxmap(.list = list(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+                    c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+                    c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus")),
+       data = list(x = c(b = 2)))
+```
+
+The equivalent for tables requires that the table has a "taxon_id" column: 
+
+```{r}
+taxmap(.list = list(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+                    c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+                    c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus")),
+       data = list(x = data.frame(taxon_id = "b", x = 2)))
+```
+
+If instead of taxon IDs, you have which classification index each row corresponds to, add a "taxon_index" column:
+
+```{r}
+taxmap(.list = list(c("Animalia", "Mammalia", "Carnivora", "Hominidae", "Homo", "sapiens"),
+                    c("Animalia", "Mammalia", "Carnivora", "Felidae", "Felis", "silvestris"),
+                    c("Animalia", "Mammalia", "Carnivora", "Canidae", "Canis", "lupus")),
+       data = list(x = data.frame(taxon_index = 1, x = 2)))
+```
+
+
+## Creating `taxonomy` objects
 
 UNDER CONSTRUCTION
 
-### Creating `hierarchies` objects
+## Creating `hierarchies` objects
 
 UNDER CONSTRUCTION
 
-### Creating `taxa` objects
+## Creating `taxa` objects
 
 UNDER CONSTRUCTION
 

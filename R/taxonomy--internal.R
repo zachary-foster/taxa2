@@ -1,3 +1,9 @@
+#' Infer edge list from hierarchies
+#'
+#' Infer edge list and unique taxa from hierarchies.
+#'
+#' @param A list of [hierarchy()] objects.
+#'
 #' @keywords internal
 parse_heirarchies_to_taxonomy <- function(heirarchies) {
 

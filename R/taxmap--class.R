@@ -46,7 +46,7 @@ Taxmap <- R6::R6Class(
       super$initialize(..., .list = .list)
 
       # Make sure `data` is in the right format and add to object
-      self$data <- validate_taxmap_data(data, self$input_ids)
+      self$data <- init_taxmap_data(self, data, self$input_ids)
       check_taxmap_data(self)
 
       # Make sure `funcs` is in the right format and add to object
@@ -110,6 +110,12 @@ Taxmap <- R6::R6Class(
       limited_print(names(self$funcs), type = "cat")
 
       invisible(self)
+    },
+
+    # Check that a set of IDs are valid taxon IDs
+    is_taxon_id = function(ids) {
+      valid_ids <- c(unlist(self$edge_list), names(self$taxa), NA)
+      ids %in% valid_ids
     },
 
     # Returns the names of things to be accessible using non-standard evaluation

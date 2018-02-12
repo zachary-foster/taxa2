@@ -134,12 +134,73 @@ reaction <- function(x) {
          paste0("No worries; its just a ", x$data$info$name, "."))
 }
 
+### Make test object
+
 test_obj <- taxmap(tiger, cat, mole, human, tomato, potato,
-                    data = list(info = info,
-                                phylopic_ids = phylopic_ids,
-                                foods = foods,
-                                abund = abund),
-                    funcs = list(reaction = reaction))
+                   data = list(info = info,
+                               phylopic_ids = phylopic_ids,
+                               foods = foods,
+                               abund = abund),
+                   funcs = list(reaction = reaction))
+
+### Manual class construction
+
+test_that("Existing taxon_id column in table data", {
+  expect_message(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = data.frame(taxon_id = "b", x = 2))),
+                 'Using existing "taxon_id" column for table')
+})
+
+test_that("Existing taxon_id with invalid IDs", {
+  expect_error(taxmap(tiger, cat, mole, human, tomato, potato,
+                      data = list(x = data.frame(taxon_id = "xxx", x = 2))),
+               'The table "x" has a "taxon_id" column, but the values do not appear to be taxon IDs')
+})
+
+test_that("Existing taxon_index column in table data", {
+  expect_message(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = data.frame(taxon_index = 6, x = 2))),
+                 'Using "taxon_index" column')
+})
+
+test_that("No taxon_id or taxon_index column in table data", {
+  expect_warning(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = data.frame(x = 2))),
+                 'The table "x" does not have a "taxon_index" column')
+})
+
+test_that("Same length table data", {
+  expect_message(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = data.frame(x = rep(2, 6)))),
+                 'Assuming that the elements of table "x" are in the same order')
+})
+
+
+test_that("vector/list named by taxon IDs", {
+  expect_message(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = c("b" = 2))),
+                 'Using existing names of list/vector "x" as taxon IDs.')
+})
+
+test_that("vector/list named, but not by taxon IDs", {
+  expect_warning(taxmap(tiger, cat, mole, human, tomato, potato,
+                      data = list(x = c("xxx" = 2))),
+               'The list/vector "x" is named, but the names do not appear to be taxon IDs.')
+})
+
+
+test_that("No names for vector/list data set", {
+  expect_warning(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = 2)),
+                 'The list/vector "x" is unnamed so has no taxon ID information.')
+})
+
+test_that("Same length vector/list data set", {
+  expect_message(taxmap(tiger, cat, mole, human, tomato, potato,
+                        data = list(x = rep(2, 6))),
+                 'Assuming that the elements of list/vector "x" are in the same order')
+})
+
 
 ### Print methods
 

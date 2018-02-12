@@ -3207,9 +3207,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="536"
-     inkscape:cy="392.62857"
+     inkscape:zoom="1.2971481"
+     inkscape:cx="389.27707"
+     inkscape:cy="444.68333"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -3236,7 +3236,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -3245,7 +3245,10 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g6084">
+       id="g6084"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="opacity:0.97000002;fill:url(#linearGradient5744);fill-opacity:1;stroke:url(#linearGradient5738);filter:url(#filter5762)"
          id="g5653-1"
@@ -3301,7 +3304,8 @@
        id="g6262"
        transform="translate(303.72013,5.0355389)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5"
          transform="translate(484.92857,753.21429)">
@@ -3363,7 +3367,8 @@
        id="g6262-4"
        transform="translate(91.305916,-136.51186)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8"
          transform="translate(484.92857,753.21429)">
@@ -3422,7 +3427,8 @@
        id="g6262-4-8"
        transform="translate(304.10518,-136.23782)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1"
          transform="translate(484.92857,753.21429)">
@@ -3481,7 +3487,8 @@
        id="g6262-4-8-9"
        transform="translate(517.14242,-136.16009)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-6"
          transform="translate(484.92857,753.21429)">
@@ -3540,7 +3547,8 @@
        id="g6262-4-8-3"
        transform="translate(303.52052,-278.57618)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-0"
          transform="translate(484.92857,753.21429)">
@@ -3595,14 +3603,15 @@
              id="flowPara5900-3-5-8-4">• taxon_name object (*)</flowPara><flowPara
              id="flowPara5902-0-9-5-7">• taxon_rank object (?*)</flowPara><flowPara
              id="flowPara5904-7-4-6-7">• taxon_id object (?*)</flowPara><flowPara
-             id="flowPara11486">• Authority (?)</flowPara><flowPara
+             id="flowPara11486">• authority (?)</flowPara><flowPara
              id="flowPara11484" /></flowRoot>      </g>
     </g>
     <g
        id="g6262-4-80"
        transform="translate(90.856451,-420.52493)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-5"
          transform="translate(484.92857,753.21429)">
@@ -3654,14 +3663,15 @@
                x="-427.5"
                y="176.11221"
                style="font-size:12.5px" /></flowRegion><flowPara
-             id="flowPara5904-7-4-8">• An unordered list of </flowPara><flowPara
+             id="flowPara5904-7-4-8">• an unordered list of </flowPara><flowPara
              id="flowPara11507">   taxon objects</flowPara></flowRoot>      </g>
     </g>
     <g
        id="g6262-4-8-2"
        transform="translate(303.65572,-420.25089)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-9"
          transform="translate(484.92857,753.21429)">
@@ -3713,14 +3723,15 @@
                x="-427.5"
                y="176.11221"
                style="font-size:12.5px" /></flowRegion><flowPara
-             id="flowPara5904-7-4-6-0">• An ordered list of </flowPara><flowPara
+             id="flowPara5904-7-4-6-0">• an ordered list of </flowPara><flowPara
              id="flowPara11505">   taxon objects (*)</flowPara></flowRoot>      </g>
     </g>
     <g
        id="g6262-4-8-9-7"
        transform="translate(516.69296,-420.17316)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-6-5"
          transform="translate(484.92857,753.21429)">
@@ -3772,16 +3783,17 @@
                x="-427.5"
                y="176.11221"
                style="font-size:12.5px" /></flowRegion><flowPara
-             id="flowPara5904-7-4-6-8-2">• An unordered list of </flowPara><flowPara
+             id="flowPara5904-7-4-6-8-2">• an unordered list of </flowPara><flowPara
              id="flowPara11518">   taxon objects (*)</flowPara><flowPara
-             id="flowPara11514">• An edge list defining </flowPara><flowPara
+             id="flowPara11514">• an edge list defining </flowPara><flowPara
              id="flowPara11516">   taxon relationships </flowPara></flowRoot>      </g>
     </g>
     <g
        id="g6262-4-8-2-3"
        transform="translate(303.41501,-562.22389)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-9-1"
          transform="translate(484.92857,753.21429)">
@@ -3833,14 +3845,15 @@
                x="-427.5"
                y="176.11221"
                style="font-size:12.5px" /></flowRegion><flowPara
-             id="flowPara5904-7-4-6-0-8">• A list of hierarchy</flowPara><flowPara
+             id="flowPara5904-7-4-6-0-8">• a list of hierarchy</flowPara><flowPara
              id="flowPara11503">   objects</flowPara></flowRoot>      </g>
     </g>
     <g
        id="g6262-4-8-9-7-8"
        transform="translate(516.45224,-562.14616)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g6084-5-8-1-6-5-8"
          transform="translate(484.92857,753.21429)">
@@ -3892,7 +3905,7 @@
                x="-427.5"
                y="176.11221"
                style="font-size:12.5px" /></flowRegion><flowPara
-             id="flowPara5904-7-4-6-8-2-0">• A list of user-defined </flowPara><flowPara
+             id="flowPara5904-7-4-6-8-2-0">• a list of user-defined </flowPara><flowPara
              id="flowPara11525">   tables, vectors, or </flowPara><flowPara
              id="flowPara11527">   lists mapped to taxa</flowPara></flowRoot>      </g>
     </g>
@@ -3912,11 +3925,15 @@
        inkscape:randomized="0"
        d="m -283.46455,485.43305 -63.57334,83.85426 33.03645,99.90846 -99.39539,-34.54945 -84.80976,62.29294 2.14361,-105.20699 -85.45176,-61.40931 100.7202,-30.47205 31.99768,-100.24598 60.1049,86.37423 z"
        inkscape:transform-center-x="7.292808"
-       inkscape:transform-center-y="-8.0270972" />
+       inkscape:transform-center-y="-8.0270972"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png" />
     <g
        id="g9271"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient9247);fill-opacity:1;stroke:url(#linearGradient9241);filter:url(#filter9231)"
          transform="matrix(0.99998765,0.0049692,0.0049692,-0.99998765,756.89607,1604.0478)"
@@ -3955,7 +3972,8 @@
        id="g9262"
        transform="translate(1,0)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g9031">
         <g
@@ -3997,7 +4015,8 @@
        id="g9436"
        transform="translate(2,0)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient8964-9);fill-opacity:1;stroke:url(#linearGradient8934-5);filter:url(#filter8956-9)"
          transform="matrix(-0.74394399,0.66824197,-0.66824197,-0.74394399,555.81529,1633.4347)"
@@ -4039,7 +4058,8 @@
        transform="translate(1.2992104,-283)"
        id="g9262-3"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g9031-7">
         <g
@@ -4081,7 +4101,8 @@
        transform="translate(1.2992104,-283)"
        id="g9436-0"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient8964-9-0);fill-opacity:1;stroke:url(#linearGradient8934-5-1);filter:url(#filter8956-9-0)"
          transform="matrix(-0.74394399,0.66824197,-0.66824197,-0.74394399,555.81529,1633.4347)"
@@ -4123,7 +4144,8 @@
        transform="matrix(1,-0.08872741,0,1,2.9077467e-6,-102.82063)"
        id="g9271-2"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient9247-4);fill-opacity:1;stroke:url(#linearGradient9241-5);filter:url(#filter9231-5)"
          transform="matrix(0.99998765,0.0049692,0.0049692,-0.99998765,756.89607,1604.0478)"
@@ -4162,7 +4184,8 @@
        transform="matrix(1,-0.08872741,0,1,2.9077467e-6,-245.08835)"
        id="g9271-2-4"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient9247-4-3);fill-opacity:1;stroke:url(#linearGradient9241-5-4);filter:url(#filter9231-5-3)"
          transform="matrix(0.99998765,0.0049692,0.0049692,-0.99998765,756.89607,1604.0478)"
@@ -4201,7 +4224,8 @@
        transform="matrix(1,-0.05915161,0,1,2.9077467e-6,-400.14814)"
        id="g9271-2-4-8"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient9247-4-3-3);fill-opacity:1;stroke:url(#linearGradient9241-5-4-8);filter:url(#filter9231-5-3-5)"
          transform="matrix(0.99998765,0.0049692,0.0049692,-0.99998765,756.89607,1604.0478)"
@@ -4240,7 +4264,8 @@
        id="g9262-6"
        transform="translate(-218.55652,-157.40381)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g9031-1">
         <g
@@ -4282,7 +4307,8 @@
        id="g9262-6-8"
        transform="matrix(-1,0,0,1,1094.6352,-157.40381)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g9031-1-0"
          inkscape:export-xdpi="300"
@@ -4326,7 +4352,8 @@
        transform="matrix(1.0524089,-0.05702199,0.00522969,-1.0527182,1025.1549,1217.0093)"
        id="g10495-8"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          style="fill:url(#linearGradient10477-2);fill-opacity:1;stroke:url(#linearGradient10485-5);filter:url(#filter10469-1)"
          transform="translate(-38.853358,16.988809)"
@@ -4368,18 +4395,22 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot10882"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><flowRegion
          id="flowRegion10884"><rect
            id="rect10886"
            width="119.5"
            height="82"
            x="602"
            y="957.36218" /></flowRegion><flowPara
-         id="flowPara10888"></flowPara></flowRoot>    <g
+         id="flowPara10888" /></flowRoot>    <g
        id="g10941"
        transform="translate(-427,-604)"
        inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
       <g
          id="g11365"
          transform="translate(1.7677669,-1.7677669)">
@@ -4572,20 +4603,26 @@
        x="819.53674"
        y="495.86917"
        id="text11529"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><tspan
          sodipodi:role="line"
          id="tspan11531"
          x="819.53674"
-         y="495.86917"> </tspan></text>
+         y="495.86917" /></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot11539"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><flowRegion
          id="flowRegion11541"><rect
            id="rect11543"
            width="860"
            height="784"
            x="121"
            y="324.36221" /></flowRegion><flowPara
-         id="flowPara11545"></flowPara></flowRoot>  </g>
+         id="flowPara11545" /></flowRoot>  </g>
 </svg>

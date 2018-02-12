@@ -1,15 +1,19 @@
 #' Convert `data` input for Taxamp
 #'
-#' Make sure `data` is in the right format and complain if it is not.
-#' Then, add a `taxon_id` column to data with the same length as the input
+#' Make sure `data` is in the right format and complain if it is not. Then, add
+#' a `taxon_id` column to data with the same length as the input
 #'
+#' @param self The newly created [taxmap()] object
 #' @param data The `data` variable passed to the `Taxmap` constructor
-#' @param input_ids
+#' @param input_ids The taxon IDs for the inputs that made the taxonomy
+#' @param assume_equal If `TRUE`, and a data set length is the same as the
+#'   `input_ids` length, then assume that `input_ids` applies to the data set as
+#'   well.
 #'
 #' @return A `data` variable with the right format
 #'
 #' @keywords internal
-validate_taxmap_data <- function(data, input_ids) {
+init_taxmap_data <- function(self, data, input_ids, assume_equal = TRUE) {
 
   process_one <- function(x, name) {
     if (is.data.frame(x)) {
@@ -20,20 +24,59 @@ validate_taxmap_data <- function(data, input_ids) {
 
       # Add the `taxon_id` column if it is not already there
       if ("taxon_id" %in% colnames(x)) {
-        message(paste0('Using existing "taxon_id" column for table "',
-                       name, '"'))
-      } else if ("taxon_index" %in% colnames(x) && is.integer(x$taxon_index)) {
-        x$taxon_id <- input_ids[x$taxon_index]
-      } else if (nrow(x) == length(input_ids)) {
-        x$taxon_id <- input_ids
+        is_valid <- self$is_taxon_id(x$taxon_id)
+        if (all(is_valid)) {
+          message(paste0('Using existing "taxon_id" column for table "',
+                         name, '"'))
+        } else { # has a "taxon_id" column but invalid IDs
+          stop(call. = FALSE,
+               paste0('The table "', name,
+                      '" has a "taxon_id" column, but the values do not appear to be taxon IDs.',
+                      'The following ', sum(! is_valid), ' of ',
+                      length(is_valid), ' values are not valid indexes:\n',
+                      limited_print(x$taxon_id[! is_valid], type = "silent")))
+        }
+      } else if ("taxon_index" %in% colnames(x)) {
+        message(paste0('Using "taxon_index" column to assign taxon IDs for table "',
+                       name, '".'))
+        x <- dplyr::bind_cols(taxon_id = unname(input_ids[as.integer(x$taxon_index)]), x)
+      } else if (assume_equal && nrow(x) == length(input_ids)) {
+        message(paste0('Assuming that the elements of table "', name,
+                       '" are in the same order as taxon information.'))
+        x <- dplyr::bind_cols(taxon_id = unname(input_ids), x)
       } else {
-        message(paste('The table "', name,
-                      '" does not have a "taxon_index" column or a number of ',
-                      'rows equal to the number of inputs, so no "taxon_id"',
-                      ' can be assigned.'))
+        warning(call. = FALSE,
+                paste0('The table "', name,
+                       '" does not have a "taxon_index" column, "taxon_id" column, or a number of',
+                       'rows equal to the number of inputs, so no "taxon_id"',
+                       ' can be assigned.'))
       }
-    } else if (is.null(names(x)) && length(x) == length(input_ids)) {
-      names(x) <- input_ids
+    } else if (is.vector(x) || is.list(x)) {
+      # Add the `taxon_id` column if it is not already there
+      if (is.null(names(x))) { # data set is unnamed
+        if (assume_equal && length(x) == length(input_ids)) { # if data length is same as input assume they match up
+          names(x) <- input_ids
+          message(paste0('Assuming that the elements of list/vector "', name,
+                         '" are in the same order as taxon information.'))
+        } else { # No taxonomy information
+          warning(call. = FALSE,
+                  paste0('The list/vector "', name,
+                         '" is unnamed so has no taxon ID information.'))
+        }
+      } else { # data set has names
+        is_valid <- self$is_taxon_id(names(x))
+        if (all(is_valid)) { # All are valid taxon ids
+          message(paste0('Using existing names of list/vector "', name,
+                         '" as taxon IDs.'))
+        } else { # data set has names, but they are not valid IDs
+          warning(call. = FALSE,
+                  paste0('The list/vector "', name,
+                         '" is named, but the names do not appear to be taxon IDs.',
+                         'The following ', sum(! is_valid), ' of ',
+                         length(is_valid), ' names are not valid indexes:\n',
+                         limited_print(names(x)[! is_valid], type = "silent")))
+        }
+      }
     }
     return(x)
   }
@@ -79,12 +122,12 @@ parse_possibly_named_logical <- function(input, data, default) {
       output <- stats::setNames(input, names(data))
     } else {
       stop(paste("Invalid input for logical vector selecting which data",
-                  "sets to affect. Valid inputs include:\n",
-                  "1) a single unnamed logical (e.g. TRUE)\n",
-                  "2) one or more named logicals with names matching",
-                  "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
-                  "= FALSE)\n  3) an unamed logical vector of the same",
-                  "length as obj$data."))
+                 "sets to affect. Valid inputs include:\n",
+                 "1) a single unnamed logical (e.g. TRUE)\n",
+                 "2) one or more named logicals with names matching",
+                 "data sets in obj$data (e.g. c(data_1 = TRUE, data_2",
+                 "= FALSE)\n  3) an unamed logical vector of the same",
+                 "length as obj$data."))
     }
   } else {
     if (length(not_data_names <-
