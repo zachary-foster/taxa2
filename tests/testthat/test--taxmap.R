@@ -205,7 +205,7 @@ test_that("Same length vector/list data set", {
 ### Print methods
 
 test_that("Print methods works", {
-  x <- test_obj
+  x = test_obj$clone(deep = TRUE)
   x$data <- list()
   x$data$more_data <- list(1, 2, 3)
   x$data$frame <- data.frame(x = 1:10)

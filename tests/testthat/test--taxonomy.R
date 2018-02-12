@@ -375,14 +375,6 @@ test_that("get data frame", {
   expect_named(x$get_data_frame("taxon_ids"), "taxon_ids")
 })
 
-test_that("S3 wrappers", {
-  x <- taxonomy(tiger, cougar, mole, tomato, potato,
-                unidentified_plant, unidentified_animal)
-  taxon_indexes(x)
-  taxon_names(x)
-})
-
-
 
 test_that("supertaxa_apply function", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
