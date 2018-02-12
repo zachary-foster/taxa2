@@ -199,6 +199,14 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Remove white space
   parsed_tax <- lapply(parsed_tax, trimws)
 
+  # Check for NAs in input
+  na_indexes <- which(vapply(parsed_tax, function(x) any(is.na(x)), logical(1)))
+  if (length(na_indexes) > 0) {
+    warning(call. = FALSE,
+            'The following input indexes have `NA` in their classifications:\n',
+            limited_print(na_indexes, prefix = "  ", type = "silent"))
+  }
+
   # Extract out any taxon info
   if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
     taxon_info <- lapply(parsed_tax, function(x)
@@ -844,7 +852,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
 validate_regex_match <- function(input, regex) {
   # check which input values match
   input <- as.character(input)
-  not_matching <- ! grepl(pattern = regex, x = input)
+  not_matching <- (! grepl(pattern = regex, x = input)) & (! is.na(input))
 
   # complain about those that dont
   if (sum(not_matching) > 0) {
