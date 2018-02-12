@@ -1,36 +1,3 @@
-#' Format taxon subset value
-#'
-#' Format an input to a `subset` option on functions like [supertaxa()].
-#' Converts logical and `taxon_ids` into indexes of `taxon_data`.
-#'
-#' @param taxon_ids All of the taxon ids from a `taxmap` object.
-#' @param index If a `character`, then it should be values of `taxon_ids`. If a
-#'   `numeric`, then it should be row indexes of `taxon_data`. If a `logical`,
-#'   then it should correspond to rows of `taxon_data`.
-#'
-#' @return (`integer`) row indexes of the edge list in a `taxmap` object named
-#'   by corresponding taxon ids
-#'
-#' @keywords internal
-format_taxon_subset <- function(taxon_ids, index) {
-  if (is.null(index)) {
-    output <- stats::setNames(seq_along(taxon_ids), taxon_ids)
-  } else {
-    if (is.numeric(index)) {
-      output <- index
-    } else if (is.character(index)) {
-      output <- match(index, taxon_ids)
-    } else if (is.logical(index)) {
-      output <- which(index)
-    } else {
-      stop("Invalid subset value.")
-    }
-    names(output) <- taxon_ids[output]
-  }
-  return(output)
-}
-
-
 #' Convert `data` input for Taxamp
 #'
 #' Make sure `data` is in the right format and complain if it is not.
