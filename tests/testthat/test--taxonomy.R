@@ -332,6 +332,10 @@ test_that("Filtering taxa", {
 
   # Errors for invalid logical
   expect_error(filter_taxa(x, TRUE), "must be the same length as the number of taxa")
+
+  # Edge case: filtering everything out
+  filter_taxa(x, numeric(0))
+
 })
 
 
