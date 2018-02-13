@@ -1035,8 +1035,12 @@ Taxonomy <- R6::R6Class(
       # Non-standard argument evaluation
       selection <- lapply(rlang::quos(...), rlang::eval_tidy, data = self$data_used(...))
 
+      # Remove any NULL selections
+      is_blank <- vapply(selection, is.null, logical(1))
+      selection <- selection[! is_blank]
+
       # Default to all taxa if no selection is provided
-      if (all(vapply(selection, is.null, logical(1)))) {
+      if (length(selection) == 0) {
         return(self$taxon_indexes())
       }
 

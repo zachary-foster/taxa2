@@ -904,6 +904,7 @@ NULL
 #'   * `integer`: One or more row indexes of `obj$edge_list`
 #'   * `logical`: A `TRUE`/`FALSE` vector of length equal to the number of rows
 #'   in `obj$edge_list`
+#'   * `NULL`: ignored
 #' @param subtaxa (`logical` or `numeric` of length 1) If `TRUE`, include
 #'   subtaxa of taxa passing the filter. Positive numbers indicate the number of
 #'   ranks below the target taxa to return. `0` is equivalent to `FALSE`.

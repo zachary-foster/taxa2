@@ -14,6 +14,7 @@ filtering condition must resolve to one of three things:
 \item \code{integer}: One or more row indexes of \code{obj$edge_list}
 \item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of rows
 in \code{obj$edge_list}
+\item \code{NULL}: ignored
 }}
 
 \item{subtaxa}{(\code{logical} or \code{numeric} of length 1) If \code{TRUE}, include

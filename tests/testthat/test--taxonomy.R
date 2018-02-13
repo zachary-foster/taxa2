@@ -334,8 +334,15 @@ test_that("Filtering taxa", {
   expect_error(filter_taxa(x, TRUE), "must be the same length as the number of taxa")
 
   # Edge case: filtering everything out
-  filter_taxa(x, numeric(0))
+  result <- filter_taxa(x, numeric(0))
+  expect_equal(length(result$taxa), 0)
+  expect_equal(result, filter_taxa(x, NULL, numeric(0)))
+  expect_equal(result, filter_taxa(x, "c", numeric(0)))
 
+  # Edge case: NULL input (shou)
+  expect_equal(filter_taxa(x, NULL), x)
+  expect_equal(filter_taxa(x, NULL, NULL), x)
+  expect_equal(filter_taxa(x, NULL, "c"), filter_taxa(x, "c"))
 })
 
 
