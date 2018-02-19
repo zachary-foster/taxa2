@@ -97,6 +97,16 @@ test_that("Taxmap can be intialized from complex data", {
                                 include_match = FALSE),
                  "could not be matched by the regex supplied")
 
+  # Expect an error if bad column name
+  expect_error(parse_tax_data(raw_data, class_cols = "Not a column"),
+               'No item')
+  expect_error(parse_tax_data(raw_data, class_cols = -1),
+               'Column index')
+  expect_error(parse_tax_data(1:3, class_cols = "Not a column"),
+               'No item named')
+  expect_error(parse_tax_data(1:3, class_cols = 10),
+               'out of bounds for inputs:')
+
 })
 
 
@@ -162,6 +172,20 @@ test_that("Taxmap can be intialized from queried data", {
   # Expect an error if trying to use invalid database of sequence id
   expect_error(lookup_tax_data(1:3, type = "seq_id", database = "bold"),
                "not a valid database")
+
+  # Expect an error if bad column name
+  expect_error(lookup_tax_data(raw_data, column = "Not a column",
+                               type = "seq_id"),
+               'No column "Not a column" in input table')
+  expect_error(lookup_tax_data(raw_data, column = -1,
+                               type = "seq_id"),
+               'Column index "-1" out of bounds')
+  expect_error(lookup_tax_data(1:3, column = "Not a column", type = "seq_id"),
+               'No item named "Not a column" in the following inputs:')
+  expect_error(lookup_tax_data(1:3, column = 10, type = "seq_id"),
+               'out of bounds for inputs:')
+
+
 
 })
 

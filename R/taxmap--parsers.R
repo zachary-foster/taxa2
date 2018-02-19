@@ -162,6 +162,11 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     stop('"named_by_rank = TRUE" does not make sense when "taxon_rank" is in "class_key".')
   }
 
+  # Check that column exists
+  for (a_col in class_cols) {
+    check_class_col(tax_data, a_col)
+  }
+
   # Deal with edge cases
   if (length(tax_data) == 0) {
     return(taxmap())
@@ -438,6 +443,9 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                 'sequnece ids. Valid choices include:\n',
                 limited_print(supported_databases, type = "silent")))
   }
+
+  # Check that column exists
+  check_class_col(tax_data, column)
 
   # Hidden parameters
   batch_size <- 100
@@ -944,3 +952,53 @@ count_capture_groups <- function(regex) {
   ncol(stringr::str_match(string = "", pattern = new_regex)) - 1
 }
 
+
+
+#' Check for name/index in input data
+#'
+#' Used by parse_tax_data and lookup_tax_data to check that columm/class_col is valid for the input data
+#'
+#' @param tax_data A table, list, or vector that contain sequence IDs, taxon
+#'   IDs, or taxon names.
+#'   * tables: The `column` option must be used to specify which column
+#'   contains the sequence IDs, taxon IDs, or taxon names.
+#'   * lists: There must be only one item per list entry unless the `column`
+#'   option is used to specify what item to use in each list entry.
+#'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
+#' @param column (`character` or `integer`) The name or index of the column that
+#'   contains information used to lookup classifications. This only applies when
+#'   a table or list is supplied to `tax_data`.
+#'
+#' @keywords internal
+check_class_col <- function(tax_data, column) {
+  if (is.data.frame(tax_data)) {
+    if (is.numeric(column)) {
+      if (column < 1 || column > ncol(tax_data)) {
+        stop(call. = FALSE,
+             'Column index "', column, '" out of bounds. Must be between 1 and ',
+             ncol(tax_data), '.')
+      }
+    } else if (! column %in% colnames(tax_data)) {
+      stop(call. = FALSE,
+           'No column "', column, '" in input table. Valid columns include:\n  ',
+           limited_print(colnames(tax_data), type = "silent"))
+    }
+  } else if (is.list(tax_data) || is.vector(tax_data)) {
+    my_lengths <- vapply(tax_data, length, numeric(1))
+    had_col_name <- vapply(tax_data, function(x) column %in% names(x), logical(1))
+    if (is.numeric(column)) {
+      if (column < 1 || any(column > my_lengths)) {
+        stop(call. = FALSE,
+             'Column index "', column, '" out of bounds for inputs:\n',
+             limited_print(which(column > my_lengths), type = "silent"))
+      }
+    } else if (! all(had_col_name)) {
+      stop(call. = FALSE,
+           'No item named "', column, '" in the following inputs:\n',
+           limited_print(which(! had_col_name), type = "silent"))
+    }
+  } else {
+    stop(call. = FALSE,
+         'Cannot read input of class "', class(tax_data)[1], '". Input must be a table, list or vector.')
+  }
+}
