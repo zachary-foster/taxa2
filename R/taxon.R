@@ -90,7 +90,7 @@ Taxon <- R6::R6Class(
       cat(paste0(indent, paste0("  id: ",
                                 private$get_id() %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
-                                private$authority %||% "none", "\n")))
+                                self$authority %||% "none", "\n")))
       invisible(self)
     },
 
