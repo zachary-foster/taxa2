@@ -19,8 +19,17 @@ option is used to specify what item to use in each list entry.
 \item vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
 }}
 
-\item{type}{(\code{"seq_id"}, \code{"taxon_id"}, \code{"taxon_name"}) What type of
-information can be used to look up the classifications.}
+\item{type}{What type of information can be used to look up the
+classifications. Takes one of the following values:
+\itemize{
+\item \code{"seq_id"}: A database sequence ID with an associated classification
+(e.g. NCBI accession numbers).
+\item \code{"taxon_id"}: A reference database taxon ID (e.g. a NCBI taxon ID)
+\item \code{"taxon_name"}: A single taxon name (e.g. "Homo sapiens" or "Primates")
+\item \code{"fuzzy_name"}: A single taxon name, but check for mispellings first.
+Only use if you think there are misspellings. Using \code{"taxon_name"} is
+faster.
+}}
 
 \item{column}{(\code{character} or \code{integer}) The name or index of the column that
 contains information used to lookup classifications. This only applies when

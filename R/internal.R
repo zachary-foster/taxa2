@@ -44,6 +44,8 @@ limited_print <- function(chars, prefix = "", sep = ", ", mid = " ... ",
   raw_chars <- chars
   chars <- crayon::strip_style(chars)
 
+  # Convert NA to "NA"
+  chars[is.na(chars)] <- "NA"
 
   #
   if (length(chars) == 0) {

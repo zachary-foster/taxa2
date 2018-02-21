@@ -140,6 +140,10 @@ test_that("Taxmap can be intialized from queried data", {
                                              "{{index}}" = "{{index}}"),
                                 column = "species")
 
+  # Parsing with fuzzy taxon name matches
+  expect_equal(lookup_tax_data("poa annus", type = "fuzzy_name")$taxon_names(),
+               lookup_tax_data("Poa annua", type = "taxon_name")$taxon_names())
+
   # Parsing with taxon ids
   id_result = lookup_tax_data(raw_data,
                               type = "taxon_id",

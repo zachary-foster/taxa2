@@ -7,6 +7,7 @@ Current
 * `taxmap` print methods now have more information.
 * Added `leaves_apply` function that works like `subtaxa_apply`, but on leaves ([issue #126](https://github.com/ropensci/taxa/issues/126)).
 # Functions with a `value` option now return named taxon indexes by default, instead of unnamed taxon indexes ([issue #128](https://github.com/ropensci/taxa/issues/128)).
+* `lookup_tax_data` and `extract_tax_data` can now use "fuzzy" matching when looking up taxon names, so taxon names can be mispelled and still be founds.
 
 ### Changes
 

@@ -23,6 +23,9 @@ term must be one of those described below:
 \item \code{taxon_name}: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
 Not necessarily unique, but interpretable by a particular \code{database}.
 Requires an internet connection.
+\item \code{fuzzy_name}: The name of a taxon, but check for mispellings first.
+Only use if you think there are misspellings. Using \code{"taxon_name"} is
+faster.
 \item \code{class}: A list of taxon information that constitutes the full taxonomic
 classification (e.g. "K_Mammalia;P_Carnivora;C_Felidae"). Individual
 taxa are separated by the \code{class_sep} argument and the information is

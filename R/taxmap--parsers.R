@@ -345,8 +345,15 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   * lists: There must be only one item per list entry unless the `column`
 #'   option is used to specify what item to use in each list entry.
 #'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
-#' @param type (`"seq_id"`, `"taxon_id"`, `"taxon_name"`) What type of
-#'   information can be used to look up the classifications.
+#' @param type What type of information can be used to look up the
+#'   classifications. Takes one of the following values:
+#'   * `"seq_id"`: A database sequence ID with an associated classification
+#'   (e.g. NCBI accession numbers).
+#'   * `"taxon_id"`: A reference database taxon ID (e.g. a NCBI taxon ID)
+#'   * `"taxon_name"`: A single taxon name (e.g. "Homo sapiens" or "Primates")
+#'   * `"fuzzy_name"`: A single taxon name, but check for mispellings first.
+#'   Only use if you think there are misspellings. Using `"taxon_name"` is
+#'   faster.
 #' @param column (`character` or `integer`) The name or index of the column that
 #'   contains information used to lookup classifications. This only applies when
 #'   a table or list is supplied to `tax_data`.
@@ -459,15 +466,15 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     failed_queries <- is.na(class_table)
     if (sum(failed_queries) > 0) {
       error_msg <- paste0('The following ', sum(failed_queries),
-                          ' taxon name could not be looked up:\n  ',
+                          ' taxon names could not be looked up:\n  ',
                           limited_print(names(failed_queries[failed_queries]),
                                         type = "silent"))
       if (ask) {
         error_msg <- paste0(error_msg, "\n",
-                            'This is probably means they dont exist in the database "', database, '".')
+                            'This probably means they dont exist in the database "', database, '".')
       } else {
         error_msg <- paste0(error_msg, "\n",
-                            'This is probably means they dont exist in the database "', database,
+                            'This probably means they dont exist in the database "', database,
                             '" or have multiple matches. ',
                             'Use "ask = TRUE" to specify which is the correct match when multiple matches occur.')
       }
@@ -504,7 +511,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     # Check that a supported database is being used
     supported_databases <- c("ncbi")
     if (! database %in% supported_databases) {
-      stop(paste0('The database "', database,
+      stop(call. = FALSE,
+           paste0('The database "', database,
                   '" is not a valid database for looking up that taxonomy of ',
                   'sequnece ids. Valid choices include:\n',
                   limited_print(supported_databases, type = "silent")))
@@ -531,9 +539,46 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     format_class_table(result)
   }
 
+  use_taxon_name_fuzzy <- function(names) {
+    # Look up similar taxon names
+    corrected <- map_unique(names, correct_taxon_names, database = database)
+
+    # Check for not found names
+    not_found <- unique(names(corrected[is.na(corrected)]))
+    if (length(not_found) > 0) {
+      warning(call. = FALSE,
+              "No taxon name was found that was similar to the following ",
+              length(not_found), " inputs:\n  ",
+              limited_print(type = "silent", not_found))
+
+    }
+
+    # Replace not found values with original input
+    corrected[is.na(corrected)] <- names(corrected[is.na(corrected)])
+
+    # Check for changed names
+    changed <- tolower(names(corrected)) != tolower(corrected) & ! is.na(corrected) & ! is.na(names(corrected))
+    if (any(changed)) {
+      before <- names(corrected[changed])
+      after <- corrected[changed]
+      change_char <- unique(paste0('"', before, '" -> "', after, '"'))
+      message("The following ", length(change_char), " names were corrected before looking up classifications:\n  ",
+              limited_print(type = "silent", change_char))
+    }
+
+    # Run standard taxon name lookup
+    use_taxon_name(corrected)
+  }
+
   lookup_funcs <- list("seq_id" = use_seq_id,
                        "taxon_id" = use_taxon_id,
-                       "taxon_name" = use_taxon_name)
+                       "taxon_name" = use_taxon_name,
+                       "fuzzy_name" = use_taxon_name_fuzzy)
+
+  # Get grn database ID if needed
+  if (type == "fuzzy_name") {
+
+  }
 
   # Get query information
   if (is.data.frame(tax_data)) { # is table
@@ -679,6 +724,9 @@ get_sort_var <- function(data, var) {
 #'   * `taxon_name`: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
 #'   Not necessarily unique, but interpretable by a particular `database`.
 #'   Requires an internet connection.
+#'   * `fuzzy_name`: The name of a taxon, but check for mispellings first.
+#'   Only use if you think there are misspellings. Using `"taxon_name"` is
+#'   faster.
 #'   * `class`: A list of taxon information that constitutes the full taxonomic
 #'   classification (e.g. "K_Mammalia;P_Carnivora;C_Felidae"). Individual
 #'   taxa are separated by the `class_sep` argument and the information is
@@ -829,7 +877,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
 
 
   # Use lookup_tax_data for taxon names, ids, and sequence ids
-  if (any(key %in% c("taxon_name", "taxon_id", "seq_id"))) {
+  if (any(key %in% c("taxon_name", "taxon_id", "seq_id", "fuzzy_name"))) {
     my_type <- key[key != "info"][1]
     output <- lookup_tax_data(tax_data = parsed_input, type = my_type,
                               column = names(my_type),
@@ -898,7 +946,7 @@ validate_regex_key_pair <- function(regex, key, multiple_allowed) {
   key_var_name <- deparse(substitute(key))
 
   # Check that the keys used are valid
-  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id")
+  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id", "fuzzy_name")
   invalid_keys <- key[! key %in% allowed]
   if (length(invalid_keys) > 0) {
     stop(paste0('Invalid key value "', invalid_keys[1], '" given.\n',
@@ -1001,4 +1049,64 @@ check_class_col <- function(tax_data, column) {
     stop(call. = FALSE,
          'Cannot read input of class "', class(tax_data)[1], '". Input must be a table, list or vector.')
   }
+}
+
+
+#' Look up official names from potentially misspelled names
+#'
+#' Look up official names from potentially misspelled names using Global Names
+#' Resolver (GNR). If a result from the chosen database is present, then it is
+#' used, otherwise the NCBI result is used and if that does not exist, then the
+#' first result is used. Names with no match will return NA.
+#'
+#' @param names Potentially misspelled taxon names
+#' @param database The database the names are being looked up for. If `NULL`, do
+#'   not consider database.
+#'
+#' @return vector of names
+#'
+#' @keywords internal
+correct_taxon_names <- function(names, database = "ncbi") {
+  # Look up what the database is called in GNR
+  database_key <-  c(itis = "ITIS",
+                     ncbi = "NCBI",
+                     eol = "EOL",
+                     col = "Catalogue of Life",
+                     tropicos = "Tropicos - Missouri Botanical Garden",
+                     gbif = "GBIF Backbone Taxonomy",
+                     wiki = "Wikispecies")
+  if (! is.null(database)) {
+    if (! tolower(database) %in% names(database_key)) {
+      warning(call. = FALSE,
+              'Can not check taxon names for database "', database,
+              '". Using NCBI instead.')
+      database = "ncbi"
+    }
+    gnr_database <- database_key[tolower(database)]
+  }
+
+  # Query GRN
+  result <- taxize::gnr_resolve(names)
+
+  # Pick results
+  pick_one <- function(n) {
+    one_tax_data <- result[result$user_supplied_name == n, ]
+    if (nrow(one_tax_data) == 0) {
+      return(NA_character_)
+    } else if (nrow(one_tax_data) == 1) {
+      return(one_tax_data$matched_name)
+    } else if (is.null(database) || ! gnr_database %in% one_tax_data$data_source_title) { # no database preference
+      most_common <- names(sort(table(one_tax_data$matched_name), decreasing = TRUE)[1])
+      if (is.null(most_common)) {
+        return(NA_character_)
+      } else {
+        return(most_common)
+      }
+    } else {
+      return(one_tax_data$matched_name[one_tax_data$data_source_title == gnr_database][1])
+    }
+  }
+
+  vapply(names, pick_one, character(1))
+
 }
