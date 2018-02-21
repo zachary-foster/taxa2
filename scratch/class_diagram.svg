@@ -11,9 +11,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="170mm"
+   height="194mm"
+   viewBox="0 0 602.36221 687.40158"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -188,137 +188,6 @@
          offset="0"
          id="stop4167" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#box_header_background-6"
-       id="linearGradient4169"
-       x1="-431.83594"
-       y1="162.54883"
-       x2="-269.83594"
-       y2="162.54883"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#box_content_background-7"
-       id="linearGradient5617"
-       x1="-431.83594"
-       y1="212.54883"
-       x2="-269.83594"
-       y2="212.54883"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0.0947018,0)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#box_header_outline-5"
-       id="linearGradient5623"
-       x1="-431.83594"
-       y1="162.54883"
-       x2="-269.83594"
-       y2="162.54883"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#box_content_outline-3"
-       id="linearGradient5629"
-       x1="-431.83594"
-       y1="212.54883"
-       x2="-269.83594"
-       y2="212.54883"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0.0947018,0)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5738"
-       x1="-440.73194"
-       y1="201.30664"
-       x2="-260.93993"
-       y2="201.30664"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5744"
-       x1="-440.73193"
-       y1="201.30664"
-       x2="-260.93994"
-       y2="201.30664"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5746"
-       gradientUnits="userSpaceOnUse"
-       x1="-440.73193"
-       y1="201.30664"
-       x2="-260.93994"
-       y2="201.30664" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5748"
-       gradientUnits="userSpaceOnUse"
-       x1="-440.73194"
-       y1="201.30664"
-       x2="-260.93993"
-       y2="201.30664" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5750"
-       gradientUnits="userSpaceOnUse"
-       x1="-440.73193"
-       y1="201.30664"
-       x2="-260.93994"
-       y2="201.30664" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shadow-0"
-       id="linearGradient5752"
-       gradientUnits="userSpaceOnUse"
-       x1="-440.73194"
-       y1="201.30664"
-       x2="-260.93993"
-       y2="201.30664" />
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter5762"
-       x="-0.029180124"
-       width="1.0583602"
-       y="-0.04698"
-       height="1.09396">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.9575"
-         id="feGaussianBlur5764" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter5852"
-       x="-0.0020513782"
-       width="1.0041028"
-       y="-0.014688948"
-       height="1.0293779">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.13761329"
-         id="feGaussianBlur5854" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter5872"
-       x="-0.0026666343"
-       width="1.0053333"
-       y="-0.0055386013"
-       height="1.0110772">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.17888672"
-         id="feGaussianBlur5874" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5740"
@@ -1660,24 +1529,6 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#arrows-6"
-       id="linearGradient8218"
-       x1="-328.46716"
-       y1="713.91833"
-       x2="-309.26422"
-       y2="713.91833"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient8220"
-       gradientUnits="userSpaceOnUse"
-       x1="-319.43317"
-       y1="667.81335"
-       x2="-318.36212"
-       y2="667.81335" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
        id="linearGradient8176-6"
        x1="-328.46716"
        y1="713.91833"
@@ -1717,10 +1568,10 @@
        xlink:href="#linearGradient8930"
        id="linearGradient8936"
        gradientUnits="userSpaceOnUse"
-       x1="-329.83977"
-       y1="697.98156"
-       x2="-307.89153"
-       y2="697.98156" />
+       x1="-329.83978"
+       y1="697.98157"
+       x2="-307.89154"
+       y2="697.98157" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#shadow-0"
@@ -1734,9 +1585,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter8956"
-       x="-0.075906589"
-       width="1.1518132"
-       y="-0.06847584"
+       x="-0.07590659"
+       width="1.1518131"
+       y="-0.068475842"
        height="1.1369517">
       <feGaussianBlur
          inkscape:collect="always"
@@ -2602,31 +2453,11 @@
        inkscape:collect="always"
        xlink:href="#linearGradient10378"
        id="linearGradient10382"
-       x1="-320.98498"
-       y1="687.36065"
-       x2="-316.86214"
-       y2="687.36065"
+       x1="-320.98499"
+       y1="687.36066"
+       x2="-316.86215"
+       y2="687.36066"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient10428"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.0870521,-0.08387129,0.09225088,-0.09421071,-413.38344,734.17843)"
-       x1="-532.18451"
-       y1="609.4491"
-       x2="-353.64423"
-       y2="609.4491" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient10430"
-       x1="-328.46716"
-       y1="713.91833"
-       x2="-309.26422"
-       y2="713.91833"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9976668,0.03129505,-0.03122256,1.0013593,21.787523,8.9991408)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient10481"
@@ -2697,26 +2528,6 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#arrows-6"
-       id="linearGradient10609"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.0870521,-0.08387129,0.09225088,-0.09421071,-413.38344,734.17843)"
-       x1="-532.18451"
-       y1="609.4491"
-       x2="-353.64423"
-       y2="609.4491" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient10611"
-       x1="-328.46716"
-       y1="713.91833"
-       x2="-309.26422"
-       y2="713.91833"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9976668,0.03129505,-0.03122256,1.0013593,21.787523,8.9991408)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
        id="linearGradient10620"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.0001956,-0.00341416,0.00340625,0.99979279,-2.1458925,7.5853853)"
@@ -2772,26 +2583,6 @@
        y1="609.4491"
        x2="-353.64423"
        y2="609.4491" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient10865"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.0870521,-0.08387129,0.09225088,-0.09421071,-413.38344,734.17843)"
-       x1="-532.18451"
-       y1="609.4491"
-       x2="-353.64423"
-       y2="609.4491" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient10867"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9976668,0.03129505,-0.03122256,1.0013593,21.787523,8.9991408)"
-       x1="-328.46716"
-       y1="713.91833"
-       x2="-309.26422"
-       y2="713.91833" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#arrows-6"
@@ -2941,16 +2732,6 @@
        y1="711.52954"
        x2="-307.01306"
        y2="711.52954" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#arrows-6"
-       id="linearGradient11205"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.0897891,-0.0809513,0.08943477,-0.09687789,-413.12052,737.106)"
-       x1="-532.18451"
-       y1="609.4491"
-       x2="-353.64423"
-       y2="609.4491" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#arrows-6"
@@ -3173,9 +2954,9 @@
        style="color-interpolation-filters:sRGB"
        id="filter11338"
        x="-0.029428143"
-       width="1.0588563"
-       y="-0.046351062"
-       height="1.0927021">
+       width="1.0588562"
+       y="-0.04635106"
+       height="1.0927022">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.6514384"
@@ -3184,7 +2965,7 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#shadow-0"
-       id="linearGradient11478"
+       id="linearGradient4976"
        gradientUnits="userSpaceOnUse"
        x1="563.49109"
        y1="990.81708"
@@ -3193,7 +2974,25 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#shadow-0"
-       id="linearGradient11480"
+       id="linearGradient4978"
+       gradientUnits="userSpaceOnUse"
+       x1="563.49109"
+       y1="990.81708"
+       x2="711.38501"
+       y2="990.81708" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#shadow-0"
+       id="linearGradient4980"
+       gradientUnits="userSpaceOnUse"
+       x1="563.49109"
+       y1="990.81708"
+       x2="711.38501"
+       y2="990.81708" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#shadow-0"
+       id="linearGradient4982"
        gradientUnits="userSpaceOnUse"
        x1="563.49109"
        y1="990.81708"
@@ -3207,9 +3006,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.2971481"
-     inkscape:cx="389.27707"
-     inkscape:cy="444.68333"
+     inkscape:zoom="0.91722222"
+     inkscape:cx="513.67003"
+     inkscape:cy="502.97851"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -3236,73 +3035,18 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <g
-       id="g6084"
-       inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300"
-       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
-      <g
-         style="opacity:0.97000002;fill:url(#linearGradient5744);fill-opacity:1;stroke:url(#linearGradient5738);filter:url(#filter5762)"
-         id="g5653-1"
-         transform="translate(1.9073668,2.8412778)">
-        <path
-           style="fill:url(#linearGradient5746);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient5748);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m -270.33594,173.79102 -161,0 0,67.1582 c 0,5.73786 4.61957,10.35742 10.35742,10.35742 l 140.28711,0 c 5.73786,0 10.35547,-4.61956 10.35547,-10.35742 l 0,-67.1582 z"
-           id="path4163-2"
-           inkscape:connector-curvature="0" />
-        <path
-           style="fill:url(#linearGradient5750);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient5752);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m -420.97852,151.30664 c -5.73785,0 -10.35742,4.61957 -10.35742,10.35742 l 0,12.12696 161,0 0,-12.12696 c 0,-5.73785 -4.61761,-10.35742 -10.35547,-10.35742 l -140.28711,0 z"
-           id="rect3336-7"
-           inkscape:connector-curvature="0" />
-      </g>
-      <path
-         transform="matrix(0.9988938,0,0,1.0000061,-0.47727738,-0.00129544)"
-         id="path4163"
-         d="m -270.24124,173.79102 -161,0 0,67.1582 c 0,5.73786 4.61957,10.35742 10.35742,10.35742 l 140.28711,0 c 5.73786,0 10.35547,-4.61956 10.35547,-10.35742 l 0,-67.1582 z"
-         style="fill:url(#linearGradient5617);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient5629);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5872)"
-         inkscape:connector-curvature="0" />
-      <path
-         id="rect3336"
-         d="m -420.97852,151.30664 c -5.73785,0 -10.35742,4.61957 -10.35742,10.35742 l 0,12.12696 161,0 0,-12.12696 c 0,-5.73785 -4.61761,-10.35742 -10.35547,-10.35742 l -140.28711,0 z"
-         style="fill:url(#linearGradient4169);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient5623);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5852)"
-         inkscape:connector-curvature="0" />
-      <flowRoot
-         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         id="flowRoot5884"
-         xml:space="preserve"><flowRegion
-           id="flowRegion5886"><rect
-             y="152.49429"
-             x="-430.89288"
-             height="21.225046"
-             width="160.53751"
-             id="rect5888" /></flowRegion><flowPara
-           style="font-size:15px;text-align:center;text-anchor:middle"
-           id="flowPara5890">template label </flowPara></flowRoot>      <flowRoot
-         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         id="flowRoot5894"
-         xml:space="preserve"><flowRegion
-           id="flowRegion5896"><rect
-             style="font-size:12.5px"
-             y="176.11221"
-             x="-427.5"
-             height="71.75"
-             width="153.25"
-             id="rect5898" /></flowRegion><flowPara
-           id="flowPara5900">• bla bla bal</flowPara><flowPara
-           id="flowPara5902">• bla bla</flowPara><flowPara
-           id="flowPara5904">• more blas</flowPara></flowRoot>    </g>
+     id="layer1"
+     transform="translate(0,-364.96062)">
     <g
        id="g6262"
-       transform="translate(303.72013,5.0355389)"
+       transform="translate(165.43909,36.833237)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3365,7 +3109,7 @@
     </g>
     <g
        id="g6262-4"
-       transform="translate(91.305916,-136.51186)"
+       transform="translate(-46.975126,-104.71416)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3425,7 +3169,7 @@
     </g>
     <g
        id="g6262-4-8"
-       transform="translate(304.10518,-136.23782)"
+       transform="translate(165.82414,-104.44012)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3485,7 +3229,7 @@
     </g>
     <g
        id="g6262-4-8-9"
-       transform="translate(517.14242,-136.16009)"
+       transform="translate(378.86138,-104.36239)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3545,7 +3289,7 @@
     </g>
     <g
        id="g6262-4-8-3"
-       transform="translate(303.52052,-278.57618)"
+       transform="translate(165.23948,-246.77848)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3608,7 +3352,7 @@
     </g>
     <g
        id="g6262-4-80"
-       transform="translate(90.856451,-420.52493)"
+       transform="translate(-47.424591,-388.72723)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3668,7 +3412,7 @@
     </g>
     <g
        id="g6262-4-8-2"
-       transform="translate(303.65572,-420.25089)"
+       transform="translate(165.37468,-388.45319)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3728,7 +3472,7 @@
     </g>
     <g
        id="g6262-4-8-9-7"
-       transform="translate(516.69296,-420.17316)"
+       transform="translate(378.41192,-388.37546)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3790,7 +3534,7 @@
     </g>
     <g
        id="g6262-4-8-2-3"
-       transform="translate(303.41501,-562.22389)"
+       transform="translate(165.13397,-530.42619)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3850,7 +3594,7 @@
     </g>
     <g
        id="g6262-4-8-9-7-8"
-       transform="translate(516.45224,-562.14616)"
+       transform="translate(378.1712,-530.34846)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -3914,8 +3658,8 @@
        style="opacity:0.97000002;fill:#000000;fill-opacity:0"
        id="path7805"
        sodipodi:sides="5"
-       sodipodi:cx="-425.19684"
-       sodipodi:cy="556.29919"
+       sodipodi:cx="-563.47791"
+       sodipodi:cy="588.09686"
        sodipodi:r1="158.46152"
        sodipodi:r2="79.230759"
        sodipodi:arg1="-0.46364761"
@@ -3923,7 +3667,7 @@
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m -283.46455,485.43305 -63.57334,83.85426 33.03645,99.90846 -99.39539,-34.54945 -84.80976,62.29294 2.14361,-105.20699 -85.45176,-61.40931 100.7202,-30.47205 31.99768,-100.24598 60.1049,86.37423 z"
+       d="m -421.74562,517.23072 -63.57333,83.85426 33.03644,99.90846 -99.39538,-34.54945 -84.80977,62.29294 2.14361,-105.20699 -85.45176,-61.40931 100.72021,-30.47205 31.99767,-100.24598 60.1049,86.37423 z"
        inkscape:transform-center-x="7.292808"
        inkscape:transform-center-y="-8.0270972"
        inkscape:export-xdpi="300"
@@ -3933,7 +3677,8 @@
        id="g9271"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"
+       transform="translate(-138.28104,31.797698)">
       <g
          style="fill:url(#linearGradient9247);fill-opacity:1;stroke:url(#linearGradient9241);filter:url(#filter9231)"
          transform="matrix(0.99998765,0.0049692,0.0049692,-0.99998765,756.89607,1604.0478)"
@@ -3970,7 +3715,7 @@
     </g>
     <g
        id="g9262"
-       transform="translate(1,0)"
+       transform="translate(-137.28104,31.797698)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -4013,7 +3758,7 @@
     </g>
     <g
        id="g9436"
-       transform="translate(2,0)"
+       transform="translate(-136.28104,31.797698)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -4055,7 +3800,7 @@
       </g>
     </g>
     <g
-       transform="translate(1.2992104,-283)"
+       transform="translate(-136.98183,-251.2023)"
        id="g9262-3"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4098,7 +3843,7 @@
       </g>
     </g>
     <g
-       transform="translate(1.2992104,-283)"
+       transform="translate(-136.98183,-251.2023)"
        id="g9436-0"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4136,12 +3881,12 @@
              inkscape:connector-curvature="0"
              id="path7829-7-6-98-5"
              d="m -318.89764,708.46131 0,-38.88013 -0.0521,-3.28894"
-             style="fill:url(#linearGradient10382);fill-rule:evenodd;stroke:url(#linearGradient7902-2-3-6);stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1" />
+             style="fill:url(#linearGradient10382);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient7902-2-3-6);stroke-width:4.0710001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         </g>
       </g>
     </g>
     <g
-       transform="matrix(1,-0.08872741,0,1,2.9077467e-6,-102.82063)"
+       transform="matrix(1,-0.08872741,0,1,-138.28104,-71.022932)"
        id="g9271-2"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4181,7 +3926,7 @@
       </g>
     </g>
     <g
-       transform="matrix(1,-0.08872741,0,1,2.9077467e-6,-245.08835)"
+       transform="matrix(1,-0.08872741,0,1,-138.28104,-213.29065)"
        id="g9271-2-4"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4221,7 +3966,7 @@
       </g>
     </g>
     <g
-       transform="matrix(1,-0.05915161,0,1,2.9077467e-6,-400.14814)"
+       transform="matrix(1,-0.05915161,0,1,-138.28104,-368.35044)"
        id="g9271-2-4-8"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4262,7 +4007,7 @@
     </g>
     <g
        id="g9262-6"
-       transform="translate(-218.55652,-157.40381)"
+       transform="translate(-356.83756,-125.60611)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -4305,7 +4050,7 @@
     </g>
     <g
        id="g9262-6-8"
-       transform="matrix(-1,0,0,1,1094.6352,-157.40381)"
+       transform="matrix(-1,0,0,1,956.35416,-125.60611)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -4349,7 +4094,7 @@
       </g>
     </g>
     <g
-       transform="matrix(1.0524089,-0.05702199,0.00522969,-1.0527182,1025.1549,1217.0093)"
+       transform="matrix(1.0524089,-0.05702199,0.00522969,-1.0527182,886.87386,1248.807)"
        id="g10495-8"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
@@ -4395,10 +4140,11 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot10882"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><flowRegion
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"
+       transform="translate(-138.28104,31.797698)"><flowRegion
          id="flowRegion10884"><rect
            id="rect10886"
            width="119.5"
@@ -4407,7 +4153,7 @@
            y="957.36218" /></flowRegion><flowPara
          id="flowPara10888" /></flowRoot>    <g
        id="g10941"
-       transform="translate(-427,-604)"
+       transform="translate(-565.28104,-572.2023)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png">
@@ -4425,7 +4171,8 @@
              height="85.509415"
              x="570.09686"
              y="948.06238"
-             ry="8.4464302" />
+             ry="8.4464302"
+             rx="8.4464302" />
           <g
              style="fill:url(#linearGradient11286);fill-opacity:1"
              transform="matrix(1.0524089,-0.05702199,0.00522969,-1.0527182,965.69199,1760.1549)"
@@ -4521,21 +4268,22 @@
                  x="608"
                  y="961.36218" /></flowRegion><flowPara
                id="flowPara10896-1"
-               style="font-size:15px;fill:url(#linearGradient11478);fill-opacity:1">Composes</flowPara><flowPara
+               style="font-size:15px;fill:url(#linearGradient4980);fill-opacity:1">Composes</flowPara><flowPara
                id="flowPara10898-6"
                style="font-size:15px;fill:url(#linearGradient11308);fill-opacity:1" /><flowPara
-               style="font-size:15px;fill:url(#linearGradient11480);fill-opacity:1"
+               style="font-size:15px;fill:url(#linearGradient4982);fill-opacity:1"
                id="flowPara10910-3">Inherits</flowPara><flowPara
                style="font-size:15px;fill:url(#linearGradient11312);fill-opacity:1"
                id="flowPara10902-0" /></flowRoot>        </g>
         <rect
-           style="opacity:0.97000002;fill:url(#linearGradient10918);fill-opacity:1;stroke:url(#linearGradient10908);stroke-width:1.107;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           style="opacity:0.97000002;fill:url(#linearGradient10918);fill-opacity:1;stroke:url(#linearGradient10908);stroke-width:1.10699999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            id="rect10626"
            width="134.68237"
            height="85.509415"
            x="570.09686"
            y="948.06238"
-           ry="8.4464302" />
+           ry="8.4464302"
+           rx="8.4464302" />
         <g
            transform="matrix(1.0524089,-0.05702199,0.00522969,-1.0527182,965.69199,1760.1549)"
            id="g10495-8-3">
@@ -4600,8 +4348,8 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="819.53674"
-       y="495.86917"
+       x="681.25568"
+       y="527.66687"
        id="text11529"
        sodipodi:linespacing="125%"
        inkscape:export-xdpi="300"
@@ -4609,15 +4357,16 @@
        inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><tspan
          sodipodi:role="line"
          id="tspan11531"
-         x="819.53674"
-         y="495.86917" /></text>
+         x="681.25568"
+         y="527.66687" /></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot11539"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"
-       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"><flowRegion
+       inkscape:export-filename="/media/fosterz/external_ssd/files/work/r_packages/taxa/vignettes/class_diagram.png"
+       transform="translate(-138.28104,31.797698)"><flowRegion
          id="flowRegion11541"><rect
            id="rect11543"
            width="860"
