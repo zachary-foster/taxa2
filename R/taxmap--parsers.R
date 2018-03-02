@@ -245,7 +245,16 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # combine taxon info into a single table
   taxon_info <- do.call(rbind, c(taxon_info, make.row.names = FALSE))
-  names(taxon_info) <- c("match", names(class_key))
+  if (is.null(names(class_key))) { # If all capture groups are not named
+    taxon_info_colnames <- make.unique(paste0(class_key, "_match"),
+                                       sep = "_")
+  } else { # Some capture groups might be unnamed still
+    taxon_info_colnames <- ifelse(names(class_key) == "",
+                                  paste0(class_key, "_match"),
+                                  names(class_key))
+    taxon_info_colnames <- make.unique(taxon_info_colnames, sep = "_")
+  }
+  names(taxon_info) <- c("match", taxon_info_colnames)
 
   # Create taxmap object
   hier_objs <- lapply(parsed_tax, function(x) {

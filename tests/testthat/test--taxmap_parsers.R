@@ -81,6 +81,17 @@ test_that("Taxmap can be intialized from complex data", {
                               class_key = c(my_rank = "taxon_rank", tax_name = "taxon_name"),
                               include_match = FALSE, named_by_rank = TRUE))
 
+  # Check that class_key names can be ommited
+  result <- parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)$",
+                           class_key = c("taxon_rank", "taxon_name"))
+  expect_true(all(c("taxon_rank_match", "taxon_name_match") %in% colnames(result$data$class_data)))
+  result <- parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)(.+)(.+)$",
+                           class_key = c("taxon_rank", "taxon_name", "info", "info"))
+  expect_true("info_match_1" %in% colnames(result$data$class_data))
+  result <- parse_tax_data(raw_data, class_sep = ";", class_regex = "^(.+)__(.+)(.+)(.+)$",
+                           class_key = c("taxon_rank", "taxon_name", "info", x = "info"))
+  expect_true(all(c("info_match", "x") %in% colnames(result$data$class_data)))
+
   # Check for data names that are the same as function names
   expect_warning(parse_tax_data(raw_data, class_sep = ";",
                                 class_regex = "^(.+)__(.+)$",

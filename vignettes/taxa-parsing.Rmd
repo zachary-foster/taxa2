@@ -51,7 +51,10 @@ By "dataset", we mean a list, vector, or table with elements associated with tax
 Data can come in diverse formats and from diverse sources, so we have made our data import functions as flexible as possible.
 However, this flexibility can be overwhelming to new users, so we have made a figure to help you get started: 
 
-![](parsing_guide.png)
+
+```{r, out.width = "1000px"}
+knitr::include_graphics("parsing_guide.png")
+```
 
 To figure out how to parse your data, identify the source of taxonomic data you have (e.g. classification, taxon name, taxon ID, or sequence ID) and then the way it is currently formatted (e.g. in a table) and use the figure above to provide a starting point for how to import it into a `taxmap` object.
 The following sections go into detail on how to deal with specific issues.

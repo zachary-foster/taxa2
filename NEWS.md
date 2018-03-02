@@ -18,6 +18,7 @@ Current
 
 * `filter_taxa` now has better error messages for invalid inputs ([issue #117](https://github.com/ropensci/taxa/issues/117)).
 * Fix a bug that caused an error in `filter_taxa` when no taxa pass filter ([issue #116](https://github.com/ropensci/taxa/issues/116)).
+* Fixed a bug in `parse_tax_data` when `class_key` was not named ([issue #131](https://github.com/ropensci/taxa/issues/131)).
 
 taxa 0.2.0
 ==========
