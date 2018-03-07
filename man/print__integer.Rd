@@ -4,10 +4,12 @@
 \alias{print__integer}
 \title{Print an integer}
 \usage{
-print__integer(obj, name, prefix, max_width, max_rows)
+print__integer(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 

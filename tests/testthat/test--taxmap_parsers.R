@@ -1,4 +1,5 @@
 library(taxa)
+library(testthat)
 context("taxmap parsers")
 
 test_that("Taxmap can be intialized from complex data", {

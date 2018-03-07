@@ -93,7 +93,7 @@ Taxmap <- R6::R6Class(
       cat(paste0("  ", length(self$data), " data sets:\n"))
       if (length(self$data) > 0) {
         for (i in 1:min(c(max_items, length(self$data)))) {
-          print_item(self$data[[i]],
+          print_item(self, self$data[[i]],
                      name = data_names[i], max_rows = max_rows,
                      max_width = max_width, prefix = "    ")
         }
@@ -179,7 +179,7 @@ Taxmap <- R6::R6Class(
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
       subset <- private$parse_nse_taxon_subset(subset)
-      obs_taxon_ids <- private$get_data_taxon_ids(data, require = TRUE)
+      obs_taxon_ids <- self$get_data_taxon_ids(data, require = TRUE)
 
       # Get observations of taxa
       if (is.logical(recursive) && recursive == FALSE) {
@@ -209,7 +209,7 @@ Taxmap <- R6::R6Class(
         if (is.null(names(possible_values))) {
           output <- lapply(output, function(i) possible_values[i])
         } else {
-          output <- lapply(output, function(i) possible_values[private$get_data_taxon_ids(data)[i]])
+          output <- lapply(output, function(i) possible_values[self$get_data_taxon_ids(data)[i]])
         }
       }
 
@@ -268,7 +268,7 @@ Taxmap <- R6::R6Class(
       selection <- Reduce(intersect_with_dups, selection)
 
       # Remove observations
-      data_taxon_ids <- private$get_data_taxon_ids(target, require = drop_taxa)
+      data_taxon_ids <- self$get_data_taxon_ids(target, require = drop_taxa)
       private$remove_obs(dataset = target, indexes = selection)
 
       # Remove unobserved taxa
@@ -405,7 +405,7 @@ Taxmap <- R6::R6Class(
       if (is.null(taxon_weight)) {
         obs_taxon_weight <- rep(1, target_length)
       } else {
-        obs_index <- match(private$get_data_taxon_ids(target, require = TRUE),
+        obs_index <- match(self$get_data_taxon_ids(target, require = TRUE),
                            self$taxon_ids())
         my_supertaxa <- self$supertaxa(recursive = use_supertaxa,
                                        simplify = FALSE, include_input = TRUE,
@@ -481,6 +481,72 @@ Taxmap <- R6::R6Class(
       }
       vapply(self$obs(target, recursive = FALSE, simplify = FALSE),
              length, numeric(1))
+    },
+
+    # Find taxon ids for datasets by dataset name
+    #
+    # require: if TRUE, require that taxon ids be present, or make an error
+    get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE) {
+      stop_or_warn <- function(text) {
+        if (require) {
+          stop(call. = FALSE, text)
+        }
+        if (warn) {
+          warning(call. = FALSE, text)
+        }
+      }
+
+      # Get the dataset
+      if (length(dataset_name) == 1 && # data is name/index of dataset in object
+          (dataset_name %in% names(self$data) || is.numeric(dataset_name))) {
+        dataset <- self$data[[dataset_name]]
+      } else { # it is an external data set, not in the object
+        dataset <- dataset_name
+        dataset_name <- deparse(substitute(dataset_name))
+      }
+
+      # Extract taxon ids if they exist
+      if (is.data.frame(dataset)) {
+        if ("taxon_id" %in% colnames(dataset)) {
+          is_valid <- private$ids_are_valid(dataset$taxon_id)
+          if (all(is_valid)) {
+            return(dataset$taxon_id)
+          } else  {
+            stop_or_warn(paste0('There is a "taxon_id" column in the data set "',
+                                dataset_name, '", but the following invalid IDs were found:\n  ',
+                                limited_print(dataset$taxon_id[! is_valid], type = "silent")))
+            return(NULL)
+          }
+        } else {
+          stop_or_warn(paste0('There is no "taxon_id" column in the data set "',
+                              dataset_name, '", so taxon ids cannot be extracted.'))
+          return(NULL)
+        }
+      } else if (class(dataset) == "list" || is.vector(dataset)) {
+        if (! is.null(names(dataset))) {
+          is_valid <- private$ids_are_valid(names(dataset))
+          if (all(is_valid)) {
+            return(names(dataset))
+          } else if (all(! is_valid)) {
+            stop_or_warn(paste0('The data set "', dataset_name,
+                                '" is a named list/vector, but not named by taxon ids.'))
+            return(NULL)
+          } else { # some are valid, but not all
+            stop_or_warn(paste0('Dataset "', dataset_name, '" appears to be named by taxon IDs, but contains ', sum(! is_valid), ' invalid IDs:\n  ',
+                                limited_print(names(dataset)[! is_valid], type = "silent")))
+            return(NULL)
+          }
+        } else {
+          stop_or_warn(paste0('The data set "', dataset_name,
+                              '" is an unnamed list/vector, ',
+                              'so taxon ids cannot be extracted.'))
+          return(NULL)
+        }
+      } else {
+        stop_or_warn(paste0('I dont know how to extract taxon ids from "', dataset_name,
+                            '" of type "', class(dataset)[1], '".'))
+        return(NULL)
+      }
     }
 
   ),
@@ -531,65 +597,10 @@ Taxmap <- R6::R6Class(
       }
     },
 
-    # Find taxon ids for datasets by dataset name
-    #
-    # require: if TRUE, require that taxon ids be present, or make an error
-    get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE) {
-      stop_or_warn <- function(text) {
-        if (require) {
-          stop(call. = FALSE, text)
-        }
-        if (warn) {
-          warning(call. = FALSE, text)
-        }
-      }
-
-
-      # Get the dataset
-      if (length(dataset_name) == 1 && # data is name/index of dataset in object
-          (dataset_name %in% names(self$data) || is.numeric(dataset_name))) {
-        dataset <- self$data[[dataset_name]]
-      } else { # it is an external data set, not in the object
-        dataset <- dataset_name
-        dataset_name <- deparse(substitute(dataset_name))
-      }
-
-      # Extract taxon ids if they exist
-      output <- NULL # Return NULL if taxon ids cannot be found
-      if (is.data.frame(dataset)) {
-        if ("taxon_id" %in% colnames(dataset)) {
-          output <- dataset$taxon_id
-        } else {
-          stop_or_warn(paste0('There is no "taxon_id" column in the data set "',
-                              dataset_name, '", so taxon ids cannot be extracted.'))
-        }
-      } else if (class(dataset) == "list" || is.vector(dataset)) {
-        if (! is.null(names(dataset))) {
-          output <- names(dataset)
-        } else {
-          stop_or_warn(paste0('The data set "', dataset_name,
-                              '" is a list/vector, but not named, ',
-                              'so taxon ids cannot be extracted.'))
-        }
-      } else {
-        stop_or_warn(paste0('I dont know how to extract taxon ids from "', dataset_name,
-                            '" of type "', class(dataset)[1], '".'))
-      }
-
-      # Check that IDs are valid
-      if (! is.null(output)) {
-        invalid_ids <- output[(! output %in% self$taxon_ids()) & (! is.na(output))]
-        if (length(invalid_ids) > 0) {
-          if (any(invalid_ids %in% self$taxon_ids())) {
-            stop_or_warn(paste0('Dataset "', dataset_name, '" appears to be named by taxon IDs, but contains ', length(invalid_ids), ' invalid IDs:\n  ',
-                                limited_print(invalid_ids, type = "silent")))
-          }
-          output <- NULL
-        }
-      }
-
-      return(output)
+    # Checks if a character vector contains only taxon IDs.
+    # Returns logical vector same length as input
+    ids_are_valid = function(ids_to_check) {
+      ids_to_check %in% c(self$taxon_ids(), NA_character_)
     }
-
   )
 )

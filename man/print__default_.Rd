@@ -4,10 +4,12 @@
 \alias{print__default_}
 \title{Print method for unsupported}
 \usage{
-print__default_(obj, name, prefix, max_width, max_rows)
+print__default_(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 

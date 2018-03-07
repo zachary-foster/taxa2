@@ -28,16 +28,18 @@ Here are the ways we will use some terms in this vignette:
 * **taxon**: A single taxon at a single rank. e.g. the genus *Homo*.
 * **classificaiton**: Multiple taxa at different ranks that nest within each other. e.g. "Mammalia, Primates, Hominidae, Homo, sapiens"
 * **observation**: Something associated with a taxon or classification. e.g. an abundance. 
+* **regular expression**: Also known as a "regex". This is a standard, well-known, and powerful way of encoding patterns in text.
+* **capture groups**: A concept in regular expressions. These are parts of a regex (i.e. a pattern in text) defined by parentheses. For example the following regex has two capture groups: `(.+) some text (.+) some more`. The parentheses do not affect the pattern matched, only specify areas of interested that can be extracted later. 
 
 ## Which class to use
 
 `Taxa` has many classes for storing taxonomic information and some types of information could be stored by multiple classes.
 Which class to use will depend on what you want to do with the data and your preference.
-The following list should help decide which class if the best for your needs. 
+The following list should help decide which class is the best for your needs. 
 
-* If you are interested in data (e.g. an abundance matrix) assigned to a taxonomic hierarchy: use the `taxmap` class.
-* If you are interested in a whole taxonomic tree, but not necessarily any non-taxonomic data: Use the `taxonomy` class. 
-* If you are interested in independent classifications of taxa, but not necessarily the "taxonomy" as a whole: use the `hierarchy` and `hierarchies` classes.
+* If you are interested in data (e.g. an abundance matrix) assigned to a taxonomic hierarchy, use the `taxmap` class.
+* If you are interested in a whole taxonomic tree, but not necessarily any non-taxonomic data, Use the `taxonomy` class. 
+* If you are interested in independent classifications of taxa, but not necessarily the "taxonomy" as a whole, use the `hierarchy` and `hierarchies` classes.
 * If you are interested in individual taxa at any rank (e.g. The genus *Homo* or the domain Bacteria), but not necessarily the relationships between them: use the `taxon` and `taxa` classes.
 
 Each of the above options has a section below for how to create these objects from external data.
@@ -45,14 +47,14 @@ Each of the above options has a section below for how to create these objects fr
 ## Creating `taxmap` objects
 
 When non-taxonomic data is your focus, but you want it classified by a taxonomy, then `taxmap` is the class to use. 
-The `taxmap` class has stores a taxonomic tree (i.e. hierarchy) and any number of user-defined data sets mapped to taxa in that tree.
+The `taxmap` class stores a taxonomic tree (i.e. hierarchy) and any number of user-defined data sets mapped to taxa in that tree.
 By "dataset", we mean a list, vector, or table with elements associated with taxa.
 
 Data can come in diverse formats and from diverse sources, so we have made our data import functions as flexible as possible.
 However, this flexibility can be overwhelming to new users, so we have made a figure to help you get started: 
 
 
-```{r, out.width = "1000px"}
+```{r, out.width = "800px"}
 knitr::include_graphics("parsing_guide.png")
 ```
 
@@ -61,12 +63,12 @@ The following sections go into detail on how to deal with specific issues.
 
 ### Considerations when importing classifications
 
-The most common and most convenient (because no internet querying is needed) way of encoding the taxonomic information for a datum is a classification.
+The most common and most convenient (because no internet querying is needed) way of encoding the taxonomic information is a classification.
 This section relates to classifications stored in tables or on their own; for classifications embedded in a string (e.g. a FASTA header), read this section and the section on embedded data that follows.
 
 #### Basics
 
-Lets say my data is about organisms I know: 
+Lets say my data is about some organisms I know: 
 
 ```{r}
 organism <- c("Scott", "Shasta", "Yoda")
@@ -147,6 +149,11 @@ print(obj)
 
 Our input table is preserved as `obj$data$tax_data`, but not has an additional column with taxon IDs. 
 
+```{r}
+print(obj$data$tax_data)
+```
+
+
 #### Classifications over multiple columns
 
 Instead of a single column, you might have multiple columns, one for each rank, like so:
@@ -218,7 +225,7 @@ You can even use multiple regular expression separators if your data has a truly
 
 #### Classifications with taxon data (e.g. ranks)
 
-A lot of the time, there is information with each taxon in each classification (e.g. ranks) and this data is also of interest:
+There is often information associated with each taxon in each classification (e.g. ranks) and this data is also of interest:
 
 ```{r}
 my_data <- data.frame(stringsAsFactors = FALSE,
@@ -532,8 +539,8 @@ print(obj)
 
 ### Using the `taxmap` constructor
 
-Those more familiar with object oriented programing might be wondering if `taxmap` has a "constructor" (standard initialation function) for creating new objects.
-It does and using it might be the best choice in certain situations.
+Those more familiar with object oriented programing might be wondering if `taxmap` has a "constructor" (standard initialization function) for creating new objects.
+It does and using it might be the best choice in some situations.
 It is probably most useful when developing functions that create `taxmap` objects from specific formats.
 The constructor is much less flexible than the parsing functions covered above.
 The taxonomic information must take the form of either:

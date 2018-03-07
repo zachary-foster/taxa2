@@ -4,10 +4,12 @@
 \alias{print__logical}
 \title{Print a logical}
 \usage{
-print__logical(obj, name, prefix, max_width, max_rows)
+print__logical(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 

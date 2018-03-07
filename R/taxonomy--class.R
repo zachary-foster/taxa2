@@ -177,7 +177,7 @@ Taxonomy <- R6::R6Class(
           data_name <- strsplit(data_location,
                                 split =  "$", fixed = TRUE)[[1]][2]
           return(stats::setNames(output[[index]],
-                                 private$get_data_taxon_ids(data_name)))
+                                 self$get_data_taxon_ids(data_name)))
         } else {
           return(output[[index]])
         }
@@ -716,7 +716,7 @@ Taxonomy <- R6::R6Class(
 
           # Get the taxon ids of the current object
           if (is.null((data_taxon_ids <-
-                       private$get_data_taxon_ids(data_index)))) {
+                       self$get_data_taxon_ids(data_index)))) {
             return(NULL) # if there is no taxon id info, dont change anything
           }
 
@@ -770,7 +770,7 @@ Taxonomy <- R6::R6Class(
 
           # Get the taxon ids of the current object
           if (is.null((data_taxon_ids <-
-                       private$get_data_taxon_ids(my_index)))) {
+                       self$get_data_taxon_ids(my_index)))) {
             return(NULL) # if there is no taxon id info, dont change anything
           }
 

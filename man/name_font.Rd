@@ -15,6 +15,7 @@ This is used for non-data, formatting characters
 }
 \seealso{
 Other printer fonts: \code{\link{desc_font}},
-  \code{\link{punc_font}}, \code{\link{tid_font}}
+  \code{\link{error_font}}, \code{\link{punc_font}},
+  \code{\link{tid_font}}
 }
 \keyword{internal}

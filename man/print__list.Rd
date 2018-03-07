@@ -4,10 +4,12 @@
 \alias{print__list}
 \title{Print a list}
 \usage{
-print__list(obj, name, prefix, max_width, max_rows)
+print__list(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 
