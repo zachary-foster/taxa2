@@ -208,7 +208,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   na_indexes <- which(vapply(parsed_tax, function(x) any(is.na(x)), logical(1)))
   if (length(na_indexes) > 0) {
     warning(call. = FALSE,
-            'The following input indexes have `NA` in their classifications:\n',
+            'The following ', length(na_indexes),' of ', length(parsed_tax),
+            ' input indexes have `NA` in their classifications:\n',
             limited_print(na_indexes, prefix = "  ", type = "silent"))
   }
 

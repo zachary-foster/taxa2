@@ -144,7 +144,8 @@ potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
 unidentified_animal <- hierarchy(mammalia, unidentified)
 unidentified_plant <- hierarchy(plantae, unidentified)
 
-info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato"),
+info <- data.frame(stringsAsFactors = FALSE,
+                   name = c("tiger", "cat", "mole", "human", "tomato", "potato"),
                    n_legs = c(4, 4, 4, 2, 0, 0),
                    dangerous = c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
 
