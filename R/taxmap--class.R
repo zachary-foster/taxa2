@@ -519,7 +519,7 @@ Taxmap <- R6::R6Class(
           }
         } else {
           stop_or_warn(paste0('There is no "taxon_id" column in the data set "',
-                              dataset_name, '", so taxon ids cannot be extracted.'))
+                              dataset_name, '", so there are no taxon IDs.'))
           return(NULL)
         }
       } else if (class(dataset) == "list" || is.vector(dataset)) {
@@ -539,7 +539,7 @@ Taxmap <- R6::R6Class(
         } else {
           stop_or_warn(paste0('The data set "', dataset_name,
                               '" is an unnamed list/vector, ',
-                              'so taxon ids cannot be extracted.'))
+                              'so there are no taxon ids.'))
           return(NULL)
         }
       } else {

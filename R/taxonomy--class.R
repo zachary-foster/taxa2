@@ -716,7 +716,7 @@ Taxonomy <- R6::R6Class(
 
           # Get the taxon ids of the current object
           if (is.null((data_taxon_ids <-
-                       self$get_data_taxon_ids(data_index)))) {
+                       self$get_data_taxon_ids(data_index, warn = TRUE)))) {
             return(NULL) # if there is no taxon id info, dont change anything
           }
 

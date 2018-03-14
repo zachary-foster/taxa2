@@ -193,7 +193,7 @@ print__list <- function(obj, data, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__vector <- function(obj, data, name, prefix, max_width, max_rows, type = class(data)[1]) {
-  cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(data)), "a ", "a named vector of '"), type, "' with ", length(data),
+  cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(data)), "a vector of '", "a named vector of '"), type, "' with ", length(data),
              " item", ifelse(length(data) == 1, "", "s"), "\n  ", prefix))
   if (is.null(names(data))) {
     limited_print(data, max_chars = max_width, sep = punc_font(", "),
