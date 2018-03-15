@@ -926,7 +926,7 @@ validate_regex_match <- function(input, regex) {
          paste0(collapse = "",
                 c("The following ", sum(not_matching), " of ", length(input),
                   " input(s) could not be matched by the regex supplied:\n",
-                  limited_print(input, prefix = "  ", type = "silent"))))
+                  limited_print(input[not_matching], prefix = "  ", type = "silent"))))
   }
 }
 
