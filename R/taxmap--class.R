@@ -107,7 +107,7 @@ Taxmap <- R6::R6Class(
 
       # Print the names of functions
       cat(paste0("  ", length(self$funcs), " functions:\n"))
-      limited_print(names(self$funcs), type = "cat")
+      limited_print(prefix = "   ", names(self$funcs), type = "cat")
 
       invisible(self)
     },

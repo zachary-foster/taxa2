@@ -397,7 +397,7 @@ print__matrix <- function(obj, data, name, prefix, max_width, max_rows) {
 #' @keywords internal
 print__default_ <- function(obj, data, name, prefix, max_width, max_rows) {
   cat(paste0(prefix, name_font(name), ":\n"))
-  prefixed_print(obj, prefix = paste0(prefix, "  "))
+  prefixed_print(data, prefix = paste0(prefix, "  "))
 }
 
 
