@@ -543,7 +543,7 @@ Taxmap <- R6::R6Class(
           return(NULL)
         }
       } else {
-        stop_or_warn(paste0('I dont know how to extract taxon ids from "', dataset_name,
+        stop_or_warn(paste0('I dont know how to extract taxon ids from dataset "', dataset_name,
                             '" of type "', class(dataset)[1], '".'))
         return(NULL)
       }
