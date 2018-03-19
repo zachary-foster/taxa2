@@ -115,9 +115,9 @@ Hierarchy <- R6::R6Class(
         for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
           cat(
             sprintf("  %s / %s / %s",
-                    self$taxa[[i]]$name$name %||% "",
-                    self$taxa[[i]]$rank$name %||% "",
-                    self$taxa[[i]]$id$id %||% ""
+                    self$taxa[[i]]$get_name() %||% "",
+                    self$taxa[[i]]$get_name() %||% "",
+                    self$taxa[[i]]$get_id() %||% ""
             ), "\n")
         }
         if (length(self$taxa) > 10) cat("  ...")

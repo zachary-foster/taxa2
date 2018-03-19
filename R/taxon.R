@@ -96,10 +96,8 @@ Taxon <- R6::R6Class(
 
     is_empty = function(x) {
       is.null(self$name) && is.null(self$rank) && is.null(self$id)
-    }
-  ),
+    },
 
-  private = list(
     get_name = function() {
       if ("TaxonName" %in% class(self$name)) {
         output <- self$name$name
@@ -126,5 +124,9 @@ Taxon <- R6::R6Class(
       }
       return(output)
     }
+
+  ),
+
+  private = list(
   )
 )
