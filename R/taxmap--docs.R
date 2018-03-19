@@ -397,8 +397,13 @@ NULL
 
 #' Count observations in [taxmap()]
 #'
-#' Count observations for each taxon in a [taxmap()] object.
-#' This includes observations for the specific taxon and its subtaxa.
+#' Count observations for each taxon in a data set in a [taxmap()] object. This
+#' includes observations for the specific taxon and the observations of its
+#' subtaxa. "Observations" in this sense are the items (for list/vectors) or
+#' rows (for tables) in a dataset. By default, observations in the first data
+#' set in the [taxmap()] object is used.  For example, if the data set is a
+#' table, then a value of 3 for a taxon means that their are 3 rows in that
+#' table assigned to that taxon or one of its subtaxa.
 #' \preformatted{
 #' obj$n_obs(target)
 #' n_obs(obj, target)}
@@ -419,8 +424,13 @@ NULL
 
 #' Count observation assigned in [taxmap()]
 #'
-#' Count observations assigned to a specific taxon in an [taxmap()].
-#' This does not include observations assigned to subtaxa.
+#' Count observations for each taxon in a data set in a [taxmap()] object. This
+#' includes observations for the specific taxon but NOT the observations of its
+#' subtaxa. "Observations" in this sense are the items (for list/vectors) or
+#' rows (for tables) in a dataset. By default, observations in the first data
+#' set in the [taxmap()] object is used.  For example, if the data set is a
+#' table, then a value of 3 for a taxon means that their are 3 rows in that
+#' table assigned to that taxon.
 #' \preformatted{
 #' obj$n_obs_1(target)
 #' n_obs_1(obj, target)}

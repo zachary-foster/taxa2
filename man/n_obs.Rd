@@ -12,8 +12,13 @@
 \code{numeric}
 }
 \description{
-Count observations for each taxon in a \code{\link[=taxmap]{taxmap()}} object.
-This includes observations for the specific taxon and its subtaxa.
+Count observations for each taxon in a data set in a \code{\link[=taxmap]{taxmap()}} object. This
+includes observations for the specific taxon and the observations of its
+subtaxa. "Observations" in this sense are the items (for list/vectors) or
+rows (for tables) in a dataset. By default, observations in the first data
+set in the \code{\link[=taxmap]{taxmap()}} object is used.  For example, if the data set is a
+table, then a value of 3 for a taxon means that their are 3 rows in that
+table assigned to that taxon or one of its subtaxa.
 \preformatted{
 obj$n_obs(target)
 n_obs(obj, target)}

@@ -475,10 +475,10 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     # Complain about failed queries
     failed_queries <- is.na(class_table)
     if (sum(failed_queries) > 0) {
-      error_msg <- paste0('The following ', sum(failed_queries),
-                          ' taxon names could not be looked up:\n  ',
-                          limited_print(names(failed_queries[failed_queries]),
-                                        type = "silent"))
+      failed_names <- unique(names(failed_queries[failed_queries]))
+      error_msg <- paste0('The following ', length(failed_names),
+                          ' unique inputs could not be looked up:\n  ',
+                          limited_print(failed_names, type = "silent"))
       if (ask) {
         error_msg <- paste0(error_msg, "\n",
                             'This probably means they dont exist in the database "', database, '".')
@@ -512,6 +512,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
 
   use_taxon_id <- function(ids) {
+    message("Looking up classifications for ", length(unique(ids)),
+            ' unique taxon IDs from database "', database, '"...')
     result <- map_unique(as_id(ids, database), taxize::classification, ask = FALSE, rows = 1,
                          db = database)
     format_class_table(result)
@@ -529,16 +531,33 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     }
 
     # Look up classifications
-    result <- stats::setNames(
-      unlist(lapply(ids, function(i) {
-        taxize::classification(taxize::genbank2uid(i)[1], db = database)
-      }), recursive = FALSE),
-      ids)
+    message("Looking up classifications for ", length(unique(ids)), " unique sequence IDs from NCBI...")
+    lookup_all <- function(ids) {
+      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(ids)), style = 3)
+      lookup_one <- function(index) {
+        output <- taxize::classification(taxize::genbank2uid(ids[index])[1], db = database)
+        setTxtProgressBar(progress_bar, index)
+        return(output)
+      }
+      output <- lapply(seq_len(length(ids)), lookup_one)
+      close(progress_bar)
+      return(output)
+    }
+    msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
+                           type = "message")
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    message(paste0(unique(msgs), collapse = "\n"))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
 
     format_class_table(result)
   }
 
   use_taxon_name <- function(names) {
+    message("Looking up classifications for ", length(unique(names)),
+            ' unique taxon names from database "', database, '"...')
     # Look up classifications
     if (ask) {
       result <- map_unique(names, taxize::classification, ask = TRUE, db = database)
@@ -550,6 +569,9 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   }
 
   use_taxon_name_fuzzy <- function(names) {
+    message("Looking up classifications for ", length(unique(names)),
+            ' unique taxon names from database "', database, '" using fuzzy name matching...')
+
     # Look up similar taxon names
     corrected <- map_unique(names, correct_taxon_names, database = database)
 
@@ -584,11 +606,6 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                        "taxon_id" = use_taxon_id,
                        "taxon_name" = use_taxon_name,
                        "fuzzy_name" = use_taxon_name_fuzzy)
-
-  # Get grn database ID if needed
-  if (type == "fuzzy_name") {
-
-  }
 
   # Get query information
   if (is.data.frame(tax_data)) { # is table
