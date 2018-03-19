@@ -543,12 +543,11 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       close(progress_bar)
       return(output)
     }
-    raw_result <- map_unique(ids, lookup_all)
-    # msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
-    #                        type = "message")
-    #
-    # # Remove repeated messages (e.g. no NCBI API key)
-    # message(paste0(unique(msgs), collapse = "\n"))
+    msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
+                           type = "message")
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    message(paste0(unique(msgs), collapse = "\n"))
 
     # Reformat result
     result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
