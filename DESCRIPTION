@@ -34,12 +34,12 @@ Imports:
     stringr,
     crayon,
     tidyr,
-    utils
+    utils,
+    taxize
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
-    rmarkdown (>= 0.9.6),
-    taxize
+    rmarkdown (>= 0.9.6)
 RoxygenNote: 6.0.1
 X-schema.org-applicationCategory: Taxonomy
 X-schema.org-keywords: taxonomy, biology, hierarchy
