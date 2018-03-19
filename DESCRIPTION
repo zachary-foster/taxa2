@@ -33,7 +33,8 @@ Imports:
     rlang,
     stringr,
     crayon,
-    tidyr
+    tidyr,
+    utils
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,

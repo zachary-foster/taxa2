@@ -536,11 +536,11 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(ids)), style = 3)
       lookup_one <- function(index) {
         output <- taxize::classification(taxize::genbank2uid(ids[index])[1], db = database)
-        setTxtProgressBar(progress_bar, index)
+        utils::setTxtProgressBar(progress_bar, index)
         return(output)
       }
       output <- lapply(seq_len(length(ids)), lookup_one)
-      close(progress_bar)
+      utils::close(progress_bar)
       return(output)
     }
     msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
