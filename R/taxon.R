@@ -84,11 +84,11 @@ Taxon <- R6::R6Class(
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
       cat(paste0(indent, paste0("  name: ",
-                                private$get_name() %||% "none", "\n")))
+                                self$get_name() %||% "none", "\n")))
       cat(paste0(indent, paste0("  rank: ",
-                                private$get_rank() %||% "none", "\n")))
+                                self$get_rank() %||% "none", "\n")))
       cat(paste0(indent, paste0("  id: ",
-                                private$get_id() %||% "none", "\n")))
+                                self$get_id() %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
                                 self$authority %||% "none", "\n")))
       invisible(self)
