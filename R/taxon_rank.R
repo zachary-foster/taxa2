@@ -59,3 +59,19 @@ TaxonRank <- R6::R6Class(
     }
   )
 )
+
+
+#' @export
+as.character.TaxonRank <- function(obj) {
+  as.character(obj$name)
+}
+
+
+#' @export
+as.TaxonRank <- function(input) {
+  if (class(input) == "TaxonRank") {
+    return(input)
+  } else {
+    return(taxon_rank(input))
+  }
+}

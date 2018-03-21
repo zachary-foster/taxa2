@@ -66,3 +66,19 @@ TaxonName <- R6::R6Class(
     }
   )
 )
+
+
+#' @export
+as.character.TaxonName <- function(obj) {
+  as.character(obj$name)
+}
+
+#' @export
+as.TaxonName <- function(input) {
+  if (class(input) == "TaxonName") {
+    return(input)
+  } else {
+    return(taxon_name(input))
+  }
+}
+

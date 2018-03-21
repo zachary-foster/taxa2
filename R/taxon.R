@@ -50,19 +50,20 @@ taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
 
 Taxon <- R6::R6Class(
   "Taxon",
+
   public = list(
-    name = NULL,
-    rank = NULL,
-    id = NULL,
-    authority = NULL,
+    my_name = NULL,
+    my_rank = NULL,
+    my_id = NULL,
+    my_authority = NULL,
 
     initialize = function(
       name = NULL, rank = NULL, id = NULL, authority = NULL
     ) {
-      assert(name, c('TaxonName', 'character'))
-      assert(rank, c('TaxonRank', 'character'))
-      assert(id, c('TaxonId', 'character', 'numeric', 'integer'))
-      assert(authority, 'character')
+      assert(name, private$valid_name_classes)
+      assert(rank, private$valid_rank_classes)
+      assert(id, private$valid_id_classes)
+      assert(authority, private$valid_authority_classes)
 
       # Convert characters to appropriate classes
       if (is.character(name)) {
@@ -75,20 +76,21 @@ Taxon <- R6::R6Class(
         id <- taxon_id(id)
       }
 
-      self$name <- name
-      self$rank <- rank
-      self$id <- id
-      self$authority <- authority
+      # Save values
+      self$my_name <- name
+      self$my_rank <- rank
+      self$my_id <- id
+      self$my_authority <- authority
     },
 
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
       cat(paste0(indent, paste0("  name: ",
-                                self$get_name() %||% "none", "\n")))
+                                self$name %||% "none", "\n")))
       cat(paste0(indent, paste0("  rank: ",
-                                self$get_rank() %||% "none", "\n")))
+                                self$rank %||% "none", "\n")))
       cat(paste0(indent, paste0("  id: ",
-                                self$get_id() %||% "none", "\n")))
+                                self$id %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
                                 self$authority %||% "none", "\n")))
       invisible(self)
@@ -96,37 +98,65 @@ Taxon <- R6::R6Class(
 
     is_empty = function(x) {
       is.null(self$name) && is.null(self$rank) && is.null(self$id)
-    },
-
-    get_name = function() {
-      if ("TaxonName" %in% class(self$name)) {
-        output <- self$name$name
-      } else {
-        output <- self$name
-      }
-      return(output)
-    },
-
-    get_rank = function() {
-      if ("TaxonRank" %in% class(self$rank)) {
-        output <- self$rank$name
-      } else {
-        output <- self$rank
-      }
-      return(output)
-    },
-
-    get_id = function() {
-      if ("TaxonId" %in% class(self$id)) {
-        output <- self$id$id
-      } else {
-        output <- self$id
-      }
-      return(output)
     }
+  ),
 
+  active = list(
+    name = function(value) {
+      if (missing(value)) { # GET
+        return(as.character(self$my_name))
+      }
+      else { # SET
+        private$check_input_class(value, private$valid_name_classes)
+        self$my_name <- value
+      }
+    },
+
+    rank = function(value) {
+      if (missing(value)) { # GET
+        return(as.character(self$my_rank))
+      }
+      else { # SET
+        private$check_input_class(value, private$valid_rank_classes)
+        self$my_rank <- value
+      }
+    },
+
+    id = function(value) {
+      if (missing(value)) { # GET
+        return(as.character(self$my_id))
+      }
+      else { # SET
+        private$check_input_class(value, private$valid_id_classes)
+        self$my_id <- value
+      }
+    },
+
+    authority = function(value) {
+      if (missing(value)) { # GET
+        return(self$my_authority)
+      }
+      else { # SET
+        private$check_input_class(value, private$valid_authority_classes)
+        self$my_authority <- value
+      }
+    }
   ),
 
   private = list(
+
+    valid_name_classes = c("character", "factor", "TaxonName"),
+    valid_rank_classes = c("character", "factor", "TaxonRank"),
+    valid_id_classes = c("character", "factor", "TaxonId"),
+    valid_authority_classes = c("factor", "character"),
+
+    check_input_class = function(input, valid_classes) {
+      if (! class(input) %in% valid_classes) {
+        stop(call. = FALSE,
+             'Input was of type "', class(input),
+             '", but only values of the following types are valid:\n  ',
+             paste0(valid_classes, collapse = ", "))
+      }
+    }
   )
 )

@@ -59,3 +59,19 @@ TaxonId <- R6::R6Class(
     }
   )
 )
+
+
+#' @export
+as.character.TaxonId <- function(obj) {
+  as.character(obj$id)
+}
+
+
+#' @export
+as.TaxonId <- function(input) {
+  if (class(input) == "TaxonId") {
+    return(input)
+  } else {
+    return(taxon_id(input))
+  }
+}
