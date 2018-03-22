@@ -108,7 +108,7 @@ Taxon <- R6::R6Class(
       }
       else { # SET
         private$check_input_class(value, private$valid_name_classes)
-        self$my_name <- value
+        self$my_name <- as.TaxonRank(value)
       }
     },
 
@@ -118,7 +118,7 @@ Taxon <- R6::R6Class(
       }
       else { # SET
         private$check_input_class(value, private$valid_rank_classes)
-        self$my_rank <- value
+        self$my_rank <- as.TaxonRank(value)
       }
     },
 
@@ -128,7 +128,7 @@ Taxon <- R6::R6Class(
       }
       else { # SET
         private$check_input_class(value, private$valid_id_classes)
-        self$my_id <- value
+        self$my_id <- as.TaxonId(value)
       }
     },
 
