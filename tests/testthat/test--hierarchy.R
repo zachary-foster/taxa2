@@ -1,3 +1,4 @@
+library(testthat)
 context("hierarchy")
 
 ## Creating test data

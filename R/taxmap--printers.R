@@ -367,14 +367,14 @@ print__ordered <- function(obj, data, name, prefix, max_width, max_rows) {
 #' @keywords internal
 print__matrix <- function(obj, data, name, prefix, max_width, max_rows) {
   cat(paste0(prefix, name_font(name), ":\n"))
-  if (nrow(obj) > max_rows) {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix (first ",
+  if (nrow(data) > max_rows) {
+    cat(paste0(prefix, "  A ", nrow(data), " by ", ncol(data), " matrix (first ",
                max_rows, " rows shown)\n"))
-    obj <- obj[1:max_rows, , drop = FALSE]
+    data <- data[1:max_rows, , drop = FALSE]
   } else {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix\n"))
+    cat(paste0(prefix, "  A ", nrow(data), " by ", ncol(data), " matrix\n"))
   }
-  prefixed_print(obj, prefix = paste0(prefix, "  "))
+  prefixed_print(data, prefix = paste0(prefix, "  "))
 }
 
 

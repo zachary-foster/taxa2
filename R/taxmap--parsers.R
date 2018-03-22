@@ -521,7 +521,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   use_taxon_id <- function(ids) {
     message("Looking up classifications for ", length(unique(ids)),
             ' unique taxon IDs from database "', database, '"...')
-    result <- map_unique(as_id(ids, database), taxize::classification, ask = FALSE, rows = 1,
+    result <- map_unique(as_id(ids, database, check = FALSE), taxize::classification, ask = FALSE, rows = 1,
                          db = database)
     format_class_table(result)
   }

@@ -116,7 +116,7 @@ Hierarchy <- R6::R6Class(
           cat(
             sprintf("  %s / %s / %s",
                     self$taxa[[i]]$get_name() %||% "",
-                    self$taxa[[i]]$get_name() %||% "",
+                    self$taxa[[i]]$get_rank() %||% "",
                     self$taxa[[i]]$get_id() %||% ""
             ), "\n")
         }
