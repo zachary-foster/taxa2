@@ -214,6 +214,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   }
 
   # Extract out any taxon info
+  expected_col_count <- count_capture_groups(class_regex) + 1
   if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
     taxon_info <- lapply(parsed_tax, function(x)
       data.frame(stringr::str_match_all(x, class_regex), stringsAsFactors = FALSE))
@@ -222,6 +223,12 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       validate_regex_match(x, class_regex)
       output <- data.frame(stringr::str_match(x, class_regex),
                            stringsAsFactors = FALSE)
+      if (ncol(output) != expected_col_count) { # stringr::str_match found no matches (all NA)
+        output <- as.data.frame(matrix(rep(NA_character_, nrow(output) * expected_col_count),
+                                       nrow = nrow(output), ncol = expected_col_count),
+                                stringsAsFactors = FALSE)
+        colnames(output) <- paste0("X", seq_len(expected_col_count))
+      }
       rownames(output) <- names(x)
       return(output)
     })
