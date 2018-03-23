@@ -235,13 +235,20 @@ Taxmap <- R6::R6Class(
     },
 
 
-    filter_obs = function(target, ..., drop_taxa = FALSE) {
+    filter_obs = function(target, ..., drop_taxa = FALSE, drop_other_obs = FALSE) {
       # Check that the target data exists
       private$check_dataset_name(target)
 
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
                                        data = self$data_used(...))
+
+      # Parse drop_other_obs option
+      drop_other_obs <- parse_possibly_named_logical(
+        drop_other_obs,
+        self$data,
+        formals(self$filter_obs)$drop_other_obs
+      )
 
       # If no selection is supplied, match all rows
       if (length(selection) == 0) {
@@ -273,16 +280,31 @@ Taxmap <- R6::R6Class(
 
       # Remove unobserved taxa
       if (drop_taxa & ! is.null(data_taxon_ids)) {
+        # find taxa that were removed in this filtering
         unobserved_taxa <- self$supertaxa(unique(data_taxon_ids[-selection]),
                                           na = FALSE, recursive = TRUE,
                                           simplify = TRUE, include_input = TRUE,
                                           value = "taxon_indexes")
-        taxa_to_remove <- 1:nrow(self$edge_list) %in%
-          unobserved_taxa & vapply(self$obs(target), length, numeric(1)) == 0
-        self$taxa <- self$taxa[self$taxon_ids()[! taxa_to_remove]]
-        self$edge_list <- self$edge_list[! taxa_to_remove, , drop = FALSE]
-        self$edge_list[! self$edge_list$from %in% self$taxon_ids(), "from"] <-
-          as.character(NA)
+        taxa_to_remove <- 1:nrow(self$edge_list) %in% unobserved_taxa # convert to logical
+
+        # dont remove taxa that appear in other data sets if they are not also filtered
+        for (i in seq_len(length(drop_other_obs))) { # iterates over data sets
+          if (drop_other_obs[i] == FALSE) {
+            taxa_to_remove <- taxa_to_remove & self$n_obs(names(drop_other_obs)[i]) == 0
+          }
+        }
+
+        # NOT RIGHT! Maybe use filter_taxa here ?
+        # # Remove data from other data sets assigned to filtered taxa
+        # for (i in seq_len(length(drop_other_obs))) { # iterates over data sets
+        #   if (drop_other_obs[i] == TRUE) {
+        #     private$remove_obs(dataset = names(drop_other_obs)[i],
+        #                        indexes = which(! taxa_to_remove))
+        #   }
+        # }
+        #
+        # # Remove filtered taxa
+        # private$remove_taxa(which(! taxa_to_remove))
       }
 
       return(self)
@@ -580,6 +602,7 @@ Taxmap <- R6::R6Class(
     },
 
     # Remove observations from a particular dataset or just remove the taxon ids
+    # NOTE: indexes = what is NOT removed
     remove_obs = function(dataset, indexes, unname_only = FALSE) {
       if (unname_only) {
         if (is.data.frame(self$data[[dataset]])) {

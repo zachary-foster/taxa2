@@ -132,7 +132,15 @@ NULL
 #'   taxa for which all observations were filtered out. Note that only taxa that
 #'   are unobserved due to this filtering will be removed; there might be other
 #'   taxa without observations to begin with that will not be removed.
-#'
+#' @param drop_other_obs (`logical`) If `TRUE`, and `drop_taxa` is `TRUE`, then
+#'   observations for all data sets  (not just `target`) assigned to taxa that
+#'   are removed in this filtering are also removed. Otherwise, only taxa that
+#'   are not present in all data sets will be removed. This option can be either
+#'   simply `TRUE`/`FALSE`, meaning that all data sets will be treated the same,
+#'   or a logical vector can be supplied with names corresponding one or more
+#'   data sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)`
+#'   would remove observations in `obj$data$abundance`, but not in
+#'   `obj$data$stats`.
 #' @return An object of type [taxmap()]
 #'
 #' @examples
