@@ -433,10 +433,22 @@ test_that("Default observation filtering works", {
 })
 
 test_that("Removing taxa when filtering observations work", {
+
   result <- filter_obs(test_obj, "info", n_legs == 2, drop_taxa = TRUE)
   expect_equivalent(as.character(result$data$info$name), "human")
-  expect_equivalent(result$taxon_names(),
-                    c("Mammalia", "Hominidae", "homo", "sapiens"))
+  expect_equivalent(sort(result$taxon_names()),
+                    sort(c("Mammalia", "Hominidae", "homo", "sapiens")))
+  expect_equal(names(result$data$phylopic_ids), result$data$info$taxon_id)
+  expect_equal(names(result$data$foods), result$data$info$taxon_id)
+  expect_equal(unique(result$data$abund$taxon_id), result$data$info$taxon_id)
+
+  # Removing taxa that appear in some datasets
+  result <- filter_obs(test_obj, "info", n_legs == 2, drop_taxa = TRUE,
+                       drop_obs = c(abund = FALSE))
+  expect_equal(result$data$abund$taxon_id, test_obj$data$abund$taxon_id)
+  expect_equivalent(result$roots(value = "taxon_names"), "Mammalia")
+  expect_true(length(test_obj$taxa) > length(result$taxa))
+
 })
 
 test_that("Edge cases return reasonable outputs", {
@@ -447,11 +459,10 @@ test_that("Edge cases return reasonable outputs", {
                "observation filtering with taxon IDs is not currently")
 })
 
-test_that("Filtering ob when there are multiple obs per taxon", {
+test_that("Filtering obs when there are multiple obs per taxon", {
   result <- filter_obs(test_obj, "abund", code == "C", drop_taxa = TRUE)
   expect_equal(nrow(result$data$abund), 2)
 })
-
 
 
 #### select_obs

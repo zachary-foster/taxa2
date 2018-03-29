@@ -22,6 +22,38 @@ even if all of their observations are filtered out. If \code{TRUE}, remove
 taxa for which all observations were filtered out. Note that only taxa that
 are unobserved due to this filtering will be removed; there might be other
 taxa without observations to begin with that will not be removed.}
+
+\item{drop_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
+\code{TRUE}. When \code{TRUE}, observations for other data sets (i.e. not \code{target})
+assigned to taxa that are removed when filtering \code{target} are also removed.
+Otherwise, only taxa that are not present in all other data sets will be removed.
+This option can be either simply \code{TRUE}/\code{FALSE}, meaning that all data sets
+will be treated the same, or a logical vector can be supplied with names
+corresponding one or more data sets in \code{obj$data}. For example,
+\code{c(abundance = TRUE, stats = FALSE)} would remove observations in
+\code{obj$data$abundance}, but not in \code{obj$data$stats}.}
+
+\item{subtaxa}{(\code{logical} or \code{numeric} of length 1) This only has an effect
+when \code{drop_taxa} is \code{TRUE}. If \code{TRUE}, include subtaxa of taxa passing the
+filter. Positive numbers indicate the number of ranks below the target taxa
+to return. \code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to
+\code{TRUE}.}
+
+\item{supertaxa}{(\code{logical}  or \code{numeric} of length 1) This only has an
+effect when \code{drop_taxa} is \code{TRUE}. If \code{TRUE}, include supertaxa of taxa
+passing the filter. Positive numbers indicate the number of ranks above the
+target taxa to return. \code{0} is equivalent to \code{FALSE}. Negative numbers are
+equivalent to \code{TRUE}.}
+
+\item{reassign_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
+\code{TRUE}. If \code{TRUE}, observations assigned to removed taxa will be reassigned
+to the closest supertaxon that passed the filter. If there are no supertaxa
+of such an observation that passed the filter, they will be filtered out if
+\code{drop_obs} is \code{TRUE}. This option can be either simply \code{TRUE}/\code{FALSE},
+meaning that all data sets will be treated the same, or a logical vector
+can be supplied with names corresponding one or more data sets in
+\code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
+reassign observations in \code{obj$data$abundance}, but not in \code{obj$data$stats}.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -36,8 +68,10 @@ using the \code{filter_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
-obj$filter_obs(target, ..., drop_taxa = FALSE)
-filter_obs(obj, target, ..., drop_taxa = FALSE)}
+obj$filter_obs(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+               subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)
+filter_obs(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+           subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)}
 }
 \examples{
 # Filter by row index

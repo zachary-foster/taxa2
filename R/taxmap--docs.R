@@ -116,8 +116,10 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$filter_obs(target, ..., drop_taxa = FALSE)
-#' filter_obs(obj, target, ..., drop_taxa = FALSE)}
+#' obj$filter_obs(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+#'                subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)
+#' filter_obs(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+#'            subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)}
 #'
 #' @param obj An object of type [taxmap()]
 #' @param target The name of the list/vector/table in `obj$data` to filter
@@ -132,15 +134,35 @@ NULL
 #'   taxa for which all observations were filtered out. Note that only taxa that
 #'   are unobserved due to this filtering will be removed; there might be other
 #'   taxa without observations to begin with that will not be removed.
-#' @param drop_other_obs (`logical`) If `TRUE`, and `drop_taxa` is `TRUE`, then
-#'   observations for all data sets  (not just `target`) assigned to taxa that
-#'   are removed in this filtering are also removed. Otherwise, only taxa that
-#'   are not present in all data sets will be removed. This option can be either
-#'   simply `TRUE`/`FALSE`, meaning that all data sets will be treated the same,
-#'   or a logical vector can be supplied with names corresponding one or more
-#'   data sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)`
-#'   would remove observations in `obj$data$abundance`, but not in
-#'   `obj$data$stats`.
+#' @param drop_obs (`logical`) This only has an effect when `drop_taxa` is
+#'   `TRUE`. When `TRUE`, observations for other data sets (i.e. not `target`)
+#'   assigned to taxa that are removed when filtering `target` are also removed.
+#'   Otherwise, only taxa that are not present in all other data sets will be removed.
+#'   This option can be either simply `TRUE`/`FALSE`, meaning that all data sets
+#'   will be treated the same, or a logical vector can be supplied with names
+#'   corresponding one or more data sets in `obj$data`. For example,
+#'   `c(abundance = TRUE, stats = FALSE)` would remove observations in
+#'   `obj$data$abundance`, but not in `obj$data$stats`.
+#' @param subtaxa (`logical` or `numeric` of length 1) This only has an effect
+#'   when `drop_taxa` is `TRUE`. If `TRUE`, include subtaxa of taxa passing the
+#'   filter. Positive numbers indicate the number of ranks below the target taxa
+#'   to return. `0` is equivalent to `FALSE`. Negative numbers are equivalent to
+#'   `TRUE`.
+#' @param supertaxa (`logical`  or `numeric` of length 1) This only has an
+#'   effect when `drop_taxa` is `TRUE`. If `TRUE`, include supertaxa of taxa
+#'   passing the filter. Positive numbers indicate the number of ranks above the
+#'   target taxa to return. `0` is equivalent to `FALSE`. Negative numbers are
+#'   equivalent to `TRUE`.
+#' @param reassign_obs (`logical`) This only has an effect when `drop_taxa` is
+#'   `TRUE`. If `TRUE`, observations assigned to removed taxa will be reassigned
+#'   to the closest supertaxon that passed the filter. If there are no supertaxa
+#'   of such an observation that passed the filter, they will be filtered out if
+#'   `drop_obs` is `TRUE`. This option can be either simply `TRUE`/`FALSE`,
+#'   meaning that all data sets will be treated the same, or a logical vector
+#'   can be supplied with names corresponding one or more data sets in
+#'   `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
+#'   reassign observations in `obj$data$abundance`, but not in `obj$data$stats`.
+#'
 #' @return An object of type [taxmap()]
 #'
 #' @examples
