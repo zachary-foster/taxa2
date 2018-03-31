@@ -13,8 +13,8 @@ obs.default <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE
 #' @export
 obs.Taxmap <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE,
                        simplify = FALSE) {
-  obj$obs(data, value = value, subset = subset, recursive = recursive,
-          simplify = simplify)
+  eval(substitute(obj$obs(data, value = value, subset = subset, recursive = recursive,
+                          simplify = simplify)))
 }
 
 
@@ -33,8 +33,8 @@ obs_apply.default <- function(obj, data, func, simplify = FALSE, value = NULL,
 #' @export
 obs_apply.Taxmap <- function(obj, data, func, simplify = FALSE, value = NULL,
                              subset = NULL, recursive = TRUE, ...) {
-  obj$obs_apply(data, func, simplify = simplify, value = value,
-                subset = subset, recursive = recursive, ...)
+  eval(substitute(obj$obs_apply(data, func, simplify = simplify, value = value,
+                                subset = subset, recursive = recursive, ...)))
 }
 
 

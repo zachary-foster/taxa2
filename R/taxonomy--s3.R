@@ -46,7 +46,7 @@ taxon_names.Taxonomy <- function(obj, ...) {
 }
 
 
-#' @keywords internal
+#' @export
 taxon_ranks <- function(obj) {
   UseMethod("taxon_ranks")
 }
@@ -77,8 +77,8 @@ supertaxa.default <- function(obj, subset = NULL, recursive = TRUE, simplify = F
 #' @export
 supertaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
                                include_input = FALSE, value = "taxon_indexes", na = FALSE) {
-  obj$supertaxa(subset = subset, recursive = recursive, simplify = simplify,
-                include_input = include_input, value = value, na = na)
+  eval(substitute(obj$supertaxa(subset = subset, recursive = recursive, simplify = simplify,
+                                include_input = include_input, value = value, na = na)))
 }
 
 
@@ -100,9 +100,9 @@ supertaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
 supertaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
                                      simplify = FALSE, include_input = FALSE,
                                      value = "taxon_indexes", na = FALSE, ...) {
-  obj$supertaxa_apply(func, subset = subset, recursive = recursive,
-                      simplify = simplify, include_input = include_input,
-                      value = value, na = na, ...)
+  eval(substitute(obj$supertaxa_apply(func, subset = subset, recursive = recursive,
+                                      simplify = simplify, include_input = include_input,
+                                      value = value, na = na, ...)))
 }
 
 
@@ -118,7 +118,7 @@ roots.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 roots.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
-  obj$roots(subset = subset, value = value)
+  eval(substitute(obj$roots(subset = subset, value = value)))
 }
 
 
@@ -134,7 +134,7 @@ branches.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 branches.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
-  obj$branches(subset = subset, value = value)
+  eval(substitute(obj$branches(subset = subset, value = value)))
 }
 
 
@@ -150,7 +150,7 @@ internodes.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 internodes.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
-  obj$internodes(subset = subset, value = value)
+  eval(substitute(obj$internodes(subset = subset, value = value)))
 }
 
 
@@ -172,9 +172,9 @@ subtaxa.default <- function(obj, subset = NULL, recursive = TRUE,
 subtaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE,
                              simplify = FALSE, include_input = FALSE,
                              value = "taxon_indexes") {
-  obj$subtaxa(subset = subset, recursive = recursive,
-              simplify = simplify, include_input = include_input,
-              value = value)
+  eval(substitute(obj$subtaxa(subset = subset, recursive = recursive,
+                              simplify = simplify, include_input = include_input,
+                              value = value)))
 }
 
 
@@ -196,9 +196,9 @@ subtaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
 subtaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
                                    simplify = FALSE, include_input = FALSE,
                                    value = "taxon_indexes", ...) {
-  obj$subtaxa_apply(func, subset = subset, recursive = recursive,
-                    simplify = simplify, include_input = include_input,
-                    value = value, ...)
+  eval(substitute(obj$subtaxa_apply(func, subset = subset, recursive = recursive,
+                                    simplify = simplify, include_input = include_input,
+                                    value = value, ...)))
 }
 
 
@@ -217,8 +217,8 @@ stems.default <- function(obj, subset = NULL, value = "taxon_indexes", simplify 
 #' @export
 stems.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
                            exclude_leaves = FALSE) {
-  obj$stems(subset = subset, value = value, simplify = simplify,
-            exclude_leaves = exclude_leaves)
+  eval(substitute(obj$stems(subset = subset, value = value, simplify = simplify,
+                            exclude_leaves = exclude_leaves)))
 }
 
 
@@ -234,7 +234,7 @@ leaves.default <- function(obj, subset = NULL, recursive = TRUE, simplify = FALS
 
 #' @export
 leaves.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
-  obj$leaves(subset = subset, recursive = recursive, simplify = simplify, value = value)
+  eval(substitute(obj$leaves(subset = subset, recursive = recursive, simplify = simplify, value = value)))
 }
 
 
@@ -253,8 +253,8 @@ leaves_apply.default <- function(obj, func, subset = NULL, recursive = TRUE, sim
 #' @export
 leaves_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
                                   value = "taxon_indexes", ...) {
-  obj$leaves_apply(func, subset = subset, recursive = recursive, simplify = simplify,
-                   value = value, ...)
+  eval(substitute(obj$leaves_apply(func, subset = subset, recursive = recursive, simplify = simplify,
+                                   value = value, ...)))
 }
 
 
@@ -516,8 +516,8 @@ filter_taxa.Taxonomy <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
 
 #' @export
 filter_taxa.Taxmap <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
-                                 drop_obs = TRUE, reassign_obs = TRUE,
-                                 reassign_taxa = TRUE, invert = FALSE) {
+                               drop_obs = TRUE, reassign_obs = TRUE,
+                               reassign_taxa = TRUE, invert = FALSE) {
   obj <- obj$clone(deep = TRUE)
   obj$filter_taxa(..., subtaxa = subtaxa, supertaxa = supertaxa,
                   drop_obs = drop_obs, reassign_obs = reassign_obs,
@@ -583,8 +583,8 @@ sample_n_taxa.Taxonomy <- function(obj, size, taxon_weight = NULL, obs_weight = 
 
 #' @export
 sample_n_taxa.Taxmap <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
-                                   obs_target = NULL, use_subtaxa = TRUE,
-                                   collapse_func = mean, ...) {
+                                 obs_target = NULL, use_subtaxa = TRUE,
+                                 collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
   obj$sample_n_taxa(size, taxon_weight = taxon_weight, obs_weight = obs_weight,
                     obs_target = obs_target, use_subtaxa = use_subtaxa,
@@ -618,8 +618,8 @@ sample_frac_taxa.Taxonomy <- function(obj, size = 1, taxon_weight = NULL,
 
 #' @export
 sample_frac_taxa.Taxmap <- function(obj, size = 1, taxon_weight = NULL,
-                                      obs_weight = NULL, obs_target = NULL,
-                                      use_subtaxa = TRUE, collapse_func = mean, ...) {
+                                    obs_weight = NULL, obs_target = NULL,
+                                    use_subtaxa = TRUE, collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
   obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
                        obs_weight = obs_weight, obs_target = obs_target,
@@ -709,34 +709,34 @@ is_leaf.Taxonomy <- function(obj) {
 
 
 #' @export
-map_data <- function(obj, ...) {
+map_data <- function(obj, from, to, warn = TRUE) {
   UseMethod("map_data")
 }
 
 #' @export
-map_data.default <- function(obj, ...) {
+map_data.default <- function(obj, from, to, warn = TRUE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-map_data.Taxonomy <- function(obj, ...) {
-  obj$map_data(...)
+map_data.Taxonomy <- function(obj, from, to, warn = TRUE) {
+  eval(substitute(obj$map_data(from = from, to = to, warn = warn)))
 }
 
 
 #' @export
-map_data_ <- function(obj, ...) {
+map_data_ <- function(obj, from, to) {
   UseMethod("map_data_")
 }
 
 #' @export
-map_data_.default <- function(obj, ...) {
+map_data_.default <- function(obj, from, to) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-map_data_.Taxonomy <- function(obj, ...) {
-  obj$map_data_(...)
+map_data_.Taxonomy <- function(obj, from, to) {
+  obj$map_data_(from = from, to = to)
 }
 
 
