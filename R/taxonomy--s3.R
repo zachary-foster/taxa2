@@ -1,16 +1,16 @@
 #' @keywords internal
-taxon_ids <- function(obj, ...) {
+taxon_ids <- function(obj) {
   UseMethod("taxon_ids")
 }
 
 #' @export
-taxon_ids.default <- function(obj, ...) {
+taxon_ids.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-taxon_ids.Taxonomy <- function(obj, ...) {
-  obj$taxon_ids(...)
+taxon_ids.Taxonomy <- function(obj) {
+  obj$taxon_ids()
 }
 
 
@@ -47,211 +47,246 @@ taxon_names.Taxonomy <- function(obj, ...) {
 
 
 #' @keywords internal
-taxon_ranks <- function(obj, ...) {
+taxon_ranks <- function(obj) {
   UseMethod("taxon_ranks")
 }
 
 #' @export
-taxon_ranks.Taxonomy <- function(obj, ...) {
-  obj$taxon_ranks(...)
-}
-
-#' @export
-taxon_ranks.default <- function(obj, ...) {
+taxon_ranks.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
+#' @export
+taxon_ranks.Taxonomy <- function(obj) {
+  obj$taxon_ranks()
+}
 
 
 #' @export
-supertaxa <- function(obj, ...) {
+supertaxa <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
+                      include_input = FALSE, value = "taxon_indexes", na = FALSE) {
   UseMethod("supertaxa")
 }
 
 #' @export
-supertaxa.default <- function(obj, ...) {
+supertaxa.default <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
+                              include_input = FALSE, value = "taxon_indexes", na = FALSE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-supertaxa.Taxonomy <- function(obj, ...) {
-  obj$supertaxa(...)
+supertaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
+                               include_input = FALSE, value = "taxon_indexes", na = FALSE) {
+  obj$supertaxa(subset = subset, recursive = recursive, simplify = simplify,
+                include_input = include_input, value = value, na = na)
 }
 
 
 #' @export
-supertaxa_apply <- function(obj, ...) {
+supertaxa_apply <- function(obj, func, subset = NULL, recursive = TRUE,
+                            simplify = FALSE, include_input = FALSE,
+                            value = "taxon_indexes", na = FALSE, ...) {
   UseMethod("supertaxa_apply")
 }
 
 #' @export
-supertaxa_apply.default <- function(obj, ...) {
+supertaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
+                                    simplify = FALSE, include_input = FALSE,
+                                    value = "taxon_indexes", na = FALSE, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-supertaxa_apply.Taxonomy <- function(obj, ...) {
-  obj$supertaxa_apply(...)
+supertaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
+                                     simplify = FALSE, include_input = FALSE,
+                                     value = "taxon_indexes", na = FALSE, ...) {
+  obj$supertaxa_apply(func, subset = subset, recursive = recursive,
+                      simplify = simplify, include_input = include_input,
+                      value = value, na = na, ...)
 }
 
 
 #' @export
-roots <- function(obj, ...) {
+roots <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("roots")
 }
 
 #' @export
-roots.default <- function(obj, ...) {
+roots.default <- function(obj, subset = NULL, value = "taxon_indexes") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-roots.Taxonomy <- function(obj, ...) {
-  obj$roots(...)
+roots.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj$roots(subset = subset, value = value)
 }
 
 
 #' @export
-branches <- function(obj, ...) {
+branches <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("branches")
 }
 
 #' @export
-branches.default <- function(obj, ...) {
+branches.default <- function(obj, subset = NULL, value = "taxon_indexes") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-branches.Taxonomy <- function(obj, ...) {
-  obj$branches(...)
+branches.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj$branches(subset = subset, value = value)
 }
 
 
 #' @export
-internodes <- function(obj, ...) {
+internodes <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("internodes")
 }
 
 #' @export
-internodes.default <- function(obj, ...) {
+internodes.default <- function(obj, subset = NULL, value = "taxon_indexes") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-internodes.Taxonomy <- function(obj, ...) {
-  obj$internodes(...)
+internodes.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj$internodes(subset = subset, value = value)
 }
 
 
 #' @export
-subtaxa <- function(obj, ...) {
+subtaxa <- function(obj, subset = NULL, recursive = TRUE,
+                    simplify = FALSE, include_input = FALSE,
+                    value = "taxon_indexes") {
   UseMethod("subtaxa")
 }
 
 #' @export
-subtaxa.default <- function(obj, ...) {
+subtaxa.default <- function(obj, subset = NULL, recursive = TRUE,
+                            simplify = FALSE, include_input = FALSE,
+                            value = "taxon_indexes") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-subtaxa.Taxonomy <- function(obj, ...) {
-  obj$subtaxa(...)
+subtaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE,
+                             simplify = FALSE, include_input = FALSE,
+                             value = "taxon_indexes") {
+  obj$subtaxa(subset = subset, recursive = recursive,
+              simplify = simplify, include_input = include_input,
+              value = value)
 }
 
 
 #' @export
-subtaxa_apply <- function(obj, ...) {
+subtaxa_apply <- function(obj, func, subset = NULL, recursive = TRUE,
+                          simplify = FALSE, include_input = FALSE,
+                          value = "taxon_indexes", ...) {
   UseMethod("subtaxa_apply")
 }
 
 #' @export
-subtaxa_apply.default <- function(obj, ...) {
+subtaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
+                                  simplify = FALSE, include_input = FALSE,
+                                  value = "taxon_indexes", ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-subtaxa_apply.Taxonomy <- function(obj, ...) {
-  obj$subtaxa_apply(...)
+subtaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
+                                   simplify = FALSE, include_input = FALSE,
+                                   value = "taxon_indexes", ...) {
+  obj$subtaxa_apply(func, subset = subset, recursive = recursive,
+                    simplify = simplify, include_input = include_input,
+                    value = value, ...)
 }
 
 
 #' @export
-stems <- function(obj, ...) {
+stems <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
+                  exclude_leaves = FALSE) {
   UseMethod("stems")
 }
 
 #' @export
-stems.default <- function(obj, ...) {
+stems.default <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
+                          exclude_leaves = FALSE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-stems.Taxonomy <- function(obj, ...) {
-  obj$stems(...)
+stems.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
+                           exclude_leaves = FALSE) {
+  obj$stems(subset = subset, value = value, simplify = simplify,
+            exclude_leaves = exclude_leaves)
 }
 
 
 #' @export
-leaves <- function(obj, ...) {
+leaves <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
   UseMethod("leaves")
 }
 
 #' @export
-leaves.default <- function(obj, ...) {
+leaves.default <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-leaves.Taxonomy <- function(obj, ...) {
-  obj$leaves(...)
+leaves.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
+  obj$leaves(subset = subset, recursive = recursive, simplify = simplify, value = value)
 }
 
 
 #' @export
-leaves_apply <- function(obj, ...) {
+leaves_apply <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
+                         value = "taxon_indexes", ...) {
   UseMethod("leaves_apply")
 }
 
 #' @export
-leaves_apply.default <- function(obj, ...) {
+leaves_apply.default <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
+                                 value = "taxon_indexes", ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-leaves_apply.Taxonomy <- function(obj, ...) {
-  obj$leaves_apply(...)
+leaves_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
+                                  value = "taxon_indexes", ...) {
+  obj$leaves_apply(func, subset = subset, recursive = recursive, simplify = simplify,
+                   value = value, ...)
 }
 
 
 #' @export
-id_classifications <- function(obj, ...) {
+id_classifications <- function(obj, sep = ";") {
   UseMethod("id_classifications")
 }
 
 #' @export
-id_classifications.default <- function(obj, ...) {
+id_classifications.default <- function(obj, sep = ";") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-id_classifications.Taxonomy <- function(obj, ...) {
-  obj$id_classifications(...)
+id_classifications.Taxonomy <- function(obj, sep = ";") {
+  obj$id_classifications(sep = sep)
 }
 
 
 #' @export
-classifications <- function(obj, ...) {
+classifications <- function(obj, value = "taxon_names", sep = ";") {
   UseMethod("classifications")
 }
 
 #' @export
-classifications.default <- function(obj, ...) {
+classifications.default <- function(obj, value = "taxon_names", sep = ";") {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-classifications.Taxonomy <- function(obj, ...) {
-  obj$classifications(...)
+classifications.Taxonomy <- function(obj, value = "taxon_names", sep = ";") {
+  obj$classifications(value = value, sep = sep)
 }
 
 
@@ -352,18 +387,28 @@ n_leaves_1.Taxonomy <- function(obj) {
 
 
 #' @export
-all_names <- function(obj, ...) {
+all_names <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
+                      builtin_funcs = TRUE, warn = FALSE) {
   UseMethod("all_names")
 }
 
 #' @export
-all_names.default <- function(obj, ...) {
+all_names.default <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
+                              builtin_funcs = TRUE, warn = FALSE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-all_names.Taxonomy <- function(obj, ...) {
-  obj$all_names(...)
+all_names.Taxonomy <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
+                               builtin_funcs = TRUE, warn = FALSE) {
+  obj$all_names()
+}
+
+#' @export
+all_names.Taxmap <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
+                             builtin_funcs = TRUE, warn = FALSE) {
+  obj$all_names(tables = tables, funcs = funcs, others = others,
+                builtin_funcs = builtin_funcs, warn = warn)
 }
 
 
@@ -384,32 +429,32 @@ names_used.Taxonomy <- function(obj, ...) {
 
 
 #' @export
-get_data <- function(obj, ...) {
+get_data <- function(obj, name = NULL, ...) {
   UseMethod("get_data")
 }
 
 #' @export
-get_data.default <- function(obj, ...) {
+get_data.default <- function(obj, name = NULL, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-get_data.Taxonomy <- function(obj, ...) {
-  obj$get_data(...)
+get_data.Taxonomy <- function(obj, name = NULL, ...) {
+  obj$get_data(name = name, ...)
 }
 
 
-#' @export
+#' @keywords internal
 get_data_frame <- function(obj, ...) {
   UseMethod("get_data_frame")
 }
 
-#' @export
+#' @keywords internal
 get_data_frame.default <- function(obj, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
-#' @export
+#' @keywords internal
 get_data_frame.Taxonomy <- function(obj, ...) {
   obj$get_data_frame(...)
 }
@@ -432,19 +477,51 @@ data_used.Taxonomy <- function(obj, ...) {
 
 
 #' @export
-filter_taxa <- function(obj, ...) {
+filter_taxa <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+                        drop_obs = TRUE, reassign_obs = TRUE,
+                        reassign_taxa = TRUE, invert = FALSE) {
   UseMethod("filter_taxa")
 }
 
 #' @export
-filter_taxa.default <- function(obj, ...) {
+filter_taxa.default <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+                                drop_obs = TRUE, reassign_obs = TRUE,
+                                reassign_taxa = TRUE, invert = FALSE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-filter_taxa.Taxonomy <- function(obj, ...) {
+filter_taxa.Taxonomy <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+                                 drop_obs = TRUE, reassign_obs = TRUE,
+                                 reassign_taxa = TRUE, invert = FALSE) {
+  # Check that a taxmap option is not used with a taxonomy object
+  if (! "Taxmap" %in% class(obj)) {
+    if (!missing(reassign_obs)) {
+      warning(paste('The option "reassign_obs" can only be used with',
+                    '`taxmap` objects. It will have no effect on a',
+                    '`taxonomy` object.'))
+    }
+    if (!missing(drop_obs)) {
+      warning(paste('The option "drop_obs" can only be used with',
+                    '`taxmap` objects. It will have no effect on a',
+                    '`taxonomy` object.'))
+    }
+  }
+
+  # Execute R6 function
   obj <- obj$clone(deep = TRUE)
-  obj$filter_taxa(...)
+  obj$filter_taxa(..., subtaxa = subtaxa, supertaxa = supertaxa,
+                  reassign_taxa = reassign_taxa, invert = invert)
+}
+
+#' @export
+filter_taxa.Taxmap <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
+                                 drop_obs = TRUE, reassign_obs = TRUE,
+                                 reassign_taxa = TRUE, invert = FALSE) {
+  obj <- obj$clone(deep = TRUE)
+  obj$filter_taxa(..., subtaxa = subtaxa, supertaxa = supertaxa,
+                  drop_obs = drop_obs, reassign_obs = reassign_obs,
+                  reassign_taxa = reassign_taxa, invert = invert)
 }
 
 
@@ -466,116 +543,168 @@ arrange_taxa.Taxonomy <- function(obj, ...) {
 
 
 #' @export
-sample_n_taxa <- function(obj, ...) {
+sample_n_taxa <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
+                          obs_target = NULL, use_subtaxa = TRUE,
+                          collapse_func = mean, ...) {
   UseMethod("sample_n_taxa")
 }
 
 #' @export
-sample_n_taxa.default <- function(obj, ...) {
+sample_n_taxa.default <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
+                                  obs_target = NULL, use_subtaxa = TRUE,
+                                  collapse_func = mean, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-sample_n_taxa.Taxonomy <- function(obj, ...) {
+sample_n_taxa.Taxonomy <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
+                                   obs_target = NULL, use_subtaxa = TRUE,
+                                   collapse_func = mean, ...) {
+  # Check that a taxmap option is not used with a taxonomy object
+  if (! "Taxmap" %in% class(obj)) {
+    if (!missing(obs_weight)) {
+      warning(paste('The option "obs_weight" can only be used with',
+                    '`taxmap` objects. It will have no effect on a',
+                    '`taxonomy` object.'))
+    }
+    if (!missing(obs_target)) {
+      warning(paste('The option "obs_target" can only be used with',
+                    '`taxmap` objects. It will have no effect on a',
+                    '`taxonomy` object.'))
+    }
+  }
+
+  # Execute R6 function
   obj <- obj$clone(deep = TRUE)
-  obj$sample_n_taxa(...)
+  obj$sample_n_taxa(size, taxon_weight = taxon_weight,
+                    use_subtaxa = use_subtaxa,
+                    collapse_func = collapse_func, ...)
+}
+
+#' @export
+sample_n_taxa.Taxmap <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
+                                   obs_target = NULL, use_subtaxa = TRUE,
+                                   collapse_func = mean, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$sample_n_taxa(size, taxon_weight = taxon_weight, obs_weight = obs_weight,
+                    obs_target = obs_target, use_subtaxa = use_subtaxa,
+                    collapse_func = collapse_func, ...)
 }
 
 
+
 #' @export
-sample_frac_taxa <- function(obj, ...) {
+sample_frac_taxa <- function(obj, size = 1, taxon_weight = NULL,
+                             obs_weight = NULL, obs_target = NULL,
+                             use_subtaxa = TRUE, collapse_func = mean, ...) {
   UseMethod("sample_frac_taxa")
 }
 
 #' @export
-sample_frac_taxa.default <- function(obj, ...) {
+sample_frac_taxa.default <- function(obj, size = 1, taxon_weight = NULL,
+                                     obs_weight = NULL, obs_target = NULL,
+                                     use_subtaxa = TRUE, collapse_func = mean, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-sample_frac_taxa.Taxonomy <- function(obj, ...) {
+sample_frac_taxa.Taxonomy <- function(obj, size = 1, taxon_weight = NULL,
+                                      obs_weight = NULL, obs_target = NULL,
+                                      use_subtaxa = TRUE, collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_frac_taxa(...)
+  obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
+                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
+}
+
+#' @export
+sample_frac_taxa.Taxmap <- function(obj, size = 1, taxon_weight = NULL,
+                                      obs_weight = NULL, obs_target = NULL,
+                                      use_subtaxa = TRUE, collapse_func = mean, ...) {
+  obj <- obj$clone(deep = TRUE)
+  obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
+                       obs_weight = obs_weight, obs_target = obs_target,
+                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
 }
 
 
+
 #' @export
-is_root <- function(obj, ...) {
+is_root <- function(obj) {
   UseMethod("is_root")
 }
 
 #' @export
-is_root.default <- function(obj, ...) {
+is_root.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-is_root.Taxonomy <- function(obj, ...) {
-  obj$is_root(...)
+is_root.Taxonomy <- function(obj) {
+  obj$is_root()
 }
 
 
 #' @export
-is_internode <- function(obj, ...) {
+is_internode <- function(obj) {
   UseMethod("is_internode")
 }
 
 #' @export
-is_internode.default <- function(obj, ...) {
+is_internode.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-is_internode.Taxonomy <- function(obj, ...) {
-  obj$is_internode(...)
+is_internode.Taxonomy <- function(obj) {
+  obj$is_internode()
 }
 
 
 #' @export
-is_stem <- function(obj, ...) {
+is_stem <- function(obj) {
   UseMethod("is_stem")
 }
 
 #' @export
-is_stem.default <- function(obj, ...) {
+is_stem.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-is_stem.Taxonomy <- function(obj, ...) {
-  obj$is_stem(...)
+is_stem.Taxonomy <- function(obj) {
+  obj$is_stem()
 }
 
 
 #' @export
-is_branch <- function(obj, ...) {
+is_branch <- function(obj) {
   UseMethod("is_branch")
 }
 
 #' @export
-is_branch.default <- function(obj, ...) {
+is_branch.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-is_branch.Taxonomy <- function(obj, ...) {
-  obj$is_branch(...)
+is_branch.Taxonomy <- function(obj) {
+  obj$is_branch()
 }
 
 
 #' @export
-is_leaf <- function(obj, ...) {
+is_leaf <- function(obj) {
   UseMethod("is_leaf")
 }
 
 #' @export
-is_leaf.default <- function(obj, ...) {
+is_leaf.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-is_leaf.Taxonomy <- function(obj, ...) {
-  obj$is_leaf(...)
+is_leaf.Taxonomy <- function(obj) {
+  obj$is_leaf()
 }
 
 
@@ -629,17 +758,17 @@ replace_taxon_ids.Taxonomy <- function(obj, ...) {
 
 
 #' @export
-remove_redundant_names <- function(obj, ...) {
+remove_redundant_names <- function(obj) {
   UseMethod("remove_redundant_names")
 }
 
 #' @export
-remove_redundant_names.default <- function(obj, ...) {
+remove_redundant_names.default <- function(obj) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-remove_redundant_names.Taxonomy <- function(obj, ...) {
+remove_redundant_names.Taxonomy <- function(obj) {
   obj <- obj$clone(deep = TRUE)
-  obj$remove_redundant_names(...)
+  obj$remove_redundant_names()
 }

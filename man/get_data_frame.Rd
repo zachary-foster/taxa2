@@ -40,3 +40,4 @@ Other accessors: \code{\link{all_names}},
   \code{\link{data_used}}, \code{\link{get_data}},
   \code{\link{names_used}}
 }
+\keyword{internal}

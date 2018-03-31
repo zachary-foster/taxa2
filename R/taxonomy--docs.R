@@ -748,7 +748,8 @@ NULL
 #' @param builtin_funcs This option only applies to [taxmap()] objects. If
 #'   `TRUE`, include functions like [n_supertaxa()] that provide information for
 #'   each taxon.
-#' @param warn If `TRUE`, warn if there are duplicate names.
+#' @param This option only applies to [taxmap()] objects. warn If `TRUE`, warn
+#'   if there are duplicate names.
 #'
 #' @return `character`
 #'
@@ -850,6 +851,7 @@ NULL
 #' @family accessors
 #'
 #' @name get_data_frame
+#' @keywords internal
 NULL
 
 

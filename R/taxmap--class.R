@@ -40,6 +40,8 @@ Taxmap <- R6::R6Class(
     data = list(),
     funcs = list(),
 
+    # -------------------------------------------------------------------------
+    # Constructor
     initialize = function(..., .list = NULL, data = list(), funcs = list()) {
 
       # Call `taxonomy` constructor
@@ -53,6 +55,7 @@ Taxmap <- R6::R6Class(
       self$funcs <- validate_taxmap_funcs(funcs)
     },
 
+    # -------------------------------------------------------------------------
     print = function(indent = "", max_rows = 3, max_items = 6,
                      max_width = getOption("width") - 10) {
 
@@ -112,12 +115,14 @@ Taxmap <- R6::R6Class(
       invisible(self)
     },
 
+    # -------------------------------------------------------------------------
     # Check that a set of IDs are valid taxon IDs
     is_taxon_id = function(ids) {
       valid_ids <- c(unlist(self$edge_list), names(self$taxa), NA)
       ids %in% valid_ids
     },
 
+    # -------------------------------------------------------------------------
     # Returns the names of things to be accessible using non-standard evaluation
     all_names = function(tables = TRUE, funcs = TRUE, others = TRUE,
                          builtin_funcs = TRUE, warn = FALSE) {
@@ -173,6 +178,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Get data indexes or other values associated with taxa
     obs = function(data, value = NULL, subset = NULL, recursive = TRUE,
                    simplify = FALSE) {
       # non-standard argument evaluation
@@ -222,6 +229,9 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Apply a function to data for the observations for each taxon.
+    # This is similar to using obs() with lapply() or sapply().
     obs_apply = function(data, func, simplify = FALSE, value = NULL,
                          subset = NULL, recursive = TRUE, ...) {
       my_obs <- self$obs(data, simplify = FALSE, value = value,
@@ -234,7 +244,8 @@ Taxmap <- R6::R6Class(
       return(output)
     },
 
-
+    # -------------------------------------------------------------------------
+    # Filter data in a taxmap() object (in obj$data) with a set of conditions.
     filter_obs = function(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
                           subtaxa = FALSE, supertaxa = TRUE,
                           reassign_obs = FALSE) {
@@ -299,6 +310,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Subsets columns in a data set
     select_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
@@ -315,6 +328,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Add columns to tables in obj$data
     mutate_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
@@ -336,6 +351,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Replace columns of tables in obj$data
     transmute_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
@@ -363,6 +380,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Sort columns of tables in obj$data
     arrange_obs = function(target, ...) {
       # Check that the target data exists
       private$check_dataset_name(target)
@@ -391,6 +410,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Randomly sample some number of observations from a table
     sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL,
                             obs_weight = NULL, use_supertaxa = TRUE,
                             collapse_func = mean, ...) {
@@ -448,6 +469,8 @@ Taxmap <- R6::R6Class(
       self$filter_obs(target, sampled_rows, ...)
     },
 
+    # -------------------------------------------------------------------------
+    # Randomly sample some proportion of observations from a table
     sample_frac_obs = function(target, size, replace = FALSE,
                                taxon_weight = NULL, obs_weight = NULL,
                                use_supertaxa = TRUE,
@@ -469,6 +492,8 @@ Taxmap <- R6::R6Class(
     },
 
 
+    # -------------------------------------------------------------------------
+    # Count observations for each taxon in a data set
     n_obs = function(target = NULL) {
       if (is.null(target)) {
         if (length(self$data) > 0) {
@@ -481,6 +506,9 @@ Taxmap <- R6::R6Class(
              length, numeric(1))
     },
 
+    # -------------------------------------------------------------------------
+    # Count observations for each taxon in a data set, including observations
+    # for the specific taxon but NOT the observations of its subtaxa.
     n_obs_1 = function(target = NULL) {
       if (is.null(target)) {
         if (length(self$data) > 0) {

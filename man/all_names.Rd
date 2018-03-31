@@ -20,7 +20,8 @@ include the names of data in \code{obj$data} besides tables.}
 \code{TRUE}, include functions like \code{\link[=n_supertaxa]{n_supertaxa()}} that provide information for
 each taxon.}
 
-\item{warn}{If \code{TRUE}, warn if there are duplicate names.}
+\item{This}{option only applies to \code{\link[=taxmap]{taxmap()}} objects. warn If \code{TRUE}, warn
+if there are duplicate names.}
 }
 \value{
 \code{character}
