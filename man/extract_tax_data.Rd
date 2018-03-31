@@ -97,6 +97,15 @@ using a regular expression with capture groups and a corresponding key. An
 object of type \code{\link[=taxmap]{taxmap()}} is returned containing the specified information.
 See the \code{key} option for accepted sources of taxonomic information.
 }
+\section{Failed Downloads}{
+ If you have invalid inputs or a download fails for
+another reason, then there will be a "unknown" taxon ID as a placeholder
+and failed inputs will be assinged to this ID. You can remove these using
+\code{\link[=filter_taxa]{filter_taxa()}} like so: \code{filter_taxa(result, taxon_ids != "unknown")}. Add
+\code{drop_obs = FALSE} if you want the input data, but want to remove the
+taxon.
+}
+
 \examples{
 \dontrun{
 

@@ -405,6 +405,13 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   as if they do not exist in the database. This might change in the future if
 #'   we can find an elegant way of handling this.
 #'
+#' @section Failed Downloads: If you have invalid inputs or a download fails for
+#'   another reason, then there will be a "unknown" taxon ID as a placeholder
+#'   and failed inputs will be assinged to this ID. You can remove these using
+#'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
+#'   `drop_obs = FALSE` if you want the input data, but want to remove the
+#'   taxon.
+#'
 #' @family parsers
 #'
 #' @examples \dontrun{
@@ -521,8 +528,28 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
   use_taxon_id <- function(ids) {
     message("Looking up classifications for ", length(unique(ids)),
             ' unique taxon IDs from database "', database, '"...')
-    result <- map_unique(as_id(ids, database, check = FALSE), taxize::classification, ask = FALSE, rows = 1,
-                         db = database)
+
+    # Look up classifications
+    lookup_all <- function(ids) {
+      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(ids)), style = 3)
+      lookup_one <- function(index) {
+        output <- taxize::classification(ids[index],
+                                         ask = FALSE, rows = 1, db = database, message = FALSE)
+        utils::setTxtProgressBar(progress_bar, index)
+        return(output)
+      }
+      output <- lapply(seq_len(length(ids)), lookup_one)
+      close(progress_bar)
+      return(output)
+    }
+    msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
+                           type = "message")
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
     format_class_table(result)
   }
 
@@ -558,29 +585,43 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
     # Reformat result
     result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
-
     format_class_table(result)
   }
 
-  use_taxon_name <- function(names) {
-    message("Looking up classifications for ", length(unique(names)),
+  use_taxon_name <- function(my_names) {
+    message("Looking up classifications for ", length(unique(my_names)),
             ' unique taxon names from database "', database, '"...')
-    # Look up classifications
-    if (ask) {
-      result <- map_unique(names, taxize::classification, ask = TRUE, db = database)
-    } else {
-      result <- map_unique(names, taxize::classification, ask = FALSE, db = database)
-    }
 
+    # Look up classifications
+    lookup_all <- function(my_names) {
+      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(my_names)), style = 3)
+      lookup_one <- function(index) {
+        output <- taxize::classification(my_names[index], ask = ask,
+                                         db = database, messages = FALSE)
+        utils::setTxtProgressBar(progress_bar, index)
+        return(output)
+      }
+      output <- lapply(seq_len(length(my_names)), lookup_one)
+      close(progress_bar)
+      return(output)
+    }
+    msgs <- capture.output(raw_result <- map_unique(my_names, lookup_all),
+                           type = "message")
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    message(paste0(unique(msgs), collapse = "\n"))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), my_names)
     format_class_table(result)
   }
 
-  use_taxon_name_fuzzy <- function(names) {
-    message("Looking up classifications for ", length(unique(names)),
+  use_taxon_name_fuzzy <- function(my_names) {
+    message("Looking up classifications for ", length(unique(my_names)),
             ' unique taxon names from database "', database, '" using fuzzy name matching...')
 
     # Look up similar taxon names
-    corrected <- map_unique(names, correct_taxon_names, database = database)
+    corrected <- map_unique(my_names, correct_taxon_names, database = database)
 
     # Check for not found names
     not_found <- unique(names(corrected[is.na(corrected)]))
@@ -809,6 +850,13 @@ get_sort_var <- function(data, var) {
 #'   the input matched by `regex` in the output object.
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset.
+#'
+#' @section Failed Downloads: If you have invalid inputs or a download fails for
+#'   another reason, then there will be a "unknown" taxon ID as a placeholder
+#'   and failed inputs will be assinged to this ID. You can remove these using
+#'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
+#'   `drop_obs = FALSE` if you want the input data, but want to remove the
+#'   taxon.
 #'
 #' @family parsers
 #'

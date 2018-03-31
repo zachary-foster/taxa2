@@ -201,7 +201,19 @@ test_that("Taxmap can be intialized from queried data", {
   expect_error(lookup_tax_data(1:3, column = 10, type = "seq_id"),
                'out of bounds for inputs:')
 
-
+  # Failed downloads
+  raw_data <- data.frame(species = c("Panthera leo",
+                                     "not a taxon",
+                                     "Ursus americanus"),
+                         my_tax_id = c("9689", "not a taxon id 6", "9643"),
+                         my_seq = c("AB548412", "777777777777", "DQ334818"),
+                         species_id = c("A", "B", "C"))
+  expect_warning(result <- lookup_tax_data(raw_data, type = "taxon_name", column = "species"))
+  expect_equal(result$data$query_data$taxon_id[2], "unknown")
+  expect_warning(result <- lookup_tax_data(raw_data, type = "taxon_id", column = "my_tax_id"))
+  expect_equal(result$data$query_data$taxon_id[2], "unknown")
+  expect_warning(result <- lookup_tax_data(raw_data, type = "seq_id", column = "my_seq"))
+  expect_equal(result$data$query_data$taxon_id[2], "unknown")
 
 })
 

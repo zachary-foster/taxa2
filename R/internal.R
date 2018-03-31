@@ -156,8 +156,7 @@ unique_mapping <- function(input) {
 #' Run a function on unique values of a iterable
 #'
 #' Runs a function on unique values of a list/vector and then reformats the
-#' output so there is a one-to-one relationship with the input. Basically
-#' imitates `lapply`.
+#' output so there is a one-to-one relationship with the input.
 #'
 #' @param input What to pass to \code{func}
 #' @param func (\code{function})
