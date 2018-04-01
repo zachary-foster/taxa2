@@ -1,3 +1,4 @@
+# -----------------------------------------------------------------------------
 #' @keywords internal
 taxon_ids <- function(obj) {
   UseMethod("taxon_ids")
@@ -14,6 +15,7 @@ taxon_ids.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 taxon_indexes <- function(obj, ...) {
   UseMethod("taxon_indexes")
@@ -30,6 +32,7 @@ taxon_indexes.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @keywords internal
 taxon_names <- function(obj, ...) {
   UseMethod("taxon_names")
@@ -46,6 +49,7 @@ taxon_names.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 taxon_ranks <- function(obj) {
   UseMethod("taxon_ranks")
@@ -62,6 +66,7 @@ taxon_ranks.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 supertaxa <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
                       include_input = FALSE, value = "taxon_indexes", na = FALSE) {
@@ -82,6 +87,7 @@ supertaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = 
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 supertaxa_apply <- function(obj, func, subset = NULL, recursive = TRUE,
                             simplify = FALSE, include_input = FALSE,
@@ -106,6 +112,7 @@ supertaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 roots <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("roots")
@@ -122,6 +129,7 @@ roots.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 branches <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("branches")
@@ -138,6 +146,7 @@ branches.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 internodes <- function(obj, subset = NULL, value = "taxon_indexes") {
   UseMethod("internodes")
@@ -154,6 +163,7 @@ internodes.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 subtaxa <- function(obj, subset = NULL, recursive = TRUE,
                     simplify = FALSE, include_input = FALSE,
@@ -178,6 +188,7 @@ subtaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 subtaxa_apply <- function(obj, func, subset = NULL, recursive = TRUE,
                           simplify = FALSE, include_input = FALSE,
@@ -202,6 +213,7 @@ subtaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 stems <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
                   exclude_leaves = FALSE) {
@@ -222,6 +234,7 @@ stems.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes", simplify
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 leaves <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
   UseMethod("leaves")
@@ -238,6 +251,7 @@ leaves.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FAL
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 leaves_apply <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
                          value = "taxon_indexes", ...) {
@@ -258,6 +272,7 @@ leaves_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE, si
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 id_classifications <- function(obj, sep = ";") {
   UseMethod("id_classifications")
@@ -274,6 +289,7 @@ id_classifications.Taxonomy <- function(obj, sep = ";") {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 classifications <- function(obj, value = "taxon_names", sep = ";") {
   UseMethod("classifications")
@@ -290,6 +306,7 @@ classifications.Taxonomy <- function(obj, value = "taxon_names", sep = ";") {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_supertaxa <- function(obj) {
   UseMethod("n_supertaxa")
@@ -306,6 +323,7 @@ n_supertaxa.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_supertaxa_1 <- function(obj) {
   UseMethod("n_supertaxa_1")
@@ -322,6 +340,7 @@ n_supertaxa_1.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_subtaxa <- function(obj) {
   UseMethod("n_subtaxa")
@@ -338,6 +357,7 @@ n_subtaxa.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_subtaxa_1 <- function(obj) {
   UseMethod("n_subtaxa_1")
@@ -354,6 +374,7 @@ n_subtaxa_1.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_leaves <- function(obj) {
   UseMethod("n_leaves")
@@ -370,6 +391,7 @@ n_leaves.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_leaves_1 <- function(obj) {
   UseMethod("n_leaves_1")
@@ -386,6 +408,7 @@ n_leaves_1.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 all_names <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
                       builtin_funcs = TRUE, warn = FALSE) {
@@ -412,6 +435,7 @@ all_names.Taxmap <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @keywords internal
 names_used <- function(obj, ...) {
   UseMethod("names_used")
@@ -428,6 +452,7 @@ names_used.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 get_data <- function(obj, name = NULL, ...) {
   UseMethod("get_data")
@@ -444,6 +469,7 @@ get_data.Taxonomy <- function(obj, name = NULL, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @keywords internal
 get_data_frame <- function(obj, ...) {
   UseMethod("get_data_frame")
@@ -460,6 +486,7 @@ get_data_frame.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @keywords internal
 data_used <- function(obj, ...) {
   UseMethod("data_used")
@@ -476,6 +503,7 @@ data_used.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 filter_taxa <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
                         drop_obs = TRUE, reassign_obs = TRUE,
@@ -525,6 +553,7 @@ filter_taxa.Taxmap <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 arrange_taxa <- function(obj, ...) {
   UseMethod("arrange_taxa")
@@ -542,6 +571,7 @@ arrange_taxa.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 sample_n_taxa <- function(obj, size, taxon_weight = NULL, obs_weight = NULL,
                           obs_target = NULL, use_subtaxa = TRUE,
@@ -593,6 +623,7 @@ sample_n_taxa.Taxmap <- function(obj, size, taxon_weight = NULL, obs_weight = NU
 
 
 
+# -----------------------------------------------------------------------------
 #' @export
 sample_frac_taxa <- function(obj, size = 1, taxon_weight = NULL,
                              obs_weight = NULL, obs_target = NULL,
@@ -628,6 +659,7 @@ sample_frac_taxa.Taxmap <- function(obj, size = 1, taxon_weight = NULL,
 
 
 
+# -----------------------------------------------------------------------------
 #' @export
 is_root <- function(obj) {
   UseMethod("is_root")
@@ -644,6 +676,7 @@ is_root.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 is_internode <- function(obj) {
   UseMethod("is_internode")
@@ -660,6 +693,7 @@ is_internode.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 is_stem <- function(obj) {
   UseMethod("is_stem")
@@ -676,6 +710,7 @@ is_stem.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 is_branch <- function(obj) {
   UseMethod("is_branch")
@@ -692,6 +727,7 @@ is_branch.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 is_leaf <- function(obj) {
   UseMethod("is_leaf")
@@ -708,6 +744,7 @@ is_leaf.Taxonomy <- function(obj) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 map_data <- function(obj, from, to, warn = TRUE) {
   UseMethod("map_data")
@@ -724,6 +761,7 @@ map_data.Taxonomy <- function(obj, from, to, warn = TRUE) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 map_data_ <- function(obj, from, to) {
   UseMethod("map_data_")
@@ -740,6 +778,7 @@ map_data_.Taxonomy <- function(obj, from, to) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 replace_taxon_ids <- function(obj, ...) {
   UseMethod("replace_taxon_ids")
@@ -757,6 +796,7 @@ replace_taxon_ids.Taxonomy <- function(obj, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 remove_redundant_names <- function(obj) {
   UseMethod("remove_redundant_names")

@@ -250,7 +250,7 @@ Taxmap <- R6::R6Class(
                           subtaxa = FALSE, supertaxa = TRUE,
                           reassign_obs = FALSE) {
       # Check that the target data exists
-      private$check_dataset_name(target)
+      private$is_datset(target)
 
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
@@ -314,7 +314,7 @@ Taxmap <- R6::R6Class(
     # Subsets columns in a data set
     select_obs = function(target, ...) {
       # Check that the target data exists
-      private$check_dataset_name(target)
+      private$is_datset(target)
 
       # Check that the target is a table
       if (! is.data.frame(self$data[[target]])) {
@@ -331,22 +331,57 @@ Taxmap <- R6::R6Class(
     # -------------------------------------------------------------------------
     # Add columns to tables in obj$data
     mutate_obs = function(target, ...) {
-      # Check that the target data exists
-      private$check_dataset_name(target)
 
-      # Check that the target is a table
-      if (! is.data.frame(self$data[[target]])) {
-        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
-      }
-
+      # Get data used in expressions to add
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
-      for (index in seq_along(unevaluated)) {
-        new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
-        # Allow this col to be used in evaluating the next cols
-        data_used <- c(data_used, new_col)
-        self$data[[target]][[names(new_col)]] <- new_col[[1]]
+
+      # add columns
+      if (private$is_datset(target, require = FALSE)) {
+        # Check that the target is a table
+        if (! is.data.frame(self$data[[target]])) {
+          stop(paste0('The dataset "', target, '" is not a table, so columns cannot be added'))
+        } else {
+          for (index in seq_along(unevaluated)) {
+            new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+            data_used <- c(data_used, new_col) # Allows this col to be used in next cols
+            self$data[[target]][[names(new_col)]] <- new_col[[1]]
+          }
+        }
+      } else { # not a current dataset
+        new_dataset <- list()
+        for (index in seq_along(unevaluated)) {
+          new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
+          data_used <- c(data_used, new_col) # Allows this col to be used in next cols
+          new_dataset <- c(new_dataset, new_col)
+        }
+        if (any(names(unevaluated) == "")) { # unnammed inputs cant be put in tables
+          if (length(unevaluated) == 1) { # Add as a vector
+            message('Adding a new "', class(new_dataset[[1]]),'" vector of length ', length(new_dataset[[1]]), '.')
+            self$data[[target]] <- new_dataset[[1]]
+          } else {
+            stop(call. = FALSE,
+                 "Cannot add a new dataset with multiple values if any are unnamed.",
+                 " The following input indexes are unnamed:\n",
+                 limited_print(which(names(unevaluated) == ""), type = "silent", prefix = "  "))
+          }
+        } else { # Try to put in new table
+          part_lengths <- vapply(new_dataset, length, numeric(1))
+          if (length(unique(part_lengths[part_lengths != 1])) == 1) { # All inputs are same length or 1
+            new_dataset <- dplyr::as_tibble(new_dataset)
+            message('Adding a new ', nrow(new_dataset), ' x ', ncol(new_dataset),
+                    ' table called "', target, '"')
+            self$data[[target]] <- dplyr::as_tibble(new_dataset)
+          } else {
+            stop(call. = FALSE,
+                 "Cannot make a new table out of multiple values of unequal length.",
+                 " The inputs have the following lengths:\n",
+                 limited_print(part_lengths, type = "silent", prefix = "  "))
+
+          }
+        }
       }
+
       return(self)
     },
 
@@ -355,7 +390,7 @@ Taxmap <- R6::R6Class(
     # Replace columns of tables in obj$data
     transmute_obs = function(target, ...) {
       # Check that the target data exists
-      private$check_dataset_name(target)
+      private$is_datset(target)
 
       # Check that the target is a table
       if (! is.data.frame(self$data[[target]])) {
@@ -384,7 +419,7 @@ Taxmap <- R6::R6Class(
     # Sort columns of tables in obj$data
     arrange_obs = function(target, ...) {
       # Check that the target data exists
-      private$check_dataset_name(target)
+      private$is_datset(target)
 
       # Sort observations
       data_used <- self$data_used(...)
@@ -416,7 +451,7 @@ Taxmap <- R6::R6Class(
                             obs_weight = NULL, use_supertaxa = TRUE,
                             collapse_func = mean, ...) {
       # Check that the target data exists
-      private$check_dataset_name(target)
+      private$is_datset(target)
 
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
@@ -609,11 +644,15 @@ Taxmap <- R6::R6Class(
       "n_obs_1"
     ),
 
-    check_dataset_name = function(target) {
-      if (! target %in% names(self$data)) {
+    is_datset = function(target, require = TRUE) {
+      if (target %in% names(self$data)) {
+        return(TRUE)
+      } else if (require) {
         stop(paste0("The target `", target, "` is not the name of a data set.",
                     " Valid targets include: ",
                     paste0(names(self$data), collapse = ", ")))
+      } else {
+        return(FALSE)
       }
     },
 

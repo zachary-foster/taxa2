@@ -500,13 +500,37 @@ test_that("Observation column replacement works",  {
 
 test_that("Edge cases for observation column addition",  {
   expect_equal(mutate_obs(test_obj, "info"), test_obj)
-  expect_error(mutate_obs(test_obj, "not_valid"),
-               "not the name of a data set. Valid targets ")
   expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
   expect_error(select_obs(test_obj, "phylopic_ids"),
                'The dataset "phylopic_ids" is not a table')
 })
 
+test_that("New tables and vectors can be made",  {
+ # New tables
+  result <- mutate_obs(test_obj, "new_table",
+                       ranks = taxon_ranks,
+                       new_col = "new",
+                       newer_col = paste0(new_col, "er"))
+  expect_equal(dim(result$data$new_table), c(17, 3))
+  result <- mutate_obs(test_obj, "new_table", a = 1:10)
+  expect_equal(dim(result$data$new_table), c(10, 1))
+  result <- mutate_obs(test_obj, "new_table", a = numeric(0), b = character(0))
+  expect_equal(dim(result$data$new_table), c(0, 2))
+
+  # New vectors
+  result <- mutate_obs(test_obj, "new_table", 1:10)
+  expect_equal(length(result$data$new_table), 10)
+  result <- mutate_obs(test_obj, "new_table", numeric(0))
+  expect_equal(length(result$data$new_table), 0)
+
+ # Invlaid: inputs of mixed lengths
+  expect_error(mutate_obs(test_obj, "new_table", a = 1, b = character(0)),
+               "must be length 1, not 0")
+
+ # Invlaid: unnamed inputs
+  expect_error(mutate_obs(test_obj, "new_table", 1:10, 1:10),
+               "Cannot add a new dataset with")
+})
 
 #### transmute_obs
 

@@ -1,3 +1,4 @@
+# -----------------------------------------------------------------------------
 #' @export
 obs <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE,
                 simplify = FALSE) {
@@ -18,6 +19,7 @@ obs.Taxmap <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 obs_apply <- function(obj, data, func, simplify = FALSE, value = NULL,
                       subset = NULL, recursive = TRUE, ...) {
@@ -38,6 +40,7 @@ obs_apply.Taxmap <- function(obj, data, func, simplify = FALSE, value = NULL,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 filter_obs <- function(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
                        subtaxa = FALSE, supertaxa = TRUE,
@@ -63,6 +66,7 @@ filter_obs.Taxmap <- function(obj, target, ..., drop_taxa = FALSE, drop_obs = TR
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 select_obs <- function(obj, target, ...) {
   UseMethod("select_obs")
@@ -80,6 +84,7 @@ select_obs.Taxmap <- function(obj, target, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 mutate_obs <- function(obj, target, ...) {
   UseMethod("mutate_obs")
@@ -97,6 +102,7 @@ mutate_obs.Taxmap <- function(obj, target, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 transmute_obs <- function(obj, target, ...) {
   UseMethod("transmute_obs")
@@ -114,6 +120,7 @@ transmute_obs.Taxmap <- function(obj, target, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 arrange_obs <- function(obj, target, ...) {
   UseMethod("arrange_obs")
@@ -131,6 +138,7 @@ arrange_obs.Taxmap <- function(obj, target, ...) {
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 sample_n_obs <- function(obj, target, size, replace = FALSE, taxon_weight = NULL,
                          obs_weight = NULL, use_supertaxa = TRUE,
@@ -156,6 +164,7 @@ sample_n_obs.Taxmap <- function(obj, target, size, replace = FALSE, taxon_weight
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 sample_frac_obs <- function(obj, target, size, replace = FALSE,
                             taxon_weight = NULL, obs_weight = NULL,
@@ -185,6 +194,7 @@ sample_frac_obs.Taxmap <- function(obj, target, size, replace = FALSE,
 }
 
 
+# -----------------------------------------------------------------------------
 #' @export
 n_obs <- function(obj, target = NULL) {
   UseMethod("n_obs")
@@ -201,6 +211,7 @@ n_obs.Taxmap <- function(obj, target = NULL) {
 }
 
 
+# -----------------------------------------------------------------------------
 #'@export
 n_obs_1 <- function(obj, target = NULL) {
   UseMethod("n_obs_1")
