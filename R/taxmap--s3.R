@@ -14,6 +14,7 @@ obs.default <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE
 #' @export
 obs.Taxmap <- function(obj, data, value = NULL, subset = NULL, recursive = TRUE,
                        simplify = FALSE) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$obs(data, value = value, subset = subset, recursive = recursive,
                           simplify = simplify)))
 }
@@ -35,6 +36,7 @@ obs_apply.default <- function(obj, data, func, simplify = FALSE, value = NULL,
 #' @export
 obs_apply.Taxmap <- function(obj, data, func, simplify = FALSE, value = NULL,
                              subset = NULL, recursive = TRUE, ...) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$obs_apply(data, func, simplify = simplify, value = value,
                                 subset = subset, recursive = recursive, ...)))
 }
@@ -158,9 +160,9 @@ sample_n_obs.Taxmap <- function(obj, target, size, replace = FALSE, taxon_weight
                                 obs_weight = NULL, use_supertaxa = TRUE,
                                 collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_n_obs(target, size, replace = replace, taxon_weight = taxon_weight,
-                   obs_weight = obs_weight, use_supertaxa = use_supertaxa,
-                   collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_n_obs(target, size, replace = replace, taxon_weight = taxon_weight,
+                                   obs_weight = obs_weight, use_supertaxa = use_supertaxa,
+                                   collapse_func = collapse_func, ...)))
 }
 
 
@@ -187,10 +189,10 @@ sample_frac_obs.Taxmap <- function(obj, target, size, replace = FALSE,
                                    use_supertaxa = TRUE,
                                    collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_frac_obs(target, size, replace = replace,
-                      taxon_weight = taxon_weight, obs_weight = obs_weight,
-                      use_supertaxa = use_supertaxa,
-                      collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_frac_obs(target, size, replace = replace,
+                                      taxon_weight = taxon_weight, obs_weight = obs_weight,
+                                      use_supertaxa = use_supertaxa,
+                                      collapse_func = collapse_func, ...)))
 }
 
 

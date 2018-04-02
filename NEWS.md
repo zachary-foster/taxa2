@@ -6,7 +6,7 @@ Current
 * `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).
 * `taxmap` print methods now have more information and color ([issue #124](https://github.com/ropensci/taxa/issues/124)).
 * Added `leaves_apply` function that works like `subtaxa_apply`, but on leaves ([issue #126](https://github.com/ropensci/taxa/issues/126)).
-# Functions with a `value` option now return named taxon indexes by default, instead of unnamed taxon indexes ([issue #128](https://github.com/ropensci/taxa/issues/128)).
+* Functions with a `value` option now return named taxon indexes by default, instead of unnamed taxon indexes ([issue #128](https://github.com/ropensci/taxa/issues/128)).
 * `lookup_tax_data` and `extract_tax_data` can now use "fuzzy" matching when looking up taxon names, so taxon names can be mispelled and still be founds.
 * `lookup_tax_data` and `extract_tax_data` now only look up unique sequence IDs, improving download speed.
 * `filter_obs` now can filter out observations in non-target data sets that are assocaited with taxa that are removed when `drop_taxa = TRUE` ([issue #143](https://github.com/ropensci/taxa/issues/143)). This is done using `filter_taxa`, so the `supertaxa`, `subtaxa`, and `reassign_obs` options are now available to `filter_obs` to control how taxon removal is done.

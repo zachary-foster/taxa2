@@ -28,8 +28,8 @@ line.}
 Used to print each item in the \code{taxmap} print method.
 }
 \examples{
-taxa:::print_item(ex_taxmap$data$info)
-taxa:::print_item(1:100)
+taxa:::print_item(ex_taxmap, ex_taxmap$data$info)
+taxa:::print_item(ex_taxmap, 1:100)
 
 }
 \keyword{internal}

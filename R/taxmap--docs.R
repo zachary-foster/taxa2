@@ -44,7 +44,7 @@
 #' obs(ex_taxmap, "info", subset = 1:2)
 #'
 #' # Get only a subset of taxon IDs
-#' obs(ex_taxmap, "info", subset = c("1", "2"))
+#' obs(ex_taxmap, "info", subset = c("b", "c"))
 #'
 #' # Get only a subset of taxa using logical tests
 #' obs(ex_taxmap, "info", subset = taxon_ranks == "genus")

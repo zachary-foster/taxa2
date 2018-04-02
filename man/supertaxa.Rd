@@ -53,7 +53,7 @@ supertaxa(ex_taxmap)
 supertaxa(ex_taxmap, subset = 1:3)
 
 # Only return data for some taxa using taxon ids
-supertaxa(ex_taxmap, subset = c("3", "4"))
+supertaxa(ex_taxmap, subset = c("d", "e"))
 
 # Only return data for some taxa using logical tests
 supertaxa(ex_taxmap, subset = taxon_ranks == "species")

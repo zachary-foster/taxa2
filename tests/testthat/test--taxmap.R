@@ -322,7 +322,7 @@ test_that("Mapping between a subset of observations and the edge list works", {
 
 test_that("Mapping non-recursivly between observations and the edge list works", {
   result <- test_obj$obs("info", recursive = FALSE)
-  expect_true(all(sapply(result[roots(test_obj)], length) == 0))
+  expect_true(all(sapply(result[test_obj$roots()], length) == 0))
   expect_equal(result[["r"]], 6)
 })
 
@@ -339,7 +339,7 @@ test_that("Mapping observations in external tables", {
 })
 
 test_that("Mapping observations when there are multiple obs per taxon", {
-  result <- obs(test_obj, "abund")
+  result <- test_obj$obs("abund")
   expect_equal(result$m, which(test_obj$data$abund$taxon_id == "m"))
   expect_equal(result$p, which(test_obj$data$abund$taxon_id == "p"))
   expect_true(all(result$b %in% 1:nrow(test_obj$data$abund)))

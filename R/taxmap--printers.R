@@ -14,8 +14,8 @@
 #'   line.
 #'
 #' @examples
-#' taxa:::print_item(ex_taxmap$data$info)
-#' taxa:::print_item(1:100)
+#' taxa:::print_item(ex_taxmap, ex_taxmap$data$info)
+#' taxa:::print_item(ex_taxmap, 1:100)
 #'
 #' @keywords internal
 print_item <- function(obj, data, name = NULL, max_rows = 3, max_items = 3,

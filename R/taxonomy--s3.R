@@ -82,6 +82,7 @@ supertaxa.default <- function(obj, subset = NULL, recursive = TRUE, simplify = F
 #' @export
 supertaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE,
                                include_input = FALSE, value = "taxon_indexes", na = FALSE) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$supertaxa(subset = subset, recursive = recursive, simplify = simplify,
                                 include_input = include_input, value = value, na = na)))
 }
@@ -106,6 +107,7 @@ supertaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
 supertaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
                                      simplify = FALSE, include_input = FALSE,
                                      value = "taxon_indexes", na = FALSE, ...) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$supertaxa_apply(func, subset = subset, recursive = recursive,
                                       simplify = simplify, include_input = include_input,
                                       value = value, na = na, ...)))
@@ -125,6 +127,7 @@ roots.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 roots.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$roots(subset = subset, value = value)))
 }
 
@@ -142,6 +145,7 @@ branches.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 branches.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$branches(subset = subset, value = value)))
 }
 
@@ -159,6 +163,7 @@ internodes.default <- function(obj, subset = NULL, value = "taxon_indexes") {
 
 #' @export
 internodes.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes") {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$internodes(subset = subset, value = value)))
 }
 
@@ -182,6 +187,7 @@ subtaxa.default <- function(obj, subset = NULL, recursive = TRUE,
 subtaxa.Taxonomy <- function(obj, subset = NULL, recursive = TRUE,
                              simplify = FALSE, include_input = FALSE,
                              value = "taxon_indexes") {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$subtaxa(subset = subset, recursive = recursive,
                               simplify = simplify, include_input = include_input,
                               value = value)))
@@ -207,6 +213,7 @@ subtaxa_apply.default <- function(obj, func, subset = NULL, recursive = TRUE,
 subtaxa_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE,
                                    simplify = FALSE, include_input = FALSE,
                                    value = "taxon_indexes", ...) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$subtaxa_apply(func, subset = subset, recursive = recursive,
                                     simplify = simplify, include_input = include_input,
                                     value = value, ...)))
@@ -229,6 +236,7 @@ stems.default <- function(obj, subset = NULL, value = "taxon_indexes", simplify 
 #' @export
 stems.Taxonomy <- function(obj, subset = NULL, value = "taxon_indexes", simplify = FALSE,
                            exclude_leaves = FALSE) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$stems(subset = subset, value = value, simplify = simplify,
                             exclude_leaves = exclude_leaves)))
 }
@@ -247,6 +255,7 @@ leaves.default <- function(obj, subset = NULL, recursive = TRUE, simplify = FALS
 
 #' @export
 leaves.Taxonomy <- function(obj, subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$leaves(subset = subset, recursive = recursive, simplify = simplify, value = value)))
 }
 
@@ -267,8 +276,9 @@ leaves_apply.default <- function(obj, func, subset = NULL, recursive = TRUE, sim
 #' @export
 leaves_apply.Taxonomy <- function(obj, func, subset = NULL, recursive = TRUE, simplify = FALSE,
                                   value = "taxon_indexes", ...) {
-  eval(substitute(obj$leaves_apply(func, subset = subset, recursive = recursive, simplify = simplify,
-                                   value = value, ...)))
+  obj <- eval(obj) # Needed by testthat for some reason
+  eval(substitute(obj$leaves_apply(func, subset = subset, recursive = recursive,
+                                   simplify = simplify, value = value, ...)))
 }
 
 
@@ -470,17 +480,17 @@ get_data.Taxonomy <- function(obj, name = NULL, ...) {
 
 
 # -----------------------------------------------------------------------------
-#' @keywords internal
+#' @export
 get_data_frame <- function(obj, ...) {
   UseMethod("get_data_frame")
 }
 
-#' @keywords internal
+#' @export
 get_data_frame.default <- function(obj, ...) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
-#' @keywords internal
+#' @export
 get_data_frame.Taxonomy <- function(obj, ...) {
   obj$get_data_frame(...)
 }
@@ -606,9 +616,9 @@ sample_n_taxa.Taxonomy <- function(obj, size, taxon_weight = NULL, obs_weight = 
 
   # Execute R6 function
   obj <- obj$clone(deep = TRUE)
-  obj$sample_n_taxa(size, taxon_weight = taxon_weight,
-                    use_subtaxa = use_subtaxa,
-                    collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_n_taxa(size, taxon_weight = taxon_weight,
+                                    use_subtaxa = use_subtaxa,
+                                    collapse_func = collapse_func, ...)))
 }
 
 #' @export
@@ -616,9 +626,9 @@ sample_n_taxa.Taxmap <- function(obj, size, taxon_weight = NULL, obs_weight = NU
                                  obs_target = NULL, use_subtaxa = TRUE,
                                  collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_n_taxa(size, taxon_weight = taxon_weight, obs_weight = obs_weight,
-                    obs_target = obs_target, use_subtaxa = use_subtaxa,
-                    collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_n_taxa(size, taxon_weight = taxon_weight, obs_weight = obs_weight,
+                                    obs_target = obs_target, use_subtaxa = use_subtaxa,
+                                    collapse_func = collapse_func, ...)))
 }
 
 
@@ -643,8 +653,8 @@ sample_frac_taxa.Taxonomy <- function(obj, size = 1, taxon_weight = NULL,
                                       obs_weight = NULL, obs_target = NULL,
                                       use_subtaxa = TRUE, collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
-                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
+                                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)))
 }
 
 #' @export
@@ -652,9 +662,9 @@ sample_frac_taxa.Taxmap <- function(obj, size = 1, taxon_weight = NULL,
                                     obs_weight = NULL, obs_target = NULL,
                                     use_subtaxa = TRUE, collapse_func = mean, ...) {
   obj <- obj$clone(deep = TRUE)
-  obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
-                       obs_weight = obs_weight, obs_target = obs_target,
-                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)
+  eval(substitute(obj$sample_frac_taxa(size = size, taxon_weight = taxon_weight,
+                                       obs_weight = obs_weight, obs_target = obs_target,
+                                       use_subtaxa = use_subtaxa, collapse_func = collapse_func, ...)))
 }
 
 
@@ -757,6 +767,7 @@ map_data.default <- function(obj, from, to, warn = TRUE) {
 
 #' @export
 map_data.Taxonomy <- function(obj, from, to, warn = TRUE) {
+  obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$map_data(from = from, to = to, warn = warn)))
 }
 

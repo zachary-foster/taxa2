@@ -147,10 +147,10 @@ test_that("Finding roots", {
   expect_equal(x$roots(), roots(x))
 
   # Index return type
-  expect_type(x$roots(value = "taxon_indexes"), "integer")
+  expect_type(roots(x, value = "taxon_indexes"), "integer")
 
   # Taxon ID return type
-  expect_type(x$roots(value = "taxon_ids"), "character")
+  expect_type(roots(x, value = "taxon_ids"), "character")
 })
 
 
@@ -160,10 +160,10 @@ test_that("Finding internodes", {
   expect_equal(x$internodes(), internodes(x))
 
   # Index return type
-  expect_type(x$internodes(value = "taxon_indexes"), "integer")
+  expect_type(internodes(x, value = "taxon_indexes"), "integer")
 
   # Taxon ID return type
-  expect_type(x$internodes(value = "taxon_ids"), "character")
+  expect_type(internodes(x, value = "taxon_ids"), "character")
 })
 
 
@@ -215,13 +215,13 @@ test_that("Finding branches", {
   expect_equal(x$branches(), branches(x))
 
   # Index return type
-  expect_type(x$branches(value = "taxon_indexes"), "integer")
+  expect_type(branches(x, value = "taxon_indexes"), "integer")
 
   # Taxon ID return type
-  expect_type(x$branches(value = "taxon_ids"), "character")
+  expect_type(branches(x, value = "taxon_ids"), "character")
 
   # Expected output
-  expect_equal(which(! x$is_root() & ! x$is_leaf()), x$branches())
+  expect_equal(which(! is_root(x) & ! is_leaf(x)), branches(x))
 
 })
 
@@ -232,12 +232,12 @@ test_that("Finding supertaxa", {
   expect_equal(x$supertaxa(), supertaxa(x))
 
   # Index return type
-  expect_type(x$supertaxa(value = "taxon_indexes")[[1]], "integer")
-  expect_type(x$supertaxa(value = "taxon_indexes", simplify = TRUE), "integer")
+  expect_type(supertaxa(x, value = "taxon_indexes")[[1]], "integer")
+  expect_type(supertaxa(x, value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$supertaxa(value = "taxon_ids")[[1]], "character")
-  expect_type(x$supertaxa(value = "taxon_ids", simplify = TRUE), "character")
+  expect_type(supertaxa(x, value = "taxon_ids")[[1]], "character")
+  expect_type(supertaxa(x, value = "taxon_ids", simplify = TRUE), "character")
 
   # Recursion settings
   expect_equal(supertaxa(x, recursive = TRUE), supertaxa(x, recursive = -1))
@@ -255,23 +255,25 @@ test_that("Finding subtaxa", {
   expect_equal(x$subtaxa(), subtaxa(x))
 
   # Index return type
-  expect_type(x$subtaxa(value = "taxon_indexes")[[1]], "integer")
-  expect_type(x$subtaxa(value = "taxon_indexes", simplify = TRUE), "integer")
+  expect_type(subtaxa(x, value = "taxon_indexes")[[1]], "integer")
+  expect_type(subtaxa(x, value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$subtaxa(value = "taxon_ids")[[1]], "character")
-  expect_type(x$subtaxa(value = "taxon_ids", simplify = TRUE), "character")
+  expect_type(subtaxa(x, value = "taxon_ids")[[1]], "character")
+  expect_type(subtaxa(x, value = "taxon_ids", simplify = TRUE), "character")
+
+  # Subsets and NSE
+  my_var <- 2
+  expect_equivalent(eval(substitute(sapply(subtaxa(x, subset = n_subtaxa == my_var), length))), c(2, 2))
 
   # Recursion settings
   expect_equal(subtaxa(x, recursive = TRUE), subtaxa(x, recursive = -1))
   expect_equal(subtaxa(x, recursive = FALSE), subtaxa(x, recursive = 1))
-  expect_equal(subtaxa(x, "b", recursive = 2, simplify = TRUE),
-               subtaxa(x, subtaxa(x, "b", recursive = FALSE, simplify = TRUE),
-                       recursive = FALSE, simplify = TRUE, include_input = TRUE))
+  expect_equivalent(names(subtaxa(x, subset = "e", recursive = 2)$e), c("k", "o"))
 
   # Edge cases
-  expect_equal(subtaxa(x, subset = rep(FALSE, length(x$taxa))), list())
-  expect_equal(subtaxa(x, subset = rep(FALSE, length(x$taxa)), simplify = TRUE),
+  expect_equal(subtaxa(x, subset = rep(FALSE, 16)), list())
+  expect_equal(subtaxa(x, subset = rep(FALSE, 16), simplify = TRUE),
                integer(0))
 })
 
@@ -282,12 +284,12 @@ test_that("Finding stems", {
   expect_equal(x$stems(), stems(x))
 
   # Index return type
-  expect_type(x$stems(value = "taxon_indexes")[[1]], "integer")
-  expect_type(x$stems(value = "taxon_indexes", simplify = TRUE), "integer")
+  expect_type(stems(x, value = "taxon_indexes")[[1]], "integer")
+  expect_type(stems(x, value = "taxon_indexes", simplify = TRUE), "integer")
 
   # Taxon ID return type
-  expect_type(x$stems(value = "taxon_ids")[[1]], "character")
-  expect_type(x$stems(value = "taxon_ids", simplify = TRUE), "character")
+  expect_type(stems(x, value = "taxon_ids")[[1]], "character")
+  expect_type(stems(x, value = "taxon_ids", simplify = TRUE), "character")
 })
 
 
@@ -297,10 +299,10 @@ test_that("Finding leaves", {
   expect_equal(x$leaves(), leaves(x))
 
   # Index return type
-  expect_type(x$leaves(value = "taxon_indexes")[[1]], "integer")
+  expect_type(leaves(x, value = "taxon_indexes")[[1]], "integer")
 
   # Taxon ID return type
-  expect_type(x$leaves(value = "taxon_ids")[[1]], "character")
+  expect_type(leaves(x, value = "taxon_ids")[[1]], "character")
 
 })
 
@@ -315,14 +317,14 @@ test_that("Filtering taxa", {
 
   # Check that filtering does not change order of taxa
   result <- filter_taxa(x, taxon_names != "tuberosum")
-  expected_names <- x$taxon_names()
+  expected_names <- taxon_names(x)
   expected_names <- expected_names[expected_names != "tuberosum"]
-  expect_true(all(expected_names == result$taxon_names()))
+  expect_true(all(expected_names == taxon_names(result)))
 
   result <- filter_taxa(x, taxon_names == "Solanum", subtaxa = TRUE, invert = TRUE)
-  expected_names <- x$taxon_names()
+  expected_names <- taxon_names(x)
   expected_names <- expected_names[! expected_names %in% c("Solanum", "lycopersicum", "tuberosum")]
-  expect_true(all(expected_names == result$taxon_names()))
+  expect_true(all(expected_names == taxon_names(result)))
 
   # Errors for invalid indexes
   expect_error(filter_taxa(x, 100), "The following taxon indexes are invalid:")
@@ -351,7 +353,7 @@ test_that("Sampling taxa",  {
                 unidentified_plant, unidentified_animal)
 
   result <- sample_n_taxa(x, size = 3)
-  expect_equal(length(result$taxon_ids()), 3)
+  expect_equal(length(taxon_ids(result)), 3)
   expect_warning(sample_n_taxa(x, size = 3, obs_weight = 1))
   expect_warning(sample_n_taxa(x, size = 3, obs_target = 1))
 })
@@ -359,9 +361,9 @@ test_that("Sampling taxa",  {
 test_that("Mapping vairables",  {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
-  result <- x$map_data(taxon_names, taxon_ranks)
-  expect_equivalent(result, x$taxon_ranks())
-  expect_equivalent(names(result), x$taxon_names())
+  result <- map_data(x, taxon_names, taxon_ranks)
+  expect_equivalent(result, taxon_ranks(x))
+  expect_equivalent(names(result), taxon_names(x))
   expect_warning(map_data(x, taxon_names, c("e" = "A", "e" = "B")))
   expect_silent(map_data(x, taxon_names, c("e" = "A", "e" = "B"), warn = FALSE))
   expect_error(map_data(x, taxon_names, 1:10))

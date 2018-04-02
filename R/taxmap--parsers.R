@@ -542,8 +542,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       close(progress_bar)
       return(output)
     }
-    msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
-                           type = "message")
+    msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                  type = "message")
 
     # Remove repeated messages (e.g. no NCBI API key)
     on.exit(message(paste0(unique(msgs), collapse = "\n")))
@@ -577,8 +577,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       close(progress_bar)
       return(output)
     }
-    msgs <- capture.output(raw_result <- map_unique(ids, lookup_all),
-                           type = "message")
+    msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                  type = "message")
 
     # Remove repeated messages (e.g. no NCBI API key)
     message(paste0(unique(msgs), collapse = "\n"))
@@ -605,8 +605,8 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       close(progress_bar)
       return(output)
     }
-    msgs <- capture.output(raw_result <- map_unique(my_names, lookup_all),
-                           type = "message")
+    msgs <- utils::capture.output(raw_result <- map_unique(my_names, lookup_all),
+                                  type = "message")
 
     # Remove repeated messages (e.g. no NCBI API key)
     message(paste0(unique(msgs), collapse = "\n"))

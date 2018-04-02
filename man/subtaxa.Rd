@@ -52,7 +52,7 @@ subtaxa(ex_taxmap)
 subtaxa(ex_taxmap, subset = 1:3)
 
 # Only return data for some taxa using taxon ids
-subtaxa(ex_taxmap, subset = c("3", "4"))
+subtaxa(ex_taxmap, subset = c("d", "e"))
 
 # Only return data for some taxa using logical tests
 subtaxa(ex_taxmap, subset = taxon_ranks == "genus")
