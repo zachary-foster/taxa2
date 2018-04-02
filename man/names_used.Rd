@@ -15,11 +15,10 @@ Named \code{character}
 Get names of available data used in expressions.
 Expressions are not evaluated and do not need to make sense.
 \preformatted{
-obj$names_used(...)
-names_used(obj,...)}
+obj$names_used(...)}
 }
 \examples{
-taxa:::names_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 
 }
 \seealso{

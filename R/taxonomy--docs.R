@@ -771,8 +771,7 @@ NULL
 #' Get names of available data used in expressions.
 #' Expressions are not evaluated and do not need to make sense.
 #' \preformatted{
-#' obj$names_used(...)
-#' names_used(obj,...)}
+#' obj$names_used(...)}
 #'
 #' @param obj a [taxonomy()] or [taxmap()] object
 #' @param ... One or more expressions
@@ -780,7 +779,7 @@ NULL
 #' @return Named `character`
 #'
 #' @examples
-#' taxa:::names_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+#' ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'
@@ -862,8 +861,7 @@ NULL
 #' in a [taxonomy()] or [taxmap()] object used in expressions. Expressions are
 #' not evaluated and do not need to make sense.
 #' \preformatted{
-#' obj$data_used(...)
-#' data_used(obj, ...)}
+#' obj$data_used(...)}
 #'
 #' @param obj a [taxonomy()] or [taxmap()] object
 #' @param ... One or more expressions
@@ -871,7 +869,7 @@ NULL
 #' @return `list`
 #'
 #' @examples
-#' taxa:::data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+#' ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
 #'
 #' @family accessors
 #'

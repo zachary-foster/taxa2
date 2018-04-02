@@ -307,7 +307,8 @@ test_that("get data frame - for now doesn't work on example data", {
 #### obs
 
 test_that("Mapping between table observations and the edge list works", {
-  result <- test_obj$obs("info")
+  result <- obs(test_obj, "info")
+  expect_equal(obs(test_obj, "info"), test_obj$obs("info"))
   expect_true(all(sapply(result, class) == "integer"))
   expect_identical(names(result), unname(test_obj$taxon_ids()))
   expect_identical(result[["b"]], 1:4)
@@ -316,35 +317,48 @@ test_that("Mapping between table observations and the edge list works", {
 })
 
 test_that("Mapping between a subset of observations and the edge list works", {
-  expect_identical(test_obj$obs("info", subset = "b"), list("b" = 1:4))
-  expect_identical(test_obj$obs("info", subset = 1), list("b" = 1:4))
+  expect_identical(obs(test_obj, "info", subset = "b"), list("b" = 1:4))
+  expect_identical(obs(test_obj, "info", subset = 1), list("b" = 1:4))
 })
 
 test_that("Mapping non-recursivly between observations and the edge list works", {
-  result <- test_obj$obs("info", recursive = FALSE)
-  expect_true(all(sapply(result[test_obj$roots()], length) == 0))
+  result <- obs(test_obj, "info", recursive = FALSE)
+  expect_true(all(sapply(result[roots(test_obj)], length) == 0))
   expect_equal(result[["r"]], 6)
 })
 
 test_that("Mapping simplification between observations and the edge list works", {
-  expect_equal(test_obj$obs("info", simplify = TRUE), 1:6)
+  expect_equal(obs(test_obj, "info", simplify = TRUE), 1:6)
 })
 
 test_that("Mapping observations in external tables", {
   external_table <- data.frame(taxon_id = c("p", "n"),
                                my_name = c("Joe", "Fluffy"))
-  expect_equal(test_obj$obs(external_table)$`b`, c(2, 1))
+  expect_equal(eval(substitute(obs(test_obj, external_table)$`b`)), c(2, 1))
   external_table <- data.frame(my_name = c("Joe", "Fluffy"))
-  expect_error(test_obj$obs(external_table), 'no "taxon_id" column')
+  expect_error(eval(substitute(obs(test_obj, external_table))), 'no "taxon_id" column')
 })
 
 test_that("Mapping observations when there are multiple obs per taxon", {
-  result <- test_obj$obs("abund")
+  result <- obs(test_obj, "abund")
   expect_equal(result$m, which(test_obj$data$abund$taxon_id == "m"))
   expect_equal(result$p, which(test_obj$data$abund$taxon_id == "p"))
   expect_true(all(result$b %in% 1:nrow(test_obj$data$abund)))
 })
 
+test_that("Applying a function the observations of each taxon", {
+  expect_equal(obs_apply(test_obj, "abund", length),
+               lapply(obs(test_obj, "abund"), length))
+
+})
+
+test_that("Counting the observations of each taxon", {
+  expect_equal(n_obs(test_obj, "abund"),
+               sapply(obs(test_obj, "abund"), length))
+  expect_equal(n_obs_1(test_obj, "abund"),
+               vapply(taxon_ids(test_obj), function(id) sum(id == test_obj$data$abund$taxon_id), numeric(1)))
+
+})
 
 
 
@@ -616,6 +630,9 @@ test_that("Sampling observations works",  {
   expect_equal(length(result$data$foods), 3)
   result <- sample_n_obs(test_obj, "phylopic_ids", size = 3)
   expect_equal(length(result$data$phylopic_ids), 3)
+
+  result <- sample_frac_obs(test_obj, "info", size = 0.5)
+  expect_equal(nrow(result$data$info), 3)
 })
 
 test_that("Sampling using data from supertaxa works",  { # Not complete

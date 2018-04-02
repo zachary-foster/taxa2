@@ -87,6 +87,11 @@ potato_partial <- hierarchy(solanaceae, solanum, tuberosum)
 unidentified_animal <- hierarchy(mammalia, unidentified)
 unidentified_plant <- hierarchy(plantae, unidentified)
 
+test_that("NSE", {
+  x <- taxonomy(tiger, cougar, mole)
+  expect_equal(all_names(x), x$all_names())
+})
+
 test_that("Simple usage", {
   x <- taxonomy(tiger, cougar, mole)
   expect_length(x$taxa, 9)
@@ -140,6 +145,13 @@ test_that("Characters as inputs", {
   # x <- taxonomy(list(c("a", "b", "c"), c("a", "d"))) # does not work yet
 })
 
+test_that("Accessing basic info", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_equal(x$taxon_indexes(), taxon_indexes(x))
+  expect_equivalent(taxon_indexes(x), seq_along(x$taxa))
+})
+
 
 test_that("Finding roots", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
@@ -158,6 +170,7 @@ test_that("Finding internodes", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
   expect_equal(x$internodes(), internodes(x))
+  expect_equal(x$is_internode(), is_internode(x))
 
   # Index return type
   expect_type(internodes(x, value = "taxon_indexes"), "integer")
@@ -213,6 +226,7 @@ test_that("Finding branches", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
   expect_equal(x$branches(), branches(x))
+  expect_equal(x$is_branch(), is_branch(x))
 
   # Index return type
   expect_type(branches(x, value = "taxon_indexes"), "integer")
@@ -282,6 +296,7 @@ test_that("Finding stems", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
   expect_equal(x$stems(), stems(x))
+  expect_equal(x$is_stem(), is_stem(x))
 
   # Index return type
   expect_type(stems(x, value = "taxon_indexes")[[1]], "integer")
@@ -297,6 +312,7 @@ test_that("Finding leaves", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
   expect_equal(x$leaves(), leaves(x))
+  expect_equal(x$is_leaf(), is_leaf(x))
 
   # Index return type
   expect_type(leaves(x, value = "taxon_indexes")[[1]], "integer")
@@ -304,6 +320,14 @@ test_that("Finding leaves", {
   # Taxon ID return type
   expect_type(leaves(x, value = "taxon_ids")[[1]], "character")
 
+  # leaves_apply
+  expect_equal(sum(leaves_apply(x, length, subset = c(1, 2), simplify = TRUE)), 7)
+
+  # n_leaves
+  expect_equal(n_leaves(x), unlist(leaves_apply(x, length)))
+
+  # n_leaves_1
+  expect_equivalent(n_leaves_1(x)["l"], 2)
 })
 
 test_that("Filtering taxa", {
@@ -356,12 +380,16 @@ test_that("Sampling taxa",  {
   expect_equal(length(taxon_ids(result)), 3)
   expect_warning(sample_n_taxa(x, size = 3, obs_weight = 1))
   expect_warning(sample_n_taxa(x, size = 3, obs_target = 1))
+
+  result <- sample_frac_taxa(x, size = 0.5)
+  expect_equal(length(taxon_ids(result)), 8)
 })
 
 test_that("Mapping vairables",  {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
   result <- map_data(x, taxon_names, taxon_ranks)
+  expect_equal(result, map_data_(x, taxon_names(x), taxon_ranks(x)))
   expect_equivalent(result, taxon_ranks(x))
   expect_equivalent(names(result), taxon_names(x))
   expect_warning(map_data(x, taxon_names, c("e" = "A", "e" = "B")))
@@ -405,3 +433,27 @@ test_that("subtaxa_apply function", {
 })
 
 
+test_that("replacing taxon IDs", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  result <- replace_taxon_ids(x, 1:16)
+  expect_equivalent(taxon_ids(result), 1:16)
+})
+
+
+test_that("removing redundant names", {
+  lycopersicum <- taxon(
+    name = taxon_name("Solanum lycopersicum"),
+    rank = taxon_rank("species"),
+    id = taxon_id(49274)
+  )
+  tuberosum <- taxon(
+    name = taxon_name("Solanum tuberosum"),
+    rank = taxon_rank("species"),
+    id = taxon_id(4113)
+  )
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  result <- remove_redundant_names(x)
+  expect_true(all(c("tuberosum", "lycopersicum") %in% taxon_names(result)))
+})

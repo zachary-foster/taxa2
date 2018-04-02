@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-#' @keywords internal
+#' @export
 taxon_ids <- function(obj) {
   UseMethod("taxon_ids")
 }
@@ -33,7 +33,7 @@ taxon_indexes.Taxonomy <- function(obj, ...) {
 
 
 # -----------------------------------------------------------------------------
-#' @keywords internal
+#' @export
 taxon_names <- function(obj, ...) {
   UseMethod("taxon_names")
 }
@@ -446,23 +446,6 @@ all_names.Taxmap <- function(obj, tables = TRUE, funcs = TRUE, others = TRUE,
 
 
 # -----------------------------------------------------------------------------
-#' @keywords internal
-names_used <- function(obj, ...) {
-  UseMethod("names_used")
-}
-
-#' @export
-names_used.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-names_used.Taxonomy <- function(obj, ...) {
-  obj$names_used(...)
-}
-
-
-# -----------------------------------------------------------------------------
 #' @export
 get_data <- function(obj, name = NULL, ...) {
   UseMethod("get_data")
@@ -493,23 +476,6 @@ get_data_frame.default <- function(obj, ...) {
 #' @export
 get_data_frame.Taxonomy <- function(obj, ...) {
   obj$get_data_frame(...)
-}
-
-
-# -----------------------------------------------------------------------------
-#' @keywords internal
-data_used <- function(obj, ...) {
-  UseMethod("data_used")
-}
-
-#' @export
-data_used.default <- function(obj, ...) {
-  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
-}
-
-#' @export
-data_used.Taxonomy <- function(obj, ...) {
-  obj$data_used(...)
 }
 
 
