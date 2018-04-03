@@ -92,6 +92,12 @@ test_that("NSE", {
   expect_equal(all_names(x), x$all_names())
 })
 
+test_that("Printing taxonomy", {
+  x <- taxonomy(tiger, cougar, mole)
+  expect_output(print(x), "Taxonomy")
+  expect_output(print(x), "9 taxa")
+})
+
 test_that("Simple usage", {
   x <- taxonomy(tiger, cougar, mole)
   expect_length(x$taxa, 9)
@@ -438,6 +444,8 @@ test_that("replacing taxon IDs", {
                 unidentified_plant, unidentified_animal)
   result <- replace_taxon_ids(x, 1:16)
   expect_equivalent(taxon_ids(result), 1:16)
+  expect_error(replace_taxon_ids(x, 1:10), "different than the current number of taxa")
+  expect_error(replace_taxon_ids(x, rep(1, 16)), "New taxon IDs must be unique")
 })
 
 

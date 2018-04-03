@@ -144,7 +144,7 @@ print__data.frame <- function(obj, data, name, prefix, max_width, max_rows) {
 #' @keywords internal
 print__list <- function(obj, data, name, prefix, max_width, max_rows) {
   if (length(data) < 1) {
-    prefixed_print(list(), prefix = prefix)
+    cat(paste0(prefix, name_font(name), ": empty list\n"))
   } else {
     cat(paste0(prefix, name_font(name), ": a list of ", length(data),
                ifelse(length(data) == 1, " item", " items")))
@@ -199,13 +199,13 @@ print__vector <- function(obj, data, name, prefix, max_width, max_rows, type = c
     limited_print(data, max_chars = max_width, sep = punc_font(", "),
                   mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"), type = "cat")
   } else {
-    if (is.null(obj$get_data_taxon_ids(name))) {
+    if (is.null(obj$get_data_taxon_ids(name))) { # no taxon ids
       limited_print(paste0(names(data), punc_font(". "), data),
                     max_chars = max_width, sep = punc_font(", "),
                     mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
                     type = "cat")
     }
-    else {
+    else { # has taxon ids
       limited_print(paste0(tid_font(names(data)), punc_font(". "), data),
                     max_chars = max_width, sep = punc_font(", "),
                     mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),

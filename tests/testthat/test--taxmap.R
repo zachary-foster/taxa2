@@ -207,10 +207,11 @@ test_that("Same length vector/list data set", {
 test_that("Print methods works", {
   x = test_obj$clone(deep = TRUE)
   x$data <- list()
-  x$data$more_data <- list(1, 2, 3)
+  x$data$more_data <- list(a = 1, b = 2, c = 3)
   x$data$frame <- data.frame(x = 1:10)
   x$data$mat <- matrix(1:9, nrow = 3)
   x$data$fac <- factor(1:10)
+  x$data$tib <- dplyr::as_tibble(data.frame(x = 1:10))
   expect_output(print(x),
                 "<Taxmap>.+17 taxa.+17 edges.+1 functions.+reaction")
   x$data$new_vec <- rep(paste0(rep(c("l", "o", "n", "g"), each = 30), collapse = ""), 5)
@@ -218,8 +219,46 @@ test_that("Print methods works", {
                 "\\[truncated\\] \\.\\.\\. ")
   x$data <- c(x$data, list(1:100, a = 1:10, b = 1:100))
   expect_output(print(x), "more data sets")
+
+  # No taxa
   x <- taxmap()
   expect_output(print(x), "No taxa")
+
+  # Empty list
+  x = test_obj$clone(deep = TRUE)
+  x$data <- list()
+  x$data$more_data <- list()
+  x$data[[2]] <- list()
+  expect_output(print(x), "empty list")
+
+  # List named by taxa
+  x = test_obj$clone(deep = TRUE)
+  x$data <- list()
+  x$data$more_data <- list(c = 3, d = 4)
+  expect_output(print(x), "named by taxa")
+
+  # Named vectors
+  x = test_obj$clone(deep = TRUE)
+  x$data <- list()
+  x$data$more_data <- c(sss = 3, dddd = 4)
+  x$data$even_more <- c(c = 3, d = 4)
+  expect_output(print(x), "named vector")
+
+  # Vector types
+  x = test_obj$clone(deep = TRUE)
+  x$data <- list()
+  x$data$int <- as.integer(1:10)
+  x$data$char <- as.character(1:10)
+  x$data$fac <- as.factor(1:10)
+  x$data$ord <- as.ordered(1:10)
+  x$data$log <- as.logical(1:10)
+  expect_output(print(x), "integer")
+  expect_output(print(x), "character")
+  expect_output(print(x), "factor")
+  expect_output(print(x), "ordered")
+  expect_output(print(x), "logical")
+
+
 })
 
 ### NSE helpers
@@ -704,11 +743,14 @@ test_that("Edge cases during sampling observations",  {
 
 #### sample_n_taxa
 
-test_that("Sampling observations works",  {
+test_that("Sampling taxa works",  {
   result <- sample_n_taxa(test_obj, size = 3)
   expect_equal(length(result$taxon_ids()), 3)
-  expect_equal(length(result$data$foods), 3)
-  expect_equal(length(result$data$phylopic_ids), 3)
+  expect_error(sample_n_taxa(test_obj, obs_weight = 1:10),
+               "`obs_target` must also be defined.")
+
+  result <- sample_n_taxa(test_obj, 3, obs_target = "info", obs_weight = 1:6)
+  expect_equal(length(result$taxon_ids()), 3)
 })
 
 

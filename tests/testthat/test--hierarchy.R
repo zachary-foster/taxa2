@@ -114,3 +114,95 @@ test_that("hierarchy can do null data", {
   expect_null(x$ranklist)
 })
 
+
+
+test_that("hierarchy pop", {
+  x <- taxon(
+    name = taxon_name("Poaceae"),
+    rank = taxon_rank("family"),
+    id = taxon_id(4479)
+  )
+
+  y <- taxon(
+    name = taxon_name("Poa"),
+    rank = taxon_rank("genus"),
+    id = taxon_id(4544)
+  )
+
+  z <- taxon(
+    name = taxon_name("Poa annua"),
+    rank = taxon_rank("species"),
+    id = taxon_id(93036)
+  )
+
+  obj <- hierarchy(z, y, x)
+
+  res <- pop(obj, ranks("species"))
+  expect_equal(length(res$taxa), 2)
+  expect_equal(res, pop(obj, nms("Poa annua")))
+  expect_equal(res, pop(obj, ids("93036")))
+  expect_error(pop(hierarchy(), nms("Poa annua")),
+               "no taxa found")
+})
+
+
+test_that("hierarchy pick", {
+  x <- taxon(
+    name = taxon_name("Poaceae"),
+    rank = taxon_rank("family"),
+    id = taxon_id(4479)
+  )
+
+  y <- taxon(
+    name = taxon_name("Poa"),
+    rank = taxon_rank("genus"),
+    id = taxon_id(4544)
+  )
+
+  z <- taxon(
+    name = taxon_name("Poa annua"),
+    rank = taxon_rank("species"),
+    id = taxon_id(93036)
+  )
+
+  obj <- hierarchy(z, y, x)
+
+  res <- pick(obj, ranks("species"))
+  expect_equal(length(res$taxa), 1)
+  expect_equal(res, pick(obj, nms("Poa annua")))
+  expect_equal(res, pick(obj, ids("93036")))
+  expect_error(pick(hierarchy(), nms("Poa annua")),
+               "no taxa found")
+})
+
+
+test_that("hierarchy span", {
+  x <- taxon(
+    name = taxon_name("Poaceae"),
+    rank = taxon_rank("family"),
+    id = taxon_id(4479)
+  )
+
+  y <- taxon(
+    name = taxon_name("Poa"),
+    rank = taxon_rank("genus"),
+    id = taxon_id(4544)
+  )
+
+  z <- taxon(
+    name = taxon_name("Poa annua"),
+    rank = taxon_rank("species"),
+    id = taxon_id(93036)
+  )
+
+  obj <- hierarchy(z, y, x)
+
+  res <- span(obj, ranks("family", "genus"))
+  expect_equal(length(res$taxa), 2)
+  expect_equal(res, span(obj, nms("Poaceae", "Poa")))
+  expect_equal(res, span(obj, ids("4544", "4479")))
+  expect_error(span(hierarchy(), nms("Poa annua")),
+               "no taxa found")
+})
+
+
