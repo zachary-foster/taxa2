@@ -119,6 +119,15 @@ test_that("Taxmap can be intialized from complex data", {
   expect_error(parse_tax_data(1:3, class_cols = 10),
                'out of bounds for inputs:')
 
+  # Invalid mapping options
+  expect_error(parse_tax_data(1:3, datasets = list(), mappings = 1),
+               'must have the same number of values')
+  expect_error(parse_tax_data(1:3, datasets = 1, mappings = 1),
+               'The mapping options must be named.')
+  expect_error(parse_tax_data(1:3, datasets = 1, mappings = c(sdaff = 2)),
+               'Invalid inputs to the `mappings` found')
+
+
 })
 
 
@@ -209,6 +218,7 @@ test_that("Taxmap can be intialized from queried data", {
                          my_seq = c("AB548412", "777777777777", "DQ334818"),
                          species_id = c("A", "B", "C"))
   expect_warning(result <- lookup_tax_data(raw_data, type = "taxon_name", column = "species"))
+  expect_warning(result <- lookup_tax_data(raw_data, type = "taxon_name", column = "species"), ask = FALSE)
   expect_equal(result$data$query_data$taxon_id[2], "unknown")
   expect_warning(result <- lookup_tax_data(raw_data, type = "taxon_id", column = "my_tax_id"))
   expect_equal(result$data$query_data$taxon_id[2], "unknown")
