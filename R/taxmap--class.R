@@ -80,7 +80,7 @@ Taxmap <- R6::R6Class(
                                       nrow(self$edge_list), " edges:"),
                       type = "cat")
       } else {
-        cat("Empty taxmap")
+        cat("  No taxa\n  No edges\n")
       }
 
       # Get item names
@@ -518,12 +518,12 @@ Taxmap <- R6::R6Class(
       }
 
 
-      self$sample_n_obs(target = target,
-                        size = size * target_length,
-                        replace = replace,
-                        taxon_weight = taxon_weight, obs_weight = obs_weight,
-                        use_supertaxa = use_supertaxa,
-                        collapse_func = collapse_func, ...)
+      eval(substitute(self$sample_n_obs(target = target,
+                                        size = size * target_length,
+                                        replace = replace,
+                                        taxon_weight = taxon_weight, obs_weight = obs_weight,
+                                        use_supertaxa = use_supertaxa,
+                                        collapse_func = collapse_func, ...)))
     },
 
 

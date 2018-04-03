@@ -213,6 +213,13 @@ test_that("Print methods works", {
   x$data$fac <- factor(1:10)
   expect_output(print(x),
                 "<Taxmap>.+17 taxa.+17 edges.+1 functions.+reaction")
+  x$data$new_vec <- rep(paste0(rep(c("l", "o", "n", "g"), each = 30), collapse = ""), 5)
+  expect_output(print(x),
+                "\\[truncated\\] \\.\\.\\. ")
+  x$data <- c(x$data, list(1:100, a = 1:10, b = 1:100))
+  expect_output(print(x), "more data sets")
+  x <- taxmap()
+  expect_output(print(x), "No taxa")
 })
 
 ### NSE helpers
@@ -316,6 +323,11 @@ test_that("Mapping between table observations and the edge list works", {
   expect_identical(result, test_obj$obs("foods"))
 })
 
+test_that("Returning values for observations", {
+  expect_true(all(c("tigris", "catus", "typhlops", "sapiens") %in%
+                    obs(test_obj, "info", subset = "b", value = "taxon_names", simplify = T)))
+})
+
 test_that("Mapping between a subset of observations and the edge list works", {
   expect_identical(obs(test_obj, "info", subset = "b"), list("b" = 1:4))
   expect_identical(obs(test_obj, "info", subset = 1), list("b" = 1:4))
@@ -409,6 +421,13 @@ test_that("Observations can be preserved when filtering taxa", {
                         reassign_obs = FALSE)
   expect_true(all(is.na(result$data$info$taxon_id)))
   expect_equal(nrow(result$data$info), 6)
+  expect_equal(filter_taxa(test_obj, 2:4, drop_obs = TRUE),
+               filter_taxa(test_obj, 2:4, drop_obs = c(TRUE, TRUE, TRUE, TRUE)))
+  expect_equal(filter_taxa(test_obj, 2:4, drop_obs = TRUE),
+               filter_taxa(test_obj, 2:4, drop_obs = c(info = TRUE,
+                                                       phylopic_ids = TRUE,
+                                                       foods = TRUE,
+                                                       abund = TRUE)))
 })
 
 test_that("Taxon ids can be preserved when filtering taxa", {
@@ -424,6 +443,12 @@ test_that("The selection of taxa to be filtered can be inverted", {
 
 test_that("Edge cases return reasonable outputs", {
   expect_equal(filter_taxa(test_obj), test_obj)
+  expect_error(filter_taxa(test_obj, drop_obs = c(TRUE, TRUE)),
+               'Invalid input for logical vector selecting')
+  expect_error(filter_taxa(test_obj, drop_obs = c(not_valid = TRUE)),
+               'Invalid input for logical vector selecting')
+  expect_error(filter_taxa(test_obj, drop_obs = c(not_valid = TRUE, TRUE, TRUE, FALSE)),
+               'Invalid input for logical vector selecting')
 })
 
 test_that("Filtering taxa when there are multiple obs per taxon", {
@@ -540,10 +565,17 @@ test_that("New tables and vectors can be made",  {
  # Invlaid: inputs of mixed lengths
   expect_error(mutate_obs(test_obj, "new_table", a = 1, b = character(0)),
                "must be length 1, not 0")
+  expect_error(mutate_obs(test_obj, "new_table", a = 1:3, b = 2:8),
+               "Cannot make a new table out of multiple values of unequal length")
 
  # Invlaid: unnamed inputs
   expect_error(mutate_obs(test_obj, "new_table", 1:10, 1:10),
                "Cannot add a new dataset with")
+
+ # invalid: not a table
+  expect_error(mutate_obs(test_obj, "foods", 1:10),
+               "is not a table")
+
 })
 
 #### transmute_obs
@@ -632,6 +664,13 @@ test_that("Sampling observations works",  {
   expect_equal(length(result$data$phylopic_ids), 3)
 
   result <- sample_frac_obs(test_obj, "info", size = 0.5)
+  expect_equal(nrow(result$data$info), 3)
+
+  result <- sample_frac_obs(test_obj, "info", size = 0.5, taxon_weight = 1 / n_obs)
+  expect_equal(nrow(result$data$info), 3)
+
+
+  result <- sample_frac_obs(test_obj, "info", size = 0.5, taxon_weight = 1 / n_obs)
   expect_equal(nrow(result$data$info), 3)
 })
 

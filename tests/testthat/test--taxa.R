@@ -41,5 +41,7 @@ test_that("taxa fails well", {
 
 test_that("dots and .list return the same output", {
   expect_equal(taxa(x, x, x), taxa(.list = list(x, x, x)))
+  expect_error(taxa(taxon("a"), .list = list(taxon("a"))),
+               'Both `...` and `.list` were supplied')
 })
 
