@@ -25,8 +25,9 @@ Current
 * `filter_taxa` now has better error messages for invalid inputs ([issue #117](https://github.com/ropensci/taxa/issues/117)).
 * Fix a bug that caused an error in `filter_taxa` when no taxa pass filter ([issue #116](https://github.com/ropensci/taxa/issues/116)).
 * Fixed a bug in `parse_tax_data` when `class_key` was not named ([issue #131](https://github.com/ropensci/taxa/issues/131)).
-* Fixed bug in `hierarchy` print method with `taxon_id` class was not used ([issue #138](https://github.com/ropensci/taxa/issues/131)).
+* Fixed bug in `hierarchy` print method with `taxon_id` class was not used ([issue #138](https://github.com/ropensci/taxa/issues/138)).
 * Fixed bug in `parse_tax_data` when all classification data is `NA.`
+* Fixed bug in `taxmap` print method when printing zero-length lists and vectors ([issue #148](https://github.com/ropensci/taxa/issues/148)).
 
 taxa 0.2.0
 ==========

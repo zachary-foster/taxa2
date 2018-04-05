@@ -108,7 +108,7 @@ print__data.frame <- function(obj, data, name, prefix, max_width, max_rows) {
   prefix <- paste0(prefix, "  ")
   if (nrow(data) > max_rows) {
     cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data),
-                           " (first ", max_rows, " rows shown)\n")))
+                         " (first ", max_rows, " rows shown)\n")))
     data <- data[1:max_rows, , drop = FALSE]
   } else {
     cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data), "\n")))
@@ -194,24 +194,26 @@ print__list <- function(obj, data, name, prefix, max_width, max_rows) {
 #' @keywords internal
 print__vector <- function(obj, data, name, prefix, max_width, max_rows, type = class(data)[1]) {
   cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(data)), "a vector of '", "a named vector of '"), type, "' with ", length(data),
-             " item", ifelse(length(data) == 1, "", "s"), "\n  ", prefix))
+             " item", ifelse(length(data) == 1, "", "s"), "\n"))
   if (is.null(names(data))) {
-    limited_print(data, max_chars = max_width, sep = punc_font(", "),
-                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"), type = "cat")
+    limited_print(data, prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
+                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                  type = "cat")
   } else {
     if (is.null(obj$get_data_taxon_ids(name))) { # no taxon ids
       limited_print(paste0(names(data), punc_font(". "), data),
-                    max_chars = max_width, sep = punc_font(", "),
+                    prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
                     mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
                     type = "cat")
     }
     else { # has taxon ids
       limited_print(paste0(tid_font(names(data)), punc_font(". "), data),
-                    max_chars = max_width, sep = punc_font(", "),
+                    prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
                     mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
                     type = "cat")
     }
   }
+
 }
 
 
