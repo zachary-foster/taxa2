@@ -13,6 +13,7 @@ Current
 * `lookup_tax_data` and `extract_tax_data` now have progress bars instead of printing lots of text when downloading information.
 * `mutate_obs` now creates new vector/tables if the data set specified does not exist ([issue #121](https://github.com/ropensci/taxa/issues/124)).
 * Add `filter_taxa` option `keep_order` that preserves input taxon order. It is `TRUE` by default, which changes how it used to work. Set to `FALSE` for old behavior.
+* Using NSE with an ambiguous name (appears in multiple datasets) now produces a warning ([issue #153](https://github.com/ropensci/taxa/issues/153)).
 
 ### Changes
 

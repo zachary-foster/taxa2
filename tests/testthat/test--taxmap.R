@@ -340,10 +340,20 @@ test_that("All valid NSE values can be found", {
   expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
+
+test_that("Using ambiguous names in NSE generates a warning", {
+  expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
+})
+
 #### get_data_frame
 
 test_that("get data frame - for now doesn't work on example data", {
-  expect_error(test_obj$get_data_frame(), "variables not of equal length")
+  x <- test_obj$clone(deep = TRUE)
+  x$data$abund_2 <- x$data$abund
+  expect_warning(x$get_data(), "Ambiguous names used")
+  expect_warning(x$get_data(c("count", "code")), "Ambiguous names used")
+  expect_warning(x$filter_obs("abund", code == "T"), "Ambiguous names used")
+
 })
 
 

@@ -163,7 +163,7 @@ Taxonomy <- R6::R6Class(
     get_data = function(name = NULL, ...) {
       # Get default if name is NULL
       if (is.null(name)) {
-        name = self$all_names(...)
+        name = unique(self$all_names(...))
       }
 
       # Check that names provided are valid
@@ -175,8 +175,23 @@ Taxonomy <- R6::R6Class(
                     paste0(my_names, collapse = ", "), "\n "))
       }
 
-      # Format output
+      # Check for ambiguous terms
       name <- my_names[match(name, my_names)]
+      name_counts <- table(my_names)
+      ambiguous_names <- names(name_counts[name_counts > 1])
+      ambiguous_names_used <- ambiguous_names[ambiguous_names %in% name]
+      value_to_be_used <- unique(names(name)[name %in% ambiguous_names_used])
+      if (length(ambiguous_names_used) > 0) {
+        warning(call. = FALSE,
+                'Ambiguous names used in non-standard evaluation:\n',
+                limited_print(prefix = "  ", type = "silent", ambiguous_names_used),
+                'These could refer to values in different datasets with the same name.',
+                ' The following values will be used:\n',
+                limited_print(prefix = "  ", type = "silent", value_to_be_used)
+                )
+      }
+
+      # Format output
       output <- lapply(names(name),
                        function(x) eval(parse(text = paste0("self$", x))))
       names(output) <- name
