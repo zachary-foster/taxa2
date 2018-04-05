@@ -725,7 +725,8 @@ Taxonomy <- R6::R6Class(
     # Filter taxa in a taxonomy() or taxmap() object with a series of conditions.
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
                            drop_obs = TRUE, reassign_obs = TRUE,
-                           reassign_taxa = TRUE, invert = FALSE) {
+                           reassign_taxa = TRUE, invert = FALSE,
+                           keep_order = TRUE) {
 
       # non-standard argument evaluation
       selection <- private$parse_nse_taxon_subset(...)
@@ -749,6 +750,11 @@ Taxonomy <- R6::R6Class(
                                              na = FALSE, simplify = TRUE,
                                              include_input = FALSE)
       ))
+
+      # Preserve original order
+      if (keep_order) {
+        taxa_subset <- sort(taxa_subset)
+      }
 
       # Invert selection
       if (invert) {

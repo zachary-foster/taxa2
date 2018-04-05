@@ -12,6 +12,7 @@ Current
 * `filter_obs` now can filter out observations in non-target data sets that are assocaited with taxa that are removed when `drop_taxa = TRUE` ([issue #143](https://github.com/ropensci/taxa/issues/143)). This is done using `filter_taxa`, so the `supertaxa`, `subtaxa`, and `reassign_obs` options are now available to `filter_obs` to control how taxon removal is done.
 * `lookup_tax_data` and `extract_tax_data` now have progress bars instead of printing lots of text when downloading information.
 * `mutate_obs` now creates new vector/tables if the data set specified does not exist ([issue #121](https://github.com/ropensci/taxa/issues/124)).
+* Add `filter_taxa` option `keep_order` that preserves input taxon order. It is `TRUE` by default, which changes how it used to work. Set to `FALSE` for old behavior.
 
 ### Changes
 

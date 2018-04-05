@@ -891,10 +891,10 @@ NULL
 #' \preformatted{
 #' filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
 #'   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
-#'   invert = FALSE)
+#'   invert = FALSE, keep_order = TRUE)
 #' obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
 #'   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
-#'   invert = FALSE)}
+#'   invert = FALSE, keep_order = TRUE)}
 #'
 #' @param obj An object of class [taxonomy()] or [taxmap()]
 #' @param ... One or more filtering conditions. Any variable name that appears
@@ -939,6 +939,11 @@ NULL
 #'   this option negates the selection after taking into account the `subtaxa`
 #'   and `supertaxa` options. This is useful for removing a taxon and all its
 #'   subtaxa for example.
+#' @param keep_order (`logical` of length 1) If `TRUE`, keep relative order of
+#'   taxa not filtered out. For example, the result of `filter_taxa(ex_taxmap,
+#'   1:3)` and `filter_taxa(ex_taxmap, 3:1)` would be the same. Does not affect
+#'   dataset order, only taxon order. This is useful for maintaing order
+#'   correspondance with a dataset that has one value per taxon.
 #'
 #' @return An object of type [taxonomy()] or [taxmap()]
 #'

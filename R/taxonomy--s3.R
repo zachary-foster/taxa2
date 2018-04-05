@@ -497,7 +497,8 @@ filter_taxa.default <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
 #' @export
 filter_taxa.Taxonomy <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
                                  drop_obs = TRUE, reassign_obs = TRUE,
-                                 reassign_taxa = TRUE, invert = FALSE) {
+                                 reassign_taxa = TRUE, invert = FALSE,
+                                 keep_order = TRUE) {
   # Check that a taxmap option is not used with a taxonomy object
   if (! "Taxmap" %in% class(obj)) {
     if (!missing(reassign_obs)) {
@@ -515,17 +516,20 @@ filter_taxa.Taxonomy <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
   # Execute R6 function
   obj <- obj$clone(deep = TRUE)
   obj$filter_taxa(..., subtaxa = subtaxa, supertaxa = supertaxa,
-                  reassign_taxa = reassign_taxa, invert = invert)
+                  reassign_taxa = reassign_taxa, invert = invert,
+                  keep_order = keep_order)
 }
 
 #' @export
 filter_taxa.Taxmap <- function(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
                                drop_obs = TRUE, reassign_obs = TRUE,
-                               reassign_taxa = TRUE, invert = FALSE) {
+                               reassign_taxa = TRUE, invert = FALSE,
+                               keep_order = TRUE) {
   obj <- obj$clone(deep = TRUE)
   obj$filter_taxa(..., subtaxa = subtaxa, supertaxa = supertaxa,
                   drop_obs = drop_obs, reassign_obs = reassign_obs,
-                  reassign_taxa = reassign_taxa, invert = invert)
+                  reassign_taxa = reassign_taxa, invert = invert,
+                  keep_order = keep_order)
 }
 
 

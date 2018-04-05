@@ -437,8 +437,8 @@ test_that("Subtaxa can be included when filtering taxa", {
 
 test_that("Supertaxa can be included when filtering taxa", {
   result <- filter_taxa(test_obj, taxon_names == "Solanum", supertaxa = TRUE)
-  expect_equivalent(result$taxon_names(),
-                    c("Solanum", "Solanaceae", "Plantae"))
+  expect_equivalent(sort(result$taxon_names()),
+                    sort(c("Solanum", "Solanaceae", "Plantae")))
   expect_equal(filter_taxa(test_obj, 16, supertaxa = TRUE),
                filter_taxa(test_obj, 16, supertaxa = -1))
   expect_equal(filter_taxa(test_obj, 16, supertaxa = FALSE),

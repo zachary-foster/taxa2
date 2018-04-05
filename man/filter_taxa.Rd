@@ -56,6 +56,11 @@ selection. This is different than just replacing a \code{==} with a \code{!=} be
 this option negates the selection after taking into account the \code{subtaxa}
 and \code{supertaxa} options. This is useful for removing a taxon and all its
 subtaxa for example.}
+
+\item{keep_order}{(\code{logical} of length 1) If \code{TRUE}, keep relative order of
+taxa not filtered out. For example, the result of \code{filter_taxa(ex_taxmap, 1:3)} and \code{filter_taxa(ex_taxmap, 3:1)} would be the same. Does not affect
+dataset order, only taxon order. This is useful for maintaing order
+correspondance with a dataset that has one value per taxon.}
 }
 \value{
 An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
@@ -72,10 +77,10 @@ a changed version would be returned, like most R functions.
 \preformatted{
 filter_taxa(obj, ..., subtaxa = FALSE, supertaxa = FALSE,
   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
-  invert = FALSE)
+  invert = FALSE, keep_order = TRUE)
 obj$filter_taxa(..., subtaxa = FALSE, supertaxa = FALSE,
   drop_obs = TRUE, reassign_obs = TRUE, reassign_taxa = TRUE,
-  invert = FALSE)}
+  invert = FALSE, keep_order = TRUE)}
 }
 \examples{
 # Filter by index
