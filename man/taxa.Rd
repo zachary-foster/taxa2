@@ -19,6 +19,10 @@ An \code{R6Class} object of class \code{Taxon}
 Stores one or more \code{\link[=taxon]{taxon()}} objects. This is just a thin wrapper for a list
 of \code{\link[=taxon]{taxon()}} objects.
 }
+\details{
+This is the documentation for the class called \code{taxa}. If you are looking for
+the documentation for the package as a whole: \link{taxa-package}.
+}
 \examples{
 (a <- taxon(
   name = taxon_name("Poa annua"),

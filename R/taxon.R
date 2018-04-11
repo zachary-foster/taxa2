@@ -1,6 +1,7 @@
 #' Taxon class
 #'
-#' A class used to define a taxon.
+#' A class used to define a single taxon. Most other classes in the taxa package
+#' include one or more objects of this class.
 #'
 #' @export
 #' @param name a TaxonName object [taxon_name()] or character string. if character

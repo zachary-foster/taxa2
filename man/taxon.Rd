@@ -23,7 +23,8 @@ internally, required}
 An \code{R6Class} object of class \code{Taxon}
 }
 \description{
-A class used to define a taxon.
+A class used to define a single taxon. Most other classes in the taxa package
+include one or more objects of this class.
 }
 \details{
 Note that there is a special use case of this function - you can
