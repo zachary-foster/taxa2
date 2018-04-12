@@ -256,9 +256,22 @@ NULL
 #' @return An object of type [taxmap()]
 #'
 #' @examples
+#'
+#' # Add column to existing tables
 #' mutate_obs(ex_taxmap, "info",
 #'            new_col = "Im new",
 #'            newer_col = paste0(new_col, "er!"))
+#'
+#' # Create columns in a new table
+#' mutate_obs(ex_taxmap, "new_table",
+#'            nums = 1:10,
+#'            squared = nums ^ 2)
+#'
+#' # Add a new vector
+#' mutate_obs(ex_taxmap, "new_vector", 1:10)
+#'
+#' # Add a new list
+#' mutate_obs(ex_taxmap, "new_list", list(1, 2))
 #'
 #' @family taxmap manipulation functions
 #' @name mutate_obs
@@ -286,6 +299,7 @@ NULL
 #'
 #' @return An object of type [taxmap()]
 #' @examples
+#' # Replace columns in a table with new columns
 #' transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 #'
 #' @family taxmap manipulation functions
@@ -445,6 +459,7 @@ NULL
 #' @return An object of type [taxmap()]
 #'
 #' @examples
+#' # Sample half of the rows fram a table
 #' sample_frac_obs(ex_taxmap, "info", 0.5)
 #'
 #' @family taxmap manipulation functions
@@ -472,7 +487,15 @@ NULL
 #' @return `numeric`
 #'
 #' @examples
+#' # Get number of observations for each taxon in first dataset
+#' n_obs(ex_taxmap)
+#'
+#' # Get number of observations in a specified data set
 #' n_obs(ex_taxmap, "info")
+#' n_obs(ex_taxmap, "abund")
+#'
+#' # Filter taxa using number of observations in the first table
+#' filter_taxa(ex_taxmap, n_obs > 1)
 #'
 #' @family taxmap data functions
 #'
@@ -499,7 +522,15 @@ NULL
 #' @return `numeric`
 #'
 #' @examples
+#' # Get number of observations for each taxon in first dataset
+#' n_obs_1(ex_taxmap)
+#'
+#' # Get number of observations in a specified data set
 #' n_obs_1(ex_taxmap, "info")
+#' n_obs_1(ex_taxmap, "abund")
+#'
+#' # Filter taxa using number of observations in the first table
+#' filter_taxa(ex_taxmap, n_obs_1 > 0)
 #'
 #' @family taxmap data functions
 #'

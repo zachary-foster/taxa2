@@ -16,7 +16,7 @@ limited_print(chars, prefix = "", sep = ", ", mid = " ... ",
 
 \item{sep}{What to put between consecutive values}
 
-\item{mid}{What is used to indicate ommited values}
+\item{mid}{What is used to indicate omitted values}
 
 \item{max_chars}{(\code{numeric} of length 1) The maximum number of
 characters to print.}

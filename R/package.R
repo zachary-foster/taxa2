@@ -1,9 +1,9 @@
 #' taxa
 #'
 #' The `taxa` package is intended to:
-#'   * Provide a set of classes to store taxonomic data and any user-specific data assocaited with it
+#'   * Provide a set of classes to store taxonomic data and any user-specific data associated with it
 #'   * Provide functions to convert commonly used formats to these classes
-#'   * Provide a common foundation for other packages to build on to enable an ecosystem of compatible pacakges dealing with taxonomic data.
+#'   * Provide a common foundation for other packages to build on to enable an ecosystem of compatible packages dealing with taxonomic data.
 #'   * Provide generally useful functionality, such as filtering and mapping functions
 #'
 #' @section Main classes:
@@ -87,7 +87,7 @@
 #'
 #'  The classes in the `taxa` package are mostly
 #'  [R6](https://adv-r.hadley.nz/r6.html) classes ([R6Class]). A few of the
-#'  simplier ones ([taxa] and [hierarchies]) are
+#'  simpler ones ([taxa] and [hierarchies]) are
 #'  [S3](https://adv-r.hadley.nz/s3.html) instead. R6 classes are different than
 #'  most R objects because they are
 #'  [mutable](https://en.wikipedia.org/wiki/Immutable_object) (e.g. A function
@@ -96,7 +96,7 @@
 #'  [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming)
 #'  languages like python. As in other object-oriented class systems, functions
 #'  are thought to "belong" to classes (i.e. the data), rather than functions
-#'  existing independntly of the data. For example, the function `print` in R
+#'  existing independently of the data. For example, the function `print` in R
 #'  exists apart from what it is printing, although it will change how it prints
 #'  based on what the class of the data is that is passed to it. In fact, a user
 #'  can make a custom print method for their own class by defining a function
@@ -114,7 +114,7 @@
 #'  the [filter_taxa()] function can be called on a [taxmap] object called
 #'  `my_obj` like `my_obj$filter_taxa(...)` (the R6 syntax) or
 #'  `filter_taxa(my_obj, ...)` (the S3 syntax). For some functions, these two
-#'  way of calling the function can have differnt effect. For functions that do
+#'  way of calling the function can have different effect. For functions that do
 #'  not returned a modified version of the input (e.g. [subtaxa()]), the two ways have identical behavior.
 #'  However, functions like [filter_taxa()], that modify their inputs, actually
 #'  change the object passed to them as the first argument as well as returning that
@@ -128,7 +128,7 @@
 #'
 #'  and
 #'
-#'  `new_obj <- filter_taxa(my_obj, ...)`
+#'  `new_obj <- my_obj$filter_taxa(...)`
 #'
 #'  all replace `my_obj` with the filtered result, but
 #'
@@ -147,13 +147,13 @@
 #'   "exist" inside a function call and depend on what is passed to that function
 #'   as the first parameter (usually a class object). For example, in the `dpylr`
 #'   function [filter()], column names can be used as if they were independent
-#'   variables. See `?dpylr::filter` for examples of this. The `taxa` pacakge builds on this idea.
+#'   variables. See `?dpylr::filter` for examples of this. The `taxa` package builds on this idea.
 #'
 #'   For many functions that work on [taxonomy] or [taxmap] objects (e.g. [filter_taxa]),
 #'   some functions that return per-taxon information (e.g. [taxon_names()]) can
-#'   be refered to by just the name of the function. When one of these functions
+#'   be referred to by just the name of the function. When one of these functions
 #'   are referred to by name, the function is run on the relevant object and its
-#'   value replaces the fucntion name. For example,
+#'   value replaces the function name. For example,
 #'
 #'   `new_obj <- filter_taxa(my_obj, taxon_names == "Bacteria")`
 #'
@@ -182,7 +182,7 @@
 #'
 #'   Various elements of the `taxa` package were inspired by the [dplyr] and
 #'   [taxize] packages. This package started as parts of the `metacoder` and
-#'   `binomen` packages. There are also many dependncies that make `taxa`
+#'   `binomen` packages. There are also many dependencies that make `taxa`
 #'   possible.
 #'
 #' @section Feedback and contributions:
@@ -193,7 +193,7 @@
 #'   [https://github.com/ropensci/taxa/issues](https://github.com/ropensci/taxa/issues)
 #'
 #'   A GitHub account is free and easy to set up. We welcome feedback! If you
-#'   dont want to use GitHub for some reason, feel free to email us. We do
+#'   don't want to use GitHub for some reason, feel free to email us. We do
 #'   prefer posting to github since it allows others that might have the same
 #'   issue to see our conversation. It also helps us keep track of what problems
 #'   we need to address.

@@ -61,6 +61,7 @@ sample_frac_obs(obj, target, size, replace = FALSE,
   use_supertaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
+# Sample half of the rows fram a table
 sample_frac_obs(ex_taxmap, "info", 0.5)
 
 }

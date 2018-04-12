@@ -11,10 +11,13 @@
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxa:::taxon_ids(ex_taxmap)
+#' # Return the taxon IDs for each taxon
+#' taxon_ids(ex_taxmap)
+#'
+#' # Filter using taxon IDs
+#' filter_taxa(ex_taxmap, ! taxon_ids %in% c("c", "d"))
 #'
 #' @name taxon_ids
-#' @keywords internal
 NULL
 
 
@@ -31,7 +34,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Return the indexes for each taxon
 #' taxon_indexes(ex_taxmap)
+#'
+#' # Use in another function (stupid example; 1:5 would work too)
+#' filter_taxa(ex_taxmap, taxon_indexes < 5)
 #'
 #' @name taxon_indexes
 NULL
@@ -50,10 +57,13 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxa:::taxon_names(ex_taxmap)
+#' # Return the names for each taxon
+#' taxon_names(ex_taxmap)
+#'
+#' # Filter by taxon name
+#' filter_taxa(ex_taxmap, taxon_names == "Felidae", subtaxa = TRUE)
 #'
 #' @name taxon_names
-#' @keywords internal
 NULL
 
 
@@ -70,10 +80,13 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
-#' taxa:::taxon_ranks(ex_taxmap)
+#' # Get ranks for each taxon
+#' taxon_ranks(ex_taxmap)
+#'
+#' # Filter by rank
+#' filter_taxa(ex_taxmap, taxon_ranks == "family", supertaxa = TRUE)
 #'
 #' @name taxon_ranks
-#' @keywords internal
 NULL
 
 
@@ -177,9 +190,14 @@ NULL
 #' @name supertaxa_apply
 #'
 #' @examples
+#' # Get number of supertaxa that each taxon is contained in
+#' supertaxa_apply(ex_taxmap, length)
+#'
 #' # Get classifications for each taxon
+#' # Note; this can be done with `classifications()` easier
 #' supertaxa_apply(ex_taxmap, paste, collapse = ";", include_input = TRUE,
 #'                 value = "taxon_names")
+#'
 NULL
 
 
@@ -405,8 +423,11 @@ NULL
 #' @examples
 #' # Count number of subtaxa in each taxon
 #' subtaxa_apply(ex_taxmap, length)
+#'
+#' # Paste all the subtaxon names for each taxon
+#' subtaxa_apply(ex_taxmap, value = "taxon_names",
+#'               recursive = FALSE, paste0, collapse = ", ")
 NULL
-
 
 
 #' Get stem taxa
@@ -555,7 +576,7 @@ NULL
 #' Get classifications of taxa
 #'
 #' Get character vector classifications of taxa in an object of type
-#' [taxonomy()] or [taxmap()] composed of data assoicated with taxa. Each
+#' [taxonomy()] or [taxmap()] composed of data associated with taxa. Each
 #' classification is constructed by concatenating the data of the given taxon
 #' and all of its supertaxa.
 #' \preformatted{
@@ -572,7 +593,6 @@ NULL
 #' @return `character`
 #'
 #' @examples
-#'
 #' # Defualt settings returns taxon names separated by ;
 #' classifications(ex_taxmap)
 #'
@@ -604,7 +624,11 @@ NULL
 #' @return `character`
 #'
 #' @examples
+#' # Get classifications of IDs for each taxon
 #' id_classifications(ex_taxmap)
+#'
+#' # Use a different seperator
+#' id_classifications(ex_taxmap, sep = '|')
 #'
 #' @family taxonomy data functions
 #'
@@ -625,7 +649,12 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Count number of supertaxa that contain each taxon
 #' n_supertaxa(ex_taxmap)
+#'
+#' # Filter taxa based on the number of supertaxa
+#' #  (this command removes all root taxa)
+#' filter_taxa(ex_taxmap, n_supertaxa > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -647,7 +676,12 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Test for the presence of supertaxa containing each taxon
 #' n_supertaxa_1(ex_taxmap)
+#'
+#' # Filter taxa based on the presence of supertaxa
+#' #  (this command removes all root taxa)
+#' filter_taxa(ex_taxmap, n_supertaxa_1 > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -668,7 +702,12 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Count number of subtaxa within each taxon
 #' n_subtaxa(ex_taxmap)
+#'
+#' # Filter taxa based on number of subtaxa
+#' #  (this command removed all leaves or "tips" of the tree)
+#' filter_taxa(ex_taxmap, n_subtaxa > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -690,7 +729,12 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Count number of immediate subtaxa in each taxon
 #' n_subtaxa_1(ex_taxmap)
+#'
+#' # Filter taxa based on number of subtaxa
+#' #  (this command removed all leaves or "tips" of the tree)
+#' filter_taxa(ex_taxmap, n_subtaxa_1 > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -711,7 +755,11 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Get number of leaves for each taxon
 #' n_leaves(ex_taxmap)
+#'
+#' # Filter taxa based on number of leaves
+#' filter_taxa(ex_taxmap, n_leaves > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -732,7 +780,11 @@ NULL
 #' @return \code{numeric}
 #'
 #' @examples
+#' # Get number of leaves for each taxon
 #' n_leaves_1(ex_taxmap)
+#'
+#' # Filter taxa based on number of leaves
+#' filter_taxa(ex_taxmap, n_leaves_1 > 0)
 #'
 #' @family taxonomy data functions
 #'
@@ -764,7 +816,7 @@ NULL
 #'   each taxon.
 #' @param warn option only applies to [taxmap()] objects. If `TRUE`, warn if
 #'   there are duplicate names. Duplicate names make it unclear what data is
-#'   beinng referred to.
+#'   being referred to.
 #'
 #' @return `character`
 #'
@@ -867,7 +919,6 @@ NULL
 #' @family accessors
 #'
 #' @name get_data_frame
-#' @keywords internal
 NULL
 
 
@@ -886,7 +937,9 @@ NULL
 #' @return `list`
 #'
 #' @examples
+#' # Get values for variables names used in expressions
 #' ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
+#' ex_taxmap$data_used(length(unique(taxon_names)))
 #'
 #' @family NSE helpers
 #'
@@ -961,8 +1014,8 @@ NULL
 #' @param keep_order (`logical` of length 1) If `TRUE`, keep relative order of
 #'   taxa not filtered out. For example, the result of `filter_taxa(ex_taxmap,
 #'   1:3)` and `filter_taxa(ex_taxmap, 3:1)` would be the same. Does not affect
-#'   dataset order, only taxon order. This is useful for maintaing order
-#'   correspondance with a dataset that has one value per taxon.
+#'   dataset order, only taxon order. This is useful for maintaining order
+#'   correspondence with a dataset that has one value per taxon.
 #'
 #' @return An object of type [taxonomy()] or [taxmap()]
 #'
@@ -1372,16 +1425,19 @@ NULL
 #'
 #' @return A [taxonomy()] or [taxmap()] object with new taxon ids
 #' @name replace_taxon_ids
-#' @examples \dontrun{
-#'
+#' @examples
+#' # Replace taxon IDs with numbers
 #' replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
-#' }
+#'
+#' # Make taxon IDs capital letters
+#' replace_taxon_ids(ex_taxmap, toupper(taxon_ids(ex_taxmap)))
+#'
 NULL
 
 
 #' Remove redundant parts of taxon names
 #'
-#' Remove the names of parent taxa in the begining of their children's names in a \code{taxonomy} or \code{taxmap} object.
+#' Remove the names of parent taxa in the beginning of their children's names in a \code{taxonomy} or \code{taxmap} object.
 #' This is useful for removing genus names in species binomials.
 #' \preformatted{
 #' obj$remove_redundant_names()
@@ -1391,4 +1447,11 @@ NULL
 #'
 #' @return A \code{taxonomy} or \code{taxmap} object
 #' @name remove_redundant_names
+#' @examples
+#' # Remove genus named from species taxa
+#' species_data <- c("Carnivora;Felidae;Panthera;Panthera leo",
+#'                   "Carnivora;Felidae;Panthera;Panthera tigris",
+#'                   "Carnivora;Ursidae;Ursus;Ursus americanus")
+#' obj <-  parse_tax_data(species_data, class_sep = ";")
+#' remove_redundant_names(obj)
 NULL

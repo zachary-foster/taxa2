@@ -60,8 +60,8 @@ subtaxa for example.}
 
 \item{keep_order}{(\code{logical} of length 1) If \code{TRUE}, keep relative order of
 taxa not filtered out. For example, the result of \code{filter_taxa(ex_taxmap, 1:3)} and \code{filter_taxa(ex_taxmap, 3:1)} would be the same. Does not affect
-dataset order, only taxon order. This is useful for maintaing order
-correspondance with a dataset that has one value per taxon.}
+dataset order, only taxon order. This is useful for maintaining order
+correspondence with a dataset that has one value per taxon.}
 }
 \value{
 An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}

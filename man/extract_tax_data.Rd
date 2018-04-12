@@ -23,7 +23,7 @@ term must be one of those described below:
 \item \code{taxon_name}: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
 Not necessarily unique, but interpretable by a particular \code{database}.
 Requires an internet connection.
-\item \code{fuzzy_name}: The name of a taxon, but check for mispellings first.
+\item \code{fuzzy_name}: The name of a taxon, but check for misspellings first.
 Only use if you think there are misspellings. Using \code{"taxon_name"} is
 faster.
 \item \code{class}: A list of taxon information that constitutes the full taxonomic
@@ -78,7 +78,7 @@ taxon data in a classification is reversed to be specific to broad.}
 \item{database}{(\code{character} of length 1) The name of the database that
 patterns given in \code{parser} will apply to. Valid databases include "ncbi",
 "itis", "eol", "col", "tropicos", "nbn", and "none". \code{"none"} will cause no
-database to be quired; use this if you want to not use the internet. NOTE:
+database to be queried; use this if you want to not use the internet. NOTE:
 Only \code{"ncbi"} has been tested extensively so far.}
 
 \item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
@@ -101,7 +101,7 @@ accepted sources of taxonomic information.
 \section{Failed Downloads}{
  If you have invalid inputs or a download fails for
 another reason, then there will be a "unknown" taxon ID as a placeholder
-and failed inputs will be assinged to this ID. You can remove these using
+and failed inputs will be assigned to this ID. You can remove these using
 \code{\link[=filter_taxa]{filter_taxa()}} like so: \code{filter_taxa(result, taxon_ids != "unknown")}. Add
 \code{drop_obs = FALSE} if you want the input data, but want to remove the
 taxon.

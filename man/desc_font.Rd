@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxmap--printers.R
 \name{desc_font}
 \alias{desc_font}
-\title{Descripton formatting in print methods}
+\title{Description formatting in print methods}
 \usage{
 desc_font(text)
 }

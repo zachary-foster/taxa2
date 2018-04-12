@@ -14,7 +14,11 @@ obj$taxon_names()
 taxon_names(obj)}
 }
 \examples{
-taxa:::taxon_names(ex_taxmap)
+# Return the names for each taxon
+taxon_names(ex_taxmap)
+
+# Filter by taxon name
+filter_taxa(ex_taxmap, taxon_names == "Felidae", subtaxa = TRUE)
 
 }
 \seealso{
@@ -29,4 +33,3 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{n_supertaxa}}, \code{\link{taxon_ids}},
   \code{\link{taxon_indexes}}, \code{\link{taxon_ranks}}
 }
-\keyword{internal}

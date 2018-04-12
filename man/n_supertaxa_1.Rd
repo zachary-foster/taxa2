@@ -18,7 +18,12 @@ obj$n_supertaxa_1()
 n_supertaxa_1(obj)}
 }
 \examples{
+# Test for the presence of supertaxa containing each taxon
 n_supertaxa_1(ex_taxmap)
+
+# Filter taxa based on the presence of supertaxa
+#  (this command removes all root taxa)
+filter_taxa(ex_taxmap, n_supertaxa_1 > 0)
 
 }
 \seealso{

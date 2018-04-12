@@ -17,7 +17,11 @@ obj$n_leaves_1()
 n_leaves_1(obj)}
 }
 \examples{
+# Get number of leaves for each taxon
 n_leaves_1(ex_taxmap)
+
+# Filter taxa based on number of leaves
+filter_taxa(ex_taxmap, n_leaves_1 > 0)
 
 }
 \seealso{

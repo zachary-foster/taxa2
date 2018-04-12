@@ -20,7 +20,9 @@ not evaluated and do not need to make sense.
 obj$data_used(...)}
 }
 \examples{
+# Get values for variables names used in expressions
 ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
+ex_taxmap$data_used(length(unique(taxon_names)))
 
 }
 \seealso{

@@ -435,7 +435,7 @@ punc_font <- function(text) {
 }
 
 
-#' Descripton formatting in print methods
+#' Description formatting in print methods
 #'
 #' A simple wrapper to make changing the formatting of text printed easier.
 #' This is used for non-data, formatting characters

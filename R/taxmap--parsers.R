@@ -81,6 +81,61 @@
 #' @family parsers
 #'
 #' @examples
+#'  # Read a vector of classifications
+#'  my_taxa <- c("Mammalia;Carnivora;Felidae",
+#'               "Mammalia;Carnivora;Felidae",
+#'               "Mammalia;Carnivora;Ursidae")
+#'  parse_tax_data(my_taxa, class_sep = ";")
+#'
+#'  # Read a list of classifications
+#'  my_taxa <- list("Mammalia;Carnivora;Felidae",
+#'                 "Mammalia;Carnivora;Felidae",
+#'                 "Mammalia;Carnivora;Ursidae")
+#'  parse_tax_data(my_taxa, class_sep = ";")
+#'
+#'  # Read classifications in a table in a single column
+#'  species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+#'                                     "Mammalia;Carnivora;Felidae",
+#'                                     "Mammalia;Carnivora;Ursidae"),
+#'                            species_id = c("A", "B", "C"))
+#'  parse_tax_data(species_data, class_sep = ";", class_cols = "tax")
+#'
+#'  # Read classifications in a table in multiple columns
+#'  species_data <- data.frame(lineage = c("Mammalia;Carnivora;Felidae",
+#'                                         "Mammalia;Carnivora;Felidae",
+#'                                         "Mammalia;Carnivora;Ursidae"),
+#'                             species = c("Panthera leo",
+#'                                         "Panthera tigris",
+#'                                         "Ursus americanus"),
+#'                             species_id = c("A", "B", "C"))
+#'  parse_tax_data(species_data, class_sep = c(" ", ";"),
+#'                 class_cols = c("lineage", "species"))
+#'
+#'  # Read classification tables with one column per rank
+#'  species_data <- data.frame(class = c("Mammalia", "Mammalia", "Mammalia"),
+#'                             order = c("Carnivora", "Carnivora", "Carnivora"),
+#'                             family = c("Felidae", "Felidae", "Ursidae"),
+#'                             genus = c("Panthera", "Panthera", "Ursus"),
+#'                             species = c("leo", "tigris", "americanus"),
+#'                             species_id = c("A", "B", "C"))
+#'   parse_tax_data(species_data, class_cols = 1:5)
+#'   parse_tax_data(species_data, class_cols = 1:5,
+#'                  named_by_rank = TRUE) # makes `taxon_ranks()` work
+#'
+#'  # Classifications with extra information
+#'  my_taxa <- c("Mammalia_class_1;Carnivora_order_2;Felidae_genus_3",
+#'               "Mammalia_class_1;Carnivora_order_2;Felidae_genus_3",
+#'               "Mammalia_class_1;Carnivora_order_2;Ursidae_genus_3")
+#'  parse_tax_data(my_taxa, class_sep = ";",
+#'                 class_regex = "(.+)_(.+)_([0-9]+)",
+#'                 class_key = c(my_name = "taxon_name",
+#'                               a_rank = "taxon_rank",
+#'                               some_num = "info"))
+#'
+#'
+#'   # --- Parsing multiple datasets at once (advanced) ---
+#'   # The rest is one example for how to classify multiple datasets at once.
+#'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
 #'                                      "Mammalia;Carnivora;Felidae",
@@ -368,7 +423,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   (e.g. NCBI accession numbers).
 #'   * `"taxon_id"`: A reference database taxon ID (e.g. a NCBI taxon ID)
 #'   * `"taxon_name"`: A single taxon name (e.g. "Homo sapiens" or "Primates")
-#'   * `"fuzzy_name"`: A single taxon name, but check for mispellings first.
+#'   * `"fuzzy_name"`: A single taxon name, but check for misspellings first.
 #'   Only use if you think there are misspellings. Using `"taxon_name"` is
 #'   faster.
 #' @param column (`character` or `integer`) The name or index of the column that
@@ -399,7 +454,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   as a dataset, like those in `datasets`.
 #' @param use_database_ids (`TRUE`/`FALSE`) Whether or not to use downloaded
 #'   database taxon ids instead of arbitrary, automatically-generated taxon ids.
-#' @param ask  (`TRUE`/`FALSE`) Whether or not to promt the user for input.
+#' @param ask  (`TRUE`/`FALSE`) Whether or not to prompt the user for input.
 #'   Currently, this would only happen when looking up the taxonomy of a taxon
 #'   name with multiple matches. If `FALSE`, taxa with multiple hits are treated
 #'   as if they do not exist in the database. This might change in the future if
@@ -407,7 +462,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #' @section Failed Downloads: If you have invalid inputs or a download fails for
 #'   another reason, then there will be a "unknown" taxon ID as a placeholder
-#'   and failed inputs will be assinged to this ID. You can remove these using
+#'   and failed inputs will be assigned to this ID. You can remove these using
 #'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
 #'   `drop_obs = FALSE` if you want the input data, but want to remove the
 #'   taxon.
@@ -454,7 +509,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #'
 #'   # --- Parsing multiple datasets at once (advanced) ---
-#'   The rest is one large exmple for how to classify multiple datasets at once.
+#'   The rest is one example for how to classify multiple datasets at once.
 #'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
@@ -841,7 +896,7 @@ get_sort_var <- function(data, var) {
 #'   * `taxon_name`: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
 #'   Not necessarily unique, but interpretable by a particular `database`.
 #'   Requires an internet connection.
-#'   * `fuzzy_name`: The name of a taxon, but check for mispellings first.
+#'   * `fuzzy_name`: The name of a taxon, but check for misspellings first.
 #'   Only use if you think there are misspellings. Using `"taxon_name"` is
 #'   faster.
 #'   * `class`: A list of taxon information that constitutes the full taxonomic
@@ -886,7 +941,7 @@ get_sort_var <- function(data, var) {
 #' @param database (`character` of length 1) The name of the database that
 #'   patterns given in `parser` will apply to. Valid databases include "ncbi",
 #'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
-#'   database to be quired; use this if you want to not use the internet. NOTE:
+#'   database to be queried; use this if you want to not use the internet. NOTE:
 #'   Only `"ncbi"` has been tested extensively so far.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `regex` in the output object.
@@ -895,7 +950,7 @@ get_sort_var <- function(data, var) {
 #'
 #' @section Failed Downloads: If you have invalid inputs or a download fails for
 #'   another reason, then there will be a "unknown" taxon ID as a placeholder
-#'   and failed inputs will be assinged to this ID. You can remove these using
+#'   and failed inputs will be assigned to this ID. You can remove these using
 #'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
 #'   `drop_obs = FALSE` if you want the input data, but want to remove the
 #'   taxon.

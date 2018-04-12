@@ -692,7 +692,7 @@ Taxonomy <- R6::R6Class(
 
     # --------------------------------------------------------------------------
     # Get number of leaves for each taxon
-      n_leaves = function() {
+    n_leaves = function() {
       vapply(self$leaves(recursive = TRUE, value = "taxon_indexes"), length, numeric(1))
     },
 
@@ -1080,6 +1080,8 @@ Taxonomy <- R6::R6Class(
                              "n_supertaxa_1",
                              "n_subtaxa",
                              "n_subtaxa_1",
+                             "n_leaves",
+                             "n_leaves_1",
                              "taxon_ranks",
                              "is_root",
                              "is_stem",

@@ -28,6 +28,7 @@ obj$transmute_obs(target, ...)
 transmute_obs(obj, target, ...)}
 }
 \examples{
+# Replace columns in a table with new columns
 transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 
 }

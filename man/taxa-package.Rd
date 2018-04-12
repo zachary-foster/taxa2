@@ -7,9 +7,9 @@
 \description{
 The \code{taxa} package is intended to:
 \itemize{
-\item Provide a set of classes to store taxonomic data and any user-specific data assocaited with it
+\item Provide a set of classes to store taxonomic data and any user-specific data associated with it
 \item Provide functions to convert commonly used formats to these classes
-\item Provide a common foundation for other packages to build on to enable an ecosystem of compatible pacakges dealing with taxonomic data.
+\item Provide a common foundation for other packages to build on to enable an ecosystem of compatible packages dealing with taxonomic data.
 \item Provide generally useful functionality, such as filtering and mapping functions
 }
 }
@@ -107,7 +107,7 @@ Note, this is mostly of interest to developers and advanced users.
 
 The classes in the \code{taxa} package are mostly
 \href{https://adv-r.hadley.nz/r6.html}{R6} classes (\link{R6Class}). A few of the
-simplier ones (\link{taxa} and \link{hierarchies}) are
+simpler ones (\link{taxa} and \link{hierarchies}) are
 \href{https://adv-r.hadley.nz/s3.html}{S3} instead. R6 classes are different than
 most R objects because they are
 \href{https://en.wikipedia.org/wiki/Immutable_object}{mutable} (e.g. A function
@@ -116,7 +116,7 @@ to class systems in
 \href{https://en.wikipedia.org/wiki/Object-oriented_programming}{object-oriented}
 languages like python. As in other object-oriented class systems, functions
 are thought to "belong" to classes (i.e. the data), rather than functions
-existing independntly of the data. For example, the function \code{print} in R
+existing independently of the data. For example, the function \code{print} in R
 exists apart from what it is printing, although it will change how it prints
 based on what the class of the data is that is passed to it. In fact, a user
 can make a custom print method for their own class by defining a function
@@ -136,7 +136,7 @@ many R users, all functions in \code{taxa} also have S3 versions. For example,
 the \code{\link[=filter_taxa]{filter_taxa()}} function can be called on a \link{taxmap} object called
 \code{my_obj} like \code{my_obj$filter_taxa(...)} (the R6 syntax) or
 \code{filter_taxa(my_obj, ...)} (the S3 syntax). For some functions, these two
-way of calling the function can have differnt effect. For functions that do
+way of calling the function can have different effect. For functions that do
 not returned a modified version of the input (e.g. \code{\link[=subtaxa]{subtaxa()}}), the two ways have identical behavior.
 However, functions like \code{\link[=filter_taxa]{filter_taxa()}}, that modify their inputs, actually
 change the object passed to them as the first argument as well as returning that
@@ -150,7 +150,7 @@ and
 
 and
 
-\code{new_obj <- filter_taxa(my_obj, ...)}
+\code{new_obj <- my_obj$filter_taxa(...)}
 
 all replace \code{my_obj} with the filtered result, but
 
@@ -170,13 +170,13 @@ to be more readable and shorter. In effect, there are variables that only
 "exist" inside a function call and depend on what is passed to that function
 as the first parameter (usually a class object). For example, in the \code{dpylr}
 function \code{\link[=filter]{filter()}}, column names can be used as if they were independent
-variables. See \code{?dpylr::filter} for examples of this. The \code{taxa} pacakge builds on this idea.
+variables. See \code{?dpylr::filter} for examples of this. The \code{taxa} package builds on this idea.
 
 For many functions that work on \link{taxonomy} or \link{taxmap} objects (e.g. \link{filter_taxa}),
 some functions that return per-taxon information (e.g. \code{\link[=taxon_names]{taxon_names()}}) can
-be refered to by just the name of the function. When one of these functions
+be referred to by just the name of the function. When one of these functions
 are referred to by name, the function is run on the relevant object and its
-value replaces the fucntion name. For example,
+value replaces the function name. For example,
 
 \code{new_obj <- filter_taxa(my_obj, taxon_names == "Bacteria")}
 
@@ -207,7 +207,7 @@ what values can be used  with \code{\link[=all_names]{all_names()}} like \code{a
 
 Various elements of the \code{taxa} package were inspired by the \link{dplyr} and
 \link{taxize} packages. This package started as parts of the \code{metacoder} and
-\code{binomen} packages. There are also many dependncies that make \code{taxa}
+\code{binomen} packages. There are also many dependencies that make \code{taxa}
 possible.
 }
 
@@ -220,7 +220,7 @@ at our \href{https://github.com/ropensci/taxa}{GitHub repository}:
 \url{https://github.com/ropensci/taxa/issues}
 
 A GitHub account is free and easy to set up. We welcome feedback! If you
-dont want to use GitHub for some reason, feel free to email us. We do
+don't want to use GitHub for some reason, feel free to email us. We do
 prefer posting to github since it allows others that might have the same
 issue to see our conversation. It also helps us keep track of what problems
 we need to address.

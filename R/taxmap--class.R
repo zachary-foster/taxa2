@@ -634,6 +634,8 @@ Taxmap <- R6::R6Class(
       "n_supertaxa_1",
       "n_subtaxa",
       "n_subtaxa_1",
+      "n_leaves",
+      "n_leaves_1",
       "taxon_ranks",
       "is_root",
       "is_stem",

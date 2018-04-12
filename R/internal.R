@@ -7,7 +7,7 @@
 #' @param prefix (`character` of length 1) What to print before
 #'   `chars`, on the same line.
 #' @param sep What to put between consecutive values
-#' @param mid What is used to indicate ommited values
+#' @param mid What is used to indicate omitted values
 #' @param trunc What is appended onto truncated values
 #' @param max_chars (`numeric` of length 1) The maximum number of
 #'   characters to print.

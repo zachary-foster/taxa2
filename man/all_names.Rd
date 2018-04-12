@@ -22,7 +22,7 @@ each taxon.}
 
 \item{warn}{option only applies to \code{\link[=taxmap]{taxmap()}} objects. If \code{TRUE}, warn if
 there are duplicate names. Duplicate names make it unclear what data is
-beinng referred to.}
+being referred to.}
 }
 \value{
 \code{character}
