@@ -90,6 +90,45 @@ taxon.
 \examples{
 \dontrun{
 
+  # Look up taxon names in vector from NCBI
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name")
+
+  # Look up taxon names in list from NCBI
+  lookup_tax_data(list("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name")
+
+  # Look up taxon names in table from NCBI
+  my_table <- data.frame(name = c("homo sapiens", "felis catus"),
+                         decency = c("meh", "good"))
+  lookup_tax_data(my_table, type = "taxon_name", column = "name")
+
+  # Look up taxon names from NCBI with fuzzy matching
+  lookup_tax_data(c("homo sapienss", "feles catus", "Solanacese"),
+                  type = "fuzzy_name")
+
+  # Look up taxon names from a different database
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name", database = "ITIS")
+
+  # Prevent asking questions for ambiguous taxon names
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name", database = "ITIS", ask = FALSE)
+
+  # Look up taxon IDs from NCBI
+  lookup_tax_data(c("9689", "9694", "9643"), type = "taxon_id")
+
+  # Look up sequence IDs from NCBI
+  lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+                  type = "seq_id")
+
+  # Make up new taxon IDs instead of using the downloaded ones
+  lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+                  type = "seq_id", use_database_ids = FALSE)
+
+  # --- Parsing multiple datasets at once (advanced) ---
+  The rest is one large exmple for how to classify multiple datasets at once.
+
   # Make example data with taxonomic classifications
   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
                                      "Mammalia;Carnivora;Felidae",

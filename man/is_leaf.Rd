@@ -17,7 +17,11 @@ obj$is_leaf()
 is_leaf(obj)}
 }
 \examples{
+# Test which taxon IDs correspond to leaves
 is_leaf(ex_taxmap)
+
+# Filter out leaves
+filter_taxa(ex_taxmap, ! is_leaf)
 
 }
 \seealso{

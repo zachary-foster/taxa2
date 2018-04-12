@@ -16,11 +16,13 @@ referenced in the same function call. Any variable name that appears in
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.  See \code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for
-this function and more information. Calling the function using the
-\code{obj$mutate_obs(...)} style edits "obj" in place, unlike most R
-functions. However, calling the function using the \code{mutate_obs(obj, ...)} imitates R's traditional copy-on-modify semantics, so "obj" would not be
-changed; instead a changed version would be returned, like most R functions.
+Add columns to tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.  See
+\code{\link[dplyr:mutate]{dplyr::mutate()}} for the inspiration for this function and more information.
+Calling the function using the \code{obj$mutate_obs(...)} style edits "obj" in
+place, unlike most R functions. However, calling the function using the
+\code{mutate_obs(obj, ...)} imitates R's traditional copy-on-modify semantics, so
+"obj" would not be changed; instead a changed version would be returned, like
+most R functions.
 \preformatted{
 obj$mutate_obs(target, ...)
 mutate_obs(obj, target, ...)}

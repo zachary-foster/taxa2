@@ -416,6 +416,46 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #' @examples \dontrun{
 #'
+#'   # Look up taxon names in vector from NCBI
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name")
+#'
+#'   # Look up taxon names in list from NCBI
+#'   lookup_tax_data(list("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name")
+#'
+#'   # Look up taxon names in table from NCBI
+#'   my_table <- data.frame(name = c("homo sapiens", "felis catus"),
+#'                          decency = c("meh", "good"))
+#'   lookup_tax_data(my_table, type = "taxon_name", column = "name")
+#'
+#'   # Look up taxon names from NCBI with fuzzy matching
+#'   lookup_tax_data(c("homo sapienss", "feles catus", "Solanacese"),
+#'                   type = "fuzzy_name")
+#'
+#'   # Look up taxon names from a different database
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name", database = "ITIS")
+#'
+#'   # Prevent asking questions for ambiguous taxon names
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name", database = "ITIS", ask = FALSE)
+#'
+#'   # Look up taxon IDs from NCBI
+#'   lookup_tax_data(c("9689", "9694", "9643"), type = "taxon_id")
+#'
+#'   # Look up sequence IDs from NCBI
+#'   lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+#'                   type = "seq_id")
+#'
+#'   # Make up new taxon IDs instead of using the downloaded ones
+#'   lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+#'                   type = "seq_id", use_database_ids = FALSE)
+#'
+#'
+#'   # --- Parsing multiple datasets at once (advanced) ---
+#'   The rest is one large exmple for how to classify multiple datasets at once.
+#'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
 #'                                      "Mammalia;Carnivora;Felidae",
@@ -468,6 +508,7 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
   # Check that a supported database is being used
   supported_databases <- names(database_list)
+  database <- tolower(database)
   if (! database %in% supported_databases) {
     stop(paste0('The database "', database,
                 '" is not a valid database for looking up that taxonomy of ',
@@ -782,11 +823,12 @@ get_sort_var <- function(data, var) {
 
 #' Extracts taxonomy info from vectors with regex
 #'
-#' Parse taxonomic information in a character vector into a [taxmap()] object.
+#' Convert taxonomic information in a character vector into a [taxmap()] object.
 #' The location and identity of important information in the input is specified
-#' using a regular expression with capture groups and a corresponding key. An
-#' object of type [taxmap()] is returned containing the specified information.
-#' See the `key` option for accepted sources of taxonomic information.
+#' using a [regular expression](https://en.wikipedia.org/wiki/Regular_expression)
+#' with capture groups and a corresponding key. An object of type [taxmap()] is
+#' returned containing the specified information. See the `key` option for
+#' accepted sources of taxonomic information.
 #'
 #' @param tax_data A vector from which to extract taxonomy information.
 #' @param key (`character`) The identity of the capturing groups defined using

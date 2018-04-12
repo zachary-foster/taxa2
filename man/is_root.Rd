@@ -17,7 +17,11 @@ obj$is_root()
 is_root(obj)}
 }
 \examples{
+# Test for which taxon IDs correspond to roots
 is_root(ex_taxmap)
+
+# Filter out roots
+filter_taxa(ex_taxmap, ! is_root)
 
 }
 \seealso{

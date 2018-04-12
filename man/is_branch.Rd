@@ -18,7 +18,11 @@ obj$is_branch()
 is_branch(obj)}
 }
 \examples{
+# Test which taxon IDs correspond to branches
 is_branch(ex_taxmap)
+
+# Filter out branches
+filter_taxa(ex_taxmap, ! is_branch)
 
 }
 \seealso{

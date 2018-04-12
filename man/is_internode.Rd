@@ -19,7 +19,11 @@ obj$is_internode()
 is_internode(obj)}
 }
 \examples{
+# Test for which taxon IDs correspond to internodes
 is_internode(ex_taxmap)
+
+# Filter out internodes
+filter_taxa(ex_taxmap, ! is_internode)
 
 }
 \seealso{

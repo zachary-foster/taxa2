@@ -12,8 +12,10 @@
 Named \code{character}
 }
 \description{
-Get names of available data used in expressions.
-Expressions are not evaluated and do not need to make sense.
+Get names of available data used in expressions. This is used to find data
+for use with \href{http://adv-r.had.co.nz/Computing-on-the-language.html}{non-standard evaluation} (NSE) in
+functions like \code{\link[=filter_taxa]{filter_taxa()}}. Expressions are not evaluated and do not need
+to make sense.
 \preformatted{
 obj$names_used(...)}
 }
@@ -22,8 +24,7 @@ ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 
 }
 \seealso{
-Other accessors: \code{\link{all_names}},
-  \code{\link{data_used}}, \code{\link{get_data_frame}},
-  \code{\link{get_data}}
+Other NSE helpers: \code{\link{all_names}},
+  \code{\link{data_used}}, \code{\link{get_data}}
 }
 \keyword{internal}

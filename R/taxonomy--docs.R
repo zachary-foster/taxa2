@@ -490,12 +490,17 @@ NULL
 #'
 #' # Return indexes for a subset of taxa
 #' leaves(ex_taxmap, subset = 2:17)
+#' leaves(ex_taxmap, subset = taxon_names == "Plantae")
 #'
 #' # Return something besides taxon indexes
 #' leaves(ex_taxmap, value = "taxon_names")
+#' leaves(ex_taxmap, subset = taxon_ranks == "genus", value = "taxon_names")
 #'
-#' # Return a vector of all leaves
-#' leaves(ex_taxmap, simplify = TRUE)
+#' # Return a vector of all unique values
+#' leaves(ex_taxmap, value = "taxon_names", simplify = TRUE)
+#'
+#' # Only return leaves for their direct supertaxa
+#' leaves(ex_taxmap, value = "taxon_names", recursive = FALSE)
 #'
 #' @name leaves
 NULL
@@ -527,23 +532,32 @@ NULL
 #' @param value What data to give to the function. Any result of
 #'   `all_names(obj)` can be used, but it usually only makes sense to use data
 #'   that has an associated taxon id.
-#' @param ... Extra arguments are passed to the function.
+#' @param ... Extra arguments are passed to the function `func`.
 #'
 #' @name leaves_apply
 #'
 #' @examples
-#' # Count number of leaves under each taxon
-#' leaves_apply(ex_taxmap, length, simplify = TRUE)
+#' # Count number of leaves under each taxon or its subtaxa
+#' leaves_apply(ex_taxmap, length)
 #'
-#' # Return
+#' # Count number of leaves under each taxon
+#' leaves_apply(ex_taxmap, length, recursive = FALSE)
+#'
+#' # Converting output of leaves to upper case
+#' leaves_apply(ex_taxmap, value = "taxon_names", toupper)
+#'
+#' # Passing arguments to the function
+#' leaves_apply(ex_taxmap, value = "taxon_names", paste0, collapse = ", ")
+#'
 NULL
 
 
 #' Get classifications of taxa
 #'
-#' Get classifications of taxa in an object of type [taxonomy()] or [taxmap()]
-#' composed of data assoicated with taxa. Each classification is constructed by
-#' concatenating the data of the given taxon and all of its supertaxa.
+#' Get character vector classifications of taxa in an object of type
+#' [taxonomy()] or [taxmap()] composed of data assoicated with taxa. Each
+#' classification is constructed by concatenating the data of the given taxon
+#' and all of its supertaxa.
 #' \preformatted{
 #' obj$classifications(value = "taxon_names", sep = ";")
 #' classifications(obj, value = "taxon_names", sep = ";")}
@@ -729,7 +743,7 @@ NULL
 #' Return names of data in [taxonomy()] or [taxmap()]
 #'
 #' Return the names of data that can be used with functions in the taxa
-#' package that use [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html),
+#' package that use [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) (NSE),
 #' like [filter_taxa()].
 #' \preformatted{
 #' obj$all_names(tables = TRUE, funcs = TRUE,
@@ -748,8 +762,9 @@ NULL
 #' @param builtin_funcs This option only applies to [taxmap()] objects. If
 #'   `TRUE`, include functions like [n_supertaxa()] that provide information for
 #'   each taxon.
-#' @param This option only applies to [taxmap()] objects. warn If `TRUE`, warn
-#'   if there are duplicate names.
+#' @param warn option only applies to [taxmap()] objects. If `TRUE`, warn if
+#'   there are duplicate names. Duplicate names make it unclear what data is
+#'   beinng referred to.
 #'
 #' @return `character`
 #'
@@ -760,7 +775,7 @@ NULL
 #' # Dont include the names of automatically included functions.
 #' all_names(ex_taxmap, builtin_funcs = FALSE)
 #'
-#' @family accessors
+#' @family NSE helpers
 #'
 #' @name all_names
 NULL
@@ -768,8 +783,10 @@ NULL
 
 #' Get names of data used in expressions
 #'
-#' Get names of available data used in expressions.
-#' Expressions are not evaluated and do not need to make sense.
+#' Get names of available data used in expressions. This is used to find data
+#' for use with [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) (NSE) in
+#' functions like [filter_taxa()]. Expressions are not evaluated and do not need
+#' to make sense.
 #' \preformatted{
 #' obj$names_used(...)}
 #'
@@ -781,7 +798,7 @@ NULL
 #' @examples
 #' ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 #'
-#' @family accessors
+#' @family NSE helpers
 #'
 #' @name names_used
 #' @keywords internal
@@ -814,7 +831,7 @@ NULL
 #' # Get all values
 #' get_data(ex_taxmap)
 #'
-#' @family accessors
+#' @family NSE helpers
 #'
 #' @name get_data
 NULL
@@ -871,7 +888,7 @@ NULL
 #' @examples
 #' ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
 #'
-#' @family accessors
+#' @family NSE helpers
 #'
 #' @name data_used
 #' @keywords internal
@@ -914,23 +931,25 @@ NULL
 #'   of ranks above the target taxa to return. `0` is equivalent to `FALSE`.
 #'   Negative numbers are equivalent to `TRUE`.
 #' @param drop_obs (`logical`)  This option only applies to [taxmap()] objects.
-#'   If `FALSE`, include observations even if the taxon they are assigned to is
-#'   filtered out. Observations assigned to removed taxa will be assigned to
-#'   \code{NA}. This option can be either simply `TRUE`/`FALSE`, meaning that
+#'   If `FALSE`, include observations (i.e. user-defined data in `obj$data`)
+#'   even if the taxon they are assigned to is filtered out. Observations
+#'   assigned to removed taxa will be assigned to \code{NA}. This option can be
+#'   either simply `TRUE`/`FALSE`, meaning that all data sets will be treated
+#'   the same, or a logical vector can be supplied with names corresponding one
+#'   or more data sets in `obj$data`. For example, `c(abundance = FALSE, stats =
+#'   TRUE)` would include observations whose taxon was filtered out in
+#'   `obj$data$abundance`, but not in `obj$data$stats`. See the `reassign_obs`
+#'   option below for further complications.
+#' @param reassign_obs (`logical` of length 1) This option only applies to
+#'   [taxmap()] objects. If `TRUE`, observations (i.e. user-defined data in
+#'   `obj$data`) assigned to removed taxa will be reassigned to the closest
+#'   supertaxon that passed the filter. If there are no supertaxa of such an
+#'   observation that passed the filter, they will be filtered out if `drop_obs`
+#'   is `TRUE`. This option can be either simply `TRUE`/`FALSE`, meaning that
 #'   all data sets will be treated the same, or a logical vector can be supplied
 #'   with names corresponding one or more data sets in `obj$data`. For example,
-#'   `c(abundance = FALSE, stats = TRUE)` would include observations whose taxon
-#'   was filtered out in `obj$data$abundance`, but not in `obj$data$stats`. See
-#'   the `reassign_obs` option below for further complications.
-#' @param reassign_obs (`logical` of length 1) This option only applies to
-#'   [taxmap()] objects. If `TRUE`, observations assigned to removed taxa will
-#'   be reassigned to the closest supertaxon that passed the filter. If there
-#'   are no supertaxa of such an observation that passed the filter, they will
-#'   be filtered out if `drop_obs` is `TRUE`. This option can be either simply
-#'   `TRUE`/`FALSE`, meaning that all data sets will be treated the same, or a
-#'   logical vector can be supplied with names corresponding one or more data
-#'   sets in `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
-#'   reassign observations in `obj$data$abundance`, but not in `obj$data$stats`.
+#'   `c(abundance = TRUE, stats = FALSE)` would reassign observations in
+#'   `obj$data$abundance`, but not in `obj$data$stats`.
 #' @param reassign_taxa (`logical` of length 1) If `TRUE`, subtaxa of removed
 #'   taxa will be reassigned to the closest supertaxon that passed the filter.
 #'   This is useful for removing intermediate levels of a taxonomy.
@@ -956,6 +975,9 @@ NULL
 #'
 #' # Fiter by TRUE/FALSE
 #' filter_taxa(ex_taxmap, taxon_names == "Plantae", subtaxa = TRUE)
+#' filter_taxa(ex_taxmap, n_obs > 3)
+#' filter_taxa(ex_taxmap, ! taxon_ranks %in% c("species", "genus"))
+#' filter_taxa(ex_taxmap, taxon_ranks == "genus", n_obs > 1)
 #'
 #' # Filter by an observation characteristic
 #' dangerous_taxa <- sapply(ex_taxmap$obs("info"),
@@ -970,11 +992,13 @@ NULL
 #' filter_taxa(ex_taxmap, 1, subtaxa = TRUE)
 #' filter_taxa(ex_taxmap, 1, subtaxa = 2)
 #'
-#' # Dont remove rows in data corresponding to removed taxa
+#' # Dont remove rows in user-defined data corresponding to removed taxa
+#' filter_taxa(ex_taxmap, 2, drop_obs = FALSE)
 #' filter_taxa(ex_taxmap, 2, drop_obs = c(info = FALSE))
 #'
 #' # Remove a taxon and it subtaxa
-#' filter_taxa(ex_taxmap, 1, subtaxa = TRUE, invert = TRUE)
+#' filter_taxa(ex_taxmap, taxon_names == "Mammalia",
+#'             subtaxa = TRUE, invert = TRUE)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -986,7 +1010,11 @@ NULL
 #'
 #' Sort the edge list and taxon list in [taxonomy()] or [taxmap()] objects. See
 #' [dplyr::arrange()] for the inspiration for this function and more
-#' information.
+#' information. Calling the function using the `obj$arrange_taxa(...)` style
+#' edits "obj" in place, unlike most R functions. However, calling the function
+#' using the `arrange_taxa(obj, ...)` imitates R's traditional copy-on-modify
+#' semantics, so "obj" would not be changed; instead a changed version would be
+#' returned, like most R functions.
 #' \preformatted{
 #' obj$arrange_taxa(...)
 #' arrange_taxa(obj, ...)}
@@ -1152,7 +1180,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Test for which taxon IDs correspond to roots
 #' is_root(ex_taxmap)
+#'
+#' # Filter out roots
+#' filter_taxa(ex_taxmap, ! is_root)
 #'
 #' @name is_root
 NULL
@@ -1175,7 +1207,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Test for which taxon IDs correspond to internodes
 #' is_internode(ex_taxmap)
+#'
+#' # Filter out internodes
+#' filter_taxa(ex_taxmap, ! is_internode)
 #'
 #' @name is_internode
 NULL
@@ -1198,7 +1234,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Test which taxon IDs correspond to stems
 #' is_stem(ex_taxmap)
+#'
+#' # Filter out stems
+#' filter_taxa(ex_taxmap, ! is_stem)
 #'
 #' @name is_stem
 NULL
@@ -1220,7 +1260,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Test which taxon IDs correspond to branches
 #' is_branch(ex_taxmap)
+#'
+#' # Filter out branches
+#' filter_taxa(ex_taxmap, ! is_branch)
 #'
 #' @name is_branch
 NULL
@@ -1241,7 +1285,11 @@ NULL
 #' @family taxonomy data functions
 #'
 #' @examples
+#' # Test which taxon IDs correspond to leaves
 #' is_leaf(ex_taxmap)
+#'
+#' # Filter out leaves
+#' filter_taxa(ex_taxmap, ! is_leaf)
 #'
 #' @name is_leaf
 NULL

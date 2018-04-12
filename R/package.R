@@ -4,14 +4,14 @@
 #'   * Provide a set of classes to store taxonomic data and any user-specific data assocaited with it
 #'   * Provide functions to convert commonly used formats to these classes
 #'   * Provide a common foundation for other packages to build on to enable an ecosystem of compatible pacakges dealing with taxonomic data.
-#'   * Provide generally useful funionality, such as filtering and mapping functions
+#'   * Provide generally useful functionality, such as filtering and mapping functions
 #'
 #' @section Main classes:
 #'
 #'   These are the classes users would typically interact with:
 #'
-#'   * [taxon]: A class used to define a single taxon. Most other classes in the
-#'   taxa package include one or more objects of this class.
+#'   * [taxon]: A class used to define a single taxon. Many other classes in the
+#'   `taxa`` package include one or more objects of this class.
 #'   * [taxa]: Stores one or more [taxon] objects. This is just a thin wrapper
 #'   for a list of [taxon] objects.
 #'   * [hierarchy]: A class containing an ordered list of [taxon] objects that
@@ -39,32 +39,32 @@
 #'   * [taxon_id]: Used to store taxon IDs, either arbitrary or from a
 #'   particular taxonomy database.
 #'   * [taxon_name]: Used to store taxon names, either arbitrary or from a
-#'   particular taxonomy database. * [taxon_rank]: Used to store taxon ranks
-#'   (e.g. species, family), either arbitrary or from a particular taxonomy
-#'   database.
+#'   particular taxonomy database.
+#'   * [taxon_rank]: Used to store taxon ranks (e.g. species, family), either
+#'   arbitrary or from a particular taxonomy database.
 #'
 #' @section Major manipulation functions:
 #'
-#'  These are some of the more important functions used to filter data in class
-#'  that store multiple taxa, like [hierarchiies], [taxmap], and [taxonomy].
+#'  These are some of the more important functions used to filter data in classes
+#'  that store multiple taxa, like [hierarchies], [taxmap], and [taxonomy].
 #'
 #'   * [filter_taxa]: Filter taxa in a [taxonomy] or [taxmap] object with a
 #'   series of conditions. Relationships between remaining taxa and user-defined
-#'   data are preserved (There are lots of options controlling this)
+#'   data are preserved (There are many options controlling this).
 #'   * [filter_obs]: Filter user-defined data [taxmap] object with a series of
 #'   conditions. Relationships between remaining taxa and user-defined data are
-#'   preserved (There are lots of options controlling this)
+#'   preserved (There are many options controlling this);
 #'   * [sample_n_taxa]: Randomly sample taxa. Has same abilities as
-#'   [filter_taxa]
+#'   [filter_taxa].
 #'   * [sample_n_obs]: Randomly sample observations. Has same abilities as
-#'   [filter_obs]
+#'   [filter_obs].
 #'   * [mutate_obs]: Add datasets or columns to datasets in the `data` list of
-#'   [taxmap] objects
+#'   [taxmap] objects.
 #'   * [pick]: Pick out specific taxa, while others are dropped in [hierarchy]
-#'   and [hierarchies] objects
-#'   * [pop]: Pop out taxa (drop them) in [hierarchy] and [hierarchies] objects
+#'   and [hierarchies] objects.
+#'   * [pop]: Pop out taxa (drop them) in [hierarchy] and [hierarchies] objects.
 #'   * [span]: Select a range of taxa, either by two names, or relational
-#'   operators in [hierarchy] and [hierarchies] objects
+#'   operators in [hierarchy] and [hierarchies] objects.
 #'
 #' @section Mapping functions:
 #'
@@ -91,17 +91,19 @@
 #'  [S3](https://adv-r.hadley.nz/s3.html) instead. R6 classes are different than
 #'  most R objects because they are
 #'  [mutable](https://en.wikipedia.org/wiki/Immutable_object) (e.g. A function
-#'  can change its input without returning it). In this, they are more similar to class
-#'  systems in [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming) languages like python.
-#'  As in other object-oriented class systems, functions are thought to "belong"
-#'  to classes (i.e. the data), rather than functions existing independntly of
-#'  the data. For example, the function `print` in R exists apart from what it
-#'  is printing, although it will change how it prints based on what the class
-#'  of the data is passed to it. In fact, a user can make a custom print method
-#'  for their own class by defining a function called `print.myclassname`.
-#'  In contrast, the functions that operate on R6 functions are "packaged" with
-#'  the data they operate on. For example, a print method of an object for an R6
-#'  class might be called like so `my_data$print()` instead of `print(my_data)`.
+#'  can change its input without returning it). In this, they are more similar
+#'  to class systems in
+#'  [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming)
+#'  languages like python. As in other object-oriented class systems, functions
+#'  are thought to "belong" to classes (i.e. the data), rather than functions
+#'  existing independntly of the data. For example, the function `print` in R
+#'  exists apart from what it is printing, although it will change how it prints
+#'  based on what the class of the data is that is passed to it. In fact, a user
+#'  can make a custom print method for their own class by defining a function
+#'  called `print.myclassname`. In contrast, the functions that operate on R6
+#'  functions are "packaged" with the data they operate on. For example, a print
+#'  method of an object for an R6 class might be called like
+#'  `my_data$print()` instead of `print(my_data)`.
 #'
 #' @section The two ways to call functions:
 #'
@@ -114,7 +116,7 @@
 #'  `filter_taxa(my_obj, ...)` (the S3 syntax). For some functions, these two
 #'  way of calling the function can have differnt effect. For functions that do
 #'  not returned a modified version of the input (e.g. [subtaxa()]), the two ways have identical behavior.
-#'  However, functions like [filter_taxa()] that modify their inputs, actually
+#'  However, functions like [filter_taxa()], that modify their inputs, actually
 #'  change the object passed to them as the first argument as well as returning that
 #'  object. For example,
 #'
@@ -124,7 +126,11 @@
 #'
 #'  `my_obj$filter_taxa(...)`
 #'
-#'  both replace `my_obj` with the filtered result, but
+#'  and
+#'
+#'  `new_obj <- filter_taxa(my_obj, ...)`
+#'
+#'  all replace `my_obj` with the filtered result, but
 #'
 #'  `new_obj <- filter_taxa(my_obj, ...)`
 #'
@@ -133,13 +139,13 @@
 #'
 #' @section Non-standard evaluation:
 #'
-#'   Note, this is a rather advanced topic.
+#'   This is a rather advanced topic.
 #'
-#'   Like packages such as [ggplot2] and [dplyr], the `taxa` package uses
+#'   Like packages such as `ggplot2` and [dplyr], the `taxa` package uses
 #'   [non-standard evaluation](https://adv-r.hadley.nz/meta.html) to allow code
 #'   to be more readable and shorter. In effect, there are variables that only
 #'   "exist" inside a function call and depend on what is passed to that function
-#'   as the first parameter (i.e. A class object). For example, in the `dpylr`
+#'   as the first parameter (usually a class object). For example, in the `dpylr`
 #'   function [filter()], column names can be used as if they were independent
 #'   variables. See `?dpylr::filter` for examples of this. The `taxa` pacakge builds on this idea.
 #'
@@ -162,6 +168,7 @@
 #'    which is identical to:
 #'
 #'   `my_names <- taxon_names(my_obj)`
+#'
 #'   `new_obj <- filter_taxa(my_obj, my_names == "Bacteria")`
 #'
 #'   For `taxmap` objects, you can also use names of user defined lists, vectors,
@@ -173,9 +180,10 @@
 #'
 #' @section Dependencies and inspiration:
 #'
-#'   Various elements of the `taxa` package were inspired by the [dplyr],
-#'   [taxize], and `metacoder` packages. There are also many dependncies that
-#'   make `taxa` possible.
+#'   Various elements of the `taxa` package were inspired by the [dplyr] and
+#'   [taxize] packages. This package started as parts of the `metacoder` and
+#'   `binomen` packages. There are also many dependncies that make `taxa`
+#'   possible.
 #'
 #' @section Feedback and contributions:
 #'
@@ -184,16 +192,15 @@
 #'
 #'   [https://github.com/ropensci/taxa/issues](https://github.com/ropensci/taxa/issues)
 #'
-#'   A GitHub account is free and easy to set up and we welcome feedback! If you
-#'   dont want to use GitHub for some reason, feel free to email us. However, we
-#'   do prefer posting to github  siince it allows others that might have the
-#'   same issue to see our conversation and lets us track what problems we need
-#'   to address.
+#'   A GitHub account is free and easy to set up. We welcome feedback! If you
+#'   dont want to use GitHub for some reason, feel free to email us. We do
+#'   prefer posting to github since it allows others that might have the same
+#'   issue to see our conversation. It also helps us keep track of what problems
+#'   we need to address.
 #'
 #'   Want to contribute code or make a change to the code? Great, thank you!
 #'   Please [fork](https://help.github.com/articles/fork-a-repo/) our GitHub
-#'   repository and submit a [pull
-#'   request](https://help.github.com/articles/about-pull-requests/).
+#'   repository and submit a [pull request](https://help.github.com/articles/about-pull-requests/).
 #'
 #'
 #' @section For more information:

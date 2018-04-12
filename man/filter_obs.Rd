@@ -10,7 +10,7 @@
 
 \item{...}{One or more filtering conditions. Any variable name that appears
 in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. Each
-filtering condition can be one of three things:
+filtering condition can be one of two things:
 \itemize{
 \item \code{integer}: One or more row indexes of \code{obj[target]}
 \item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of
@@ -26,11 +26,11 @@ taxa without observations to begin with that will not be removed.}
 \item{drop_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
 \code{TRUE}. When \code{TRUE}, observations for other data sets (i.e. not \code{target})
 assigned to taxa that are removed when filtering \code{target} are also removed.
-Otherwise, only taxa that are not present in all other data sets will be removed.
-This option can be either simply \code{TRUE}/\code{FALSE}, meaning that all data sets
-will be treated the same, or a logical vector can be supplied with names
-corresponding one or more data sets in \code{obj$data}. For example,
-\code{c(abundance = TRUE, stats = FALSE)} would remove observations in
+Otherwise, only data for taxa that are not present in all other data sets
+will be removed. This option can be either simply \code{TRUE}/\code{FALSE}, meaning
+that all data sets will be treated the same, or a logical vector can be
+supplied with names corresponding one or more data sets in \code{obj$data}. For
+example, \code{c(abundance = TRUE, stats = FALSE)} would remove observations in
 \code{obj$data$abundance}, but not in \code{obj$data$stats}.}
 
 \item{subtaxa}{(\code{logical} or \code{numeric} of length 1) This only has an effect
@@ -79,9 +79,19 @@ filter_obs(ex_taxmap, "info", 1:2)
 
 # Filter by TRUE/FALSE
 filter_obs(ex_taxmap, "info", dangerous == FALSE)
+filter_obs(ex_taxmap, "info", dangerous == FALSE, n_legs > 0)
+filter_obs(ex_taxmap, "info", n_legs == 2)
 
-# Remove taxa whose obserservation were filtered out
-filter_obs(ex_taxmap, "info", dangerous == FALSE, drop_taxa = TRUE)
+# Remove taxa whose obserservations were filtered out
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE)
+
+# Preserve other data sets while removing taxa
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+           drop_obs = c(abund = FALSE))
+
+# When filtering taxa, do not return supertaxa of taxa that are preserved
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+           supertaxa = FALSE)
 
 }
 \seealso{

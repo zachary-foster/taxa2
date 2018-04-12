@@ -91,11 +91,12 @@ as a dataset.}
 Returns an object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Parse taxonomic information in a character vector into a \code{\link[=taxmap]{taxmap()}} object.
+Convert taxonomic information in a character vector into a \code{\link[=taxmap]{taxmap()}} object.
 The location and identity of important information in the input is specified
-using a regular expression with capture groups and a corresponding key. An
-object of type \code{\link[=taxmap]{taxmap()}} is returned containing the specified information.
-See the \code{key} option for accepted sources of taxonomic information.
+using a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}
+with capture groups and a corresponding key. An object of type \code{\link[=taxmap]{taxmap()}} is
+returned containing the specified information. See the \code{key} option for
+accepted sources of taxonomic information.
 }
 \section{Failed Downloads}{
  If you have invalid inputs or a download fails for

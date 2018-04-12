@@ -45,11 +45,15 @@ take  numeric vector and return a single number.}
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Randomly sample some number of observations from a \code{\link[=taxmap]{taxmap()}}
-object. Weights can be specified for observations or the taxa they are classified
-by. Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as
-if it was a vector on its own. See \code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration
-for this function.
+Randomly sample some number of observations from a \code{\link[=taxmap]{taxmap()}} object. Weights
+can be specified for observations or the taxa they are classified by. Any
+variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it was a vector
+on its own. See \code{\link[dplyr:sample_n]{dplyr::sample_n()}} for the inspiration for this function.
+Calling the function using the \code{obj$sample_n_obs(...)} style edits "obj" in
+place, unlike most R functions. However, calling the function using the
+\code{sample_n_obs(obj, ...)} imitates R's traditional copy-on-modify semantics,
+so "obj" would not be changed; instead a changed version would be returned,
+like most R functions.
 \preformatted{
 obj$sample_n_obs(target, size, replace = FALSE,
   taxon_weight = NULL, obs_weight = NULL,

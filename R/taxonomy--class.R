@@ -28,14 +28,14 @@ Taxonomy <- R6::R6Class(
     edge_list = NULL, # Note: this should be made of taxon ids, not indexes
     input_ids = NULL, # Only used by `Taxmap` right now
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # A simple wrapper to make future changes easier
     # it returns ids named by ids for consistency with other funcs
     taxon_ids = function() {
       stats::setNames(self$edge_list$to, self$edge_list$to)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # A simple wrapper to make future changes easier
     taxon_names = function() {
       vapply(self$taxa[self$taxon_ids()],
@@ -49,7 +49,7 @@ Taxonomy <- R6::R6Class(
              character(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Return the taxon ranks in a taxonomy() or taxmap() object.
     # They are in the order taxa appear in the edge list.
     taxon_ranks = function() {
@@ -64,13 +64,13 @@ Taxonomy <- R6::R6Class(
              character(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # A simple wrapper to make future changes easier
     taxon_indexes = function() {
       stats::setNames(seq_len(nrow(self$edge_list)), self$taxon_ids())
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Constructor
     initialize = function(..., .list = NULL) {
       # Get intput
@@ -94,7 +94,7 @@ Taxonomy <- R6::R6Class(
       }
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     print = function(indent = "") {
       cat(paste0(indent, "<Taxonomy>\n"))
       taxon_names <- vapply(self$taxa, function(x) x$name$name, character(1))
@@ -121,7 +121,7 @@ Taxonomy <- R6::R6Class(
       invisible(self)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Returns the names of things to be accessible using non-standard evaluation
     all_names = function() {
       output <- c()
@@ -136,7 +136,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Looks for names of data in a expression for use with NSE
     names_used = function(...) {
       decompose <- function(x) {
@@ -158,7 +158,7 @@ Taxonomy <- R6::R6Class(
       }
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get data by name
     get_data = function(name = NULL, ...) {
       # Get default if name is NULL
@@ -223,7 +223,7 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get data in a taxonomy or taxmap object by name
     get_data_frame = function(...) {
       x <- self$get_data(...)
@@ -234,7 +234,7 @@ Taxonomy <- R6::R6Class(
       }
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get a list of all data in an expression used with non-standard evaluation
     data_used = function(...) {
       my_names_used <- self$names_used(...)
@@ -242,7 +242,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Return data for supertaxa (i.e. all taxa the target taxa are a part of)
     # of each taxon in a taxonomy() or taxmap() object.
     supertaxa = function(subset = NULL, recursive = TRUE, simplify = FALSE,
@@ -313,7 +313,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Apply function to supertaxa of each taxon
     supertaxa_apply = function(func, subset = NULL, recursive = TRUE,
                                simplify = FALSE, include_input = FALSE,
@@ -332,7 +332,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Return the root taxa for a taxonomy() or taxmap() object.
     # Can also be used to get the roots of a subset of taxa.
     roots = function(subset = NULL, value = "taxon_indexes") {
@@ -371,7 +371,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Return the stem taxa for a taxonomy() or a taxmap() object.
     # Stem taxa are all those from the roots to the first taxon with more than one subtaxon.
     stems = function(subset = NULL, value = "taxon_indexes", simplify = FALSE,
@@ -418,7 +418,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Leaf taxa are taxa with no subtaxa.
     leaves = function(subset = NULL, recursive = TRUE, simplify = FALSE, value = "taxon_indexes") {
       # Find taxa without subtaxa (leaves)
@@ -434,7 +434,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Apply a function to the leaves of each taxon.
     # This is similar to using leaves() with lapply() or sapply().
     leaves_apply = function(func, subset = NULL, recursive = TRUE, simplify = FALSE,
@@ -451,7 +451,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # A branch is anything that is not a root, stem, or leaf.
     # Its the interior of the tree after the first split starting from the roots
     branches = function(subset = NULL, value = "taxon_indexes") {
@@ -489,7 +489,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # An internode is any taxon with a single immediate supertaxon and a single immediate subtaxon.
     internodes = function(subset = NULL, value = "taxon_indexes") {
       # non-standard argument evaluation
@@ -526,7 +526,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Return data for the subtaxa of each taxon in an taxonomy() or taxmap() object.
     subtaxa = function(subset = NULL, recursive = TRUE,
                        simplify = FALSE, include_input = FALSE,
@@ -625,7 +625,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Apply a function to the subtaxa for each taxon.
     # This is similar to using subtaxa() with lapply() or sapply().
     subtaxa_apply = function(func, subset = NULL, recursive = TRUE,
@@ -638,13 +638,13 @@ Taxonomy <- R6::R6Class(
                                              value = value)))
       output <- lapply(my_sub, func, ...)
       if (simplify) {
-        output <- unlist(output)
+        output <- simplify(output)
       }
       return(output)
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get classifications of taxa
     classifications = function(value = "taxon_names", sep = ";") {
       vapply(self$supertaxa(recursive = TRUE, include_input = TRUE,
@@ -652,13 +652,13 @@ Taxonomy <- R6::R6Class(
              function(x) paste0(rev(x), collapse = sep), character(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get ID classifications of taxa
     id_classifications = function(sep = ";") {
       self$classifications(value = "taxon_ids", sep = sep)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of supertaxa for each taxon
     n_supertaxa = function() {
       vapply(self$supertaxa(recursive = TRUE, include_input = FALSE,
@@ -666,7 +666,7 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of immediate supertaxa (not supertaxa of supertaxa) for each taxon
     n_supertaxa_1 = function() {
       vapply(self$supertaxa(recursive = FALSE, include_input = FALSE,
@@ -674,7 +674,7 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of subtaxa for each taxon
     n_subtaxa = function() {
       vapply(self$subtaxa(recursive = TRUE, include_input = FALSE,
@@ -682,7 +682,7 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of subtaxa for each taxon, not including subtaxa of subtaxa
     n_subtaxa_1 = function() {
       vapply(self$subtaxa(recursive = FALSE, include_input = FALSE,
@@ -690,31 +690,31 @@ Taxonomy <- R6::R6Class(
              length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of leaves for each taxon
       n_leaves = function() {
       vapply(self$leaves(recursive = TRUE, value = "taxon_indexes"), length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Get number of leaves for each taxon, not including leaves of subtaxa etc.
     n_leaves_1 = function() {
       vapply(self$leaves(recursive = FALSE, value = "taxon_indexes"), length, numeric(1))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test if taxa are roots
     is_root = function() {
       stats::setNames(is.na(self$edge_list$from), self$taxon_ids())
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test if taxa are leaves
     is_leaf = function() {
       self$n_subtaxa() == 0
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test if taxa are stems
     is_stem = function() {
       stats::setNames(self$taxon_ids() %in% self$stems(simplify = TRUE,
@@ -722,21 +722,21 @@ Taxonomy <- R6::R6Class(
                       self$taxon_ids())
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test if taxa are branches
     is_branch = function() {
       stats::setNames(! (self$is_root() | self$is_leaf() | self$is_stem()),
                       self$taxon_ids())
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test if taxa are "internodes"
     is_internode = function() {
       stats::setNames(self$n_subtaxa_1() == 1 & self$n_supertaxa_1() == 1,
                       self$taxon_ids())
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Filter taxa in a taxonomy() or taxmap() object with a series of conditions.
     filter_taxa = function(..., subtaxa = FALSE, supertaxa = FALSE,
                            drop_obs = TRUE, reassign_obs = TRUE,
@@ -864,7 +864,7 @@ Taxonomy <- R6::R6Class(
       return(self)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Sort the edge list and taxon list
     arrange_taxa = function(...) {
       # Sort edge list
@@ -884,7 +884,7 @@ Taxonomy <- R6::R6Class(
       return(self)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Randomly sample some number of taxa
     sample_n_taxa = function(size, taxon_weight = NULL, obs_weight = NULL,
                              obs_target = NULL, use_subtaxa = TRUE,
@@ -931,7 +931,7 @@ Taxonomy <- R6::R6Class(
       self$filter_taxa(sampled_rows, ...)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Randomly sample some proportion of taxa
     sample_frac_taxa = function(size = 1, taxon_weight = NULL,
                                 obs_weight = NULL, obs_target = NULL,
@@ -944,7 +944,7 @@ Taxonomy <- R6::R6Class(
     },
 
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Creates a named vector that maps the values of two variables associated with taxa
     map_data = function(from, to, warn = TRUE) {
       # non-standard argument evaluation
@@ -988,13 +988,13 @@ Taxonomy <- R6::R6Class(
       self$map_data_(from = from_data, to = to_data)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # map_data without NSE
     map_data_ = function(from, to) {
       stats::setNames(to[match(names(from), names(to))], from)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Replace taxon ids
     replace_taxon_ids = function(new_ids) {
       # Check that new ids are unique
@@ -1038,7 +1038,7 @@ Taxonomy <- R6::R6Class(
       return(self)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Remove the names of parent taxa in the begining of their children's names
     remove_redundant_names = function() {
       new_names <- vapply(supertaxa(self, recursive = FALSE, include_input = TRUE),
@@ -1071,7 +1071,7 @@ Taxonomy <- R6::R6Class(
   ),
 
   private = list(
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     nse_accessible_funcs = c("taxon_names",
                              "taxon_ids",
                              "taxon_indexes",
@@ -1087,12 +1087,12 @@ Taxonomy <- R6::R6Class(
                              "is_leaf",
                              "is_internode"),
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     make_graph = function() {
       apply(self$edge_list, 1, function(x) paste0(tid_font(x), collapse = punc_font("->")))
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Remove taxa NOT in "el_indexes"
     remove_taxa = function(el_indexes) {
       # Remove taxa objects
@@ -1108,7 +1108,7 @@ Taxonomy <- R6::R6Class(
       }
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Takes one ore more NSE expressions and resolves them to indexes of edgelist rows
     # Each expression can resolve to taxon ids, edgelist indexes, or logical.
     parse_nse_taxon_subset = function(...) {
@@ -1177,7 +1177,7 @@ Taxonomy <- R6::R6Class(
       return(output)
     },
 
-    # -------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # check if a set of putative taxon ids are valid.
     # returns TRUE/FALSE
     valid_taxon_ids = function(ids) {

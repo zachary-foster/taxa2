@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxmap--docs.R
 \name{arrange_obs}
 \alias{arrange_obs}
-\title{Sort columns of \code{\link[=taxmap]{taxmap()}} objects}
+\title{Sort user data in \code{\link[=taxmap]{taxmap()}} objects}
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}.}
 
@@ -14,10 +14,14 @@
 An object of type \code{\link[=taxmap]{taxmap()}}
 }
 \description{
-Sort columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects.
-Any variable name that appears in \code{\link[=all_names]{all_names()}} can be used as if it
-was a vector on its own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration
-for this function and more information.
+Sort rows of tables  or the elements of lists/vectors in the \code{obj$data} list
+in \code{\link[=taxmap]{taxmap()}} objects. Any variable name that appears in \code{\link[=all_names]{all_names()}} can be
+used as if it was a vector on its own. See \code{\link[dplyr:arrange]{dplyr::arrange()}} for the
+inspiration for this function and more information. Calling the function
+using the \code{obj$arrange_obs(...)} style edits "obj" in place, unlike most R
+functions. However, calling the function using the \code{arrange_obs(obj, ...)}
+imitates R's traditional copy-on-modify semantics, so "obj" would not be
+changed; instead a changed version would be returned, like most R functions.
 \preformatted{
 obj$arrange_obs(target, ...)
 arrange_obs(obj, target, ...)}

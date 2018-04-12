@@ -125,7 +125,7 @@ NULL
 #' @param target The name of the list/vector/table in `obj$data` to filter
 #' @param ... One or more filtering conditions. Any variable name that appears
 #'   in [all_names()] can be used as if it was a vector on its own. Each
-#'   filtering condition can be one of three things:
+#'   filtering condition can be one of two things:
 #'   * `integer`: One or more row indexes of `obj[target]`
 #'   * `logical`: A `TRUE`/`FALSE` vector of length equal to the number of
 #'   rows in `obj[target]`
@@ -137,11 +137,11 @@ NULL
 #' @param drop_obs (`logical`) This only has an effect when `drop_taxa` is
 #'   `TRUE`. When `TRUE`, observations for other data sets (i.e. not `target`)
 #'   assigned to taxa that are removed when filtering `target` are also removed.
-#'   Otherwise, only taxa that are not present in all other data sets will be removed.
-#'   This option can be either simply `TRUE`/`FALSE`, meaning that all data sets
-#'   will be treated the same, or a logical vector can be supplied with names
-#'   corresponding one or more data sets in `obj$data`. For example,
-#'   `c(abundance = TRUE, stats = FALSE)` would remove observations in
+#'   Otherwise, only data for taxa that are not present in all other data sets
+#'   will be removed. This option can be either simply `TRUE`/`FALSE`, meaning
+#'   that all data sets will be treated the same, or a logical vector can be
+#'   supplied with names corresponding one or more data sets in `obj$data`. For
+#'   example, `c(abundance = TRUE, stats = FALSE)` would remove observations in
 #'   `obj$data$abundance`, but not in `obj$data$stats`.
 #' @param subtaxa (`logical` or `numeric` of length 1) This only has an effect
 #'   when `drop_taxa` is `TRUE`. If `TRUE`, include subtaxa of taxa passing the
@@ -171,9 +171,19 @@ NULL
 #'
 #' # Filter by TRUE/FALSE
 #' filter_obs(ex_taxmap, "info", dangerous == FALSE)
+#' filter_obs(ex_taxmap, "info", dangerous == FALSE, n_legs > 0)
+#' filter_obs(ex_taxmap, "info", n_legs == 2)
 #'
-#' # Remove taxa whose obserservation were filtered out
-#' filter_obs(ex_taxmap, "info", dangerous == FALSE, drop_taxa = TRUE)
+#' # Remove taxa whose obserservations were filtered out
+#' filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE)
+#'
+#' # Preserve other data sets while removing taxa
+#' filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+#'            drop_obs = c(abund = FALSE))
+#'
+#' # When filtering taxa, do not return supertaxa of taxa that are preserved
+#' filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+#'            supertaxa = FALSE)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -226,12 +236,13 @@ NULL
 
 #' Add columns to [taxmap()] objects
 #'
-#' Add columns to tables in `obj$data` in [taxmap()] objects.  See [dplyr::mutate()] for the inspiration for
-#' this function and more information. Calling the function using the
-#' `obj$mutate_obs(...)` style edits "obj" in place, unlike most R
-#' functions. However, calling the function using the `mutate_obs(obj,
-#' ...)` imitates R's traditional copy-on-modify semantics, so "obj" would not be
-#' changed; instead a changed version would be returned, like most R functions.
+#' Add columns to tables in `obj$data` in [taxmap()] objects.  See
+#' [dplyr::mutate()] for the inspiration for this function and more information.
+#' Calling the function using the `obj$mutate_obs(...)` style edits "obj" in
+#' place, unlike most R functions. However, calling the function using the
+#' `mutate_obs(obj, ...)` imitates R's traditional copy-on-modify semantics, so
+#' "obj" would not be changed; instead a changed version would be returned, like
+#' most R functions.
 #' \preformatted{
 #' obj$mutate_obs(target, ...)
 #' mutate_obs(obj, target, ...)}
@@ -258,7 +269,11 @@ NULL
 #'
 #' Replace columns of tables in `obj$data` in [taxmap()] objects. See
 #' [dplyr::transmute()] for the inspiration for this function and more
-#' information.
+#' information. Calling the function using the `obj$transmute_obs(...)` style
+#' edits "obj" in place, unlike most R functions. However, calling the function
+#' using the `transmute_obs(obj, ...)` imitates R's traditional copy-on-modify
+#' semantics, so "obj" would not be changed; instead a changed version would be
+#' returned, like most R functions.
 #' \preformatted{
 #' obj$transmute_obs(target, ...)
 #' transmute_obs(obj, target, ...)}
@@ -279,12 +294,16 @@ NULL
 NULL
 
 
-#' Sort columns of [taxmap()] objects
+#' Sort user data in [taxmap()] objects
 #'
-#' Sort columns of tables in `obj$data` in [taxmap()] objects.
-#' Any variable name that appears in [all_names()] can be used as if it
-#' was a vector on its own. See [dplyr::arrange()] for the inspiration
-#' for this function and more information.
+#' Sort rows of tables  or the elements of lists/vectors in the `obj$data` list
+#' in [taxmap()] objects. Any variable name that appears in [all_names()] can be
+#' used as if it was a vector on its own. See [dplyr::arrange()] for the
+#' inspiration for this function and more information. Calling the function
+#' using the `obj$arrange_obs(...)` style edits "obj" in place, unlike most R
+#' functions. However, calling the function using the `arrange_obs(obj, ...)`
+#' imitates R's traditional copy-on-modify semantics, so "obj" would not be
+#' changed; instead a changed version would be returned, like most R functions.
 #' \preformatted{
 #' obj$arrange_obs(target, ...)
 #' arrange_obs(obj, target, ...)}
@@ -311,11 +330,15 @@ NULL
 
 #' Sample n observations from [taxmap()]
 #'
-#' Randomly sample some number of observations from a [taxmap()]
-#' object. Weights can be specified for observations or the taxa they are classified
-#' by. Any variable name that appears in [all_names()] can be used as
-#' if it was a vector on its own. See [dplyr::sample_n()] for the inspiration
-#' for this function.
+#' Randomly sample some number of observations from a [taxmap()] object. Weights
+#' can be specified for observations or the taxa they are classified by. Any
+#' variable name that appears in [all_names()] can be used as if it was a vector
+#' on its own. See [dplyr::sample_n()] for the inspiration for this function.
+#' Calling the function using the `obj$sample_n_obs(...)` style edits "obj" in
+#' place, unlike most R functions. However, calling the function using the
+#' `sample_n_obs(obj, ...)` imitates R's traditional copy-on-modify semantics,
+#' so "obj" would not be changed; instead a changed version would be returned,
+#' like most R functions.
 #' \preformatted{
 #' obj$sample_n_obs(target, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,
@@ -376,7 +399,12 @@ NULL
 #'
 #' Randomly sample some proportion of observations from a [taxmap()]
 #' object. Weights can be specified for observations or their taxa. See
-#' [dplyr::sample_frac()] for the inspiration for this function.
+#' [dplyr::sample_frac()] for the inspiration for this function. Calling the
+#' function using the `obj$sample_frac_obs(...)` style edits "obj" in place, unlike
+#' most R functions. However, calling the function using the `sample_frac_obs(obj,
+#' ...)` imitates R's traditional copy-on-modify semantics, so "obj" would not
+#' be changed; instead a changed version would be returned, like most R
+#' functions.
 #' \preformatted{
 #' obj$sample_frac_obs(target, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,

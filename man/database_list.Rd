@@ -9,7 +9,8 @@
 database_list
 }
 \description{
-Database list
+The list of known databases. Not currently used much, but will be when we add
+more check for taxon IDs and taxon ranks from particular databases.
 }
 \details{
 List of databases with pre-filled details, where each has the

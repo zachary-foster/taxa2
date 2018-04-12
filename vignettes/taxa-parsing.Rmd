@@ -511,7 +511,7 @@ common_names <- c(A = "Scottie", B = "Cat", C = "Dog")
 And finally, another related data set with no names, but in the same order:
 
 ```{r}
-foods <- list(c("bagels", "spaghetti squash"), # DISCLAMER: Might not actually be what Scott eats
+foods <- list(c("bagels", "spaghetti squash"), # WARNING: Might not actually be what Scott eats
               c("mice", "kibble"),
               c("cats", "kibble"))
 ```

@@ -19,7 +19,11 @@ obj$is_stem()
 is_stem(obj)}
 }
 \examples{
+# Test which taxon IDs correspond to stems
 is_stem(ex_taxmap)
+
+# Filter out stems
+filter_taxa(ex_taxmap, ! is_stem)
 
 }
 \seealso{

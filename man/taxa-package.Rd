@@ -10,7 +10,7 @@ The \code{taxa} package is intended to:
 \item Provide a set of classes to store taxonomic data and any user-specific data assocaited with it
 \item Provide functions to convert commonly used formats to these classes
 \item Provide a common foundation for other packages to build on to enable an ecosystem of compatible pacakges dealing with taxonomic data.
-\item Provide generally useful funionality, such as filtering and mapping functions
+\item Provide generally useful functionality, such as filtering and mapping functions
 }
 }
 \section{Main classes}{
@@ -18,8 +18,8 @@ The \code{taxa} package is intended to:
 
 These are the classes users would typically interact with:
 \itemize{
-\item \link{taxon}: A class used to define a single taxon. Most other classes in the
-taxa package include one or more objects of this class.
+\item \link{taxon}: A class used to define a single taxon. Many other classes in the
+`taxa`` package include one or more objects of this class.
 \item \link{taxa}: Stores one or more \link{taxon} objects. This is just a thin wrapper
 for a list of \link{taxon} objects.
 \item \link{hierarchy}: A class containing an ordered list of \link{taxon} objects that
@@ -50,35 +50,35 @@ not typically be used on their own.
 \item \link{taxon_id}: Used to store taxon IDs, either arbitrary or from a
 particular taxonomy database.
 \item \link{taxon_name}: Used to store taxon names, either arbitrary or from a
-particular taxonomy database. * \link{taxon_rank}: Used to store taxon ranks
-(e.g. species, family), either arbitrary or from a particular taxonomy
-database.
+particular taxonomy database.
+\item \link{taxon_rank}: Used to store taxon ranks (e.g. species, family), either
+arbitrary or from a particular taxonomy database.
 }
 }
 
 \section{Major manipulation functions}{
 
 
-These are some of the more important functions used to filter data in class
-that store multiple taxa, like \link{hierarchiies}, \link{taxmap}, and \link{taxonomy}.
+These are some of the more important functions used to filter data in classes
+that store multiple taxa, like \link{hierarchies}, \link{taxmap}, and \link{taxonomy}.
 \itemize{
 \item \link{filter_taxa}: Filter taxa in a \link{taxonomy} or \link{taxmap} object with a
 series of conditions. Relationships between remaining taxa and user-defined
-data are preserved (There are lots of options controlling this)
+data are preserved (There are many options controlling this).
 \item \link{filter_obs}: Filter user-defined data \link{taxmap} object with a series of
 conditions. Relationships between remaining taxa and user-defined data are
-preserved (There are lots of options controlling this)
+preserved (There are many options controlling this);
 \item \link{sample_n_taxa}: Randomly sample taxa. Has same abilities as
-\link{filter_taxa}
+\link{filter_taxa}.
 \item \link{sample_n_obs}: Randomly sample observations. Has same abilities as
-\link{filter_obs}
+\link{filter_obs}.
 \item \link{mutate_obs}: Add datasets or columns to datasets in the \code{data} list of
-\link{taxmap} objects
+\link{taxmap} objects.
 \item \link{pick}: Pick out specific taxa, while others are dropped in \link{hierarchy}
-and \link{hierarchies} objects
-\item \link{pop}: Pop out taxa (drop them) in \link{hierarchy} and \link{hierarchies} objects
+and \link{hierarchies} objects.
+\item \link{pop}: Pop out taxa (drop them) in \link{hierarchy} and \link{hierarchies} objects.
 \item \link{span}: Select a range of taxa, either by two names, or relational
-operators in \link{hierarchy} and \link{hierarchies} objects
+operators in \link{hierarchy} and \link{hierarchies} objects.
 }
 }
 
@@ -111,17 +111,19 @@ simplier ones (\link{taxa} and \link{hierarchies}) are
 \href{https://adv-r.hadley.nz/s3.html}{S3} instead. R6 classes are different than
 most R objects because they are
 \href{https://en.wikipedia.org/wiki/Immutable_object}{mutable} (e.g. A function
-can change its input without returning it). In this, they are more similar to class
-systems in \href{https://en.wikipedia.org/wiki/Object-oriented_programming}{object-oriented} languages like python.
-As in other object-oriented class systems, functions are thought to "belong"
-to classes (i.e. the data), rather than functions existing independntly of
-the data. For example, the function \code{print} in R exists apart from what it
-is printing, although it will change how it prints based on what the class
-of the data is passed to it. In fact, a user can make a custom print method
-for their own class by defining a function called \code{print.myclassname}.
-In contrast, the functions that operate on R6 functions are "packaged" with
-the data they operate on. For example, a print method of an object for an R6
-class might be called like so \code{my_data$print()} instead of \code{print(my_data)}.
+can change its input without returning it). In this, they are more similar
+to class systems in
+\href{https://en.wikipedia.org/wiki/Object-oriented_programming}{object-oriented}
+languages like python. As in other object-oriented class systems, functions
+are thought to "belong" to classes (i.e. the data), rather than functions
+existing independntly of the data. For example, the function \code{print} in R
+exists apart from what it is printing, although it will change how it prints
+based on what the class of the data is that is passed to it. In fact, a user
+can make a custom print method for their own class by defining a function
+called \code{print.myclassname}. In contrast, the functions that operate on R6
+functions are "packaged" with the data they operate on. For example, a print
+method of an object for an R6 class might be called like
+\code{my_data$print()} instead of \code{print(my_data)}.
 }
 
 \section{The two ways to call functions}{
@@ -136,7 +138,7 @@ the \code{\link[=filter_taxa]{filter_taxa()}} function can be called on a \link{
 \code{filter_taxa(my_obj, ...)} (the S3 syntax). For some functions, these two
 way of calling the function can have differnt effect. For functions that do
 not returned a modified version of the input (e.g. \code{\link[=subtaxa]{subtaxa()}}), the two ways have identical behavior.
-However, functions like \code{\link[=filter_taxa]{filter_taxa()}} that modify their inputs, actually
+However, functions like \code{\link[=filter_taxa]{filter_taxa()}}, that modify their inputs, actually
 change the object passed to them as the first argument as well as returning that
 object. For example,
 
@@ -146,7 +148,11 @@ and
 
 \code{my_obj$filter_taxa(...)}
 
-both replace \code{my_obj} with the filtered result, but
+and
+
+\code{new_obj <- filter_taxa(my_obj, ...)}
+
+all replace \code{my_obj} with the filtered result, but
 
 \code{new_obj <- filter_taxa(my_obj, ...)}
 
@@ -156,13 +162,13 @@ will not modify \code{my_obj}.
 \section{Non-standard evaluation}{
 
 
-Note, this is a rather advanced topic.
+This is a rather advanced topic.
 
-Like packages such as \link{ggplot2} and \link{dplyr}, the \code{taxa} package uses
+Like packages such as \code{ggplot2} and \link{dplyr}, the \code{taxa} package uses
 \href{https://adv-r.hadley.nz/meta.html}{non-standard evaluation} to allow code
 to be more readable and shorter. In effect, there are variables that only
 "exist" inside a function call and depend on what is passed to that function
-as the first parameter (i.e. A class object). For example, in the \code{dpylr}
+as the first parameter (usually a class object). For example, in the \code{dpylr}
 function \code{\link[=filter]{filter()}}, column names can be used as if they were independent
 variables. See \code{?dpylr::filter} for examples of this. The \code{taxa} pacakge builds on this idea.
 
@@ -185,6 +191,7 @@ which is identical to:
 which is identical to:
 
 \code{my_names <- taxon_names(my_obj)}
+
 \code{new_obj <- filter_taxa(my_obj, my_names == "Bacteria")}
 
 For \code{taxmap} objects, you can also use names of user defined lists, vectors,
@@ -198,9 +205,10 @@ what values can be used  with \code{\link[=all_names]{all_names()}} like \code{a
 \section{Dependencies and inspiration}{
 
 
-Various elements of the \code{taxa} package were inspired by the \link{dplyr},
-\link{taxize}, and \code{metacoder} packages. There are also many dependncies that
-make \code{taxa} possible.
+Various elements of the \code{taxa} package were inspired by the \link{dplyr} and
+\link{taxize} packages. This package started as parts of the \code{metacoder} and
+\code{binomen} packages. There are also many dependncies that make \code{taxa}
+possible.
 }
 
 \section{Feedback and contributions}{
@@ -211,15 +219,15 @@ at our \href{https://github.com/ropensci/taxa}{GitHub repository}:
 
 \url{https://github.com/ropensci/taxa/issues}
 
-A GitHub account is free and easy to set up and we welcome feedback! If you
-dont want to use GitHub for some reason, feel free to email us. However, we
-do prefer posting to github  siince it allows others that might have the
-same issue to see our conversation and lets us track what problems we need
-to address.
+A GitHub account is free and easy to set up. We welcome feedback! If you
+dont want to use GitHub for some reason, feel free to email us. We do
+prefer posting to github since it allows others that might have the same
+issue to see our conversation. It also helps us keep track of what problems
+we need to address.
 
 Want to contribute code or make a change to the code? Great, thank you!
 Please \href{https://help.github.com/articles/fork-a-repo/}{fork} our GitHub
-repository and submit a \href{https://help.github.com/articles/about-pull-requests/}{pullrequest}.
+repository and submit a \href{https://help.github.com/articles/about-pull-requests/}{pull request}.
 }
 
 \section{For more information}{

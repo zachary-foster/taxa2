@@ -81,7 +81,9 @@ print__tbl_df <- function(obj, data, name, prefix, max_width, max_rows) {
     output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
 
   }
-  output[3] <- desc_font(output[3])
+  if (nrow(data) > 0) {
+    output[3] <- desc_font(output[3])
+  }
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
@@ -195,25 +197,26 @@ print__list <- function(obj, data, name, prefix, max_width, max_rows) {
 print__vector <- function(obj, data, name, prefix, max_width, max_rows, type = class(data)[1]) {
   cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(data)), "a vector of '", "a named vector of '"), type, "' with ", length(data),
              " item", ifelse(length(data) == 1, "", "s"), "\n"))
-  if (is.null(names(data))) {
-    limited_print(data, prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
-                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
-                  type = "cat")
-  } else {
-    if (is.null(obj$get_data_taxon_ids(name))) { # no taxon ids
-      limited_print(paste0(names(data), punc_font(". "), data),
-                    prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
+  if (length(data) > 0) {
+    if (is.null(names(data))) { # Not named
+      limited_print(data, prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
                     mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
                     type = "cat")
-    }
-    else { # has taxon ids
-      limited_print(paste0(tid_font(names(data)), punc_font(". "), data),
-                    prefix = paste0(prefix, prefix), max_chars = max_width, sep = punc_font(", "),
-                    mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
-                    type = "cat")
+    } else { # Is named
+      if (is.null(obj$get_data_taxon_ids(name))) { # no taxon ids
+        limited_print(paste0(names(data), punc_font(". "), data),
+                      prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
+                      mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                      type = "cat")
+      }
+      else { # has taxon ids
+        limited_print(paste0(tid_font(names(data)), punc_font(". "), data),
+                      prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
+                      mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                      type = "cat")
+      }
     }
   }
-
 }
 
 
