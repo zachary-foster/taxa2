@@ -509,7 +509,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'
 #'
 #'   # --- Parsing multiple datasets at once (advanced) ---
-#'   The rest is one example for how to classify multiple datasets at once.
+#'   # The rest is one example for how to classify multiple datasets at once.
 #'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
