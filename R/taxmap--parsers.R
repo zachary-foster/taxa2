@@ -634,8 +634,10 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       output <- progress_lapply(ids, lookup_one)
       return(output)
     }
-    msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
-                                  type = "message")
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                           type = "message"),
+             error = function(e) stop(e))
+
 
     # Remove repeated messages (e.g. no NCBI API key)
     on.exit(message(paste0(unique(msgs), collapse = "\n")))
@@ -665,8 +667,9 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       output <- progress_lapply(ids, lookup_one)
       return(output)
     }
-    msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
-                                  type = "message")
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                  type = "message"),
+             error = function(e) stop(e))
 
     # Remove repeated messages (e.g. no NCBI API key)
     on.exit(message(paste0(unique(msgs), collapse = "\n")))
@@ -689,8 +692,9 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
       output <- progress_lapply(my_names, lookup_one)
       return(output)
     }
-    msgs <- utils::capture.output(raw_result <- map_unique(my_names, lookup_all),
-                                  type = "message")
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(my_names, lookup_all),
+                                  type = "message"),
+             error = function(e) stop(e))
 
     # Remove repeated messages (e.g. no NCBI API key)
     on.exit(message(paste0(unique(msgs), collapse = "\n")))
