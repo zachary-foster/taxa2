@@ -220,3 +220,31 @@ as_id <- function(ids, database, ...) {
   id_constructors[[database]](ids, ...)
 }
 
+
+#' lappy with progress bars
+#'
+#' Immitates lapply with optional progress bars
+#'
+#' @param X The thing to iterate over
+#' @param FUN The function to apply to each element
+#' @param progress (logical of length 1) Whether or not to print a progress bar. Default is to only print a progress bar during interactive use.
+#' @param ... Passed to function
+#'
+#' @return list
+#' @keywords internal
+progress_lapply <- function(X, FUN, progress = interactive(), ...) {
+  if (progress) {
+    progress_bar <- utils::txtProgressBar(min = 0, max = length(X), style = 3)
+    one_iteration <- function(index) {
+      output <- FUN(X[[index]], ...)
+      utils::setTxtProgressBar(progress_bar, index)
+      return(output)
+    }
+    output <- lapply(seq_len(length(X)), one_iteration)
+    close(progress_bar)
+  } else {
+    output <- lapply(X, FUN, ...)
+  }
+
+  return(output)
+}

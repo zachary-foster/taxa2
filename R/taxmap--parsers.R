@@ -627,15 +627,11 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
     # Look up classifications
     lookup_all <- function(ids) {
-      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(ids)), style = 3)
-      lookup_one <- function(index) {
-        output <- taxize::classification(ids[index],
-                                         ask = FALSE, rows = 1, db = database, message = FALSE)
-        utils::setTxtProgressBar(progress_bar, index)
-        return(output)
+      lookup_one <- function(id) {
+        taxize::classification(id, ask = FALSE, rows = 1, db = database,
+                               message = FALSE)
       }
-      output <- lapply(seq_len(length(ids)), lookup_one)
-      close(progress_bar)
+      output <- progress_lapply(ids, lookup_one)
       return(output)
     }
     msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
@@ -663,21 +659,17 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     # Look up classifications
     message("Looking up classifications for ", length(unique(ids)), " unique sequence IDs from NCBI...")
     lookup_all <- function(ids) {
-      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(ids)), style = 3)
-      lookup_one <- function(index) {
-        output <- taxize::classification(taxize::genbank2uid(ids[index])[1], db = database)
-        utils::setTxtProgressBar(progress_bar, index)
-        return(output)
+      lookup_one <- function(id) {
+        taxize::classification(taxize::genbank2uid(id)[1], db = database)
       }
-      output <- lapply(seq_len(length(ids)), lookup_one)
-      close(progress_bar)
+      output <- progress_lapply(ids, lookup_one)
       return(output)
     }
     msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
                                   type = "message")
 
     # Remove repeated messages (e.g. no NCBI API key)
-    message(paste0(unique(msgs), collapse = "\n"))
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
 
     # Reformat result
     result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
@@ -690,22 +682,18 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
     # Look up classifications
     lookup_all <- function(my_names) {
-      progress_bar <- utils::txtProgressBar(min = 0, max = length(unique(my_names)), style = 3)
-      lookup_one <- function(index) {
-        output <- taxize::classification(my_names[index], ask = ask,
-                                         db = database, messages = FALSE)
-        utils::setTxtProgressBar(progress_bar, index)
-        return(output)
-      }
-      output <- lapply(seq_len(length(my_names)), lookup_one)
-      close(progress_bar)
+      lookup_one <- function(my_name) {
+        taxize::classification(my_name, ask = ask, db = database,
+                               messages = FALSE)
+       }
+      output <- progress_lapply(my_names, lookup_one)
       return(output)
     }
     msgs <- utils::capture.output(raw_result <- map_unique(my_names, lookup_all),
                                   type = "message")
 
     # Remove repeated messages (e.g. no NCBI API key)
-    message(paste0(unique(msgs), collapse = "\n"))
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
 
     # Reformat result
     result <- stats::setNames(unlist(raw_result, recursive = FALSE), my_names)
