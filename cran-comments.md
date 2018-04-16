@@ -1,27 +1,55 @@
 ## Test environments
 
-* local OS X install, R 3.4.3 patched
-* ubuntu 12.04 (on travis-ci), R 3.4.3
+* local ubuntu 16.04, R 3.4.4
+* ubuntu 14.04 (on travis-ci), R 3.4.4
 * win-builder (devel and release)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-  License components with restrictions and base license permitting such:
-    MIT + file LICENSE
-  File 'LICENSE':
-    YEAR: 2017
-    COPYRIGHT HOLDER: Scott Chamberlain
+0 errors | 0 warnings | 0 notes
 
 ## Reverse dependencies
 
-There are no reverse dependencies.
+metacoder
 
 ---
 
-This version includes a number of bug fixes and improvements - of 
-particular importance is a fix for failing CRAN checks.
+This version includes a number of bug fixes and improvements.
+I (Zachary Foster) will be taking over as maintainer.
+We emailed Uwe Ligges about this a few months ago and the reply is pasted below:
+
+> From: Uwe Ligges <ligges@statistik.tu-dortmund.de>
+> Date: Thu, Feb 1, 2018 at 2:22 PM
+> Subject: Re: Switch maintainers for taxa package
+> To: Zachary Foster <zacharyfoster1989@gmail.com>, Scott Chamberlain <myrmecocystus@gmail.com>
+> Cc: cran@R-project.org <cran@r-project.org>
+> 
+> 
+> Then please resubmit with yourself as the maintakner citing this message
+> in the submisison comments.
+> 
+> Best,
+> Uwe Ligges
+> 
+> 
+> 
+> On 01.02.2018 23:20, Zachary Foster wrote:
+> > Thanks Scott!
+> >
+> > -Zach
+> >
+> > On Thu, Feb 1, 2018 at 1:59 PM, Scott Chamberlain <myrmecocystus@gmail.com>
+> > wrote:
+> >
+> >> Dear CRAN maintainers,
+> >>
+> >> I would like to give role of maintainer on the taxa package on CRAN to
+> >> Zachary Foster in CC in this email.  The next version pushed to CRAN will
+> >> have Zach as maintainer. Thanks!
+> >>
+> >> Sincerely,
+> >> Scott Chamberlain
 
 Thanks!
-Scott Chamberlain
+
+Zach Foster
