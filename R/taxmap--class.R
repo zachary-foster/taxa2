@@ -298,7 +298,7 @@ Taxmap <- R6::R6Class(
         sets_to_keep_ids_from <- names(drop_obs[! drop_obs])
         other_ids_to_keep <- unique(unlist(lapply(sets_to_keep_ids_from,
                                                   self$get_data_taxon_ids)))
-        taxon_ids_to_keep <- unique(c(names(selection), other_ids_to_keep))
+        taxon_ids_to_keep <- unique(c(data_taxon_ids[selection], other_ids_to_keep))
 
         # Remove taxa that are not in the filtered data set
         self$filter_taxa(taxon_ids_to_keep, drop_obs = drop_obs,
