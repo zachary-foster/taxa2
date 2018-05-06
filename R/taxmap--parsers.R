@@ -1,8 +1,8 @@
 #' Convert one or more data sets to taxmap
 #'
-#' Parses taxonomic information and associated data and stores it in a
-#' [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
-#' must be present somewhere in the first input.
+#' Reads taxonomic information and associated data in tables, lists, and vectors
+#' and stores it in a [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
+#' must be present.
 #'
 #' @param tax_data A table, list, or vector that contains the names of taxa that
 #'   represent [taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms).
@@ -405,10 +405,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
 #' Convert one or more data sets to taxmap
 #'
-#'
 #' Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-#' that are present in a dataset. Also can incorporate additional associated
-#' datasets.
+#' that are present in a table, list, or vector. Also can incorporate additional
+#' associated datasets.
 #'
 #' @param tax_data A table, list, or vector that contain sequence IDs, taxon
 #'   IDs, or taxon names.
@@ -909,6 +908,8 @@ get_sort_var <- function(data, var) {
 #'   `"info"` can be used multiple times. Each term must be one of those
 #'   described below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique.
+#'   * `taxon_rank`: The rank of the taxon. This will be used to add rank info
+#'   into the output object that can be accessed by `out$taxon_ranks()`.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -1117,7 +1118,7 @@ validate_regex_key_pair <- function(regex, key, multiple_allowed) {
   key_var_name <- deparse(substitute(key))
 
   # Check that the keys used are valid
-  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id", "fuzzy_name")
+  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id", "fuzzy_name", "taxon_rank")
   invalid_keys <- key[! key %in% allowed]
   if (length(invalid_keys) > 0) {
     stop(paste0('Invalid key value "', invalid_keys[1], '" given.\n',

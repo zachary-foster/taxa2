@@ -100,9 +100,9 @@ by \code{out$taxon_ranks()}. Cannot be used with the \code{sep}, \code{class_reg
 \code{class_key} options.}
 }
 \description{
-Parses taxonomic information and associated data and stores it in a
-\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
-must be present somewhere in the first input.
+Reads taxonomic information and associated data in tables, lists, and vectors
+and stores it in a \code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
+must be present.
 }
 \examples{
  # Read a vector of classifications

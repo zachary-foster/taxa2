@@ -1,6 +1,13 @@
 Current
 =======
 
+### Bug fixes
+
+* Made the `"taxon_rank"` value for the `class_key` options work with `extract_tax_data`. 
+
+taxa 0.2.1
+=======
+
 ### Improvements
 
 * `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).

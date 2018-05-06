@@ -75,8 +75,8 @@ we can find an elegant way of handling this.}
 }
 \description{
 Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-that are present in a dataset. Also can incorporate additional associated
-datasets.
+that are present in a table, list, or vector. Also can incorporate additional
+associated datasets.
 }
 \section{Failed Downloads}{
  If you have invalid inputs or a download fails for

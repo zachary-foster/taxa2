@@ -48,6 +48,8 @@ added to the terms will be used as column names in the output. Only
 described below:
 \itemize{
 \item \code{taxon_name}: The name of a taxon. Not necessarily unique.
+\item \code{taxon_rank}: The rank of the taxon. This will be used to add rank info
+into the output object that can be accessed by \code{out$taxon_ranks()}.
 \item \code{info}: Arbitrary taxon info you want included in the output. Can be used
 more than once.
 }}
