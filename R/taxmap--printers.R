@@ -58,10 +58,17 @@ highlight_taxon_ids <- function(table_text, header_index, row_indexes) {
   tax_id_bounds <- stringr::str_locate(table_text[header_index], "taxon_id[[:space:]]+")[1,]
   tax_id_part <- substr(table_text[row_indexes],
                         start = tax_id_bounds[1], stop = tax_id_bounds[2])
-  tax_id_part <- sub(tax_id_part, pattern = "(\\S)+", replacement = tid_font("\\1"), perl = TRUE)
-  table_text[row_indexes] <- paste0(substr(table_text[row_indexes], start = 1, stop = tax_id_bounds[1] - 1),
-                            tax_id_part,
-                            substr(table_text[row_indexes], start = tax_id_bounds[2] + 1, stop = nchar(table_text[row_indexes])))
+  tax_id_part <- sub(tax_id_part,
+                     pattern = "^(\\S+)",
+                     replacement = tid_font("\\1"),
+                     perl = TRUE)
+  table_text[row_indexes] <- paste0(substr(table_text[row_indexes],
+                                           start = 1,
+                                           stop = tax_id_bounds[1] - 1),
+                                    tax_id_part,
+                                    substr(table_text[row_indexes],
+                                           start = tax_id_bounds[2] + 1,
+                                           stop = nchar(table_text[row_indexes])))
   return(table_text)
 }
 
