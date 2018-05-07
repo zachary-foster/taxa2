@@ -47,6 +47,23 @@ prefixed_print <- function(x, prefix, ...) {
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
+#' Highlight taxon ID column
+#'
+#' Changes the font of a taxon ID column in a table print out.
+#'
+#' @param table_text The print out of the table in a character vector, one element per line.
+#' @param header_index The row index that contains the table column names
+#' @param row_indexes The indexes of the rows to be formatted.
+highlight_taxon_ids <- function(table_text, header_index, row_indexes) {
+  tax_id_bounds <- stringr::str_locate(table_text[header_index], "taxon_id[[:space:]]+")[1,]
+  tax_id_part <- substr(table_text[row_indexes],
+                        start = tax_id_bounds[1], stop = tax_id_bounds[2])
+  tax_id_part <- sub(tax_id_part, pattern = "(\\S)+", replacement = tid_font("\\1"), perl = TRUE)
+  table_text[row_indexes] <- paste0(substr(table_text[row_indexes], start = 1, stop = tax_id_bounds[1] - 1),
+                            tax_id_part,
+                            substr(table_text[row_indexes], start = tax_id_bounds[2] + 1, stop = nchar(table_text[row_indexes])))
+  return(table_text)
+}
 
 
 #' Print a tibble
@@ -67,23 +84,40 @@ prefixed_print <- function(x, prefix, ...) {
 #'
 #' @keywords internal
 print__tbl_df <- function(obj, data, name, prefix, max_width, max_rows) {
-  loadNamespace("dplyr") # used for tibble print methods
+
+  # used for tibble print methods
+  loadNamespace("dplyr")
+
+  # Make data set name
   if (length(name) > 0 && ! is.na(name)) {
     cat(paste0(prefix, name_font(name), ":\n"))
   }
+
+  # Increment prefix
   prefix <- paste0(prefix, "  ")
+
+  # Capture tibble print output
   output <- paste0(prefix, utils::capture.output(print(data, n = max_rows,
                                                        width = max_width - nchar(prefix))))
+  # Modify font of tibble dims
   output[1] <- desc_font(output[1])
+
+  # Highlight taxon IDs if they exist
   if (! is.null(obj$get_data_taxon_ids(name))) {
+    output <- highlight_taxon_ids(output,
+                                  header_index = 2,
+                                  row_indexes = 4:(3 + min(c(max_rows, nrow(data)))))
     output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
   } else {
     output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
-
   }
+
+  # Change font of column classes
   if (nrow(data) > 0) {
     output[3] <- desc_font(output[3])
   }
+
+  # Print output
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
@@ -106,8 +140,13 @@ print__tbl_df <- function(obj, data, name, prefix, max_width, max_rows) {
 #'
 #' @keywords internal
 print__data.frame <- function(obj, data, name, prefix, max_width, max_rows) {
+  # Make data set name
   cat(paste0(prefix, name_font(name), ":\n"))
+
+  # Increment prefix
   prefix <- paste0(prefix, "  ")
+
+  # Make description of data.frame
   if (nrow(data) > max_rows) {
     cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data),
                          " (first ", max_rows, " rows shown)\n")))
@@ -116,13 +155,19 @@ print__data.frame <- function(obj, data, name, prefix, max_width, max_rows) {
     cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data), "\n")))
   }
 
+  # Highlight taxon IDs if they exist
   output <- paste0(prefix, utils::capture.output(print(data)))
   if (! is.null(obj$get_data_taxon_ids(name))) {
+    output <- highlight_taxon_ids(output,
+                                  header_index = 1,
+                                  row_indexes = 2:(1 + min(c(max_rows, nrow(data)))))
     output[1] <- sub(output[1], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
   } else {
     output[1] <- sub(output[1], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
 
   }
+
+  # Print output
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
