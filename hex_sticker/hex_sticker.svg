@@ -1030,7 +1030,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1062,7 +1062,7 @@
      transform="translate(0,-843.36216)">
     <g
        id="g4583"
-       style="filter:url(#filter15044)">
+       style="">
       <path
          d="m 90.500003,1051.3172 -89.59466135,-51.72751 -2.77e-6,-103.45501 89.59465812,-51.7275 89.594663,51.7275 0,103.455 z"
          inkscape:randomized="0"
