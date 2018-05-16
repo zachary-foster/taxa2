@@ -1050,7 +1050,7 @@ Taxonomy <- R6::R6Class(
         self$taxa[[i]]$name$name <- new_names[i]
       })
       return(self)
-    }
+    },
 
     # pop = function(ranks = NULL, names = NULL, ids = NULL) {
     #   taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
@@ -1067,6 +1067,79 @@ Taxonomy <- R6::R6Class(
     #   self$input_ids <- parsed_data$input_ids
     #   return(self)
     # }
+
+    # --------------------------------------------------------------------------
+    # Return taxonomy information in a taxon x rank table
+    taxonomy_table = function(subset = NULL,
+                              value = "taxon_names", use_ranks = NULL) {
+
+      # non-standard argument evaluation of subset
+      data_used <- eval(substitute(self$data_used(subset)))
+      subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+      if (is.null(subset)) {
+        subset <- self$leaves(simplify = TRUE)
+      }
+      subset <- private$parse_nse_taxon_subset(subset)
+
+      # Get supertaxa of each taxon, named by ranks
+      obj_has_ranks <- ! all(is.na(obj$taxon_ranks()))
+      class_list <- supertaxa(obj, subset = subset, value = value,
+                              include_input = TRUE)
+      if (is.null(use_ranks)) {
+        if (obj_has_ranks) {
+          rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+                                  include_input = TRUE)
+          ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
+        } else {
+          rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+                                  include_input = TRUE)
+          rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
+          ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
+        }
+      } else if (is.logical(use_ranks)) {
+        if (use_ranks == TRUE) {
+          if (obj_has_ranks) {
+            rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+                                    include_input = TRUE)
+            ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
+          } else {
+            stop(call. = FALSE, "option `use_ranks is `TRUE`, but there is no rank information.")
+          }
+        } else {
+          rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+                                  include_input = TRUE)
+          rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
+          ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
+        }
+      } else if (is.character(use_ranks)) {
+        rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+                                include_input = TRUE)
+        ranks_used <- use_ranks
+      } else if (is.numeric(use_ranks)) {
+        rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+                                include_input = TRUE)
+        rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
+        ranks_used <-  rev(paste0("rank_", use_ranks))
+      } else {
+        stop(call. = FALSE, "Invalid `use_ranks` input. See ?taxonomy_table for valid inputs.")
+      }
+      class_list <- lapply(seq_len(length(class_list)),
+                           function(i) stats::setNames(class_list[[i]], rank_names[[i]]))
+
+      # Check for unused ranks
+      all_ranks <- unique(unlist(rank_names))
+      unused_ranks <- all_ranks[! all_ranks %in% ranks_used]
+      if (length(unused_ranks) > 0) {
+        message('The following ranks will not be included:\n',
+                limited_print(unused_ranks, prefix = "  ", type = "silent"),
+                'See the section on the `use_ranks` option in ?taxonomy_table to if you want to change which ranks are used.')
+      }
+
+      # Make table
+      output <- do.call(rbind, lapply(class_list, function(x) x[ranks_used]))
+      colnames(output) <- ranks_used
+      return(dplyr::as_tibble(output))
+    }
 
   ),
 

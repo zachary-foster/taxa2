@@ -1455,3 +1455,35 @@ NULL
 #' obj <-  parse_tax_data(species_data, class_sep = ";")
 #' remove_redundant_names(obj)
 NULL
+
+#' Convert taxonomy info to a table
+#'
+#' Convert per-taxon information, like taxon names, to a table of taxa (rows) by ranks (columns).
+#'
+#' @param obj A \code{taxonomy} or \code{taxmap} object
+#' @param subset Taxon IDs, TRUE/FALSE vector, or taxon indexes to find supertaxa for.
+#'   Default: All leaves will be used. Any variable name that appears in
+#'   [all_names()] can be used as if it was a vector on its own.
+#' @param value What data to return. Default is taxon names. Any result of
+#'   [all_names()] can be used, but it usually only makes sense to use data with
+#'   one value per taxon, like taxon names.
+#' @param use_ranks Which ranks to use. Must be one of the following:
+#' * `NULL` (the default): If there is rank information, use the ranks that
+#' appear in the lineage with the most ranks. Otherwise, assume the number of
+#' supertaxa corresponds to rank and use placeholders for the rank column names
+#' in the output.
+#' * `TRUE`: Use the ranks that appear in the lineage with the most ranks. An
+#' error will occur if no rank information is available.
+#' * `FALSE`: Assume the number of supertaxa corresponds to rank and use
+#' placeholders for the rank column names in the output. Do not use included
+#' rank information.
+#' * `character`: The names of the ranks to use. Requires included rank information.
+#' * `numeric`: The "depth" of the ranks to use. These are equal to `n_supertaxa` + 1.
+#'
+#' @return A tibble of taxa (rows) by ranks (columns).
+#'
+#' @examples
+#' taxonomy_table(ex_taxmap)
+#'
+#' @name taxonomy_table
+NULL

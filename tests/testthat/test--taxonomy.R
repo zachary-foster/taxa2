@@ -465,3 +465,16 @@ test_that("removing redundant names", {
   result <- remove_redundant_names(x)
   expect_true(all(c("tuberosum", "lycopersicum") %in% taxon_names(result)))
 })
+
+
+
+test_that("Ranks can be made consistant", {
+  raw_data <- c(
+    "A root; B phylum; C class; D order; E family; F genus; G species",
+    "A root; H phylum; I class; J order; K family; L genus; M species",
+    "A root; B phylum; N class; O order; P family",
+    "A root; B phylum; C class; Q order; R genus; S species"
+  )
+  obj <- parse_tax_data(raw_data, class_sep = "; ", class_key = c("taxon_name", "taxon_rank"), class_regex = "^([A-Z]+) ([a-z]+)$")
+})
+

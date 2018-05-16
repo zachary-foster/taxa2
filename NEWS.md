@@ -1,6 +1,10 @@
 Current
 =======
 
+### New features
+
+* Added the `taxonomy_table` function that converts the information in a `taxmap` or `taxonomy` object into a table with taxa as rows and ranks as columns.
+
 ### Bug fixes
 
 * Made the `"taxon_rank"` value for the `class_key` options work with `extract_tax_data`. 
@@ -10,13 +14,13 @@ taxa 0.2.1
 
 ### Improvements
 
-* `parse_tax_data` can now incorperate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).
+* `parse_tax_data` can now incorporate rank information which can be accessed by `result$taxon_ranks()` ([issue #113](https://github.com/ropensci/taxa/issues/113)).
 * `taxmap` print methods now have more information and color ([issue #124](https://github.com/ropensci/taxa/issues/124)).
 * Added `leaves_apply` function that works like `subtaxa_apply`, but on leaves ([issue #126](https://github.com/ropensci/taxa/issues/126)).
 * Functions with a `value` option now return named taxon indexes by default, instead of unnamed taxon indexes ([issue #128](https://github.com/ropensci/taxa/issues/128)).
-* `lookup_tax_data` and `extract_tax_data` can now use "fuzzy" matching when looking up taxon names, so taxon names can be mispelled and still be founds.
+* `lookup_tax_data` and `extract_tax_data` can now use "fuzzy" matching when looking up taxon names, so taxon names can be misspelled and still be founds.
 * `lookup_tax_data` and `extract_tax_data` now only look up unique sequence IDs, improving download speed.
-* `filter_obs` now can filter out observations in non-target data sets that are assocaited with taxa that are removed when `drop_taxa = TRUE` ([issue #143](https://github.com/ropensci/taxa/issues/143)). This is done using `filter_taxa`, so the `supertaxa`, `subtaxa`, and `reassign_obs` options are now available to `filter_obs` to control how taxon removal is done.
+* `filter_obs` now can filter out observations in non-target data sets that are associated with taxa that are removed when `drop_taxa = TRUE` ([issue #143](https://github.com/ropensci/taxa/issues/143)). This is done using `filter_taxa`, so the `supertaxa`, `subtaxa`, and `reassign_obs` options are now available to `filter_obs` to control how taxon removal is done.
 * `lookup_tax_data` and `extract_tax_data` now have progress bars instead of printing lots of text when downloading information.
 * `mutate_obs` now creates new vector/tables if the data set specified does not exist ([issue #121](https://github.com/ropensci/taxa/issues/124)).
 * Add `filter_taxa` option `keep_order` that preserves input taxon order. It is `TRUE` by default, which changes how it used to work. Set to `FALSE` for old behavior.
@@ -45,7 +49,7 @@ taxa 0.2.0
 * Fixed a bug that caused an error when using unnamed vectors ([issue #86](https://github.com/ropensci/taxa/issues/86))
 * Fixed a bug that prevents using sequence accession numbers ([issue #85](https://github.com/ropensci/taxa/issues/85))
 * Fixed bug in `lookup_tax_data` and `extract_tax_data` that caused an error when one of the queries failed too download.
-* Fixed bug that caused "data" argument of `obs_apply` to not work when passed as a varaible ([issue #97](https://github.com/ropensci/taxa/issues/97))
+* Fixed bug that caused "data" argument of `obs_apply` to not work when passed as a variable ([issue #97](https://github.com/ropensci/taxa/issues/97))
 
 ### Improvements
 
@@ -55,7 +59,7 @@ taxa 0.2.0
 * `extract_tax_data` now gives warnings if a regex does not match.
 * Added `n_supertaxa_1` function to get number of immediate supertaxa (always 1 or 0).
 * Added `branches` function to go with `roots`, `leaves`, and `stems`. ([issue #56](https://github.com/ropensci/taxa/issues/56))
-* Added `internodes` and `is_internode` functions to go with `roots`, `leaves`, `branches`, and `stems`. USeful for removing uninformative taxonomic ranks/taxa.
+* Added `internodes` and `is_internode` functions to go with `roots`, `leaves`, `branches`, and `stems`. Useful for removing uninformative taxonomic ranks/taxa.
 * Started to incorporate ability for `taxon`, `taxon_name`, `taxon_id`, `taxon_rank`, and `taxa` to handle `NULL` inputs as first class citizens to handle cases when you have essentially a blank taxon (use case comes from `taxize` package) [#95](https://github.com/ropensci/taxa/issues/95) [#107](https://github.com/ropensci/taxa/issues/107)
 * data parsers: Put long, often unused columns last ([issue #93](https://github.com/ropensci/taxa/issues/93))
 * When parsing classifications that have per-taxon info add input id column ([issue #92](https://github.com/ropensci/taxa/issues/92))
