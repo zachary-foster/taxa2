@@ -467,7 +467,6 @@ test_that("removing redundant names", {
 })
 
 
-
 test_that("Ranks can be made consistant", {
   raw_data <- c(
     "A root; B phylum; C class; D order; E family; F genus; G species",
@@ -476,5 +475,12 @@ test_that("Ranks can be made consistant", {
     "A root; B phylum; C class; Q order; R genus; S species"
   )
   obj <- parse_tax_data(raw_data, class_sep = "; ", class_key = c("taxon_name", "taxon_rank"), class_regex = "^([A-Z]+) ([a-z]+)$")
+})
+
+
+test_that("print_tree works", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_output(print_tree(x), regexp = "Mammalia")
 })
 

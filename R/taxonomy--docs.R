@@ -1487,3 +1487,20 @@ NULL
 #'
 #' @name taxonomy_table
 NULL
+
+
+#' Print a text tree
+#'
+#' Print a text-based tree of a [taxonomy()] or [taxmap()] object.
+#'
+#' @param obj A \code{taxonomy} or \code{taxmap} object
+#' @param value What data to return. Default is taxon names. Any result of
+#'   [all_names()] can be used, but it usually only makes sense to use data with
+#'   one value per taxon, like taxon names.
+#'
+#' @examples
+#' print_tree(ex_taxmap)
+#'
+#' @name print_tree
+NULL
+

@@ -1139,6 +1139,36 @@ Taxonomy <- R6::R6Class(
       output <- do.call(rbind, lapply(class_list, function(x) x[ranks_used]))
       colnames(output) <- ranks_used
       return(dplyr::as_tibble(output))
+    },
+
+    # Make text print out of a tree
+    print_tree = function(value = "taxon_names") {
+        # Make tree with taxon IDs to avoid potential loop errors
+        tree_data <- data.frame(stringsAsFactors = FALSE,
+                                taxa = self$taxon_ids(),
+                                subtaxa = I(self$subtaxa(recursive = FALSE,
+                                                         value = "taxon_ids")))
+        trees <- lapply(self$roots(value = "taxon_ids"), function(my_root) {
+          cli::tree(tree_data, root = my_root)
+        })
+        trees <- unlist(trees)
+
+        # Replace taxon ids with other value
+        if (value != "taxon_ids") {
+          value <- self$get_data(value)[[1]]
+          ids_in_tree <- sub(trees, pattern = "^[\\│ \\├─└]*", replacement = "")
+          trees <- vapply(seq_len(length(trees)), FUN.VALUE = character(1),
+                          function(i) {
+                            sub(trees[i], pattern = ids_in_tree[i],
+                                replacement = value[ids_in_tree[i]])
+
+                          })
+        }
+
+        # Return tree
+        # cat(paste0(trees, collapse = "\n"))
+        class(trees) <- unique(c("tree", "character"))
+        return(trees)
     }
 
   ),

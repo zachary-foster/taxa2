@@ -806,7 +806,24 @@ taxonomy_table.default <- function(obj, subset = NULL, value = "taxon_names", us
 }
 
 #' @export
-taxonomy_table.Taxmap <- function(obj, subset = NULL, value = "taxon_names", use_ranks = NULL) {
+taxonomy_table.Taxonomy <- function(obj, subset = NULL, value = "taxon_names", use_ranks = NULL) {
   obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$taxonomy_table(subset = subset, value = value, use_ranks = use_ranks)))
+}
+
+
+# -----------------------------------------------------------------------------
+#' @export
+print_tree <- function(obj, value = "taxon_names") {
+  UseMethod("print_tree")
+}
+
+#' @export
+print_tree.default <- function(obj, value = "taxon_names") {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+print_tree.Taxonomy <- function(obj, value = "taxon_names") {
+  obj$print_tree(value = value)
 }
