@@ -481,6 +481,6 @@ test_that("Ranks can be made consistant", {
 test_that("print_tree works", {
   x <- taxonomy(tiger, cougar, mole, tomato, potato,
                 unidentified_plant, unidentified_animal)
-  expect_output(print_tree(x), regexp = "Mammalia")
+  expect_equal(print_tree(x)[1], "Mammalia")
 })
 

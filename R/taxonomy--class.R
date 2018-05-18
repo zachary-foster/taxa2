@@ -1156,7 +1156,7 @@ Taxonomy <- R6::R6Class(
         # Replace taxon ids with other value
         if (value != "taxon_ids") {
           value <- self$get_data(value)[[1]]
-          ids_in_tree <- sub(trees, pattern = "^[\\│ \\├─└]*", replacement = "")
+          ids_in_tree <- sub(trees, pattern = "^[\u2502 \u251C\u2500\u2514]*", replacement = "")
           trees <- vapply(seq_len(length(trees)), FUN.VALUE = character(1),
                           function(i) {
                             sub(trees[i], pattern = ids_in_tree[i],
