@@ -796,19 +796,23 @@ remove_redundant_names.Taxonomy <- function(obj) {
 
 # -----------------------------------------------------------------------------
 #' @export
-taxonomy_table <- function(obj, subset = NULL, value = "taxon_names", use_ranks = NULL) {
+taxonomy_table <- function(obj, subset = NULL, value = "taxon_names",
+                           use_ranks = NULL, add_id_col = FALSE) {
   UseMethod("taxonomy_table")
 }
 
 #' @export
-taxonomy_table.default <- function(obj, subset = NULL, value = "taxon_names", use_ranks = NULL) {
+taxonomy_table.default <- function(obj, subset = NULL, value = "taxon_names",
+                                   use_ranks = NULL, add_id_col = FALSE) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-taxonomy_table.Taxonomy <- function(obj, subset = NULL, value = "taxon_names", use_ranks = NULL) {
+taxonomy_table.Taxonomy <- function(obj, subset = NULL, value = "taxon_names",
+                                    use_ranks = NULL, add_id_col = FALSE) {
   obj <- eval(obj) # Needed by testthat for some reason
-  eval(substitute(obj$taxonomy_table(subset = subset, value = value, use_ranks = use_ranks)))
+  eval(substitute(obj$taxonomy_table(subset = subset, value = value,
+                                     use_ranks = use_ranks)))
 }
 
 

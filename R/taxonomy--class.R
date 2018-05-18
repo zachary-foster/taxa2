@@ -1070,8 +1070,8 @@ Taxonomy <- R6::R6Class(
 
     # --------------------------------------------------------------------------
     # Return taxonomy information in a taxon x rank table
-    taxonomy_table = function(subset = NULL,
-                              value = "taxon_names", use_ranks = NULL) {
+    taxonomy_table = function(subset = NULL, value = "taxon_names",
+                              use_ranks = NULL, add_id_col = FALSE) {
 
       # non-standard argument evaluation of subset
       data_used <- eval(substitute(self$data_used(subset)))
@@ -1082,16 +1082,16 @@ Taxonomy <- R6::R6Class(
       subset <- private$parse_nse_taxon_subset(subset)
 
       # Get supertaxa of each taxon, named by ranks
-      obj_has_ranks <- ! all(is.na(obj$taxon_ranks()))
-      class_list <- supertaxa(obj, subset = subset, value = value,
+      obj_has_ranks <- ! all(is.na(self$taxon_ranks()))
+      class_list <- self$supertaxa(subset = subset, value = value,
                               include_input = TRUE)
       if (is.null(use_ranks)) {
         if (obj_has_ranks) {
-          rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+          rank_names <- self$supertaxa(subset = subset, value = "taxon_ranks",
                                   include_input = TRUE)
           ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
         } else {
-          rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+          rank_names <- self$supertaxa(subset = subset, value = "n_supertaxa",
                                   include_input = TRUE)
           rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
           ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
@@ -1099,24 +1099,24 @@ Taxonomy <- R6::R6Class(
       } else if (is.logical(use_ranks)) {
         if (use_ranks == TRUE) {
           if (obj_has_ranks) {
-            rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+            rank_names <- self$supertaxa(subset = subset, value = "taxon_ranks",
                                     include_input = TRUE)
             ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
           } else {
             stop(call. = FALSE, "option `use_ranks is `TRUE`, but there is no rank information.")
           }
         } else {
-          rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+          rank_names <- self$supertaxa(subset = subset, value = "n_supertaxa",
                                   include_input = TRUE)
           rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
           ranks_used <- rev(rank_names[[which.max(vapply(rank_names, length, numeric(1)))]])
         }
       } else if (is.character(use_ranks)) {
-        rank_names <- supertaxa(obj, subset = subset, value = "taxon_ranks",
+        rank_names <- self$supertaxa(subset = subset, value = "taxon_ranks",
                                 include_input = TRUE)
         ranks_used <- use_ranks
       } else if (is.numeric(use_ranks)) {
-        rank_names <- supertaxa(obj, subset = subset, value = "n_supertaxa",
+        rank_names <- self$supertaxa(subset = subset, value = "n_supertaxa",
                                 include_input = TRUE)
         rank_names <- lapply(rank_names, function(x) paste0("rank_", x + 1))
         ranks_used <-  rev(paste0("rank_", use_ranks))
@@ -1130,7 +1130,7 @@ Taxonomy <- R6::R6Class(
       all_ranks <- unique(unlist(rank_names))
       unused_ranks <- all_ranks[! all_ranks %in% ranks_used]
       if (length(unused_ranks) > 0) {
-        message('The following ranks will not be included:\n',
+        message('The following ranks will not be included because the order cannot be determined:\n',
                 limited_print(unused_ranks, prefix = "  ", type = "silent"),
                 'See the section on the `use_ranks` option in ?taxonomy_table to if you want to change which ranks are used.')
       }
@@ -1138,6 +1138,14 @@ Taxonomy <- R6::R6Class(
       # Make table
       output <- do.call(rbind, lapply(class_list, function(x) x[ranks_used]))
       colnames(output) <- ranks_used
+
+      # Add taxon ID column
+      if (add_id_col) {
+        output <- cbind(data.frame(stringsAsFactors = FALSE,
+                                   taxon_ids = self$taxon_ids()[subset]),
+                        output)
+      }
+
       return(dplyr::as_tibble(output))
     },
 

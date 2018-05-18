@@ -467,14 +467,14 @@ test_that("removing redundant names", {
 })
 
 
-test_that("Ranks can be made consistant", {
-  raw_data <- c(
-    "A root; B phylum; C class; D order; E family; F genus; G species",
-    "A root; H phylum; I class; J order; K family; L genus; M species",
-    "A root; B phylum; N class; O order; P family",
-    "A root; B phylum; C class; Q order; R genus; S species"
-  )
-  obj <- parse_tax_data(raw_data, class_sep = "; ", class_key = c("taxon_name", "taxon_rank"), class_regex = "^([A-Z]+) ([a-z]+)$")
+test_that("taxonomy can be converted to tables", {
+  x <- taxonomy(tiger, cougar, mole, tomato, potato,
+                unidentified_plant, unidentified_animal)
+  expect_message(result <- taxonomy_table(x),
+                 "The following ranks will not be included")
+  expect_equal(colnames(result), c("class", "family", "genus", "species"))
+  result <- taxonomy_table(x, use_ranks = FALSE)
+  expect_equal(colnames(result), c("rank_1", "rank_2", "rank_3", "rank_4"))
 })
 
 
