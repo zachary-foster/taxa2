@@ -28,7 +28,7 @@ get_dataset(ex_taxmap, "info")
 get_dataset(ex_taxmap, 1)
 
 # Get data set by T/F vector
-get_dataset(ex_taxmap, c(T, F, F, F))
+get_dataset(ex_taxmap, startsWith(names(ex_taxmap$data), "i"))
 
 }
 
