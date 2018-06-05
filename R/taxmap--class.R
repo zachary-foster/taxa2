@@ -620,6 +620,46 @@ Taxmap <- R6::R6Class(
                             '" of type "', class(dataset)[1], '".'))
         return(NULL)
       }
+    },
+
+    # Get a data set from a taxmap selfect
+    get_dataset = function(dataset) {
+
+      # Convert logicals to numerics
+      if (is.logical(dataset)) {
+        if (length(dataset) != length(self$data)) {
+          stop("When using a TRUE/FALSE vector to specify the data set, it must be the same length as the number of data sets",
+               call. = FALSE)
+        } else {
+          dataset <- which(dataset)
+        }
+      }
+
+      # Check for multiple/no values
+      if (length(dataset) == 0) {
+        stop('No dataset specified.', call. = FALSE)
+      }
+      if (length(dataset) > 1) {
+        stop('Only one dataset can be used.', call. = FALSE)
+      }
+
+      # Check that dataset exists
+      error_msg <- paste0('The dataset "', dataset,
+                          '" cannot be found. Datasets found include:\n  ',
+                          limited_print(paste0("[", seq_along(self$data), "] ", names(self$data)),
+                                        type = "silent"))
+      if (is.character(dataset)) {
+        if (! dataset %in% names(self$data)) {
+          stop(error_msg, call. = FALSE)
+        }
+      } else if (is.numeric(dataset)) {
+        if (! dataset %in% seq_along(self$data)) {
+          stop(error_msg, call. = FALSE)
+        }
+      }
+
+      # Return without printing
+      return(self$data[[dataset]])
     }
 
   ),

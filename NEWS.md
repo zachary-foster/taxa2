@@ -5,6 +5,7 @@ Current
 
 * Added the `taxonomy_table` function that converts the information in a `taxmap` or `taxonomy` object into a table with taxa as rows and ranks as columns.
 * Added the `print_tree` function that prints text-based trees of `taxmap` or `taxonomy` objects ([issue #173](https://github.com/ropensci/taxa/issues/173)).
+* Added `get_dataset` function to get a single data set from `taxmap` objects. Useful for piping with `%>%`.
 
 ### Bug fixes
 

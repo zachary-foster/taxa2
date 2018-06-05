@@ -345,6 +345,22 @@ test_that("Using ambiguous names in NSE generates a warning", {
   expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
+
+#### Get datasets
+
+test_that("datasets can be accessed", {
+  # Works right with valid input
+  expect_identical(get_dataset(test_obj, "info"), test_obj$data$info)
+  expect_identical(get_dataset(test_obj, 1), test_obj$data$info)
+  expect_identical(get_dataset(test_obj,  names(test_obj$data) == "info"), test_obj$data$info)
+
+  # Fails with invalid input
+  expect_error(get_dataset(test_obj, "not valid"), 'The dataset "not valid" cannot be found')
+  expect_error(get_dataset(test_obj, 123), 'The dataset "123" cannot be found')
+  expect_error(get_dataset(test_obj, TRUE), 'must be the same length')
+})
+
+
 #### get_data_frame
 
 test_that("get data frame - for now doesn't work on example data", {
@@ -820,3 +836,4 @@ test_that("dots and .list return the same output", {
                                   foods = foods),
                       funcs = list(reaction = reaction)))
 })
+

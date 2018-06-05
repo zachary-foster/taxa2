@@ -228,3 +228,20 @@ n_obs_1.default <- function(obj, target = NULL) {
 n_obs_1.Taxmap <- function(obj, target = NULL) {
   obj$n_obs_1(target = target)
 }
+
+
+# -----------------------------------------------------------------------------
+#'@export
+get_dataset <- function(obj, dataset = NULL) {
+  UseMethod("get_dataset")
+}
+
+#' @export
+get_dataset.default <- function(obj, dataset = NULL) {
+  stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
+}
+
+#' @export
+get_dataset.Taxmap <- function(obj, dataset = NULL) {
+  obj$get_dataset(dataset = dataset)
+}

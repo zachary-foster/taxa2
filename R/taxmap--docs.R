@@ -536,3 +536,35 @@ NULL
 #'
 #' @name n_obs_1
 NULL
+
+
+#' Get a data set from a taxmap object
+#'
+#' Get a data set from a taxmap object and complain if it does not
+#' exist.
+#'
+#' @param obj A taxmap object
+#' @param dataset Which data set to use. Can be any of the following:
+#'   \describe{
+#'     \item{Name}{The name of the data set to use.}
+#'     \item{Index}{The index of the data set to use.}
+#'     \item{TRUE/FALSE vector}{A TRUE/FALSE vector the same length as the
+#'     number of datasets, with exactly one TRUE corresponding to the
+#'     selected data set.}
+#'   }
+#'
+#' @examples
+#' \dontrun{
+#' # Get data set by name
+#' get_dataset(ex_taxmap, "info")
+#'
+#' # Get data set by indeex_taxmap
+#' get_dataset(ex_taxmap, 1)
+#'
+#' # Get data set by T/F vector
+#' get_dataset(ex_taxmap, c(T, F, F, F))
+#'
+#' }
+#'
+#' @name get_dataset
+NULL
