@@ -115,9 +115,11 @@ print__tbl_df <- function(obj, data, name, prefix, max_width, max_rows) {
 
   # Highlight taxon IDs if they exist
   if (! is.null(obj$get_data_taxon_ids(name))) {
-    output <- highlight_taxon_ids(output,
-                                  header_index = 2,
-                                  row_indexes = 4:(3 + min(c(max_rows, nrow(data)))))
+    if (nrow(data) > 0) {
+      output <- highlight_taxon_ids(output,
+                                    header_index = 2,
+                                    row_indexes = 4:(3 + min(c(max_rows, nrow(data)))))
+    }
     output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
   } else {
     output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
