@@ -172,14 +172,14 @@ check_taxmap_data <- function(obj) {
   #  Check that column names are not the names of functions
   data_names <- all_names(obj, funcs = FALSE, builtin_funcs = FALSE)
   suspect_names <- data_names[data_names %in% all_functions()]
-  if (length(suspect_names) > 0) {
-    warning(paste0("Naming table columns/vectors/lists the same name as ",
-                   "functions can sometimes interfere with non-standard ",
-                   "evaluation. The following data shares names with ",
-                   "functions:\n", limited_print(names(suspect_names),
-                                                 type = "silent")),
-            call. = FALSE)
-  }
+  # if (length(suspect_names) > 0) {
+  #   warning(paste0("Naming table columns/vectors/lists the same name as ",
+  #                  "functions can sometimes interfere with non-standard ",
+  #                  "evaluation. The following data shares names with ",
+  #                  "functions:\n", limited_print(names(suspect_names),
+  #                                                type = "silent")),
+  #           call. = FALSE)
+  # }
 
   return(invisible(NULL))
 }
