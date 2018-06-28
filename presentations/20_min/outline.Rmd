@@ -1,0 +1,67 @@
+# Talk outline
+
+## Introduction (0.5 min)
+
+
+## Taxonomic information in the wild (1 min)
+
+* sequence databases
+* BLAST results
+* Sepcies occurance databases
+* museum records
+
+
+## The purpose of the taxa package (0.5 min)
+
+
+## The classes (3 min total)
+
+### The basic classes (1 min)
+
+### Taxonomy and Taxmap (2 min)
+
+
+## Taxon attributes (4.5 min total)
+
+### Ranks, names, and IDs (0.5 min)
+
+* taxon_names, taxon_ranks, taxon_ids
+
+### Parts of the tree (3 min)
+
+* branches, internodes, leaves, roots, stems, supertaxa, subtaxa
+
+### Numbers of supertaxa/subtaxa/data (1 min)
+
+* n_supertaxa, n_subtaxa, n_obs, n_supertaxa_1, n_subtaxa_1, n_obs_1 
+
+
+## Parsing (5 min total)
+
+### Vectors (1 min)
+
+### Tables (2 min)
+
+### Complex strings (2 min)
+
+
+## Manipulation (4 min total)
+
+### Subsetting the taxonomy (2 min)
+
+### Subsetting user data (1.5 min)
+
+### Adding user data (0.5 min)
+
+
+## Compatibility with other packages (3 min total)
+
+### Metacoder (2.5 min)
+
+### Taxize (0.5 min)
+
+
+
+## Conclusion
+
+

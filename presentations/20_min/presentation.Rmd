@@ -1,0 +1,281 @@
+---
+title: "Taxa and metacoder: R packages for parsing, visualization, and manipulation of taxonomic data"
+author: Zachary Foster, Scott Chamberlain, Thomas Sharpton, and Niklaus Grunwald
+header-includes:
+   - \usepackage{subfig}
+   - \usepackage{graphicx}
+output:
+  beamer_presentation:
+    theme: "default"
+    colortheme: "beaver"
+    fonttheme: "structurebold"
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+# options(crayon.enabled = TRUE)
+options(width = 80)
+library(taxa)
+library(metacoder)
+```
+
+## The challenges of taxonomic data
+
+
+\begin{columns}
+
+\begin{column}{0.3\textwidth}
+  \includegraphics[height=8cm]{images/taxonomy.png}
+\end{column}
+
+\begin{column}{0.8\textwidth}  %%<--- here
+  \begin{itemize}
+    \setlength\itemsep{1em}
+    \item Taxonomic data is hierarchical
+    \item Associated with tabular data
+    \item Can be names, classifications, or IDs
+    \item Many different taxonomic systems
+    \item Many different data formats
+    \item Hierarchical visualization is difficult 
+  \end{itemize}
+\end{column}
+  
+\end{columns}
+
+
+
+## Sources of taxonomic data
+
+**DNA sequence databases**
+
+\begin{center}
+\resizebox{.99\textwidth}{!}{%
+\includegraphics[height=1cm]{images/ncbi_icon.png}%
+\quad
+\includegraphics[height=1cm]{images/unite_icon.png}%
+\quad
+\includegraphics[height=1cm]{images/greengenes_icon.png}%
+}
+\end{center}
+
+**Species occurrence databases**
+
+\begin{center}
+\resizebox{.99\textwidth}{!}{%
+\includegraphics[height=1cm]{images/gbif_icon.png}%
+\quad
+\includegraphics[height=1cm]{images/inaturalist_icon.png}%
+\quad
+\includegraphics[height=1cm]{images/atlas_icon.jpg}%
+}
+\end{center}
+
+**Museum records**
+
+\begin{center}
+\resizebox{.99\textwidth}{!}{%
+\includegraphics[height=1cm]{images/smith_icon.jpg}%
+\quad
+\includegraphics[height=1cm]{images/bmnh_icon.jpg}%
+\quad
+\includegraphics[height=1cm]{images/nhm_icon.jpg}%
+}
+\end{center}
+
+
+## Sources of taxonomic data: DNA sequences
+
+### NCBI Genbank
+
+\footnotesize
+AC073210.8 Homo sapiens BAC clone RP11-460N20 from 7, complete sequence
+
+### UNITE
+
+\footnotesize
+SH099456.05FU_FJ357315_refs  \nolinebreak  k__Fungi;p__Ascomycota;c__Dothideomycetes
+;o__Pleosporales;f__Pleosporaceae;g__Embellisia;s__Embellisia_planifunda
+
+### RDP 
+
+\footnotesize
+S000448483 \nolinebreak Sparassis \nolinebreak crispa; \nolinebreak MBUH-PIRJO&ILKKA94-\nolinebreak1587/ss5
+Lineage=Root;rootrank ;Fungi;domain;Basidiomycota;phylum;Agaricomycetes;
+class;Polyporales;order ;Sparassidaceae;family;Sparassis;genus
+
+### SILVA
+
+\footnotesize
+GCVF01000431.1.2369 Bacteria;Proteobacteria;Gammaproteobacteria;Oceanospirillales
+;Alcanivoraceae;Alcanivorax;Thalassiosira rotula
+
+
+## Sources of taxonomic data: Occurrence records
+
+**Global Biodiversity Information Facility : Archea database**
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment=""}
+readr::read_tsv("datasets/gbif_archea.csv")[4:8]
+```
+
+
+## Sources of taxonomic data: Museum records
+
+**Smithsonian Museum of Natural History: Mammal database**
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment=""}
+readr::read_csv("datasets/SNMNH.csv")[9]
+```
+
+
+## The `taxa` package
+
+![](images/taxa_header.png)
+
+\vfill
+
+The `taxa` package is designed to be a soild foundation for using taxonomic data in R. 
+
+\vfill
+
+\begin{itemize}
+  \setlength\itemsep{1em}
+  \item Classes to hold taxa, taxonomies, and associated data
+  \item Flexible parsers to convert raw data to these classes
+  \item Dplyr-inspired functions to manipulate these classes
+  \item Functions to get data assocaited with each taxon in a taxonomy
+\end{itemize}
+
+
+## Classes defined by `taxa`: Relationships
+
+\begin{center}
+\resizebox{.8\textwidth}{!}{%
+\includegraphics[height=1cm]{images/class_diagram.png}%
+}
+\end{center}
+
+## Classes defined by `taxa`: Relationships
+
+\begin{center}
+\resizebox{.8\textwidth}{!}{%
+\includegraphics[height=1cm]{images/class_diagram_selected.png}%
+}
+\end{center}
+
+## Classes defined by `taxa`: The `taxmap` class
+
+\begin{center}
+\hspace*{-0.6cm}
+\resizebox{1.1\textwidth}{!}{%
+\includegraphics{images/taxmap_printed.png}%
+}
+\end{center}
+
+
+## Parsing
+
+\begin{center}
+\hspace*{-0.6cm}
+\resizebox{1.1\textwidth}{!}{%
+\includegraphics{images/parsing_guide.png}%
+}
+\end{center}
+
+## Parsing: vectors of classifications
+
+\scriptsize
+```{r echo=TRUE, message=FALSE, cache=TRUE}
+x <- c("Mammalia;Theria;Metatheria;Diprotodontia;Macropodiformes",
+       "Mammalia;Theria;Eutheria;Primates;Haplorrhini;Simiiformes") 
+
+parse_tax_data(x, class_sep = ";")
+```
+
+
+## Parsing: vectors of names
+
+\scriptsize
+```{r echo=TRUE, message=FALSE, cache=TRUE}
+x <- c("Homo sapiens", "Macropus", "Chordata")
+
+lookup_tax_data(x, type = "taxon_name", database = "ncbi")
+```
+
+
+## Parsing: vectors of taxon IDs
+
+\scriptsize
+```{r echo=TRUE, message=FALSE, cache=TRUE}
+x <- c("9606", "207598", "7711") # NCBI taxon IDs
+
+lookup_tax_data(x, type = "taxon_id", database = "ncbi")
+```
+
+## Parsing: vectors of sequence IDs
+
+\scriptsize
+```{r echo=TRUE, message=FALSE, cache=TRUE}
+x <- c("AC073210", "MG014608", "AE006468") # NCBI sequence IDs
+
+lookup_tax_data(x, type = "seq_id", database = "ncbi")
+```
+
+
+## Parsing: tables
+
+**Global Biodiversity Information Facility : Archea database**
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment="", cache=TRUE}
+readr::read_tsv("datasets/gbif_archea.csv")[4:8]
+```
+
+
+## Parsing: tables
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment="", warning=FALSE, cache=TRUE}
+x = readr::read_tsv("datasets/gbif_archea.csv")
+
+parse_tax_data(x, class_cols = 4:8)
+```
+
+
+## Parsing: tables
+
+**Smithsonian Museum of Natural History: Mammal database**
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment="", cache=TRUE}
+readr::read_csv("datasets/SNMNH.csv")[9]
+```
+
+
+## Parsing: tables
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment="", cache=TRUE}
+x = readr::read_csv("datasets/SNMNH.csv")
+
+parse_tax_data(x, class_cols = "Name Hierarchy",
+               class_sep = " : ", class_reversed = TRUE)
+```
+
+
+## Parsing: complex strings (NCBI Genbank)
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, comment="", cache=TRUE}
+x = c("AC073210.8 Homo sapiens BAC clone RP11-460N20 from 7, complete sequence",
+      "AE006468.2 Salmonella enterica subsp. enterica serovar Typhimurium",
+      "MG014608.1 Macropus fuliginosus Csf1r gene, enhancer")
+
+extract_tax_data(x, database = "ncbi", regex = "([A-Z0-9.]+) (.+)",
+                 key = c(my_ncbi_id = "seq_id", my_desc = "info"))
+```
+
+

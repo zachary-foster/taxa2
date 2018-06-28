@@ -54,6 +54,8 @@
 #'   `class_sep` option can be used to split the classification into data for
 #'   each taxon before matching. If `class_sep` is `NULL`, each match of
 #'   `class_regex` defines a taxon in the classification.
+#' @param class_reversed If `TRUE`, then classifications go from specific to general.
+#' For example: `Abditomys latidens : Muridae : Rodentia : Mammalia : Chordata`.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `class_regex` in the output object.
 #' @param mappings (named `character`) This defines how the taxonomic
@@ -182,6 +184,7 @@
 parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                            class_sep = ";", sep_is_regex = FALSE,
                            class_key = "taxon_name", class_regex = "(.*)",
+                           class_reversed = FALSE,
                            include_match = TRUE,
                            mappings = c(), include_tax_data = TRUE,
                            named_by_rank = FALSE) {
@@ -258,6 +261,11 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # Remove white space
   parsed_tax <- lapply(parsed_tax, trimws)
+
+  # Reverse order of taxa in classifications
+  if (class_reversed) {
+    parsed_tax <- lapply(parsed_tax, rev)
+  }
 
   # Check for NAs in input
   na_indexes <- which(vapply(parsed_tax, function(x) any(is.na(x)), logical(1)))

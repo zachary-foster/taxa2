@@ -6,8 +6,8 @@
 \usage{
 parse_tax_data(tax_data, datasets = list(), class_cols = 1,
   class_sep = ";", sep_is_regex = FALSE, class_key = "taxon_name",
-  class_regex = "(.*)", include_match = TRUE, mappings = c(),
-  include_tax_data = TRUE, named_by_rank = FALSE)
+  class_regex = "(.*)", class_reversed = FALSE, include_match = TRUE,
+  mappings = c(), include_tax_data = TRUE, named_by_rank = FALSE)
 }
 \arguments{
 \item{tax_data}{A table, list, or vector that contains the names of taxa that
@@ -69,6 +69,9 @@ the information must be specified using the \code{class_key} argument. The
 \code{class_sep} option can be used to split the classification into data for
 each taxon before matching. If \code{class_sep} is \code{NULL}, each match of
 \code{class_regex} defines a taxon in the classification.}
+
+\item{class_reversed}{If \code{TRUE}, then classifications go from specific to general.
+For example: \code{Abditomys latidens : Muridae : Rodentia : Mammalia : Chordata}.}
 
 \item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
 the input matched by \code{class_regex} in the output object.}
