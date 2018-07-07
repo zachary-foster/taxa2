@@ -1,6 +1,6 @@
 ---
 title: "Taxa and metacoder: R packages for parsing, visualization, and manipulation of taxonomic data"
-author: Zachary Foster, Scott Chamberlain, Thomas Sharpton, and Niklaus Grunwald
+author: Zachary Foster, Scott Chamberlain, Thomas Sharpton, and Niklaus Grünwald
 header-includes:
    - \usepackage{subfig}
    - \usepackage{graphicx}
@@ -13,7 +13,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, comment = "")
+knitr::opts_chunk$set(echo = FALSE, comment = "", warning = FALSE)
 # options(crayon.enabled = TRUE)
 options(width = 80)
 library(taxa)
@@ -87,34 +87,43 @@ library(cowplot)
 
 ## Sources of taxonomic data: DNA sequences
 
+\scriptsize
+
 **NCBI Genbank**
 
-\footnotesize
-AC073210.8 Homo sapiens BAC clone RP11-460N20 from 7, complete sequence
+```
+>AC073210.8 Homo sapiens BAC clone RP11-460N20 from 7, complete sequence
+AACGAACGCTGGCGGCATGCCTAACACATGCAAGTCGAACGAGACCTTCGGGTC...
+```
 
 **UNITE**
 
-\footnotesize
-SH099456.05FU_FJ357315_refs  \nolinebreak  k__Fungi;p__Ascomycota;c__Dothideomycetes
-;o__Pleosporales;f__Pleosporaceae;g__Embellisia;s__Embellisia_planifunda
+```
+>SH099456.05FU_FJ357315_refs k__Fungi;p__Ascomycota;c__Dothideomycetes
+;o__Pleosporales;f__Pleosporaceae;g__Embellisia;s__Embellisia_planifunda  
+GCTGGCGGCGTGCCTAACACATGTAAGTCGAACGGGACTGGGGGCAACTCCAGT...
+```
 
 **RDP**
 
-\footnotesize
-S000448483 \nolinebreak Sparassis \nolinebreak crispa; \nolinebreak MBUH-PIRJO&ILKKA94-\nolinebreak1587/ss5
+```
+>S000448483 Sparassis crispa; MBUH-PIRJO&ILKKA94-1587/ss5
 Lineage=Root;rootrank ;Fungi;domain;Basidiomycota;phylum;Agaricomycetes;
 class;Polyporales;order ;Sparassidaceae;family;Sparassis;genus
+AGAGTTTGATCCTGGCTCAGATTGAACGCTGGCGGAATGCTTAACACATGAAAC...
+```
 
 **SILVA**
 
-\footnotesize
-GCVF01000431.1.2369 Bacteria;Proteobacteria;Gammaproteobacteria;Oceanospirillales
-;Alcanivoraceae;Alcanivorax;Thalassiosira rotula
-
+```
+>GCVF01000431.1.2369 Bacteria;Proteobacteria;Gammaproteobacteria;
+Oceanospirillales;Alcanivoraceae;Alcanivorax;Thalassiosira rotula
+AGAGTTTGATCCTGGCTCAGGATGAACGCTGGCGGTATGCTTAACACATGCAAG...
+```
 
 ## Sources of taxonomic data: Occurrence records
 
-**Global Biodiversity Information Facility : Archea database**
+**Global Biodiversity Information Facility : Archaea database**
 
 \scriptsize
 ```{r echo = TRUE, message=FALSE}
@@ -151,6 +160,29 @@ The `taxa` package is designed to be a solid foundation for using taxonomic data
 \end{itemize}
 
 
+## The `metacoder` package: visualization of taxon data
+
+```{r include=FALSE}
+set.seed(6)
+```
+
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE, warning=FALSE}
+readr::read_tsv("datasets/gbif_archea.csv") %>%
+  parse_tax_data(class_cols = 4:8) %>%
+  filter_taxa(taxon_names != "") %>%
+  heat_tree(node_label = taxon_names, node_color = n_obs,
+            node_size = n_obs, layout = "da")
+```
+
+## Classes defined by `taxa`
+
+\begin{center}
+\Huge
+Classes defined by `taxa`
+\end{center}
+
 ## Classes defined by `taxa`: Relationships
 
 \begin{center}
@@ -176,6 +208,14 @@ The `taxa` package is designed to be a solid foundation for using taxonomic data
 \resizebox{1.1\textwidth}{!}{%
 \includegraphics{images/taxmap_printed.png}%
 }
+\end{center}
+
+
+## Parsing
+  
+\begin{center}
+\Huge
+Parsing
 \end{center}
 
 
@@ -210,28 +250,28 @@ lookup_tax_data(x, type = "taxon_name", database = "ncbi")
 ```
 
 
-## Parsing: vectors of taxon IDs
+## Parsing: vectors of taxon or sequence IDs
 
-\scriptsize
-```{r echo=TRUE, message=FALSE, cache=TRUE}
+\footnotesize
+
+**Taxon IDs**
+
+```{r echo=TRUE, message=FALSE, cache=TRUE, eval=FALSE}
 x <- c("9606", "207598", "7711") # NCBI taxon IDs
-
 lookup_tax_data(x, type = "taxon_id", database = "ncbi")
 ```
 
-## Parsing: vectors of sequence IDs
+**Sequence IDs**
 
-\scriptsize
-```{r echo=TRUE, message=FALSE, cache=TRUE}
+```{r echo=TRUE, message=FALSE, cache=TRUE, eval=FALSE}
 x <- c("AC073210", "MG014608", "AE006468") # NCBI sequence IDs
-
 lookup_tax_data(x, type = "seq_id", database = "ncbi")
 ```
 
 
 ## Parsing: tables
 
-**Global Biodiversity Information Facility : Archea database**
+**Global Biodiversity Information Facility : Archaea database**
 
 \scriptsize
 ```{r echo = TRUE, message=FALSE, cache=TRUE}
@@ -249,27 +289,6 @@ parse_tax_data(x, class_cols = 4:8)
 ```
 
 
-## Parsing: tables
-
-**Smithsonian Museum of Natural History: Mammal database**
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-readr::read_csv("datasets/SNMNH.csv")[9]
-```
-
-
-## Parsing: tables
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-x = readr::read_csv("datasets/SNMNH.csv")
-
-parse_tax_data(x, class_cols = "Name Hierarchy",
-               class_sep = " : ", class_reversed = TRUE)
-```
-
-
 ## Parsing: complex strings (NCBI Genbank)
 
 \scriptsize
@@ -283,7 +302,15 @@ extract_tax_data(x, database = "ncbi", regex = "([A-Z0-9.]+) (.+)",
 ```
 
 
-## Taxonomy terminology
+## Taxon attributes
+
+\begin{center}
+\Huge
+Taxon attributes
+\end{center}
+
+
+## Taxon attributes: Taxonomy terminology
 
 ```{r include=FALSE, cache=TRUE}
 hmp_otus$lineage <- sub(hmp_otus$lineage, 
@@ -322,7 +349,7 @@ subtaxa_recursive <- plot_one(title = "Subtaxa (recursive = T)", node_color = my
 
 my_color <- ifelse(x$taxon_indexes() %in% subtaxa(x, subset = taxon_names == "Betaproteobacteria", simplify = T, recursive = FALSE), selected, unselected)
 my_color[x$taxon_names() == "Betaproteobacteria"] <- target
-subtaxa_immediate <- plot_one(title = "Subtaxa (recursive = F) ", node_color = my_color)
+subtaxa_immediate <- plot_one(title = "Subtaxa (recursive = F)", node_color = my_color)
 
 my_color <- ifelse(x$taxon_indexes() %in% supertaxa(x, subset = taxon_names == "Betaproteobacteria", simplify = T), selected, unselected)
 my_color[x$taxon_names() == "Betaproteobacteria"] <- target
@@ -358,7 +385,7 @@ x %>%
 ```
 
 
-## Taxonomy terminology: subtaxa and supertaxa
+## Taxon attributes: subtaxa and supertaxa
 
 \centering
 ```{r warning=FALSE, cache=TRUE}
@@ -366,7 +393,7 @@ cowplot::plot_grid(plotlist = list(subtaxa_recursive, subtaxa_immediate, superta
 ```
 
 
-## Taxonomy terminology: parts of a tree
+## Taxon attributes: parts of a tree
 
 \centering
 ```{r warning=FALSE, cache=TRUE}
@@ -374,93 +401,7 @@ cowplot::plot_grid(plotlist = list(leaf_plot, root_plot, stem_plot, internode_pl
 ```
 
 
-
-## Manipulating
-
-Here is the example object that will be used:
-
-```{r include=FALSE}
-obj <- ex_taxmap$clone(deep = TRUE)
-obj$data$abund <- NULL
-```
-
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-print(obj)
-```
-
-
-## Manipulating: Subsetting the taxonomy
-
-Subset taxonomy and data to one taxon:
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-filter_taxa(obj, taxon_names == "Plantae", subtaxa = TRUE)
-```
-
-
-## Manipulating: Subsetting the taxonomy
-
-Subset taxonomy to one rank:
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-filter_taxa(obj, taxon_ranks == "family", supertaxa = TRUE)
-```
-
-
-## Manipulating: Subsetting user data
-
-Subset data and remove any taxa not in subset:
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-filter_obs(obj, "info", n_legs == 4, drop_taxa = TRUE)
-```
-
-
-## Manipulating: Adding user data
-
-Add a column to a dataset:
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-mutate_obs(obj, "info", bipedal = n_legs == 2)
-```
-
-
-## Manipulating: Adding user data
-
-Add a new dataset:
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-mutate_obs(obj, "new_data", n_obs)
-```
-
-## Manipulating: values accessible to NSE
-
-The following can be used in manipulation functions as if they were independent variables:
-
-\begin{itemize}
-  \setlength\itemsep{1em}
-  \item Functions that return per-taxon information
-  \item User-defined table columns
-  \item User-defined vectors and lists
-  \item User-defined functions
-\end{itemize}
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-unname(all_names(obj))
-```
-
-
-## Taxon attributes
-
-There are a set of functions for transforming the hierarchical information in a taxonomy into per-taxon information named by taxon IDs.
+## Taxon attributes: functions
 
 **Ranks, names, and IDs**
 
@@ -469,6 +410,10 @@ There are a set of functions for transforming the hierarchical information in a 
 **Parts of the tree**
 
 `branches`, `internodes`, `leaves`, `roots`, `stems`, `supertaxa`, `subtaxa`
+
+**Filtering helpers**
+
+`is_branch`, `is_internode`, `is_leaf`, `is_root`, `is_stem`
 
 **Numbers of supertaxa/subtaxa/data**
 
@@ -487,7 +432,7 @@ taxon_ids(ex_taxmap) %>% head
 ```
 
 
-## Taxon attributes: Parts of the tree
+## Taxon attributes: `subtaxa`
 
 These return a list of vectors named by taxon IDs.
 
@@ -497,7 +442,7 @@ subtaxa(ex_taxmap, value = "taxon_names")[1:3]
 ```
 
 
-## Taxon attributes: Parts of the tree
+## Taxon attributes: `subtaxa`
 
 These return a list of vectors named by taxon IDs.
 
@@ -506,25 +451,6 @@ These return a list of vectors named by taxon IDs.
 subtaxa(ex_taxmap, value = "taxon_names", recursive = FALSE)[1:3]
 ```
 
-
-## Taxon attributes: Parts of the tree
-
-Any value accessible to NSE can be returned, including user-defined data. 
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-subtaxa(ex_taxmap, value = "taxon_ranks", recursive = FALSE)[1:3]
-```
-
-## Taxon attributes: Parts of the tree
-
-There are a set that return logical vectors for filtering. 
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-is_leaf(ex_taxmap)
-is_root(ex_taxmap)
-```
 
 
 ## Taxon attributes: counts
@@ -539,46 +465,159 @@ n_obs(ex_taxmap, "info")
 n_obs(ex_taxmap, "abund")
 ```
 
-## Taxon attributes: counts
 
-The `*_1` variants return non-recursive counts.
+## Manipulating
+
+\begin{center}
+\Huge
+Manipulating
+\end{center}
+
+
+## Manipulating: example data
+
+Here is the example object that will be used:
+
+```{r include=FALSE}
+obj <- ex_taxmap$clone(deep = TRUE)
+obj$data$abund <- NULL
+```
+
 
 \scriptsize
 ```{r echo = TRUE, message=FALSE, cache=TRUE}
-n_subtaxa_1(ex_taxmap)
-n_supertaxa_1(ex_taxmap)
-n_obs_1(ex_taxmap, "info")
-n_obs_1(ex_taxmap, "abund")
+print(obj)
 ```
+
+
+## Manipulating: example data
+
+Here is the example object that will be used:
+
+```{r include=FALSE}
+set.seed(1)
+```
+
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+heat_tree(obj, node_label = taxon_names, layout = "da")
+```
+
+
+## Manipulating: Subsetting the taxonomy
+
+Subset taxonomy and user-defined data to one taxon:
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+filter_taxa(obj, taxon_names == "Plantae", subtaxa = TRUE)
+```
+
+
+## Manipulating: Subsetting the taxonomy
+
+Subset taxonomy and user-defined data to one taxon:
+
+```{r include=FALSE}
+set.seed(1)
+```
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE, fig.width=3}
+filter_taxa(obj, taxon_names == "Plantae", subtaxa = TRUE) %>%
+  heat_tree(node_label = taxon_names, layout = "da")
+```
+
+
+## Manipulating: Subsetting the taxonomy
+
+Subset taxonomy to one rank:
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+filter_taxa(obj, taxon_ranks == "family", supertaxa = TRUE)
+```
+
+
+## Manipulating: Subsetting the taxonomy
+
+Subset taxonomy to one rank:
+
+```{r include=FALSE}
+set.seed(8)
+```
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE, fig.width=3}
+filter_taxa(obj, taxon_ranks == "family", supertaxa = TRUE) %>%
+  heat_tree(node_label = taxon_names, layout = "da")
+```
+
+
+## Manipulating: Subsetting user data
+
+Subset user-defined data and remove any taxa not in subset:
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+filter_obs(obj, "info", n_legs == 4, drop_taxa = TRUE)
+```
+
+
+## Manipulating: Subsetting user data
+
+Subset data and remove any taxa not in subset:
+
+```{r include=FALSE}
+set.seed(7)
+```
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE, fig.width=2.5}
+filter_obs(obj, "info", n_legs == 4, drop_taxa = TRUE) %>%
+  heat_tree(node_label = taxon_names, layout = "da")
+```
+
+
+## Manipulating: Adding user data
+
+Add a column to a dataset:
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+mutate_obs(obj, "info", bipedal = n_legs == 2)
+```
+
+
+## Manipulating: values accessible to NSE
+
+The following can be used in manipulation functions as if they were independent variables using Non-Standard Evaluation (NSE):
+
+\begin{itemize}
+  \setlength\itemsep{1em}
+  \item Functions that return per-taxon information
+  \item User-defined table columns
+  \item User-defined vectors and lists
+  \item User-defined functions
+\end{itemize}
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+unname(all_names(obj))
+```
+
 
 
 ## Compatiblity with other packages
 
 `taxa` is still being developed, but we hope it will become a foundation for an ecosystem of R packages that use taxonomic data.
 
-\begin{itemize}
-  \setlength\itemsep{1em}
-  \item Flexible parsers can read most formats
-  \item Working on making `taxize` compatible with `taxa`
-  \item Fully compatible with `metacoder`
-\end{itemize}
+* Flexible parsers can read most formats
+* Working on making `taxize` compatible with `taxa`
+* Fully compatible with `metacoder`
 
 
-## Metacoder: visulization of taxonomic data
-
-```{r include=FALSE}
-set.seed(6)
-```
-
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE, warning=FALSE}
-readr::read_tsv("datasets/gbif_archea.csv") %>%
-  parse_tax_data(class_cols = 4:8) %>%
-  filter_taxa(taxon_names != "") %>%
-  heat_tree(node_label = taxon_names, node_color = n_obs,
-            node_size = n_obs, layout = "da")
-```
 
 
 ## Metacoder: visulization of taxonomic data
@@ -598,6 +637,32 @@ readr::read_tsv("datasets/gbif_archea.csv") %>%
 \resizebox{1.15\textwidth}{!}{%
 \includegraphics{images/metacoder_multiroot.png}%
 }
+\end{center}
+
+
+## Acknowledgements
+
+\begin{center}
+\resizebox{.99\textwidth}{!}{%
+\includegraphics[height=0.5cm]{images/ropensci_icon.png}%
+\quad
+\includegraphics[height=0.5cm]{images/r_icon.jpg}%
+\quad
+\includegraphics[height=0.5cm]{images/user_icon.png}%
+}
+\end{center}
+
+
+\begin{center}
+\resizebox{.99\textwidth}{!}{%
+\includegraphics[height=0.5cm]{images/osu_icon.png}%
+\quad
+\includegraphics[height=0.5cm]{images/ars_icon.png}%
+}
+\end{center}
+  
+\begin{center}
+\includegraphics[height=7cm]{images/grunwaldlab.jpg}%
 \end{center}
 
 
