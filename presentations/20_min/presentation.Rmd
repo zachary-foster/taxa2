@@ -10,10 +10,11 @@ output:
     colortheme: "beaver"
     fonttheme: "structurebold"
     fig_caption: false
+    keep_tex: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, comment = "", warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, comment = "", warning = FALSE, cache = TRUE, autodep = TRUE)
 # options(crayon.enabled = TRUE)
 options(width = 80)
 library(taxa)
@@ -85,41 +86,80 @@ library(cowplot)
 \end{center}
 
 
-## Sources of taxonomic data: DNA sequences
+
+## Sources of taxonomic data: DNA sequences {.fragile}
 
 \scriptsize
 
-**NCBI Genbank**
+\textbf{NCBI GenBank}
 
-```
+\begin{verbatim}
 >AC073210.8 Homo sapiens BAC clone RP11-460N20 from 7, complete sequence
 AACGAACGCTGGCGGCATGCCTAACACATGCAAGTCGAACGAGACCTTCGGGTC...
-```
+\end{verbatim}
 
-**UNITE**
+\textbf{UNITE}
 
-```
+\begin{verbatim}
 >SH099456.05FU_FJ357315_refs k__Fungi;p__Ascomycota;c__Dothideomycetes
 ;o__Pleosporales;f__Pleosporaceae;g__Embellisia;s__Embellisia_planifunda  
 GCTGGCGGCGTGCCTAACACATGTAAGTCGAACGGGACTGGGGGCAACTCCAGT...
-```
+\end{verbatim}
 
-**RDP**
+\textbf{RDP}
 
-```
+\begin{verbatim}
 >S000448483 Sparassis crispa; MBUH-PIRJO&ILKKA94-1587/ss5
-Lineage=Root;rootrank ;Fungi;domain;Basidiomycota;phylum;Agaricomycetes;
-class;Polyporales;order ;Sparassidaceae;family;Sparassis;genus
+Lineage=Root;rootrank;Fungi;domain;Basidiomycota;phylum;Agaricomycetes;
+class;Polyporales;order;Sparassidaceae;family;Sparassis;genus
 AGAGTTTGATCCTGGCTCAGATTGAACGCTGGCGGAATGCTTAACACATGAAAC...
-```
+\end{verbatim}
 
-**SILVA**
+\textbf{SILVA}
 
-```
+\begin{verbatim}
 >GCVF01000431.1.2369 Bacteria;Proteobacteria;Gammaproteobacteria;
 Oceanospirillales;Alcanivoraceae;Alcanivorax;Thalassiosira rotula
 AGAGTTTGATCCTGGCTCAGGATGAACGCTGGCGGTATGCTTAACACATGCAAG...
-```
+\end{verbatim}
+
+
+## Sources of taxonomic data: DNA sequences {.fragile}
+
+\scriptsize
+
+\textbf{NCBI GenBank}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+>\underline{AC073210.8} \underline{Homo sapiens} BAC clone RP11-460N20 from 7, complete sequence
+AACGAACGCTGGCGGCATGCCTAACACATGCAAGTCGAACGAGACCTTCGGGTC...
+\end{Verbatim}
+
+\textbf{UNITE}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+>SH099456.05FU_FJ357315_refs \underline{k__Fungi;p__Ascomycota;c__Dothideomycetes}
+\underline{;o__Pleosporales;f__Pleosporaceae;g__Embellisia;s__Embellisia_planifunda}  
+GCTGGCGGCGTGCCTAACACATGTAAGTCGAACGGGACTGGGGGCAACTCCAGT...
+\end{Verbatim}
+
+\textbf{RDP}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+>S000448483 \underline{Sparassis crispa}; MBUH-PIRJO&ILKKA94-1587/ss5
+Lineage=\underline{Root;rootrank;Fungi;domain;Basidiomycota;phylum;Agaricomycetes;}
+\underline{class;Polyporales;order;Sparassidaceae;family;Sparassis;genus}
+AGAGTTTGATCCTGGCTCAGATTGAACGCTGGCGGAATGCTTAACACATGAAAC...
+\end{Verbatim}
+
+\textbf{SILVA}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+>GCVF01000431.1.2369 \underline{Bacteria;Proteobacteria;Gammaproteobacteria;}
+\underline{Oceanospirillales;Alcanivoraceae;Alcanivorax;Thalassiosira rotula}
+AGAGTTTGATCCTGGCTCAGGATGAACGCTGGCGGTATGCTTAACACATGCAAG...
+\end{Verbatim}
+
 
 ## Sources of taxonomic data: Occurrence records
 
@@ -176,11 +216,11 @@ readr::read_tsv("datasets/gbif_archea.csv") %>%
             node_size = n_obs, layout = "da")
 ```
 
-## Classes defined by `taxa`
+## Classes
 
 \begin{center}
 \Huge
-Classes defined by `taxa`
+Classes defined by taxa
 \end{center}
 
 ## Classes defined by `taxa`: Relationships
@@ -590,56 +630,6 @@ mutate_obs(obj, "info", bipedal = n_legs == 2)
 ```
 
 
-## Manipulating: values accessible to NSE
-
-The following can be used in manipulation functions as if they were independent variables using Non-Standard Evaluation (NSE):
-
-\begin{itemize}
-  \setlength\itemsep{1em}
-  \item Functions that return per-taxon information
-  \item User-defined table columns
-  \item User-defined vectors and lists
-  \item User-defined functions
-\end{itemize}
-
-\scriptsize
-```{r echo = TRUE, message=FALSE, cache=TRUE}
-unname(all_names(obj))
-```
-
-
-
-## Compatiblity with other packages
-
-`taxa` is still being developed, but we hope it will become a foundation for an ecosystem of R packages that use taxonomic data.
-
-* Flexible parsers can read most formats
-* Working on making `taxize` compatible with `taxa`
-* Fully compatible with `metacoder`
-
-
-
-
-## Metacoder: visulization of taxonomic data
-
-\begin{center}
-\vspace*{-0.3cm}\hspace*{-1cm}
-\resizebox{0.9\textwidth}{!}{%
-\includegraphics{images/heat_tree_matrix.png}%
-}
-\end{center}
-
-
-## Metacoder: visulization of taxonomic data
-
-\begin{center}
-\vspace*{-0.7cm}\hspace*{-0.6cm}
-\resizebox{1.15\textwidth}{!}{%
-\includegraphics{images/metacoder_multiroot.png}%
-}
-\end{center}
-
-
 ## Acknowledgements
 
 \begin{center}
@@ -666,6 +656,44 @@ unname(all_names(obj))
 \end{center}
 
 
+## Manipulating: values accessible to NSE
+
+The following can be used in manipulation functions as if they were independent variables using Non-Standard Evaluation (NSE):
+
+\begin{itemize}
+  \setlength\itemsep{1em}
+  \item Functions that return per-taxon information
+  \item User-defined table columns
+  \item User-defined vectors and lists
+  \item User-defined functions
+\end{itemize}
+
+\scriptsize
+```{r echo = TRUE, message=FALSE, cache=TRUE}
+unname(all_names(obj))
+```
+
+
+## Metacoder: visualization of taxonomic data
+
+\begin{center}
+\vspace*{-0.3cm}\hspace*{-1cm}
+\resizebox{0.9\textwidth}{!}{%
+\includegraphics{images/heat_tree_matrix.png}%
+}
+\end{center}
+
+
+## Metacoder: visualization of taxonomic data
+
+\begin{center}
+\vspace*{-0.7cm}\hspace*{-0.6cm}
+\resizebox{1.15\textwidth}{!}{%
+\includegraphics{images/metacoder_multiroot.png}%
+}
+\end{center}
+
+
 ## Thanks for listening!
 
 
@@ -673,3 +701,5 @@ unname(all_names(obj))
 \Huge
 Questions?
 \end{center}
+
+
