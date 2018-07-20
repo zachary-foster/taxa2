@@ -9,4 +9,5 @@ scratch/*.tif
 scratch/*.png
 scratch/*.eps
 scratch/*.pdf
+scratch/*.html
 vignettes/.build.timestamp
