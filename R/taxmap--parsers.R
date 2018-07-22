@@ -77,8 +77,9 @@
 #' @param named_by_rank (`TRUE`/`FALSE`) If  `TRUE` and the input is a table
 #'   with columns named by ranks or a list of vectors with each vector named by
 #'   ranks, include that rank info in the output object, so it can be accessed
-#'   by `out$taxon_ranks()`. Cannot be used with the `sep`, `class_regex`, or
-#'   `class_key` options.
+#'   by `out$taxon_ranks()`. If `TRUE`, taxa with different ranks, but the same
+#'   name and location in the taxonomy, will be considered different taxa.
+#'   Cannot be used with the `sep`, `class_regex`, or `class_key` options.
 #'
 #' @family parsers
 #'
@@ -303,6 +304,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       stats::setNames(x[[which(class_key == "taxon_name") + 1]],
                       x[[which(class_key == "taxon_rank") + 1]])
     })
+    named_by_rank <- TRUE
   } else if (named_by_rank)  {
     parsed_tax <- lapply(taxon_info, function(x) {
       stats::setNames(x[[which(class_key == "taxon_name") + 1]],
@@ -328,14 +330,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   names(taxon_info) <- c("match", taxon_info_colnames)
 
   # Create taxmap object
-  hier_objs <- lapply(parsed_tax, function(x) {
-    output <- hierarchy()
-    output$taxa <- lapply(seq_len(length(x)), function(i) {
-      taxon(x[i], rank = names(x[i]))
-    })
-    return(output)
-  })
-  output <- taxmap(.list = hier_objs)
+  output <- taxmap(.list = parsed_tax, named_by_rank = named_by_rank)
 
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {

@@ -99,8 +99,9 @@ as a dataset, like those in \code{datasets}.}
 \item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a table
 with columns named by ranks or a list of vectors with each vector named by
 ranks, include that rank info in the output object, so it can be accessed
-by \code{out$taxon_ranks()}. Cannot be used with the \code{sep}, \code{class_regex}, or
-\code{class_key} options.}
+by \code{out$taxon_ranks()}. If \code{TRUE}, taxa with different ranks, but the same
+name and location in the taxonomy, will be considered different taxa.
+Cannot be used with the \code{sep}, \code{class_regex}, or \code{class_key} options.}
 }
 \description{
 Reads taxonomic information and associated data in tables, lists, and vectors

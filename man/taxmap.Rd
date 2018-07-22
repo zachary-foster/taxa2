@@ -4,11 +4,12 @@
 \alias{taxmap}
 \title{Taxmap class}
 \usage{
-taxmap(..., .list = NULL, data = NULL, funcs = list())
+taxmap(..., .list = NULL, data = NULL, funcs = list(),
+  named_by_rank = FALSE)
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character vectors.
-Cannot be used with \code{.list}.}
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
+vectors.}
 
 \item{.list}{An alternate to the \code{...} input. Any number of object of class
 \code{\link[=hierarchy]{hierarchy()}} or character vectors in a list. Cannot be used with \code{...}.}
@@ -19,6 +20,12 @@ Cannot be used with \code{.list}.}
 the names of these in functions like \code{\link[=filter_taxa]{filter_taxa()}} will execute the
 function and return the results. If the function has at least one argument,
 the taxmap object is passed to it.}
+
+\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a list of
+vectors with each vector named by ranks, include that rank info in the
+output object, so it can be accessed by \code{out$taxon_ranks()}. If \code{TRUE},
+taxa with different ranks, but the same name and location in the taxonomy,
+will be considered different taxa.}
 }
 \value{
 An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}

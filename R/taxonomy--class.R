@@ -11,13 +11,15 @@
 #'   vectors.
 #' @param .list An alternate to the `...` input. Any number of object of class
 #'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
+#' @inheritParams parse_raw_heirarchies_to_taxonomy
+#'
 #' @return An `R6Class` object of class `Taxonomy`
 #' @family classes
 #'
 #' @template taxonomyegs
 
-taxonomy <- function(..., .list = NULL) {
-  Taxonomy$new(..., .list = .list)
+taxonomy <- function(..., .list = NULL, named_by_rank = FALSE) {
+  Taxonomy$new(..., .list = .list, named_by_rank = named_by_rank)
 }
 
 Taxonomy <- R6::R6Class(
@@ -72,16 +74,16 @@ Taxonomy <- R6::R6Class(
 
     # --------------------------------------------------------------------------
     # Constructor
-    initialize = function(..., .list = NULL) {
+    initialize = function(..., .list = NULL, named_by_rank = FALSE) {
       # Get intput
       input <- get_dots_or_list(..., .list = .list)
 
-      # If character strings are supplied, convert to hierarcies
-      char_input_index <- which(lapply(input, class) == "character")
-      input[char_input_index] <- lapply(input[char_input_index], hierarchy)
-
       # Parse input
-      parsed_data <- parse_heirarchies_to_taxonomy(input)
+      if (length(input) > 0 && "Hierarchy" %in% class(input[[1]])) {
+        parsed_data <- parse_heirarchies_to_taxonomy(input)
+      } else {
+        parsed_data <- parse_raw_heirarchies_to_taxonomy(input, named_by_rank = named_by_rank)
+      }
       self$taxa <- parsed_data$taxa
       self$edge_list <- parsed_data$edge_list
       self$input_ids <- parsed_data$input_ids

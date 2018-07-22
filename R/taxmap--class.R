@@ -12,15 +12,13 @@
 #' functions [parse_tax_data()], [lookup_tax_data()], and [extract_tax_data()].
 #'
 #' @export
-#' @param ... Any number of object of class [hierarchy()] or character vectors.
-#'   Cannot be used with `.list`.
-#' @param .list An alternate to the `...` input. Any number of object of class
-#'   [hierarchy()] or character vectors in a list. Cannot be used with `...`.
 #' @param data A list of tables with data associated with the taxa.
 #' @param funcs A named list of functions to include in the class. Referring to
 #'   the names of these in functions like [filter_taxa()] will execute the
 #'   function and return the results. If the function has at least one argument,
 #'   the taxmap object is passed to it.
+#' @inheritParams taxonomy
+#'
 #' @family classes
 #' @return An `R6Class` object of class [taxmap()]
 #'
@@ -29,8 +27,8 @@
 #'   orders
 #'
 #' @template taxmapegs
-taxmap <- function(..., .list = NULL, data = NULL, funcs = list()) {
-  Taxmap$new(..., .list = .list, data = data, funcs = funcs)
+taxmap <- function(..., .list = NULL, data = NULL, funcs = list(), named_by_rank = FALSE) {
+  Taxmap$new(..., .list = .list, data = data, funcs = funcs, named_by_rank = named_by_rank)
 }
 
 Taxmap <- R6::R6Class(
@@ -42,10 +40,10 @@ Taxmap <- R6::R6Class(
 
     # -------------------------------------------------------------------------
     # Constructor
-    initialize = function(..., .list = NULL, data = list(), funcs = list()) {
+    initialize = function(..., .list = NULL, data = list(), funcs = list(), named_by_rank = FALSE) {
 
       # Call `taxonomy` constructor
-      super$initialize(..., .list = .list)
+      super$initialize(..., .list = .list, named_by_rank = named_by_rank)
 
       # Make sure `data` is in the right format and add to object
       self$data <- init_taxmap_data(self, data, self$input_ids)

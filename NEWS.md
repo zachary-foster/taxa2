@@ -7,6 +7,11 @@ Current
 * Added the `print_tree` function that prints text-based trees of `taxmap` or `taxonomy` objects ([issue #173](https://github.com/ropensci/taxa/issues/173)).
 * Added `get_dataset` function to get a single data set from `taxmap` objects. Useful for piping with `%>%`.
 
+### Improvements
+
+* Parsers are somewhat faster and use less RAM ([issue #177](https://github.com/ropensci/taxa/issues/177)).
+* `taxmap` and `taxonomy` parsers now treat taxa with the same name and same place in the taxonomy, but different ranks, database IDs, or authorities, as different taxa.
+
 ### Bug fixes
 
 * Made the `"taxon_rank"` value for the `class_key` options work with `extract_tax_data`. 
