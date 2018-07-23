@@ -593,14 +593,14 @@ Taxmap <- R6::R6Class(
                               dataset_name, '", so there are no taxon IDs.'))
           return(NULL)
         }
-      } else if (class(dataset) == "list" || is.vector(dataset)) {
+      } else if (class(dataset) == "list" || is.vector(dataset) || can_be_used_in_taxmap(dataset)) {
         if (! is.null(names(dataset))) {
           is_valid <- private$ids_are_valid(names(dataset))
           if (all(is_valid)) {
             return(names(dataset))
           } else if (all(! is_valid)) {
             stop_or_warn(paste0('The data set "', dataset_name,
-                                '" is a named list/vector, but not named by taxon ids.'))
+                                '" is named, but not named by taxon ids.'))
             return(NULL)
           } else { # some are valid, but not all
             stop_or_warn(paste0('Dataset "', dataset_name, '" appears to be named by taxon IDs, but contains ', sum(! is_valid), ' invalid IDs:\n  ',
@@ -609,7 +609,7 @@ Taxmap <- R6::R6Class(
           }
         } else {
           stop_or_warn(paste0('The data set "', dataset_name,
-                              '" is an unnamed list/vector, ',
+                              '" is unnamed, ',
                               'so there are no taxon ids.'))
           return(NULL)
         }

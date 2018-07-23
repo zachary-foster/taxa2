@@ -6,6 +6,7 @@ Current
 * Added the `taxonomy_table` function that converts the information in a `taxmap` or `taxonomy` object into a table with taxa as rows and ranks as columns.
 * Added the `print_tree` function that prints text-based trees of `taxmap` or `taxonomy` objects ([issue #173](https://github.com/ropensci/taxa/issues/173)).
 * Added `get_dataset` function to get a single data set from `taxmap` objects. Useful for piping with `%>%`.
+* `filter_taxa` and `filter_obs` can now subset anything that has names, length, and can be subset, not just tables, lists, and vectors. For example, `DNAbin` objects from the `ape` package can now be used in `taxmap` objects ([issue #178](https://github.com/ropensci/taxa/issues/178)).
 
 ### Improvements
 
