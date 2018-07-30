@@ -248,7 +248,27 @@ Taxmap <- R6::R6Class(
                           subtaxa = FALSE, supertaxa = TRUE,
                           reassign_obs = FALSE) {
       # Check that the target data exists
-      private$is_datset(target)
+      for (one in target) {
+        private$is_datset(one) # NOTE: This needs to be converted to accept multiple inputs
+      }
+
+      # Check that multiple datasets are the same length
+      datasets <- lapply(target, self$get_dataset)
+      dataset_length <- vapply(datasets, FUN.VALUE = numeric(1),
+                               function(one) {
+                                 if (is.data.frame(one)) {
+                                   return(nrow(one))
+                                 } else {
+                                   return(length(one))
+                                 }
+                               })
+      dataset_length <- unique(dataset_length)
+      if (length(dataset_length) > 1) {
+        stop(call. = FALSE,
+             "If multiple datasets are filtered at once, then they must the same length. ",
+             "The following lengths were found for the specified datasets:\n",
+             limited_print(type = "silent", prefix = "  ", dataset_length))
+      }
 
       # non-standard argument evaluation
       selection <- lazyeval::lazy_eval(lazyeval::lazy_dots(...),
@@ -277,6 +297,12 @@ Taxmap <- R6::R6Class(
 
       # convert logical to indexes
       is_logical <- vapply(selection, is.logical, logical(1))
+      for (one in selection[is_logical]) {
+        if (length(one) != dataset_length) {
+          stop(call. = FALSE,
+               "All logical filtering criteria must be the same length as the data sets filtered.")
+        }
+      }
       selection[is_logical] <- lapply(selection[is_logical], which)
 
       # combine filters
@@ -286,10 +312,14 @@ Taxmap <- R6::R6Class(
       selection <- Reduce(intersect_with_dups, selection)
 
       # Remove observations
-      data_taxon_ids <- self$get_data_taxon_ids(target, require = drop_taxa)
-      private$remove_obs(dataset = target, indexes = selection)
+      data_taxon_ids <- NULL
+      for (one in target) {
+        data_taxon_ids <- c(data_taxon_ids, self$get_data_taxon_ids(one, require = drop_taxa))
+        private$remove_obs(dataset = one, indexes = selection)
+      }
 
       # Remove unobserved taxa
+      data_taxon_ids <- unique(data_taxon_ids)
       if (drop_taxa & ! is.null(data_taxon_ids)) {
 
         # dont remove taxa that appear in other data sets if they are not also filtered
@@ -685,9 +715,29 @@ Taxmap <- R6::R6Class(
     ),
 
     is_datset = function(target, require = TRUE) {
+
+      # Convert logicals to numerics
+      if (is.logical(target)) {
+        if (length(target) != length(self$data)) {
+          stop("When using a TRUE/FALSE vector to specify the data set, it must be the same length as the number of data sets",
+               call. = FALSE)
+        } else {
+          target <- which(target)
+        }
+      }
+
+      # Check numerical inputs
+      if (is.numeric(target) && target <= length(self$data)) {
+        return(TRUE)
+      }
+
+      # Check character inputs
       if (target %in% names(self$data)) {
         return(TRUE)
-      } else if (require) {
+      }
+
+      # If not found
+      if (require) {
         stop(paste0("The target `", target, "` is not the name of a data set.",
                     " Valid targets include: ",
                     paste0(names(self$data), collapse = ", ")))

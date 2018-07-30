@@ -12,6 +12,7 @@ Current
 
 * Parsers are somewhat faster and use less RAM ([issue #177](https://github.com/ropensci/taxa/issues/177)).
 * `taxmap` and `taxonomy` parsers now treat taxa with the same name and same place in the taxonomy, but different ranks, database IDs, or authorities, as different taxa.
+* `filter_obs` can now filter multiple datasets at once if they are the same length ([issue #179](https://github.com/ropensci/taxa/issues/179)).
 
 ### Bug fixes
 

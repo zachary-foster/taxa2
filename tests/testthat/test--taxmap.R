@@ -536,6 +536,13 @@ test_that("Default observation filtering works", {
                "Most things, but especially anything rare or expensive")
 })
 
+test_that("Datasets can be specified using names, numbers, and characters", {
+  result <- filter_obs(test_obj, c("info", "foods"), n_legs == 2)
+  expect_equal(result, filter_obs(test_obj, c(1, 3), n_legs == 2))
+  expect_equal(result, filter_obs(test_obj, 1:4 %in% c(1, 3), n_legs == 2))
+})
+
+
 test_that("Filtering observations with external variables work", {
   my_logical <- test_obj$data$info$n_legs == 2 & test_obj$data$info$dangerous == TRUE
   expect_equal(filter_obs(test_obj, "info", n_legs == 2, dangerous == TRUE),
@@ -582,6 +589,13 @@ test_that("Edge cases return reasonable outputs", {
 test_that("Filtering obs when there are multiple obs per taxon", {
   result <- filter_obs(test_obj, "abund", code == "C", drop_taxa = TRUE)
   expect_equal(nrow(result$data$abund), 2)
+})
+
+
+test_that("Filtering multiple datasets at once", {
+  result <- filter_obs(test_obj, c("phylopic_ids", "info"), n_legs < 4, drop_taxa = TRUE)
+  expect_equal(length(result$data$phylopic_ids), 3)
+  expect_equal(nrow(result$data$info), 3)
 })
 
 
