@@ -584,6 +584,9 @@ test_that("Edge cases return reasonable outputs", {
                           "not the name of a data set. Valid targets "))
   expect_error(filter_obs(test_obj, "info", "11"),
                "observation filtering with taxon IDs is not currently")
+  expect_error(filter_obs(test_obj, character(0)),
+               "At least one dataset must be specified.")
+
 })
 
 test_that("Filtering obs when there are multiple obs per taxon", {
@@ -596,6 +599,20 @@ test_that("Filtering multiple datasets at once", {
   result <- filter_obs(test_obj, c("phylopic_ids", "info"), n_legs < 4, drop_taxa = TRUE)
   expect_equal(length(result$data$phylopic_ids), 3)
   expect_equal(nrow(result$data$info), 3)
+
+  # Multiple datasets with different taxon IDs
+  test_obj_2 <- test_obj$clone(deep = TRUE)
+  test_obj_2$data$abund_2 <- test_obj_2$data$abund
+  test_obj_2$data$abund_2$taxon_id <- rep("r", 8)
+  result <- expect_warning(filter_obs(test_obj_2, c("abund", "abund_2"), code == "C", drop_taxa = TRUE))
+  expect_true("tuberosum" %in% taxon_names(result))
+  expect_true(! "sapiens" %in% taxon_names(result))
+  expect_equal(nrow(result$data$abund), 2)
+  expect_equal(nrow(result$data$abund_2), 2)
+
+  # Datasets of different length cannot be filtered
+  expect_error(filter_obs(test_obj, c("phylopic_ids", "abund"), n_legs < 4, drop_taxa = TRUE),
+               "If multiple datasets are filtered at once, then they must the same length")
 })
 
 
@@ -610,11 +627,17 @@ test_that("Edge cases return reasonable outputs during observation column subset
   result <- select_obs(test_obj, "info")
   expect_equal(colnames(result$data$info), c("taxon_id"))
   expect_error(select_obs(test_obj, "not_valid"),
-               "not the name of a data set. Valid targets ")
+               "The input does not correspond to a valid dataset")
   expect_error(select_obs(test_obj), " missing, with no default")
-  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
-  expect_error(select_obs(test_obj, "phylopic_ids"),
-               'The dataset "phylopic_ids" is not a table')
+  expect_error(select_obs(test_obj, "foods"), 'not a table, so columns cannot be selected')
+})
+
+test_that("The columns of multiple datasets can be subset at once", {
+  test_obj_2 <- test_obj$clone(deep = TRUE)
+  test_obj_2$data$abund_2 <- test_obj_2$data$abund
+  result <- select_obs(test_obj_2, c("abund", "abund_2"), count, code)
+  expect_equal(colnames(result$data$abund), c("taxon_id", "count", "code"))
+  expect_equal(colnames(result$data$abund_2), c("taxon_id", "count", "code"))
 })
 
 

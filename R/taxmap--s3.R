@@ -44,155 +44,155 @@ obs_apply.Taxmap <- function(obj, data, func, simplify = FALSE, value = NULL,
 
 # -----------------------------------------------------------------------------
 #' @export
-filter_obs <- function(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+filter_obs <- function(obj, dataset, ..., drop_taxa = FALSE, drop_obs = TRUE,
                        subtaxa = FALSE, supertaxa = TRUE,
-                       reassign_obs = FALSE) {
+                       reassign_obs = FALSE, target = NULL) {
   UseMethod("filter_obs")
 }
 
 #' @export
-filter_obs.default <- function(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+filter_obs.default <- function(obj, dataset, ..., drop_taxa = FALSE, drop_obs = TRUE,
                                subtaxa = FALSE, supertaxa = TRUE,
-                               reassign_obs = FALSE) {
+                               reassign_obs = FALSE, target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-filter_obs.Taxmap <- function(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+filter_obs.Taxmap <- function(obj, dataset, ..., drop_taxa = FALSE, drop_obs = TRUE,
                               subtaxa = FALSE, supertaxa = TRUE,
-                              reassign_obs = FALSE) {
+                              reassign_obs = FALSE, target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  obj$filter_obs(target, ..., drop_taxa = drop_taxa, drop_obs = drop_obs,
+  obj$filter_obs(dataset, ..., drop_taxa = drop_taxa, drop_obs = drop_obs,
                  subtaxa = subtaxa, supertaxa = supertaxa,
-                 reassign_obs = reassign_obs)
+                 reassign_obs = reassign_obs, target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-select_obs <- function(obj, target, ...) {
+select_obs <- function(obj, dataset, ..., target = NULL) {
   UseMethod("select_obs")
 }
 
 #' @export
-select_obs.default <- function(obj, target, ...) {
+select_obs.default <- function(obj, dataset, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-select_obs.Taxmap <- function(obj, target, ...) {
+select_obs.Taxmap <- function(obj, dataset, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  obj$select_obs(target, ...)
+  obj$select_obs(dataset, ..., target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-mutate_obs <- function(obj, target, ...) {
+mutate_obs <- function(obj, dataset, ..., target = NULL) {
   UseMethod("mutate_obs")
 }
 
 #' @export
-mutate_obs.default <- function(obj, target, ...) {
+mutate_obs.default <- function(obj, dataset, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-mutate_obs.Taxmap <- function(obj, target, ...) {
+mutate_obs.Taxmap <- function(obj, dataset, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  obj$mutate_obs(target, ...)
+  obj$mutate_obs(dataset, ..., target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-transmute_obs <- function(obj, target, ...) {
+transmute_obs <- function(obj, dataset, ..., target = NULL) {
   UseMethod("transmute_obs")
 }
 
 #' @export
-transmute_obs.default <- function(obj, target, ...) {
+transmute_obs.default <- function(obj, dataset, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-transmute_obs.Taxmap <- function(obj, target, ...) {
+transmute_obs.Taxmap <- function(obj, dataset, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  obj$transmute_obs(target, ...)
+  obj$transmute_obs(dataset, ..., target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-arrange_obs <- function(obj, target, ...) {
+arrange_obs <- function(obj, dataset, ..., target = NULL) {
   UseMethod("arrange_obs")
 }
 
 #' @export
-arrange_obs.default <- function(obj, target, ...) {
+arrange_obs.default <- function(obj, dataset, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-arrange_obs.Taxmap <- function(obj, target, ...) {
+arrange_obs.Taxmap <- function(obj, dataset, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  obj$arrange_obs(target, ...)
+  obj$arrange_obs(dataset, ..., target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-sample_n_obs <- function(obj, target, size, replace = FALSE, taxon_weight = NULL,
+sample_n_obs <- function(obj, dataset, size, replace = FALSE, taxon_weight = NULL,
                          obs_weight = NULL, use_supertaxa = TRUE,
-                         collapse_func = mean, ...) {
+                         collapse_func = mean, ..., target = NULL) {
   UseMethod("sample_n_obs")
 }
 
 #' @export
-sample_n_obs.default <- function(obj, target, size, replace = FALSE, taxon_weight = NULL,
+sample_n_obs.default <- function(obj, dataset, size, replace = FALSE, taxon_weight = NULL,
                                  obs_weight = NULL, use_supertaxa = TRUE,
-                                 collapse_func = mean, ...) {
+                                 collapse_func = mean, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-sample_n_obs.Taxmap <- function(obj, target, size, replace = FALSE, taxon_weight = NULL,
+sample_n_obs.Taxmap <- function(obj, dataset, size, replace = FALSE, taxon_weight = NULL,
                                 obs_weight = NULL, use_supertaxa = TRUE,
-                                collapse_func = mean, ...) {
+                                collapse_func = mean, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  eval(substitute(obj$sample_n_obs(target, size, replace = replace, taxon_weight = taxon_weight,
+  eval(substitute(obj$sample_n_obs(dataset, size, replace = replace, taxon_weight = taxon_weight,
                                    obs_weight = obs_weight, use_supertaxa = use_supertaxa,
-                                   collapse_func = collapse_func, ...)))
+                                   collapse_func = collapse_func, ..., target = target)))
 }
 
 
 # -----------------------------------------------------------------------------
 #' @export
-sample_frac_obs <- function(obj, target, size, replace = FALSE,
+sample_frac_obs <- function(obj, dataset, size, replace = FALSE,
                             taxon_weight = NULL, obs_weight = NULL,
                             use_supertaxa = TRUE,
-                            collapse_func = mean, ...) {
+                            collapse_func = mean, ..., target = NULL) {
   UseMethod("sample_frac_obs")
 }
 
 #' @export
-sample_frac_obs.default <- function(obj, target, size, replace = FALSE,
+sample_frac_obs.default <- function(obj, dataset, size, replace = FALSE,
                                     taxon_weight = NULL, obs_weight = NULL,
                                     use_supertaxa = TRUE,
-                                    collapse_func = mean, ...) {
+                                    collapse_func = mean, ..., target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-sample_frac_obs.Taxmap <- function(obj, target, size, replace = FALSE,
+sample_frac_obs.Taxmap <- function(obj, dataset, size, replace = FALSE,
                                    taxon_weight = NULL, obs_weight = NULL,
                                    use_supertaxa = TRUE,
-                                   collapse_func = mean, ...) {
+                                   collapse_func = mean, ..., target = NULL) {
   obj <- obj$clone(deep = TRUE)
-  eval(substitute(obj$sample_frac_obs(target, size, replace = replace,
+  eval(substitute(obj$sample_frac_obs(dataset, size, replace = replace,
                                       taxon_weight = taxon_weight, obs_weight = obs_weight,
                                       use_supertaxa = use_supertaxa,
-                                      collapse_func = collapse_func, ...)))
+                                      collapse_func = collapse_func, ..., target = target)))
 }
 
 

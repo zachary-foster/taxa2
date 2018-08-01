@@ -244,17 +244,19 @@ Taxmap <- R6::R6Class(
 
     # -------------------------------------------------------------------------
     # Filter data in a taxmap() object (in obj$data) with a set of conditions.
-    filter_obs = function(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+    filter_obs = function(dataset, ..., drop_taxa = FALSE, drop_obs = TRUE,
                           subtaxa = FALSE, supertaxa = TRUE,
-                          reassign_obs = FALSE) {
-      # Check that the target data exists
-      for (one in target) {
-        private$is_datset(one) # NOTE: This needs to be converted to accept multiple inputs
+                          reassign_obs = FALSE, target = NULL) {
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
       }
 
+      # Parse dataset option
+      dataset <- parse_dataset(self, dataset)
+
       # Check that multiple datasets are the same length
-      datasets <- lapply(target, self$get_dataset)
-      dataset_length <- vapply(datasets, FUN.VALUE = numeric(1),
+      dataset_length <- vapply(self$data[dataset], FUN.VALUE = numeric(1),
                                function(one) {
                                  if (is.data.frame(one)) {
                                    return(nrow(one))
@@ -283,7 +285,7 @@ Taxmap <- R6::R6Class(
 
       # If no selection is supplied, match all rows
       if (length(selection) == 0) {
-        selection <- list(seq_len(nrow(self$data[[target]])))
+        selection <- list(seq_len(dataset_length))
       }
 
       # convert taxon_ids to indexes
@@ -313,8 +315,8 @@ Taxmap <- R6::R6Class(
 
       # Remove observations
       data_taxon_ids <- NULL
-      for (one in target) {
-        data_taxon_ids <- c(data_taxon_ids, self$get_data_taxon_ids(one, require = drop_taxa))
+      for (one in dataset) {
+        data_taxon_ids <- c(data_taxon_ids, self$get_data_taxon_ids(one, require = drop_taxa)[selection])
         private$remove_obs(dataset = one, indexes = selection)
       }
 
@@ -326,7 +328,7 @@ Taxmap <- R6::R6Class(
         sets_to_keep_ids_from <- names(drop_obs[! drop_obs])
         other_ids_to_keep <- unique(unlist(lapply(sets_to_keep_ids_from,
                                                   self$get_data_taxon_ids)))
-        taxon_ids_to_keep <- unique(c(data_taxon_ids[selection], other_ids_to_keep))
+        taxon_ids_to_keep <- unique(c(data_taxon_ids, other_ids_to_keep))
 
         # Remove taxa that are not in the filtered data set
         self$filter_taxa(taxon_ids_to_keep, drop_obs = drop_obs,
@@ -340,40 +342,67 @@ Taxmap <- R6::R6Class(
 
     # -------------------------------------------------------------------------
     # Subsets columns in a data set
-    select_obs = function(target, ...) {
-      # Check that the target data exists
-      private$is_datset(target)
+    select_obs = function(dataset, ..., target = NULL) {
 
-      # Check that the target is a table
-      if (! is.data.frame(self$data[[target]])) {
-        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
       }
 
-      self$data[[target]] <-
-        dplyr::bind_cols(self$data[[target]][ , c("taxon_id"), drop = FALSE],
-                         dplyr::select(self$data[[target]], ...))
+      # Parse dataset option
+      dataset <- parse_dataset(self, dataset)
+
+      # Check that the datasets are tables
+      for (one in dataset) {
+        if (! is.data.frame(self$data[[one]])) {
+          stop(paste0('Dataset ', one, ' is not a table, so columns cannot be selected.'))
+        }
+      }
+
+      # Subset columns
+      for (one in dataset) {
+        self$data[[one]] <-
+          dplyr::bind_cols(self$data[[one]][ , c("taxon_id"), drop = FALSE],
+                           dplyr::select(self$data[[one]], ...))
+
+      }
+
       return(self)
     },
 
 
     # -------------------------------------------------------------------------
     # Add columns to tables in obj$data
-    mutate_obs = function(target, ...) {
+    mutate_obs = function(dataset, ..., target = NULL) {
+
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
+      }
+
+      # Parse dataset option
+      dataset <- parse_dataset(dataset, must_be_valid = FALSE)
+
+      # Check that only one dataset is specified
+      if (length(dataset) > 1) {
+        stop(call. = FALSE,
+             'Only one dataset can be mutated at a time.')
+      }
 
       # Get data used in expressions to add
       data_used <- self$data_used(...)
       unevaluated <- lazyeval::lazy_dots(...)
 
       # add columns
-      if (private$is_datset(target, require = FALSE)) {
-        # Check that the target is a table
-        if (! is.data.frame(self$data[[target]])) {
-          stop(paste0('The dataset "', target, '" is not a table, so columns cannot be added'))
+      if (! is.na(dataset)) {
+        # Check that the dataset is a table
+        if (! is.data.frame(self$data[[dataset]])) {
+          stop(paste0('Dataset "', dataset, '" is not a table, so columns cannot be added'))
         } else {
           for (index in seq_along(unevaluated)) {
             new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
             data_used <- c(data_used, new_col) # Allows this col to be used in next cols
-            self$data[[target]][[names(new_col)]] <- new_col[[1]]
+            self$data[[dataset]][[names(new_col)]] <- new_col[[1]]
           }
         }
       } else { # not a current dataset
@@ -386,7 +415,7 @@ Taxmap <- R6::R6Class(
         if (any(names(unevaluated) == "")) { # unnammed inputs cant be put in tables
           if (length(unevaluated) == 1) { # Add as a vector
             message('Adding a new "', class(new_dataset[[1]]),'" vector of length ', length(new_dataset[[1]]), '.')
-            self$data[[target]] <- new_dataset[[1]]
+            self$data[[dataset]] <- new_dataset[[1]]
           } else {
             stop(call. = FALSE,
                  "Cannot add a new dataset with multiple values if any are unnamed.",
@@ -398,8 +427,8 @@ Taxmap <- R6::R6Class(
           if (length(unique(part_lengths[part_lengths != 1])) == 1) { # All inputs are same length or 1
             new_dataset <- dplyr::as_tibble(new_dataset)
             message('Adding a new ', nrow(new_dataset), ' x ', ncol(new_dataset),
-                    ' table called "', target, '"')
-            self$data[[target]] <- dplyr::as_tibble(new_dataset)
+                    ' table called "', dataset, '"')
+            self$data[[dataset]] <- dplyr::as_tibble(new_dataset)
           } else {
             stop(call. = FALSE,
                  "Cannot make a new table out of multiple values of unequal length.",
@@ -416,17 +445,29 @@ Taxmap <- R6::R6Class(
 
     # -------------------------------------------------------------------------
     # Replace columns of tables in obj$data
-    transmute_obs = function(target, ...) {
-      # Check that the target data exists
-      private$is_datset(target)
+    transmute_obs = function(dataset, ..., target = NULL) {
 
-      # Check that the target is a table
-      if (! is.data.frame(self$data[[target]])) {
-        stop(paste0('The dataset "', target, '" is not a table, so columns cannot be selected.'))
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
       }
 
-      if ("taxon_id" %in% colnames(self$data[[target]])) {
-        result <- list(taxon_id = self$data[[target]]$taxon_id)
+      # Parse dataset option
+      dataset <- parse_dataset(dataset, must_be_valid = FALSE)
+
+      # Check that only one dataset is specified
+      if (length(dataset) > 1) {
+        stop(call. = FALSE,
+             'Only one dataset can be mutated at a time.')
+      }
+
+      # Check that the dataset is a table
+      if (! is.data.frame(self$data[[dataset]])) {
+        stop(paste0('Dataset "', dataset, '" is not a table, so columns cannot be selected.'))
+      }
+
+      if ("taxon_id" %in% colnames(self$data[[dataset]])) {
+        result <- list(taxon_id = self$data[[dataset]]$taxon_id)
       } else {
         result <- list()
       }
@@ -438,48 +479,79 @@ Taxmap <- R6::R6Class(
         data_used <- c(data_used, new_col)
         result[[names(new_col)]] <- new_col[[1]]
       }
-      self$data[[target]] <- tibble::as_tibble(result)
+      self$data[[dataset]] <- tibble::as_tibble(result)
       return(self)
     },
 
 
     # -------------------------------------------------------------------------
     # Sort columns of tables in obj$data
-    arrange_obs = function(target, ...) {
-      # Check that the target data exists
-      private$is_datset(target)
+    arrange_obs = function(dataset, ..., target = NULL) {
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
+      }
+
+      # Parse dataset option
+      dataset <- parse_dataset(self, dataset)
+
+      # Check that multiple datasets are the same length
+      dataset_length <- vapply(self$data[dataset], FUN.VALUE = numeric(1),
+                               function(one) {
+                                 if (is.data.frame(one)) {
+                                   return(nrow(one))
+                                 } else {
+                                   return(length(one))
+                                 }
+                               })
+      dataset_length <- unique(dataset_length)
+      if (length(dataset_length) > 1) {
+        stop(call. = FALSE,
+             "If multiple datasets are filtered at once, then they must the same length. ",
+             "The following lengths were found for the specified datasets:\n",
+             limited_print(type = "silent", prefix = "  ", dataset_length))
+      }
 
       # Sort observations
       data_used <- self$data_used(...)
-      data_used <- data_used[! names(data_used) %in% names(self$data[[target]])]
-      if (is.data.frame(self$data[[target]])) { # if it is a table
-        if (length(data_used) == 0) {
-          self$data[[target]] <- dplyr::arrange(self$data[[target]], ...)
-        } else {
-          target_with_extra_cols <-
-            dplyr::bind_cols(data_used, self$data[[target]])
-          self$data[[target]] <-
-            dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+      for (one in dataset) {
+        data_used <- data_used[! names(data_used) %in% names(self$data[[one]])]
+        if (is.data.frame(self$data[[one]])) { # if it is a table
+          if (length(data_used) == 0) {
+            self$data[[one]] <- dplyr::arrange(self$data[[one]], ...)
+          } else {
+            target_with_extra_cols <-
+              dplyr::bind_cols(data_used, self$data[[one]])
+            self$data[[one]] <-
+              dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+          }
+        } else { # if it is a list or vector
+          dummy_table <- data.frame(index = seq_along(self$data[[one]]))
+          if (length(data_used)!= 0) {
+            dummy_table <- dplyr::bind_cols(data_used, dummy_table)
+          }
+          dummy_table <- dplyr::arrange(dummy_table, ...)
+          self$data[[one]] <- self$data[[one]][dummy_table$index]
         }
-      } else { # if it is a list or vector
-        dummy_table <- data.frame(index = seq_along(self$data[[target]]))
-        if (length(data_used)!= 0) {
-          dummy_table <- dplyr::bind_cols(data_used, dummy_table)
-        }
-        dummy_table <- dplyr::arrange(dummy_table, ...)
-        self$data[[target]] <- self$data[[target]][dummy_table$index]
       }
+
       return(self)
     },
 
 
     # -------------------------------------------------------------------------
     # Randomly sample some number of observations from a table
-    sample_n_obs = function(target, size, replace = FALSE, taxon_weight = NULL,
+    sample_n_obs = function(dataset, size, replace = FALSE, taxon_weight = NULL,
                             obs_weight = NULL, use_supertaxa = TRUE,
-                            collapse_func = mean, ...) {
-      # Check that the target data exists
-      private$is_datset(target)
+                            collapse_func = mean, ..., target = NULL) {
+
+      # Check for use of "target"
+      if (! is.null(target)) {
+        stop('Use of "target" is depreciated. Use "dataset" instead.')
+      }
+
+      # Parse dataset option
+      dataset <- parse_dataset(self, dataset)
 
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(taxon_weight, obs_weight)))
@@ -713,38 +785,6 @@ Taxmap <- R6::R6Class(
       "n_obs",
       "n_obs_1"
     ),
-
-    is_datset = function(target, require = TRUE) {
-
-      # Convert logicals to numerics
-      if (is.logical(target)) {
-        if (length(target) != length(self$data)) {
-          stop("When using a TRUE/FALSE vector to specify the data set, it must be the same length as the number of data sets",
-               call. = FALSE)
-        } else {
-          target <- which(target)
-        }
-      }
-
-      # Check numerical inputs
-      if (is.numeric(target) && target <= length(self$data)) {
-        return(TRUE)
-      }
-
-      # Check character inputs
-      if (target %in% names(self$data)) {
-        return(TRUE)
-      }
-
-      # If not found
-      if (require) {
-        stop(paste0("The target `", target, "` is not the name of a data set.",
-                    " Valid targets include: ",
-                    paste0(names(self$data), collapse = ", ")))
-      } else {
-        return(FALSE)
-      }
-    },
 
     # Remove observations from a particular dataset or just remove the taxon ids
     # NOTE: indexes = what is NOT removed
