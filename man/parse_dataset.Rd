@@ -4,13 +4,13 @@
 \alias{parse_dataset}
 \title{Parse options specifying datasets}
 \usage{
-parse_dataset(obj, dataset, must_be_valid = TRUE, needed = TRUE,
+parse_dataset(obj, data, must_be_valid = TRUE, needed = TRUE,
   rm_na = TRUE)
 }
 \arguments{
 \item{obj}{The taxmap object.}
 
-\item{dataset}{The name/index of datasets in a taxmap object to use. Can also be a logical vector
+\item{data}{The name/index of datasets in a taxmap object to use. Can also be a logical vector
 of length equal to the number of datasets.}
 
 \item{must_be_valid}{If TRUE, all datasets specified must be valid or an error occurs.}

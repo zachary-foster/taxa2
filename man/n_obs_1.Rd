@@ -6,7 +6,10 @@
 \arguments{
 \item{obj}{(\code{\link[=taxmap]{taxmap()}})}
 
-\item{target}{The name of the list/vector/table in \code{obj$data}}
+\item{data}{Dataset name, index, or a logical vector that indicates which dataset in
+\code{obj$data} to add columns to.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 \code{numeric}
@@ -20,8 +23,8 @@ set in the \code{\link[=taxmap]{taxmap()}} object is used.  For example, if the 
 table, then a value of 3 for a taxon means that their are 3 rows in that
 table assigned to that taxon.
 \preformatted{
-obj$n_obs_1(target)
-n_obs_1(obj, target)}
+obj$n_obs_1(data)
+n_obs_1(obj, data)}
 }
 \examples{
 # Get number of observations for each taxon in first dataset

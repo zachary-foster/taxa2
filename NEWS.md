@@ -13,10 +13,15 @@ Current
 * Parsers are somewhat faster and use less RAM ([issue #177](https://github.com/ropensci/taxa/issues/177)).
 * `taxmap` and `taxonomy` parsers now treat taxa with the same name and same place in the taxonomy, but different ranks, database IDs, or authorities, as different taxa.
 * `filter_obs` can now filter multiple datasets at once if they are the same length ([issue #179](https://github.com/ropensci/taxa/issues/179)).
+* `select_obs` and `arrange_obs` can now work on multiple datasets at once.
 
 ### Bug fixes
 
 * Made the `"taxon_rank"` value for the `class_key` options work with `extract_tax_data`. 
+
+### Changes
+
+* Option `target` in many functions renamed to `datasets` to make it more intuitive.
 
 taxa 0.2.1
 =======

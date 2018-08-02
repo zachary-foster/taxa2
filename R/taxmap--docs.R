@@ -30,8 +30,8 @@
 #'   single vector of unique observation indexes.
 #'
 #' @return If `simplify = FALSE`, then a list of vectors of observation indexes
-#'   are returned corresponding to the `target` argument. If `simplify = TRUE`,
-#'   then the observation indexes for all `target` taxa are returned in a single
+#'   are returned corresponding to the `data` argument. If `simplify = TRUE`,
+#'   then the observation indexes for all `data` taxa are returned in a single
 #'   vector.
 #'
 #' @name obs
@@ -116,27 +116,29 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$filter_obs(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+#' obj$filter_obs(data, ..., drop_taxa = FALSE, drop_obs = TRUE,
 #'                subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)
-#' filter_obs(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+#' filter_obs(obj, data, ..., drop_taxa = FALSE, drop_obs = TRUE,
 #'            subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)}
 #'
 #' @param obj An object of type [taxmap()]
-#' @param target The name of the list/vector/table in `obj$data` to filter
+#' @param data Dataset names, indexes, or a logical vector that indicates which datasets in
+#'   `obj$data` to filter. If multiple datasets are filterd at once, then they must be the same
+#'   length.
 #' @param ... One or more filtering conditions. Any variable name that appears
 #'   in [all_names()] can be used as if it was a vector on its own. Each
 #'   filtering condition can be one of two things:
-#'   * `integer`: One or more row indexes of `obj[target]`
+#'   * `integer`: One or more dataset indexes.
 #'   * `logical`: A `TRUE`/`FALSE` vector of length equal to the number of
-#'   rows in `obj[target]`
+#'   items in the dataset.
 #' @param drop_taxa (`logical` of length 1) If `FALSE`, preserve taxa
 #'   even if all of their observations are filtered out. If `TRUE`, remove
 #'   taxa for which all observations were filtered out. Note that only taxa that
 #'   are unobserved due to this filtering will be removed; there might be other
 #'   taxa without observations to begin with that will not be removed.
 #' @param drop_obs (`logical`) This only has an effect when `drop_taxa` is
-#'   `TRUE`. When `TRUE`, observations for other data sets (i.e. not `target`)
-#'   assigned to taxa that are removed when filtering `target` are also removed.
+#'   `TRUE`. When `TRUE`, observations for other data sets (i.e. not `data`)
+#'   assigned to taxa that are removed when filtering `data` are also removed.
 #'   Otherwise, only data for taxa that are not present in all other data sets
 #'   will be removed. This option can be either simply `TRUE`/`FALSE`, meaning
 #'   that all data sets will be treated the same, or a logical vector can be
@@ -162,6 +164,7 @@ NULL
 #'   can be supplied with names corresponding one or more data sets in
 #'   `obj$data`. For example, `c(abundance = TRUE, stats = FALSE)` would
 #'   reassign observations in `obj$data$abundance`, but not in `obj$data$stats`.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -185,6 +188,9 @@ NULL
 #' filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
 #'            supertaxa = FALSE)
 #'
+#' # Filter multiple datasets at once
+#' filter_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), n_legs == 2)
+#'
 #' @family taxmap manipulation functions
 #'
 #' @name filter_obs
@@ -203,18 +209,20 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$select_obs(target, ...)
-#' select_obs(obj, target, ...)}
+#' obj$select_obs(data, ...)
+#' select_obs(obj, data, ...)}
 #'
 #' @param obj An object of type [taxmap()]
-#' @param target The name of the list/vector/table in `obj$data` to filter
+#' @param data Dataset names, indexes, or a logical vector that indicates which tables in
+#'   `obj$data` to subset columns in. Multiple tables can be subset at once.
 #' @param ... One or more column names to return in the new object. Each can be
 #'   one of two things: \describe{ \item{expression with unquoted column
-#'   name}{The name of a column in `obj$data[[target]]` typed as if it was
+#'   name}{The name of a column in the dataset typed as if it was
 #'   a variable on its own.} \item{`numeric`}{Indexes of columns in
-#'   `obj$data[[target]]`} } To match column names with a character vector,
+#'   the dataset} } To match column names with a character vector,
 #'   use `matches("my_col_name")`. To match a logical vector, convert it to
 #'   a column index using `which`.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -244,14 +252,16 @@ NULL
 #' "obj" would not be changed; instead a changed version would be returned, like
 #' most R functions.
 #' \preformatted{
-#' obj$mutate_obs(target, ...)
-#' mutate_obs(obj, target, ...)}
+#' obj$mutate_obs(data, ...)
+#' mutate_obs(obj, data, ...)}
 #'
 #' @param obj An object of type [taxmap()]
-#' @param target The name of the table in `obj$data` to filter
+#' @param data Dataset name, index, or a logical vector that indicates which dataset in
+#'   `obj$data` to add columns to.
 #' @param ... One or more named columns to add. Newly created columns can be
 #'   referenced in the same function call. Any variable name that appears in
 #'   [all_names()] can be used as if it was a vector on its own.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -288,14 +298,16 @@ NULL
 #' semantics, so "obj" would not be changed; instead a changed version would be
 #' returned, like most R functions.
 #' \preformatted{
-#' obj$transmute_obs(target, ...)
-#' transmute_obs(obj, target, ...)}
+#' obj$transmute_obs(data, ...)
+#' transmute_obs(obj, data, ...)}
 #'
 #' @param obj An object of type [taxmap()]
-#' @param target The name of the table in `obj$data` to filter
+#' @param data Dataset name, index, or a logical vector that indicates which dataset in
+#'   `obj$data` to use.
 #' @param ... One or more named columns to add. Newly created columns can be
 #'   referenced in the same function call. Any variable name that appears in
 #'   [all_names()] can be used as if it was a vector on its own.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #' @examples
@@ -319,12 +331,15 @@ NULL
 #' imitates R's traditional copy-on-modify semantics, so "obj" would not be
 #' changed; instead a changed version would be returned, like most R functions.
 #' \preformatted{
-#' obj$arrange_obs(target, ...)
-#' arrange_obs(obj, target, ...)}
+#' obj$arrange_obs(data, ...)
+#' arrange_obs(obj, data, ...)}
 #'
 #' @param obj An object of type [taxmap()].
-#' @param target The name of the table in `obj$data` to filter.
+#' @param data Dataset names, indexes, or a logical vector that indicates which datasets in
+#'   `obj$data` to sort If multiple datasets are sorted at once, then they must be the same
+#'   length.
 #' @param ... One or more expressions (e.g. column names) to sort on.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -335,6 +350,9 @@ NULL
 #'
 #' # Sort in decending order
 #' arrange_obs(ex_taxmap, "info", desc(n_legs))
+#'
+#' # Sort multiple datasets at once
+#' arrange_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), n_legs)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -354,15 +372,17 @@ NULL
 #' so "obj" would not be changed; instead a changed version would be returned,
 #' like most R functions.
 #' \preformatted{
-#' obj$sample_n_obs(target, size, replace = FALSE,
+#' obj$sample_n_obs(data, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,
 #'   use_supertaxa = TRUE, collapse_func = mean, ...)
-#' sample_n_obs(obj, target, size, replace = FALSE,
+#' sample_n_obs(obj, data, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,
 #'   use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
-#' @param target The name of the table in `obj$data` to filter
+#' @param data Dataset names, indexes, or a logical vector that indicates which datasets in
+#'   `obj$data` to sample. If multiple datasets are sampled at once, then they must be the same
+#'   length.
 #' @param size (`numeric` of length 1) The number of observations to
 #'   sample.
 #' @param replace (`logical` of length 1) If `TRUE`, sample with
@@ -389,6 +409,7 @@ NULL
 #'   `collapse_func` to get the observation weight. This function should
 #'   take  numeric vector and return a single number.
 #' @param ... Additional options are passed to [filter_obs()].
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
@@ -402,6 +423,9 @@ NULL
 #'
 #' # Sample some rows for often then others
 #' sample_n_obs(ex_taxmap, "info", 3, obs_weight = n_legs)
+#'
+#' # Sample multiple datasets at once
+#' sample_n_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), 3)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -420,15 +444,17 @@ NULL
 #' be changed; instead a changed version would be returned, like most R
 #' functions.
 #' \preformatted{
-#' obj$sample_frac_obs(target, size, replace = FALSE,
+#' obj$sample_frac_obs(data, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,
 #'   use_supertaxa = TRUE, collapse_func = mean, ...)
-#' sample_frac_obs(obj, target, size, replace = FALSE,
+#' sample_frac_obs(obj, data, size, replace = FALSE,
 #'   taxon_weight = NULL, obs_weight = NULL,
 #'   use_supertaxa = TRUE, collapse_func = mean, ...)}
 #'
 #' @param obj ([taxmap()]) The object to sample from.
-#' @param target The name of the table in `obj$data` to filter
+#' @param data Dataset names, indexes, or a logical vector that indicates which datasets in
+#'   `obj$data` to sample. If multiple datasets are sample at once, then they must be the same
+#'   length.
 #' @param size (`numeric` of length 1) The proportion of observations to
 #'   sample.
 #' @param replace (`logical` of length 1) If `TRUE`, sample with
@@ -455,12 +481,16 @@ NULL
 #'   `collapse_func` to get the observation weight. This function should
 #'   take  numeric vector and return a single number.
 #' @param ... Additional options are passed to [filter_obs()].
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return An object of type [taxmap()]
 #'
 #' @examples
 #' # Sample half of the rows fram a table
 #' sample_frac_obs(ex_taxmap, "info", 0.5)
+#'
+#' # Sample multiple datasets at once
+#' sample_frac_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), 0.5)
 #'
 #' @family taxmap manipulation functions
 #'
@@ -478,11 +508,13 @@ NULL
 #' table, then a value of 3 for a taxon means that their are 3 rows in that
 #' table assigned to that taxon or one of its subtaxa.
 #' \preformatted{
-#' obj$n_obs(target)
-#' n_obs(obj, target)}
+#' obj$n_obs(data)
+#' n_obs(obj, data)}
 #'
 #' @param obj ([taxmap()])
-#' @param target The name of the list/vector/table in `obj$data`
+#' @param data Dataset name, index, or a logical vector that indicates which dataset in
+#'   `obj$data` to add columns to.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return `numeric`
 #'
@@ -513,11 +545,13 @@ NULL
 #' table, then a value of 3 for a taxon means that their are 3 rows in that
 #' table assigned to that taxon.
 #' \preformatted{
-#' obj$n_obs_1(target)
-#' n_obs_1(obj, target)}
+#' obj$n_obs_1(data)
+#' n_obs_1(obj, data)}
 #'
 #' @param obj ([taxmap()])
-#' @param target The name of the list/vector/table in `obj$data`
+#' @param data Dataset name, index, or a logical vector that indicates which dataset in
+#'   `obj$data` to add columns to.
+#' @param target DEPRECIATED. use "data" instead.
 #'
 #' @return `numeric`
 #'
@@ -544,14 +578,8 @@ NULL
 #' exist.
 #'
 #' @param obj A taxmap object
-#' @param dataset Which data set to use. Can be any of the following:
-#'   \describe{
-#'     \item{Name}{The name of the data set to use.}
-#'     \item{Index}{The index of the data set to use.}
-#'     \item{TRUE/FALSE vector}{A TRUE/FALSE vector the same length as the
-#'     number of datasets, with exactly one TRUE corresponding to the
-#'     selected data set.}
-#'   }
+#' @param data Dataset name, index, or a logical vector that indicates which dataset in
+#'   `obj$data` to add columns to.
 #'
 #' @examples
 #' \dontrun{

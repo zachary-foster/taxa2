@@ -853,7 +853,7 @@ Taxonomy <- R6::R6Class(
           }
 
           obs_subset <- data_taxon_ids %in% self$taxon_ids()[taxa_subset]
-          private$remove_obs(dataset = my_index,
+          private$remove_obs(data = my_index,
                              indexes = obs_subset,
                              unname_only = ! drop_obs[my_index])
         }

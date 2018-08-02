@@ -6,14 +6,8 @@
 \arguments{
 \item{obj}{A taxmap object}
 
-\item{dataset}{Which data set to use. Can be any of the following:
-\describe{
-\item{Name}{The name of the data set to use.}
-\item{Index}{The index of the data set to use.}
-\item{TRUE/FALSE vector}{A TRUE/FALSE vector the same length as the
-number of datasets, with exactly one TRUE corresponding to the
-selected data set.}
-}}
+\item{data}{Dataset name, index, or a logical vector that indicates which dataset in
+\code{obj$data} to add columns to.}
 }
 \description{
 Get a data set from a taxmap object and complain if it does not

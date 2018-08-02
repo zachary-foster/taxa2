@@ -6,9 +6,13 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}.}
 
-\item{target}{The name of the table in \code{obj$data} to filter.}
+\item{data}{Dataset names, indexes, or a logical vector that indicates which datasets in
+\code{obj$data} to sort If multiple datasets are sorted at once, then they must be the same
+length.}
 
 \item{...}{One or more expressions (e.g. column names) to sort on.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -23,8 +27,8 @@ functions. However, calling the function using the \code{arrange_obs(obj, ...)}
 imitates R's traditional copy-on-modify semantics, so "obj" would not be
 changed; instead a changed version would be returned, like most R functions.
 \preformatted{
-obj$arrange_obs(target, ...)
-arrange_obs(obj, target, ...)}
+obj$arrange_obs(data, ...)
+arrange_obs(obj, data, ...)}
 }
 \examples{
 # Sort in ascending order
@@ -33,6 +37,9 @@ arrange_obs(ex_taxmap, "foods", name)
 
 # Sort in decending order
 arrange_obs(ex_taxmap, "info", desc(n_legs))
+
+# Sort multiple datasets at once
+arrange_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), n_legs)
 
 }
 \seealso{

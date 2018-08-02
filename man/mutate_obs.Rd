@@ -6,11 +6,14 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
-\item{target}{The name of the table in \code{obj$data} to filter}
+\item{data}{Dataset name, index, or a logical vector that indicates which dataset in
+\code{obj$data} to add columns to.}
 
 \item{...}{One or more named columns to add. Newly created columns can be
 referenced in the same function call. Any variable name that appears in
 \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -24,8 +27,8 @@ place, unlike most R functions. However, calling the function using the
 "obj" would not be changed; instead a changed version would be returned, like
 most R functions.
 \preformatted{
-obj$mutate_obs(target, ...)
-mutate_obs(obj, target, ...)}
+obj$mutate_obs(data, ...)
+mutate_obs(obj, data, ...)}
 }
 \examples{
 

@@ -3,30 +3,30 @@
 #' Parse options specifying datasets in taxmap objects
 #'
 #' @param obj The taxmap object.
-#' @param dataset The name/index of datasets in a taxmap object to use. Can also be a logical vector
+#' @param data The name/index of datasets in a taxmap object to use. Can also be a logical vector
 #'   of length equal to the number of datasets.
 #' @param must_be_valid If TRUE, all datasets specified must be valid or an error occurs.
 #' @param needed If TRUE, at least one dataset must be specified or an error occurs.
 #' @param rm_na If TRUE, then invalid datasets do result in NAs in the output.
 #'
 #' @return The indexes for the datasets selected
-parse_dataset = function(obj, dataset, must_be_valid = TRUE, needed = TRUE, rm_na = TRUE) {
+parse_dataset = function(obj, data, must_be_valid = TRUE, needed = TRUE, rm_na = TRUE) {
 
   output <- NULL
 
   # Convert logicals to numerics
-  if (is.logical(dataset)) {
-    if (length(dataset) != length(obj$data)) {
+  if (is.logical(data)) {
+    if (length(data) != length(obj$data)) {
       stop("When using a TRUE/FALSE vector to specify the data set, it must be the same length as the number of data sets",
            call. = FALSE)
     } else {
-      output <- which(dataset)
+      output <- which(data)
     }
   }
 
   # Check numerical inputs
-  if (is.numeric(dataset)) {
-    output <- vapply(dataset, FUN.VALUE = numeric(1),
+  if (is.numeric(data)) {
+    output <- vapply(data, FUN.VALUE = numeric(1),
                      function(one) {
                        if (one <= length(obj$data)) {
                          return(one)
@@ -37,8 +37,8 @@ parse_dataset = function(obj, dataset, must_be_valid = TRUE, needed = TRUE, rm_n
   }
 
   # Check character inputs
-  if (is.character(dataset)) {
-    output <- vapply(dataset, FUN.VALUE = numeric(1),
+  if (is.character(data)) {
+    output <- vapply(data, FUN.VALUE = numeric(1),
                      function(one) {
                        if (one %in% names(obj$data)) {
                          return(which(names(obj$data) == one))
@@ -51,7 +51,7 @@ parse_dataset = function(obj, dataset, must_be_valid = TRUE, needed = TRUE, rm_n
   # Stop if none of the above could create an output
   if (is.null(output)) {
     stop(call. = FALSE,
-         'Invalid input given to "dataset". Must be a character (name of dataset), index, or TRUE/FALSE vector.')
+         'Invalid input given to "data". Must be a character (name of dataset), index, or TRUE/FALSE vector.')
 
   }
 

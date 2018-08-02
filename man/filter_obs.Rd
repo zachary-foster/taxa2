@@ -6,15 +6,17 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
-\item{target}{The name of the list/vector/table in \code{obj$data} to filter}
+\item{data}{Dataset names, indexes, or a logical vector that indicates which datasets in
+\code{obj$data} to filter. If multiple datasets are filterd at once, then they must be the same
+length.}
 
 \item{...}{One or more filtering conditions. Any variable name that appears
 in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. Each
 filtering condition can be one of two things:
 \itemize{
-\item \code{integer}: One or more row indexes of \code{obj[target]}
+\item \code{integer}: One or more dataset indexes.
 \item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of
-rows in \code{obj[target]}
+items in the dataset.
 }}
 
 \item{drop_taxa}{(\code{logical} of length 1) If \code{FALSE}, preserve taxa
@@ -24,8 +26,8 @@ are unobserved due to this filtering will be removed; there might be other
 taxa without observations to begin with that will not be removed.}
 
 \item{drop_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
-\code{TRUE}. When \code{TRUE}, observations for other data sets (i.e. not \code{target})
-assigned to taxa that are removed when filtering \code{target} are also removed.
+\code{TRUE}. When \code{TRUE}, observations for other data sets (i.e. not \code{data})
+assigned to taxa that are removed when filtering \code{data} are also removed.
 Otherwise, only data for taxa that are not present in all other data sets
 will be removed. This option can be either simply \code{TRUE}/\code{FALSE}, meaning
 that all data sets will be treated the same, or a logical vector can be
@@ -54,6 +56,8 @@ meaning that all data sets will be treated the same, or a logical vector
 can be supplied with names corresponding one or more data sets in
 \code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
 reassign observations in \code{obj$data$abundance}, but not in \code{obj$data$stats}.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -68,9 +72,9 @@ using the \code{filter_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
-obj$filter_obs(target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+obj$filter_obs(data, ..., drop_taxa = FALSE, drop_obs = TRUE,
                subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)
-filter_obs(obj, target, ..., drop_taxa = FALSE, drop_obs = TRUE,
+filter_obs(obj, data, ..., drop_taxa = FALSE, drop_obs = TRUE,
            subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)}
 }
 \examples{
@@ -92,6 +96,9 @@ filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
 # When filtering taxa, do not return supertaxa of taxa that are preserved
 filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
            supertaxa = FALSE)
+
+# Filter multiple datasets at once
+filter_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), n_legs == 2)
 
 }
 \seealso{

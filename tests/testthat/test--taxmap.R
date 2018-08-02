@@ -824,7 +824,7 @@ test_that("Edge cases during sampling observations",  {
   expect_error(sample_n_obs(test_obj),
                "missing, with no default")
   expect_error(sample_n_obs(test_obj, "not_valid"),
-               "not the name of a data set. Valid targets ")
+               "The input does not correspond to a valid dataset.")
 })
 
 

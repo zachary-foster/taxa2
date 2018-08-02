@@ -6,7 +6,9 @@
 \arguments{
 \item{obj}{(\code{\link[=taxmap]{taxmap()}}) The object to sample from.}
 
-\item{target}{The name of the table in \code{obj$data} to filter}
+\item{data}{Dataset names, indexes, or a logical vector that indicates which datasets in
+\code{obj$data} to sample. If multiple datasets are sample at once, then they must be the same
+length.}
 
 \item{size}{(\code{numeric} of length 1) The proportion of observations to
 sample.}
@@ -40,6 +42,8 @@ taxon in an observation's classification are supplied to
 take  numeric vector and return a single number.}
 
 \item{...}{Additional options are passed to \code{\link[=filter_obs]{filter_obs()}}.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -53,16 +57,19 @@ most R functions. However, calling the function using the \code{sample_frac_obs(
 be changed; instead a changed version would be returned, like most R
 functions.
 \preformatted{
-obj$sample_frac_obs(target, size, replace = FALSE,
+obj$sample_frac_obs(data, size, replace = FALSE,
   taxon_weight = NULL, obs_weight = NULL,
   use_supertaxa = TRUE, collapse_func = mean, ...)
-sample_frac_obs(obj, target, size, replace = FALSE,
+sample_frac_obs(obj, data, size, replace = FALSE,
   taxon_weight = NULL, obs_weight = NULL,
   use_supertaxa = TRUE, collapse_func = mean, ...)}
 }
 \examples{
 # Sample half of the rows fram a table
 sample_frac_obs(ex_taxmap, "info", 0.5)
+
+# Sample multiple datasets at once
+sample_frac_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), 0.5)
 
 }
 \seealso{

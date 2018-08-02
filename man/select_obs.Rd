@@ -6,18 +6,18 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
-\item{target}{The name of the list/vector/table in \code{obj$data} to filter}
+\item{data}{Dataset names, indexes, or a logical vector that indicates which tables in
+\code{obj$data} to subset columns in. Multiple tables can be subset at once.}
 
 \item{...}{One or more column names to return in the new object. Each can be
 one of two things: \describe{ \item{expression with unquoted column
-name}{The name of a column in \code{obj$data[[target]]} typed as if it was
+name}{The name of a column in the dataset typed as if it was
 a variable on its own.} \item{\code{numeric}}{Indexes of columns in
-\code{obj$data[[target]]}} } To match column names with a character vector,
+the dataset} } To match column names with a character vector,
 use \code{matches("my_col_name")}. To match a logical vector, convert it to
-a column index using \code{which}.
+a column index using \code{which}.}
 
-[[target]: R:[target
-[[target]: R:[target}
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -33,8 +33,8 @@ using the \code{select_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
-obj$select_obs(target, ...)
-select_obs(obj, target, ...)}
+obj$select_obs(data, ...)
+select_obs(obj, data, ...)}
 }
 \examples{
 # Selecting a column by name
