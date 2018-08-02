@@ -1,5 +1,5 @@
-Current
-=======
+taxa 0.3.0
+==========
 
 ### New features
 
@@ -18,13 +18,14 @@ Current
 ### Bug fixes
 
 * Made the `"taxon_rank"` value for the `class_key` options work with `extract_tax_data`. 
+* Fixed bug in `taxmap` print method when printing tables with only a taxon ID column ([issue #181](https://github.com/ropensci/taxa/issues/181)).
 
 ### Changes
 
 * Option `target` in many functions renamed to `datasets` to make it more intuitive.
 
 taxa 0.2.1
-=======
+==========
 
 ### Improvements
 

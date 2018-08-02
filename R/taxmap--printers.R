@@ -55,7 +55,7 @@ prefixed_print <- function(x, prefix, ...) {
 #' @param header_index The row index that contains the table column names
 #' @param row_indexes The indexes of the rows to be formatted.
 highlight_taxon_ids <- function(table_text, header_index, row_indexes) {
-  tax_id_bounds <- stringr::str_locate(table_text[header_index], "taxon_id[[:space:]]+")[1,]
+  tax_id_bounds <- stringr::str_locate(table_text[header_index], "taxon_id[[:space:]]*")[1,]
   tax_id_part <- substr(table_text[row_indexes],
                         start = tax_id_bounds[1], stop = tax_id_bounds[2])
   tax_id_part <- sub(tax_id_part,
