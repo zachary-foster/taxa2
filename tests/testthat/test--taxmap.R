@@ -657,9 +657,9 @@ test_that("Observation column replacement works",  {
 
 test_that("Edge cases for observation column addition",  {
   expect_equal(mutate_obs(test_obj, "info"), test_obj)
-  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+  expect_error(select_obs(test_obj, "foods"), 'not a table, so columns cannot be selected.')
   expect_error(select_obs(test_obj, "phylopic_ids"),
-               'The dataset "phylopic_ids" is not a table')
+               'is not a table, so columns cannot be selected.')
 })
 
 test_that("New tables and vectors can be made",  {
@@ -717,10 +717,10 @@ test_that("Edge cases for observation column addition (transmute) ",  {
   result <- transmute_obs(test_obj, "info")
   expect_equal("taxon_id", colnames(result$data$info))
   expect_error(transmute_obs(test_obj, "not_valid"),
-               "not the name of a data set. Valid targets ")
-  expect_error(select_obs(test_obj, "foods"), 'The dataset "foods" is not a table')
+               "The input does not correspond to a valid dataset")
+  expect_error(select_obs(test_obj, "foods"), 'not a table, so columns cannot be selected')
   expect_error(select_obs(test_obj, "phylopic_ids"),
-               'The dataset "phylopic_ids" is not a table')
+               'not a table, so columns cannot be selected')
 })
 
 
@@ -751,7 +751,15 @@ test_that("Sorting observations with non-target NSE values",  {
 test_that("Edge cases during observation sorting works",  {
   expect_equal(arrange_obs(test_obj, "info"), test_obj)
   expect_error(arrange_obs(test_obj, "not_valid"),
-               "not the name of a data set. Valid targets ")
+               "The input does not correspond to a valid dataset")
+})
+
+test_that("Sorting multiple datasets works",  {
+  result <- arrange_obs(test_obj, c("info", "phylopic_ids", "foods"), n_legs)
+  expect_equal(test_obj$data$info$taxon_id[order(test_obj$data$info$n_legs)],
+               result$data$info$taxon_id)
+  expect_equal(result$data$info$taxon_id, names(result$data$phylopic_ids))
+  expect_equal(result$data$info$taxon_id, names(result$data$foods))
 })
 
 

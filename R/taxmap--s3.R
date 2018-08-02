@@ -198,35 +198,35 @@ sample_frac_obs.Taxmap <- function(obj, dataset, size, replace = FALSE,
 
 # -----------------------------------------------------------------------------
 #' @export
-n_obs <- function(obj, target = NULL) {
+n_obs <- function(obj, dataset = NULL, target = NULL) {
   UseMethod("n_obs")
 }
 
 #' @export
-n_obs.default <- function(obj, target = NULL) {
+n_obs.default <- function(obj, dataset = NULL, target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-n_obs.Taxmap <- function(obj, target = NULL) {
-  obj$n_obs(target = target)
+n_obs.Taxmap <- function(obj, dataset = NULL, target = NULL) {
+  obj$n_obs(dataset = dataset, target = target)
 }
 
 
 # -----------------------------------------------------------------------------
 #'@export
-n_obs_1 <- function(obj, target = NULL) {
+n_obs_1 <- function(obj, dataset = NULL, target = NULL) {
   UseMethod("n_obs_1")
 }
 
 #' @export
-n_obs_1.default <- function(obj, target = NULL) {
+n_obs_1.default <- function(obj, dataset = NULL, target = NULL) {
   stop("Unsupported class: ", class(obj)[[1L]], call. = FALSE, domain = NA)
 }
 
 #' @export
-n_obs_1.Taxmap <- function(obj, target = NULL) {
-  obj$n_obs_1(target = target)
+n_obs_1.Taxmap <- function(obj, dataset = NULL, target = NULL) {
+  obj$n_obs_1(dataset = dataset, target = target)
 }
 
 

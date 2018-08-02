@@ -247,9 +247,12 @@ Taxmap <- R6::R6Class(
     filter_obs = function(dataset, ..., drop_taxa = FALSE, drop_obs = TRUE,
                           subtaxa = FALSE, supertaxa = TRUE,
                           reassign_obs = FALSE, target = NULL) {
+
       # Check for use of "target"
       if (! is.null(target)) {
-        stop('Use of "target" is depreciated. Use "dataset" instead.')
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
       }
 
       # Parse dataset option
@@ -346,7 +349,9 @@ Taxmap <- R6::R6Class(
 
       # Check for use of "target"
       if (! is.null(target)) {
-        stop('Use of "target" is depreciated. Use "dataset" instead.')
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
       }
 
       # Parse dataset option
@@ -377,11 +382,13 @@ Taxmap <- R6::R6Class(
 
       # Check for use of "target"
       if (! is.null(target)) {
-        stop('Use of "target" is depreciated. Use "dataset" instead.')
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
       }
 
       # Parse dataset option
-      dataset <- parse_dataset(dataset, must_be_valid = FALSE)
+      dataset_index <- parse_dataset(self, dataset, must_be_valid = FALSE, needed = FALSE)
 
       # Check that only one dataset is specified
       if (length(dataset) > 1) {
@@ -394,15 +401,15 @@ Taxmap <- R6::R6Class(
       unevaluated <- lazyeval::lazy_dots(...)
 
       # add columns
-      if (! is.na(dataset)) {
+      if (length(dataset_index) > 0) {
         # Check that the dataset is a table
-        if (! is.data.frame(self$data[[dataset]])) {
+        if (! is.data.frame(self$data[[dataset_index]])) {
           stop(paste0('Dataset "', dataset, '" is not a table, so columns cannot be added'))
         } else {
           for (index in seq_along(unevaluated)) {
             new_col <- lazyeval::lazy_eval(unevaluated[index], data = data_used)
             data_used <- c(data_used, new_col) # Allows this col to be used in next cols
-            self$data[[dataset]][[names(new_col)]] <- new_col[[1]]
+            self$data[[dataset_index]][[names(new_col)]] <- new_col[[1]]
           }
         }
       } else { # not a current dataset
@@ -449,16 +456,18 @@ Taxmap <- R6::R6Class(
 
       # Check for use of "target"
       if (! is.null(target)) {
-        stop('Use of "target" is depreciated. Use "dataset" instead.')
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
       }
 
       # Parse dataset option
-      dataset <- parse_dataset(dataset, must_be_valid = FALSE)
+      dataset <- parse_dataset(self, dataset)
 
       # Check that only one dataset is specified
       if (length(dataset) > 1) {
         stop(call. = FALSE,
-             'Only one dataset can be mutated at a time.')
+             'Only one dataset can be transmuted at a time.')
       }
 
       # Check that the dataset is a table
@@ -487,6 +496,7 @@ Taxmap <- R6::R6Class(
     # -------------------------------------------------------------------------
     # Sort columns of tables in obj$data
     arrange_obs = function(dataset, ..., target = NULL) {
+
       # Check for use of "target"
       if (! is.null(target)) {
         stop('Use of "target" is depreciated. Use "dataset" instead.')
@@ -515,15 +525,15 @@ Taxmap <- R6::R6Class(
       # Sort observations
       data_used <- self$data_used(...)
       for (one in dataset) {
-        data_used <- data_used[! names(data_used) %in% names(self$data[[one]])]
         if (is.data.frame(self$data[[one]])) { # if it is a table
-          if (length(data_used) == 0) {
+          sort_cols <- data_used[! names(data_used) %in% names(self$data[[one]])]
+          if (length(sort_cols) == 0) {
             self$data[[one]] <- dplyr::arrange(self$data[[one]], ...)
           } else {
             target_with_extra_cols <-
-              dplyr::bind_cols(data_used, self$data[[one]])
+              dplyr::bind_cols(sort_cols, self$data[[one]])
             self$data[[one]] <-
-              dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(data_used)]
+              dplyr::arrange(target_with_extra_cols, ...)[, -seq_along(sort_cols)]
           }
         } else { # if it is a list or vector
           dummy_table <- data.frame(index = seq_along(self$data[[one]]))
@@ -547,7 +557,9 @@ Taxmap <- R6::R6Class(
 
       # Check for use of "target"
       if (! is.null(target)) {
-        stop('Use of "target" is depreciated. Use "dataset" instead.')
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
       }
 
       # Parse dataset option
@@ -629,30 +641,46 @@ Taxmap <- R6::R6Class(
 
     # -------------------------------------------------------------------------
     # Count observations for each taxon in a data set
-    n_obs = function(target = NULL) {
-      if (is.null(target)) {
+    n_obs = function(dataset = NULL, target = NULL) {
+
+      # Check for use of "target"
+      if (! is.null(target)) {
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
+      }
+
+      if (is.null(dataset)) {
         if (length(self$data) > 0) {
-          target <- 1
+          dataset <- 1
         } else {
           stop(paste0('There are no data sets to get observation info from.'))
         }
       }
-      vapply(self$obs(target, recursive = TRUE, simplify = FALSE),
+      vapply(self$obs(dataset, recursive = TRUE, simplify = FALSE),
              length, numeric(1))
     },
 
     # -------------------------------------------------------------------------
     # Count observations for each taxon in a data set, including observations
     # for the specific taxon but NOT the observations of its subtaxa.
-    n_obs_1 = function(target = NULL) {
-      if (is.null(target)) {
+    n_obs_1 = function(dataset = NULL, target = NULL) {
+
+      # Check for use of "target"
+      if (! is.null(target)) {
+        warning(call. = FALSE,
+                'Use of "target" is depreciated. Use "dataset" instead.')
+        dataset <- target
+      }
+
+      if (is.null(dataset)) {
         if (length(self$data) > 0) {
-          target <- 1
+          dataset <- 1
         } else {
           stop(paste0('There are no data sets to get observation info from.'))
         }
       }
-      vapply(self$obs(target, recursive = FALSE, simplify = FALSE),
+      vapply(self$obs(dataset, recursive = FALSE, simplify = FALSE),
              length, numeric(1))
     },
 
@@ -660,6 +688,7 @@ Taxmap <- R6::R6Class(
     #
     # require: if TRUE, require that taxon ids be present, or make an error
     get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE) {
+
       stop_or_warn <- function(text) {
         if (require) {
           stop(call. = FALSE, text)
