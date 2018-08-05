@@ -22,7 +22,7 @@ taxa 0.3.0
 
 ### Changes
 
-* Option `target` in many functions renamed to `datasets` to make it more intuitive.
+* Option `target` in many functions renamed to `data` to make it more intuitive. 
 
 taxa 0.2.1
 ==========
