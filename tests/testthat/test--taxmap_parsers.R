@@ -132,6 +132,9 @@ test_that("Taxmap can be intialized from complex data", {
 
 
 test_that("Taxmap can be intialized from queried data", {
+
+  skip_on_cran()
+
   # Make test data
   raw_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
                                  "Mammalia;Carnivora;Felidae",
@@ -230,6 +233,7 @@ test_that("Taxmap can be intialized from queried data", {
 
 
 test_that("Taxmap can be intialized from raw strings", {
+
   raw_data <- c(">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
                 ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
                 ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
@@ -241,11 +245,6 @@ test_that("Taxmap can be intialized from raw strings", {
   expect_equal(length(result$taxa), 8)
   expect_equal(result$data$tax_data$var_1, c("A", "B", "C"))
   expect_true("my_rank" %in% colnames(result$data$class_data))
-
-  # Test looking up variables extracted from raw strings
-  extract_tax_data(raw_data,
-                   key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
-                   regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
 
   # test that different info with same sep can be used in classifications
   raw_data <- c("K;Mammalia;P;Carnivora;C;Felidae;G;Panthera;S;leo;",
@@ -273,3 +272,19 @@ test_that("Taxmap can be intialized from raw strings", {
 
 })
 
+
+test_that("Taxmap can be intialized from raw strings and lookup data", {
+  skip_on_cran()
+
+  raw_data <- c(">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
+                ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
+                ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
+
+  # Test looking up variables extracted from raw strings
+  result <- extract_tax_data(raw_data,
+                             key = c(var_1 = "info", var_2 = "taxon_id", tax = "info"),
+                             regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$")
+  expect_true("ncbi_id" %in% colnames(result$data$tax_data))
+  expect_equivalent(result$roots(value = "taxon_names"), "cellular organisms")
+
+})

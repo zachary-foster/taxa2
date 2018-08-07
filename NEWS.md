@@ -1,4 +1,4 @@
-taxa 0.3.0
+taxa 0.3.1
 ==========
 
 ### New features
