@@ -17,4 +17,5 @@ Other printer fonts: \code{\link{desc_font}},
   \code{\link{error_font}}, \code{\link{name_font}},
   \code{\link{punc_font}}
 }
+\concept{printer fonts}
 \keyword{internal}

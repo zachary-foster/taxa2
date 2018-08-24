@@ -408,12 +408,19 @@ test_that("Mapping simplification between observations and the edge list works",
   expect_equal(obs(test_obj, "info", simplify = TRUE), 1:6)
 })
 
-test_that("Mapping observations in external tables", {
+test_that("Mapping observations in external variables", {
   external_table <- data.frame(taxon_id = c("p", "n"),
                                my_name = c("Joe", "Fluffy"))
   expect_equal(eval(substitute(obs(test_obj, external_table)$`b`)), c(2, 1))
+
   external_table <- data.frame(my_name = c("Joe", "Fluffy"))
   expect_error(eval(substitute(obs(test_obj, external_table))), 'no "taxon_id" column')
+
+  extern_vec <- c(p = "Joe", n = "Fluffy")
+  expect_equal(eval(substitute(obs(test_obj, extern_vec)$`b`)), c(2, 1))
+
+  extern_vec <- c("Joe", "Fluffy")
+  expect_error(eval(substitute(obs(test_obj, extern_vec))), 'no taxon ids')
 })
 
 test_that("Mapping observations when there are multiple obs per taxon", {

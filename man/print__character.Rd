@@ -37,4 +37,5 @@ Other taxmap print methods: \code{\link{print__data.frame}},
   \code{\link{print__ordered}},
   \code{\link{print__tbl_df}}, \code{\link{print__vector}}
 }
+\concept{taxmap print methods}
 \keyword{internal}

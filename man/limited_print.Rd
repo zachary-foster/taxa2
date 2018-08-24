@@ -5,8 +5,8 @@
 \title{Print a subset of a character vector}
 \usage{
 limited_print(chars, prefix = "", sep = ", ", mid = " ... ",
-  trunc_char = "[truncated]", max_chars = getOption("width") - nchar(prefix)
-  - 5, type = "message")
+  trunc_char = "[truncated]", max_chars = getOption("width") -
+  nchar(prefix) - 5, type = "message")
 }
 \arguments{
 \item{chars}{(\code{character}) What to print.}

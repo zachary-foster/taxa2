@@ -27,4 +27,5 @@ ex_taxmap$names_used(n_legs + dangerous == invalid_expression)
 Other NSE helpers: \code{\link{all_names}},
   \code{\link{data_used}}, \code{\link{get_data}}
 }
+\concept{NSE helpers}
 \keyword{internal}

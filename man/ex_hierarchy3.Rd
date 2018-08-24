@@ -25,4 +25,5 @@ Other taxa-datasets: \code{\link{ex_hierarchies}},
   \code{\link{ex_hierarchy1}}, \code{\link{ex_hierarchy2}},
   \code{\link{ex_taxmap}}, \code{\link{ex_taxonomy}}
 }
+\concept{taxa-datasets}
 \keyword{data}

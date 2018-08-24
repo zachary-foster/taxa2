@@ -180,6 +180,7 @@ Taxmap <- R6::R6Class(
     # Get data indexes or other values associated with taxa
     obs = function(data, value = NULL, subset = NULL, recursive = TRUE,
                    simplify = FALSE) {
+
       # non-standard argument evaluation
       data_used <- eval(substitute(self$data_used(subset)))
       subset <- lazyeval::lazy_eval(lazyeval::lazy(subset), data = data_used)
@@ -693,13 +694,7 @@ Taxmap <- R6::R6Class(
       }
 
       # Parse data option
-      data <- parse_dataset(self, data)
-
-      # Check that only one data is specified
-      if (length(data) > 1) {
-        stop(call. = FALSE,
-             'Only one data can be transmuted at a time.')
-      }
+      data <- self$get_data(data)
 
       # Count observations
       vapply(self$obs(data, recursive = TRUE, simplify = FALSE),

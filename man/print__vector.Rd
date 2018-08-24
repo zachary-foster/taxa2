@@ -40,4 +40,5 @@ Other taxmap print methods: \code{\link{print__character}},
   \code{\link{print__numeric}},
   \code{\link{print__ordered}}, \code{\link{print__tbl_df}}
 }
+\concept{taxmap print methods}
 \keyword{internal}

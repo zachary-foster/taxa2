@@ -72,3 +72,4 @@ Other taxonomy indexing functions: \code{\link{branches}},
   \code{\link{roots}}, \code{\link{stems}},
   \code{\link{supertaxa}}
 }
+\concept{taxonomy indexing functions}

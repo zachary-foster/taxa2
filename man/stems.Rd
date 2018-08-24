@@ -55,3 +55,4 @@ Other taxonomy indexing functions: \code{\link{branches}},
   \code{\link{roots}}, \code{\link{subtaxa}},
   \code{\link{supertaxa}}
 }
+\concept{taxonomy indexing functions}

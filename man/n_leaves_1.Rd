@@ -36,3 +36,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

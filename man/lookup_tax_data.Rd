@@ -177,3 +177,4 @@ taxon.
 Other parsers: \code{\link{extract_tax_data}},
   \code{\link{parse_tax_data}}
 }
+\concept{parsers}

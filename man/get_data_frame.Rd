@@ -35,3 +35,4 @@ get_data_frame(ex_taxonomy, c("taxon_names", "taxon_indexes", "is_stem"))
 get_data_frame(ex_taxonomy)
 
 }
+\concept{accessors}

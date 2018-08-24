@@ -97,3 +97,4 @@ Other classes: \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxon_rank}}, \code{\link{taxonomy}},
   \code{\link{taxon}}
 }
+\concept{classes}

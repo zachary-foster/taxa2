@@ -37,3 +37,4 @@ get_data(ex_taxmap)
 Other NSE helpers: \code{\link{all_names}},
   \code{\link{data_used}}, \code{\link{names_used}}
 }
+\concept{NSE helpers}

@@ -18,4 +18,5 @@ Other printer fonts: \code{\link{error_font}},
   \code{\link{name_font}}, \code{\link{punc_font}},
   \code{\link{tid_font}}
 }
+\concept{printer fonts}
 \keyword{internal}

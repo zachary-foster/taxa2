@@ -41,3 +41,4 @@ filter_taxa(ex_taxmap, n_obs_1 > 0)
 \seealso{
 Other taxmap data functions: \code{\link{n_obs}}
 }
+\concept{taxmap data functions}

@@ -60,3 +60,4 @@ Other taxonomy indexing functions: \code{\link{branches}},
   \code{\link{stems}}, \code{\link{subtaxa}},
   \code{\link{supertaxa}}
 }
+\concept{taxonomy indexing functions}

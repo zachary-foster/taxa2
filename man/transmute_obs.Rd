@@ -44,3 +44,4 @@ Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}
 }
+\concept{taxmap manipulation functions}

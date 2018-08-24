@@ -26,7 +26,7 @@ An \code{R6Class} object of class \code{Taxonomy}
 Stores a taxonomy composed of \code{\link[=taxon]{taxon()}} objects organized in a tree
 structure. This differs from the \code{\link[=hierarchies]{hierarchies()}} class in how the \code{\link[=taxon]{taxon()}}
 objects are stored. Unlike \code{\link[=hierarchies]{hierarchies()}}, each taxon is only stored once
-and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edgelist}.
+and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edge list}.
 }
 \examples{
 
@@ -102,3 +102,4 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank}}, \code{\link{taxon}}
 }
+\concept{classes}

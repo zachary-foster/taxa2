@@ -33,3 +33,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{n_supertaxa}}, \code{\link{taxon_ids}},
   \code{\link{taxon_indexes}}, \code{\link{taxon_names}}
 }
+\concept{taxonomy data functions}

@@ -59,3 +59,4 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
+\concept{classes}

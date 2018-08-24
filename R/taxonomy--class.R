@@ -162,19 +162,23 @@ Taxonomy <- R6::R6Class(
 
     # --------------------------------------------------------------------------
     # Get data by name
-    get_data = function(name = NULL, ...) {
+    get_data = function(name = NULL, allow_external = TRUE, ...) {
       # Get default if name is NULL
       if (is.null(name)) {
         name = unique(self$all_names(...))
       }
 
-      # Check that names provided are valid
+      # Check that names provided are valid or an external object is used
       my_names <- self$all_names(...)
-      if (any(unknown <- !name %in% my_names)) {
-        stop(paste0("Cannot find the following data: ",
-                    paste0(name[unknown], collapse = ", "), "\n ",
-                    "Valid choices include: ",
-                    paste0(my_names, collapse = ", "), "\n "))
+      if (any(unknown <- ! name %in% my_names)) {
+        if (allow_external && (! is.null(obj_taxon_ids <- self$get_data_taxon_ids(name)))) {
+          return(name)
+        } else {
+          stop(paste0("Cannot find the following data: ",
+                      paste0(name[unknown], collapse = ", "), "\n ",
+                      "Valid choices include: ",
+                      paste0(my_names, collapse = ", "), "\n "))
+        }
       }
 
       # Check for ambiguous terms
