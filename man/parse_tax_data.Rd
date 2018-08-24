@@ -209,6 +209,7 @@ must be present.
 }
 \seealso{
 Other parsers: \code{\link{extract_tax_data}},
-  \code{\link{lookup_tax_data}}
+  \code{\link{lookup_tax_data}},
+  \code{\link{parse_edge_list}}
 }
 \concept{parsers}

@@ -148,6 +148,7 @@ taxon.
 }
 \seealso{
 Other parsers: \code{\link{lookup_tax_data}},
+  \code{\link{parse_edge_list}},
   \code{\link{parse_tax_data}}
 }
 \concept{parsers}
