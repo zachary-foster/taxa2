@@ -321,8 +321,8 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Check for NAs in input
   na_indexes <- which(vapply(parsed_tax, function(x) any(is.na(x)), logical(1)))
   if (length(na_indexes) > 0) {
-    warning(call. = FALSE,
-            'The following ', length(na_indexes),' of ', length(parsed_tax),
+    message('The following ', length(na_indexes),' of ', length(parsed_tax),
+            ' (', to_percent(length(na_indexes) / length(parsed_tax)), ')',
             ' input indexes have `NA` in their classifications:\n',
             limited_print(na_indexes, prefix = "  ", type = "silent"))
   }

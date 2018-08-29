@@ -727,7 +727,7 @@ Taxmap <- R6::R6Class(
     # Find taxon ids for datasets by dataset name
     #
     # require: if TRUE, require that taxon ids be present, or make an error
-    get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE) {
+    get_data_taxon_ids = function(dataset_name, require = FALSE, warn = FALSE, message = FALSE) {
 
       stop_or_warn <- function(text) {
         if (require) {
@@ -735,6 +735,8 @@ Taxmap <- R6::R6Class(
         }
         if (warn) {
           warning(call. = FALSE, text)
+        } else if (message) {
+          message(text)
         }
       }
 
