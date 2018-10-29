@@ -18,6 +18,7 @@ Depends:
 VignetteBuilder: knitr
 LazyLoad: yes
 LazyData: yes
+Encoding: UTF-8
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/taxa
 BugReports: https://github.com/ropensci/taxa/issues
