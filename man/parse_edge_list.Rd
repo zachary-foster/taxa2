@@ -13,6 +13,10 @@ parse_edge_list(input, taxon_id, supertaxon_id, taxon_name,
 \item{taxon_id}{The name/index of the column containing the taxon IDs.}
 
 \item{supertaxon_id}{The name/index of the column containing the taxon IDs for the supertaxon of the IDs in \code{taxon_col}.}
+
+\item{taxon_name}{xxx}
+
+\item{taxon_rank}{xxx}
 }
 \description{
 Converts a table containing an edge list into a \code{\link[taxa:taxmap]{taxa::taxmap()}} object.

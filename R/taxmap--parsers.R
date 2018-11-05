@@ -8,6 +8,8 @@
 #' @param input A table containing an edge list encoded by two columns.
 #' @param taxon_id The name/index of the column containing the taxon IDs.
 #' @param supertaxon_id The name/index of the column containing the taxon IDs for the supertaxon of the IDs in `taxon_col`.
+#' @param taxon_name xxx
+#' @param taxon_rank xxx
 #'
 #' @family parsers
 #'
