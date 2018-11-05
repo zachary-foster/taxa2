@@ -1,0 +1,10 @@
+
+bibentry("Manual",
+  title = "Taxa: An R package implementing data standards and methods for taxonomic data.",
+  author = c(person("Foster", "Zachary"), person("Chamberlain", "Scott"), person("Grunwald", "Niklaus")),
+  journal = "F1000Research",
+  year = "2018",
+  volume = "7",
+  number = "272",
+  doi = "https://doi.org/10.12688/f1000research.14013.1"
+)
