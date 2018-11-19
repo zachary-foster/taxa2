@@ -3,6 +3,7 @@ taxa
 
 [![Build
 Status](https://travis-ci.org/ropensci/taxa.svg?branch=master)](https://travis-ci.org/ropensci/taxa)
+[![cran checks](https://cranchecks.info/badges/worst/taxa)](https://cranchecks.info/pkgs/taxa)
 [![codecov](https://codecov.io/gh/ropensci/taxa/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/taxa)
 [![Project Status: WIP - Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
