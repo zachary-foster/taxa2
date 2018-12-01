@@ -4,10 +4,12 @@
 \alias{print_item}
 \title{Print a item}
 \usage{
-print_item(data, name = NULL, max_rows = 3, max_items = 3,
+print_item(obj, data, name = NULL, max_rows = 3, max_items = 3,
   max_width = getOption("width") - 10, prefix = "")
 }
 \arguments{
+\item{obj}{The taxmap object containing the thing to print}
+
 \item{data}{The item to be printed}
 
 \item{max_rows}{(\code{numeric} of length 1) The maximum number of rows in
@@ -26,8 +28,8 @@ line.}
 Used to print each item in the \code{taxmap} print method.
 }
 \examples{
-taxa:::print_item(ex_taxmap$data$info)
-taxa:::print_item(1:100)
+taxa:::print_item(ex_taxmap, ex_taxmap$data$info)
+taxa:::print_item(ex_taxmap, 1:100)
 
 }
 \keyword{internal}

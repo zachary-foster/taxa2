@@ -17,7 +17,12 @@ obj$n_supertaxa()
 n_supertaxa(obj)}
 }
 \examples{
+# Count number of supertaxa that contain each taxon
 n_supertaxa(ex_taxmap)
+
+# Filter taxa based on the number of supertaxa
+#  (this command removes all root taxa)
+filter_taxa(ex_taxmap, n_supertaxa > 0)
 
 }
 \seealso{
@@ -32,3 +37,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

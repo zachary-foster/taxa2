@@ -7,7 +7,7 @@
 #' @param prefix (`character` of length 1) What to print before
 #'   `chars`, on the same line.
 #' @param sep What to put between consecutive values
-#' @param mid What is used to indicate ommited values
+#' @param mid What is used to indicate omitted values
 #' @param trunc What is appended onto truncated values
 #' @param max_chars (`numeric` of length 1) The maximum number of
 #'   characters to print.
@@ -44,6 +44,8 @@ limited_print <- function(chars, prefix = "", sep = ", ", mid = " ... ",
   raw_chars <- chars
   chars <- crayon::strip_style(chars)
 
+  # Convert NA to "NA"
+  chars[is.na(chars)] <- "NA"
 
   #
   if (length(chars) == 0) {
@@ -154,8 +156,7 @@ unique_mapping <- function(input) {
 #' Run a function on unique values of a iterable
 #'
 #' Runs a function on unique values of a list/vector and then reformats the
-#' output so there is a one-to-one relationship with the input. Basically
-#' imitates `lapply`.
+#' output so there is a one-to-one relationship with the input.
 #'
 #' @param input What to pass to \code{func}
 #' @param func (\code{function})
@@ -244,5 +245,24 @@ get_dots_or_list <- function(..., .list = NULL) {
          call. = FALSE)
   } else {
     return(list())
+  }
+}
+
+#' Format a proportion as a printed percent
+#'
+#' Format a proportion as a printed percent
+#'
+#' @param prop The proportion
+#' @param ... passed to `format`
+#' @inheritParams base::format
+#'
+#' @return character
+#'
+#' @keywords internal
+to_percent <- function(prop, digits = 3, ...) {
+  if (prop < .00001) {
+    return("< 0.001%")
+  } else {
+    return(paste0(format(prop * 100, digits = digits, ...), '%'))
   }
 }

@@ -45,3 +45,4 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{taxon_id}}, \code{\link{taxon_rank}},
   \code{\link{taxonomy}}, \code{\link{taxon}}
 }
+\concept{classes}

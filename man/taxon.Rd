@@ -23,7 +23,8 @@ internally, required}
 An \code{R6Class} object of class \code{Taxon}
 }
 \description{
-A class used to define a taxon.
+A class used to define a single taxon. Most other classes in the taxa package
+include one or more objects of this class.
 }
 \details{
 Note that there is a special use case of this function - you can
@@ -58,3 +59,4 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
+\concept{classes}

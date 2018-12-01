@@ -3,6 +3,9 @@
 #' Stores one or more [taxon()] objects. This is just a thin wrapper for a list
 #' of [taxon()] objects.
 #'
+#' This is the documentation for the class called `taxa`. If you are looking for
+#' the documentation for the package as a whole: [taxa-package].
+#'
 #' @export
 #' @param ... Any number of object of class [taxon()]
 #' @param .list An alternate to the `...` input. Any number of object of class

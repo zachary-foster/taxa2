@@ -17,7 +17,12 @@ obj$n_subtaxa()
 n_subtaxa(obj)}
 }
 \examples{
+# Count number of subtaxa within each taxon
 n_subtaxa(ex_taxmap)
+
+# Filter taxa based on number of subtaxa
+#  (this command removed all leaves or "tips" of the tree)
+filter_taxa(ex_taxmap, n_subtaxa > 0)
 
 }
 \seealso{
@@ -32,3 +37,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

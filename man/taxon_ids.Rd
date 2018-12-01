@@ -14,7 +14,11 @@ obj$taxon_ids()
 taxon_ids(obj)}
 }
 \examples{
-taxa:::taxon_ids(ex_taxmap)
+# Return the taxon IDs for each taxon
+taxon_ids(ex_taxmap)
+
+# Filter using taxon IDs
+filter_taxa(ex_taxmap, ! taxon_ids \%in\% c("c", "d"))
 
 }
 \seealso{
@@ -29,4 +33,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{n_supertaxa}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
-\keyword{internal}
+\concept{taxonomy data functions}

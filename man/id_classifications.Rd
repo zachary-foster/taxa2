@@ -21,7 +21,11 @@ obj$id_classifications(sep = ";")
 id_classifications(obj, sep = ";")}
 }
 \examples{
+# Get classifications of IDs for each taxon
 id_classifications(ex_taxmap)
+
+# Use a different seperator
+id_classifications(ex_taxmap, sep = '|')
 
 }
 \seealso{
@@ -36,3 +40,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_indexes}}, \code{\link{taxon_names}},
   \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

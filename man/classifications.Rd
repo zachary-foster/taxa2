@@ -17,15 +17,15 @@ taxon IDs}
 \code{character}
 }
 \description{
-Get classifications of taxa in an object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}}
-composed of data assoicated with taxa. Each classification is constructed by
-concatenating the data of the given taxon and all of its supertaxa.
+Get character vector classifications of taxa in an object of type
+\code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} composed of data associated with taxa. Each
+classification is constructed by concatenating the data of the given taxon
+and all of its supertaxa.
 \preformatted{
 obj$classifications(value = "taxon_names", sep = ";")
 classifications(obj, value = "taxon_names", sep = ";")}
 }
 \examples{
-
 # Defualt settings returns taxon names separated by ;
 classifications(ex_taxmap)
 
@@ -48,3 +48,4 @@ Other taxonomy data functions: \code{\link{id_classifications}},
   \code{\link{taxon_indexes}}, \code{\link{taxon_names}},
   \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

@@ -35,8 +35,4 @@ get_data_frame(ex_taxonomy, c("taxon_names", "taxon_indexes", "is_stem"))
 get_data_frame(ex_taxonomy)
 
 }
-\seealso{
-Other accessors: \code{\link{all_names}},
-  \code{\link{data_used}}, \code{\link{get_data}},
-  \code{\link{names_used}}
-}
+\concept{accessors}

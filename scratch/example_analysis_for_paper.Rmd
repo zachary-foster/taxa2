@@ -31,6 +31,8 @@ obj %>%
             node_color = n_obs,
             node_size = n_obs,
             node_color_axis_label = "# occurrences",
-            output_file = "example_analysis_figure.png")
+            output_file = c("example_analysis_figure.eps",
+                            "example_analysis_figure.pdf",
+                            "example_analysis_figure.tiff"))
 ```
 

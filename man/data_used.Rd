@@ -17,16 +17,17 @@ Get values available for
 in a \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} object used in expressions. Expressions are
 not evaluated and do not need to make sense.
 \preformatted{
-obj$data_used(...)
-data_used(obj, ...)}
+obj$data_used(...)}
 }
 \examples{
-taxa:::data_used(ex_taxmap, n_legs + dangerous == invalid_expression)
+# Get values for variables names used in expressions
+ex_taxmap$data_used(n_legs + dangerous == invalid_expression)
+ex_taxmap$data_used(length(unique(taxon_names)))
 
 }
 \seealso{
-Other accessors: \code{\link{all_names}},
-  \code{\link{get_data_frame}}, \code{\link{get_data}},
-  \code{\link{names_used}}
+Other NSE helpers: \code{\link{all_names}},
+  \code{\link{get_data}}, \code{\link{names_used}}
 }
+\concept{NSE helpers}
 \keyword{internal}

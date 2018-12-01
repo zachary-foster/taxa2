@@ -11,3 +11,6 @@ man-roxygen
 cran-comments.md
 scott_notes.md
 ^codemeta\.json$
+^CODE_OF_CONDUCT\.md$
+^hex_sticker$
+^presentations$

@@ -26,7 +26,7 @@ single vector of unique values.}
 \code{all_names(obj)} can be used, but it usually only makes sense to use data
 that has an associated taxon id.}
 
-\item{...}{Extra arguments are passed to the function.}
+\item{...}{Extra arguments are passed to the function \code{func}.}
 }
 \description{
 Apply a function to the leaves of each taxon. This is similar
@@ -38,8 +38,16 @@ leaves_apply(obj, func, subset = NULL, recursive = TRUE,
   simplify = FALSE, value = "taxon_indexes", ...)}
 }
 \examples{
-# Count number of leaves under each taxon
-leaves_apply(ex_taxmap, length, simplify = TRUE)
+# Count number of leaves under each taxon or its subtaxa
+leaves_apply(ex_taxmap, length)
 
-# Return
+# Count number of leaves under each taxon
+leaves_apply(ex_taxmap, length, recursive = FALSE)
+
+# Converting output of leaves to upper case
+leaves_apply(ex_taxmap, value = "taxon_names", toupper)
+
+# Passing arguments to the function
+leaves_apply(ex_taxmap, value = "taxon_names", paste0, collapse = ", ")
+
 }

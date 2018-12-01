@@ -19,8 +19,17 @@ option is used to specify what item to use in each list entry.
 \item vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
 }}
 
-\item{type}{(\code{"seq_id"}, \code{"taxon_id"}, \code{"taxon_name"}) What type of
-information can be used to look up the classifications.}
+\item{type}{What type of information can be used to look up the
+classifications. Takes one of the following values:
+\itemize{
+\item \code{"seq_id"}: A database sequence ID with an associated classification
+(e.g. NCBI accession numbers).
+\item \code{"taxon_id"}: A reference database taxon ID (e.g. a NCBI taxon ID)
+\item \code{"taxon_name"}: A single taxon name (e.g. "Homo sapiens" or "Primates")
+\item \code{"fuzzy_name"}: A single taxon name, but check for misspellings first.
+Only use if you think there are misspellings. Using \code{"taxon_name"} is
+faster.
+}}
 
 \item{column}{(\code{character} or \code{integer}) The name or index of the column that
 contains information used to lookup classifications. This only applies when
@@ -58,7 +67,7 @@ as a dataset, like those in \code{datasets}.}
 \item{use_database_ids}{(\code{TRUE}/\code{FALSE}) Whether or not to use downloaded
 database taxon ids instead of arbitrary, automatically-generated taxon ids.}
 
-\item{ask}{(\code{TRUE}/\code{FALSE}) Whether or not to promt the user for input.
+\item{ask}{(\code{TRUE}/\code{FALSE}) Whether or not to prompt the user for input.
 Currently, this would only happen when looking up the taxonomy of a taxon
 name with multiple matches. If \code{FALSE}, taxa with multiple hits are treated
 as if they do not exist in the database. This might change in the future if
@@ -66,11 +75,60 @@ we can find an elegant way of handling this.}
 }
 \description{
 Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-that are present in a dataset. Also can incorporate additional associated
-datasets.
+that are present in a table, list, or vector. Also can incorporate additional
+associated datasets.
 }
+\section{Failed Downloads}{
+ If you have invalid inputs or a download fails for
+another reason, then there will be a "unknown" taxon ID as a placeholder
+and failed inputs will be assigned to this ID. You can remove these using
+\code{\link[=filter_taxa]{filter_taxa()}} like so: \code{filter_taxa(result, taxon_ids != "unknown")}. Add
+\code{drop_obs = FALSE} if you want the input data, but want to remove the
+taxon.
+}
+
 \examples{
 \dontrun{
+
+  # Look up taxon names in vector from NCBI
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name")
+
+  # Look up taxon names in list from NCBI
+  lookup_tax_data(list("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name")
+
+  # Look up taxon names in table from NCBI
+  my_table <- data.frame(name = c("homo sapiens", "felis catus"),
+                         decency = c("meh", "good"))
+  lookup_tax_data(my_table, type = "taxon_name", column = "name")
+
+  # Look up taxon names from NCBI with fuzzy matching
+  lookup_tax_data(c("homo sapienss", "feles catus", "Solanacese"),
+                  type = "fuzzy_name")
+
+  # Look up taxon names from a different database
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name", database = "ITIS")
+
+  # Prevent asking questions for ambiguous taxon names
+  lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+                  type = "taxon_name", database = "ITIS", ask = FALSE)
+
+  # Look up taxon IDs from NCBI
+  lookup_tax_data(c("9689", "9694", "9643"), type = "taxon_id")
+
+  # Look up sequence IDs from NCBI
+  lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+                  type = "seq_id")
+
+  # Make up new taxon IDs instead of using the downloaded ones
+  lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+                  type = "seq_id", use_database_ids = FALSE)
+
+
+  # --- Parsing multiple datasets at once (advanced) ---
+  # The rest is one example for how to classify multiple datasets at once.
 
   # Make example data with taxonomic classifications
   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
@@ -117,5 +175,7 @@ datasets.
 }
 \seealso{
 Other parsers: \code{\link{extract_tax_data}},
+  \code{\link{parse_edge_list}},
   \code{\link{parse_tax_data}}
 }
+\concept{parsers}

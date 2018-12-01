@@ -49,3 +49,4 @@ Other taxonomy indexing functions: \code{\link{internodes}},
   \code{\link{stems}}, \code{\link{subtaxa}},
   \code{\link{supertaxa}}
 }
+\concept{taxonomy indexing functions}

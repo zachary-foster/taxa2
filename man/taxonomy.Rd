@@ -4,7 +4,7 @@
 \alias{taxonomy}
 \title{Taxonomy class}
 \usage{
-taxonomy(..., .list = NULL)
+taxonomy(..., .list = NULL, named_by_rank = FALSE)
 }
 \arguments{
 \item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
@@ -12,6 +12,12 @@ vectors.}
 
 \item{.list}{An alternate to the \code{...} input. Any number of object of class
 \code{\link[=hierarchy]{hierarchy()}} or character vectors in a list. Cannot be used with \code{...}.}
+
+\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a list of
+vectors with each vector named by ranks, include that rank info in the
+output object, so it can be accessed by \code{out$taxon_ranks()}. If \code{TRUE},
+taxa with different ranks, but the same name and location in the taxonomy,
+will be considered different taxa.}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}
@@ -20,7 +26,7 @@ An \code{R6Class} object of class \code{Taxonomy}
 Stores a taxonomy composed of \code{\link[=taxon]{taxon()}} objects organized in a tree
 structure. This differs from the \code{\link[=hierarchies]{hierarchies()}} class in how the \code{\link[=taxon]{taxon()}}
 objects are stored. Unlike \code{\link[=hierarchies]{hierarchies()}}, each taxon is only stored once
-and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edgelist}.
+and the relationships between taxa are stored in an \href{https://en.wikipedia.org/wiki/Adjacency_list}{edge list}.
 }
 \examples{
 
@@ -96,3 +102,4 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank}}, \code{\link{taxon}}
 }
+\concept{classes}

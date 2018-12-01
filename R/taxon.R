@@ -1,6 +1,7 @@
 #' Taxon class
 #'
-#' A class used to define a taxon.
+#' A class used to define a single taxon. Most other classes in the taxa package
+#' include one or more objects of this class.
 #'
 #' @export
 #' @param name a TaxonName object [taxon_name()] or character string. if character
@@ -84,22 +85,20 @@ Taxon <- R6::R6Class(
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
       cat(paste0(indent, paste0("  name: ",
-                                private$get_name() %||% "none", "\n")))
+                                self$get_name() %||% "none", "\n")))
       cat(paste0(indent, paste0("  rank: ",
-                                private$get_rank() %||% "none", "\n")))
+                                self$get_rank() %||% "none", "\n")))
       cat(paste0(indent, paste0("  id: ",
-                                private$get_id() %||% "none", "\n")))
+                                self$get_id() %||% "none", "\n")))
       cat(paste0(indent, paste0("  authority: ",
-                                private$authority %||% "none", "\n")))
+                                self$authority %||% "none", "\n")))
       invisible(self)
     },
 
     is_empty = function(x) {
       is.null(self$name) && is.null(self$rank) && is.null(self$id)
-    }
-  ),
+    },
 
-  private = list(
     get_name = function() {
       if ("TaxonName" %in% class(self$name)) {
         output <- self$name$name
@@ -126,5 +125,9 @@ Taxon <- R6::R6Class(
       }
       return(output)
     }
+
+  ),
+
+  private = list(
   )
 )

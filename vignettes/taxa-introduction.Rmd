@@ -22,7 +22,7 @@ eval = TRUE
 ```
 
 `taxa` defines taxonomic classes and functions to manipulate them. The goal is to use these classes as low
-level fundamental taxonomic classes that other R packages can build on and use.
+level fundamental taxonomic classes that other R packages can build on and supply robust manipulation functions (e.g. subsetting) that are broadly useful.
 
 There are two distinct types of classes in `taxa`:
 
@@ -42,17 +42,17 @@ cat(paste0('<img src="', flowchart_path, '" title="taxa classes diagram" width="
        width, '">'))
 ```
 
-Relationship between classes implemented in the taxa package. Diamond-tipped arrows indicate that objects of a one are used in another class. For example, a database object can stored in the taxon_rank, taxon_name, or taxon_id objects. A standard arrow indicates inheritance. For example, the taxmap class inherits the taxonomy class. `*` means that the object (e.g. a database object) can be replaced by a simple character vector. `?` means that the data is optional.
+Relationship between classes implemented in the taxa package. Diamond-tipped arrows indicate that objects of one class are used in another class. For example, a database object can stored in the taxon_rank, taxon_name, or taxon_id objects. A standard arrow indicates inheritance. For example, the taxmap class inherits the taxonomy class. `*` means that the object (e.g. a database object) can be replaced by a simple character vector. `?` means that the data is optional (Note: being able to replace objects with characters might be going away soon).
 
 ## Install
 
-CRAN version
+For the latest "stable" release, use the CRAN version:
 
 ```{r eval=FALSE}
 install.packages("taxa")
 ```
 
-Development version from GitHub
+For all the latest improvements, bug fixes, and bugs, you can download the development version:
 
 ```{r eval=FALSE}
 devtools::install_github("ropensci/taxa")
@@ -67,7 +67,7 @@ library("taxa")
 ### Minor component classes
 
 There are a few optional classes used to store information in other classes.
-In most cases, these can be replaced with simple character values but using them provides more information and potential functionality.
+These will probably mostly be of interest to developers rather than users.
 
 #### database
 
@@ -135,6 +135,7 @@ There is also a place to define an authority of the taxon.
 ```
 
 Instead of the name, rank, and ID classes, simple character vectors can be supplied.
+These will be converted to objects automatically.
 
 ```{r}
 (x <- taxon(
@@ -145,16 +146,27 @@ Instead of the name, rank, and ID classes, simple character vectors can be suppl
 ))
 ```
 
-The `taxa` class is just a list of `taxon` classes with some custom print methods.
-It is meant to store an arbitrary list of `taxon`.
+The `taxa` class is just a list of `taxon` classes.
+It is meant to store an arbitrary list of `taxon` objects.
 
 ```{r}
-(x <- taxon(
+grass <- taxon(
   name = taxon_name("Poa annua"),
   rank = taxon_rank("species"),
   id = taxon_id(93036)
-))
-taxa(x, x, x)
+)
+mammalia <- taxon(
+  name = taxon_name("Mammalia"),
+  rank = taxon_rank("class"),
+  id = taxon_id(9681)
+)
+plantae <- taxon(
+  name = taxon_name("Plantae"),
+  rank = taxon_rank("kingdom"),
+  id = taxon_id(33090)
+)
+
+taxa(grass, mammalia, plantae)
 ```
 
 ### The "hierarchy" class
@@ -212,7 +224,7 @@ hierarchies(hier1, hier2)
 ### The "taxonomy" class
 
 The `taxonomy` class stores unique `taxon` objects in a tree structure.
-Usually this kind of complex information would be the output of a file parsing function, but the code below shows how to construct a `taxonomy` object from scratch.
+Usually this kind of complex information would be the output of a file parsing function, but the code below shows how to construct a `taxonomy` object from scratch (you would not normally do this).
 
 ```{r}
 # define taxa
@@ -249,7 +261,9 @@ potato <- hierarchy(plantae, solanaceae, solanum, tuberosum)
 Unlike the `hierarchies` class, each unique `taxon` object is only represented once in the `taxonomy` object.
 Each taxon has a corresponding entry in an [edge list](https://en.wikipedia.org/wiki/Adjacency_list) that encode how it is related to other taxa.
 This makes `taxonomy` more compact, but harder to manipulate using standard indexing.
-To make manipulation easier, there are methods for `taxomomy` that can provide indexes in a taxonomic context.
+To make manipulation easier, there are functions like `filter_taxa` and `subtaxa` that will be covered later.
+In general, the `taxonomy` and `taxmap` objects (covered later) would be instantiated using a parser like `parse_tax_data`. 
+This is covered in detail in the parsing vignette.
 
 #### supertaxa
 
@@ -280,12 +294,27 @@ supertaxa(tax, subset = "m", value = "taxon_ranks")
 You can also subset based on a logical test:
 
 ```{r}
-supertaxa(tax, subset = taxon_ranks == "genus", value = "taxon_names")
+supertaxa(tax, subset = taxon_ranks == "genus", value = "taxon_ranks")
 ```
 
 
 The `subset` and `value` work the same for most of the following functions as well.
-See `tax$all_names()` for what can be used with `value`.
+See `all_names(tax)` for what can be used with `value` and `subset`.
+Note how `value` takes a character vector (`"taxon_ranks"`), but `subset` can use the same value (`taxon_ranks`) as a part of an expression.
+`taxon_ranks` is actually a function that is run automatically when its name is used this way:
+
+```{r}
+taxon_ranks(tax)
+```
+
+This is an example of [Non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) (NSE).
+NSE makes codes easier to read an write.
+The call to `supertaxa` could also have been written without NSE like so:
+
+```{r}
+supertaxa(tax, subset = taxon_ranks(tax) == "genus", value = "taxon_ranks")
+```
+
 
 #### subtaxa
 
@@ -296,6 +325,8 @@ The `subtaxa` function returns all subtaxa for each taxon in a `taxonomy` object
 ```{r}
 subtaxa(tax, value = "taxon_names")
 ```
+
+This and the following functions behaves much like `supertaxa`, so we will not go into the same details here.
 
 #### roots
 
@@ -328,6 +359,7 @@ It is basically the same as the `taxonomy` class, but with the following additio
 * A list called `data` that stores arbitrary user data associated with taxa
 * A list called `funcs` that stores user defined functions
 
+All the functions described above for the `taxonomy` class can be used with the `taxmap` class.
 
 ```{r}
 info <- data.frame(name = c("tiger", "cat", "mole", "human", "tomato", "potato"),
@@ -361,7 +393,7 @@ my_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
                     funcs = list(reaction = reaction))
 ```
 
-In most functions that work with taxmap objects, the names of list/vector datasets, table columns, or functions can be used as if they were separate variables on their own.
+In most functions that work with taxmap objects, the names of list/vector data sets, table columns, or functions can be used as if they were separate variables on their own (i.e. NSE).
 In the case of functions, instead of returning the function itself, the results of the functions are returned.
 To see what variables can be used this way, use `all_names`.
 
@@ -370,6 +402,7 @@ all_names(my_taxmap)
 ```
 
 For example using `my_taxmap$data$info$n_legs` or `n_legs` will have the same effect inside manipulation functions like `filter_taxa` described below.
+This is similar to how `taxon_ranks` was used in `supertaxa` in a previous section.
 To get the values of these variables, use `get_data`.
 
 ```{r}
@@ -388,10 +421,12 @@ For example, we can use `filter_taxa` to subset all taxa with a name starting wi
 ```{r}
 filter_taxa(my_taxmap, startsWith(taxon_names, "t"))
 ```
+
 There can be any number of filters that resolve to TRUE/FALSE vectors, taxon ids, or edge list indexes.
+For example, below is a combination of a TRUE/FALSE vectors and taxon id filter:
 
 ```{r eval=FALSE}
-filter_taxa(my_taxmap, startsWith(taxon_names, "t"), "r")
+filter_taxa(my_taxmap, startsWith(taxon_names, "t"), c("b", "r", "o"))
 ```
 
 There are many options for `filter_taxa` that make it very flexible.
@@ -413,6 +448,9 @@ You can choose to filter out taxa whose observations did not pass the filter as 
 filter_obs(my_taxmap, "info", dangerous == TRUE, drop_taxa = TRUE)
 ```
 
+Note how both the taxonomy and the associated data sets were filtered. 
+The `drop_obs` option can be used to specify which non-target (i.e. not `"info"`) data sets are filtered when taxa are removed.
+
 #### Sampling
 
 The functions `sample_n_obs` and `sample_n_taxa` are similar to `filter_obs` and `filter_taxa`, except taxa/observations are chosen  randomly.
@@ -420,7 +458,7 @@ All of the options of the "filter_" functions are available to the "sample_" fun
 
 ```{r}
 set.seed(1)
-sample_n_taxa(my_taxmap, 3)
+sample_n_taxa(my_taxmap, 3) # "3" here is a taxon index in the edge list
 set.seed(1)
 sample_n_taxa(my_taxmap, 3, supertaxa = TRUE)
 ```
@@ -428,7 +466,7 @@ sample_n_taxa(my_taxmap, 3, supertaxa = TRUE)
 
 #### Adding columns
 
-Adding columns to tabular datasets is done using `mutate_obs`.
+Adding columns to tabular data sets is done using `mutate_obs`.
 
 ```{r}
 mutate_obs(my_taxmap, "info",
@@ -436,9 +474,11 @@ mutate_obs(my_taxmap, "info",
            newer_col = paste0(new_col, "er!"))
 ```
 
+Note how you can use newly created columns in the same call.
+
 #### Subsetting columns
 
-Subsetting columns in tabular datasets is done using `select_obs`.
+Subsetting columns in tabular data sets is done using `select_obs`.
 
 ```{r}
 # Selecting a column by name
@@ -447,7 +487,7 @@ select_obs(my_taxmap, "info", dangerous)
 # Selecting a column by index
 select_obs(my_taxmap, "info", 3)
 
-# Selecting a column by regular expressions
+# Selecting a column by regular expressions (i.e. TRUE/FALSE)
 select_obs(my_taxmap, "info", matches("^dange"))
 ```
 
@@ -479,7 +519,8 @@ cat(paste0('<img src="', fig_path, '" title="parsing diagram" width="',
 ```
 
 
-The `parse_tax_data` and `lookup_tax_data` have, in addition to the functionality above, the ability to include additional data sets that are somehow associated with the source datasets (e.g. share a common identifier). Elements in these datasets will be assigned the taxa defined in the source data, so functions like `filter_taxa` and `filter_obs` will work on all of the dataset at once.
+The `parse_tax_data` and `lookup_tax_data` have, in addition to the functionality above, the ability to include additional data sets that are somehow associated with the source data sets (e.g. share a common identifier). Elements in these data sets will be assigned the taxa defined in the source data, so functions like `filter_taxa` and `filter_obs` will work on all of the data set at once.
+See the parsing vignette for more information.
 
 ## Parsing Hierarchy and hierarchies objects
 
@@ -548,8 +589,8 @@ span(ex_hierarchy3, ranks("> genus"), ranks("< phylum"))
 
 ## For more information
 
-This vignettte is meant to be just an outline of what `taxa` can do.
+This vignette is meant to be just an outline of what `taxa` can do.
 In the future, we plan to release additional, in-depth vignettes for specific topics.
-More informaiton for specific functions and examples can be found on their man pages by typing the name of the function prefixed by a `?` in an R session. For example, `?filter_taxa` will  pull up the help page for `filter_taxa`.
+More information for specific functions and examples can be found on their man pages by typing the name of the function prefixed by a `?` in an R session. For example, `?filter_taxa` will  pull up the help page for `filter_taxa`.
 
 

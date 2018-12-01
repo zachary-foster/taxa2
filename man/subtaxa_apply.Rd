@@ -43,4 +43,8 @@ subtaxa_apply(obj, func, subset = NULL, recursive = TRUE,
 \examples{
 # Count number of subtaxa in each taxon
 subtaxa_apply(ex_taxmap, length)
+
+# Paste all the subtaxon names for each taxon
+subtaxa_apply(ex_taxmap, value = "taxon_names",
+              recursive = FALSE, paste0, collapse = ", ")
 }

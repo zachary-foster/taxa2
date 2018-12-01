@@ -16,7 +16,11 @@ An object of type \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{ta
 \description{
 Sort the edge list and taxon list in \code{\link[=taxonomy]{taxonomy()}} or \code{\link[=taxmap]{taxmap()}} objects. See
 \code{\link[dplyr:arrange]{dplyr::arrange()}} for the inspiration for this function and more
-information.
+information. Calling the function using the \code{obj$arrange_taxa(...)} style
+edits "obj" in place, unlike most R functions. However, calling the function
+using the \code{arrange_taxa(obj, ...)} imitates R's traditional copy-on-modify
+semantics, so "obj" would not be changed; instead a changed version would be
+returned, like most R functions.
 \preformatted{
 obj$arrange_taxa(...)
 arrange_taxa(obj, ...)}
@@ -40,3 +44,4 @@ Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
+\concept{taxmap manipulation functions}

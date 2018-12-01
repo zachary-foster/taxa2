@@ -1,8 +1,60 @@
+#' Convert a table with an edge list to taxmap
+#'
+#' Converts a table containing an edge list into a [taxa::taxmap()] object.
+#' An "edge list" is two columns in a table, where each row defines a taxon-supertaxon relationship.
+#' The contents of the edge list will be used as taxon IDs.
+#' The whole table will be included as a data set in the output object.
+#'
+#' @param input A table containing an edge list encoded by two columns.
+#' @param taxon_id The name/index of the column containing the taxon IDs.
+#' @param supertaxon_id The name/index of the column containing the taxon IDs for the supertaxon of the IDs in `taxon_col`.
+#' @param taxon_name xxx
+#' @param taxon_rank xxx
+#'
+#' @family parsers
+#'
+#' @export
+parse_edge_list <- function(input, taxon_id, supertaxon_id, taxon_name, taxon_rank = NULL) {
+
+  # Create empty taxmap object
+  output <- taxmap()
+
+  # Make taxon ID characters
+  input[taxon_id] <- as.character(input[[taxon_id]])
+  input[supertaxon_id] <- as.character(input[[supertaxon_id]])
+
+  # Add edge list
+  output$edge_list <- data.frame(from = input[[supertaxon_id]],
+                                 to = input[[taxon_id]],
+                                 stringsAsFactors = FALSE)
+
+  # Add taxa
+  output$taxa <- lapply(seq_len(nrow(input)), function(i) {
+    my_name <- input[[taxon_name]][i]
+    if (is.null(taxon_rank)) {
+      my_rank <- NULL
+    } else {
+      my_rank <- input[[taxon_rank]][i]
+    }
+    my_id <- input[[taxon_id]][i]
+    taxon(name = my_name, rank = my_rank, id = my_id)
+  })
+  names(output$taxa) <- input[[taxon_id]]
+
+  # Add data
+  input <- dplyr::mutate(input, taxon_id = taxon_ids(output))
+  input <- dplyr::select(input, taxon_id, everything())
+  output$data <- list(input = input)
+
+  return(output)
+}
+
+
 #' Convert one or more data sets to taxmap
 #'
-#' Parses taxonomic information and associated data and stores it in a
-#' [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
-#' must be present somewhere in the first input.
+#' Reads taxonomic information and associated data in tables, lists, and vectors
+#' and stores it in a [taxa::taxmap()] object. [Taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms)
+#' must be present.
 #'
 #' @param tax_data A table, list, or vector that contains the names of taxa that
 #'   represent [taxonomic classifications](https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms).
@@ -54,6 +106,8 @@
 #'   `class_sep` option can be used to split the classification into data for
 #'   each taxon before matching. If `class_sep` is `NULL`, each match of
 #'   `class_regex` defines a taxon in the classification.
+#' @param class_reversed If `TRUE`, then classifications go from specific to general.
+#' For example: `Abditomys latidens : Muridae : Rodentia : Mammalia : Chordata`.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `class_regex` in the output object.
 #' @param mappings (named `character`) This defines how the taxonomic
@@ -75,12 +129,68 @@
 #' @param named_by_rank (`TRUE`/`FALSE`) If  `TRUE` and the input is a table
 #'   with columns named by ranks or a list of vectors with each vector named by
 #'   ranks, include that rank info in the output object, so it can be accessed
-#'   by `out$taxon_ranks()`. Cannot be used with the `sep`, `class_regex`, or
-#'   `class_key` options.
+#'   by `out$taxon_ranks()`. If `TRUE`, taxa with different ranks, but the same
+#'   name and location in the taxonomy, will be considered different taxa.
+#'   Cannot be used with the `sep`, `class_regex`, or `class_key` options.
 #'
 #' @family parsers
 #'
 #' @examples
+#'  # Read a vector of classifications
+#'  my_taxa <- c("Mammalia;Carnivora;Felidae",
+#'               "Mammalia;Carnivora;Felidae",
+#'               "Mammalia;Carnivora;Ursidae")
+#'  parse_tax_data(my_taxa, class_sep = ";")
+#'
+#'  # Read a list of classifications
+#'  my_taxa <- list("Mammalia;Carnivora;Felidae",
+#'                 "Mammalia;Carnivora;Felidae",
+#'                 "Mammalia;Carnivora;Ursidae")
+#'  parse_tax_data(my_taxa, class_sep = ";")
+#'
+#'  # Read classifications in a table in a single column
+#'  species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
+#'                                     "Mammalia;Carnivora;Felidae",
+#'                                     "Mammalia;Carnivora;Ursidae"),
+#'                            species_id = c("A", "B", "C"))
+#'  parse_tax_data(species_data, class_sep = ";", class_cols = "tax")
+#'
+#'  # Read classifications in a table in multiple columns
+#'  species_data <- data.frame(lineage = c("Mammalia;Carnivora;Felidae",
+#'                                         "Mammalia;Carnivora;Felidae",
+#'                                         "Mammalia;Carnivora;Ursidae"),
+#'                             species = c("Panthera leo",
+#'                                         "Panthera tigris",
+#'                                         "Ursus americanus"),
+#'                             species_id = c("A", "B", "C"))
+#'  parse_tax_data(species_data, class_sep = c(" ", ";"),
+#'                 class_cols = c("lineage", "species"))
+#'
+#'  # Read classification tables with one column per rank
+#'  species_data <- data.frame(class = c("Mammalia", "Mammalia", "Mammalia"),
+#'                             order = c("Carnivora", "Carnivora", "Carnivora"),
+#'                             family = c("Felidae", "Felidae", "Ursidae"),
+#'                             genus = c("Panthera", "Panthera", "Ursus"),
+#'                             species = c("leo", "tigris", "americanus"),
+#'                             species_id = c("A", "B", "C"))
+#'   parse_tax_data(species_data, class_cols = 1:5)
+#'   parse_tax_data(species_data, class_cols = 1:5,
+#'                  named_by_rank = TRUE) # makes `taxon_ranks()` work
+#'
+#'  # Classifications with extra information
+#'  my_taxa <- c("Mammalia_class_1;Carnivora_order_2;Felidae_genus_3",
+#'               "Mammalia_class_1;Carnivora_order_2;Felidae_genus_3",
+#'               "Mammalia_class_1;Carnivora_order_2;Ursidae_genus_3")
+#'  parse_tax_data(my_taxa, class_sep = ";",
+#'                 class_regex = "(.+)_(.+)_([0-9]+)",
+#'                 class_key = c(my_name = "taxon_name",
+#'                               a_rank = "taxon_rank",
+#'                               some_num = "info"))
+#'
+#'
+#'   # --- Parsing multiple datasets at once (advanced) ---
+#'   # The rest is one example for how to classify multiple datasets at once.
+#'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
 #'                                      "Mammalia;Carnivora;Felidae",
@@ -127,6 +237,7 @@
 parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                            class_sep = ";", sep_is_regex = FALSE,
                            class_key = "taxon_name", class_regex = "(.*)",
+                           class_reversed = FALSE,
                            include_match = TRUE,
                            mappings = c(), include_tax_data = TRUE,
                            named_by_rank = FALSE) {
@@ -160,6 +271,11 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   }
   if ("taxon_rank" %in% class_key && named_by_rank) {
     stop('"named_by_rank = TRUE" does not make sense when "taxon_rank" is in "class_key".')
+  }
+
+  # Check that column exists
+  for (a_col in class_cols) {
+    check_class_col(tax_data, a_col)
   }
 
   # Deal with edge cases
@@ -199,15 +315,22 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
   # Remove white space
   parsed_tax <- lapply(parsed_tax, trimws)
 
+  # Reverse order of taxa in classifications
+  if (class_reversed) {
+    parsed_tax <- lapply(parsed_tax, rev)
+  }
+
   # Check for NAs in input
   na_indexes <- which(vapply(parsed_tax, function(x) any(is.na(x)), logical(1)))
   if (length(na_indexes) > 0) {
-    warning(call. = FALSE,
-            'The following input indexes have `NA` in their classifications:\n',
+    message('The following ', length(na_indexes),' of ', length(parsed_tax),
+            ' (', to_percent(length(na_indexes) / length(parsed_tax)), ')',
+            ' input indexes have `NA` in their classifications:\n',
             limited_print(na_indexes, prefix = "  ", type = "silent"))
   }
 
   # Extract out any taxon info
+  expected_col_count <- count_capture_groups(class_regex) + 1
   if (is.null(class_sep)) { # Use mutliple matches of the class regex instead of sep
     taxon_info <- lapply(parsed_tax, function(x)
       data.frame(stringr::str_match_all(x, class_regex), stringsAsFactors = FALSE))
@@ -216,6 +339,12 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       validate_regex_match(x, class_regex)
       output <- data.frame(stringr::str_match(x, class_regex),
                            stringsAsFactors = FALSE)
+      if (ncol(output) != expected_col_count) { # stringr::str_match found no matches (all NA)
+        output <- as.data.frame(matrix(rep(NA_character_, nrow(output) * expected_col_count),
+                                       nrow = nrow(output), ncol = expected_col_count),
+                                stringsAsFactors = FALSE)
+        colnames(output) <- paste0("X", seq_len(expected_col_count))
+      }
       rownames(output) <- names(x)
       return(output)
     })
@@ -227,6 +356,7 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
       stats::setNames(x[[which(class_key == "taxon_name") + 1]],
                       x[[which(class_key == "taxon_rank") + 1]])
     })
+    named_by_rank <- TRUE
   } else if (named_by_rank)  {
     parsed_tax <- lapply(taxon_info, function(x) {
       stats::setNames(x[[which(class_key == "taxon_name") + 1]],
@@ -240,17 +370,19 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
   # combine taxon info into a single table
   taxon_info <- do.call(rbind, c(taxon_info, make.row.names = FALSE))
-  names(taxon_info) <- c("match", names(class_key))
+  if (is.null(names(class_key))) { # If all capture groups are not named
+    taxon_info_colnames <- make.unique(paste0(class_key, "_match"),
+                                       sep = "_")
+  } else { # Some capture groups might be unnamed still
+    taxon_info_colnames <- ifelse(names(class_key) == "",
+                                  paste0(class_key, "_match"),
+                                  names(class_key))
+    taxon_info_colnames <- make.unique(taxon_info_colnames, sep = "_")
+  }
+  names(taxon_info) <- c("match", taxon_info_colnames)
 
   # Create taxmap object
-  hier_objs <- lapply(parsed_tax, function(x) {
-    output <- hierarchy()
-    output$taxa <- lapply(seq_len(length(x)), function(i) {
-      taxon(x[i], rank = names(x[i]))
-    })
-    return(output)
-  })
-  output <- taxmap(.list = hier_objs)
+  output <- taxmap(.list = parsed_tax, named_by_rank = named_by_rank)
 
   # Add taxon ids to extracted info and add to data
   if (ncol(taxon_info) > 2) {
@@ -328,10 +460,9 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 
 #' Convert one or more data sets to taxmap
 #'
-#'
 #' Looks up taxonomic data from NCBI sequence IDs, taxon IDs, or taxon names
-#' that are present in a dataset. Also can incorporate additional associated
-#' datasets.
+#' that are present in a table, list, or vector. Also can incorporate additional
+#' associated datasets.
 #'
 #' @param tax_data A table, list, or vector that contain sequence IDs, taxon
 #'   IDs, or taxon names.
@@ -340,8 +471,15 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   * lists: There must be only one item per list entry unless the `column`
 #'   option is used to specify what item to use in each list entry.
 #'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
-#' @param type (`"seq_id"`, `"taxon_id"`, `"taxon_name"`) What type of
-#'   information can be used to look up the classifications.
+#' @param type What type of information can be used to look up the
+#'   classifications. Takes one of the following values:
+#'   * `"seq_id"`: A database sequence ID with an associated classification
+#'   (e.g. NCBI accession numbers).
+#'   * `"taxon_id"`: A reference database taxon ID (e.g. a NCBI taxon ID)
+#'   * `"taxon_name"`: A single taxon name (e.g. "Homo sapiens" or "Primates")
+#'   * `"fuzzy_name"`: A single taxon name, but check for misspellings first.
+#'   Only use if you think there are misspellings. Using `"taxon_name"` is
+#'   faster.
 #' @param column (`character` or `integer`) The name or index of the column that
 #'   contains information used to lookup classifications. This only applies when
 #'   a table or list is supplied to `tax_data`.
@@ -370,15 +508,62 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
 #'   as a dataset, like those in `datasets`.
 #' @param use_database_ids (`TRUE`/`FALSE`) Whether or not to use downloaded
 #'   database taxon ids instead of arbitrary, automatically-generated taxon ids.
-#' @param ask  (`TRUE`/`FALSE`) Whether or not to promt the user for input.
+#' @param ask  (`TRUE`/`FALSE`) Whether or not to prompt the user for input.
 #'   Currently, this would only happen when looking up the taxonomy of a taxon
 #'   name with multiple matches. If `FALSE`, taxa with multiple hits are treated
 #'   as if they do not exist in the database. This might change in the future if
 #'   we can find an elegant way of handling this.
 #'
+#' @section Failed Downloads: If you have invalid inputs or a download fails for
+#'   another reason, then there will be a "unknown" taxon ID as a placeholder
+#'   and failed inputs will be assigned to this ID. You can remove these using
+#'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
+#'   `drop_obs = FALSE` if you want the input data, but want to remove the
+#'   taxon.
+#'
 #' @family parsers
 #'
 #' @examples \dontrun{
+#'
+#'   # Look up taxon names in vector from NCBI
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name")
+#'
+#'   # Look up taxon names in list from NCBI
+#'   lookup_tax_data(list("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name")
+#'
+#'   # Look up taxon names in table from NCBI
+#'   my_table <- data.frame(name = c("homo sapiens", "felis catus"),
+#'                          decency = c("meh", "good"))
+#'   lookup_tax_data(my_table, type = "taxon_name", column = "name")
+#'
+#'   # Look up taxon names from NCBI with fuzzy matching
+#'   lookup_tax_data(c("homo sapienss", "feles catus", "Solanacese"),
+#'                   type = "fuzzy_name")
+#'
+#'   # Look up taxon names from a different database
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name", database = "ITIS")
+#'
+#'   # Prevent asking questions for ambiguous taxon names
+#'   lookup_tax_data(c("homo sapiens", "felis catus", "Solanaceae"),
+#'                   type = "taxon_name", database = "ITIS", ask = FALSE)
+#'
+#'   # Look up taxon IDs from NCBI
+#'   lookup_tax_data(c("9689", "9694", "9643"), type = "taxon_id")
+#'
+#'   # Look up sequence IDs from NCBI
+#'   lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+#'                   type = "seq_id")
+#'
+#'   # Make up new taxon IDs instead of using the downloaded ones
+#'   lookup_tax_data(c("AB548412", "FJ358423", "DQ334818"),
+#'                   type = "seq_id", use_database_ids = FALSE)
+#'
+#'
+#'   # --- Parsing multiple datasets at once (advanced) ---
+#'   # The rest is one example for how to classify multiple datasets at once.
 #'
 #'   # Make example data with taxonomic classifications
 #'   species_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
@@ -432,12 +617,16 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
   # Check that a supported database is being used
   supported_databases <- names(database_list)
+  database <- tolower(database)
   if (! database %in% supported_databases) {
     stop(paste0('The database "', database,
                 '" is not a valid database for looking up that taxonomy of ',
                 'sequnece ids. Valid choices include:\n',
                 limited_print(supported_databases, type = "silent")))
   }
+
+  # Check that column exists
+  check_class_col(tax_data, column)
 
   # Hidden parameters
   batch_size <- 100
@@ -450,16 +639,16 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     # Complain about failed queries
     failed_queries <- is.na(class_table)
     if (sum(failed_queries) > 0) {
-      error_msg <- paste0('The following ', sum(failed_queries),
-                          ' taxon name could not be looked up:\n  ',
-                          limited_print(names(failed_queries[failed_queries]),
-                                        type = "silent"))
+      failed_names <- unique(names(failed_queries[failed_queries]))
+      error_msg <- paste0('The following ', length(failed_names),
+                          ' unique inputs could not be looked up:\n  ',
+                          limited_print(failed_names, type = "silent"))
       if (ask) {
         error_msg <- paste0(error_msg, "\n",
-                            'This is probably means they dont exist in the database "', database, '".')
+                            'This probably means they dont exist in the database "', database, '".')
       } else {
         error_msg <- paste0(error_msg, "\n",
-                            'This is probably means they dont exist in the database "', database,
+                            'This probably means they dont exist in the database "', database,
                             '" or have multiple matches. ',
                             'Use "ask = TRUE" to specify which is the correct match when multiple matches occur.')
       }
@@ -487,8 +676,28 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
 
 
   use_taxon_id <- function(ids) {
-    result <- map_unique(as_id(ids, database), taxize::classification, ask = FALSE, rows = 1,
-                         db = database)
+    message("Looking up classifications for ", length(unique(ids)),
+            ' unique taxon IDs from database "', database, '"...')
+
+    # Look up classifications
+    lookup_all <- function(ids) {
+      lookup_one <- function(id) {
+        taxize::classification(id, ask = FALSE, rows = 1, db = database,
+                               message = FALSE)
+      }
+      output <- progress_lapply(ids, lookup_one)
+      return(output)
+    }
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                           type = "message"),
+             error = function(e) stop(e))
+
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
     format_class_table(result)
   }
 
@@ -496,36 +705,97 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
     # Check that a supported database is being used
     supported_databases <- c("ncbi")
     if (! database %in% supported_databases) {
-      stop(paste0('The database "', database,
+      stop(call. = FALSE,
+           paste0('The database "', database,
                   '" is not a valid database for looking up that taxonomy of ',
                   'sequnece ids. Valid choices include:\n',
                   limited_print(supported_databases, type = "silent")))
     }
 
     # Look up classifications
-    result <- stats::setNames(
-      unlist(lapply(ids, function(i) {
-        taxize::classification(taxize::genbank2uid(i)[1], db = database)
-      }), recursive = FALSE),
-      ids)
+    message("Looking up classifications for ", length(unique(ids)), " unique sequence IDs from NCBI...")
+    lookup_all <- function(ids) {
+      lookup_one <- function(id) {
+        taxize::classification(taxize::genbank2uid(id)[1], db = database)
+      }
+      output <- progress_lapply(ids, lookup_one)
+      return(output)
+    }
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(ids, lookup_all),
+                                  type = "message"),
+             error = function(e) stop(e))
 
+    # Remove repeated messages (e.g. no NCBI API key)
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), ids)
     format_class_table(result)
   }
 
-  use_taxon_name <- function(names) {
+  use_taxon_name <- function(my_names) {
+    message("Looking up classifications for ", length(unique(my_names)),
+            ' unique taxon names from database "', database, '"...')
+
     # Look up classifications
-    if (ask) {
-      result <- map_unique(names, taxize::classification, ask = TRUE, db = database)
-    } else {
-      result <- map_unique(names, taxize::classification, ask = FALSE, db = database)
+    lookup_all <- function(my_names) {
+      lookup_one <- function(my_name) {
+        taxize::classification(my_name, ask = ask, db = database,
+                               messages = FALSE)
+       }
+      output <- progress_lapply(my_names, lookup_one)
+      return(output)
+    }
+    tryCatch(msgs <- utils::capture.output(raw_result <- map_unique(my_names, lookup_all),
+                                  type = "message"),
+             error = function(e) stop(e))
+
+    # Remove repeated messages (e.g. no NCBI API key)
+    on.exit(message(paste0(unique(msgs), collapse = "\n")))
+
+    # Reformat result
+    result <- stats::setNames(unlist(raw_result, recursive = FALSE), my_names)
+    format_class_table(result)
+  }
+
+  use_taxon_name_fuzzy <- function(my_names) {
+    message("Looking up classifications for ", length(unique(my_names)),
+            ' unique taxon names from database "', database, '" using fuzzy name matching...')
+
+    # Look up similar taxon names
+    corrected <- map_unique(my_names, correct_taxon_names, database = database)
+
+    # Check for not found names
+    not_found <- unique(names(corrected[is.na(corrected)]))
+    if (length(not_found) > 0) {
+      warning(call. = FALSE,
+              "No taxon name was found that was similar to the following ",
+              length(not_found), " inputs:\n  ",
+              limited_print(type = "silent", not_found))
+
     }
 
-    format_class_table(result)
+    # Replace not found values with original input
+    corrected[is.na(corrected)] <- names(corrected[is.na(corrected)])
+
+    # Check for changed names
+    changed <- tolower(names(corrected)) != tolower(corrected) & ! is.na(corrected) & ! is.na(names(corrected))
+    if (any(changed)) {
+      before <- names(corrected[changed])
+      after <- corrected[changed]
+      change_char <- unique(paste0('"', before, '" -> "', after, '"'))
+      message("The following ", length(change_char), " names were corrected before looking up classifications:\n  ",
+              limited_print(type = "silent", change_char))
+    }
+
+    # Run standard taxon name lookup
+    use_taxon_name(corrected)
   }
 
   lookup_funcs <- list("seq_id" = use_seq_id,
                        "taxon_id" = use_taxon_id,
-                       "taxon_name" = use_taxon_name)
+                       "taxon_name" = use_taxon_name,
+                       "fuzzy_name" = use_taxon_name_fuzzy)
 
   # Get query information
   if (is.data.frame(tax_data)) { # is table
@@ -654,11 +924,12 @@ get_sort_var <- function(data, var) {
 
 #' Extracts taxonomy info from vectors with regex
 #'
-#' Parse taxonomic information in a character vector into a [taxmap()] object.
+#' Convert taxonomic information in a character vector into a [taxmap()] object.
 #' The location and identity of important information in the input is specified
-#' using a regular expression with capture groups and a corresponding key. An
-#' object of type [taxmap()] is returned containing the specified information.
-#' See the `key` option for accepted sources of taxonomic information.
+#' using a [regular expression](https://en.wikipedia.org/wiki/Regular_expression)
+#' with capture groups and a corresponding key. An object of type [taxmap()] is
+#' returned containing the specified information. See the `key` option for
+#' accepted sources of taxonomic information.
 #'
 #' @param tax_data A vector from which to extract taxonomy information.
 #' @param key (`character`) The identity of the capturing groups defined using
@@ -671,6 +942,9 @@ get_sort_var <- function(data, var) {
 #'   * `taxon_name`: The name of a taxon (e.g. "Mammalia" or "Homo sapiens").
 #'   Not necessarily unique, but interpretable by a particular `database`.
 #'   Requires an internet connection.
+#'   * `fuzzy_name`: The name of a taxon, but check for misspellings first.
+#'   Only use if you think there are misspellings. Using `"taxon_name"` is
+#'   faster.
 #'   * `class`: A list of taxon information that constitutes the full taxonomic
 #'   classification (e.g. "K_Mammalia;P_Carnivora;C_Felidae"). Individual
 #'   taxa are separated by the `class_sep` argument and the information is
@@ -689,6 +963,8 @@ get_sort_var <- function(data, var) {
 #'   `"info"` can be used multiple times. Each term must be one of those
 #'   described below:
 #'   * `taxon_name`: The name of a taxon. Not necessarily unique.
+#'   * `taxon_rank`: The rank of the taxon. This will be used to add rank info
+#'   into the output object that can be accessed by `out$taxon_ranks()`.
 #'   * `info`: Arbitrary taxon info you want included in the output. Can be used
 #'   more than once.
 #' @param class_regex (`character` of length 1)
@@ -713,12 +989,19 @@ get_sort_var <- function(data, var) {
 #' @param database (`character` of length 1) The name of the database that
 #'   patterns given in `parser` will apply to. Valid databases include "ncbi",
 #'   "itis", "eol", "col", "tropicos", "nbn", and "none". `"none"` will cause no
-#'   database to be quired; use this if you want to not use the internet. NOTE:
+#'   database to be queried; use this if you want to not use the internet. NOTE:
 #'   Only `"ncbi"` has been tested extensively so far.
 #' @param include_match (`logical` of length 1) If `TRUE`, include the part of
 #'   the input matched by `regex` in the output object.
 #' @param include_tax_data (`TRUE`/`FALSE`) Whether or not to include `tax_data`
 #'   as a dataset.
+#'
+#' @section Failed Downloads: If you have invalid inputs or a download fails for
+#'   another reason, then there will be a "unknown" taxon ID as a placeholder
+#'   and failed inputs will be assigned to this ID. You can remove these using
+#'   [filter_taxa()] like so: `filter_taxa(result, taxon_ids != "unknown")`. Add
+#'   `drop_obs = FALSE` if you want the input data, but want to remove the
+#'   taxon.
 #'
 #' @family parsers
 #'
@@ -799,7 +1082,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   # Complain about failed matches
   failed <- which(apply(is.na(parsed_input), MARGIN = 1, FUN = all))
   if (length(failed) > 0) {
-    warning(paste0("The following input indexes failed to match the regex supplied:\n",
+    warning(paste0("The following ", length(failed), " input indexes failed to match the regex supplied:\n",
                    limited_print(failed, type = "silent")), call. = FALSE)
     parsed_input <- parsed_input[-failed, ]
   }
@@ -821,7 +1104,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
 
 
   # Use lookup_tax_data for taxon names, ids, and sequence ids
-  if (any(key %in% c("taxon_name", "taxon_id", "seq_id"))) {
+  if (any(key %in% c("taxon_name", "taxon_id", "seq_id", "fuzzy_name"))) {
     my_type <- key[key != "info"][1]
     output <- lookup_tax_data(tax_data = parsed_input, type = my_type,
                               column = names(my_type),
@@ -860,7 +1143,7 @@ validate_regex_match <- function(input, regex) {
          paste0(collapse = "",
                 c("The following ", sum(not_matching), " of ", length(input),
                   " input(s) could not be matched by the regex supplied:\n",
-                  limited_print(input, prefix = "  ", type = "silent"))))
+                  limited_print(input[not_matching], prefix = "  ", type = "silent"))))
   }
 }
 
@@ -890,7 +1173,7 @@ validate_regex_key_pair <- function(regex, key, multiple_allowed) {
   key_var_name <- deparse(substitute(key))
 
   # Check that the keys used are valid
-  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id")
+  allowed <- c("taxon_id", "taxon_name", "info", "class", "seq_id", "fuzzy_name", "taxon_rank")
   invalid_keys <- key[! key %in% allowed]
   if (length(invalid_keys) > 0) {
     stop(paste0('Invalid key value "', invalid_keys[1], '" given.\n',
@@ -944,3 +1227,113 @@ count_capture_groups <- function(regex) {
   ncol(stringr::str_match(string = "", pattern = new_regex)) - 1
 }
 
+
+
+#' Check for name/index in input data
+#'
+#' Used by parse_tax_data and lookup_tax_data to check that columm/class_col is valid for the input data
+#'
+#' @param tax_data A table, list, or vector that contain sequence IDs, taxon
+#'   IDs, or taxon names.
+#'   * tables: The `column` option must be used to specify which column
+#'   contains the sequence IDs, taxon IDs, or taxon names.
+#'   * lists: There must be only one item per list entry unless the `column`
+#'   option is used to specify what item to use in each list entry.
+#'   * vectors: simply a vector of sequence IDs, taxon IDs, or taxon names.
+#' @param column (`character` or `integer`) The name or index of the column that
+#'   contains information used to lookup classifications. This only applies when
+#'   a table or list is supplied to `tax_data`.
+#'
+#' @keywords internal
+check_class_col <- function(tax_data, column) {
+  if (is.data.frame(tax_data)) {
+    if (is.numeric(column)) {
+      if (column < 1 || column > ncol(tax_data)) {
+        stop(call. = FALSE,
+             'Column index "', column, '" out of bounds. Must be between 1 and ',
+             ncol(tax_data), '.')
+      }
+    } else if (! column %in% colnames(tax_data)) {
+      stop(call. = FALSE,
+           'No column "', column, '" in input table. Valid columns include:\n  ',
+           limited_print(colnames(tax_data), type = "silent"))
+    }
+  } else if (is.list(tax_data) || is.vector(tax_data)) {
+    my_lengths <- vapply(tax_data, length, numeric(1))
+    had_col_name <- vapply(tax_data, function(x) column %in% names(x), logical(1))
+    if (is.numeric(column)) {
+      if (column < 1 || any(column > my_lengths)) {
+        stop(call. = FALSE,
+             'Column index "', column, '" out of bounds for inputs:\n',
+             limited_print(which(column > my_lengths), type = "silent"))
+      }
+    } else if (! all(had_col_name)) {
+      stop(call. = FALSE,
+           'No item named "', column, '" in the following inputs:\n',
+           limited_print(which(! had_col_name), type = "silent"))
+    }
+  } else {
+    stop(call. = FALSE,
+         'Cannot read input of class "', class(tax_data)[1], '". Input must be a table, list or vector.')
+  }
+}
+
+
+#' Look up official names from potentially misspelled names
+#'
+#' Look up official names from potentially misspelled names using Global Names
+#' Resolver (GNR). If a result from the chosen database is present, then it is
+#' used, otherwise the NCBI result is used and if that does not exist, then the
+#' first result is used. Names with no match will return NA.
+#'
+#' @param names Potentially misspelled taxon names
+#' @param database The database the names are being looked up for. If `NULL`, do
+#'   not consider database.
+#'
+#' @return vector of names
+#'
+#' @keywords internal
+correct_taxon_names <- function(names, database = "ncbi") {
+  # Look up what the database is called in GNR
+  database_key <-  c(itis = "ITIS",
+                     ncbi = "NCBI",
+                     eol = "EOL",
+                     col = "Catalogue of Life",
+                     tropicos = "Tropicos - Missouri Botanical Garden",
+                     gbif = "GBIF Backbone Taxonomy",
+                     wiki = "Wikispecies")
+  if (! is.null(database)) {
+    if (! tolower(database) %in% names(database_key)) {
+      warning(call. = FALSE,
+              'Can not check taxon names for database "', database,
+              '". Using NCBI instead.')
+      database = "ncbi"
+    }
+    gnr_database <- database_key[tolower(database)]
+  }
+
+  # Query GRN
+  result <- taxize::gnr_resolve(names)
+
+  # Pick results
+  pick_one <- function(n) {
+    one_tax_data <- result[result$user_supplied_name == n, ]
+    if (nrow(one_tax_data) == 0) {
+      return(NA_character_)
+    } else if (nrow(one_tax_data) == 1) {
+      return(one_tax_data$matched_name)
+    } else if (is.null(database) || ! gnr_database %in% one_tax_data$data_source_title) { # no database preference
+      most_common <- names(sort(table(one_tax_data$matched_name), decreasing = TRUE)[1])
+      if (is.null(most_common)) {
+        return(NA_character_)
+      } else {
+        return(most_common)
+      }
+    } else {
+      return(one_tax_data$matched_name[one_tax_data$data_source_title == gnr_database][1])
+    }
+  }
+
+  vapply(names, pick_one, character(1))
+
+}

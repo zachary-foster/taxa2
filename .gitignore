@@ -4,3 +4,10 @@
 .Ruserdata
 scott_notes.md
 vignettes/*_cache
+scratch/*.tiff
+scratch/*.tif
+scratch/*.png
+scratch/*.eps
+scratch/*.pdf
+scratch/*.html
+vignettes/.build.timestamp

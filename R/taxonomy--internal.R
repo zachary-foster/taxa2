@@ -14,11 +14,52 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
                                                       stringsAsFactors=FALSE)))
   }
 
+  # Convert to character vecotor and use parse_raw_heirarchies_to_taxonomy
+  taxon_names <- lapply(heirarchies,
+                        function(heirarchy) vapply(heirarchy$taxa,
+                                                   function(taxon) paste0(taxon$get_name(),
+                                                                          taxon$get_rank(),
+                                                                          taxon$get_id(),
+                                                                          taxon$authority),
+                                                   character(1)))
+  input_taxa <- unlist(lapply(heirarchies, function(x) x$taxa))
+  names(input_taxa) <- unlist(taxon_names)
+  output <- parse_raw_heirarchies_to_taxonomy(taxon_names)
+
+  # Replace taxa list with objects from input
+  output$taxa <- stats::setNames(input_taxa[vapply(output$taxa, function(x) x$name$name, character(1))],
+                                 names(output$taxa))
+
+  return(output)
+}
+
+
+#' Infer edge list from hierarchies composed of character vectors
+#'
+#' Infer edge list and unique taxa from hierarchies.
+#'
+#' @param A list of character vectors.
+#' @param named_by_rank (`TRUE`/`FALSE`) If  `TRUE` and the input is a list of
+#'   vectors with each vector named by ranks, include that rank info in the
+#'   output object, so it can be accessed by `out$taxon_ranks()`. If `TRUE`,
+#'   taxa with different ranks, but the same name and location in the taxonomy,
+#'   will be considered different taxa.
+#'
+#' @keywords internal
+parse_raw_heirarchies_to_taxonomy <- function(heirarchies, named_by_rank = FALSE) {
+
+  # Look for input edge cases
+  total_taxa_count <- sum(vapply(heirarchies, length, numeric(1)))
+  if (length(heirarchies) == 0 || total_taxa_count == 0) {
+    return(list(taxa = list(), edge_list = data.frame(from = character(), to = character(),
+                                                      stringsAsFactors=FALSE)))
+  }
+
   # This is used to store both taxon names and their IDs once assigned. The IDs will be added as
   # names to the taxon character vectors
   taxon_names <- lapply(heirarchies,
-                        function(heirarchy) stats::setNames(c(NA, vapply(heirarchy$taxa,
-                                                                         function(taxon) taxon$name$name, character(1))), NA))
+                        function(heirarchy) stats::setNames(c(NA, heirarchy), NA))
+
   # initialize output lists
   unique_taxa <- list()
   edge_list <- list() # matrix?
@@ -33,7 +74,13 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
   process_one_level <- function(depth) {
 
     # Identify unique pairs of taxon ids and unclassified taxon names and make new IDs
-    all_pairs <- lapply(taxon_names[heirarchies_depths >= depth], function(x) c(names(x)[depth - 1], x[depth]))
+    if (named_by_rank) { # If names are ranks, then consider rank part of the taxon name
+      all_pairs <- lapply(taxon_names[heirarchies_depths >= depth],
+                          function(x) c(names(x)[depth - 1], paste0(names(x)[depth], x[depth])))
+    } else {
+      all_pairs <- lapply(taxon_names[heirarchies_depths >= depth],
+                          function(x) c(names(x)[depth - 1], x[depth]))
+    }
     unique_encoding <- match(all_pairs, unique(all_pairs))
     new_ids <- unique_encoding + max_id
     max_id <<- max(new_ids)
@@ -46,9 +93,15 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
     # The `depth - 1` is because `NA` was added to each hierachy in `taxon_names` so the indexes
     # are one off.
     taxon_objects <- lapply(heirarchies[heirarchies_depths > (depth - 1)],
-                            function(heirarchy) heirarchy$taxa[[depth - 1]])
-    new_taxa <- stats::setNames(taxon_objects[match(unique(unique_encoding), unique_encoding)],
-                                unique(new_ids))
+                            function(heirarchy) heirarchy[depth - 1])
+    taxon_objects <- taxon_objects[match(unique(unique_encoding), unique_encoding)] # make unique
+    if (named_by_rank) {
+      taxon_objects <- mapply(taxon, taxon_objects, vapply(taxon_objects, names, character(1)))
+    } else {
+      taxon_objects <- mapply(taxon, taxon_objects)
+    }
+    new_taxa <- stats::setNames(taxon_objects, unique(new_ids))
+
 
     # TODO: either check that unique taxa identified by name are actually unique when considering
     # all fields (e.g. `id`) or rework function to optionally consider all fields with identifiying

@@ -6,11 +6,11 @@ Description: Provides taxonomic classes for
     with data. Methods provided are "taxonomically aware", in
     that they know about ordering of ranks, and methods that
     filter based on taxonomy also filter associated data.
-Version: 0.2.0.9111
+Version: 0.3.1.9001
 Authors@R: c(
-    person("Scott", "Chamberlain", role = c("aut", "cre"), 
+    person("Scott", "Chamberlain", role = "aut", 
        email = "myrmecocystus+r@gmail.com", comment = c(ORCID = "0000-0003-1444-9135")),
-    person("Zachary", "Foster", role = "aut", 
+    person("Zachary", "Foster", role = c("aut", "cre"), 
        email = "zacharyfoster1989@gmail.com", comment = c(ORCID = "0000-0002-5075-0948"))
     )
 Depends:
@@ -18,6 +18,7 @@ Depends:
 VignetteBuilder: knitr
 LazyLoad: yes
 LazyData: yes
+Encoding: UTF-8
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/taxa
 BugReports: https://github.com/ropensci/taxa/issues
@@ -33,13 +34,14 @@ Imports:
     rlang,
     stringr,
     crayon,
-    tidyr
+    tidyr,
+    utils,
+    taxize
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
-    rmarkdown (>= 0.9.6),
-    taxize
-RoxygenNote: 6.0.1
+    rmarkdown (>= 0.9.6)
+RoxygenNote: 6.1.0
 X-schema.org-applicationCategory: Taxonomy
 X-schema.org-keywords: taxonomy, biology, hierarchy
 X-schema.org-isPartOf: https://ropensci.org

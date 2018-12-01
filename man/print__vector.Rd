@@ -4,10 +4,13 @@
 \alias{print__vector}
 \title{Generic vector printer}
 \usage{
-print__vector(obj, name, prefix, max_width, max_rows, type = class(obj)[1])
+print__vector(obj, data, name, prefix, max_width, max_rows,
+  type = class(data)[1])
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 
@@ -37,4 +40,5 @@ Other taxmap print methods: \code{\link{print__character}},
   \code{\link{print__numeric}},
   \code{\link{print__ordered}}, \code{\link{print__tbl_df}}
 }
+\concept{taxmap print methods}
 \keyword{internal}

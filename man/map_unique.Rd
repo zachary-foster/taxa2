@@ -15,7 +15,6 @@ map_unique(input, func, ...)
 }
 \description{
 Runs a function on unique values of a list/vector and then reformats the
-output so there is a one-to-one relationship with the input. Basically
-imitates \code{lapply}.
+output so there is a one-to-one relationship with the input.
 }
 \keyword{internal}

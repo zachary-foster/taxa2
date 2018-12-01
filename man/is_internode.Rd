@@ -19,7 +19,11 @@ obj$is_internode()
 is_internode(obj)}
 }
 \examples{
+# Test for which taxon IDs correspond to internodes
 is_internode(ex_taxmap)
+
+# Filter out internodes
+filter_taxa(ex_taxmap, ! is_internode)
 
 }
 \seealso{
@@ -34,3 +38,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

@@ -32,8 +32,8 @@ single vector of unique observation indexes.}
 }
 \value{
 If \code{simplify = FALSE}, then a list of vectors of observation indexes
-are returned corresponding to the \code{target} argument. If \code{simplify = TRUE},
-then the observation indexes for all \code{target} taxa are returned in a single
+are returned corresponding to the \code{data} argument. If \code{simplify = TRUE},
+then the observation indexes for all \code{data} taxa are returned in a single
 vector.
 }
 \description{
@@ -53,7 +53,7 @@ obs(ex_taxmap, "info")
 obs(ex_taxmap, "info", subset = 1:2)
 
 # Get only a subset of taxon IDs
-obs(ex_taxmap, "info", subset = c("1", "2"))
+obs(ex_taxmap, "info", subset = c("b", "c"))
 
 # Get only a subset of taxa using logical tests
 obs(ex_taxmap, "info", subset = taxon_ranks == "genus")

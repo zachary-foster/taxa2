@@ -170,16 +170,16 @@ all_functions <- function() {
 #' @keywords internal
 check_taxmap_data <- function(obj) {
   #  Check that column names are not the names of functions
-  data_names <- all_names(obj, funcs = FALSE, builtin_funcs = FALSE)
-  suspect_names <- data_names[data_names %in% all_functions()]
-  if (length(suspect_names) > 0) {
-    warning(paste0("Naming table columns/vectors/lists the same name as ",
-                   "functions can sometimes interfere with non-standard ",
-                   "evaluation. The following data shares names with ",
-                   "functions:\n", limited_print(names(suspect_names),
-                                                 type = "silent")),
-            call. = FALSE)
-  }
+  # data_names <- all_names(obj, funcs = FALSE, builtin_funcs = FALSE)
+  # suspect_names <- data_names[data_names %in% all_functions()]
+  # if (length(suspect_names) > 0) {
+  #   warning(paste0("Naming table columns/vectors/lists the same name as ",
+  #                  "functions can sometimes interfere with non-standard ",
+  #                  "evaluation. The following data shares names with ",
+  #                  "functions:\n", limited_print(names(suspect_names),
+  #                                                type = "silent")),
+  #           call. = FALSE)
+  # }
 
   return(invisible(NULL))
 }
@@ -220,3 +220,79 @@ as_id <- function(ids, database, ...) {
   id_constructors[[database]](ids, ...)
 }
 
+
+#' lappy with progress bars
+#'
+#' Immitates lapply with optional progress bars
+#'
+#' @param X The thing to iterate over
+#' @param FUN The function to apply to each element
+#' @param progress (logical of length 1) Whether or not to print a progress bar. Default is to only print a progress bar during interactive use.
+#' @param ... Passed to function
+#'
+#' @return list
+#' @keywords internal
+progress_lapply <- function(X, FUN, progress = interactive(), ...) {
+  if (progress) {
+    progress_bar <- utils::txtProgressBar(min = 0, max = length(X), style = 3)
+    one_iteration <- function(index) {
+      output <- FUN(X[[index]], ...)
+      utils::setTxtProgressBar(progress_bar, index)
+      return(output)
+    }
+    output <- lapply(seq_len(length(X)), one_iteration)
+    close(progress_bar)
+  } else {
+    output <- lapply(X, FUN, ...)
+  }
+
+  return(output)
+}
+
+
+#' Check that a unknown object can be used with taxmap
+#'
+#' Check that a unknown object can be assigned taxon IDs and filtered.
+#'
+#' @param obj
+#'
+#' @return TRUE/FALSE
+#'
+#' @keywords internal
+can_be_used_in_taxmap <- function(obj) {
+  # Check if is one-dimension, with a known length (i.e. works with length function)
+  obj_length <- tryCatch({length(obj)}, error = function(e) return(NA))
+  if (is.na(obj_length)) {
+    return(FALSE)
+  }
+
+  # Can be subset (i.e. [ changes the value of length)
+  if (obj_length > 0) {
+    new_length <- tryCatch({length(obj[numeric(0)])}, error = function(e) return(NA))
+    if (is.na(new_length) || new_length != 0) {
+      return(FALSE)
+    }
+    new_length <- tryCatch({length(obj[c(1, 1)])}, error = function(e) return(NA))
+    if (is.na(new_length) || new_length != 2) {
+      return(FALSE)
+    }
+  }
+
+  # Has per-element names that can be set (i.e. works with names and names<- function)
+  my_names <- tryCatch({names(obj)}, error = function(e) return(NA))
+  if (length(my_names) == 1 && is.na(my_names)) {
+    return(FALSE)
+  }
+  if (obj_length > 0) {
+    new_names <- tryCatch({
+      names(obj)[1] <- "name_test"
+      names(obj)[1]
+    },
+    error = function(e) return(NA))
+    if (new_names != "name_test") {
+      return(FALSE)
+    }
+  }
+
+  return(TRUE)
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxmap--printers.R
 \name{desc_font}
 \alias{desc_font}
-\title{Descripton formatting in print methods}
+\title{Description formatting in print methods}
 \usage{
 desc_font(text)
 }
@@ -14,7 +14,9 @@ A simple wrapper to make changing the formatting of text printed easier.
 This is used for non-data, formatting characters
 }
 \seealso{
-Other printer fonts: \code{\link{name_font}},
-  \code{\link{punc_font}}, \code{\link{tid_font}}
+Other printer fonts: \code{\link{error_font}},
+  \code{\link{name_font}}, \code{\link{punc_font}},
+  \code{\link{tid_font}}
 }
+\concept{printer fonts}
 \keyword{internal}

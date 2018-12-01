@@ -19,7 +19,11 @@ obj$is_stem()
 is_stem(obj)}
 }
 \examples{
+# Test which taxon IDs correspond to stems
 is_stem(ex_taxmap)
+
+# Filter out stems
+filter_taxa(ex_taxmap, ! is_stem)
 
 }
 \seealso{
@@ -34,3 +38,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

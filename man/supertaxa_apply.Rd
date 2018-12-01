@@ -46,7 +46,12 @@ supertaxa_apply(obj, func, subset = NULL, recursive = TRUE,
   na = FALSE, ....)}
 }
 \examples{
+# Get number of supertaxa that each taxon is contained in
+supertaxa_apply(ex_taxmap, length)
+
 # Get classifications for each taxon
+# Note; this can be done with `classifications()` easier
 supertaxa_apply(ex_taxmap, paste, collapse = ";", include_input = TRUE,
                 value = "taxon_names")
+
 }

@@ -4,10 +4,12 @@
 \alias{print__character}
 \title{Print a character}
 \usage{
-print__character(obj, name, prefix, max_width, max_rows)
+print__character(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 
@@ -35,4 +37,5 @@ Other taxmap print methods: \code{\link{print__data.frame}},
   \code{\link{print__ordered}},
   \code{\link{print__tbl_df}}, \code{\link{print__vector}}
 }
+\concept{taxmap print methods}
 \keyword{internal}

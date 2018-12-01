@@ -5,8 +5,8 @@
 \title{Print a subset of a character vector}
 \usage{
 limited_print(chars, prefix = "", sep = ", ", mid = " ... ",
-  trunc_char = "[truncated]", max_chars = getOption("width") - nchar(prefix)
-  - 5, type = "message")
+  trunc_char = "[truncated]", max_chars = getOption("width") -
+  nchar(prefix) - 5, type = "message")
 }
 \arguments{
 \item{chars}{(\code{character}) What to print.}
@@ -16,7 +16,7 @@ limited_print(chars, prefix = "", sep = ", ", mid = " ... ",
 
 \item{sep}{What to put between consecutive values}
 
-\item{mid}{What is used to indicate ommited values}
+\item{mid}{What is used to indicate omitted values}
 
 \item{max_chars}{(\code{numeric} of length 1) The maximum number of
 characters to print.}

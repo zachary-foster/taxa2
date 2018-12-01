@@ -2,6 +2,7 @@
 #'
 #' Used to print each item in the `taxmap` print method.
 #'
+#' @param obj The taxmap object containing the thing to print
 #' @param data The item to be printed
 #' @param max_rows (`numeric` of length 1) The maximum number of rows in
 #'   tables to print.
@@ -13,11 +14,11 @@
 #'   line.
 #'
 #' @examples
-#' taxa:::print_item(ex_taxmap$data$info)
-#' taxa:::print_item(1:100)
+#' taxa:::print_item(ex_taxmap, ex_taxmap$data$info)
+#' taxa:::print_item(ex_taxmap, 1:100)
 #'
 #' @keywords internal
-print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
+print_item <- function(obj, data, name = NULL, max_rows = 3, max_items = 3,
                        max_width = getOption("width") - 10, prefix = "") {
 
   # Find best print method
@@ -27,7 +28,7 @@ print_item <- function(data, name = NULL, max_rows = 3, max_items = 3,
   best_method <- applicable_methods[1]
 
   # Call print method
-  get(best_method)(data, name = name, prefix = prefix, max_width = max_width,
+  get(best_method)(obj, data, name = name, prefix = prefix, max_width = max_width,
                    max_rows = max_rows)
 
   invisible(data)
@@ -46,6 +47,30 @@ prefixed_print <- function(x, prefix, ...) {
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
+#' Highlight taxon ID column
+#'
+#' Changes the font of a taxon ID column in a table print out.
+#'
+#' @param table_text The print out of the table in a character vector, one element per line.
+#' @param header_index The row index that contains the table column names
+#' @param row_indexes The indexes of the rows to be formatted.
+highlight_taxon_ids <- function(table_text, header_index, row_indexes) {
+  tax_id_bounds <- stringr::str_locate(table_text[header_index], "taxon_id[[:space:]]*")[1,]
+  tax_id_part <- substr(table_text[row_indexes],
+                        start = tax_id_bounds[1], stop = tax_id_bounds[2])
+  tax_id_part <- sub(tax_id_part,
+                     pattern = "^(\\S+)",
+                     replacement = tid_font("\\1"),
+                     perl = TRUE)
+  table_text[row_indexes] <- paste0(substr(table_text[row_indexes],
+                                           start = 1,
+                                           stop = tax_id_bounds[1] - 1),
+                                    tax_id_part,
+                                    substr(table_text[row_indexes],
+                                           start = tax_id_bounds[2] + 1,
+                                           stop = nchar(table_text[row_indexes])))
+  return(table_text)
+}
 
 
 #' Print a tibble
@@ -55,7 +80,8 @@ prefixed_print <- function(x, prefix, ...) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -64,16 +90,47 @@ prefixed_print <- function(x, prefix, ...) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
-  loadNamespace("dplyr") # used for tibble print methods
+print__tbl_df <- function(obj, data, name, prefix, max_width, max_rows) {
+
+  # used for tibble print methods
+  loadNamespace("dplyr")
+
+  # Make data set name
   if (length(name) > 0 && ! is.na(name)) {
     cat(paste0(prefix, name_font(name), ":\n"))
   }
-  output <- paste0(prefix, utils::capture.output(print(obj, n = max_rows,
-                                                       width = max_width - nchar(prefix))))
+
+  # Increment prefix
+  prefix <- paste0(prefix, "  ")
+
+  # Capture tibble print output
+  output <- paste0(prefix, utils::capture.output(print(data, n = max_rows,
+                                                       width = max_width - nchar(prefix),
+                                                       n_extra = 10)))
+  # Remove any existing fonts
+  output <- crayon::strip_style(output)
+
+  # Modify font of tibble dims
   output[1] <- desc_font(output[1])
-  output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
-  output[3] <- desc_font(output[3])
+
+  # Highlight taxon IDs if they exist
+  if (! is.null(obj$get_data_taxon_ids(name))) {
+    if (nrow(data) > 0) {
+      output <- highlight_taxon_ids(output,
+                                    header_index = 2,
+                                    row_indexes = 4:(3 + min(c(max_rows, nrow(data)))))
+    }
+    output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
+  } else {
+    output[2] <- sub(output[2], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
+  }
+
+  # Change font of column classes
+  if (nrow(data) > 0) {
+    output[3] <- desc_font(output[3])
+  }
+
+  # Print output
   cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
@@ -85,7 +142,8 @@ print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -94,16 +152,36 @@ print__tbl_df <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
+print__data.frame <- function(obj, data, name, prefix, max_width, max_rows) {
+  # Make data set name
   cat(paste0(prefix, name_font(name), ":\n"))
-  if (nrow(obj) > max_rows) {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame (first ",
-               max_rows, " rows shown)\n"))
-    obj <- obj[1:max_rows, , drop = FALSE]
+
+  # Increment prefix
+  prefix <- paste0(prefix, "  ")
+
+  # Make description of data.frame
+  if (nrow(data) > max_rows) {
+    cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data),
+                         " (first ", max_rows, " rows shown)\n")))
+    data <- data[1:max_rows, , drop = FALSE]
   } else {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " data.frame\n"))
+    cat(desc_font(paste0(prefix, "# A data.frame: ", nrow(data), " x ", ncol(data), "\n")))
   }
-  prefixed_print(obj, prefix = paste0(prefix, "  "))
+
+  # Highlight taxon IDs if they exist
+  output <- paste0(prefix, utils::capture.output(print(data)))
+  if (! is.null(obj$get_data_taxon_ids(name))) {
+    output <- highlight_taxon_ids(output,
+                                  header_index = 1,
+                                  row_indexes = 2:(1 + min(c(max_rows, nrow(data)))))
+    output[1] <- sub(output[1], pattern = "(^|\\W)taxon_id($|\\W)", replacement = tid_font("\\1taxon_id\\2"))
+  } else {
+    output[1] <- sub(output[1], pattern = "(^|\\W)taxon_id($|\\W)", replacement = error_font("\\1taxon_id\\2"))
+
+  }
+
+  # Print output
+  cat(paste0(paste0(output, collapse = "\n"), "\n"))
 }
 
 
@@ -114,7 +192,8 @@ print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -123,22 +202,33 @@ print__data.frame <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__list <- function(obj, name, prefix, max_width, max_rows) {
-  if (length(obj) < 1) {
-    prefixed_print(list(), prefix = prefix)
+print__list <- function(obj, data, name, prefix, max_width, max_rows) {
+  if (length(data) < 1) {
+    cat(paste0(prefix, name_font(name), ": empty list\n"))
   } else {
-    cat(paste0(prefix, name_font(name), ": a list with ", length(obj),
-               ifelse(length(obj) == 1, " item", " items")))
-    if (is.null(names(obj))) {
+    cat(paste0(prefix, name_font(name), ": a list of ", length(data),
+               ifelse(length(data) == 1, " item", " items")))
+    if (is.null(names(data))) {
       cat("\n")
     } else {
-      cat(paste0(" with names:\n  ",
-                 limited_print(tid_font(names(obj)),
-                               prefix = prefix,
-                               sep = punc_font(", "),
-                               mid = punc_font(" ... "),
-                               trunc_char = punc_font("[truncated]"),
-                               type = "silent")))
+      if (is.null(obj$get_data_taxon_ids(name))) {
+        cat(paste0(" with names:\n  ",
+                   limited_print(names(data),
+                                 prefix = prefix,
+                                 sep = punc_font(", "),
+                                 mid = punc_font(" ... "),
+                                 trunc_char = punc_font("[truncated]"),
+                                 type = "silent")))
+
+      } else {
+        cat(paste0(" named by taxa:\n  ",
+                   limited_print(tid_font(names(data)),
+                                 prefix = prefix,
+                                 sep = punc_font(", "),
+                                 mid = punc_font(" ... "),
+                                 trunc_char = punc_font("[truncated]"),
+                                 type = "silent")))
+      }
     }
   }
 }
@@ -151,7 +241,8 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -161,17 +252,28 @@ print__list <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(obj)[1]) {
-  cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(obj)), "a ", "a named "), type, " with ", length(obj),
-             " item", ifelse(length(obj) == 1, "", "s"), "\n  ", prefix))
-  if (is.null(names(obj))) {
-    limited_print(obj, max_chars = max_width, sep = punc_font(", "),
-                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"), type = "cat")
-  } else {
-    limited_print(paste0(tid_font(names(obj)), punc_font(". "), obj),
-                  max_chars = max_width, sep = punc_font(", "),
-                  mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
-                  type = "cat")
+print__vector <- function(obj, data, name, prefix, max_width, max_rows, type = class(data)[1]) {
+  cat(paste0(prefix, name_font(name), ": ", ifelse(is.null(names(data)), "a vector of '", "a named vector of '"), type, "' with ", length(data),
+             " item", ifelse(length(data) == 1, "", "s"), "\n"))
+  if (length(data) > 0) {
+    if (is.null(names(data))) { # Not named
+      limited_print(data, prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
+                    mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                    type = "cat")
+    } else { # Is named
+      if (is.null(obj$get_data_taxon_ids(name))) { # no taxon ids
+        limited_print(paste0(names(data), punc_font(". "), data),
+                      prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
+                      mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                      type = "cat")
+      }
+      else { # has taxon ids
+        limited_print(paste0(tid_font(names(data)), punc_font(". "), data),
+                      prefix = paste0(prefix, "  "), max_chars = max_width, sep = punc_font(", "),
+                      mid = punc_font(" ... "), trunc_char = punc_font("[truncated]"),
+                      type = "cat")
+      }
+    }
   }
 }
 
@@ -183,7 +285,8 @@ print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(o
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -192,8 +295,8 @@ print__vector <- function(obj, name, prefix, max_width, max_rows, type = class(o
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__integer <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows)
+print__integer <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows)
 }
 
 
@@ -205,7 +308,8 @@ print__integer <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -214,8 +318,8 @@ print__integer <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__numeric <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows)
+print__numeric <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows)
 }
 
 
@@ -226,7 +330,8 @@ print__numeric <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -235,8 +340,8 @@ print__numeric <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__character <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows)
+print__character <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows)
 }
 
 
@@ -247,7 +352,8 @@ print__character <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -256,8 +362,8 @@ print__character <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__logical <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows)
+print__logical <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows)
 }
 
 
@@ -268,7 +374,8 @@ print__logical <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -277,8 +384,8 @@ print__logical <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__factor <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows)
+print__factor <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows)
 }
 
 
@@ -289,7 +396,8 @@ print__factor <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -298,8 +406,8 @@ print__factor <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__ordered <- function(obj, name, prefix, max_width, max_rows) {
-  print__vector(obj, name, prefix, max_width, max_rows, type = "ordered factor")
+print__ordered <- function(obj, data, name, prefix, max_width, max_rows) {
+  print__vector(obj, data, name, prefix, max_width, max_rows, type = "ordered factor")
 }
 
 
@@ -310,7 +418,8 @@ print__ordered <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -319,16 +428,16 @@ print__ordered <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__matrix <- function(obj, name, prefix, max_width, max_rows) {
+print__matrix <- function(obj, data, name, prefix, max_width, max_rows) {
   cat(paste0(prefix, name_font(name), ":\n"))
-  if (nrow(obj) > max_rows) {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix (first ",
+  if (nrow(data) > max_rows) {
+    cat(paste0(prefix, "  A ", nrow(data), " by ", ncol(data), " matrix (first ",
                max_rows, " rows shown)\n"))
-    obj <- obj[1:max_rows, , drop = FALSE]
+    data <- data[1:max_rows, , drop = FALSE]
   } else {
-    cat(paste0(prefix, "  A ", nrow(obj), " by ", ncol(obj), " matrix\n"))
+    cat(paste0(prefix, "  A ", nrow(data), " by ", ncol(data), " matrix\n"))
   }
-  prefixed_print(obj, prefix = paste0(prefix, "  "))
+  prefixed_print(data, prefix = paste0(prefix, "  "))
 }
 
 
@@ -339,7 +448,8 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
 #' Which print method is called is determined by its name, so changing the name
 #' of this function will change when it is called.
 #'
-#' @param obj Something to print
+#' @param obj The taxmap object containing the thing to print
+#' @param data Something to print
 #' @param name The name of the thing to print
 #' @param prefix What to put before the thing printed. Typically a space.
 #' @param max_width Maximum width in number of characters to print
@@ -348,9 +458,9 @@ print__matrix <- function(obj, name, prefix, max_width, max_rows) {
 #' @family taxmap print methods
 #'
 #' @keywords internal
-print__default_ <- function(obj, name, prefix, max_width, max_rows) {
+print__default_ <- function(obj, data, name, prefix, max_width, max_rows) {
   cat(paste0(prefix, name_font(name), ":\n"))
-  prefixed_print(obj, prefix = paste0(prefix, "  "))
+  prefixed_print(data, prefix = paste0(prefix, "  "))
 }
 
 
@@ -383,7 +493,7 @@ punc_font <- function(text) {
 }
 
 
-#' Descripton formatting in print methods
+#' Description formatting in print methods
 #'
 #' A simple wrapper to make changing the formatting of text printed easier.
 #' This is used for non-data, formatting characters
@@ -410,4 +520,19 @@ desc_font <- function(text) {
 #' @keywords internal
 name_font <- function(text) {
   crayon::bold(text)
+}
+
+
+#' Font to indicate an error
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for non-data, formatting characters
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+error_font <- function(text) {
+  crayon::bgRed(text)
 }

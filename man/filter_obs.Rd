@@ -6,15 +6,17 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
-\item{target}{The name of the list/vector/table in \code{obj$data} to filter}
+\item{data}{Dataset names, indexes, or a logical vector that indicates which datasets in
+\code{obj$data} to filter. If multiple datasets are filterd at once, then they must be the same
+length.}
 
 \item{...}{One or more filtering conditions. Any variable name that appears
 in \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own. Each
-filtering condition can be one of three things:
+filtering condition can be one of two things:
 \itemize{
-\item \code{integer}: One or more row indexes of \code{obj[target]}
+\item \code{integer}: One or more dataset indexes.
 \item \code{logical}: A \code{TRUE}/\code{FALSE} vector of length equal to the number of
-rows in \code{obj[target]}
+items in the dataset.
 }}
 
 \item{drop_taxa}{(\code{logical} of length 1) If \code{FALSE}, preserve taxa
@@ -22,6 +24,40 @@ even if all of their observations are filtered out. If \code{TRUE}, remove
 taxa for which all observations were filtered out. Note that only taxa that
 are unobserved due to this filtering will be removed; there might be other
 taxa without observations to begin with that will not be removed.}
+
+\item{drop_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
+\code{TRUE}. When \code{TRUE}, observations for other data sets (i.e. not \code{data})
+assigned to taxa that are removed when filtering \code{data} are also removed.
+Otherwise, only data for taxa that are not present in all other data sets
+will be removed. This option can be either simply \code{TRUE}/\code{FALSE}, meaning
+that all data sets will be treated the same, or a logical vector can be
+supplied with names corresponding one or more data sets in \code{obj$data}. For
+example, \code{c(abundance = TRUE, stats = FALSE)} would remove observations in
+\code{obj$data$abundance}, but not in \code{obj$data$stats}.}
+
+\item{subtaxa}{(\code{logical} or \code{numeric} of length 1) This only has an effect
+when \code{drop_taxa} is \code{TRUE}. If \code{TRUE}, include subtaxa of taxa passing the
+filter. Positive numbers indicate the number of ranks below the target taxa
+to return. \code{0} is equivalent to \code{FALSE}. Negative numbers are equivalent to
+\code{TRUE}.}
+
+\item{supertaxa}{(\code{logical}  or \code{numeric} of length 1) This only has an
+effect when \code{drop_taxa} is \code{TRUE}. If \code{TRUE}, include supertaxa of taxa
+passing the filter. Positive numbers indicate the number of ranks above the
+target taxa to return. \code{0} is equivalent to \code{FALSE}. Negative numbers are
+equivalent to \code{TRUE}.}
+
+\item{reassign_obs}{(\code{logical}) This only has an effect when \code{drop_taxa} is
+\code{TRUE}. If \code{TRUE}, observations assigned to removed taxa will be reassigned
+to the closest supertaxon that passed the filter. If there are no supertaxa
+of such an observation that passed the filter, they will be filtered out if
+\code{drop_obs} is \code{TRUE}. This option can be either simply \code{TRUE}/\code{FALSE},
+meaning that all data sets will be treated the same, or a logical vector
+can be supplied with names corresponding one or more data sets in
+\code{obj$data}. For example, \code{c(abundance = TRUE, stats = FALSE)} would
+reassign observations in \code{obj$data$abundance}, but not in \code{obj$data$stats}.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -36,8 +72,10 @@ using the \code{filter_obs(obj, ...)} imitates R's traditional copy-on-modify
 semantics, so "obj" would not be changed; instead a changed version would be
 returned, like most R functions.
 \preformatted{
-obj$filter_obs(target, ..., drop_taxa = FALSE)
-filter_obs(obj, target, ..., drop_taxa = FALSE)}
+obj$filter_obs(data, ..., drop_taxa = FALSE, drop_obs = TRUE,
+               subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)
+filter_obs(obj, data, ..., drop_taxa = FALSE, drop_obs = TRUE,
+           subtaxa = FALSE, supertaxa = TRUE, reassign_obs = FALSE)}
 }
 \examples{
 # Filter by row index
@@ -45,9 +83,22 @@ filter_obs(ex_taxmap, "info", 1:2)
 
 # Filter by TRUE/FALSE
 filter_obs(ex_taxmap, "info", dangerous == FALSE)
+filter_obs(ex_taxmap, "info", dangerous == FALSE, n_legs > 0)
+filter_obs(ex_taxmap, "info", n_legs == 2)
 
-# Remove taxa whose obserservation were filtered out
-filter_obs(ex_taxmap, "info", dangerous == FALSE, drop_taxa = TRUE)
+# Remove taxa whose obserservations were filtered out
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE)
+
+# Preserve other data sets while removing taxa
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+           drop_obs = c(abund = FALSE))
+
+# When filtering taxa, do not return supertaxa of taxa that are preserved
+filter_obs(ex_taxmap, "info", n_legs == 2, drop_taxa = TRUE,
+           supertaxa = FALSE)
+
+# Filter multiple datasets at once
+filter_obs(ex_taxmap, c("info", "phylopic_ids", "foods"), n_legs == 2)
 
 }
 \seealso{
@@ -58,3 +109,4 @@ Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}, \code{\link{transmute_obs}}
 }
+\concept{taxmap manipulation functions}

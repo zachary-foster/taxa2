@@ -19,8 +19,10 @@ obj$replace_taxon_ids(new_ids)
 replace_taxon_ids(obj, new_ids)}
 }
 \examples{
-\dontrun{
-
+# Replace taxon IDs with numbers
 replace_taxon_ids(ex_taxmap, seq_len(length(ex_taxmap$taxa)))
-}
+
+# Make taxon IDs capital letters
+replace_taxon_ids(ex_taxmap, toupper(taxon_ids(ex_taxmap)))
+
 }

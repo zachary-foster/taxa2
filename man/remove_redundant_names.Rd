@@ -10,9 +10,17 @@
 A \code{taxonomy} or \code{taxmap} object
 }
 \description{
-Remove the names of parent taxa in the begining of their children's names in a \code{taxonomy} or \code{taxmap} object.
+Remove the names of parent taxa in the beginning of their children's names in a \code{taxonomy} or \code{taxmap} object.
 This is useful for removing genus names in species binomials.
 \preformatted{
 obj$remove_redundant_names()
 remove_redundant_names(obj)}
+}
+\examples{
+# Remove genus named from species taxa
+species_data <- c("Carnivora;Felidae;Panthera;Panthera leo",
+                  "Carnivora;Felidae;Panthera;Panthera tigris",
+                  "Carnivora;Ursidae;Ursus;Ursus americanus")
+obj <-  parse_tax_data(species_data, class_sep = ";")
+remove_redundant_names(obj)
 }

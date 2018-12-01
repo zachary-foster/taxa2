@@ -18,7 +18,11 @@ obj$is_branch()
 is_branch(obj)}
 }
 \examples{
+# Test which taxon IDs correspond to branches
 is_branch(ex_taxmap)
+
+# Filter out branches
+filter_taxa(ex_taxmap, ! is_branch)
 
 }
 \seealso{
@@ -33,3 +37,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

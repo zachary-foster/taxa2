@@ -18,7 +18,12 @@ obj$n_supertaxa_1()
 n_supertaxa_1(obj)}
 }
 \examples{
+# Test for the presence of supertaxa containing each taxon
 n_supertaxa_1(ex_taxmap)
+
+# Filter taxa based on the presence of supertaxa
+#  (this command removes all root taxa)
+filter_taxa(ex_taxmap, n_supertaxa_1 > 0)
 
 }
 \seealso{
@@ -33,3 +38,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{taxon_ids}}, \code{\link{taxon_indexes}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}

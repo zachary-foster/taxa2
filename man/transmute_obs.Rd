@@ -6,11 +6,14 @@
 \arguments{
 \item{obj}{An object of type \code{\link[=taxmap]{taxmap()}}}
 
-\item{target}{The name of the table in \code{obj$data} to filter}
+\item{data}{Dataset name, index, or a logical vector that indicates which dataset in
+\code{obj$data} to use.}
 
 \item{...}{One or more named columns to add. Newly created columns can be
 referenced in the same function call. Any variable name that appears in
 \code{\link[=all_names]{all_names()}} can be used as if it was a vector on its own.}
+
+\item{target}{DEPRECIATED. use "data" instead.}
 }
 \value{
 An object of type \code{\link[=taxmap]{taxmap()}}
@@ -18,12 +21,17 @@ An object of type \code{\link[=taxmap]{taxmap()}}
 \description{
 Replace columns of tables in \code{obj$data} in \code{\link[=taxmap]{taxmap()}} objects. See
 \code{\link[dplyr:transmute]{dplyr::transmute()}} for the inspiration for this function and more
-information.
+information. Calling the function using the \code{obj$transmute_obs(...)} style
+edits "obj" in place, unlike most R functions. However, calling the function
+using the \code{transmute_obs(obj, ...)} imitates R's traditional copy-on-modify
+semantics, so "obj" would not be changed; instead a changed version would be
+returned, like most R functions.
 \preformatted{
-obj$transmute_obs(target, ...)
-transmute_obs(obj, target, ...)}
+obj$transmute_obs(data, ...)
+transmute_obs(obj, data, ...)}
 }
 \examples{
+# Replace columns in a table with new columns
 transmute_obs(ex_taxmap, "info", new_col = paste0(name, "!!!"))
 
 }
@@ -36,3 +44,4 @@ Other taxmap manipulation functions: \code{\link{arrange_obs}},
   \code{\link{sample_n_obs}}, \code{\link{sample_n_taxa}},
   \code{\link{select_obs}}
 }
+\concept{taxmap manipulation functions}

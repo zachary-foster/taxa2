@@ -4,10 +4,12 @@
 \alias{print__tbl_df}
 \title{Print a tibble}
 \usage{
-print__tbl_df(obj, name, prefix, max_width, max_rows)
+print__tbl_df(obj, data, name, prefix, max_width, max_rows)
 }
 \arguments{
-\item{obj}{Something to print}
+\item{obj}{The taxmap object containing the thing to print}
+
+\item{data}{Something to print}
 
 \item{name}{The name of the thing to print}
 
@@ -35,4 +37,5 @@ Other taxmap print methods: \code{\link{print__character}},
   \code{\link{print__numeric}},
   \code{\link{print__ordered}}, \code{\link{print__vector}}
 }
+\concept{taxmap print methods}
 \keyword{internal}

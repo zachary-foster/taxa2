@@ -14,7 +14,11 @@ obj$taxon_indexes()
 taxon_indexes(obj)}
 }
 \examples{
+# Return the indexes for each taxon
 taxon_indexes(ex_taxmap)
+
+# Use in another function (stupid example; 1:5 would work too)
+filter_taxa(ex_taxmap, taxon_indexes < 5)
 
 }
 \seealso{
@@ -29,3 +33,4 @@ Other taxonomy data functions: \code{\link{classifications}},
   \code{\link{n_supertaxa}}, \code{\link{taxon_ids}},
   \code{\link{taxon_names}}, \code{\link{taxon_ranks}}
 }
+\concept{taxonomy data functions}
