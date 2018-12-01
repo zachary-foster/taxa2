@@ -1148,7 +1148,7 @@ Taxonomy <- R6::R6Class(
       # Add taxon ID column
       if (add_id_col) {
         output <- cbind(data.frame(stringsAsFactors = FALSE,
-                                   taxon_ids = self$taxon_ids()[subset]),
+                                   taxon_id = self$taxon_ids()[subset]),
                         output)
       }
 
