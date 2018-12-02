@@ -273,14 +273,14 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     stop('"named_by_rank = TRUE" does not make sense when "taxon_rank" is in "class_key".')
   }
 
+  # Check for zero-length inputs
+  if (length_of_thing(tax_data) <= 0) {
+    return(taxmap(data = list(tax_data = tax_data)))
+  }
+
   # Check that column exists
   for (a_col in class_cols) {
     check_class_col(tax_data, a_col)
-  }
-
-  # Deal with edge cases
-  if (length(tax_data) == 0) {
-    return(taxmap())
   }
 
   # Get classificatons
@@ -612,6 +612,12 @@ lookup_tax_data <- function(tax_data, type, column = 1, datasets = list(),
                             mappings = c(), database = "ncbi",
                             include_tax_data = TRUE, use_database_ids = TRUE,
                             ask = TRUE) {
+
+  # Check for zero-length inputs
+  if (length_of_thing(tax_data) <= 0) {
+    return(taxmap(data = list(tax_data = tax_data)))
+  }
+
   # Make sure taxize is installed
   check_for_pkg("taxize")
 
@@ -1048,13 +1054,21 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
                              sep_is_regex = FALSE,
                              class_rev = FALSE, database = "ncbi",
                              include_match = FALSE, include_tax_data = TRUE) {
+
+  # Check for zero-length inputs
+  if (length_of_thing(tax_data) <= 0) {
+    return(taxmap(data = list(tax_data = tax_data)))
+  }
+
   # Check regex/keys
   key <- validate_regex_key_pair(regex, key, multiple_allowed = "info")
   class_key <- validate_regex_key_pair(class_regex, class_key, multiple_allowed = "info")
+
   # classification sep
   if (!is.null(class_sep) && (class(class_sep) != "character" | length(class_sep) != 1)) {
     stop('"class_sep" must be a character vector of length 1 or NULL')
   }
+
   # Boolean options
   if (class(class_rev) != "logical" | length(class_rev) != 1) {
     stop('"class_rev" must be TRUE/FALSE')
@@ -1065,6 +1079,7 @@ extract_tax_data <- function(tax_data, key, regex, class_key = "taxon_name",
   if (class(include_tax_data) != "logical" | length(include_tax_data) != 1) {
     stop('"include_tax_data" must be TRUE/FALSE')
   }
+
   # database
   valid_databases <- c(names(database_list), "none")
   if (! database %in% valid_databases) {

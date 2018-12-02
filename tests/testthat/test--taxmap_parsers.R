@@ -128,6 +128,12 @@ test_that("Taxmap can be intialized from complex data", {
                'Invalid inputs to the `mappings` found')
 
 
+  # Zero-length inputs produce empty taxmap objects
+  expect_equal(taxon_names(parse_tax_data(c())),          character(0))
+  expect_equal(taxon_names(parse_tax_data(character(0))), character(0))
+  expect_equal(taxon_names(parse_tax_data(list())),       character(0))
+  expect_equal(taxon_names(parse_tax_data(data.frame())), character(0))
+
 })
 
 
@@ -228,6 +234,11 @@ test_that("Taxmap can be intialized from queried data", {
   expect_warning(result <- lookup_tax_data(raw_data, type = "seq_id", column = "my_seq"))
   expect_equal(result$data$query_data$taxon_id[2], "unknown")
 
+  # Zero-length inputs produce empty taxmap objects
+  expect_equal(taxon_names(lookup_tax_data(c())),          character(0))
+  expect_equal(taxon_names(lookup_tax_data(character(0))), character(0))
+  expect_equal(taxon_names(lookup_tax_data(list())),       character(0))
+  expect_equal(taxon_names(lookup_tax_data(data.frame())), character(0))
 })
 
 
@@ -264,12 +275,16 @@ test_that("Taxmap can be intialized from raw strings", {
                 "not a match",
                 ">var_1:C--var_2:9643--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Ursus;S__americanus")
   expect_warning(extract_tax_data(raw_data,
-                             key = c(var_1 = "info", var_2 = "info", tax = "class"),
-                             regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
-                             class_sep = ";", class_regex = "^(.+)__(.+)$",
-                             class_key = c(my_rank = "info", tax_name = "taxon_name")),
+                                  key = c(var_1 = "info", var_2 = "info", tax = "class"),
+                                  regex = "^>var_1:(.+)--var_2:(.+)--non_target--tax:(.+)$",
+                                  class_sep = ";", class_regex = "^(.+)__(.+)$",
+                                  class_key = c(my_rank = "info", tax_name = "taxon_name")),
                  "indexes failed to match the regex supplied")
 
+  # Zero-length inputs produce empty taxmap objects
+  expect_equal(taxon_names(extract_tax_data(c())),          character(0))
+  expect_equal(taxon_names(extract_tax_data(character(0))), character(0))
+  expect_equal(taxon_names(extract_tax_data(list())),       character(0))
 })
 
 

@@ -16,6 +16,12 @@
 init_taxmap_data <- function(self, data, input_ids, assume_equal = TRUE) {
 
   process_one <- function(x, name) {
+
+    # Check for zero-length inputs
+    if (length_of_thing(x) <= 0) {
+      return(x)
+    }
+
     if (is.data.frame(x)) {
       # Convert all data.frames to tibbles
       if  (! tibble::is_tibble(x)) {

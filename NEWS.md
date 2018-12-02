@@ -1,3 +1,11 @@
+development
+===========
+
+### Bug fixes
+
+* Parsers now correclty handle zero-length inputs ([issue #185](https://github.com/ropensci/taxa/issues/185)).
+
+
 taxa 0.3.1
 ==========
 

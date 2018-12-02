@@ -266,3 +266,21 @@ to_percent <- function(prop, digits = 3, ...) {
     return(paste0(format(prop * 100, digits = digits, ...), '%'))
   }
 }
+
+
+#' Check length of thing
+#'
+#' Check the length of an object, be it list, vector, or table.
+#'
+#' @param obj
+#'
+#' @return \code{numeric} of length 1.
+#'
+#' @keywords internal
+length_of_thing <- function(obj) {
+  if (is.data.frame(obj)) {
+    return(nrow(obj))
+  } else {
+    return(length(obj))
+  }
+}

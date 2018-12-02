@@ -6,5 +6,5 @@ bibentry("Manual",
   year = "2018",
   volume = "7",
   number = "272",
-  doi = "https://doi.org/10.12688/f1000research.14013.1"
+  doi = "10.12688/f1000research.14013.1"
 )
