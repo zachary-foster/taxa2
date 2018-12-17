@@ -324,6 +324,12 @@ test_that("Names in invalid expressions can be found by NSE", {
                                            aslkadsldsa)))
 })
 
+test_that("Names of varaibles referred to by full $ path are not returned", {
+  expect_equal(length(test_obj$names_used(data$abund$count)), 0)
+  expect_equal(length(test_obj$names_used(data$count)), 0)
+  expect_equal(length(test_obj$names_used(count)), 1)
+})
+
 #### get_data
 
 test_that("NSE values can be found", {

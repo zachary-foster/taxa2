@@ -812,7 +812,7 @@ taxonomy_table.Taxonomy <- function(obj, subset = NULL, value = "taxon_names",
                                     use_ranks = NULL, add_id_col = FALSE) {
   obj <- eval(obj) # Needed by testthat for some reason
   eval(substitute(obj$taxonomy_table(subset = subset, value = value,
-                                     use_ranks = use_ranks)))
+                                     use_ranks = use_ranks, add_id_col = add_id_col)))
 }
 
 

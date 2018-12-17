@@ -142,10 +142,10 @@ Taxonomy <- R6::R6Class(
     # Looks for names of data in a expression for use with NSE
     names_used = function(...) {
       decompose <- function(x) {
-        if (class(x) %in% c("call", "(", "{")) {
+        if (class(x) %in% c("call", "(", "{") && x[[1]] != "$") {
           return(lapply(1:length(x), function(i) decompose(x[[i]])))
         } else {
-          return(as.character(x))
+          return(deparse(x))
         }
       }
 
@@ -1138,7 +1138,7 @@ Taxonomy <- R6::R6Class(
       if (length(unused_ranks) > 0) {
         message('The following ranks will not be included because the order cannot be determined:\n',
                 limited_print(unused_ranks, prefix = "  ", type = "silent"),
-                'See the section on the `use_ranks` option in ?taxonomy_table to if you want to change which ranks are used.')
+                'See the section on the `use_ranks` option in ?taxonomy_table if you want to change which ranks are used.')
       }
 
       # Make table
