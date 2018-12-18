@@ -112,8 +112,6 @@ test_that("Taxmap can be intialized from complex data", {
   # Expect an error if bad column name
   expect_error(parse_tax_data(raw_data, class_cols = "Not a column"),
                'No item')
-  expect_error(parse_tax_data(raw_data, class_cols = -1),
-               'Column index')
   expect_error(parse_tax_data(1:3, class_cols = "Not a column"),
                'No item named')
   expect_error(parse_tax_data(1:3, class_cols = 10),
