@@ -694,8 +694,6 @@ test_that("New tables and vectors can be made",  {
   expect_equal(length(result$data$new_table), 0)
 
  # Invlaid: inputs of mixed lengths
-  expect_error(mutate_obs(test_obj, "new_table", a = 1, b = character(0)),
-               "must be length 1, not 0")
   expect_error(mutate_obs(test_obj, "new_table", a = 1:3, b = 2:8),
                "Cannot make a new table out of multiple values of unequal length")
 

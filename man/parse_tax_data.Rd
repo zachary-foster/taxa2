@@ -10,103 +10,80 @@ parse_tax_data(tax_data, datasets = list(), class_cols = 1,
   mappings = c(), include_tax_data = TRUE, named_by_rank = FALSE)
 }
 \arguments{
-\item{tax_data}{A table, list, or vector that contains the names of taxa that
-represent \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{taxonomic classifications}.
-Accepted representations of classifications include:
-\itemize{
-\item A list/vector or table with column(s) of taxon names: Something like
-\code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}. What separator(s)
-is used (";" in this example) can be changed with the \code{class_sep} option.
-For tables, the classification can be spread over multiple columns and the
-separator(s) will be applied to each column, although each column could
-just be single taxon names with no separator. Use the \code{class_cols} option
-to specify which columns have taxon names.
-\item A list in which each entry is a classifications. For example,
-\code{list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae", "Homo"), ...)}.
-\item A list of data.frames where each represents a classification with one
-taxon per row. The column that contains taxon names is specified using the
-\code{class_cols} option. In this instance, it only makes sense to specify a
-single column.
-}}
+\item{tax_data}{A table, list, or vector that contains the names of taxa that represent
+\href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{taxonomic classifications}.
+Accepted representations of classifications include: * A list/vector or table with column(s) of
+taxon names: Something like \code{"Animalia;Chordata;Mammalia;Primates;Hominidae;Homo"}. What
+separator(s) is used (";" in this example) can be changed with the \code{class_sep} option. For
+tables, the classification can be spread over multiple columns and the separator(s) will be
+applied to each column, although each column could just be single taxon names with no
+separator. Use the \code{class_cols} option to specify which columns have taxon names. * A list in
+which each entry is a classifications. For example, \code{list(c("Animalia", "Chordata", "Mammalia", "Primates", "Hominidae", "Homo"), ...)}. * A list of data.frames where each represents a
+classification with one taxon per row. The column that contains taxon names is specified using
+the \code{class_cols} option. In this instance, it only makes sense to specify a single column.}
 
-\item{datasets}{Additional lists/vectors/tables that should be included in
-the resulting \code{taxmap} object. The \code{mappings} option is use to specify how
-these data sets relate to the \code{tax_data} and, by inference, what taxa apply
-to each item.}
+\item{datasets}{Additional lists/vectors/tables that should be included in the resulting \code{taxmap}
+object. The \code{mappings} option is use to specify how these data sets relate to the \code{tax_data}
+and, by inference, what taxa apply to each item.}
 
-\item{class_cols}{(\code{character} or \code{integer}) The names or indexes of columns
-that contain classifications if the first input is a table. If multiple
-columns are specified, they will be combined in the order given.}
+\item{class_cols}{(\code{character} or \code{integer}) The names or indexes of columns that contain
+classifications if the first input is a table. If multiple columns are specified, they will be
+combined in the order given. Negative column indexes mean "every column besides these columns".}
 
-\item{class_sep}{(\code{character}) One or more separators that delineate taxon
-names in a classification. For example, if one column had \code{"Homo sapiens"}
-and another had \code{"Animalia;Chordata;Mammalia;Primates;Hominidae"}, then
-\code{class_sep = c(" ", ";")}. All separators are applied to each column so
-order does not matter.}
+\item{class_sep}{(\code{character}) One or more separators that delineate taxon names in a
+classification. For example, if one column had \code{"Homo sapiens"} and another had
+\code{"Animalia;Chordata;Mammalia;Primates;Hominidae"}, then \code{class_sep = c(" ", ";")}. All
+separators are applied to each column so order does not matter.}
 
-\item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be
-used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}.}
+\item{sep_is_regex}{(\code{TRUE}/\code{FALSE}) Whether or not \code{class_sep} should be used as a \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expression}.}
 
-\item{class_key}{(\code{character} of length 1) The identity of the capturing
-groups defined using \code{class_regex}. The length of \code{class_key} must be equal
-to the number of capturing groups specified in \code{class_regex}. Any names
-added to the terms will be used as column names in the output. At least
-one \code{"taxon_name"} must be specified. Only \code{"info"} can be used
-multiple times. Each term must be one of those described below:
-\itemize{
-\item \code{taxon_name}: The name of a taxon. Not necessarily unique, but are
-interpretable by a particular \code{database}. Requires an internet connection.
-\item \code{taxon_rank}: The rank of the taxon. This will be used to add rank info
-into the output object that can be accessed by \code{out$taxon_ranks()}.
-\item \code{info}: Arbitrary taxon info you want included in the output. Can be used
-more than once.
-}}
+\item{class_key}{(\code{character} of length 1) The identity of the capturing groups defined using
+\code{class_regex}. The length of \code{class_key} must be equal to the number of capturing groups
+specified in \code{class_regex}. Any names added to the terms will be used as column names in the
+output. At least one \code{"taxon_name"} must be specified. Only \code{"info"} can be used multiple
+times. Each term must be one of those described below: * \code{taxon_name}: The name of a taxon. Not
+necessarily unique, but are interpretable by a particular \code{database}. Requires an internet
+connection. * \code{taxon_rank}: The rank of the taxon. This will be used to add rank info into the
+output object that can be accessed by \code{out$taxon_ranks()}. * \code{info}: Arbitrary taxon info you
+want included in the output. Can be used more than once.}
 
-\item{class_regex}{(\code{character} of length 1)
-A regular expression with capturing groups indicating the locations of data
-for each taxon in the \code{class} term in the \code{key} argument. The identity of
-the information must be specified using the \code{class_key} argument. The
-\code{class_sep} option can be used to split the classification into data for
-each taxon before matching. If \code{class_sep} is \code{NULL}, each match of
-\code{class_regex} defines a taxon in the classification.}
+\item{class_regex}{(\code{character} of length 1) A regular expression with capturing groups
+indicating the locations of data for each taxon in the \code{class} term in the \code{key} argument. The
+identity of the information must be specified using the \code{class_key} argument. The \code{class_sep}
+option can be used to split the classification into data for each taxon before matching. If
+\code{class_sep} is \code{NULL}, each match of \code{class_regex} defines a taxon in the classification.}
 
-\item{class_reversed}{If \code{TRUE}, then classifications go from specific to general.
-For example: \code{Abditomys latidens : Muridae : Rodentia : Mammalia : Chordata}.}
+\item{class_reversed}{If \code{TRUE}, then classifications go from specific to general. For example:
+\code{Abditomys latidens : Muridae : Rodentia : Mammalia : Chordata}.}
 
-\item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of
-the input matched by \code{class_regex} in the output object.}
+\item{include_match}{(\code{logical} of length 1) If \code{TRUE}, include the part of the input matched by
+\code{class_regex} in the output object.}
 
-\item{mappings}{(named \code{character}) This defines how the taxonomic
-information in \code{tax_data} applies to data set in \code{datasets}. This option
-should have the same number of inputs as \code{datasets}, with values
-corresponding to each data set. The names of the character vector specify
-what information in \code{tax_data} is shared with info in each \code{dataset}, which
-is specified by the corresponding values of the character vector. If there
-are no shared variables, you can add \code{NA} as a placeholder, but you could
-just leave that data out since it is not benefiting from being in the
-taxmap object. The names/values can be one of the following:
-\itemize{
-\item For tables, the names of columns can be used.
-\item \code{"{{index}}"} : This means to use the index of rows/items
-\item \code{"{{name}}"}  : This means to use row/item names.
-\item \code{"{{value}}"} : This means to use the values in vectors or lists. Lists
-will be converted to vectors using \code{\link[=unlist]{unlist()}}.
-}}
+\item{mappings}{(named \code{character}) This defines how the taxonomic information in \code{tax_data}
+applies to data set in \code{datasets}. This option should have the same number of inputs as
+\code{datasets}, with values corresponding to each data set. The names of the character vector
+specify what information in \code{tax_data} is shared with info in each \code{dataset}, which is
+specified by the corresponding values of the character vector. If there are no shared
+variables, you can add \code{NA} as a placeholder, but you could just leave that data out since it
+is not benefiting from being in the taxmap object. The names/values can be one of the
+following: * For tables, the names of columns can be used. * \code{"{{index}}"} : This means to use
+the index of rows/items * \code{"{{name}}"}  : This means to use row/item names. * \code{"{{value}}"} :
+This means to use the values in vectors or lists. Lists will be converted to vectors using
+\code{\link[=unlist]{unlist()}}.}
 
-\item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data}
-as a dataset, like those in \code{datasets}.}
+\item{include_tax_data}{(\code{TRUE}/\code{FALSE}) Whether or not to include \code{tax_data} as a dataset, like
+those in \code{datasets}.}
 
-\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a table
-with columns named by ranks or a list of vectors with each vector named by
-ranks, include that rank info in the output object, so it can be accessed
-by \code{out$taxon_ranks()}. If \code{TRUE}, taxa with different ranks, but the same
-name and location in the taxonomy, will be considered different taxa.
+\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a table with columns named by
+ranks or a list of vectors with each vector named by ranks, include that rank info in the
+output object, so it can be accessed by \code{out$taxon_ranks()}. If \code{TRUE}, taxa with different
+ranks, but the same name and location in the taxonomy, will be considered different taxa.
 Cannot be used with the \code{sep}, \code{class_regex}, or \code{class_key} options.}
 }
 \description{
-Reads taxonomic information and associated data in tables, lists, and vectors
-and stores it in a \code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications}
-must be present.
+Reads taxonomic information and associated data in tables, lists, and vectors and stores it in a
+\code{\link[taxa:taxmap]{taxa::taxmap()}} object. \href{https://en.wikipedia.org/wiki/Taxonomy_(biology)#Classifying_organisms}{Taxonomic classifications} must be
+present.
 }
 \examples{
  # Read a vector of classifications

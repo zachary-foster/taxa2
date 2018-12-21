@@ -408,9 +408,6 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
     mappings <- c("{{index}}" = "{{index}}", mappings)
   }
 
-  # Convert additional tables to tibbles
-  are_tables <- vapply(datasets, is.data.frame, logical(1))
-  datasets[are_tables] <- lapply(datasets[are_tables], dplyr::as.tbl)
 
   # Add additional data sets
   name_datset <- function(dataset, sort_var) {
@@ -433,6 +430,10 @@ parse_tax_data <- function(tax_data, datasets = list(), class_cols = 1,
                                           function(i) name_datset(datasets[[i]],
                                                                   mappings[i])),
                                    names(datasets)))
+
+  # Convert additional tables to tibbles
+  are_tables <- vapply(output$data, is.data.frame, logical(1))
+  output$data[are_tables] <- lapply(output$data[are_tables], dplyr::as.tbl)
 
   # Fix incorrect taxon ids in data if a list of data.frames is given
   if (is_list_of_frames && include_tax_data) {
@@ -1008,7 +1009,9 @@ get_sort_var <- function(data, var) {
 #'
 #' @return Returns an object of type [taxmap()]
 #'
-#' @examples \dontrun{
+#' @examples
+#'
+#' \dontrun{
 #'
 #'   # For demonstration purposes, the following example dataset has all the
 #'   # types of data that can be used, but any one of them alone would work.
