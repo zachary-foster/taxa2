@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/taxa",
   "issueTracker": "https://github.com/ropensci/taxa/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.0.9106",
+  "version": "0.3.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.4.3",
+    "version": "3.5.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.4.3 Patched (2018-01-01 r74017)",
+  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -40,25 +40,28 @@
       "@id": "https://orcid.org/0000-0002-5075-0948"
     }
   ],
-  "maintainer": {
-    "@type": "Person",
-    "givenName": "Scott",
-    "familyName": "Chamberlain",
-    "email": "myrmecocystus+r@gmail.com",
-    "@id": "https://orcid.org/0000-0003-1444-9135"
-  },
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Zachary",
+      "familyName": "Foster",
+      "email": "zacharyfoster1989@gmail.com",
+      "@id": "https://orcid.org/0000-0002-5075-0948"
+    }
+  ],
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
       "identifier": "roxygen2",
       "name": "roxygen2",
-      "version": "6.0.1",
+      "version": ">= 6.0.1",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=roxygen2"
     },
     {
       "@type": "SoftwareApplication",
@@ -67,35 +70,32 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
       "name": "rmarkdown",
-      "version": "0.9.6",
+      "version": ">= 0.9.6",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "taxize",
-      "name": "taxize",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     }
   ],
   "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.0.2"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "R6",
@@ -103,9 +103,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=R6"
     },
     {
       "@type": "SoftwareApplication",
@@ -114,9 +115,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -125,9 +127,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
     {
       "@type": "SoftwareApplication",
@@ -136,9 +139,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lazyeval"
     },
     {
       "@type": "SoftwareApplication",
@@ -147,9 +151,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
     {
       "@type": "SoftwareApplication",
@@ -158,9 +163,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
     {
       "@type": "SoftwareApplication",
@@ -169,9 +175,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
     },
     {
       "@type": "SoftwareApplication",
@@ -180,9 +187,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
     {
       "@type": "SoftwareApplication",
@@ -191,9 +199,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
     {
       "@type": "SoftwareApplication",
@@ -202,23 +211,84 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=crayon"
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "R",
-      "name": "R",
-      "version": "3.0.2"
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "taxize",
+      "name": "taxize",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=taxize"
     }
   ],
   "contIntegration": "https://travis-ci.org/ropensci/taxa",
   "developmentStatus": "[![Project Status: WIP - Initial development is in progress, but there",
   "releaseNotes": "https://github.com/ropensci/taxa/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/taxa/blob/master/README.md",
-  "fileSize": "1214.488KB",
+  "fileSize": "1835.02KB",
   "applicationCategory": "Taxonomy",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["taxonomy", "biology", "hierarchy"]
+  "keywords": ["taxonomy", "biology", "hierarchy", "taxon", "data-cleaning", "rstats", "r", "r-package"],
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "datePublished": "2018",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Foster",
+          "familyName": "Zachary"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Chamberlain",
+          "familyName": "Scott"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Grunwald",
+          "familyName": "Niklaus"
+        }
+      ],
+      "name": "Taxa: An R package implementing data standards and methods for taxonomic data.",
+      "identifier": "10.12688/f1000research.14013.1",
+      "@id": "https://doi.org/10.12688/f1000research.14013.1",
+      "sameAs": "https://doi.org/10.12688/f1000research.14013.1",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "issueNumber": "272",
+        "datePublished": "2018",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "7",
+          "name": "F1000Research"
+        }
+      }
+    }
+  ]
 }
