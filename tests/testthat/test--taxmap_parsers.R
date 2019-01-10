@@ -138,6 +138,7 @@ test_that("Taxmap can be intialized from complex data", {
 test_that("Taxmap can be intialized from queried data", {
 
   skip_on_cran()
+  skip_on_travis()
 
   # Make test data
   raw_data <- data.frame(tax = c("Mammalia;Carnivora;Felidae",
@@ -293,6 +294,7 @@ test_that("Taxmap can be intialized from raw strings", {
 
 test_that("Taxmap can be intialized from raw strings and lookup data", {
   skip_on_cran()
+  skip_on_travis()
 
   raw_data <- c(">var_1:A--var_2:9689--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__leo",
                 ">var_1:B--var_2:9694--non_target--tax:K__Mammalia;P__Carnivora;C__Felidae;G__Panthera;S__tigris",
