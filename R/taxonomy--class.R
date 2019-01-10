@@ -248,12 +248,20 @@ Taxonomy <- R6::R6Class(
     },
 
     # --------------------------------------------------------------------------
-    # Evaluate expressions that might include data from this object
-    eval = function(...) {
+    # Evaluate multiple expressions that might include data from this object and returns a list
+    eval_many = function(...) {
       arguments <- rlang::enquos(...)
       expressions <- lapply(arguments, rlang::get_expr)
       obj_data_used <- rlang::eval_tidy(rlang::call2(self$data_used, !!! expressions))
       lapply(arguments, rlang::eval_tidy, data = obj_data_used)
+    },
+
+    # --------------------------------------------------------------------------
+    # Evaluate one expressions that might include data from this object and returns the result
+    eval_one = function(input) {
+      argument <- rlang::enquo(input)
+      obj_data_used <- rlang::eval_tidy(rlang::call2(self$data_used, rlang::get_expr(argument)))
+      rlang::eval_tidy(argument, data = obj_data_used)
     },
 
     # --------------------------------------------------------------------------

@@ -948,6 +948,67 @@ NULL
 NULL
 
 
+#' Evaluate multiple expressions
+#'
+#' Evaluate multiple expressions using
+#' [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html).
+#' Symbols (i.e., variable names) in the expressions will be replaced with the
+#' values associated with terms in [data_used()], if their names match. Symbols
+#' with the same name in the global envriomnet will be ignored unless they are
+#' prefixed with `.env$`.
+#' \preformatted{
+#' obj$eval_many(...)}
+#'
+#' @param obj a [taxonomy()] or [taxmap()] object
+#' @param ... One or more expressions
+#'
+#' @return A `list` of evaluated expressions
+#'
+#' @examples
+#' # Evaluating expressions
+#' ex_taxmap$eval_many(n_legs + 1, sum(n_obs))
+#'
+#' # Forcing use of variables in the global envrionment
+#' n_legs = 5
+#' ex_taxmap$eval_many(n_legs + 1, .env$n_legs + 1)
+#'
+#' @family NSE helpers
+#'
+#' @name eval_many
+NULL
+
+
+#' Evaluate an expressions
+#'
+#' Evaluate an expression using
+#' [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html).
+#' Symbols (i.e., variable names) in the expression will be replaced with the
+#' values associated with terms in [data_used()], if their names match. Symbols
+#' with the same name in the global envriomnet will be ignored unless they are
+#' prefixed with `.env$`.
+#' \preformatted{
+#' obj$eval_one(...)}
+#'
+#' @param obj A [taxonomy()] or [taxmap()] object
+#' @param input An expression (i.e. any R code)
+#'
+#' @return The input expression evaluated
+#'
+#' @examples
+#' # Evaluating an expression
+#' ex_taxmap$eval_one(sum(n_obs + 1))
+#'
+#' # Forcing use of variables in the global envrionment
+#' n_legs = 5
+#' ex_taxmap$eval_many(n_legs + 1)
+#' ex_taxmap$eval_many(.env$n_legs + 1)
+#'
+#' @family NSE helpers
+#'
+#' @name eval_one
+NULL
+
+
 #' Filter taxa with a list of conditions
 #'
 #' Filter taxa in a [taxonomy()] or [taxmap()] object with a series of

@@ -27,6 +27,7 @@ ex_taxmap$data_used(length(unique(taxon_names)))
 }
 \seealso{
 Other NSE helpers: \code{\link{all_names}},
+  \code{\link{eval_many}}, \code{\link{eval_one}},
   \code{\link{get_data}}, \code{\link{names_used}}
 }
 \concept{NSE helpers}

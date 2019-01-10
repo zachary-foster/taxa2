@@ -351,6 +351,14 @@ test_that("Using ambiguous names in NSE generates a warning", {
   expect_equal(names(get_data(test_obj)), unname(all_names(test_obj)))
 })
 
+#### eval
+
+test_that("NSE is done correctly", {
+  expect_equal(test_obj$eval_one(sum(n_obs + 1)),
+               sum(test_obj$n_obs() + 1))
+  expect_equivalent(test_obj$eval_many(sum(n_obs + 1), n_supertaxa),
+                    list(sum(test_obj$n_obs() + 1), test_obj$n_supertaxa()))
+})
 
 #### Get datasets
 
