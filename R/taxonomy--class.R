@@ -247,6 +247,14 @@ Taxonomy <- R6::R6Class(
       self$get_data(my_names_used)
     },
 
+    # --------------------------------------------------------------------------
+    # Evaluate expressions that might include data from this object
+    eval = function(...) {
+      arguments <- rlang::enquos(...)
+      expressions <- lapply(arguments, rlang::get_expr)
+      obj_data_used <- rlang::eval_tidy(rlang::call2(self$data_used, !!! expressions))
+      lapply(arguments, rlang::eval_tidy, data = obj_data_used)
+    },
 
     # --------------------------------------------------------------------------
     # Return data for supertaxa (i.e. all taxa the target taxa are a part of)
