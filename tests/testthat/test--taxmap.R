@@ -358,6 +358,9 @@ test_that("NSE is done correctly", {
                sum(test_obj$n_obs() + 1))
   expect_equivalent(test_obj$eval_many(sum(n_obs + 1), n_supertaxa),
                     list(sum(test_obj$n_obs() + 1), test_obj$n_supertaxa()))
+  expect_equal(test_obj$eval_many(my_param_name = n_obs, my_param_name),
+               test_obj$eval_many(my_param_name = n_obs, n_obs))
+
 })
 
 #### Get datasets

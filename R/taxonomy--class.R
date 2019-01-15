@@ -253,7 +253,15 @@ Taxonomy <- R6::R6Class(
       arguments <- rlang::enquos(...)
       expressions <- lapply(arguments, rlang::get_expr)
       obj_data_used <- rlang::eval_tidy(rlang::call2(self$data_used, !!! expressions))
-      lapply(arguments, rlang::eval_tidy, data = obj_data_used)
+      output <- list()
+      for (index in seq_len(length(arguments))) {
+        output <- c(output, list(rlang::eval_tidy(arguments[[index]], data = obj_data_used)))
+        if (! is.null(names(arguments)) && ! is.na(names(arguments)[index]) && names(arguments)[index] != "") {
+          names(output)[index] <- names(arguments)[index]
+          obj_data_used <- c(obj_data_used, output[index]) # Allow previously evaluated arguments to be used
+        }
+      }
+      return(output)
     },
 
     # --------------------------------------------------------------------------
