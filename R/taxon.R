@@ -60,20 +60,20 @@ Taxon <- R6::R6Class(
     initialize = function(
       name = NULL, rank = NULL, id = NULL, authority = NULL
     ) {
-      assert(name, c('TaxonName', 'character'))
-      assert(rank, c('TaxonRank', 'character'))
-      assert(id, c('TaxonId', 'character', 'numeric', 'integer'))
-      assert(authority, 'character')
+      assert(name, c('TaxonName', 'character', 'factor'))
+      assert(rank, c('TaxonRank', 'character', 'factor'))
+      assert(id, c('TaxonId', 'character', 'numeric', 'integer', 'factor'))
+      assert(authority, c('character', 'factor'))
 
       # Convert characters to appropriate classes
-      if (is.character(name)) {
-        name <- taxon_name(name)
+      if (is.character(name) || is.factor(name)) {
+        name <- taxon_name(as.character(name))
       }
-      if (is.character(rank)) {
-        rank <- taxon_rank(rank)
+      if (is.character(rank) || is.factor(rank)) {
+        rank <- taxon_rank(as.character(rank))
       }
-      if (is.character(id)) {
-        id <- taxon_id(id)
+      if (is.character(id) || is.factor(id)) {
+        id <- taxon_id(as.character(id))
       }
 
       self$name <- name
@@ -131,3 +131,4 @@ Taxon <- R6::R6Class(
   private = list(
   )
 )
+

@@ -51,6 +51,21 @@ Taxonomy <- R6::R6Class(
              character(1))
     },
 
+
+    # --------------------------------------------------------------------------
+    #  Set taxon names
+    set_taxon_names = function(value) {
+      if (length(value) !=  length(self$taxa))
+      {
+        stop(call. = FALSE, 'New taxon names must be of the same length as the number of taxa and in the same order as taxa.')
+      }
+
+      for (i in seq_len(length(self$taxa))) {
+        self$taxa[[i]]$name$name <- as.character(value[[i]])
+      }
+    },
+
+
     # --------------------------------------------------------------------------
     # Return the taxon ranks in a taxonomy() or taxmap() object.
     # They are in the order taxa appear in the edge list.
@@ -64,6 +79,32 @@ Taxonomy <- R6::R6Class(
                }
              },
              character(1))
+    },
+
+    # --------------------------------------------------------------------------
+    #  Set taxon names
+    set_taxon_ranks = function(value) {
+      if (length(value) !=  length(self$taxa))
+      {
+        stop(call. = FALSE, 'New taxon ranks must be of the same length as the number of taxa and in the same order as taxa.')
+      }
+
+      for (i in seq_len(length(self$taxa))) {
+        self$taxa[[i]]$rank$name <- as.character(value[[i]])
+      }
+    },
+
+    # --------------------------------------------------------------------------
+    #  Set taxon authorities
+    set_taxon_auths = function(value) {
+      if (length(value) !=  length(self$taxa))
+      {
+        stop(call. = FALSE, 'New taxon authorities must be of the same length as the number of taxa and in the same order as taxa.')
+      }
+
+      for (i in seq_len(length(self$taxa))) {
+        self$taxa[[i]]$authority <- as.character(value[[i]])
+      }
     },
 
     # --------------------------------------------------------------------------
