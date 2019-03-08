@@ -45,3 +45,81 @@ test_that("dots and .list return the same output", {
                'Both `...` and `.list` were supplied')
 })
 
+
+test_that("taxa: taxon_name getters and setters", {
+
+  # Can set the taxon names with a list of taxon_name objects
+
+  # Can set the taxon names with a character/factor
+
+  # Can set the taxon names with anything else that can be coerced into a character/object with a warning
+
+  # Can get a list of taxon_names objects
+
+  # Can coerce the list of taxon_name objects returned into a character/factor
+
+  # Can get the character version of taxon names from S3 method
+
+  # Can set the taxon names using a character with the S3 method
+
+  # Can set the taxon names using a list of objects with the S3 method
+
+})
+
+
+test_that("taxa: taxon_id getters and setters", {
+
+  # Can set the taxon ids with a list of taxon_id objects
+
+  # Can set the taxon ids with a character/factor/nunmber
+
+  # Can set the taxon ids with anything else that can be coerced into a character/object with a warning
+
+  # Can get a list of taxon_id objects
+
+  # Can coerce the list of taxon_id objects returned into a character/factor/number
+
+  # Can get the character version of taxon ids from S3 method
+
+  # Can set the taxon ids using a character with the S3 method
+
+  # Can set the taxon ids using a list of objects with the S3 method
+
+})
+
+
+test_that("taxa: taxon_rank getters and setters", {
+
+  # Can set the taxon ranks with a list of taxon_rank objects
+
+  # Can set the taxon ranks with a character/factor/nunmber
+
+  # Can set the taxon ranks with anything else that can be coerced into a character/object with a warning
+
+  # Can get the list of taxon_rank object
+
+  # Can coerce the list of taxon rank objects returned into a character/factor/number
+
+  # Can get the character version of taxon ranks from S3 method
+
+  # Can set the taxon ranks using a character with the S3 method
+
+  # Can set the taxon ranks using a list of objects with the S3 method
+
+  # Only valid ranks are accepted by setters if valid ranks are defined
+
+})
+
+
+test_that("taxa: authority getters and setters", {
+
+  # Can set the authorities with a character/factor/nunmber
+
+  # Can set the authorities with anything else that can be coerced into a character with a warning
+
+  # Can get the authorities from the S3 method
+
+  # Can set the authorities using a character with the S3 method
+
+})
+

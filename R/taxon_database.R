@@ -41,10 +41,6 @@ taxon_database <- function(name = NULL, url = NULL, description = NULL,
 TaxonDatabase <- R6::R6Class(
   "TaxonDatabase",
   public = list(
-    name = NULL,
-    url = NULL,
-    description = NULL,
-    id_regex = NULL,
 
     initialize = function(
       name = NULL, url = NULL, description = NULL, id_regex = NULL
@@ -56,13 +52,95 @@ TaxonDatabase <- R6::R6Class(
     },
 
     print = function(indent = "") {
-      cat(paste0(indent, sprintf("<database> %s\n", self$name)))
-      cat(paste0(indent, paste0("  url: ", self$url, "\n")))
-      cat(paste0(indent, paste0("  description: ", self$description, "\n")))
-      cat(paste0(indent, paste0("  id regex: ", self$id_regex, "\n")))
+      cat(paste0(indent, sprintf("<database> %s\n", char_or_placeholder(self$name))))
+      cat(paste0(indent, paste0("  url: ", char_or_placeholder(self$url), "\n")))
+      cat(paste0(indent, paste0("  description: ", char_or_placeholder(self$description), "\n")))
+      cat(paste0(indent, paste0("  id regex: ", char_or_placeholder(self$id_regex), "\n")))
       invisible(self)
+    },
+
+    is_valid_id = function(id) {
+      if (is.null(self$id_regex)) {
+        return(TRUE)
+      } else {
+        return(grepl(id, pattern = self$id_regex))
+      }
     }
+
+  ),
+
+
+  active = list(
+
+    name = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_name)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_name <- NULL
+        } else {
+          check_arg_class(value, c("character", "factor", "TaxonDatabase"), "database name")
+          private$my_name <- as.character(value)
+        }
+      }
+    },
+
+    url = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_url)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_url <- NULL
+        } else {
+          check_arg_class(value, c("character", "factor"), "database url")
+          private$my_url <- as.character(value)
+        }
+      }
+    },
+
+    description = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_description)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_description <- NULL
+        } else {
+          check_arg_class(value, c("character", "factor"), "database description")
+          private$my_description <- as.character(value)
+        }
+      }
+    },
+
+    id_regex = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_id_regex)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_id_regex <- NULL
+        } else {
+          check_arg_class(value, c("character", "factor"), '"id_regex"')
+          value <- as.character(value)
+          if (!is_valid_regex(value)) {
+            stop(call. = FALSE, '"id_regex" must be a valid regular expression. "', value, '" is not a valid regular expression according to R.')
+          }
+          private$my_id_regex <- value
+        }
+      }
+    }
+  ),
+
+
+  private = list(
+    my_name = NULL,
+    my_url = NULL,
+    my_description = NULL,
+    my_id_regex = NULL
   )
+
 )
 
 #' Database list
@@ -142,3 +220,23 @@ database_list <- list(
     ".*"
   )
 )
+
+
+#' @export
+as.character.TaxonDatabase <- function(obj) {
+  obj$name
+}
+
+
+#' @export
+as.TaxonDatabase <- function(input) {
+  if ("TaxonDatabase" %in% class(input)) {
+    return(input)
+  } else {
+    return(taxon_database(input))
+  }
+}
+
+#' @export
+as_TaxonDatabase <- as.TaxonDatabase
+

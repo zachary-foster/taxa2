@@ -24,19 +24,29 @@ This is the documentation for the class called \code{taxa}. If you are looking f
 the documentation for the package as a whole: \link{taxa-package}.
 }
 \examples{
-(a <- taxon(
-  name = taxon_name("Poa annua"),
+catus <- taxon(
+  name = taxon_name("catus"),
   rank = taxon_rank("species"),
-  id = taxon_id(93036)
-))
-taxa(a, a, a)
+  id = taxon_id(9685)
+)
+tigris <- taxon(
+  name = taxon_name("tigris"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9696)
+)
+sapiens <- taxon(
+  name = taxon_name("sapiens"),
+  rank = taxon_rank("species"),
+  id = taxon_id(9606)
+)
+(x <- taxa(catus, tigris, sapiens))
 
 # a null set
 x <- taxon(NULL)
 taxa(x, x, x)
 
 # combo non-null and null
-taxa(a, x, a)
+taxa(catus, x, sapiens)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},

@@ -39,30 +39,70 @@ taxon_name <- function(name, database = NULL) {
 TaxonName <- R6::R6Class(
   "TaxonName",
   public = list(
-    name = NULL,
-    database = NULL,
 
-    initialize = function(
-      name = NULL, database = NULL
-    ) {
-      assert(name, "character")
-      assert(database, c("character", "TaxonDatabase"))
-
-      # Convert characters to appropriate classes
-      if (is.character(database)) {
-        database <- taxon_database(database)
-      }
-
-      self$name <- name
+    initialize = function(name = NULL, database = NULL) {
       self$database <- database
+      self$name <- name
     },
 
     print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonName> %s\n", self$name %||% "none")))
-      cat(paste0(indent, paste0("  database: ",
-                                get_database_name(self$database) %||% "none",
-                                "\n")))
+      cat(paste0(indent, sprintf("<TaxonName> %s\n", char_or_placeholder(self$name))))
+      cat(paste0(indent, paste0("  database: ", char_or_placeholder(self$database), "\n")))
       invisible(self)
     }
+  ),
+
+  active = list(
+
+    name = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_name)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_name <- NULL
+        } else {
+          check_arg_class(value, c("character", "TaxonName", "numeric", "factor", "integer"), "taxon name")
+          private$my_name <- as.character(value)
+        }
+      }
+    },
+
+    database = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_database)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_database <- NULL
+        } else {
+          private$my_database <- as_TaxonDatabase(value)
+        }
+      }
+    }
+
+  ),
+
+  private = list(
+    my_name = NULL,
+    my_database = NULL
   )
 )
+
+
+#' @export
+as.character.TaxonName <- function(obj) {
+  as.character(obj$name)
+}
+
+#' @export
+as.TaxonName <- function(input) {
+  if ("TaxonName" %in% class(input)) {
+    return(input)
+  } else {
+    return(taxon_name(input))
+  }
+}
+
+#' @export
+as_TaxonName <- as.TaxonName

@@ -10,15 +10,8 @@ add_names <- function(...) {
   stats::setNames(list(...), nms)
 }
 
-# assert <- function(x, y) {
-#   if (!is.null(x)) {
-#     if (!class(x) %in% y) {
-#       stop(deparse(substitute(x)), " must be of class ",
-#            paste0(y, collapse = ", "), call. = FALSE)
-#     }
-#   }
-# }
 
+#' @keywords internal
 assert <- function(x, y) {
   if (!is.null(x)) {
     if (!any(class(x) %in% y)) {
@@ -35,3 +28,4 @@ csep2vec <- function(z, uniq = TRUE) {
 }
 
 strex <- function(str, pattern) regmatches(str, regexpr(pattern, str))
+

@@ -51,31 +51,10 @@ taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
 
 Taxon <- R6::R6Class(
   "Taxon",
+
   public = list(
-    name = NULL,
-    rank = NULL,
-    id = NULL,
-    authority = NULL,
 
-    initialize = function(
-      name = NULL, rank = NULL, id = NULL, authority = NULL
-    ) {
-      assert(name, c('TaxonName', 'character', 'factor'))
-      assert(rank, c('TaxonRank', 'character', 'factor'))
-      assert(id, c('TaxonId', 'character', 'numeric', 'integer', 'factor'))
-      assert(authority, c('character', 'factor'))
-
-      # Convert characters to appropriate classes
-      if (is.character(name) || is.factor(name)) {
-        name <- taxon_name(as.character(name))
-      }
-      if (is.character(rank) || is.factor(rank)) {
-        rank <- taxon_rank(as.character(rank))
-      }
-      if (is.character(id) || is.factor(id)) {
-        id <- taxon_id(as.character(id))
-      }
-
+    initialize = function(name = NULL, rank = NULL, id = NULL, authority = NULL) {
       self$name <- name
       self$rank <- rank
       self$id <- id
@@ -84,51 +63,96 @@ Taxon <- R6::R6Class(
 
     print = function(indent = "") {
       cat(paste0(indent, "<Taxon>\n"))
-      cat(paste0(indent, paste0("  name: ",
-                                self$get_name() %||% "none", "\n")))
-      cat(paste0(indent, paste0("  rank: ",
-                                self$get_rank() %||% "none", "\n")))
-      cat(paste0(indent, paste0("  id: ",
-                                self$get_id() %||% "none", "\n")))
-      cat(paste0(indent, paste0("  authority: ",
-                                self$authority %||% "none", "\n")))
+      cat(paste0(indent, paste0("  name: ", char_or_placeholder(self$name), "\n")))
+      cat(paste0(indent, paste0("  rank: ", char_or_placeholder(self$rank), "\n")))
+      cat(paste0(indent, paste0("  id: ", char_or_placeholder(self$id), "\n")))
+      cat(paste0(indent, paste0("  authority: ", char_or_placeholder(self$authority), "\n")))
       invisible(self)
     },
 
     is_empty = function(x) {
       is.null(self$name) && is.null(self$rank) && is.null(self$id)
+    }
+  ),
+
+  active = list(
+    name = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_name)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_name <- NULL
+        } else {
+          private$my_name <- as_TaxonName(value)
+        }
+      }
     },
 
-    get_name = function() {
-      if ("TaxonName" %in% class(self$name)) {
-        output <- self$name$name
-      } else {
-        output <- self$name
+    rank = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_rank)
       }
-      return(output)
+      else { # SET
+        if (is.null(value)) {
+          private$my_rank <- NULL
+        } else {
+          private$my_rank <- as_TaxonRank(value)
+        }
+      }
     },
 
-    get_rank = function() {
-      if ("TaxonRank" %in% class(self$rank)) {
-        output <- self$rank$name
-      } else {
-        output <- self$rank
+    id = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_id)
       }
-      return(output)
+      else { # SET
+        if (is.null(value)) {
+          private$my_id <- NULL
+        } else {
+          private$my_id <- as_TaxonId(value)
+        }
+      }
     },
 
-    get_id = function() {
-      if ("TaxonId" %in% class(self$id)) {
-        output <- self$id$id
-      } else {
-        output <- self$id
+    authority = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_authority)
       }
-      return(output)
+      else { # SET
+        if (is.null(value)) {
+          private$my_authority <- NULL
+        } else {
+          check_arg_class(value, c("character", "numeric", "factor", "integer"), "authority")
+          private$my_authority <- as.character(value)
+        }
+      }
     }
 
   ),
 
   private = list(
+    my_name = NULL,
+    my_rank = NULL,
+    my_id = NULL,
+    my_authority = NULL
   )
 )
 
+
+#' @export
+as.character.Taxon <- function(obj) {
+  as.character(obj$name)
+}
+
+#' @export
+as.Taxon <- function(input) {
+  if ("Taxon" %in% class(input)) {
+    return(input)
+  } else {
+    return(taxon(input))
+  }
+}
+
+#' @export
+as_Taxon <- as.Taxon

@@ -105,3 +105,82 @@ test_that("dots and .list return the same output", {
   expect_equal(hierarchies(hier1, hier2),
                hierarchies(.list = list(hier1, hier2)))
 })
+
+
+
+test_that("hierarchies: taxon_name getters and setters", {
+
+  # Can set the taxon names with a list of lists of taxon_name objects
+
+  # Can set the taxon names with a list of character/factor (data frame)
+
+  # Can set the taxon names with a NA padded matrix of character/factor
+
+  # Can set the taxon names with a list of lists of anything else that can be coerced into a character/object with a warning
+
+  # Can get a list of list of taxon_names objects
+
+  # Can get a list of  character of taxon names from S3 method
+
+  # Can set the taxon names using a list of character with the S3 method
+
+  # Can set the taxon names using a list of list of objects with the S3 method
+
+})
+
+
+test_that("hierarchies: taxon_id getters and setters", {
+
+  # Can set the taxon ids with a list of list of taxon_id objects
+
+  # Can set the taxon ids with a list of character/factor/nunmber (data.frame)
+
+  # Can set the taxon ids with a matrix padded by NA
+
+  # Can set the taxon ids with a list of anything else that can be coerced into a character/object with a warning
+
+  # Can get a list of lists of taxon_id objects
+
+  # Can get the list of character of taxon ids from S3 method
+
+  # Can set the taxon ids using a list of character with the S3 method
+
+  # Can set the taxon ids using a list of list of objects with the S3 method
+
+})
+
+
+test_that("hierarchies: taxon_rank getters and setters", {
+
+  # Can set the taxon ranks with a list of lists of taxon_rank objects
+
+  # Can set the taxon ranks with a list of character/factor/nunmber (dataframe)
+
+  # Can set the taxon ranks with a matrix padded by NA
+
+  # Can set the taxon ranks with a list of anything else that can be coerced into a character/object with a warning
+
+  # Can get the list of list of  taxon_rank objects
+
+  # Can get the list of characters of taxon ranks from S3 method
+
+  # Can set the taxon ranks using a list of character with the S3 method
+
+  # Can set the taxon ranks using a list of lists of objects with the S3 method
+
+  # Only valid ranks are accepted by setters if valid ranks are defined
+
+})
+
+
+test_that("hierarchies: authority getters and setters", {
+
+  # Can set the authorities with a list of character/factor/nunmber
+
+  # Can set the authorities with a list of anything else that can be coerced into a character with a warning
+
+  # Can get the authorities from the S3 method
+
+  # Can set the authorities using a list of character/factor with the S3 method
+
+})

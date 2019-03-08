@@ -284,3 +284,52 @@ length_of_thing <- function(obj) {
     return(length(obj))
   }
 }
+
+#' Check regex validity
+#'
+#' Check if a regular expression is valid
+#'
+#' @param text The putative regex to check.
+#'
+#' @keywords internal
+is_valid_regex <- function(text)
+{
+  out <- suppressWarnings(try(grepl(pattern = text, "x"), silent = TRUE))
+  return(! inherits(out, "try-error"))
+}
+
+#' Check argument types
+#'
+#' Check that an argument is one of an accepted set of classes and throw and error if it is not.
+#'
+#' @param value The value of the argument
+#' @param valid_classes A character vector of valid classes. It must inherit at least one of these.
+#' @param arg_name The name of the argument used in error messages. By defualt the name of the
+#'   variable passed to "value" is used.
+#'
+#' @keywords internal
+check_arg_class <- function(value, valid_classes, arg_name = deparse(substitute(x))) {
+  if (!is.null(value)) {
+    if (!any(class(value) %in% valid_classes)) {
+      stop('', arg_name, ' must be a class that is or inherits one of the following classes: ',
+           paste0(valid_classes, collapse = ", "), '. An object of class "', class(value), '" was given.', call. = FALSE)
+    }
+  }
+}
+
+
+#' Convert to character or a placeholder
+#'
+#' The placeholder is used with the thing to be printed is NULL or of zero length.
+#'
+#' @param thing The thing to convert to a character
+#' @param placeholder What is returned when "thing" is NULL or of zero length.
+#'
+#' @keywords internal
+char_or_placeholder <- function(thing, placeholder = "[none]") {
+  if (is.null(thing) || length(thing) == 0) {
+    return(placeholder)
+  } else {
+    return(as.character(thing))
+  }
+}
