@@ -47,124 +47,111 @@ taxa <- function(..., .list = NULL) {
 Taxa <- R6::R6Class(
   classname = "Taxa",
   public = list(
-
-    values = list (),
+    taxa = list(),
 
     initialize = function(..., .list = NULL) {
-      tt <- get_dots_or_list(..., .list = .list)
-      if (! all(vapply(tt, inherits, logical(1), what = "Taxon"))) {
-        stop("all inputs to 'taxa' must be of class 'Taxon'",
-             call. = FALSE)
-      }
-      self$values <- tt
+      inputs <- get_dots_or_list(..., .list = .list)
+      self$taxa <- lapply(inputs, as_Taxon)
     },
 
     print = function() {
       cat("<taxa>", "\n")
-      cat("  no. taxa: ", length(self$values), "\n")
-      if (length(self$values)) {
-        if (all(vapply(self$values, function(z) z$is_empty(), logical(1)))) {
+      cat("  no. taxa: ", length(self$taxa), "\n")
+      if (length(self$taxa) > 0) {
+        if (all(vapply(self$taxa, function(z) z$is_empty(), logical(1)))) {
           cat("   empty set", "\n")
         } else {
-          for (i in seq_along(self$values[1:min(10, length(self$values))])) {
-            if (self$values[[i]]$is_empty()) {
+          for (i in seq_len(min(10, length(self$taxa)))) {
+            if (self$taxa[[i]]$is_empty()) {
               cat("  empty", "\n")
             } else {
               cat(
                 sprintf("  %s / %s / %s",
-                        self$values[[i]]$name %||% "",
-                        self$values[[i]]$rank %||% "",
-                        self$values[[i]]$id %||% ""
+                        char_or_placeholder(self$taxa[[i]]$name),
+                        char_or_placeholder(self$taxa[[i]]$rank),
+                        char_or_placeholder(self$taxa[[i]]$id)
                 ), "\n")
             }
           }
         }
       }
-      if (length(self$values) > 10) cat("  ...")
+      if (length(self$taxa) > 10) cat("  ...")
     }
   ),
 
   active = list(
     names = function(values) {
       if (missing(values)) { # GET
-        return(vapply(self$values, function(x) x$name %||% NA_character_, character(1)))
+        return(lapply(self$taxa, function(x) x$name))
       }
       else { # SET
-        if (length(values) == 1) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$name <- values
-          }
-        } else if (length(values) == length(self$values)) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$name <- values[i]
+        if (length(values) == length(self$taxa)) {
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$name <- values[[i]]
           }
         } else {
           stop(call. = FALSE,
-               'Length of input must be either 1 or equal to the number of taxa (',
-               length(self$values), ').')
+               'Length of input must be equal to the number of taxa (',
+               length(self$taxa), '). ', length(values), ' inputs received.')
         }
       }
     },
 
     ranks = function(values) {
       if (missing(values)) { # GET
-        return(vapply(self$values, function(x) x$rank %||% NA_character_, character(1)))
+        return(lapply(self$taxa, function(x) x$rank))
       }
       else { # SET
         if (length(values) == 1) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$rank <- values
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$rank <- values[[1]]
           }
-        } else if (length(values) == length(self$values)) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$rank <- values[i]
+        } else if (length(values) == length(self$taxa)) {
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$rank <- values[[i]]
           }
         } else {
           stop(call. = FALSE,
-               'Length of input must be either 1 or equal to the number of taxa (',
-               length(self$values), ').')
+               'Length of input must be 1 or equal to the number of taxa (',
+               length(self$taxa), '). ', length(values), ' inputs received.')
         }
       }
     },
 
     ids = function(values) {
       if (missing(values)) { # GET
-        return(vapply(self$values, function(x) x$id %||% NA_character_, character(1)))
+        return(lapply(self$taxa, function(x) x$id))
       }
       else { # SET
-        if (length(values) == 1) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$id <- values
-          }
-        } else if (length(values) == length(self$values)) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$id <- values[i]
+        if (length(values) == length(self$taxa)) {
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$id <- values[[i]]
           }
         } else {
           stop(call. = FALSE,
-               'Length of input must be either 1 or equal to the number of taxa (',
-               length(self$values), ').')
+               'Length of input must be equal to the number of taxa (',
+               length(self$taxa), '). ', length(values), ' inputs received.')
         }
       }
     },
 
     authorities = function(values) {
       if (missing(values)) { # GET
-        return(vapply(self$values, function(x) x$authority %||% NA_character_, character(1)))
+        return(vapply(self$taxa, function(x) x$authority %||% NA_character_, character(1)))
       }
       else { # SET
         if (length(values) == 1) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$authority <- values
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$authority <- values
           }
-        } else if (length(values) == length(self$values)) {
-          for (i in seq_len(length(self$values))) {
-            self$values[[i]]$authority <- values[i]
+        } else if (length(values) == length(self$taxa)) {
+          for (i in seq_len(length(self$taxa))) {
+            self$taxa[[i]]$authority <- values[[i]]
           }
         } else {
           stop(call. = FALSE,
                'Length of input must be either 1 or equal to the number of taxa (',
-               length(self$values), ').')
+               length(self$taxa), '). ', length(values), ' inputs received.')
         }
       }
     }
@@ -173,36 +160,59 @@ Taxa <- R6::R6Class(
   ),
 
   private = list(
-  ))
+  )
+
+)
 
 
 #' @export
 `[<-.Taxa` <- function(x, i = NULL, j = NULL, values) {
-  accepted_classes <- c("character", "Taxon")
-  is_valid <- vapply(values, FUN.VALUE = logical(1),
-                     function(x) any(class(x) %in% accepted_classes))
-  if (any(! is_valid)) {
-    stop(call. = FALSE,
-         'Values in the `taxa` class must be one of the following types:\n  ',
-         paste0(accepted_classes, collapse = ", "), "\n",
-         "The following ", sum(! is_valid), " inputs are not one of these types:\n  ",
-         limited_print(type = "silent", which(! is_valid)))
+  # If an index is not provided, set all values
+  if (missing(i)) {
+    i  = seq_len(length(x$taxa))
   }
-  x$values[i] <- values
+
+  if (! missing(i) && any(abs(i) > length(x))) {
+    stop(call. = FALSE, "Index out of bounds.")
+  }
+
+  if (length(values) == 1) {
+    for (index in i) {
+      x$taxa[[index]] <- as_Taxon(values[[1]])
+    }
+  } else if (length(i) == length(values)) {
+    for (index in seq_len(length(values))) {
+      x$taxa[[i[[index]]]] <- as_Taxon(values[[index]])
+    }
+  } else {
+    stop(call. = FALSE,
+         'Length of input must be either 1 or equal to the number of taxa to be replaced (',
+         length(values), '). ', length(i), ' indexes supplied.')
+  }
+
   return(x)
 }
 
 
 #' @export
 `[.Taxa` <- function(obj, i = NULL, j = NULL) {
+  if (! missing(i) && any(abs(i) > length(obj))) {
+    stop(call. = FALSE, "Index out of bounds.")
+  }
   obj <- obj$clone(deep = TRUE)
-  obj$values <- obj$values[i]
+  obj$taxa <- obj$taxa[i]
   return(obj)
 }
 
 
 #' @export
 `[[<-.Taxa` <- function(x, i = NULL, j = NULL, value) {
+  if(missing(i)) {
+    stop(call. = FALSE, "No index supplied.")
+  }
+  if (any(abs(i) > length(x))) {
+    stop(call. = FALSE, "Index out of bounds.")
+  }
   if (length(i) > 1) {
     stop("Attempted to use [[]] <- with more than one value. Use [] <- instead.")
   }
@@ -213,22 +223,30 @@ Taxa <- R6::R6Class(
 
 #' @export
 `[[.Taxa` <- function(obj, i = NULL, j = NULL) {
-  obj$values[[i]]
+  if (! missing(i) && any(abs(i) > length(obj))) {
+    stop(call. = FALSE, "Index out of bounds.")
+  }
+  obj$taxa[[i]]$clone(deep = TRUE)
 }
 
 
 #' @export
 as.list.Taxa <- function(obj) {
-  obj$values
+  lapply(obj$taxa, function(X) x$clone(deep = TRUE))
 }
 
 
 #' @export
-as.data.frame <- function(obj, ...) {
-  data.frame(name = obj$names,
-             rank =  obj$ranks,
-             taxon_id = obj$ids,
-             authority = obj$authorities,
+as.data.frame.Taxa <- function(obj, ...) {
+  data.frame(name = taxon_names(obj),
+             rank =  taxon_ranks(obj),
+             taxon_id = taxon_ids(obj),
+             authority = taxon_auths(obj),
              ...)
 }
 
+
+#' @export
+length.Taxa <- function(x) {
+  length(x$taxa)
+}

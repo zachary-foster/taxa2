@@ -1,50 +1,118 @@
+library(taxa)
+library(testthat)
+
 context("taxa")
 
-x <- taxon(
-  name = taxon_name("Poa annua"),
-  rank = taxon_rank("species"),
-  id = taxon_id(93036)
-)
+t1 <- taxon("Poa annua", "species", 93036)
+t2 <- taxon("Homo sapiens", "species", 93036)
 
-test_that("taxa works", {
-  aa <- taxa(x, x, x)
+test_that("taxa - constructor", {
+  # Empty
+  expect_true("Taxa" %in% class(taxa()))
+  expect_equal(length(taxa()), 0)
 
-  expect_is(aa, "taxa")
-  expect_is(unlist(aa), "list")
-  expect_is(aa[[1]], "Taxon")
-  expect_is(aa[[2]], "Taxon")
-  expect_is(aa[[3]], "Taxon")
-})
+  # Taxon Objects
+  x <- taxa(t1, t2)
+  expect_true("Taxa" %in% class(x))
+  expect_equal(length(x), 2)
 
-test_that("taxa - empty", {
-  aa <- taxa()
+  # Vectors
+  expect_equal(taxa(taxon("a"), taxon("b")), taxa("a", "b"))
+  expect_equal(taxa(taxon("1"), taxon("2")), taxa(1, 2))
+  expect_equal(taxa(taxon("a"), taxon("b")), taxa(as.factor("a"), as.factor("b")))
 
-  expect_is(aa, "taxa")
-  expect_is(unclass(aa), "list")
-  expect_equal(length(aa), 0)
-})
+  # TaxonName objects
+  expect_equal(taxa(taxon("a"), taxon("b")), taxa(taxon_name("a"), taxon_name("b")))
 
-test_that("taxa - print method", {
-  # no inputs
-  expect_output(print(taxa()), "<taxa>")
-  expect_output(print(taxa()), "no\\. taxa:  0")
-  expect_output(print(taxa(x)), "no\\. taxa:  1")
-  expect_output(print(taxa(x)), "Poa annua / species / 93036")
-})
+  # Mixed
+  expect_equal(taxa(taxon("a"), taxon("b"), taxon("c")), taxa("a", taxon_name("b"), taxon("c")))
 
-test_that("taxa fails well", {
-  expect_error(taxa(5), "all inputs to 'taxa' must be of class 'Taxon'")
-  expect_error(taxa(mtcars), "all inputs to 'taxa' must be of class 'Taxon'")
-  expect_error(taxa(4, x, "adff"),
-               "all inputs to 'taxa' must be of class 'Taxon'")
-})
+  # List
+  expect_equal(taxa("a", "b"), taxa(.list = list("a", "b")))
 
-test_that("dots and .list return the same output", {
-  expect_equal(taxa(x, x, x), taxa(.list = list(x, x, x)))
+  # Bad inputs
+  expect_error(taxa(mtcars))
+  expect_error(taxa(c))
   expect_error(taxa(taxon("a"), .list = list(taxon("a"))),
                'Both `...` and `.list` were supplied')
 })
 
+test_that("taxa - print method", {
+  expect_output(print(taxa()), "<taxa>")
+  expect_output(print(taxa()), "no\\. taxa:  0")
+  expect_output(print(taxa(t1)), "no\\. taxa:  1")
+  expect_output(print(taxa(t1)), "Poa annua / species / 93036")
+})
+
+test_that("taxa - subsetting", {
+  x <- taxa(t1, t2)
+
+  # [ indexing
+  expect_true("Taxa" %in% class(x[1]))
+  expect_equal(x[1], taxa(t1))
+  expect_equal(x[], taxa())
+  expect_equal(x[0], taxa())
+  expect_error(x[3], "Index out of bounds")
+  expect_error(x[-3], "Index out of bounds")
+
+  # [[ indexing
+  expect_true("Taxon" %in% class(x[[1]]))
+  expect_equal(x[[1]], t1)
+  expect_error(x[[]])
+  expect_error(x[[0]])
+  expect_error(x[[3]], "Index out of bounds")
+  expect_error(x[[-3]], "Index out of bounds")
+})
+
+test_that("taxa - replacing by index", {
+  # [ indexing
+  x <- taxa(t1, t2)
+  x[1] <- "new"
+  expect_equal(x, taxa("new", t2))
+
+  x <- taxa(t1, t2)
+  x[2] <- "new"
+  expect_equal(x, taxa(t1, "new"))
+
+  x <- taxa(t1, t2)
+  x[-2] <- "new"
+  expect_equal(x, taxa("new", t2))
+
+  x <- taxa(t1, t2)
+  x[c(2, 1)] <- c("a", "b")
+  expect_equal(x, taxa("b", "a"))
+
+  x <- taxa(t1, t2)
+  x[c(2, 1)] <- taxa("a", "b")
+  expect_equal(x, taxa("b", "a"))
+
+  x <- taxa(t1, t2)
+  x[] <- "new"
+  expect_equal(x, taxa("new", "new"))
+
+  x <- taxa(t1, t2)
+  expect_error(x[3] <- "a", "Index out of bounds")
+  expect_error(x[-3] <- "a", "Index out of bounds")
+
+  # [[ indexing
+  x <- taxa(t1, t2)
+  x[[1]] <- "new"
+  expect_equal(x, taxa("new", t2))
+
+  x <- taxa(t1, t2)
+  x[[2]] <- "new"
+  expect_equal(x, taxa(t1, "new"))
+
+  x <- taxa(t1, t2)
+  x[[-2]] <- "new"
+  expect_equal(x, taxa("new", t2))
+
+  x <- taxa(t1, t2)
+  expect_error(x[[3]] <- "a", "Index out of bounds")
+  expect_error(x[[-3]] <- "a", "Index out of bounds")
+  expect_error(x[[1:2]] <- c("a", "b"), "with more than one value")
+  expect_error(x[[]] <- "a", "No index supplied")
+})
 
 test_that("taxa: taxon_name getters and setters", {
 
