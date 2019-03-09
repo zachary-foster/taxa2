@@ -35,6 +35,19 @@ test_that("taxa - constructor", {
   expect_error(taxa(c))
   expect_error(taxa(taxon("a"), .list = list(taxon("a"))),
                'Both `...` and `.list` were supplied')
+
+  # r6 constructor passes by reference
+  ta <- taxon("a", "species", 93036)
+  tb <- taxon("b", "species", 93036)
+  x <- Taxa$new(ta, tb)
+  expect_identical(x$taxa[[1]], ta)
+
+  # s3 constructor passes by value
+  ta <- taxon("a", "species", 93036)
+  tb <- taxon("b", "species", 93036)
+  x <- taxa(ta, tb)
+  expect_equal(x$taxa[[1]], ta)
+  expect_false(identical(x$taxa[[1]], ta))
 })
 
 test_that("taxa - print method", {
@@ -117,20 +130,48 @@ test_that("taxa - replacing by index", {
 test_that("taxa: taxon_name getters and setters", {
 
   # Can set the taxon names with a list of taxon_name objects
+  ta <- taxon("a", "species", 93036)
+  tb <- taxon("b", "species", 93036)
+  x <- taxa(t1, t2)
+  x$names <- list(ta$name, tb$name)
+  expect_equal(x$names, list(taxon_name("a"), taxon_name("b")))
+  expect_identical(x$names[[1]], ta$name) # R6 setters pass by reference
+  ta$name$name <- "new"
+  expect_equal(x$names[[1]], taxon_name("new")) # R6 setters pass by reference
 
-  # Can set the taxon names with a character/factor
+  # Can set the taxon names with a character
+  x <- taxa(t1, t2)
+  x$names <- c("a", "b")
+  expect_equal(x$names, list(taxon_name("a"), taxon_name("b")))
 
-  # Can set the taxon names with anything else that can be coerced into a character/object with a warning
-
-  # Can get a list of taxon_names objects
-
-  # Can coerce the list of taxon_name objects returned into a character/factor
+  # Can set the taxon names with a factor
+  x <- taxa(t1, t2)
+  x$names <- as.factor(c("a", "b"))
+  expect_equal(x$names, list(taxon_name("a"), taxon_name("b")))
 
   # Can get the character version of taxon names from S3 method
+  x <- taxa(t1, t2)
+  expect_equal(taxon_names(x), c("Poa annua", "Homo sapiens"))
 
   # Can set the taxon names using a character with the S3 method
+  x <- taxa(t1, t2)
+  taxon_names(x) <- c("1", "2")
+  expect_equal(taxon_names(x), c("1", "2"))
 
-  # Can set the taxon names using a list of objects with the S3 method
+  # Can set the taxon names using a list of TaxonName objects with the S3 method
+  ta <- taxon("a", "species", 93036)
+  tb <- taxon("b", "species", 93036)
+  x <- taxa(t1, t2)
+  taxon_names(x) <- list(ta$name, tb$name)
+  expect_equal(x$names, list(taxon_name("a"), taxon_name("b")))
+  expect_false(identical(x$names[[1]], ta$name)) # s3 setters pass by value
+  ta$name$name <- "new"
+  expect_equal(x$names[[1]], taxon_name("a")) # s3 setters pass by value
+
+  # Can set the taxon names using a list of Taxon objects with the S3 method
+  x <- taxa(t1, t2)
+  taxon_names(x) <- list(taxon("1"), taxon("2"))
+  expect_equal(taxon_names(x), c("1", "2"))
 
 })
 
@@ -138,20 +179,48 @@ test_that("taxa: taxon_name getters and setters", {
 test_that("taxa: taxon_id getters and setters", {
 
   # Can set the taxon ids with a list of taxon_id objects
+  ta <- taxon("a", "species", "a")
+  tb <- taxon("b", "species", "b")
+  x <- taxa(t1, t2)
+  x$ids <- list(ta$id, tb$id)
+  expect_equal(x$ids, list(taxon_id("a"), taxon_id("b")))
+  expect_identical(x$ids[[1]], ta$id) # R6 setters pass by reference
+  ta$id$id <- "new"
+  expect_equal(x$ids[[1]], taxon_id("new")) # R6 setters pass by reference
 
-  # Can set the taxon ids with a character/factor/nunmber
+  # Can set the taxon ids with a character
+  x <- taxa(t1, t2)
+  x$ids <- c("a", "b")
+  expect_equal(x$ids, list(taxon_id("a"), taxon_id("b")))
 
-  # Can set the taxon ids with anything else that can be coerced into a character/object with a warning
+  # Can set the taxon ids with a factor
+  x <- taxa(t1, t2)
+  x$ids <- as.factor(c("a", "b"))
+  expect_equal(x$ids, list(taxon_id("a"), taxon_id("b")))
 
-  # Can get a list of taxon_id objects
-
-  # Can coerce the list of taxon_id objects returned into a character/factor/number
+  # Can set the taxon ids with a number
+  x <- taxa(t1, t2)
+  x$ids <- 1:2
+  expect_equal(x$ids, list(taxon_id("1"), taxon_id("2")))
 
   # Can get the character version of taxon ids from S3 method
+  x <- taxa(t1, t2)
+  expect_equal(taxon_ids(x), c("93036", "93036"))
 
   # Can set the taxon ids using a character with the S3 method
+  x <- taxa(t1, t2)
+  taxon_ids(x) <- c("1", "2")
+  expect_equal(taxon_ids(x), c("1", "2"))
 
-  # Can set the taxon ids using a list of objects with the S3 method
+  # Can set the taxon ids using a list of TaxonId objects with the S3 method
+  ta <- taxon("a", "species", "a")
+  tb <- taxon("b", "species", "b")
+  x <- taxa(t1, t2)
+  taxon_ids(x) <- list(ta$id, tb$id)
+  expect_equal(x$ids, list(taxon_id("a"), taxon_id("b")))
+  expect_false(identical(x$ids[[1]], ta$id)) # s3 setters pass by value
+  ta$id$id <- "new"
+  expect_equal(x$ids[[1]], taxon_id("a")) # s3 setters pass by value
 
 })
 
@@ -159,35 +228,66 @@ test_that("taxa: taxon_id getters and setters", {
 test_that("taxa: taxon_rank getters and setters", {
 
   # Can set the taxon ranks with a list of taxon_rank objects
+  ta <- taxon("a", "genus", "a")
+  tb <- taxon("b", "family", "b")
+  x <- taxa(t1, t2)
+  x$ranks <- list(ta$rank, tb$rank)
+  expect_equal(x$ranks, list(taxon_rank("genus"), taxon_rank("family")))
+  expect_identical(x$ranks[[1]], ta$rank) # R6 setters pass by reference
+  ta$rank$name <- "new"
+  expect_equal(x$ranks[[1]], taxon_rank("new")) # R6 setters pass by reference
 
-  # Can set the taxon ranks with a character/factor/nunmber
+  # Can set the taxon ranks with a character
+  x <- taxa(t1, t2)
+  x$ranks <- c("a", "b")
+  expect_equal(x$ranks, list(taxon_rank("a"), taxon_rank("b")))
 
-  # Can set the taxon ranks with anything else that can be coerced into a character/object with a warning
+  # Can set the taxon ranks with a factor
+  x <- taxa(t1, t2)
+  x$ranks <- as.factor(c("a", "b"))
+  expect_equal(x$ranks, list(taxon_rank("a"), taxon_rank("b")))
 
-  # Can get the list of taxon_rank object
-
-  # Can coerce the list of taxon rank objects returned into a character/factor/number
+  # Can set the taxon ranks with a number
+  x <- taxa(t1, t2)
+  x$ranks <- 1:2
+  expect_equal(x$ranks, list(taxon_rank("1"), taxon_rank("2")))
 
   # Can get the character version of taxon ranks from S3 method
+  x <- taxa(t1, t2)
+  expect_equal(taxon_ranks(x), c("species", "species"))
 
   # Can set the taxon ranks using a character with the S3 method
+  x <- taxa(t1, t2)
+  taxon_ranks(x) <- c("1", "2")
+  expect_equal(taxon_ranks(x), c("1", "2"))
 
-  # Can set the taxon ranks using a list of objects with the S3 method
-
-  # Only valid ranks are accepted by setters if valid ranks are defined
+  # Can set the taxon ranks using a list of TaxonId objects with the S3 method
+  ta <- taxon("a", "genus", "a")
+  tb <- taxon("b", "family", "b")
+  x <- taxa(t1, t2)
+  taxon_ranks(x) <- list(ta$rank, tb$rank)
+  expect_equal(x$ranks, list(taxon_rank("genus"), taxon_rank("family")))
+  expect_false(identical(x$ranks[[1]], ta$rank)) # s3 setters pass by value
+  ta$rank$name <- "new"
+  expect_equal(x$ranks[[1]], taxon_rank("genus")) # s3 setters pass by value
 
 })
 
 
 test_that("taxa: authority getters and setters", {
 
-  # Can set the authorities with a character/factor/nunmber
-
-  # Can set the authorities with anything else that can be coerced into a character with a warning
+  # Can set the authorities with a character
+  x <- taxa(t1, t2)
+  x$authorities <- c("a", "b")
+  expect_equal(x$authorities,  c("a", "b"))
 
   # Can get the authorities from the S3 method
+  expect_equal(taxon_auths(x),  c("a", "b"))
 
   # Can set the authorities using a character with the S3 method
+  x <- taxa(t1, t2)
+  taxon_auths(x) <- c("a", "b")
+  expect_equal(taxon_auths(x),  c("a", "b"))
 
 })
 

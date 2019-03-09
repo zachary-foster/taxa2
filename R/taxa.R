@@ -37,13 +37,18 @@
 #' # combo non-null and null
 #' taxa(catus, x, sapiens)
 taxa <- function(..., .list = NULL) {
-  Taxa$new(
-    ...,
-    .list = .list
-  )
+  inputs <- get_dots_or_list(..., .list = .list)
+  inputs <- lapply(inputs, function(x) {
+    if (length(x) > 0 && "R6" %in% class(x)) {
+      return(x$clone(deep = TRUE))
+    } else {
+      return(x)
+    }
+  })
+  Taxa$new(.list = inputs)
 }
 
-
+#' @export
 Taxa <- R6::R6Class(
   classname = "Taxa",
   public = list(

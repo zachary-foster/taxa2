@@ -62,7 +62,7 @@ TaxonName <- R6::R6Class(
         if (is.null(value)) {
           private$my_name <- NULL
         } else {
-          check_arg_class(value, c("character", "TaxonName", "numeric", "factor", "integer"), "taxon name")
+          check_arg_class(value, c("character", "TaxonName", "numeric", "factor", "integer", "Taxon"), "taxon name")
           private$my_name <- as.character(value)
         }
       }
