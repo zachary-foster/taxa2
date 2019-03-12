@@ -1,3 +1,6 @@
+library(taxa)
+library(testthat)
+
 context("hierarchies")
 
 ## Creating test data
@@ -55,17 +58,17 @@ test_that("hierarchies - empty", {
   expect_is(unclass(aa), "list")
   expect_is(aa[[1]], "Hierarchy")
   expect_is(aa[[2]], "Hierarchy")
-  expect_null(aa[[1]]$taxa)
-  expect_null(aa[[2]]$taxa)
+  expect_equal(length(aa[[1]]$taxa), 0)
+  expect_equal(length(aa[[2]]$taxa), 0)
 
   # prints 'Empty hierarchy'
   expect_output(
-    print(hierarchies(hierarchy())),
-    "Empty hierarchy"
+    print(hierarchies()),
+    "no. hierarchies:  0"
   )
   expect_output(
     print(hierarchies(hierarchy(), hierarchy())),
-    "Empty hierarchy\n  Empty hierarchy"
+    "Empty hierarchy"
   )
 
   aa <- hierarchies()

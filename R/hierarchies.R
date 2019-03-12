@@ -99,8 +99,8 @@ print.hierarchies <- function(x, ...) {
   cat("  no. hierarchies: ", length(x), "\n")
   if (length(x)) {
     for (i in seq_along(x[1:min(10, length(x))])) {
-      if (is.null(x[[i]]$taxa)) {
-        cat("  Empty hierarchy", sep = "\n")
+      if (length(x[[i]]$taxa) == 0) {
+        cat("  [Empty hierarchy]", sep = "\n")
       } else {
         cat(
           paste0("  ", paste0(vapply(x[[i]]$taxa, function(x) x$name$name, ""),

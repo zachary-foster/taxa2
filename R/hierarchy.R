@@ -92,7 +92,7 @@ Hierarchy <- R6::R6Class(
         cat("  no. taxon's: ", length(self$taxa), "\n")
         for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
           if (self$taxa[[i]]$is_empty()) {
-            cat("  empty taxon\n")
+            cat("  [empty taxon]\n")
           } else {
             cat(
               sprintf("  %s / %s / %s",
