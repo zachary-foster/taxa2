@@ -30,12 +30,11 @@
 #' # a null taxon_name object
 #' taxon_name(NULL)
 taxon_name <- function(name, database = NULL) {
-  TaxonName$new(
-    name = name,
-    database = database
-  )
+  database <- clone_if_r6(database)
+  TaxonName$new(name = name, database = database)
 }
 
+#' @export
 TaxonName <- R6::R6Class(
   "TaxonName",
   public = list(

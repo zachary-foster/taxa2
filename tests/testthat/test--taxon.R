@@ -24,6 +24,24 @@ test_that("taxa works", {
   # Can make a taxon with as_Taxon
   expect_identical(as.Taxon(x), x)
   expect_equal(as_Taxon("new taxon"), taxon("new taxon"))
+
+  # S3 constructor passes by value
+  n <- taxon_name("1")
+  x <- taxon(n, rank, id)
+  n$name <- "2"
+  expect_equal(x$name$name, "1")
+  x$name$name <- "3"
+  expect_equal(n$name, "2")
+
+  # R6 constructor passes by reference
+  n <- taxon_name("1")
+  x <- Taxon$new(n, rank, id)
+  n$name <- "2"
+  expect_equal(x$name$name, "2")
+  expect_identical(x$name, n)
+  x$name$name <- "3"
+  expect_equal(n$name, "3")
+
 })
 
 test_that("taxa fails well", {

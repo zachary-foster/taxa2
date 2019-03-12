@@ -32,6 +32,28 @@ test_that("taxa_id - ID and database (character)", {
   expect_null(aa$database$url)
   expect_type(aa$id, "character")
   expect_output(aa$print())
+
+  # S3 constructor passes by value
+  db = taxon_database("1")
+  x = taxon_id(93036, db)
+  db$name = "2"
+  expect_equal(x$database$name, "1")
+
+  # R6 constructor passes by reference
+  db = taxon_database("1")
+  x = TaxonId$new(93036, db)
+  db$name = "2"
+  expect_equal(x$database$name, "2")
+  expect_identical(x$database, db)
+
+  # R6 constructor passes by value any non-R6 objects, since they have to
+  id = "1"
+  x = TaxonId$new(id, "db")
+  id = "2"
+  expect_equal(x$id, "1")
+  x$id = "3"
+  expect_equal(id, "2")
+
 })
 
 test_that("taxon_id fails well", {

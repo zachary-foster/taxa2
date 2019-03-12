@@ -24,13 +24,13 @@
 #'
 #' # a null taxon_name object
 #' taxon_name(NULL)
+#'
 taxon_id <- function(id, database = NULL) {
-  TaxonId$new(
-    id = id,
-    database = database
-  )
+  database <- clone_if_r6(database)
+  TaxonId$new(id = id, database = database)
 }
 
+#' @export
 TaxonId <- R6::R6Class(
   "TaxonId",
   public = list(

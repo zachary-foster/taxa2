@@ -25,12 +25,11 @@
 #' # a null taxon_name object
 #' taxon_name(NULL)
 taxon_rank <- function(name, database = NULL) {
-  TaxonRank$new(
-    name = name,
-    database = database
-  )
+  database <- clone_if_r6(database)
+  TaxonRank$new(name = name, database = database)
 }
 
+#' @export
 TaxonRank <- R6::R6Class(
   "TaxonRank",
   public = list(

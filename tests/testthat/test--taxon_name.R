@@ -32,6 +32,23 @@ test_that("taxa_name - ID and database (character)", {
   expect_null(aa$database$url)
   expect_type(aa$name, "character")
   expect_output(aa$print())
+
+  # S3 constructor passes by value
+  db <- taxon_database("1")
+  x <- taxon_name("poa", db)
+  db$name <- "2"
+  expect_equal(x$database$name, "1")
+  x$database$name <- "3"
+  expect_equal(db$name, "2")
+
+  # R6 constructor passes by reference
+  db <- taxon_database("1")
+  x <- TaxonName$new("poa", db)
+  db$name <- "2"
+  expect_equal(x$database$name, "2")
+  expect_identical(x$database, db)
+  x$database$name <- "3"
+  expect_equal(db$name, "3")
 })
 
 test_that("taxon_name fails well", {

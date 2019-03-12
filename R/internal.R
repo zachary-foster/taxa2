@@ -333,3 +333,19 @@ char_or_placeholder <- function(thing, placeholder = "[none]") {
     return(as.character(thing))
   }
 }
+
+
+#' Clone R6 objects
+#'
+#' Check if the object is an R6 class and return a deep clone if so, otherwise return the object
+#'
+#' @param input the object to clone
+#'
+#' @keywords internal
+clone_if_r6 <- function(input) {
+  if (length(input) > 0 && "R6" %in% class(input)) {
+    return(input$clone(deep = TRUE))
+  } else {
+    return(input)
+  }
+}

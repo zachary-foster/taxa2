@@ -42,13 +42,14 @@
 #' )
 taxon <- function(name, rank = NULL, id = NULL, authority = NULL) {
   Taxon$new(
-    name = name,
-    rank = rank,
-    id = id,
-    authority = authority
+    name = clone_if_r6(name),
+    rank = clone_if_r6(rank),
+    id = clone_if_r6(id),
+    authority = clone_if_r6(authority)
   )
 }
 
+#' @export
 Taxon <- R6::R6Class(
   "Taxon",
 

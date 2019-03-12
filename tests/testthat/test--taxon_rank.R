@@ -30,6 +30,23 @@ test_that("taxa_rank - name and database (character)", {
   expect_equal(aa$database$name, "ncbi")
   expect_null(aa$database$url)
   expect_type(aa$name, "character")
+
+  # S3 constructor passes by value
+  db <- taxon_database("1")
+  x <- taxon_rank("species", db)
+  db$name <- "2"
+  expect_equal(x$database$name, "1")
+  x$database$name <- "3"
+  expect_equal(db$name, "2")
+
+  # R6 constructor passes by reference
+  db <- taxon_database("1")
+  x <- TaxonRank$new("species", db)
+  db$name <- "2"
+  expect_equal(x$database$name, "2")
+  expect_identical(x$database, db)
+  x$database$name <- "3"
+  expect_equal(db$name, "3")
 })
 
 test_that("taxon_rank fails well", {
