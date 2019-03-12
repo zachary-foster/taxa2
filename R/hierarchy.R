@@ -64,61 +64,43 @@
 #' x <- taxon(NULL)
 #' (res <- hierarchy(x, x, x))
 #' ## similar to hierarchy(), but `taxa` slot is not empty
-
 hierarchy <- function(..., .list = NULL) {
   Hierarchy$new(..., .list = .list)
 }
 
+#' @export
 Hierarchy <- R6::R6Class(
   "Hierarchy",
   lock_objects = TRUE,
+  inherit = Taxa,
   public = list(
-    taxa = NULL,
     ranklist = NULL,
 
     initialize = function(..., .list = NULL) {
-      # Get intput
-      input <- unlist(get_dots_or_list(..., .list = .list))
-
-      if (!all(vapply(input, function(x)
-        any(class(x) %in% c('character', 'Taxon')), logical(1)))
-      ) {
-        stop(
-          "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'",
-          call. = FALSE)
-      }
-
-      # Convert factors to characters
-      fact_input_index <- which(lapply(input, class) == "factor")
-      input[fact_input_index] <- lapply(input[fact_input_index], as.character)
-
-      # If character strings are supplied, convert to taxa
-      char_input_index <- which(lapply(input, class) == "character")
-      input[char_input_index] <- lapply(input[char_input_index], taxon)
-
-      # Parse input
-      all_have_ranks <- all(vapply(input,
-                                   function(x) !is.null(x$rank$name),
+      super$initialize(..., .list = .list)
+      all_have_ranks <- all(vapply(self$taxa,
+                                   function(x) ! is.null(x$rank$name),
                                    logical(1)))
       if (all_have_ranks) {
-        self$taxa <- private$sort_hierarchy(input)
-      } else {
-        self$taxa <- input
+        self$taxa <- private$sort_hierarchy(self$taxa)
       }
     },
 
     print = function(indent = "") {
       cat(paste0(indent, "<Hierarchy>\n"))
-      if (length(self$taxa) > 0 &&
-          !all(vapply(self$taxa, function(z) z$is_empty(), logical(1)))) {
+      if (length(self$taxa) > 0) {
         cat("  no. taxon's: ", length(self$taxa), "\n")
         for (i in seq_along(self$taxa[1:min(10, length(self$taxa))])) {
-          cat(
-            sprintf("  %s / %s / %s",
-                    self$taxa[[i]]$get_name() %||% "",
-                    self$taxa[[i]]$get_rank() %||% "",
-                    self$taxa[[i]]$get_id() %||% ""
-            ), "\n")
+          if (self$taxa[[i]]$is_empty()) {
+            cat("  empty taxon\n")
+          } else {
+            cat(
+              sprintf("  %s / %s / %s",
+                      self$taxa[[i]]$name %||% "",
+                      self$taxa[[i]]$rank %||% "",
+                      self$taxa[[i]]$id %||% ""
+              ), "\n")
+          }
         }
         if (length(self$taxa) > 10) cat("  ...")
       } else {
@@ -135,7 +117,7 @@ Hierarchy <- R6::R6Class(
       }
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
-      taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
+      taxa_ids <- vapply(self$taxa, function(x) x$id$id, "")
       todrop <- which(taxa_rks %in% ranks |
                         taxa_nms %in% names |
                         taxa_ids %in% ids)
@@ -152,7 +134,7 @@ Hierarchy <- R6::R6Class(
       }
       taxa_rks <- vapply(self$taxa, function(x) x$rank$name, "")
       taxa_nms <- vapply(self$taxa, function(x) x$name$name, "")
-      taxa_ids <- vapply(self$taxa, function(x) x$id$id, numeric(1))
+      taxa_ids <- vapply(self$taxa, function(x) x$id$id, "")
       todrop <- which(!(taxa_rks %in% ranks |
                         taxa_nms %in% names |
                         taxa_ids %in% ids))
@@ -212,7 +194,9 @@ Hierarchy <- R6::R6Class(
 
   ),
 
+
   private = list(
+
     sort_hierarchy = function(x) {
       if (length(x) == 0) {
         return(x)
@@ -280,7 +264,7 @@ Hierarchy <- R6::R6Class(
     },
 
     ids2rank = function(w) {
-      tmp <- vapply(self$taxa, function(z) z$id$id, 1)
+      tmp <- vapply(self$taxa, function(z) z$id$id, "")
       rcks <- vapply(self$taxa, function(z) z$rank$name, "")
       rcks[which(tmp %in% w)]
     },

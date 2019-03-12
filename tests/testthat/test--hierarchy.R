@@ -34,7 +34,7 @@ test_that("hierarchy - empty", {
   aa <- hierarchy()
 
   expect_is(aa, "Hierarchy")
-  expect_null(aa$taxa)
+  expect_equal(length(aa$taxa), 0)
   expect_null(aa$ranklist)
 
   # prints 'Empty hierarchy'
@@ -87,11 +87,11 @@ test_that("hierarchy - print when not empty", {
 
 test_that("hierarchy fails well", {
   expect_error(
-    hierarchy(4),
-    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+    hierarchy(mtcars),
+    "taxon name must be a class that is or inherits one of the following classes")
   expect_error(
-    hierarchy(solanum, 5),
-    "all inputs to 'hierarchy' must be of class 'Taxon' or 'character'")
+    hierarchy(c, 5),
+    "taxon name must be a class that is or inherits one of the following classes")
 })
 
 
@@ -104,13 +104,13 @@ test_that("hierarchy can do null data", {
   # empty hierarchy()
   x <- hierarchy()
   expect_is(x, "Hierarchy")
-  expect_null(x$taxa)
+  expect_equal(length(x$taxa), 0)
   expect_null(x$ranklist)
 
   # specifying NULL
-  x <- hierarchy(NULL)
+  x <- hierarchy(NULL, NULL)
   expect_is(x, "Hierarchy")
-  expect_null(x$taxa)
+  expect_equal(length(x$taxa), 2)
   expect_null(x$ranklist)
 })
 
@@ -204,85 +204,5 @@ test_that("hierarchy span", {
   expect_error(span(hierarchy(), nms("Poa annua")),
                "no taxa found")
 })
-
-
-
-test_that("hierarchy: taxon_name getters and setters", {
-
-  # Can set the taxon names with a list of taxon_name objects
-
-  # Can set the taxon names with a character/factor
-
-  # Can set the taxon names with anything else that can be coerced into a character/object with a warning
-
-  # Can get a list of taxon_names objects
-
-  # Can coerce the list of taxon_name objects returned into a character/factor
-
-  # Can get the character version of taxon names from S3 method
-
-  # Can set the taxon names using a character with the S3 method
-
-  # Can set the taxon names using a list of objects with the S3 method
-
-})
-
-
-test_that("hierarchy: taxon_id getters and setters", {
-
-  # Can set the taxon ids with a list of taxon_id objects
-
-  # Can set the taxon ids with a character/factor/nunmber
-
-  # Can set the taxon ids with anything else that can be coerced into a character/object with a warning
-
-  # Can get a list of taxon_id objects
-
-  # Can coerce the list of taxon_id objects returned into a character/factor/number
-
-  # Can get the character version of taxon ids from S3 method
-
-  # Can set the taxon ids using a character with the S3 method
-
-  # Can set the taxon ids using a list of objects with the S3 method
-
-})
-
-
-test_that("hierarchy: taxon_rank getters and setters", {
-
-  # Can set the taxon ranks with a list of taxon_rank objects
-
-  # Can set the taxon ranks with a character/factor/nunmber
-
-  # Can set the taxon ranks with anything else that can be coerced into a character/object with a warning
-
-  # Can get the list of taxon_rank object
-
-  # Can coerce the list of taxon rank objects returned into a character/factor/number
-
-  # Can get the character version of taxon ranks from S3 method
-
-  # Can set the taxon ranks using a character with the S3 method
-
-  # Can set the taxon ranks using a list of objects with the S3 method
-
-  # Only valid ranks are accepted by setters if valid ranks are defined
-
-})
-
-
-test_that("hierarchy: authority getters and setters", {
-
-  # Can set the authorities with a character/factor/nunmber
-
-  # Can set the authorities with anything else that can be coerced into a character with a warning
-
-  # Can get the authorities from the S3 method
-
-  # Can set the authorities using a character with the S3 method
-
-})
-
 
 

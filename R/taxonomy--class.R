@@ -17,16 +17,16 @@
 #' @family classes
 #'
 #' @template taxonomyegs
-
 taxonomy <- function(..., .list = NULL, named_by_rank = FALSE) {
   Taxonomy$new(..., .list = .list, named_by_rank = named_by_rank)
 }
 
+#' @export
 Taxonomy <- R6::R6Class(
   "Taxonomy",
+  inherit = Taxa,
   lock_class = TRUE,
   public = list(
-    taxa = NULL,
     edge_list = NULL, # Note: this should be made of taxon ids, not indexes
     input_ids = NULL, # Only used by `Taxmap` right now
 

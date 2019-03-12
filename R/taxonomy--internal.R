@@ -17,9 +17,9 @@ parse_heirarchies_to_taxonomy <- function(heirarchies) {
   # Convert to character vecotor and use parse_raw_heirarchies_to_taxonomy
   taxon_names <- lapply(heirarchies,
                         function(heirarchy) vapply(heirarchy$taxa,
-                                                   function(taxon) paste0(taxon$get_name(),
-                                                                          taxon$get_rank(),
-                                                                          taxon$get_id(),
+                                                   function(taxon) paste0(taxon$name,
+                                                                          taxon$rank,
+                                                                          taxon$id,
                                                                           taxon$authority),
                                                    character(1)))
   input_taxa <- unlist(lapply(heirarchies, function(x) x$taxa))
