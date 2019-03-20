@@ -70,7 +70,14 @@ Taxmap <- R6::R6Class(
                       prefix = paste0(indent, "  ",
                                       length(self$taxa), " taxa:"),
                       type = "cat")
-        limited_print(private$make_graph(),
+        if (nrow(self$edge_list) > 100) { # Needed so that a lot of time is not used formatting edges that will not be printed
+          el_text <- apply(self$edge_list[c(1:50, (nrow(self$edge_list) - 50):nrow(self$edge_list)), ], 1,
+                            function(x) paste0(tid_font(x), collapse = punc_font("->")))
+        } else {
+          el_text <- apply(self$edge_list, 1,
+                            function(x) paste0(tid_font(x), collapse = punc_font("->")))
+        }
+        limited_print(el_text,
                       sep = punc_font(", "),
                       mid = punc_font(" ... "),
                       trunc_char = punc_font("[truncated]"),
