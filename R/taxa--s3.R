@@ -1,4 +1,3 @@
-# -----------------------------------------------------------------------------
 #' @export
 `taxon_names<-.Taxa` <- function(obj, value) {
   if (length(value) > 0) {
@@ -14,13 +13,20 @@
   return(obj)
 }
 
+
 #' @export
 `taxon_names.Taxa` <- function(obj, ...) {
-  return(unname(vapply(obj$names, as.character, character(1))))
+  return(unname(vapply(obj$names, FUN.VALUE = character(1),
+                       function(x) {
+                         if (length(x) == 0) {
+                           return(NA_character_)
+                         } else {
+                           return(as.character(x))
+                         }
+                       })))
 }
 
 
-# -----------------------------------------------------------------------------
 #' @export
 `taxon_ids<-.Taxa` <- function(obj, value) {
   if (length(value) > 0) {
@@ -39,11 +45,17 @@
 
 #' @export
 `taxon_ids.Taxa` <- function(obj, ...) {
-  return(unname(vapply(obj$ids, as.character, character(1))))
+  return(unname(vapply(obj$ids, FUN.VALUE = character(1),
+                       function(x) {
+                         if (length(x) == 0) {
+                           return(NA_character_)
+                         } else {
+                           return(as.character(x))
+                         }
+                       })))
 }
 
 
-# -----------------------------------------------------------------------------
 #' @export
 `taxon_ranks<-.Taxa` <- function(obj, value) {
   if (length(value) > 0) {
@@ -62,11 +74,17 @@
 
 #' @export
 `taxon_ranks.Taxa` <- function(obj, ...) {
-  return(unname(vapply(obj$ranks, as.character, character(1))))
+  return(unname(vapply(obj$ranks, FUN.VALUE = character(1),
+                       function(x) {
+                         if (length(x) == 0) {
+                           return(NA_character_)
+                         } else {
+                           return(as.character(x))
+                         }
+                       })))
 }
 
 
-# -----------------------------------------------------------------------------
 #' @export
 `taxon_auths<-.Taxa` <- function(obj, value) {
   if (length(value) > 0) {
@@ -82,7 +100,21 @@
   return(obj)
 }
 
+
 #' @export
 `taxon_auths.Taxa` <- function(obj, ...) {
-  return(unname(vapply(obj$authorities, as.character, character(1))))
+  return(unname(vapply(obj$authorities, FUN.VALUE = character(1),
+                       function(x) {
+                         if (length(x) == 0) {
+                           return(NA_character_)
+                         } else {
+                           return(as.character(x))
+                         }
+                       })))
+}
+
+
+#' @export
+as.character.Taxa <- function(x, ...) {
+  taxon_names(x)
 }

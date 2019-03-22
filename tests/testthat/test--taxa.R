@@ -173,6 +173,10 @@ test_that("taxa: taxon_name getters and setters", {
   taxon_names(x) <- list(taxon("1"), taxon("2"))
   expect_equal(taxon_names(x), c("1", "2"))
 
+  # Can get id when no ids are set
+  x <- taxa("a", NULL)
+  expect_equal(taxon_names(x), c("a", NA))
+
 })
 
 
@@ -221,6 +225,10 @@ test_that("taxa: taxon_id getters and setters", {
   expect_false(identical(x$ids[[1]], ta$id)) # s3 setters pass by value
   ta$id$id <- "new"
   expect_equal(x$ids[[1]], taxon_id("a")) # s3 setters pass by value
+
+  # Can get id when no ids are set
+  x <- taxa(taxon("a", "species", "123"), "b")
+  expect_equal(taxon_ids(x), c("123", NA))
 
 })
 
@@ -271,6 +279,10 @@ test_that("taxa: taxon_rank getters and setters", {
   ta$rank$name <- "new"
   expect_equal(x$ranks[[1]], taxon_rank("genus")) # s3 setters pass by value
 
+  # Can get rank when no ranks are set
+  x <- taxa(taxon("a", "species", "123"), "b")
+  expect_equal(taxon_ranks(x), c("species", NA))
+
 })
 
 
@@ -288,6 +300,10 @@ test_that("taxa: authority getters and setters", {
   x <- taxa(t1, t2)
   taxon_auths(x) <- c("a", "b")
   expect_equal(taxon_auths(x),  c("a", "b"))
+
+  # Can get authorities when no authority is set
+  x <- taxa(taxon("a", "species", "123", "auth1"), "b")
+  expect_equal(taxon_auths(x), c("auth1", NA))
 
 })
 

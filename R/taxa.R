@@ -57,20 +57,16 @@ Taxa <- R6::R6Class(
       cat("<taxa>", "\n")
       cat("  no. taxa: ", length(self$taxa), "\n")
       if (length(self$taxa) > 0) {
-        if (all(vapply(self$taxa, function(z) z$is_empty(), logical(1)))) {
-          cat("   empty set", "\n")
-        } else {
-          for (i in seq_len(min(10, length(self$taxa)))) {
-            if (self$taxa[[i]]$is_empty()) {
-              cat("  empty", "\n")
-            } else {
-              cat(
-                sprintf("  %s / %s / %s",
-                        char_or_placeholder(self$taxa[[i]]$name),
-                        char_or_placeholder(self$taxa[[i]]$rank),
-                        char_or_placeholder(self$taxa[[i]]$id)
-                ), "\n")
-            }
+        for (i in seq_len(min(10, length(self$taxa)))) {
+          if (self$taxa[[i]]$is_empty()) {
+            cat("  empty", "\n")
+          } else {
+            cat(
+              sprintf("  %s / %s / %s",
+                      char_or_placeholder(self$taxa[[i]]$name),
+                      char_or_placeholder(self$taxa[[i]]$rank),
+                      char_or_placeholder(self$taxa[[i]]$id)
+              ), "\n")
           }
         }
       }
@@ -231,7 +227,7 @@ Taxa <- R6::R6Class(
 
 #' @export
 as.list.Taxa <- function(obj) {
-  lapply(obj$taxa, function(X) x$clone(deep = TRUE))
+  lapply(obj$taxa, function(x) x$clone(deep = TRUE))
 }
 
 
@@ -248,4 +244,10 @@ as.data.frame.Taxa <- function(obj, ...) {
 #' @export
 length.Taxa <- function(x) {
   length(x$taxa)
+}
+
+
+#' @export
+c.Taxa <- function(...) {
+  taxa(.list = unlist(lapply(list(...), as.list), recursive = FALSE))
 }

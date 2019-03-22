@@ -130,7 +130,25 @@ TaxonDatabase <- R6::R6Class(
           private$my_id_regex <- value
         }
       }
+    },
+
+    valid_ranks = function(value) {
+      if (missing(value)) { # GET
+        return(private$my_valid_ranks)
+      }
+      else { # SET
+        if (is.null(value)) {
+          private$my_valid_ranks <- NULL
+        } else {
+          check_arg_class(value, c("character", "factor"), '"valid_ranks"')
+          if (is.factor(value) && ! is.ordered(value)) {
+            value <- as.character(value)
+          }
+          private$my_valid_ranks <- value
+        }
+      }
     }
+
   ),
 
 
@@ -138,7 +156,8 @@ TaxonDatabase <- R6::R6Class(
     my_name = NULL,
     my_url = NULL,
     my_description = NULL,
-    my_id_regex = NULL
+    my_id_regex = NULL,
+    my_valid_ranks = NULL
   )
 
 )
@@ -239,4 +258,5 @@ as.TaxonDatabase <- function(input) {
 
 #' @export
 as_TaxonDatabase <- as.TaxonDatabase
+
 
