@@ -93,23 +93,41 @@ taxon_db.taxa_taxon_id <- function(db = character()) {
 # S3 printing functions
 #--------------------------------------------------------------------------------
 
+#' Prepare taxon_id for printing
+#'
+#' Prepare taxon_id for printing. Makes color optional.
+#'
+#' @param color Use color?
+#'
+#' @return character
+#'
 #' @keywords internal
-#' @export
-format.taxa_taxon_id <- function(x, ...) {
+printed_taxon_id <- function(x, color = FALSE) {
   out <- vctrs::field(x, 'id')
   db <- vctrs::field(x, 'db')
   out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
-  # out <- paste0(out, ifelse(is.na(db), '', paste0(' (', db, ')')))
+  if (! color) {
+    out <- crayon::strip_style(out)
+  }
   return(out)
 }
 
 
-#' @keywords internal
 #' @export
+#' @keywords internal
+format.taxa_taxon_id <- function(x, ...) {
+  printed_taxon_id(x, color = FALSE)
+}
+
+
+#' @export
+#' @keywords internal
 obj_print_data.taxa_taxon_id <- function(x) {
-  # if (length(x) == 0)
-  #   return()
-  print_with_color(x, quote = FALSE)
+  if (length(x) == 0) {
+    return()
+  }
+  out <- printed_taxon_id(x, color = TRUE)
+  print_with_color(out, quote = FALSE)
 }
 
 
@@ -126,6 +144,14 @@ vec_ptype_full.taxa_taxon_id <- function(x) {
   paste0("taxon_id")
 }
 
+
+#' @importFrom pillar pillar_shaft
+#' @export
+#' @keywords internal
+pillar_shaft.taxa_taxon_id <- function(x, ...) {
+  out <- printed_taxon_id(x, color = TRUE)
+  pillar::new_pillar_shaft_simple(out, align = "left")
+}
 
 #--------------------------------------------------------------------------------
 # S3 coercion functions

@@ -199,7 +199,7 @@ database_list <- list(
     "itis",
     "http://www.itis.gov",
     "Integrated Taxonomic Information System",
-    ".*"
+    "[0-9]+"
   )
 )
 
@@ -280,7 +280,7 @@ default_database_definitions <- function(defaults = list()) {
 #'   name = "my_new_database",
 #'   url = "http://www.my_tax_database.com",
 #'   description = "I just made this up",
-#'   id_regex = "*"
+#'   id_regex = ".*"
 #' )
 #'
 #' # Reset definitions to default values

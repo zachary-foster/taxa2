@@ -39,7 +39,7 @@ database_definitions$set(
   name = "my_new_database",
   url = "http://www.my_tax_database.com",
   description = "I just made this up",
-  id_regex = "*"
+  id_regex = ".*"
 )
 
 # Reset definitions to default values
