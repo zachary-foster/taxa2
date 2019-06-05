@@ -4,19 +4,21 @@
 \alias{taxon_id}
 \title{Taxon ID class}
 \usage{
-taxon_id(id, database = NULL)
+taxon_id(id = character(), db = NA)
 }
 \arguments{
-\item{id}{(character/integer/numeric) a taxonomic id, required}
+\item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
 
-\item{database}{(database) database class object, optional}
+\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
+default), the input must consist of names of databases in \link{database_list}. The length must be
+0, 1, or equal to the number of IDs.}
 }
 \value{
-An \code{R6Class} object of class \code{TaxonId}
+An \code{S3} object of class \code{taxa_taxon_id}
 }
 \description{
-Used to store taxon IDs, either arbitrary or from a taxonomy database. This
-is typically used to store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
+Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
+store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 (x <- taxon_id(12345))
@@ -37,7 +39,7 @@ taxon_name(NULL)
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
-  \code{\link{taxmap}}, \code{\link{taxon_database}},
+  \code{\link{taxmap}}, \code{\link{taxon_db}},
   \code{\link{taxon_name}}, \code{\link{taxon_rank}},
   \code{\link{taxonomy}}, \code{\link{taxon}}
 }

@@ -285,19 +285,6 @@ length_of_thing <- function(obj) {
   }
 }
 
-#' Check regex validity
-#'
-#' Check if a regular expression is valid
-#'
-#' @param text The putative regex to check.
-#'
-#' @keywords internal
-is_valid_regex <- function(text)
-{
-  out <- suppressWarnings(try(grepl(pattern = text, "x"), silent = TRUE))
-  return(! inherits(out, "try-error"))
-}
-
 #' Check argument types
 #'
 #' Check that an argument is one of an accepted set of classes and throw and error if it is not.

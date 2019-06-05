@@ -37,7 +37,8 @@ Imports:
     tidyr,
     utils,
     taxize,
-    pillar
+    pillar,
+    vctrs
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,

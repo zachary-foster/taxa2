@@ -1,43 +1,19 @@
-#' Taxonomy database class
+#' Check regex validity
 #'
-#' Used to store information about taxonomy databases. This is typically used to
-#' store where taxon information came from in [taxon()] objects.
+#' Check if a regular expression is valid
 #'
-#' @export
-#' @param name (character) name of the database
-#' @param url (character) url for the database
-#' @param description (character) description of the database
-#' @param id_regex (character) id regex
+#' @param text The putative regex to check.
 #'
-#' @return An `R6Class` object of class `TaxonDatabase`
-#'
-#' @seealso [database_list]
-#'
-#' @family classes
-#' @examples
-#' # create a database entry
-#' (x <- taxon_database(
-#'   "ncbi",
-#'   "http://www.ncbi.nlm.nih.gov/taxonomy",
-#'   "NCBI Taxonomy Database",
-#'   "*"
-#' ))
-#' x$name
-#' x$url
-#'
-#' # use pre-created database objects
-#' database_list
-#' database_list$ncbi
-taxon_database <- function(name = NULL, url = NULL, description = NULL,
-                     id_regex = NULL) {
-  TaxonDatabase$new(
-    name = name,
-    url = url,
-    description = description,
-    id_regex = id_regex
-  )
+#' @keywords internal
+is_valid_regex <- function(text)
+{
+  out <- suppressWarnings(try(grepl(pattern = text, "x"), silent = TRUE))
+  return(! inherits(out, "try-error"))
 }
 
+
+
+#' @keywords internal
 TaxonDatabase <- R6::R6Class(
   "TaxonDatabase",
   public = list(
@@ -80,7 +56,7 @@ TaxonDatabase <- R6::R6Class(
         if (is.null(value)) {
           private$my_name <- NULL
         } else {
-          check_arg_class(value, c("character", "factor", "TaxonDatabase"), "database name")
+          # check_arg_class(value, c("character", "factor", "TaxonDatabase"), "database name")
           private$my_name <- as.character(value)
         }
       }
@@ -94,7 +70,7 @@ TaxonDatabase <- R6::R6Class(
         if (is.null(value)) {
           private$my_url <- NULL
         } else {
-          check_arg_class(value, c("character", "factor"), "database url")
+          # check_arg_class(value, c("character", "factor"), "database url")
           private$my_url <- as.character(value)
         }
       }
@@ -108,7 +84,7 @@ TaxonDatabase <- R6::R6Class(
         if (is.null(value)) {
           private$my_description <- NULL
         } else {
-          check_arg_class(value, c("character", "factor"), "database description")
+          # check_arg_class(value, c("character", "factor"), "database description")
           private$my_description <- as.character(value)
         }
       }
@@ -122,7 +98,7 @@ TaxonDatabase <- R6::R6Class(
         if (is.null(value)) {
           private$my_id_regex <- NULL
         } else {
-          check_arg_class(value, c("character", "factor"), '"id_regex"')
+          # check_arg_class(value, c("character", "factor"), '"id_regex"')
           value <- as.character(value)
           if (!is_valid_regex(value)) {
             stop(call. = FALSE, '"id_regex" must be a valid regular expression. "', value, '" is not a valid regular expression according to R.')
@@ -162,77 +138,64 @@ TaxonDatabase <- R6::R6Class(
 
 )
 
+
 #' Database list
 #'
 #' The list of known databases. Not currently used much, but will be when we add
 #' more check for taxon IDs and taxon ranks from particular databases.
 #'
-#' @export
-#' @details List of databases with pre-filled details, where each has the
-#' format:
-#' \itemize{
-#'  \item url: A base URL for the database source.
-#'  \item description: Description of the database source.
-#'  \item id regex: identifier regex.
-#' }
-#' @seealso [taxon_database]
-#' @examples
-#' database_list
-#' database_list$ncbi
-#' database_list$ncbi$name
-#' database_list$ncbi$description
-#' database_list$ncbi$url
+#' @keywords internal
 database_list <- list(
-  ncbi = taxon_database(
+  ncbi = TaxonDatabase$new(
     "ncbi",
     "http://www.ncbi.nlm.nih.gov/taxonomy",
     "NCBI Taxonomy Database",
     ".*"
   ),
 
-  gbif = taxon_database(
+  gbif = TaxonDatabase$new(
     "gbif",
     "http://www.gbif.org/developer/species",
     "GBIF Taxonomic Backbone",
     ".*"
   ),
 
-  bold = taxon_database(
+  bold = TaxonDatabase$new(
     "bold",
     "http://www.boldsystems.org",
     "Barcode of Life",
     ".*"
   ),
 
-  col = taxon_database(
+  col = TaxonDatabase$new(
     "col",
     "http://www.catalogueoflife.org",
     "Catalogue of Life",
     ".*"
   ),
 
-  eol = taxon_database(
+  eol = TaxonDatabase$new(
     "eol",
     "http://eol.org",
     "Encyclopedia of Life",
     ".*"
   ),
 
-  nbn = taxon_database(
+  nbn = TaxonDatabase$new(
     "nbn",
     "https://nbn.org.uk",
     "UK National Biodiversity Network",
     ".*"
   ),
 
-  tps = taxon_database(
+  tps = TaxonDatabase$new(
     "tps",
     "http://www.tropicos.org/",
     "Tropicos",
     ".*"
   ),
 
-  itis = taxon_database(
+  itis = TaxonDatabase$new(
     "itis",
     "http://www.itis.gov",
     "Integrated Taxonomic Information System",
@@ -240,23 +203,91 @@ database_list <- list(
   )
 )
 
+#' Defines valid taxonomic databases
+#'
+#' @param name (character) name of the database
+#' @param url (character) url for the database
+#' @param description (character) description of the database
+#' @param id_regex (character) id regex
+#'
+#' @section Attribution:
+#'
+#' This code is copied from the code handling options in [knitr].
+#'
+#' @keywords internal
+default_database_definitions <- function(defaults = list()) {
+  definitions <- defaults
 
-#' @export
-as.character.TaxonDatabase <- function(obj) {
-  obj$name
-}
-
-
-#' @export
-as.TaxonDatabase <- function(input) {
-  if ("TaxonDatabase" %in% class(input)) {
-    return(input)
-  } else {
-    return(taxon_database(input))
+  merge_list = function(x, y) {
+    x[names(y)] = y
+    x
   }
+
+  get <- function(name = NULL) {
+    if (is.null(name)) {
+      return(definitions)
+    } else {
+      if (name %in% names(definitions)) {
+        return(definitions[[name]])
+      } else {
+        stop(call. = FALSE, 'Unknown database: "', name, '"')
+      }
+    }
+  }
+
+  set <- function(name = NULL, url = NULL, description = NULL, id_regex = NULL) {
+    addition <- list(TaxonDatabase$new(
+      name = name,
+      url = url,
+      description = description,
+      id_regex = id_regex
+    ))
+    names(addition) <- name
+    definitions <<- merge_list(definitions, addition)
+  }
+
+  reset <- function() {
+    definitions <<- initial_value
+  }
+
+  list(get = get, set = set, reset = reset)
 }
 
+
+#' Valid taxonomy databases
+#'
+#' This defines the valid taxonomic databases that can be used in `taxa_database` objects as a list of
+#'
+#' @param name (character) name of the database
+#' @param url (character) url for the database
+#' @param description (character) description of the database
+#' @param id_regex (character) id regex
+#'
+#' @section Attribution:
+#'
+#' This code is based on the code handling options in [knitr].
+#'
+#' @examples
+#'
+#' # List all database definitions
+#' database_definitions$get()
+#'
+#' # Get a specific database definition
+#' database_definitions$get('ncbi')
+#'
+#' # Add or overwrite a database definition
+#' database_definitions$set(
+#'   name = "my_new_database",
+#'   url = "http://www.my_tax_database.com",
+#'   description = "I just made this up",
+#'   id_regex = "*"
+#' )
+#'
+#' # Reset definitions to default values
+#' database_definitions$reset()
+#'
 #' @export
-as_TaxonDatabase <- as.TaxonDatabase
+database_definitions <- default_database_definitions(database_list)
+
 
 

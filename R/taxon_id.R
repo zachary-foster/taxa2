@@ -1,13 +1,33 @@
+#' Minimal taxon_id constructor
+#'
+#' Minimal taxon_id constructor for internal use. Only use when the input is known to be valid since
+#' few validity checks are done.
+#'
+#' @param id Zero or more taxonomic ids. Inputs will be transformed to a `character` vector.
+#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the
+#'   default), the input must consist of names of databases in [database_list]. The length must be
+#'   0, 1, or equal to the number of IDs.
+#'
+#' @return An `S3` object of class `taxa_taxon_id`
+#'
+#' @keywords internal
+new_taxon_id <- function(id = character(), db = character()) {
+  vctrs::vec_assert(id, ptype = character())
+  vctrs::vec_assert(db, ptype = character())
+
+  vctrs::new_rcrd(list(id = id, db = db), class = "taxa_taxon_id")
+}
+
+
 #' Taxon ID class
 #'
-#' Used to store taxon IDs, either arbitrary or from a taxonomy database. This
-#' is typically used to store taxon IDs in [taxon()] objects.
+#' Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
+#' store taxon IDs in [taxon()] objects.
 #'
 #' @export
-#' @param id (character/integer/numeric) a taxonomic id, required
-#' @param database (database) database class object, optional
+#' @inheritParams new_taxon_id
 #'
-#' @return An `R6Class` object of class `TaxonId`
+#' @return An `S3` object of class `taxa_taxon_id`
 #' @family classes
 #'
 #' @examples
@@ -25,73 +45,27 @@
 #' # a null taxon_name object
 #' taxon_name(NULL)
 #'
-taxon_id <- function(id, database = NULL) {
-  database <- clone_if_r6(database)
-  TaxonId$new(id = id, database = database)
+taxon_id <- function(id = character(), db = NA) {
+  id <- vctrs::vec_cast(id, character())
+  db <- vctrs::vec_cast(db, character())
+  c(id, db) %<-% vec_recycle_common(id, db)
+
+  validate_id_for_database(id, db)
+
+  new_taxon_id(id, db)
 }
 
-#' @export
-TaxonId <- R6::R6Class(
-  "TaxonId",
-  public = list(
 
-    initialize = function(id = NULL, database = NULL) {
-      self$database <- database
-      self$id <- id
-    },
+#' @keywords internal
+validate_id_for_database <- function(id, db) {
+  is_invalid <- ! is_valid_database_id(id, db)
+  if (sum(is_invalid) > 0) {
+    stop(call. = FALSE, 'Taxon IDs must follow the database ID conventions if a database with a defined ID regex is specified. ',
+         'The following IDs do not match the regex "', self$database$id_regex, '" for their database:\n',
+         limited_print(paste0(id[is_invalid], ' (', db[is_invalid], ')'), type = 'silent', prefix = '  '))
+  }
 
-    print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonId> %s\n", char_or_placeholder(self$id))))
-      cat(paste0(indent, paste0("  database: ", char_or_placeholder(self$database), "\n")))
-      invisible(self)
-    }
-  ),
-
-  active = list(
-
-    id = function(value) {
-      if (missing(value)) { # GET
-        return(private$my_id)
-      }
-      else { # SET
-        if (is.null(value)) {
-          private$my_id <- NULL
-        } else {
-          check_arg_class(value, c("character", "TaxonId", "numeric", "factor", "integer"), "taxon id")
-          if (! is.null(self$database)) {
-            invalid_ids <- value[! self$database$is_valid_id(value)]
-            if (length(invalid_ids) > 0) {
-              stop(call. = FALSE, 'Taxon IDs must follow the database ID conventions if a database with a defined ID regex is specified. ',
-                   'The following IDs do not match the regex "', self$database$id_regex, '" for database "', self$database$name, '":\n',
-                   limited_print(invalid_ids, type = "silent", prefix = "  "))
-            }
-          }
-          private$my_id <- as.character(value)
-        }
-      }
-    },
-
-    database = function(value) {
-      if (missing(value)) { # GET
-        return(private$my_database)
-      }
-      else { # SET
-        if (is.null(value)) {
-          private$my_database <- NULL
-        } else {
-          private$my_database <- as_TaxonDatabase(value)
-        }
-      }
-    }
-
-  ),
-
-  private = list(
-    my_id = NULL,
-    my_database = NULL
-  )
-)
-
+}
 
 #' @export
 as.character.TaxonId <- function(obj) {
