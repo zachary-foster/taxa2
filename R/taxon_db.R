@@ -50,6 +50,7 @@ methods::setOldClass(c("taxa_taxon_db", "vctrs_vctr"))
 # S3 printing functions
 #--------------------------------------------------------------------------------
 
+#' @export
 #' @keywords internal
 format.taxa_taxon_db <- function(x, ...) {
   out <- formatC(vctrs::vec_data(x))
@@ -138,6 +139,11 @@ vec_cast.taxa_taxon_db <- function(x, to) UseMethod("vec_cast.taxa_taxon_db")
 #' @method vec_cast.taxa_taxon_db default
 #' @export
 vec_cast.taxa_taxon_db.default <- function(x, to) vctrs::vec_default_cast(x, to)
+
+
+#' @method vec_cast.taxa_taxon_db taxa_taxon_db
+#' @export
+vec_cast.taxa_taxon_db.taxa_taxon_db <- function(x, to) x
 
 
 #' @method vec_cast.taxa_taxon_db character
