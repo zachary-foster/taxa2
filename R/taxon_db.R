@@ -34,6 +34,12 @@ new_taxon_db <- function(db = character()) {
 #'
 #' @export
 taxon_db <- function(db = character()) {
+  UseMethod("taxon_db")
+}
+
+
+#' @export
+taxon_db.default <- function(db = character()) {
   db <- vctrs::vec_cast(db, character())
   db <- tolower(db)
 
@@ -41,6 +47,12 @@ taxon_db <- function(db = character()) {
 
   new_taxon_db(db)
 }
+
+#' @export
+`taxon_db<-` <- function(x, value) {
+  UseMethod('taxon_db<-')
+}
+
 
 #' @importFrom methods setOldClass
 methods::setOldClass(c("taxa_taxon_db", "vctrs_vctr"))

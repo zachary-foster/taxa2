@@ -61,8 +61,32 @@ taxon_id <- function(id = character(), db = NA) {
   new_taxon_id(id, db)
 }
 
+
 #' @importFrom methods setOldClass
 methods::setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
+
+
+
+#--------------------------------------------------------------------------------
+# S3 getters/setters
+#--------------------------------------------------------------------------------
+
+#' @export
+`taxon_db<-.taxa_taxon_id` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_db())
+  value <- vctrs::vec_recycle(value, length(x))
+
+  vctrs::field(x, "db") <- value
+
+  return(x)
+}
+
+
+#' @export
+taxon_db.taxa_taxon_id <- function(db = character()) {
+  vctrs::field(db, "db")
+}
+
 
 
 #--------------------------------------------------------------------------------
@@ -79,34 +103,15 @@ format.taxa_taxon_id <- function(x, ...) {
   return(out)
 }
 
+
 #' @keywords internal
 #' @export
-print.taxa_taxon_id <- function(x, ...) {
-  print_with_color(x)
-  invisible(x)
+obj_print_data.taxa_taxon_id <- function(x) {
+  # if (length(x) == 0)
+  #   return()
+  print_with_color(x, quote = FALSE)
 }
 
-#' @keywords internal
-print_with_color <- function(x) {
-  if (length(x) > options()$max.print) {
-    x <- x[seq_len(options()$max.print)]
-  }
-
-  dummy <- vapply(nchar(crayon::strip_style(format(x))), FUN.VALUE = character(1),
-                  function(n) paste0(rep("@", n), collapse = ""))
-  dummy <- capture.output(print(format(dummy), quote = FALSE))
-  dummy <- paste0(dummy, collapse = "\n")
-  split_dummy <- strsplit(dummy, "@+")[[1]]
-
-  cat(paste0(interleave(c(split_dummy, ""), c(format(x), "")), collapse = ""))
-}
-
-interleave <- function(v1,v2)
-{
-  ord1 <- 2*(1:length(v1))-1
-  ord2 <- 2*(1:length(v2))
-  c(v1,v2)[order(c(ord1,ord2))]
-}
 
 #' @export
 #' @keywords internal
@@ -171,6 +176,7 @@ vec_type2.taxa_taxon_id.factor <- function(x, y, ...) factor()
 #' @importFrom vctrs vec_type2.factor
 #' @export
 vec_type2.factor.taxa_taxon_id <- function(x, y, ...) factor()
+
 
 
 #--------------------------------------------------------------------------------
