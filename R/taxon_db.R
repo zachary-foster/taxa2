@@ -196,19 +196,14 @@ is_taxon_db <- function(x) {
 }
 
 
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
 
 #' @keywords internal
-valid_databases <- function() {
-  names(database_definitions$get())
-}
-
-
-#' @keywords internal
 is_valid_db_name <- function(db_names) {
-  db_names %in% c(valid_databases(), NA)
+  db_names %in% c(database_definitions$get(value = 'name'), NA)
 }
 
 
@@ -221,6 +216,6 @@ validate_db_names <- function(db_names) {
          ' The following names are not known databases:\n',
          limited_print(unique(invalid_names), type = "silent", prefix = "  "),
          'The following databases are defined:\n',
-         limited_print(valid_databases(), type = "silent", prefix = "  "))
+         limited_print(database_definitions$get(value = 'name'), type = "silent", prefix = "  "))
   }
 }

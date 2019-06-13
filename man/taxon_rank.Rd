@@ -2,29 +2,31 @@
 % Please edit documentation in R/taxon_rank.R
 \name{taxon_rank}
 \alias{taxon_rank}
-\title{Taxon rank class}
+\title{Taxon ID class}
 \usage{
-taxon_rank(name, database = NULL)
+taxon_rank(rank = character(), db = NA)
 }
 \arguments{
-\item{name}{(character) rank name. required}
+\item{rank}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
 
-\item{database}{(character) database class object, optional}
+\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
+default), the input must consist of names of databases in \link{database_list}. The length must be
+0, 1, or equal to the number of IDs.}
 }
 \value{
-An \code{R6Class} object of class \code{TaxonRank}
+An \code{S3} object of class \code{taxa_taxon_rank}
 }
 \description{
-Stores the rank of a taxon. This is typically used to store where taxon
-information came from in \code{\link[=taxon]{taxon()}} objects.
+Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
+store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
-taxon_rank("species")
-taxon_rank("genus")
-taxon_rank("kingdom")
+(x <- taxon_rank(12345))
+x$rank
+x$database
 
 (x <- taxon_rank(
-  "species",
+  12345,
   database_list$ncbi
 ))
 x$rank
@@ -32,12 +34,14 @@ x$database
 
 # a null taxon_name object
 taxon_name(NULL)
+
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
-  \code{\link{taxmap}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+  \code{\link{taxmap}}, \code{\link{taxon_db_def}},
+  \code{\link{taxon_db}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
 \concept{classes}

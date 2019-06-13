@@ -15,7 +15,7 @@
 #' @return An `S3` object of class `taxa_taxon_id`
 #'
 #' @keywords internal
-new_taxon_id <- function(id = character(), db = taxa_taxon_db()) {
+new_taxon_id <- function(id = character(), db = taxon_db()) {
   vctrs::vec_assert(id, ptype = character())
   vctrs::vec_assert(db, ptype = taxon_db())
 
@@ -153,6 +153,8 @@ pillar_shaft.taxa_taxon_id <- function(x, ...) {
   pillar::new_pillar_shaft_simple(out, align = "left")
 }
 
+
+
 #--------------------------------------------------------------------------------
 # S3 coercion functions
 #--------------------------------------------------------------------------------
@@ -260,6 +262,14 @@ vec_cast.taxa_taxon_id.double <- function(x, to) taxon_id(x)
 vec_cast.double.taxa_taxon_id <- function(x, to) as.numeric(vctrs::field(x, "id"))
 
 
+#' @method vec_cast.data.frame taxa_taxon_id
+#' @importFrom vctrs vec_cast.data.frame
+#' @export
+vec_cast.data.frame.taxa_taxon_id <- function(x, to) data.frame(stringsAsFactors = FALSE,
+                                                                id = vctrs::field(x, "id"),
+                                                                db = vctrs::field(x, "db"))
+
+
 
 #--------------------------------------------------------------------------------
 # Exported utility functions
@@ -297,26 +307,5 @@ validate_id_for_database <- function(id, db) {
 is_valid_database_id <- function(id, db) {
   mapply(function(i, r) {
     grepl(i, pattern = r)
-  }, i = id, r = db_regexs(db))
-}
-
-
-#' ID validation regexs from database names
-#'
-#' ID validation regexs from database names
-#'
-#' @param db The names of the databases
-#'
-#' @return regexes as character vector
-#'
-#' @keywords internal
-db_regexs <- function(db) {
-  db_defs <- database_definitions$get()
-  vapply(db, FUN.VALUE = character(1), function(d) {
-    if (is.na(d)) {
-      return(".*")
-    } else {
-      return(db_defs[[d]]$id_regex)
-    }
-  })
+  }, i = id, r = database_definitions$get(value = 'id_regex')[db])
 }

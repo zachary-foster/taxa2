@@ -1,107 +1,294 @@
+#--------------------------------------------------------------------------------
+# S3 constructors
+#--------------------------------------------------------------------------------
+
+#' Minimal taxon_name constructor
+#'
+#' Minimal taxon_name constructor for internal use. Only use when the input is known to be valid since
+#' few validity checks are done.
+#'
+#' @param name Zero or more taxonomic ids. Inputs will be transformed to a `character` vector.
+#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the
+#'   default), the input must consist of names of databases in [database_list]. The length must be
+#'   0, 1, or equal to the number of IDs.
+#'
+#' @return An `S3` object of class `taxa_taxon_name`
+#'
+#' @keywords internal
+new_taxon_name <- function(name = character(), db = taxon_db()) {
+  vctrs::vec_assert(name, ptype = character())
+  vctrs::vec_assert(db, ptype = taxon_db())
+
+  vctrs::new_rcrd(list(name = name, db = db), class = "taxa_taxon_name")
+}
+
+
 #' Taxon name class
 #'
-#' Used to store the name of taxa. This is typically used to
-#' store where taxon names in [taxon()] objects.
+#' Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
+#' store taxon IDs in [taxon()] objects.
 #'
 #' @export
-#' @param name (character) a taxonomic name. required
-#' @param database (character) database class object, optional
+#' @inheritParams new_taxon_name
 #'
-#' @return An `R6Class` object of class `TaxonName`
+#' @importFrom vctrs %<-%
 #'
+#' @return An `S3` object of class `taxa_taxon_name`
 #' @family classes
-#' @examples
-#' (poa <- taxon_name("Poa"))
-#' (undef <- taxon_name("undefined"))
-#' (sp1 <- taxon_name("species 1"))
-#' (poa_annua <- taxon_name("Poa annua"))
-#' (x <- taxon_name("Poa annua L."))
 #'
+#' @examples
+#' (x <- taxon_name(12345))
 #' x$name
 #' x$database
 #'
 #' (x <- taxon_name(
-#'   "Poa annua",
+#'   12345,
 #'   database_list$ncbi
 #' ))
-#' x$rank
+#' x$name
 #' x$database
 #'
 #' # a null taxon_name object
 #' taxon_name(NULL)
-taxon_name <- function(name, database = NULL) {
-  database <- clone_if_r6(database)
-  TaxonName$new(name = name, database = database)
+#'
+taxon_name <- function(name = character(), db = NA) {
+  name <- vctrs::vec_cast(name, character())
+  db <- vctrs::vec_cast(db, taxon_db())
+  c(name, db) %<-% vctrs::vec_recycle_common(name, db)
+
+  validate_id_for_database(name, db)
+
+  new_taxon_name(name, db)
 }
 
-#' @export
-TaxonName <- R6::R6Class(
-  "TaxonName",
-  public = list(
 
-    initialize = function(name = NULL, database = NULL) {
-      self$database <- database
-      self$name <- name
-    },
+#' @importFrom methods setOldClass
+methods::setOldClass(c("taxa_taxon_name", "vctrs_vctr"))
 
-    print = function(indent = "") {
-      cat(paste0(indent, sprintf("<TaxonName> %s\n", char_or_placeholder(self$name))))
-      cat(paste0(indent, paste0("  database: ", char_or_placeholder(self$database), "\n")))
-      invisible(self)
-    }
-  ),
 
-  active = list(
 
-    name = function(value) {
-      if (missing(value)) { # GET
-        return(private$my_name)
-      }
-      else { # SET
-        if (is.null(value)) {
-          private$my_name <- NULL
-        } else {
-          check_arg_class(value, c("character", "TaxonName", "numeric", "factor", "integer", "Taxon"), "taxon name")
-          private$my_name <- as.character(value)
-        }
-      }
-    },
-
-    database = function(value) {
-      if (missing(value)) { # GET
-        return(private$my_database)
-      }
-      else { # SET
-        if (is.null(value)) {
-          private$my_database <- NULL
-        } else {
-          private$my_database <- as_TaxonDatabase(value)
-        }
-      }
-    }
-
-  ),
-
-  private = list(
-    my_name = NULL,
-    my_database = NULL
-  )
-)
-
+#--------------------------------------------------------------------------------
+# S3 getters/setters
+#--------------------------------------------------------------------------------
 
 #' @export
-as.character.TaxonName <- function(obj) {
-  as.character(obj$name)
+`taxon_db<-.taxa_taxon_name` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_db())
+  value <- vctrs::vec_recycle(value, length(x))
+
+  vctrs::field(x, "db") <- value
+
+  return(x)
 }
 
+
 #' @export
-as.TaxonName <- function(input) {
-  if ("TaxonName" %in% class(input)) {
-    return(input)
-  } else {
-    return(taxon_name(input))
+taxon_db.taxa_taxon_name <- function(db = character()) {
+  vctrs::field(db, "db")
+}
+
+
+
+#--------------------------------------------------------------------------------
+# S3 printing functions
+#--------------------------------------------------------------------------------
+
+#' Prepare taxon_name for printing
+#'
+#' Prepare taxon_name for printing. Makes color optional.
+#'
+#' @param color Use color?
+#'
+#' @return character
+#'
+#' @keywords internal
+printed_taxon_name <- function(x, color = FALSE) {
+  out <- vctrs::field(x, 'name')
+  db <- vctrs::field(x, 'db')
+  out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
+  if (! color) {
+    out <- crayon::strip_style(out)
   }
+  return(out)
 }
 
+
 #' @export
-as_TaxonName <- as.TaxonName
+#' @keywords internal
+format.taxa_taxon_name <- function(x, ...) {
+  printed_taxon_name(x, color = FALSE)
+}
+
+
+#' @export
+#' @keywords internal
+obj_print_data.taxa_taxon_name <- function(x) {
+  if (length(x) == 0) {
+    return()
+  }
+  out <- printed_taxon_name(x, color = TRUE)
+  print_with_color(out, quote = FALSE)
+}
+
+
+#' @export
+#' @keywords internal
+vec_ptype_abbr.taxa_taxon_name <- function(x) {
+  "tax_id"
+}
+
+
+#' @export
+#' @keywords internal
+vec_ptype_full.taxa_taxon_name <- function(x) {
+  paste0("taxon_name")
+}
+
+
+#' @importFrom pillar pillar_shaft
+#' @export
+#' @keywords internal
+pillar_shaft.taxa_taxon_name <- function(x, ...) {
+  out <- printed_taxon_name(x, color = TRUE)
+  pillar::new_pillar_shaft_simple(out, align = "left")
+}
+
+
+
+#--------------------------------------------------------------------------------
+# S3 coercion functions
+#--------------------------------------------------------------------------------
+
+#' @method vec_type2 taxa_taxon_name
+#' @importFrom vctrs vec_type2
+#' @export
+#' @export vec_type2.taxa_taxon_name
+#' @keywords internal
+vec_type2.taxa_taxon_name <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_name", y)
+
+
+#' @method vec_type2.taxa_taxon_name default
+#' @export
+vec_type2.taxa_taxon_name.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+
+#' @method vec_type2.taxa_taxon_name vctrs_unspecified
+#' @export
+vec_type2.taxa_taxon_name.vctrs_unspecified <- function(x, y, ...) x
+
+
+#' @method vec_type2.taxa_taxon_name taxa_taxon_name
+#' @export
+vec_type2.taxa_taxon_name.taxa_taxon_name <- function(x, y, ...) new_taxon_name()
+
+
+#' @method vec_type2.taxa_taxon_name character
+#' @export
+vec_type2.taxa_taxon_name.character <- function(x, y, ...) character()
+
+
+#' @method vec_type2.character taxa_taxon_name
+#' @importFrom vctrs vec_type2.character
+#' @export
+vec_type2.character.taxa_taxon_name <- function(x, y, ...) character()
+
+
+#' @method vec_type2.taxa_taxon_name factor
+#' @export
+vec_type2.taxa_taxon_name.factor <- function(x, y, ...) factor()
+
+
+#' @method vec_type2.factor taxa_taxon_name
+#' @importFrom vctrs vec_type2.factor
+#' @export
+vec_type2.factor.taxa_taxon_name <- function(x, y, ...) factor()
+
+
+
+#--------------------------------------------------------------------------------
+# S3 casting functions
+#--------------------------------------------------------------------------------
+
+#' @method vec_cast taxa_taxon_name
+#' @importFrom vctrs vec_cast
+#' @export
+#' @export vec_cast.taxa_taxon_name
+#' @keywords internal
+vec_cast.taxa_taxon_name <- function(x, to) UseMethod("vec_cast.taxa_taxon_name")
+
+
+#' @method vec_cast.taxa_taxon_name default
+#' @export
+vec_cast.taxa_taxon_name.default <- function(x, to) vctrs::vec_default_cast(x, to)
+
+
+#' @method vec_cast.taxa_taxon_name taxa_taxon_name
+#' @export
+vec_cast.taxa_taxon_name.taxa_taxon_name <- function(x, to) x
+
+
+#' @method vec_cast.taxa_taxon_name character
+#' @export
+vec_cast.taxa_taxon_name.character <- function(x, to) taxon_name(x)
+
+
+#' @method vec_cast.character taxa_taxon_name
+#' @importFrom vctrs vec_cast.character
+#' @export
+vec_cast.character.taxa_taxon_name <- function(x, to) vctrs::field(x, "name")
+
+
+#' @method vec_cast.taxa_taxon_name factor
+#' @export
+vec_cast.taxa_taxon_name.factor <- function(x, to) taxon_name(x)
+
+
+#' @method vec_cast.factor taxa_taxon_name
+#' @importFrom vctrs vec_cast.factor
+#' @export
+vec_cast.factor.taxa_taxon_name <- function(x, to) factor(vctrs::field(x, "name"))
+
+
+#' @method vec_cast.taxa_taxon_name double
+#' @export
+vec_cast.taxa_taxon_name.double <- function(x, to) taxon_name(x)
+
+
+#' @method vec_cast.double taxa_taxon_name
+#' @importFrom vctrs vec_cast.double
+#' @export
+vec_cast.double.taxa_taxon_name <- function(x, to) as.numeric(vctrs::field(x, "name"))
+
+
+#' @method vec_cast.data.frame taxa_taxon_name
+#' @importFrom vctrs vec_cast.data.frame
+#' @export
+vec_cast.data.frame.taxa_taxon_name <- function(x, to) data.frame(stringsAsFactors = FALSE,
+                                                                name = vctrs::field(x, "name"),
+                                                                db = vctrs::field(x, "db"))
+
+
+
+#--------------------------------------------------------------------------------
+# Exported utility functions
+#--------------------------------------------------------------------------------
+
+#' Check if is a taxon name
+#'
+#' Check if an object is the taxon name class
+#'
+#' @param x An object to test
+#'
+#' @export
+is_taxon_name <- function(x) {
+  inherits(x, "taxa_taxon_name")
+}
+
+
+
+#--------------------------------------------------------------------------------
+# Internal utility functions
+#--------------------------------------------------------------------------------
+
