@@ -19,7 +19,7 @@
 #' @return An `S3` object of class `taxa_taxon_rank`
 #'
 #' @keywords internal
-new_taxon_rank <- function(rank = character(), db = taxa_taxon_db(), levels = NULL) {
+new_taxon_rank <- function(rank = character(), db = taxon_db(), levels = taxon_rank_level()) {
 
   # Check that values are the correct type
   vctrs::vec_assert(rank, ptype = character())
@@ -351,6 +351,49 @@ vec_cast.data.frame.taxa_taxon_rank <- function(x, to) data.frame(stringsAsFacto
 
 
 #--------------------------------------------------------------------------------
+# S3 equality and comparison functions
+#--------------------------------------------------------------------------------
+
+#' @export
+#' @keywords internal
+vec_proxy_compare.taxa_taxon_rank <- function(x, ...) {
+  levels(x)[as.character(x)]
+}
+
+
+#' @export
+#' @keywords internal
+vec_proxy_equal.taxa_taxon_rank <- function(x, ...) {
+  db <- as.character(taxon_db(x))
+  db[is.na(db)] <- "NA" # avoids NA comparisons always being NA
+  data.frame(rank = as.character(x),
+             db = db,
+             stringsAsFactors = FALSE)
+}
+
+
+#' @export
+#' @keywords internal
+Ops.taxa_taxon_rank <- function(e1, e2) {
+
+  # Make comparisons with character vectors use the levels of the taxon_rank
+  if (.Generic %in% c('>', '>=', '<', '<=')) {
+    if (is.character(e1) && is_taxon_rank(e2)) {
+      validate_rank_levels(e1, attr(e2, 'levels'))
+      e1 <- taxon_rank(e1, levels = attr(e2, 'levels'))
+    }
+    if (is.character(e2) && is_taxon_rank(e1)) {
+      validate_rank_levels(e2, attr(e1, 'levels'))
+      e2 <- taxon_rank(e2, levels = attr(e1, 'levels'))
+    }
+  }
+
+  NextMethod()
+}
+
+
+
+#--------------------------------------------------------------------------------
 # Exported utility functions
 #--------------------------------------------------------------------------------
 
@@ -386,7 +429,10 @@ validate_rank_levels <- function(rank, levels) {
 validate_rank_dbs <- function(rank, db) {
   db_levels <- database_definitions$get(value = "rank_levels")
   is_invalid <- vapply(seq_len(length(rank)), FUN.VALUE = logical(1), function(i) {
-    ! is.na(db[i]) && ! is.na(rank[i]) && ! rank[i] %in% as.character(db_levels[[db[i]]])
+    ! is.null(db[[i]]) &&
+      ! is.na(rank[i]) &&
+      ! is.null(db_levels[[db[i]]]) &&
+      ! tolower(rank[i]) %in% as.character(db_levels[[db[i]]])
   })
   if (sum(is_invalid) > 0) {
     stop(call. = FALSE,

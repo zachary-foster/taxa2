@@ -4,8 +4,8 @@
 \alias{new_taxon_rank}
 \title{Minimal taxon_rank constructor}
 \usage{
-new_taxon_rank(rank = character(), db = taxa_taxon_db(),
-  levels = NULL)
+new_taxon_rank(rank = character(), db = taxon_db(),
+  levels = taxon_rank_level())
 }
 \arguments{
 \item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to
