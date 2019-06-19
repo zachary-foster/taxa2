@@ -6,7 +6,7 @@
 \usage{
 taxon_db_def(name = character(), url = NA_character_,
   desc = NA_character_, id_regex = NA_character_,
-  ranks = rep(list(NULL), length(name)))
+  rank_levels = rep(list(NULL), length(name)))
 }
 \arguments{
 \item{name}{Name of the database in lower case. Inputs will be transformed to a \code{character} vector.}
@@ -17,7 +17,7 @@ taxon_db_def(name = character(), url = NA_character_,
 
 \item{id_regex}{A regular expression for taxon IDs of the database. Inputs will be transformed to a \code{character} vector.}
 
-\item{ranks}{Valid taxonomic ranks for the database. Should be a list of \code{factor}s.}
+\item{rank_levels}{Valid taxonomic ranks for the database. Should be a list of \code{numeric} vectors named by taxonomic ranks.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_db_def}
@@ -30,8 +30,8 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxmap}}, \code{\link{taxon_db}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+  \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}
 \keyword{internal}

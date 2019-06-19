@@ -4,20 +4,26 @@
 \alias{new_taxon_rank}
 \title{Minimal taxon_rank constructor}
 \usage{
-new_taxon_rank(rank = character(), db = taxa_taxon_db())
+new_taxon_rank(rank = character(), db = taxa_taxon_db(),
+  levels = NULL)
 }
 \arguments{
-\item{rank}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
+\item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to
+a \code{character} vector.}
 
-\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
-default), the input must consist of names of databases in \link{database_list}. The length must be
-0, 1, or equal to the number of IDs.}
+\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA}
+(the default), the input must consist of names of databases in
+\link{database_list}. The length must be 0, 1, or equal to the number of IDs.}
+
+\item{levels}{A named numeric vector indicating the names and orders of
+possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.
+Ranks of unknown order can be indicated with \code{NA} instead of a number.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_rank}
 }
 \description{
-Minimal taxon_rank constructor for internal use. Only use when the input is known to be valid since
-few validity checks are done.
+Minimal taxon_rank constructor for internal use. Only use when the input is
+known to be valid since few validity checks are done.
 }
 \keyword{internal}

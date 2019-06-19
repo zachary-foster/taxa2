@@ -12,20 +12,20 @@
 #' @param url URL of the database website. Inputs will be transformed to a `character` vector.
 #' @param desc Description of the database. Inputs will be transformed to a `character` vector.
 #' @param id_regex A regular expression for taxon IDs of the database. Inputs will be transformed to a `character` vector.
-#' @param ranks Valid taxonomic ranks for the database. Should be a list of `factor`s.
+#' @param rank_levels Valid taxonomic ranks for the database. Should be a list of `numeric` vectors named by taxonomic ranks.
 #'
 #' @return An `S3` object of class `taxa_taxon_db_def`
 #'
 #' @keywords internal
 new_taxon_db_def <- function(name = character(), url = character(), desc = character(),
-                             id_regex = character(), ranks = list()) {
+                             id_regex = character(), rank_levels = list()) {
   vctrs::vec_assert(name, ptype = character())
   vctrs::vec_assert(url, ptype = character())
   vctrs::vec_assert(desc, ptype = character())
   vctrs::vec_assert(id_regex, ptype = character())
-  vctrs::vec_assert(ranks, ptype = list())
+  vctrs::vec_assert(rank_levels, ptype = list())
 
-  vctrs::new_rcrd(list(name = name, url = url, desc = desc, id_regex = id_regex, ranks = ranks),
+  vctrs::new_rcrd(list(name = name, url = url, desc = desc, id_regex = id_regex, rank_levels = rank_levels),
                   class = "taxa_taxon_db_def")
 }
 
@@ -42,26 +42,39 @@ new_taxon_db_def <- function(name = character(), url = character(), desc = chara
 #' @family classes
 #' @keywords internal
 taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_character_,
-                         id_regex = NA_character_, ranks = rep(list(NULL), length(name))) {
+                         id_regex = NA_character_, rank_levels = rep(list(NULL), length(name))) {
+
+  # Cast inputs to correct type
   name <- vctrs::vec_cast(name, character())
   url <- vctrs::vec_cast(url, character())
   desc <- vctrs::vec_cast(desc, character())
   id_regex <- vctrs::vec_cast(id_regex, character())
-  ranks <- vctrs::vec_cast(ranks, list())
+  rank_levels <- vctrs::vec_cast(rank_levels, list())
 
-  # Check that ranks are right format
-  valid_ranks <- vapply(ranks, FUN.VALUE = logical(1), function(x) {
-    is.factor(x) || is.null(x)
+  # Check that rank_levels are right format
+  # valid_ranks <- vapply(rank_levels, FUN.VALUE = logical(1), function(x) {
+  #   is_taxon_rank_level(x) || is.null(x)
+  # })
+  # if (any(! valid_ranks)) {
+  #   stop(call. = FALSE,
+  #        'Invalid rank_levels. Must be a list of factors. The following indexes are not factors:\n',
+  #        limited_print(type = 'silent', prefix = '  ', which(! valid_ranks)))
+  # }
+
+  # Convert rank_levels into taxon_rank_level class
+  rank_levels <- lapply(rank_levels, function(lev) {
+   if (is.null(lev)) {
+     return(lev)
+   } else {
+     return(taxon_rank_level(lev))
+   }
   })
-  if (any(! valid_ranks)) {
-    stop(call. = FALSE,
-         'Invalid ranks. Must be a list of factors. The following indexes are not factors:\n',
-         limited_print(type = 'silent', prefix = '  ', which(! valid_ranks)))
-  }
 
-  c(name, url, desc, id_regex, ranks) %<-% vctrs::vec_recycle_common(name, url, desc, id_regex, ranks)
+  # Recycle inputs to common length
+  c(name, url, desc, id_regex, rank_levels) %<-% vctrs::vec_recycle_common(name, url, desc, id_regex, rank_levels)
 
-  new_taxon_db_def(name, url, desc, id_regex, ranks)
+  # Create new object
+  new_taxon_db_def(name, url, desc, id_regex, rank_levels)
 }
 
 
@@ -78,8 +91,8 @@ methods::setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
 #' @keywords internal
 obj_print_data.taxa_taxon_db_def <- function(x) {
   spacer <- '   '
-  screen_width <- getOption("width") * 0.8
-  max_value_nchar <- round(screen_width * 0.7)
+  screen_width <- round(getOption("width") * 0.9)
+  max_value_nchar <- round(screen_width * 0.8)
 
   parts <- lapply(seq_len(length(x)), function(i) {
 
@@ -90,11 +103,7 @@ obj_print_data.taxa_taxon_db_def <- function(x) {
     keys_printed <- stringr::str_pad(keys_printed, max(nchar(keys_printed)), side = 'right')
     values <- vapply(keys, FUN.VALUE = character(1), function(key) {
       value <- vctrs::field(x, key)[[i]]
-      if (length(value) > 1) {
-        out <- paste0(value, collapse = ', ')
-      } else {
-        out <- format(value)
-      }
+      out <- toString(value)
       if (nchar(out) > max_value_nchar) {
         out <- paste0(substr(out, start = 1, stop = max_value_nchar), '\u2026')
       }
@@ -118,7 +127,18 @@ obj_print_data.taxa_taxon_db_def <- function(x) {
     max(nchar(p))
   })
 
-  row_num <- floor(cumsum(part_len) / screen_width) + 1
+  # row_num <- floor(cumsum(part_len) / screen_width) + 1
+  current_pos <- 0
+  current_row <- 1
+  row_num <- vapply(part_len, FUN.VALUE = numeric(1), function(len) {
+    current_pos <<- current_pos + len
+    if (current_pos >= screen_width) {
+      current_row <<- current_row + 1
+      current_pos <<- len
+    }
+    current_row
+  })
+
 
   rows <- lapply(split(parts, row_num), function(row_parts) {
     paste0(do.call(paste, row_parts), collapse = '\n')
@@ -135,195 +155,27 @@ vec_ptype_full.taxa_taxon_db_def <- function(x) {
 }
 
 
-
 #--------------------------------------------------------------------------------
-# Default database definitions
-#--------------------------------------------------------------------------------
-
-#' Database list
-#'
-#' The list of known databases. Not currently used much, but will be when we add
-#' more check for taxon IDs and taxon ranks from particular databases.
-#'
-#' @keywords internal
-database_list <- c(
-
-  taxon_db_def(
-    name =     "ncbi",
-    url =      "http://www.ncbi.nlm.nih.gov/taxonomy",
-    desc =     "NCBI Taxonomy Database",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "gbif",
-    url =      "http://www.gbif.org/developer/species",
-    desc =     "GBIF Taxonomic Backbone",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "bold",
-    url =      "http://www.boldsystems.org",
-    desc =     "Barcode of Life",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "col",
-    url =      "http://www.catalogueoflife.org",
-    desc =     "Catalogue of Life",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "eol",
-    url =      "http://eol.org",
-    desc =     "Encyclopedia of Life",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "nbn",
-    url =      "https://nbn.org.uk",
-    desc =     "UK National Biodiversity Network",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "tps",
-    url =      "http://www.tropicos.org/",
-    desc =     "Tropicos",
-    id_regex = ".*",
-    ranks  =   list(NULL)
-  ),
-
-  taxon_db_def(
-    name =     "itis",
-    url =      "http://www.itis.gov",
-    desc =     "Integrated Taxonomic Information System",
-    id_regex = "[0-9]+",
-    ranks  =   list(NULL)
-  )
-)
-
-
-
-#--------------------------------------------------------------------------------
-# getters/setters
+# S3 casting functions
 #--------------------------------------------------------------------------------
 
-#' Defines valid taxonomic databases
-#'
-#' @param name (character) name of the database
-#' @param url (character) url for the database
-#' @param desc (character) description of the database
-#' @param id_regex (character) id regex
-#'
-#' @section Attribution:
-#'
-#' This code is copied from the code handling options in [knitr].
-#'
-#' @keywords internal
-default_database_definitions <- function(defaults = list()) {
-  definitions <- defaults
-  initial_value <- defaults
-
-  merge_list = function(x, y) {
-    x[names(y)] = y
-    x
-  }
-
-  get <- function(name = NULL, value = NULL) {
-    db_names <- vctrs::field(definitions, 'name')
-    if (is.null(name)) {
-      if (is.null(value)) {
-        return(definitions)
-      } else {
-        return(stats::setNames(vctrs::field(definitions, value),
-                               db_names))
-      }
-    } else {
-      db <- definitions[db_names == name]
-      if (is.null(value)) {
-        if (name %in% db_names) {
-          return(db)
-        } else {
-          stop(call. = FALSE, 'Unknown database: "', name, '"')
-        }
-      } else {
-        return(vctrs::field(db, value))
-      }
-    }
-  }
-
-  set <- function(name, url = NA, desc = NA, id_regex = NA, ranks = NULL) {
-    addition <- taxon_db_def(
-      name = name,
-      url = url,
-      desc = desc,
-      id_regex = id_regex,
-      ranks = list(ranks)
-    )
-    db_names <- vctrs::field(definitions, 'name')
-    new_defs <- definitions
-    if (name %in% db_names) {
-      new_defs[name == db_names] <- addition
-    } else {
-      new_defs <- c(new_defs, addition)
-    }
-    definitions <<- new_defs
-  }
-
-  reset <- function() {
-    definitions <<- initial_value
-  }
-
-  list(get = get, set = set, reset = reset)
-}
-
-
-#' Valid taxonomy databases
-#'
-#' This defines the valid taxonomic databases that can be used in `taxa_database` objects as a list of
-#'
-#' @param name (character) name of the database
-#' @param url (character) url for the database
-#' @param desc (character) description of the database
-#' @param id_regex (character) id regex
-#' @param ranks Possible taxonomic ranks
-#'
-#' @section Attribution:
-#'
-#' This code is based on the code handling options in [knitr].
-#'
-#' @examples
-#'
-#' # List all database definitions
-#' database_definitions$get()
-#'
-#' # Get a specific database definition
-#' database_definitions$get('ncbi')
-#'
-#' # Add or overwrite a database definition
-#' database_definitions$set(
-#'   name = "my_new_database",
-#'   url = "http://www.my_tax_database.com",
-#'   desc = "I just made this up",
-#'   id_regex = ".*"
-#' )
-#'
-#' # Reset definitions to default values
-#' database_definitions$reset()
-#'
+#' @method vec_cast taxa_taxon_db_def
+#' @importFrom vctrs vec_cast
 #' @export
-database_definitions <- default_database_definitions(database_list)
+#' @export vec_cast.taxa_taxon_db_def
+#' @keywords internal
+vec_cast.taxa_taxon_db_def <- function(x, to) UseMethod("vec_cast.taxa_taxon_db_def")
+
+
+#' @method vec_cast.taxa_taxon_db_def default
+#' @export
+vec_cast.taxa_taxon_db_def.default <- function(x, to) vctrs::vec_default_cast(x, to)
+
+
+#' @method vec_cast.taxa_taxon_db_def taxa_taxon_db_def
+#' @export
+vec_cast.taxa_taxon_db_def.taxa_taxon_db_def <- function(x, to) x
+
 
 
 

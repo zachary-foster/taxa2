@@ -2,23 +2,31 @@
 % Please edit documentation in R/taxon_rank.R
 \name{taxon_rank}
 \alias{taxon_rank}
-\title{Taxon ID class}
+\title{Taxon rank class}
 \usage{
-taxon_rank(rank = character(), db = NA)
+taxon_rank(rank = character(), db = NA, levels = NULL,
+  guess_order = TRUE)
 }
 \arguments{
-\item{rank}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
+\item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to
+a \code{character} vector.}
 
-\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
-default), the input must consist of names of databases in \link{database_list}. The length must be
-0, 1, or equal to the number of IDs.}
+\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA}
+(the default), the input must consist of names of databases in
+\link{database_list}. The length must be 0, 1, or equal to the number of IDs.}
+
+\item{levels}{A named numeric vector indicating the names and orders of
+possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.
+Ranks of unknown order can be indicated with \code{NA} instead of a number.}
+
+\item{guess_order}{If \code{TRUE} and no rank order is given using numbers, try to guess order based on rank names.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_rank}
 }
 \description{
-Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
-store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
+Used to store taxon ranks, possibly assocaited with a taxonomy database. This is typically used to
+store taxon ranks in \code{\link[=taxon]{taxon()}} objects.
 }
 \examples{
 (x <- taxon_rank(12345))
@@ -41,7 +49,7 @@ Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxmap}}, \code{\link{taxon_db_def}},
   \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+  \code{\link{taxon_name}}, \code{\link{taxon_rank_level}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}

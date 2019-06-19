@@ -4,32 +4,41 @@
 
 #' Minimal taxon_rank constructor
 #'
-#' Minimal taxon_rank constructor for internal use. Only use when the input is known to be valid since
-#' few validity checks are done.
+#' Minimal taxon_rank constructor for internal use. Only use when the input is
+#' known to be valid since few validity checks are done.
 #'
-#' @param rank Zero or more taxonomic ids. Inputs will be transformed to a `character` vector.
-#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the
-#'   default), the input must consist of names of databases in [database_list]. The length must be
-#'   0, 1, or equal to the number of IDs.
+#' @param rank Zero or more taxonomic rank names. Inputs will be transformed to
+#'   a `character` vector.
+#' @param db The name(s) of the database(s) associated with the IDs. If not `NA`
+#'   (the default), the input must consist of names of databases in
+#'   [database_list]. The length must be 0, 1, or equal to the number of IDs.
+#' @param levels A named numeric vector indicating the names and orders of
+#'   possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.
+#'   Ranks of unknown order can be indicated with `NA` instead of a number.
 #'
 #' @return An `S3` object of class `taxa_taxon_rank`
 #'
 #' @keywords internal
-new_taxon_rank <- function(rank = character(), db = taxa_taxon_db()) {
+new_taxon_rank <- function(rank = character(), db = taxa_taxon_db(), levels = NULL) {
+
+  # Check that values are the correct type
   vctrs::vec_assert(rank, ptype = character())
   vctrs::vec_assert(db, ptype = taxon_db())
+  vctrs::vec_assert(levels, ptype = taxon_rank_level())
 
-  vctrs::new_rcrd(list(rank = rank, db = db), class = "taxa_taxon_rank")
+  # Create new object
+  vctrs::new_rcrd(list(rank = rank, db = db), levels = levels, class = "taxa_taxon_rank")
 }
 
 
-#' Taxon ID class
+#' Taxon rank class
 #'
-#' Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
-#' store taxon IDs in [taxon()] objects.
+#' Used to store taxon ranks, possibly assocaited with a taxonomy database. This is typically used to
+#' store taxon ranks in [taxon()] objects.
 #'
 #' @export
 #' @inheritParams new_taxon_rank
+#' @param guess_order If `TRUE` and no rank order is given using numbers, try to guess order based on rank names.
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -51,14 +60,32 @@ new_taxon_rank <- function(rank = character(), db = taxa_taxon_db()) {
 #' # a null taxon_name object
 #' taxon_name(NULL)
 #'
-taxon_rank <- function(rank = character(), db = NA) {
+taxon_rank <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE) {
+
+  # Cast inputs to correct values
   rank <- vctrs::vec_cast(rank, character())
   db <- vctrs::vec_cast(db, taxon_db())
+
+  # Recycle ranks and databases to common length
   c(rank, db) %<-% vctrs::vec_recycle_common(rank, db)
 
-  validate_id_for_database(rank, db)
+  # Provide default levels if not defined
+  if (is.null(levels)) {
+    levels <- unique(tolower(rank))
+    levels <- levels[! is.na(levels)]
+  }
 
-  new_taxon_rank(rank, db)
+  # Create taxon levels object
+  levels <- taxon_rank_level(levels, guess_order = guess_order)
+
+  # Check that all ranks are defined in levels
+  validate_rank_levels(rank, levels)
+
+  # Check that levels are acceptable for the database specified
+  validate_rank_dbs(rank, db)
+
+  # Create taxon_rank object
+  new_taxon_rank(rank = rank, db = db, levels = levels)
 }
 
 
@@ -87,6 +114,46 @@ taxon_db.taxa_taxon_rank <- function(db = character()) {
   vctrs::field(db, "db")
 }
 
+
+#' @export
+`levels<-.taxa_taxon_rank` <- function(x, value) {
+  levels <- taxon_rank_level(value)
+  validate_rank_levels(rank = vctrs::field(x, 'rank'),
+                       levels = levels)
+  attr(x, "levels") <- levels
+  return(x)
+}
+
+
+#' @export
+levels.taxa_taxon_rank <- function(x) {
+  stats::setNames(vctrs::field(attr(x, 'levels'), 'order'),
+                  vctrs::field(attr(x, 'levels'), 'level'))
+}
+
+
+#' @export
+`[<-.taxa_taxon_rank` <- function(x, i, j, value) {
+  if (is_taxon_rank(value)) {
+    attr(x, 'levels') <- c(attr(x, 'levels'), attr(value, 'levels'))
+  } else {
+    value <- vctrs::vec_cast(value, taxon_rank())
+    validate_rank_levels(as.character(value), attr(x, 'levels'))
+  }
+  NextMethod()
+}
+
+
+#' @export
+`[[<-.taxa_taxon_rank` <- function(x, i, j, value) {
+  if (is_taxon_rank(value)) {
+    attr(x, 'levels') <- c(attr(x, 'levels'), attr(value, 'levels'))
+  } else {
+    value <- vctrs::vec_cast(value, taxon_rank())
+    validate_rank_levels(as.character(value), attr(x, 'levels'))
+  }
+  NextMethod()
+}
 
 
 #--------------------------------------------------------------------------------
@@ -128,6 +195,18 @@ obj_print_data.taxa_taxon_rank <- function(x) {
   }
   out <- printed_taxon_rank(x, color = TRUE)
   print_with_color(out, quote = FALSE)
+}
+
+
+#' @export
+#' @keywords internal
+obj_print_footer.taxa_taxon_rank <- function(x) {
+  levels <- attr(x, 'levels')
+  if (length(levels) == 0) {
+    return()
+  }
+  out <- printed_taxon_rank_level(attr(x, 'levels'), color = TRUE)
+  cat(paste0(font_secondary('Levels: '), out, '\n'))
 }
 
 
@@ -266,8 +345,8 @@ vec_cast.double.taxa_taxon_rank <- function(x, to) as.numeric(vctrs::field(x, "r
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
 vec_cast.data.frame.taxa_taxon_rank <- function(x, to) data.frame(stringsAsFactors = FALSE,
-                                                                rank = vctrs::field(x, "rank"),
-                                                                db = vctrs::field(x, "db"))
+                                                                  rank = vctrs::field(x, "rank"),
+                                                                  db = vctrs::field(x, "db"))
 
 
 
@@ -293,40 +372,29 @@ is_taxon_rank <- function(x) {
 #--------------------------------------------------------------------------------
 
 #' @keywords internal
-validate_rank_for_database <- function(rank, db) {
-  is_invalid <- ! is_valid_database_id(rank, db)
-  if (sum(is_invalid) > 0) {
-    stop(call. = FALSE, 'Taxon IDs must follow the database ID conventions if a database with a defined ID regex is specified. ',
-         'The following IDs do not match the pattern for their database:\n',
-         limited_print(paste0(rank[is_invalid], ' (', db[is_invalid], ')'), type = 'silent', prefix = '  '))
+validate_rank_levels <- function(rank, levels) {
+  not_defined <- ! is.na(rank) & ! rank %in% as.character(levels)
+  if (sum(not_defined) > 0) {
+    stop(call. = FALSE,
+         'The following rank names are not in `levels`:\n',
+         limited_print(type = 'silent', prefix = '  ', unique(rank[not_defined])))
   }
 }
 
 
 #' @keywords internal
-is_valid_database_rank <- function(rank, db) {
-  mapply(function(i, r) {
-    grepl(i, pattern = r)
-  }, i = rank, r = db_regexs(db))
-}
-
-
-#' ID validation regexs from database names
-#'
-#' ID validation regexs from database names
-#'
-#' @param db The names of the databases
-#'
-#' @return regexes as character vector
-#'
-#' @keywords internal
-db_ranks <- function(db) {
-  db_defs <- database_definitions$get()
-  vapply(db, FUN.VALUE = character(1), function(d) {
-    if (is.na(d)) {
-      return(".*")
-    } else {
-      return(db_defs[[d]]$id_regex)
-    }
+validate_rank_dbs <- function(rank, db) {
+  db_levels <- database_definitions$get(value = "rank_levels")
+  is_invalid <- vapply(seq_len(length(rank)), FUN.VALUE = logical(1), function(i) {
+    ! is.na(db[i]) && ! is.na(rank[i]) && ! rank[i] %in% as.character(db_levels[[db[i]]])
   })
+  if (sum(is_invalid) > 0) {
+    stop(call. = FALSE,
+         'Taxonomic levels must match those used by the database when both levels and database are defined. ',
+         'The following levels are not used by their assocaited database:\n',
+         limited_print(type = 'silent', prefix = '  ', unique(paste0(rank[is_invalid], ' (', db, ')'))),
+         'Type `database_definitions$get(value = "rank_levels")` to see valid levels for each database.')
+  }
+
 }
+

@@ -5,7 +5,7 @@
 \title{Minimal taxon_db_def constructor}
 \usage{
 new_taxon_db_def(name = character(), url = character(),
-  desc = character(), id_regex = character(), ranks = list())
+  desc = character(), id_regex = character(), rank_levels = list())
 }
 \arguments{
 \item{name}{Name of the database in lower case. Inputs will be transformed to a \code{character} vector.}
@@ -16,7 +16,7 @@ new_taxon_db_def(name = character(), url = character(),
 
 \item{id_regex}{A regular expression for taxon IDs of the database. Inputs will be transformed to a \code{character} vector.}
 
-\item{ranks}{Valid taxonomic ranks for the database. Should be a list of \code{factor}s.}
+\item{rank_levels}{Valid taxonomic ranks for the database. Should be a list of \code{numeric} vectors named by taxonomic ranks.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_db_def}

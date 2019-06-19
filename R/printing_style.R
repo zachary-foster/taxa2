@@ -13,6 +13,20 @@ font_secondary <- function(text) {
 }
 
 
+#' Punctuation formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for non-data, formatting characters
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+font_punct <- function(text) {
+  crayon::silver(text)
+}
+
 
 
 #' Print that works with color
@@ -52,6 +66,7 @@ print_with_color <- function(x, ...) {
   }
 
   # Print output and return input
+  output <- paste0(output, '\n')
   cat(output)
   invisible(original_input)
 }

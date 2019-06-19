@@ -15,8 +15,9 @@ This is used for print data associated with other data.
 }
 \seealso{
 Other printer fonts: \code{\link{desc_font}},
-  \code{\link{error_font}}, \code{\link{name_font}},
-  \code{\link{punc_font}}, \code{\link{tid_font}}
+  \code{\link{error_font}}, \code{\link{font_punct}},
+  \code{\link{name_font}}, \code{\link{punc_font}},
+  \code{\link{tid_font}}
 }
 \concept{printer fonts}
 \keyword{internal}

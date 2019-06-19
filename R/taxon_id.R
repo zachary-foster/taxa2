@@ -295,7 +295,7 @@ is_taxon_id <- function(x) {
 #' @keywords internal
 validate_id_for_database <- function(id, db) {
   is_invalid <- ! is_valid_database_id(id, db)
-  if (sum(is_invalid) > 0) {
+  if (sum(is_invalid, na.rm = TRUE) > 0) {
     stop(call. = FALSE, 'Taxon IDs must follow the database ID conventions if a database with a defined ID regex is specified. ',
          'The following IDs do not match the pattern for their database:\n',
          limited_print(paste0(id[is_invalid], ' (', db[is_invalid], ')'), type = 'silent', prefix = '  '))
