@@ -32,6 +32,7 @@ new_taxon_rank_level <- function(level = character(), order = numeric()) {
 #'
 #' @inheritParams new_taxon_rank_level
 #' @param guess_order If `TRUE` and no order is given, try to guess order based on rank names.
+#' @param impute_na If `TRUE`, fill in NAs based on nearby values (assumed in ascending order).
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -39,28 +40,42 @@ new_taxon_rank_level <- function(level = character(), order = numeric()) {
 #' @family classes
 #'
 #' @export
-taxon_rank_level <- function(level = character(), order = NULL, guess_order = TRUE) {
+taxon_rank_level <- function(level = character(), order = NULL, guess_order = TRUE, impute_na = FALSE) {
 
   # Accept named numeric as input if supplied
-  if (is.null(order) && is.numeric(level) && ! is.null(names(level))) {
+  if (is.null(order) && (is.numeric(level) || all(is.na(level))) && ! is.null(names(level))) {
     order <- unname(level)
     level <- names(level)
   }
 
   # Use order of known ranks if no order is defined for any taxon
-  if (guess_order && is.null(order)) {
-    order <- unname(known_taxon_rank_levels[tolower(level)])
+  order_inferred <- is.null(order)
+  if (is.null(order)) {
+    if (guess_order) {
+      order <- unname(known_taxon_rank_levels[tolower(level)])
+      known_orders <- order[!is.na(order)]
+      if (impute_na && length(known_orders) > 0 && any(diff(known_orders) < 0)) {
+      stop(call. = FALSE,
+           'If both `guess_order` and `impute_na` are TRUE, then known ranks must be in ascending order. ',
+           'If you really want to do this, try specifying the level order manually.')
+      }
+    } else {
+      order <- NA
+    }
   }
 
   # Coerce inputs to right data types
-  if (is.null(order)) {
-    order <- NA
-  }
   level <- vctrs::vec_cast(level, character())
   order <- vctrs::vec_cast(order, numeric())
 
   # Recycle to common length
   c(level, order) %<-% vctrs::vec_recycle_common(level, order)
+
+  # Fill in NAs based on nearby values (assumed in ascending order)
+  if (impute_na && order_inferred) {
+    mean_inc_between_ranks <- round(mean(diff(unique(known_taxon_rank_levels)), na.rm = TRUE))
+    order <- impute_order_na(order, inc = mean_inc_between_ranks)
+  }
 
   # Reorder inputs in specified order
   c(level, order) %<-% check_taxon_rank_order(level, order, warn = FALSE)
@@ -313,4 +328,55 @@ check_taxon_rank_order <- function(level, order, warn = FALSE) {
     order <- order[order(order)]
   }
   return(list(level = level, order = order))
+}
+
+
+#' Fill in NA values in sequence
+#'
+#' Fill in the NA values in a ascending sequence based on nearby non-NA values.
+#' Used to guess the order values for unknown ranks based on the values of known ranks.
+#'
+#' @param order An ascending sequences, possibly with NAs
+#' @param inc The increment size to use for values in NA blocks at the start and end of the sequence.
+#'
+#' @keywords internal
+impute_order_na <- function(order, inc = 1) {
+
+  # If no NAs, return input
+  if (all(! is.na(order))) {
+    return(order)
+  }
+
+  # If all NA, return ascending sequence
+  if (all(is.na(order))) {
+    return(seq_len(length(order)) * inc)
+  }
+
+  # Check that sequences is increasing
+  if (! all(diff(order[! is.na(order)]) >= 0)) {
+    stop('Rank orders must be increasing in impute unknown rank values.')
+  }
+
+  # Find contiguous blocks of NA
+  na_blocks <- data.frame(unclass(rle(is.na(order))))
+  na_blocks$end <- cumsum(na_blocks$lengths)
+  na_blocks$start <- na_blocks$end - na_blocks$lengths + 1
+  na_blocks <- na_blocks[na_blocks$values, ]
+
+  # Replace blocks of NA with imputed values
+  for (i in seq_len(nrow(na_blocks))) {
+    start <- na_blocks$start[i]
+    end <- na_blocks$end[i]
+    if (start == 1L) {
+      fill <- order[end + 1] - rev(seq_len(end - start + 1)) * inc
+    } else if (end == length(order)) {
+      fill <- order[start - 1] + seq_len(end - start + 1) * inc
+    } else {
+      fill <- seq(from = order[start - 1], to = order[end + 1], length.out = end - start + 3)
+      fill <- fill[2:(length(fill) - 1)]
+    }
+    order[start:end] <- fill
+  }
+
+  return(order)
 }

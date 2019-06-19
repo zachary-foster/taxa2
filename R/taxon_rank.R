@@ -69,14 +69,14 @@ taxon_rank <- function(rank = character(), db = NA, levels = NULL, guess_order =
   # Recycle ranks and databases to common length
   c(rank, db) %<-% vctrs::vec_recycle_common(rank, db)
 
-  # Provide default levels if not defined
-  if (is.null(levels)) {
-    levels <- unique(tolower(rank))
-    levels <- levels[! is.na(levels)]
-  }
-
   # Create taxon levels object
-  levels <- taxon_rank_level(levels, guess_order = guess_order)
+  if (is.null(levels)) {
+    levels <- unique(rank)
+    levels <- levels[! is.na(levels)]
+    levels <- taxon_rank_level(levels, guess_order = TRUE, impute_na = FALSE)
+  } else {
+    levels <- taxon_rank_level(levels, guess_order = guess_order, impute_na = TRUE)
+  }
 
   # Check that all ranks are defined in levels
   validate_rank_levels(rank, levels)

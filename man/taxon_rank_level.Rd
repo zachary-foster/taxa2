@@ -5,7 +5,7 @@
 \title{Taxon ID class}
 \usage{
 taxon_rank_level(level = character(), order = NULL,
-  guess_order = TRUE)
+  guess_order = TRUE, impute_na = FALSE)
 }
 \arguments{
 \item{level}{Zero or more taxonomic rank names. If a named numeric is
@@ -17,6 +17,8 @@ Inputs will be transformed to a \code{interger} vector. \code{NA}s can be used t
 indicate that the order is not known.}
 
 \item{guess_order}{If \code{TRUE} and no order is given, try to guess order based on rank names.}
+
+\item{impute_na}{If \code{TRUE}, fill in NAs based on nearby values (assumed in ascending order).}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_rank_level}
