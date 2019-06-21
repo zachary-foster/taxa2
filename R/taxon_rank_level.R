@@ -235,28 +235,28 @@ vec_type2.character.taxa_taxon_rank_level <- function(x, y, ...) character()
 #' @export
 #' @export vec_cast.taxa_taxon_rank_level
 #' @keywords internal
-vec_cast.taxa_taxon_rank_level <- function(x, to) UseMethod("vec_cast.taxa_taxon_rank_level")
+vec_cast.taxa_taxon_rank_level <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank_level")
 
 
 #' @method vec_cast.taxa_taxon_rank_level default
 #' @export
-vec_cast.taxa_taxon_rank_level.default <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.taxa_taxon_rank_level.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @method vec_cast.taxa_taxon_rank_level taxa_taxon_rank_level
 #' @export
-vec_cast.taxa_taxon_rank_level.taxa_taxon_rank_level <- function(x, to) x
+vec_cast.taxa_taxon_rank_level.taxa_taxon_rank_level <- function(x, to, x_arg, to_arg) x
 
 
 #' @method vec_cast.taxa_taxon_rank_level character
 #' @export
-vec_cast.taxa_taxon_rank_level.character <- function(x, to) taxon_rank_level(x)
+vec_cast.taxa_taxon_rank_level.character <- function(x, to, x_arg, to_arg) taxon_rank_level(x)
 
 
 #' @method vec_cast.character taxa_taxon_rank_level
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_rank_level <- function(x, to) vctrs::field(x, "level")
+vec_cast.character.taxa_taxon_rank_level <- function(x, to, x_arg, to_arg) vctrs::field(x, "level")
 
 
 

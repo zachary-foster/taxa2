@@ -145,39 +145,39 @@ vec_type2.factor.taxa_taxon_db <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_db
 #' @keywords internal
-vec_cast.taxa_taxon_db <- function(x, to) UseMethod("vec_cast.taxa_taxon_db")
+vec_cast.taxa_taxon_db <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db")
 
 
 #' @method vec_cast.taxa_taxon_db default
 #' @export
-vec_cast.taxa_taxon_db.default <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.taxa_taxon_db.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @method vec_cast.taxa_taxon_db taxa_taxon_db
 #' @export
-vec_cast.taxa_taxon_db.taxa_taxon_db <- function(x, to) x
+vec_cast.taxa_taxon_db.taxa_taxon_db <- function(x, to, x_arg, to_arg) x
 
 
 #' @method vec_cast.taxa_taxon_db character
 #' @export
-vec_cast.taxa_taxon_db.character <- function(x, to) taxon_db(x)
+vec_cast.taxa_taxon_db.character <- function(x, to, x_arg, to_arg) taxon_db(x)
 
 
 #' @method vec_cast.character taxa_taxon_db
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_db <- function(x, to) vctrs::vec_data(x)
+vec_cast.character.taxa_taxon_db <- function(x, to, x_arg, to_arg) vctrs::vec_data(x)
 
 
 #' @method vec_cast.taxa_taxon_db factor
 #' @export
-vec_cast.taxa_taxon_db.factor <- function(x, to) taxon_db(x)
+vec_cast.taxa_taxon_db.factor <- function(x, to, x_arg, to_arg) taxon_db(x)
 
 
 #' @method vec_cast.factor taxa_taxon_db
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_db <- function(x, to) factor(vctrs::vec_data(x))
+vec_cast.factor.taxa_taxon_db <- function(x, to, x_arg, to_arg) factor(vctrs::vec_data(x))
 
 
 #--------------------------------------------------------------------------------

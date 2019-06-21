@@ -36,22 +36,13 @@ new_taxon_id <- function(id = character(), db = taxon_db()) {
 #' @return An `S3` object of class `taxa_taxon_id`
 #' @family classes
 #'
-#' @examples
-#' (x <- taxon_id(12345))
-#' x$id
-#' x$database
-#'
-#' (x <- taxon_id(
-#'   12345,
-#'   database_list$ncbi
-#' ))
-#' x$id
-#' x$database
-#'
-#' # a null taxon_name object
-#' taxon_name(NULL)
-#'
 taxon_id <- function(id = character(), db = NA) {
+  UseMethod("taxon_id")
+}
+
+
+#' @export
+taxon_id.default <- function(id = character(), db = NA) {
   id <- vctrs::vec_cast(id, character())
   db <- vctrs::vec_cast(db, taxon_db())
   c(id, db) %<-% vctrs::vec_recycle_common(id, db)
@@ -59,6 +50,12 @@ taxon_id <- function(id = character(), db = NA) {
   validate_id_for_database(id, db)
 
   new_taxon_id(id, db)
+}
+
+
+#' @export
+`taxon_id<-` <- function(x, value) {
+  UseMethod('taxon_id<-')
 }
 
 
@@ -216,58 +213,75 @@ vec_type2.factor.taxa_taxon_id <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_id
 #' @keywords internal
-vec_cast.taxa_taxon_id <- function(x, to) UseMethod("vec_cast.taxa_taxon_id")
+vec_cast.taxa_taxon_id <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_id")
 
 
 #' @method vec_cast.taxa_taxon_id default
 #' @export
-vec_cast.taxa_taxon_id.default <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.taxa_taxon_id.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @method vec_cast.taxa_taxon_id taxa_taxon_id
 #' @export
-vec_cast.taxa_taxon_id.taxa_taxon_id <- function(x, to) x
+vec_cast.taxa_taxon_id.taxa_taxon_id <- function(x, to, x_arg, to_arg) x
 
 
 #' @method vec_cast.taxa_taxon_id character
 #' @export
-vec_cast.taxa_taxon_id.character <- function(x, to) taxon_id(x)
+vec_cast.taxa_taxon_id.character <- function(x, to, x_arg, to_arg) taxon_id(x)
 
 
 #' @method vec_cast.character taxa_taxon_id
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_id <- function(x, to) vctrs::field(x, "id")
+vec_cast.character.taxa_taxon_id <- function(x, to, x_arg, to_arg) vctrs::field(x, "id")
 
 
 #' @method vec_cast.taxa_taxon_id factor
 #' @export
-vec_cast.taxa_taxon_id.factor <- function(x, to) taxon_id(x)
+vec_cast.taxa_taxon_id.factor <- function(x, to, x_arg, to_arg) taxon_id(x)
 
 
 #' @method vec_cast.factor taxa_taxon_id
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_id <- function(x, to) factor(vctrs::field(x, "id"))
+vec_cast.factor.taxa_taxon_id <- function(x, to, x_arg, to_arg) factor(vctrs::field(x, "id"))
 
 
-#' @method vec_cast.taxa_taxon_id double
+#' @method vec_cast.taxa_taxon_id integer
 #' @export
-vec_cast.taxa_taxon_id.double <- function(x, to) taxon_id(x)
+vec_cast.taxa_taxon_id.integer <- function(x, to, x_arg, to_arg) taxon_id(x)
 
 
-#' @method vec_cast.double taxa_taxon_id
-#' @importFrom vctrs vec_cast.double
+#' @method vec_cast.integer taxa_taxon_id
+#' @importFrom vctrs vec_cast.integer
 #' @export
-vec_cast.double.taxa_taxon_id <- function(x, to) as.numeric(vctrs::field(x, "id"))
+vec_cast.integer.taxa_taxon_id <- function(x, to, x_arg, to_arg) integer(vctrs::field(x, "id"))
 
 
 #' @method vec_cast.data.frame taxa_taxon_id
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
-vec_cast.data.frame.taxa_taxon_id <- function(x, to) data.frame(stringsAsFactors = FALSE,
+vec_cast.data.frame.taxa_taxon_id <- function(x, to, x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
                                                                 id = vctrs::field(x, "id"),
                                                                 db = vctrs::field(x, "db"))
+
+
+
+#--------------------------------------------------------------------------------
+# S3 equality and comparison functions
+#--------------------------------------------------------------------------------
+
+
+#' @export
+#' @keywords internal
+vec_proxy_equal.taxa_taxon_id <- function(x, ...) {
+  db <- as.character(taxon_db(x))
+  db[is.na(db)] <- "NA" # avoids NA comparisons always being NA
+  data.frame(id = as.character(x),
+             db = db,
+             stringsAsFactors = FALSE)
+}
 
 
 

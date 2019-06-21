@@ -52,6 +52,12 @@ new_taxon_name <- function(name = character(), db = taxon_db()) {
 #' taxon_name(NULL)
 #'
 taxon_name <- function(name = character(), db = NA) {
+  UseMethod("taxon_name")
+}
+
+
+#' @export
+taxon_name.default <- function(name = character(), db = NA) {
   name <- vctrs::vec_cast(name, character())
   db <- vctrs::vec_cast(db, taxon_db())
   c(name, db) %<-% vctrs::vec_recycle_common(name, db)
@@ -59,6 +65,12 @@ taxon_name <- function(name = character(), db = NA) {
   validate_id_for_database(name, db)
 
   new_taxon_name(name, db)
+}
+
+
+#' @export
+`taxon_name<-` <- function(x, value) {
+  UseMethod('taxon_name<-')
 }
 
 
@@ -216,58 +228,75 @@ vec_type2.factor.taxa_taxon_name <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_name
 #' @keywords internal
-vec_cast.taxa_taxon_name <- function(x, to) UseMethod("vec_cast.taxa_taxon_name")
+vec_cast.taxa_taxon_name <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_name")
 
 
 #' @method vec_cast.taxa_taxon_name default
 #' @export
-vec_cast.taxa_taxon_name.default <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.taxa_taxon_name.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @method vec_cast.taxa_taxon_name taxa_taxon_name
 #' @export
-vec_cast.taxa_taxon_name.taxa_taxon_name <- function(x, to) x
+vec_cast.taxa_taxon_name.taxa_taxon_name <- function(x, to, x_arg, to_arg) x
 
 
 #' @method vec_cast.taxa_taxon_name character
 #' @export
-vec_cast.taxa_taxon_name.character <- function(x, to) taxon_name(x)
+vec_cast.taxa_taxon_name.character <- function(x, to, x_arg, to_arg) taxon_name(x)
 
 
 #' @method vec_cast.character taxa_taxon_name
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_name <- function(x, to) vctrs::field(x, "name")
+vec_cast.character.taxa_taxon_name <- function(x, to, x_arg, to_arg) vctrs::field(x, "name")
 
 
 #' @method vec_cast.taxa_taxon_name factor
 #' @export
-vec_cast.taxa_taxon_name.factor <- function(x, to) taxon_name(x)
+vec_cast.taxa_taxon_name.factor <- function(x, to, x_arg, to_arg) taxon_name(x)
 
 
 #' @method vec_cast.factor taxa_taxon_name
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_name <- function(x, to) factor(vctrs::field(x, "name"))
+vec_cast.factor.taxa_taxon_name <- function(x, to, x_arg, to_arg) factor(vctrs::field(x, "name"))
 
 
 #' @method vec_cast.taxa_taxon_name double
 #' @export
-vec_cast.taxa_taxon_name.double <- function(x, to) taxon_name(x)
+vec_cast.taxa_taxon_name.double <- function(x, to, x_arg, to_arg) taxon_name(x)
 
 
 #' @method vec_cast.double taxa_taxon_name
 #' @importFrom vctrs vec_cast.double
 #' @export
-vec_cast.double.taxa_taxon_name <- function(x, to) as.numeric(vctrs::field(x, "name"))
+vec_cast.double.taxa_taxon_name <- function(x, to, x_arg, to_arg) as.numeric(vctrs::field(x, "name"))
 
 
 #' @method vec_cast.data.frame taxa_taxon_name
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
-vec_cast.data.frame.taxa_taxon_name <- function(x, to) data.frame(stringsAsFactors = FALSE,
+vec_cast.data.frame.taxa_taxon_name <- function(x, to, x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
                                                                 name = vctrs::field(x, "name"),
                                                                 db = vctrs::field(x, "db"))
+
+
+
+#--------------------------------------------------------------------------------
+# S3 equality and comparison functions
+#--------------------------------------------------------------------------------
+
+
+#' @export
+#' @keywords internal
+vec_proxy_equal.taxa_taxon_name <- function(x, ...) {
+  db <- as.character(taxon_db(x))
+  db[is.na(db)] <- "NA" # avoids NA comparisons always being NA
+  data.frame(name = as.character(x),
+             db = db,
+             stringsAsFactors = FALSE)
+}
 
 
 

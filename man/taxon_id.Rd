@@ -20,28 +20,13 @@ An \code{S3} object of class \code{taxa_taxon_id}
 Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
 store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
 }
-\examples{
-(x <- taxon_id(12345))
-x$id
-x$database
-
-(x <- taxon_id(
-  12345,
-  database_list$ncbi
-))
-x$id
-x$database
-
-# a null taxon_name object
-taxon_name(NULL)
-
-}
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
   \code{\link{taxmap}}, \code{\link{taxon_db_def}},
-  \code{\link{taxon_db}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+  \code{\link{taxon_db}}, \code{\link{taxon_info}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank_level}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
 \concept{classes}

@@ -61,7 +61,12 @@ new_taxon_rank <- function(rank = character(), db = taxon_db(), levels = taxon_r
 #' taxon_name(NULL)
 #'
 taxon_rank <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE) {
+  UseMethod("taxon_rank")
+}
 
+
+#' @export
+taxon_rank.default <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE) {
   # Cast inputs to correct values
   rank <- vctrs::vec_cast(rank, character())
   db <- vctrs::vec_cast(db, taxon_db())
@@ -86,6 +91,12 @@ taxon_rank <- function(rank = character(), db = NA, levels = NULL, guess_order =
 
   # Create taxon_rank object
   new_taxon_rank(rank = rank, db = db, levels = levels)
+}
+
+
+#' @export
+`taxon_rank<-` <- function(x, value) {
+  UseMethod('taxon_rank<-')
 }
 
 
@@ -206,7 +217,7 @@ obj_print_footer.taxa_taxon_rank <- function(x) {
     return()
   }
   out <- printed_taxon_rank_level(attr(x, 'levels'), color = TRUE)
-  cat(paste0(font_secondary('Levels: '), out, '\n'))
+  cat(paste0('Rank levels: ', out, '\n'))
 }
 
 
@@ -295,56 +306,56 @@ vec_type2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_rank
 #' @keywords internal
-vec_cast.taxa_taxon_rank <- function(x, to) UseMethod("vec_cast.taxa_taxon_rank")
+vec_cast.taxa_taxon_rank <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank")
 
 
 #' @method vec_cast.taxa_taxon_rank default
 #' @export
-vec_cast.taxa_taxon_rank.default <- function(x, to) vctrs::vec_default_cast(x, to)
+vec_cast.taxa_taxon_rank.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @method vec_cast.taxa_taxon_rank taxa_taxon_rank
 #' @export
-vec_cast.taxa_taxon_rank.taxa_taxon_rank <- function(x, to) x
+vec_cast.taxa_taxon_rank.taxa_taxon_rank <- function(x, to, x_arg, to_arg) x
 
 
 #' @method vec_cast.taxa_taxon_rank character
 #' @export
-vec_cast.taxa_taxon_rank.character <- function(x, to) taxon_rank(x)
+vec_cast.taxa_taxon_rank.character <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
 #' @method vec_cast.character taxa_taxon_rank
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_rank <- function(x, to) vctrs::field(x, "rank")
+vec_cast.character.taxa_taxon_rank <- function(x, to, x_arg, to_arg) vctrs::field(x, "rank")
 
 
 #' @method vec_cast.taxa_taxon_rank factor
 #' @export
-vec_cast.taxa_taxon_rank.factor <- function(x, to) taxon_rank(x)
+vec_cast.taxa_taxon_rank.factor <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
 #' @method vec_cast.factor taxa_taxon_rank
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_rank <- function(x, to) factor(vctrs::field(x, "rank"))
+vec_cast.factor.taxa_taxon_rank <- function(x, to, x_arg, to_arg) factor(vctrs::field(x, "rank"))
 
 
 #' @method vec_cast.taxa_taxon_rank double
 #' @export
-vec_cast.taxa_taxon_rank.double <- function(x, to) taxon_rank(x)
+vec_cast.taxa_taxon_rank.double <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
 #' @method vec_cast.double taxa_taxon_rank
 #' @importFrom vctrs vec_cast.double
 #' @export
-vec_cast.double.taxa_taxon_rank <- function(x, to) as.numeric(vctrs::field(x, "rank"))
+vec_cast.double.taxa_taxon_rank <- function(x, to, x_arg, to_arg) as.numeric(vctrs::field(x, "rank"))
 
 
 #' @method vec_cast.data.frame taxa_taxon_rank
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
-vec_cast.data.frame.taxa_taxon_rank <- function(x, to) data.frame(stringsAsFactors = FALSE,
+vec_cast.data.frame.taxa_taxon_rank <- function(x, to, x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
                                                                   rank = vctrs::field(x, "rank"),
                                                                   db = vctrs::field(x, "db"))
 
@@ -443,4 +454,3 @@ validate_rank_dbs <- function(rank, db) {
   }
 
 }
-
