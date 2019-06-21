@@ -9,7 +9,8 @@
 #'
 #' @keywords internal
 font_secondary <- function(text) {
-  crayon::silver(text)
+  style <- crayon::make_style(rgb(.7, .7, .7))
+  style(text)
 }
 
 
@@ -27,6 +28,28 @@ font_punct <- function(text) {
   crayon::silver(text)
 }
 
+
+#' Taxon name formatting in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for taxon names.
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+font_tax_name <- function(text) {
+  if (is_taxon(text)) {
+    ranks_below_genus <- names(known_taxon_rank_levels[known_taxon_rank_levels >= known_taxon_rank_levels['genus']])
+    ranks_below_genus <- ranks_below_genus[! is.na(ranks_below_genus)]
+    out <- ifelse(! is.na(text) & tolower(taxon_rank(text)) %in% ranks_below_genus,
+                  crayon::italic(text), as.character(text))
+  } else {
+    out <- text
+  }
+  return(out)
+}
 
 
 #' Print that works with color
@@ -46,17 +69,16 @@ print_with_color <- function(x, ...) {
   if (original_length > options()$max.print) {
     x <- x[seq_len(options()$max.print)]
   }
-  formatted_intput <- format(x)
 
   # Print fake data with same length as uncolored text
-  dummy <- vapply(nchar(crayon::strip_style(formatted_intput)), FUN.VALUE = character(1),
+  dummy <- vapply(nchar(crayon::strip_style(x)), FUN.VALUE = character(1),
                   function(n) paste0(rep("@", n), collapse = ""))
   dummy <- capture.output(print(dummy, ...))
   dummy <- paste0(dummy, collapse = "\n")
 
   # Replace fake data with colored data
   split_dummy <- strsplit(dummy, "@+")[[1]]
-  output <- paste0(interleave(c(split_dummy, ""), c(formatted_intput, "")), collapse = "")
+  output <- paste0(interleave(c(split_dummy, ""), c(x, "")), collapse = "")
 
   # Replicate maximum print truncation message
   if (original_length > length(x)) {

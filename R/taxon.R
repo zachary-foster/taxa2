@@ -154,13 +154,14 @@ taxon_rank.taxa_taxon <- function(rank = character()) {
 #'
 #' @keywords internal
 printed_taxon <- function(x, color = FALSE) {
-  name <- vctrs::field(x, 'name')
   id <- vctrs::field(x, 'id')
   rank <- vctrs::field(x, 'rank')
-  out <- name
-  out <- paste0(ifelse(is.na(id), '', paste0(id, font_secondary('/'))),
+  auth <- vctrs::field(x, 'auth')
+  out <- font_tax_name(x)
+  # out <- paste0(out, ifelse(is.na(auth), '', paste0(' ', font_tax_name(auth))))
+  out <- paste0(ifelse(is.na(id), '', paste0(font_secondary(id), font_punct('|'))),
                 out)
-  out <- paste0(out, ifelse(is.na(rank), '', paste0(font_secondary('/'), rank)))
+  out <- paste0(out, ifelse(is.na(rank), '', paste0(font_punct('|'), font_secondary(rank))))
   if (! color) {
     out <- crayon::strip_style(out)
   }
@@ -339,6 +340,10 @@ is_taxon <- function(x) {
   inherits(x, "taxa_taxon")
 }
 
+#' @export
+is.na.taxa_taxon <- function(x) {
+  is.na(vctrs::vec_cast(x, character()))
+}
 
 
 #--------------------------------------------------------------------------------

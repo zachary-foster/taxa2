@@ -420,6 +420,12 @@ is_taxon_rank <- function(x) {
 }
 
 
+#' @export
+is.na.taxa_taxon_rank <- function(x) {
+  is.na(vctrs::vec_cast(x, character()))
+}
+
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions

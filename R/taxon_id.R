@@ -301,6 +301,11 @@ is_taxon_id <- function(x) {
 }
 
 
+#' @export
+is.na.taxa_taxon_id <- function(x) {
+  is.na(vctrs::vec_cast(x, character()))
+}
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions

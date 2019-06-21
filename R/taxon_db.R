@@ -180,6 +180,7 @@ vec_cast.taxa_taxon_db.factor <- function(x, to, x_arg, to_arg) taxon_db(x)
 vec_cast.factor.taxa_taxon_db <- function(x, to, x_arg, to_arg) factor(vctrs::vec_data(x))
 
 
+
 #--------------------------------------------------------------------------------
 # Exported utility functions
 #--------------------------------------------------------------------------------
@@ -195,6 +196,11 @@ is_taxon_db <- function(x) {
   inherits(x, "taxa_taxon_db")
 }
 
+
+#' @export
+is.na.taxa_taxon_db <- function(x) {
+  is.na(vctrs::vec_cast(x, character()))
+}
 
 
 #--------------------------------------------------------------------------------
