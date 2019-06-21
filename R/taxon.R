@@ -194,7 +194,22 @@ obj_print_footer.taxa_taxon <- function(x) {
   vctrs::obj_print_footer(vctrs::field(x, 'rank'))
 
   # print databases used in names, ranks, and ids
-  # if (any(! is.na(taxon_db())))
+  db_types <- c(name = 'name', rank = 'rank', id = 'id')
+  dbs <- lapply(db_types, function(db) {
+    as.character(vctrs::field(vctrs::field(x, db), 'db'))
+  })
+  db_per_type <- unique(stack(dbs))
+  db_per_type <- db_per_type[!is.na(db_per_type$values), ]
+  if (nrow(db_per_type) > 0) {
+    type_per_db <- split(db_per_type$ind, db_per_type$values)
+    db_printed <- vapply(seq_len(length(type_per_db)), FUN.VALUE = character(1), function(i) {
+      db_name <- names(type_per_db)[i]
+      db_types <- paste0('(', paste0(type_per_db[[i]], collapse = ','), ')')
+      db_types <- font_secondary(db_types)
+      paste0(db_name, db_types)
+    })
+    cat(paste0('Databases: ', paste0(db_printed, collapse = ' ')))
+  }
 }
 
 
@@ -323,6 +338,14 @@ vec_cast.factor.taxa_taxon <- function(x, to, x_arg, to_arg) as.factor(vctrs::fi
 # S3 equality and comparison functions
 #--------------------------------------------------------------------------------
 
+#' @export
+#' @keywords internal
+vec_proxy_compare.taxa_taxon <- function(x, ...) {
+  data.frame(stringsAsFactors = FALSE,
+             rank = as.character(taxon_rank(x)),
+             name = as.character(taxon_name(x)),
+             id   = as.character(taxon_id(x)))
+}
 
 
 #--------------------------------------------------------------------------------

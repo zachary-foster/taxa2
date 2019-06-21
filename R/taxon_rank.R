@@ -128,7 +128,7 @@ taxon_db.taxa_taxon_rank <- function(db = character()) {
 
 #' @export
 `levels<-.taxa_taxon_rank` <- function(x, value) {
-  levels <- taxon_rank_level(value)
+  levels <- vctrs::vec_cast(value, taxon_rank_level())
   validate_rank_levels(rank = vctrs::field(x, 'rank'),
                        levels = levels)
   attr(x, "levels") <- levels
@@ -183,6 +183,7 @@ levels.taxa_taxon_rank <- function(x) {
 printed_taxon_rank <- function(x, color = FALSE) {
   out <- vctrs::field(x, 'rank')
   db <- vctrs::field(x, 'db')
+  out <- font_na(out)
   out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
   if (! color) {
     out <- crayon::strip_style(out)

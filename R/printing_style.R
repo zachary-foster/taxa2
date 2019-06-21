@@ -45,10 +45,27 @@ font_tax_name <- function(text) {
     ranks_below_genus <- ranks_below_genus[! is.na(ranks_below_genus)]
     out <- ifelse(! is.na(text) & tolower(taxon_rank(text)) %in% ranks_below_genus,
                   crayon::italic(text), as.character(text))
+    out <- font_na(out)
   } else {
     out <- text
   }
   return(out)
+}
+
+
+#' Font for NAs in print methods
+#'
+#' A simple wrapper to make changing the formatting of text printed easier.
+#' This is used for `NA`s
+#'
+#' @param text What to print
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+font_na <- function(text) {
+  text[is.na(text)] <- crayon::red(text[is.na(text)])
+  return(text)
 }
 
 

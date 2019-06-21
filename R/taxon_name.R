@@ -117,6 +117,7 @@ taxon_db.taxa_taxon_name <- function(db = character()) {
 printed_taxon_name <- function(x, color = FALSE) {
   out <- vctrs::field(x, 'name')
   db <- vctrs::field(x, 'db')
+  out <- font_na(out)
   out <- paste0(font_tax_name(out), ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
   if (! color) {
     out <- crayon::strip_style(out)
