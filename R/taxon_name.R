@@ -140,7 +140,7 @@ obj_print_data.taxa_taxon_name <- function(x) {
     return()
   }
   out <- printed_taxon_name(x, color = TRUE)
-  print_with_color(out, quote = FALSE)
+  print_with_color(out, quote = TRUE)
 }
 
 

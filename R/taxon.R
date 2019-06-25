@@ -11,32 +11,25 @@
 #'   is given.
 #' @param rank The ranks of taxa. Inputs with be coerced into a [taxon_rank] vector if anything else
 #'   is given.
-#' @param id The ids of taxa. These should be unique identifiers. A given ID with a defined database
-#'   can only appear more than once if all other information (e.g. name, rank) are the same, but
-#'   differnt IDs can have the same information. Inputs with be coerced into a [taxon_id] vector if
+#' @param id The ids of taxa. These should be unique identifier and are usually associated with a
+#'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
+#' @param auth The authority of the taxon. Inputs with be coerced into a [taxon_auth] vector if
 #'   anything else is given.
-#' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
-#'   anything else is given.
-#' @param info A list of arbitrary, user-defined attributes associated with each taxon. Each element
-#'   in the list, one per taxon, should be a named list of zero or more items with unique names.
-#'   Values in this list can be accessed with the [taxon_info] function. All elements in the list do
-#'   not need to contain the same attributes.
 #'
 #' @return An `S3` object of class `taxa_taxon`
 #'
 #' @keywords internal
 new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
-                      auth = character(), info = taxon_info()) {
+                      auth = taxon_auth()) {
 
   # Check that values are the correct type
   vctrs::vec_assert(name, ptype = taxon_name())
   # vctrs::vec_assert(rank, ptype = taxon_rank())
   vctrs::vec_assert(id, ptype = taxon_id())
-  vctrs::vec_assert(auth, ptype = character())
-  vctrs::vec_assert(info, ptype = taxon_info())
+  vctrs::vec_assert(auth, ptype = taxon_auth())
 
   # Create new object
-  vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth, info = info),
+  vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth),
                   class = "taxa_taxon")
 }
 
@@ -55,20 +48,37 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 #'
 #' @examples
 #'
-taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA, info = list(NULL)) {
+#' # Create taxon vector
+#' x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
+#'            rank = c('species', 'genus', 'phylum', 'family'),
+#'            id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
+#'            auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
+#'
+#' # Get parts of the taxon vector
+#' taxon_name(x)
+#' taxon_rank(x)
+#' taxon_id(x)
+#' taxon_auth(x)
+#'
+#' # Set parts of the taxon vector
+#' taxon_name(x) <- tolower(taxon_name(x))
+#' taxon_rank(x)[1] <- NA
+#' taxon_db(taxon_id(x)) <- 'itis'
+#' taxon_auth(x) <- NA
+#'
+taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA) {
 
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, taxon_name())
   rank <- vctrs::vec_cast(rank, taxon_rank())
   id <- vctrs::vec_cast(id, taxon_id())
-  auth <- vctrs::vec_cast(auth, character())
-  info <- vctrs::vec_cast(info, taxon_info())
+  auth <- vctrs::vec_cast(auth, taxon_auth())
 
   # Recycle ranks and databases to common length
-  c(name, rank, id, auth, info) %<-% vctrs::vec_recycle_common(name, rank, id, auth, info)
+  c(name, rank, id, auth) %<-% vctrs::vec_recycle_common(name, rank, id, auth)
 
   # Create taxon object
-  new_taxon(name = name, rank = rank, id = id, auth = auth, info = info)
+  new_taxon(name = name, rank = rank, id = id, auth = auth)
 }
 
 
@@ -140,6 +150,22 @@ taxon_rank.taxa_taxon <- function(rank = character()) {
 }
 
 
+#' @export
+`taxon_auth<-.taxa_taxon` <- function(x, value) {
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "auth") <- value
+  return(x)
+}
+
+
+#' @export
+taxon_auth.taxa_taxon <- function(auth = character()) {
+  vctrs::field(auth, "auth")
+}
+
+
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -158,7 +184,7 @@ printed_taxon <- function(x, color = FALSE) {
   rank <- vctrs::field(x, 'rank')
   auth <- vctrs::field(x, 'auth')
   out <- font_tax_name(x)
-  # out <- paste0(out, ifelse(is.na(auth), '', paste0(' ', font_tax_name(auth))))
+  out <- paste0(out, ifelse(is.na(auth), '', paste0(' ', font_secondary(auth))))
   out <- paste0(ifelse(is.na(id), '', paste0(font_secondary(id), font_punct('|'))),
                 out)
   out <- paste0(out, ifelse(is.na(rank), '', paste0(font_punct('|'), font_secondary(rank))))

@@ -4,8 +4,7 @@
 \alias{taxon}
 \title{Taxon rank class}
 \usage{
-taxon(name = taxon_name(), rank = NA, id = NA, auth = NA,
-  info = list(NULL))
+taxon(name = taxon_name(), rank = NA, id = NA, auth = NA)
 }
 \arguments{
 \item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
@@ -14,18 +13,11 @@ is given.}
 \item{rank}{The ranks of taxa. Inputs with be coerced into a \link{taxon_rank} vector if anything else
 is given.}
 
-\item{id}{The ids of taxa. These should be unique identifiers. A given ID with a defined database
-can only appear more than once if all other information (e.g. name, rank) are the same, but
-differnt IDs can have the same information. Inputs with be coerced into a \link{taxon_id} vector if
-anything else is given.}
+\item{id}{The ids of taxa. These should be unique identifier and are usually associated with a
+database. Inputs with be coerced into a \link{taxon_id} vector if anything else is given.}
 
-\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
+\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{taxon_auth} vector if
 anything else is given.}
-
-\item{info}{A list of arbitrary, user-defined attributes associated with each taxon. Each element
-in the list, one per taxon, should be a named list of zero or more items with unique names.
-Values in this list can be accessed with the \link{taxon_info} function. All elements in the list do
-not need to contain the same attributes.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon}
@@ -35,14 +27,32 @@ Used to store information about taxa, such as names, ranks, id, and other arbitr
 }
 \examples{
 
+# Create taxon vector
+x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
+           rank = c('species', 'genus', 'phylum', 'family'),
+           id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
+           auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
+
+# Get parts of the taxon vector
+taxon_name(x)
+taxon_rank(x)
+taxon_id(x)
+taxon_auth(x)
+
+# Set parts of the taxon vector
+taxon_name(x) <- tolower(taxon_name(x))
+taxon_rank(x)[1] <- NA
+taxon_db(taxon_id(x)) <- 'itis'
+taxon_auth(x) <- NA
+
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxa}},
-  \code{\link{taxmap}}, \code{\link{taxon_db_def}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_info}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}
+  \code{\link{taxmap}}, \code{\link{taxon_auth}},
+  \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
+  \code{\link{taxon_id}}, \code{\link{taxon_info}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank_level}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
 \concept{classes}
