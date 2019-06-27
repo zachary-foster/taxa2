@@ -190,8 +190,7 @@ ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxa}},
-  \code{\link{taxon_auth}}, \code{\link{taxon_db_def}},
+  \code{\link{hierarchy}}, \code{\link{taxon_db_def}},
   \code{\link{taxon_db}}, \code{\link{taxon_id}},
   \code{\link{taxon_info}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},

@@ -5,7 +5,7 @@
 \title{Minimal taxon constructor}
 \usage{
 new_taxon(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
-  auth = taxon_auth())
+  auth = character(), info = taxon_info())
 }
 \arguments{
 \item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
@@ -17,8 +17,13 @@ is given.}
 \item{id}{The ids of taxa. These should be unique identifier and are usually associated with a
 database. Inputs with be coerced into a \link{taxon_id} vector if anything else is given.}
 
-\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{taxon_auth} vector if
+\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
 anything else is given.}
+
+\item{info}{A list of arbitrary, user-defined attributes associated with each taxon. Each element
+in the list, one per taxon, should be a named list of zero or more items with unique names.
+Values in this list can be accessed with the \link{taxon_info} function. All elements in the list do
+not need to contain the same attributes.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon}

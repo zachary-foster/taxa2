@@ -13,23 +13,28 @@
 #'   is given.
 #' @param id The ids of taxa. These should be unique identifier and are usually associated with a
 #'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
-#' @param auth The authority of the taxon. Inputs with be coerced into a [taxon_auth] vector if
+#' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
 #'   anything else is given.
+#' @param info A list of arbitrary, user-defined attributes associated with each taxon. Each element
+#'   in the list, one per taxon, should be a named list of zero or more items with unique names.
+#'   Values in this list can be accessed with the [taxon_info] function. All elements in the list do
+#'   not need to contain the same attributes.
 #'
 #' @return An `S3` object of class `taxa_taxon`
 #'
 #' @keywords internal
 new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
-                      auth = taxon_auth()) {
+                      auth = character(), info = taxon_info()) {
 
   # Check that values are the correct type
   vctrs::vec_assert(name, ptype = taxon_name())
   # vctrs::vec_assert(rank, ptype = taxon_rank())
   vctrs::vec_assert(id, ptype = taxon_id())
-  vctrs::vec_assert(auth, ptype = taxon_auth())
+  vctrs::vec_assert(auth, ptype = character())
+  vctrs::vec_assert(info, ptype = taxon_info())
 
   # Create new object
-  vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth),
+  vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth, info = info),
                   class = "taxa_taxon")
 }
 
@@ -66,19 +71,20 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 #' taxon_db(taxon_id(x)) <- 'itis'
 #' taxon_auth(x) <- NA
 #'
-taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA) {
+taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA, info = list(NULL)) {
 
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, taxon_name())
   rank <- vctrs::vec_cast(rank, taxon_rank())
   id <- vctrs::vec_cast(id, taxon_id())
-  auth <- vctrs::vec_cast(auth, taxon_auth())
+  auth <- vctrs::vec_cast(auth, character())
+  info <- vctrs::vec_cast(info, taxon_info())
 
   # Recycle ranks and databases to common length
-  c(name, rank, id, auth) %<-% vctrs::vec_recycle_common(name, rank, id, auth)
+  c(name, rank, id, auth, info) %<-% vctrs::vec_recycle_common(name, rank, id, auth, info)
 
   # Create taxon object
-  new_taxon(name = name, rank = rank, id = id, auth = auth)
+  new_taxon(name = name, rank = rank, id = id, auth = auth, info = info)
 }
 
 
@@ -151,6 +157,12 @@ taxon_rank.taxa_taxon <- function(rank = character()) {
 
 
 #' @export
+`taxon_auth<-` <- function(x, value) {
+  UseMethod('taxon_auth<-')
+}
+
+
+#' @export
 `taxon_auth<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
@@ -160,10 +172,30 @@ taxon_rank.taxa_taxon <- function(rank = character()) {
 
 
 #' @export
-taxon_auth.taxa_taxon <- function(auth = character()) {
-  vctrs::field(auth, "auth")
+`taxon_auth` <- function(x) {
+  UseMethod('taxon_auth')
 }
 
+
+#' @export
+taxon_auth.taxa_taxon <- function(x) {
+  vctrs::field(x, "auth")
+}
+
+
+#' @export
+`taxon_info<-.taxa_taxon` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_info())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "info") <- value
+  return(x)
+}
+
+
+#' @export
+taxon_info.taxa_taxon <- function(info = list()) {
+  as.list(vctrs::field(info, "info"))
+}
 
 
 #--------------------------------------------------------------------------------

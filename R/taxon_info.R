@@ -41,11 +41,45 @@ new_taxon_info <- function(info = list()) {
 #' @examples
 #'
 taxon_info <- function(info = list()) {
+  UseMethod("taxon_info")
+}
+
+
+#' @export
+taxon_info.default <- function(info = list()) {
   # Cast inputs to correct values
   info <- lapply(info, vctrs::vec_cast, list())
 
+  # Check that all elements are named
+  is_named <- vapply(info, FUN.VALUE = logical(1), function(x) {
+    length(info) > 0 || (! is.null(names(x)) && all(! is.na(names(x))) && all(names(x) != ''))
+  })
+  if (any(! is_named)) {
+    stop(call. = FALSE,
+         'All elements in taxon info must be named lists. ',
+         'The following indexes have unnamed elements:\n',
+         limited_print(type = 'silent', prefix = '  ', which(! is_named)))
+  }
+
+  # Check that all names are unique
+  is_named_unique <- vapply(info, FUN.VALUE = logical(1), function(x) {
+    length(info) == 0 || length(unique(names(x))) == length(names(x))
+  })
+  if (any(! is_named_unique)) {
+    stop(call. = FALSE,
+         'All elements in taxon info must be uniquely named lists. ',
+         'The following indexes non-uniquely named elements:\n',
+         limited_print(type = 'silent', prefix = '  ', which(! is_named_unique)))
+  }
+
   # Create taxon_info object
   new_taxon_info(info = info)
+}
+
+
+#' @export
+`taxon_info<-` <- function(x, value) {
+  UseMethod('taxon_info<-')
 }
 
 
@@ -141,7 +175,9 @@ vec_cast.taxa_taxon_info <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.t
 
 #' @method vec_cast.taxa_taxon_info default
 #' @export
-vec_cast.taxa_taxon_info.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxon_info.default <- function(x, to, x_arg, to_arg) {
+  vctrs::vec_default_cast(x, to, x_arg, to_arg)
+}
 
 
 #' @method vec_cast.taxa_taxon_info taxa_taxon_info

@@ -22,8 +22,7 @@ store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxa}},
-  \code{\link{taxmap}}, \code{\link{taxon_auth}},
+  \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
   \code{\link{taxon_info}}, \code{\link{taxon_name}},
   \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},
