@@ -199,6 +199,38 @@ levels.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @rdname taxon_rank
+#' @export
+`levels<-.taxa_taxon` <- function(x, value) {
+  levels(vctrs::field(x, 'rank')) <- value
+  return(x)
+}
+
+
+#' @rdname taxon_rank
+#' @export
+levels.taxa_taxon <- function(x) {
+  levels(vctrs::field(x, 'rank'))
+}
+
+
+#' @rdname taxon_rank
+#' @export
+`taxon_rank<-.taxa_taxon` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_rank())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "rank") <- value
+  return(x)
+}
+
+
+#' @rdname taxon_rank
+#' @export
+taxon_rank.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "rank")
+}
+
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -497,6 +529,16 @@ is.na.taxa_taxon_rank <- function(x) {
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
+
+#' @export
+c.taxa_taxon_rank <- function(...) {
+  out <- vctrs::vec_c(...)
+  if (is_taxon_rank(out)) {
+    attr(out, 'levels') <- do.call(c, lapply(list(...), function(x) attr(x, 'levels')))
+  }
+  return(out)
+}
+
 
 #' @keywords internal
 validate_rank_levels <- function(rank, levels) {

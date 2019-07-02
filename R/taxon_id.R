@@ -120,6 +120,23 @@ taxon_db.taxa_taxon_id <- function(db = character(), ...) {
 }
 
 
+#' @rdname taxon_id
+#' @export
+`taxon_id<-.taxa_taxon` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_id())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "id") <- value
+  return(x)
+}
+
+
+#' @rdname taxon_id
+#' @export
+taxon_id.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "id")
+}
+
+
 
 #--------------------------------------------------------------------------------
 # S3 printing functions

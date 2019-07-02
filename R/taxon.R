@@ -77,6 +77,11 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 #' taxon_info(x)[3:4] <- list(list(count = NA))
 #' taxon_info(x, 'n')[1:2] <- c(12, 30)
 #'
+#' # Manipulate taxon vectors
+#' x[1:3]
+#' x[taxon_rank(x) > 'family']
+#' c(x, x)
+#'
 #' @export
 taxon <- function(...) {
   UseMethod("taxon")
@@ -133,72 +138,6 @@ setOldClass(c("taxa_taxon", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 # S3 getters/setters
 #--------------------------------------------------------------------------------
-
-
-#' @rdname taxon_rank
-#' @export
-`levels<-.taxa_taxon` <- function(x, value) {
-  levels(vctrs::field(x, 'rank')) <- value
-  return(x)
-}
-
-
-#' @rdname taxon_rank
-#' @export
-levels.taxa_taxon <- function(x) {
-  levels(vctrs::field(x, 'rank'))
-}
-
-
-#' @rdname taxon_id
-#' @export
-`taxon_id<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_id())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "id") <- value
-  return(x)
-}
-
-
-#' @rdname taxon_id
-#' @export
-taxon_id.taxa_taxon <- function(x, ...) {
-  vctrs::field(x, "id")
-}
-
-
-#' @rdname taxon_name
-#' @export
-`taxon_name<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_name())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "name") <- value
-  return(x)
-}
-
-
-#' @rdname taxon_name
-#' @export
-taxon_name.taxa_taxon <- function(x, ...) {
-  vctrs::field(x, "name")
-}
-
-
-#' @rdname taxon_rank
-#' @export
-`taxon_rank<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_rank())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "rank") <- value
-  return(x)
-}
-
-
-#' @rdname taxon_rank
-#' @export
-taxon_rank.taxa_taxon <- function(x, ...) {
-  vctrs::field(x, "rank")
-}
 
 
 #' Set and get taxon authorities
@@ -530,6 +469,16 @@ vec_proxy_compare.taxa_taxon <- function(x, ...) {
 #--------------------------------------------------------------------------------
 # Exported utility functions
 #--------------------------------------------------------------------------------
+
+#' @export
+c.taxa_taxon <- function(...) {
+  out <- vctrs::vec_c(...)
+  if (is_taxon(out)) {
+    vctrs::field(out, 'rank') <- do.call(c, lapply(list(...), function(x) vctrs::field(x, 'rank')))
+  }
+  return(out)
+}
+
 
 #' Check if is a taxon rank
 #'

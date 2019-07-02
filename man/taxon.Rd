@@ -70,14 +70,17 @@ taxon_auth(x) <- NA
 taxon_info(x)[3:4] <- list(list(count = NA))
 taxon_info(x, 'n')[1:2] <- c(12, 30)
 
+# Manipulate taxon vectors
+x[1:3]
+x[taxon_rank(x) > 'family']
+c(x, x)
+
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id<-.taxa_taxon}},
-  \code{\link{taxon_name<-.taxa_taxon}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxonomy}}
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
 \concept{classes}

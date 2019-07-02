@@ -27,13 +27,10 @@ Used to store information on taxonomic databases that is used to validate inform
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
-  \code{\link{taxon_db}},
-  \code{\link{taxon_id<-.taxa_taxon}},
-  \code{\link{taxon_name<-.taxa_taxon}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+  \code{\link{hierarchy}}, \code{\link{taxmap}},
+  \code{\link{taxon_db}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}
 \keyword{internal}

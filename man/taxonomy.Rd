@@ -97,11 +97,9 @@ ex_taxonomy <- taxonomy(hier1, hier2, hier3)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id<-.taxa_taxon}},
-  \code{\link{taxon_name<-.taxa_taxon}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxon}}
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxon}}
 }
 \concept{classes}

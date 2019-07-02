@@ -26,14 +26,4 @@ An \code{S3} object of class \code{taxa_taxon_rank_level}
 \description{
 Used to store taxon rank level information. This is used in \code{\link[=taxon_rank]{taxon_rank()}} objects.
 }
-\seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
-  \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id<-.taxa_taxon}},
-  \code{\link{taxon_name<-.taxa_taxon}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
-}
-\concept{classes}
 \keyword{internal}

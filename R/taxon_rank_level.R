@@ -36,7 +36,6 @@ new_taxon_rank_level <- function(level = character(), order = numeric()) {
 #' @importFrom vctrs %<-%
 #'
 #' @return An `S3` object of class `taxa_taxon_rank_level`
-#' @family classes
 #'
 #' @keywords internal
 taxon_rank_level <- function(level = character(), order = NULL, guess_order = TRUE, impute_na = FALSE) {
