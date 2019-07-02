@@ -4,7 +4,7 @@
 \alias{printed_taxon_rank}
 \title{Prepare taxon_rank for printing}
 \usage{
-printed_taxon_rank(x, color = FALSE)
+printed_taxon_rank(x, color = FALSE, add_db = TRUE)
 }
 \arguments{
 \item{color}{Use color?}

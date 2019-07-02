@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxon_rank_level.R
 \name{taxon_rank_level}
 \alias{taxon_rank_level}
-\title{Taxon ID class}
+\title{Taxon rank level}
 \usage{
 taxon_rank_level(level = character(), order = NULL,
   guess_order = TRUE, impute_na = FALSE)
@@ -24,15 +24,16 @@ indicate that the order is not known.}
 An \code{S3} object of class \code{taxa_taxon_rank_level}
 }
 \description{
-Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
-store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
+Used to store taxon rank level information. This is used in \code{\link[=taxon_rank]{taxon_rank()}} objects.
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}},
+  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
   \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_info}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxon_id<-.taxa_taxon}},
+  \code{\link{taxon_name<-.taxa_taxon}},
   \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}
+\keyword{internal}

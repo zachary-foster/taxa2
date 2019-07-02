@@ -11,7 +11,7 @@
 #'   a `character` vector.
 #' @param db The name(s) of the database(s) associated with the IDs. If not `NA`
 #'   (the default), the input must consist of names of databases in
-#'   [database_list]. The length must be 0, 1, or equal to the number of IDs.
+#'   [database_ref]. The length must be 0, 1, or equal to the number of IDs.
 #' @param levels A named numeric vector indicating the names and orders of
 #'   possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.
 #'   Ranks of unknown order can be indicated with `NA` instead of a number.
@@ -33,40 +33,66 @@ new_taxon_rank <- function(rank = character(), db = taxon_db(), levels = taxon_r
 
 #' Taxon rank class
 #'
+#' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store taxon ranks, possibly assocaited with a taxonomy database. This is typically used to
 #' store taxon ranks in [taxon()] objects.
 #'
-#' @export
-#' @inheritParams new_taxon_rank
-#' @param guess_order If `TRUE` and no rank order is given using numbers, try to guess order based on rank names.
-#'
-#' @importFrom vctrs %<-%
+#' @param ... Used to pass arguments to methods and allow methods to use additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon_rank`
+#' @importFrom vctrs %<-%
 #' @family classes
 #'
 #' @examples
-#' (x <- taxon_rank(12345))
-#' x$rank
-#' x$database
 #'
-#' (x <- taxon_rank(
-#'   12345,
-#'   database_list$ncbi
-#' ))
-#' x$rank
-#' x$database
+#' # Making new objects
+#' x <- taxon_rank(c('species', 'species', 'phylum', 'family'))
+#' x <- taxon_rank(c('species', 'species', 'phylum', 'family'),
+#'                 db = c('ncbi', 'ncbi', 'itis', 'itis'))
 #'
-#' # a null taxon_name object
-#' taxon_name(NULL)
+#' # Specifiying level order
+#' taxon_rank(c('A', 'B', 'C', 'D', 'A', 'D', 'D'),
+#'            levels = c('D', 'C', 'B', 'A'))
+#' taxon_rank(c('A', 'B', 'C', 'D', 'A', 'D', 'D'),
+#'            levels = c(D = NA, A = 10, B = 20, C = 30))
 #'
-taxon_rank <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE) {
+#' # Manipulating objects
+#' as.character(x)
+#' as.factor(x)
+#' as.ordered(x)
+#' x[2:3]
+#' x[x > 'family'] <- taxon_rank('unknown')
+#' x[1] <- taxon_rank('order')
+#' x[4] <- taxon_rank('order', db = 'ncbi')
+#'
+#' # Using as columns in tables
+#' tibble::tibble(x = x, y = 1:4)
+#' data.frame(x = x, y = 1:4)
+#'
+#' # Trying to add an unknown level causes an error
+#' #x[2] <- 'unknown'
+#'
+#' @export
+taxon_rank <- function(...) {
   UseMethod("taxon_rank")
 }
 
 
+#' @rdname taxon_rank
+#'
+#' @param rank Zero or more taxonomic rank names. Inputs will be transformed to a `character`
+#'   vector.
+#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the default), the
+#'   input must consist of names of databases in [database_ref]. The length must be 0, 1, or equal
+#'   to the number of IDs.
+#' @param levels A named numeric vector indicating the names and orders of possible taxonomic ranks.
+#'   Higher numbers indicate for fine-scale groupings. Ranks of unknown order can be indicated with
+#'   `NA` instead of a number.
+#' @param guess_order If `TRUE` and no rank order is given using numbers, try to guess order based
+#'   on rank names.
+#'
 #' @export
-taxon_rank.default <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE) {
+taxon_rank.default <- function(rank = character(), db = NA, levels = NULL, guess_order = TRUE, ...) {
   # Cast inputs to correct values
   rank <- vctrs::vec_cast(rank, character())
   db <- vctrs::vec_cast(db, taxon_db())
@@ -94,14 +120,18 @@ taxon_rank.default <- function(rank = character(), db = NA, levels = NULL, guess
 }
 
 
+#' @rdname taxon_rank
+#'
+#' @param x An object with taxon ranks.
+#' @param value The ranks to set. Inputs will be coerced into a [taxon_rank()] vector.
+#'
 #' @export
 `taxon_rank<-` <- function(x, value) {
   UseMethod('taxon_rank<-')
 }
 
 
-#' @importFrom methods setOldClass
-methods::setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
+setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
 
 
 
@@ -109,23 +139,24 @@ methods::setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
 # S3 getters/setters
 #--------------------------------------------------------------------------------
 
+#' @rdname taxon_db
 #' @export
 `taxon_db<-.taxa_taxon_rank` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_db())
   value <- vctrs::vec_recycle(value, length(x))
-
   vctrs::field(x, "db") <- value
-
   return(x)
 }
 
 
+#' @rdname taxon_db
 #' @export
-taxon_db.taxa_taxon_rank <- function(db = character()) {
-  vctrs::field(db, "db")
+taxon_db.taxa_taxon_rank <- function(x, ...) {
+  vctrs::field(x, "db")
 }
 
 
+#' @rdname taxon_rank
 #' @export
 `levels<-.taxa_taxon_rank` <- function(x, value) {
   levels <- vctrs::vec_cast(value, taxon_rank_level())
@@ -136,6 +167,7 @@ taxon_db.taxa_taxon_rank <- function(db = character()) {
 }
 
 
+#' @rdname taxon_rank
 #' @export
 levels.taxa_taxon_rank <- function(x) {
   stats::setNames(vctrs::field(attr(x, 'levels'), 'order'),
@@ -180,11 +212,17 @@ levels.taxa_taxon_rank <- function(x) {
 #' @return character
 #'
 #' @keywords internal
-printed_taxon_rank <- function(x, color = FALSE) {
+printed_taxon_rank <- function(x, color = FALSE, add_db = TRUE) {
   out <- vctrs::field(x, 'rank')
   db <- vctrs::field(x, 'db')
+  styles <- rank_level_color_funcs(levels(x))
+  out[! is.na(out)] <- vapply(out[! is.na(out)], FUN.VALUE = character(1), function(r) {
+    styles[[r]](r)
+  })
   out <- font_na(out)
-  out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
+  if (add_db) {
+    out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
+  }
   if (! color) {
     out <- crayon::strip_style(out)
   }
@@ -192,6 +230,7 @@ printed_taxon_rank <- function(x, color = FALSE) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 format.taxa_taxon_rank <- function(x, ...) {
@@ -199,6 +238,7 @@ format.taxa_taxon_rank <- function(x, ...) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxon_rank <- function(x) {
@@ -210,6 +250,7 @@ obj_print_data.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 obj_print_footer.taxa_taxon_rank <- function(x) {
@@ -222,13 +263,15 @@ obj_print_footer.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 vec_ptype_abbr.taxa_taxon_rank <- function(x) {
-  "tax_id"
+  "tax_rank"
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 vec_ptype_full.taxa_taxon_rank <- function(x) {
@@ -236,6 +279,7 @@ vec_ptype_full.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @importFrom pillar pillar_shaft
 #' @export
 #' @keywords internal
@@ -250,6 +294,7 @@ pillar_shaft.taxa_taxon_rank <- function(x, ...) {
 # S3 coercion functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2 taxa_taxon_rank
 #' @importFrom vctrs vec_type2
 #' @export
@@ -258,6 +303,7 @@ pillar_shaft.taxa_taxon_rank <- function(x, ...) {
 vec_type2.taxa_taxon_rank <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_rank", y)
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_rank default
 #' @export
 vec_type2.taxa_taxon_rank.default <- function(x, y, ..., x_arg = "", y_arg = "") {
@@ -265,32 +311,38 @@ vec_type2.taxa_taxon_rank.default <- function(x, y, ..., x_arg = "", y_arg = "")
 }
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_rank vctrs_unspecified
 #' @export
 vec_type2.taxa_taxon_rank.vctrs_unspecified <- function(x, y, ...) x
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_rank taxa_taxon_rank
 #' @export
 vec_type2.taxa_taxon_rank.taxa_taxon_rank <- function(x, y, ...) new_taxon_rank()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_rank character
 #' @export
 vec_type2.taxa_taxon_rank.character <- function(x, y, ...) character()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.character taxa_taxon_rank
 #' @importFrom vctrs vec_type2.character
 #' @export
 vec_type2.character.taxa_taxon_rank <- function(x, y, ...) character()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_rank factor
 #' @export
 vec_type2.taxa_taxon_rank.factor <- function(x, y, ...) factor()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.factor taxa_taxon_rank
 #' @importFrom vctrs vec_type2.factor
 #' @export
@@ -302,6 +354,7 @@ vec_type2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 # S3 casting functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast taxa_taxon_rank
 #' @importFrom vctrs vec_cast
 #' @export
@@ -310,49 +363,58 @@ vec_type2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 vec_cast.taxa_taxon_rank <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank")
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank default
 #' @export
 vec_cast.taxa_taxon_rank.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank taxa_taxon_rank
 #' @export
 vec_cast.taxa_taxon_rank.taxa_taxon_rank <- function(x, to, x_arg, to_arg) x
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank character
 #' @export
 vec_cast.taxa_taxon_rank.character <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_taxon_rank
 #' @importFrom vctrs vec_cast.character
 #' @export
 vec_cast.character.taxa_taxon_rank <- function(x, to, x_arg, to_arg) vctrs::field(x, "rank")
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank factor
 #' @export
 vec_cast.taxa_taxon_rank.factor <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxon_rank
 #' @importFrom vctrs vec_cast.factor
 #' @export
 vec_cast.factor.taxa_taxon_rank <- function(x, to, x_arg, to_arg) factor(vctrs::field(x, "rank"))
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank double
 #' @export
 vec_cast.taxa_taxon_rank.double <- function(x, to, x_arg, to_arg) taxon_rank(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.double taxa_taxon_rank
 #' @importFrom vctrs vec_cast.double
 #' @export
 vec_cast.double.taxa_taxon_rank <- function(x, to, x_arg, to_arg) as.numeric(vctrs::field(x, "rank"))
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.data.frame taxa_taxon_rank
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
@@ -366,6 +428,7 @@ vec_cast.data.frame.taxa_taxon_rank <- function(x, to, x_arg, to_arg) data.frame
 # S3 equality and comparison functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_comparison_funcs
 #' @export
 #' @keywords internal
 vec_proxy_compare.taxa_taxon_rank <- function(x, ...) {
@@ -373,6 +436,7 @@ vec_proxy_compare.taxa_taxon_rank <- function(x, ...) {
 }
 
 
+#' @rdname taxa_comparison_funcs
 #' @export
 #' @keywords internal
 vec_proxy_equal.taxa_taxon_rank <- function(x, ...) {
@@ -384,6 +448,7 @@ vec_proxy_equal.taxa_taxon_rank <- function(x, ...) {
 }
 
 
+#' @rdname taxa_comparison_funcs
 #' @export
 #' @keywords internal
 Ops.taxa_taxon_rank <- function(e1, e2) {
@@ -421,6 +486,7 @@ is_taxon_rank <- function(x) {
 }
 
 
+#' @rdname taxon_rank
 #' @export
 is.na.taxa_taxon_rank <- function(x) {
   is.na(vctrs::vec_cast(x, character()))
@@ -445,7 +511,7 @@ validate_rank_levels <- function(rank, levels) {
 
 #' @keywords internal
 validate_rank_dbs <- function(rank, db) {
-  db_levels <- database_definitions$get(value = "rank_levels")
+  db_levels <- db_ref$get(value = "rank_levels")
   is_invalid <- vapply(seq_len(length(rank)), FUN.VALUE = logical(1), function(i) {
     ! is.null(db[[i]]) &&
       ! is.na(rank[i]) &&
@@ -457,7 +523,32 @@ validate_rank_dbs <- function(rank, db) {
          'Taxonomic levels must match those used by the database when both levels and database are defined. ',
          'The following levels are not used by their assocaited database:\n',
          limited_print(type = 'silent', prefix = '  ', unique(paste0(rank[is_invalid], ' (', db, ')'))),
-         'Type `database_definitions$get(value = "rank_levels")` to see valid levels for each database.')
+         'Type `db_ref$get(value = "rank_levels")` to see valid levels for each database.')
   }
 
+}
+
+
+#' Get font color for levels
+#'
+#' Make list of crayon style functions to print taxon rank levels in color.
+#'
+#' @keywords internal
+rank_level_color_funcs <- function(levels) {
+  lev <- sort(levels, na.last = TRUE)
+  colored_lev <- unique(lev[! is.na(lev)])
+  if (length(colored_lev) > 0) {
+    colors <- viridisLite::viridis(length(colored_lev), begin = 0.85, end = 0.15)
+  } else {
+    colors <- character(0)
+  }
+  out <- lapply(lev, function(l) {
+    if (is.na(l)) {
+      return(crayon::white)
+    } else {
+      crayon::make_style(colors[colored_lev == l])
+    }
+  })
+  names(out) <- names(lev)
+  return(out)
 }

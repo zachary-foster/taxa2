@@ -8,7 +8,7 @@ new_taxon_db(db = character())
 }
 \arguments{
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
-\code{names(database_definitions)}. Inputs will be transformed to a \code{character} vector.}
+\code{names(db_ref)}. Inputs will be transformed to a \code{character} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_db}

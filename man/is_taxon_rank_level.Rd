@@ -12,3 +12,4 @@ is_taxon_rank_level(x)
 \description{
 Check if an object is the taxon id class
 }
+\keyword{internal}

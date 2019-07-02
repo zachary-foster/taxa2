@@ -2,12 +2,26 @@
 % Please edit documentation in R/taxon.R
 \name{taxon}
 \alias{taxon}
-\title{Taxon rank class}
+\alias{taxon.default}
+\alias{taxon<-}
+\alias{taxon_info<-.taxa_taxon}
+\alias{taxon_info.taxa_taxon}
+\title{Taxon class}
 \usage{
-taxon(name = taxon_name(), rank = NA, id = NA, auth = NA,
-  info = list(NULL))
+taxon(...)
+
+\method{taxon}{default}(name = taxon_name(), rank = NA, id = NA,
+  auth = NA, info = list(NULL), ...)
+
+taxon(x) <- value
+
+\method{taxon_info}{taxa_taxon}(x) <- value
+
+\method{taxon_info}{taxa_taxon}(x, ...)
 }
 \arguments{
+\item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
+
 \item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
 is given.}
 
@@ -24,11 +38,16 @@ anything else is given.}
 in the list, one per taxon, should be a named list of zero or more items with unique names.
 Values in this list can be accessed with the \link{taxon_info} function. All elements in the list do
 not need to contain the same attributes.}
+
+\item{x}{An object to with taxa.}
+
+\item{value}{The taxa to set. Inputs will be coerced into a \code{\link[=taxon]{taxon()}} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon}
 }
 \description{
+\Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 Used to store information about taxa, such as names, ranks, id, and other arbitrary data.
 }
 \examples{
@@ -54,10 +73,11 @@ taxon_auth(x) <- NA
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}},
+  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
   \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_info}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank_level}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
+  \code{\link{taxon_id<-.taxa_taxon}},
+  \code{\link{taxon_name<-.taxa_taxon}},
+  \code{\link{taxon_rank_level}}, \code{\link{taxonomy}}
 }
 \concept{classes}

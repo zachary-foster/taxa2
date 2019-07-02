@@ -15,7 +15,7 @@
 #'
 #'
 #' @keywords internal
-known_taxon_rank_levels <- c(
+rank_ref <- c(
   'domain' = 10,
   'superkingdom' = 20,
   'kingdom' = 30,
@@ -77,13 +77,13 @@ known_taxon_rank_levels <- c(
 #' more check for taxon IDs and taxon ranks from particular databases.
 #'
 #' @keywords internal
-database_list <- c(
+database_ref <- c(
 
   taxon_db_def(
     name =     "ncbi",
     url =      "http://www.ncbi.nlm.nih.gov/taxonomy",
     desc =     "NCBI Taxonomy Database",
-    id_regex = ".*",
+    id_regex = "[0-9]+",
     rank_levels  = list(NULL)
   ),
 
@@ -91,16 +91,16 @@ database_list <- c(
     name =     "gbif",
     url =      "http://www.gbif.org/developer/species",
     desc =     "GBIF Taxonomic Backbone",
-    id_regex = ".*",
-    rank_levels  = list(known_taxon_rank_levels[c("kingdom", "phylum", "order", "family", "genus", "species")])
+    id_regex = "[0-9]+",
+    rank_levels  = list(rank_ref[c("kingdom", "phylum", "order", "family", "genus", "species")])
   ),
 
   taxon_db_def(
     name =     "bold",
     url =      "http://www.boldsystems.org",
     desc =     "Barcode of Life",
-    id_regex = ".*",
-    rank_levels  =   list(known_taxon_rank_levels[c("phylum", "class", "order", "family", "subfamily",
+    id_regex = "[0-9]+",
+    rank_levels  =   list(rank_ref[c("phylum", "class", "order", "family", "subfamily",
                                                     "genus", "species", "subspecies")])
   ),
 
@@ -108,7 +108,7 @@ database_list <- c(
     name =     "col",
     url =      "http://www.catalogueoflife.org",
     desc =     "Catalogue of Life",
-    id_regex = ".*",
+    id_regex = "[a-z0-9]{32}",
     rank_levels  =   list(NULL)
   ),
 
@@ -116,7 +116,7 @@ database_list <- c(
     name =     "eol",
     url =      "http://eol.org",
     desc =     "Encyclopedia of Life",
-    id_regex = ".*",
+    id_regex = "[0-9]+",
     rank_levels  =   list(NULL)
   ),
 
@@ -124,7 +124,7 @@ database_list <- c(
     name =     "nbn",
     url =      "https://nbn.org.uk",
     desc =     "UK National Biodiversity Network",
-    id_regex = ".*",
+    id_regex = "[A-Z]{5}[0-9]{10}",
     rank_levels  =   list(NULL)
   ),
 
@@ -132,7 +132,7 @@ database_list <- c(
     name =     "tps",
     url =      "http://www.tropicos.org/",
     desc =     "Tropicos",
-    id_regex = ".*",
+    id_regex = "[0-9]+",
     rank_levels  =   list(NULL)
   ),
 
@@ -162,7 +162,7 @@ database_list <- c(
 #' This code is copied from the code handling options in [knitr].
 #'
 #' @keywords internal
-default_database_definitions <- function(defaults = list()) {
+default_db_ref <- function(defaults = list()) {
   definitions <- defaults
   initial_value <- defaults
 
@@ -224,12 +224,6 @@ default_database_definitions <- function(defaults = list()) {
 #'
 #' This defines the valid taxonomic databases that can be used in `taxa_database` objects as a list of
 #'
-#' @param name (character) name of the database
-#' @param url (character) url for the database
-#' @param desc (character) description of the database
-#' @param id_regex (character) id regex
-#' @param rank_levels Possible taxonomic ranks
-#'
 #' @section Attribution:
 #'
 #' This code is based on the code handling options in [knitr].
@@ -237,13 +231,13 @@ default_database_definitions <- function(defaults = list()) {
 #' @examples
 #'
 #' # List all database definitions
-#' database_definitions$get()
+#' db_ref$get()
 #'
 #' # Get a specific database definition
-#' database_definitions$get('ncbi')
+#' db_ref$get('ncbi')
 #'
 #' # Add or overwrite a database definition
-#' database_definitions$set(
+#' db_ref$set(
 #'   name = "my_new_database",
 #'   url = "http://www.my_tax_database.com",
 #'   desc = "I just made this up",
@@ -251,8 +245,8 @@ default_database_definitions <- function(defaults = list()) {
 #' )
 #'
 #' # Reset definitions to default values
-#' database_definitions$reset()
+#' db_ref$reset()
 #'
 #' @export
-database_definitions <- default_database_definitions(database_list)
+db_ref <- default_db_ref(database_ref)
 

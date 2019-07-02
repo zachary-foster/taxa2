@@ -78,8 +78,7 @@ taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_char
 }
 
 
-#' @importFrom methods setOldClass
-methods::setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
+setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
 
 
 
@@ -87,6 +86,7 @@ methods::setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
 # S3 printing functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxon_db_def <- function(x) {
@@ -148,6 +148,7 @@ obj_print_data.taxa_taxon_db_def <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 vec_ptype_full.taxa_taxon_db_def <- function(x) {
@@ -159,6 +160,7 @@ vec_ptype_full.taxa_taxon_db_def <- function(x) {
 # S3 casting functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast taxa_taxon_db_def
 #' @importFrom vctrs vec_cast
 #' @export
@@ -167,15 +169,16 @@ vec_ptype_full.taxa_taxon_db_def <- function(x) {
 vec_cast.taxa_taxon_db_def <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db_def")
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_db_def default
 #' @export
 vec_cast.taxa_taxon_db_def.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_db_def taxa_taxon_db_def
 #' @export
 vec_cast.taxa_taxon_db_def.taxa_taxon_db_def <- function(x, to, x_arg, to_arg) x
-
 
 
 
@@ -196,8 +199,3 @@ is_valid_regex <- function(text)
   out <- suppressWarnings(try(grepl(pattern = text, "x"), silent = TRUE))
   return(! inherits(out, "try-error"))
 }
-
-
-
-
-

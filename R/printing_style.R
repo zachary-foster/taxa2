@@ -9,7 +9,7 @@
 #'
 #' @keywords internal
 font_secondary <- function(text) {
-  style <- crayon::make_style(rgb(.7, .7, .7))
+  style <- crayon::make_style(grDevices::rgb(.7, .7, .7))
   style(text)
 }
 
@@ -41,7 +41,7 @@ font_punct <- function(text) {
 #' @keywords internal
 font_tax_name <- function(text) {
   if (is_taxon(text)) {
-    ranks_below_genus <- names(known_taxon_rank_levels[known_taxon_rank_levels >= known_taxon_rank_levels['genus']])
+    ranks_below_genus <- names(rank_ref[rank_ref >= rank_ref['genus']])
     ranks_below_genus <- ranks_below_genus[! is.na(ranks_below_genus)]
     out <- ifelse(! is.na(text) & tolower(taxon_rank(text)) %in% ranks_below_genus,
                   crayon::italic(text), as.character(text))
@@ -90,7 +90,7 @@ print_with_color <- function(x, ...) {
   # Print fake data with same length as uncolored text
   dummy <- vapply(nchar(crayon::strip_style(x)), FUN.VALUE = character(1),
                   function(n) paste0(rep("@", n), collapse = ""))
-  dummy <- capture.output(print(dummy, ...))
+  dummy <- utils::capture.output(print(dummy, ...))
   dummy <- paste0(dummy, collapse = "\n")
 
   # Replace fake data with colored data

@@ -12,3 +12,4 @@ is_taxon_info(x)
 \description{
 Check if an object is the taxon info class
 }
+\keyword{internal}

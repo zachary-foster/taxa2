@@ -13,7 +13,7 @@ a \code{character} vector.}
 
 \item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA}
 (the default), the input must consist of names of databases in
-\link{database_list}. The length must be 0, 1, or equal to the number of IDs.}
+\link{database_ref}. The length must be 0, 1, or equal to the number of IDs.}
 
 \item{levels}{A named numeric vector indicating the names and orders of
 possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.

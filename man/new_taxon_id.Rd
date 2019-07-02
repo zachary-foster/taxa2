@@ -10,7 +10,7 @@ new_taxon_id(id = character(), db = taxon_db())
 \item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
 
 \item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
-default), the input must consist of names of databases in \link{database_list}. The length must be
+default), the input must consist of names of databases in \link{database_ref}. The length must be
 0, 1, or equal to the number of IDs.}
 }
 \value{

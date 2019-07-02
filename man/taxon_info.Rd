@@ -2,15 +2,27 @@
 % Please edit documentation in R/taxon_info.R
 \name{taxon_info}
 \alias{taxon_info}
+\alias{taxon_info.default}
+\alias{taxon_info<-}
 \title{Taxon info class}
 \usage{
-taxon_info(info = list())
+taxon_info(...)
+
+\method{taxon_info}{default}(info = list(), ...)
+
+taxon_info(x) <- value
 }
 \arguments{
+\item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
+
 \item{info}{A list of arbitrary, user-defined attributes associated with each taxon. Each element
 in the list, one per taxon, should be a named list of zero or more items with unique names.
 Values in this list can be accessed with the \link{taxon_info} function. All elements in the list do
 not need to contain the same attributes.}
+
+\item{x}{An object with taxa.}
+
+\item{value}{The taxa to set. Inputs will be coerced into a list of uniquely named list.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_info}
@@ -19,15 +31,4 @@ An \code{S3} object of class \code{taxa_taxon_info}
 Used to store arbitrary user-defined data assocaited with data. This is typically used to
 store taxon info in \code{\link[=taxon]{taxon()}} objects.
 }
-\examples{
-
-}
-\seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
-  \code{\link{taxon_db_def}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank_level}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
-}
-\concept{classes}
+\keyword{internal}

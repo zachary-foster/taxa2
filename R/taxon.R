@@ -39,12 +39,12 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 }
 
 
-#' Taxon rank class
+#' Taxon class
 #'
+#' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store information about taxa, such as names, ranks, id, and other arbitrary data.
 #'
-#' @export
-#' @inheritParams new_taxon
+#' @param ... Used to pass arguments to methods and allow methods to used additional arguments.
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -71,8 +71,29 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 #' taxon_db(taxon_id(x)) <- 'itis'
 #' taxon_auth(x) <- NA
 #'
-taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA, info = list(NULL)) {
+#' @export
+taxon <- function(...) {
+  UseMethod("taxon")
+}
 
+
+#' @rdname taxon
+#'
+#' @param name The names of taxa. Inputs with be coerced into a [taxon_name] vector if anything else
+#'   is given.
+#' @param rank The ranks of taxa. Inputs with be coerced into a [taxon_rank] vector if anything else
+#'   is given.
+#' @param id The ids of taxa. These should be unique identifier and are usually associated with a
+#'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
+#' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
+#'   anything else is given.
+#' @param info A list of arbitrary, user-defined attributes associated with each taxon. Each element
+#'   in the list, one per taxon, should be a named list of zero or more items with unique names.
+#'   Values in this list can be accessed with the [taxon_info] function. All elements in the list do
+#'   not need to contain the same attributes.
+#'
+#' @export
+taxon.default <- function(name = taxon_name(), rank = NA, id = NA, auth = NA, info = list(NULL), ...) {
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, taxon_name())
   rank <- vctrs::vec_cast(rank, taxon_rank())
@@ -88,8 +109,18 @@ taxon <- function(name = taxon_name(), rank = NA, id = NA, auth = NA, info = lis
 }
 
 
-#' @importFrom methods setOldClass
-methods::setOldClass(c("taxa_taxon", "vctrs_vctr"))
+#' @rdname taxon
+#'
+#' @param x An object to with taxa.
+#' @param value The taxa to set. Inputs will be coerced into a [taxon()] vector.
+#'
+#' @export
+`taxon<-` <- function(x, value) {
+  UseMethod('taxon<-')
+}
+
+
+setOldClass(c("taxa_taxon", "vctrs_vctr"))
 
 
 
@@ -98,6 +129,7 @@ methods::setOldClass(c("taxa_taxon", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 
 
+#' @rdname taxon_rank
 #' @export
 `levels<-.taxa_taxon` <- function(x, value) {
   levels(vctrs::field(x, 'rank')) <- value
@@ -105,12 +137,14 @@ methods::setOldClass(c("taxa_taxon", "vctrs_vctr"))
 }
 
 
+#' @rdname taxon_rank
 #' @export
 levels.taxa_taxon <- function(x) {
   levels(vctrs::field(x, 'rank'))
 }
 
 
+#' @rdname taxon_id
 #' @export
 `taxon_id<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_id())
@@ -120,12 +154,14 @@ levels.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxon_id
 #' @export
-taxon_id.taxa_taxon <- function(id = character()) {
-  vctrs::field(id, "id")
+taxon_id.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "id")
 }
 
 
+#' @rdname taxon_name
 #' @export
 `taxon_name<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_name())
@@ -135,12 +171,14 @@ taxon_id.taxa_taxon <- function(id = character()) {
 }
 
 
+#' @rdname taxon_name
 #' @export
-taxon_name.taxa_taxon <- function(name = character()) {
-  vctrs::field(name, "name")
+taxon_name.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "name")
 }
 
 
+#' @rdname taxon_rank
 #' @export
 `taxon_rank<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_rank())
@@ -150,18 +188,45 @@ taxon_name.taxa_taxon <- function(name = character()) {
 }
 
 
+#' @rdname taxon_rank
 #' @export
-taxon_rank.taxa_taxon <- function(rank = character()) {
-  vctrs::field(rank, "rank")
+taxon_rank.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "rank")
 }
 
 
+#' Set and get taxon authorities
+#'
+#' Set and get taxon authorities in objects that have them, such as [taxon()] objects.
+#'
+#' @param x An object with taxon authorities.
+#'
+#' @return A [character()] vector
+#'
+#' @export
+taxon_auth <- function(x) {
+  UseMethod('taxon_auth')
+}
+
+
+#' @rdname taxon_auth
+#' @export
+taxon_auth.taxa_taxon <- function(x) {
+  vctrs::field(x, "auth")
+}
+
+
+#' @rdname taxon_auth
+#'
+#' @param value The taxon authorities to set. Inputs will be coerced into a [character()] vector.
+#'
 #' @export
 `taxon_auth<-` <- function(x, value) {
   UseMethod('taxon_auth<-')
 }
 
 
+#' @rdname taxon_auth
 #' @export
 `taxon_auth<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
@@ -171,18 +236,7 @@ taxon_rank.taxa_taxon <- function(rank = character()) {
 }
 
 
-#' @export
-`taxon_auth` <- function(x) {
-  UseMethod('taxon_auth')
-}
-
-
-#' @export
-taxon_auth.taxa_taxon <- function(x) {
-  vctrs::field(x, "auth")
-}
-
-
+#' @rdname taxon
 #' @export
 `taxon_info<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_info())
@@ -192,9 +246,10 @@ taxon_auth.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxon
 #' @export
-taxon_info.taxa_taxon <- function(info = list()) {
-  as.list(vctrs::field(info, "info"))
+taxon_info.taxa_taxon <- function(x, ...) {
+  as.list(vctrs::field(x, "info"))
 }
 
 
@@ -219,7 +274,9 @@ printed_taxon <- function(x, color = FALSE) {
   out <- paste0(out, ifelse(is.na(auth), '', paste0(' ', font_secondary(auth))))
   out <- paste0(ifelse(is.na(id), '', paste0(font_secondary(id), font_punct('|'))),
                 out)
-  out <- paste0(out, ifelse(is.na(rank), '', paste0(font_punct('|'), font_secondary(rank))))
+  out <- paste0(out, ifelse(is.na(rank), '',
+                            paste0(font_punct('|'),
+                                   printed_taxon_rank(rank, color = TRUE, add_db = FALSE))))
   if (! color) {
     out <- crayon::strip_style(out)
   }
@@ -227,6 +284,8 @@ printed_taxon <- function(x, color = FALSE) {
 }
 
 
+#' @rdname taxa_printing_funcs
+#' @rdname taxon
 #' @export
 #' @keywords internal
 format.taxa_taxon <- function(x, ...) {
@@ -234,6 +293,8 @@ format.taxa_taxon <- function(x, ...) {
 }
 
 
+#' @rdname taxa_printing_funcs
+#' @rdname taxon
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxon <- function(x) {
@@ -245,6 +306,7 @@ obj_print_data.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 obj_print_footer.taxa_taxon <- function(x) {
@@ -256,7 +318,7 @@ obj_print_footer.taxa_taxon <- function(x) {
   dbs <- lapply(db_types, function(db) {
     as.character(vctrs::field(vctrs::field(x, db), 'db'))
   })
-  db_per_type <- unique(stack(dbs))
+  db_per_type <- unique(utils::stack(dbs))
   db_per_type <- db_per_type[!is.na(db_per_type$values), ]
   if (nrow(db_per_type) > 0) {
     type_per_db <- split(db_per_type$ind, db_per_type$values)
@@ -271,6 +333,7 @@ obj_print_footer.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 vec_ptype_abbr.taxa_taxon <- function(x) {
@@ -278,6 +341,7 @@ vec_ptype_abbr.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @export
 #' @keywords internal
 vec_ptype_full.taxa_taxon <- function(x) {
@@ -285,6 +349,7 @@ vec_ptype_full.taxa_taxon <- function(x) {
 }
 
 
+#' @rdname taxa_printing_funcs
 #' @importFrom pillar pillar_shaft
 #' @export
 #' @keywords internal
@@ -299,6 +364,7 @@ pillar_shaft.taxa_taxon <- function(x, ...) {
 # S3 coercion functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2 taxa_taxon
 #' @importFrom vctrs vec_type2
 #' @export
@@ -307,6 +373,7 @@ pillar_shaft.taxa_taxon <- function(x, ...) {
 vec_type2.taxa_taxon <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon", y)
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon default
 #' @export
 vec_type2.taxa_taxon.default <- function(x, y, ..., x_arg = "", y_arg = "") {
@@ -314,32 +381,38 @@ vec_type2.taxa_taxon.default <- function(x, y, ..., x_arg = "", y_arg = "") {
 }
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon vctrs_unspecified
 #' @export
 vec_type2.taxa_taxon.vctrs_unspecified <- function(x, y, ...) x
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon taxa_taxon
 #' @export
 vec_type2.taxa_taxon.taxa_taxon <- function(x, y, ...) new_taxon()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon character
 #' @export
 vec_type2.taxa_taxon.character <- function(x, y, ...) character()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.character taxa_taxon
 #' @importFrom vctrs vec_type2.character
 #' @export
 vec_type2.character.taxa_taxon <- function(x, y, ...) character()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon factor
 #' @export
 vec_type2.taxa_taxon.factor <- function(x, y, ...) factor()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.factor taxa_taxon
 #' @importFrom vctrs vec_type2.factor
 #' @export
@@ -351,6 +424,7 @@ vec_type2.factor.taxa_taxon <- function(x, y, ...) factor()
 # S3 casting functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast taxa_taxon
 #' @importFrom vctrs vec_cast
 #' @export
@@ -359,32 +433,38 @@ vec_type2.factor.taxa_taxon <- function(x, y, ...) factor()
 vec_cast.taxa_taxon <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon")
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon default
 #' @export
 vec_cast.taxa_taxon.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon taxa_taxon
 #' @export
 vec_cast.taxa_taxon.taxa_taxon <- function(x, to, x_arg, to_arg) x
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon character
 #' @export
 vec_cast.taxa_taxon.character <- function(x, to, x_arg, to_arg) taxon(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_taxon
 #' @importFrom vctrs vec_cast.character
 #' @export
 vec_cast.character.taxa_taxon <- function(x, to, x_arg, to_arg) as.character(vctrs::field(x, "name"))
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon factor
 #' @export
 vec_cast.taxa_taxon.factor <- function(x, to, x_arg, to_arg) taxon(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxon
 #' @importFrom vctrs vec_cast.factor
 #' @export
@@ -396,6 +476,7 @@ vec_cast.factor.taxa_taxon <- function(x, to, x_arg, to_arg) as.factor(vctrs::fi
 # S3 equality and comparison functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_comparison_funcs
 #' @export
 #' @keywords internal
 vec_proxy_compare.taxa_taxon <- function(x, ...) {
@@ -420,6 +501,7 @@ vec_proxy_compare.taxa_taxon <- function(x, ...) {
 is_taxon <- function(x) {
   inherits(x, "taxa_taxon")
 }
+
 
 #' @export
 is.na.taxa_taxon <- function(x) {

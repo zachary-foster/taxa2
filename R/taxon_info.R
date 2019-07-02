@@ -30,23 +30,24 @@ new_taxon_info <- function(info = list()) {
 #' Used to store arbitrary user-defined data assocaited with data. This is typically used to
 #' store taxon info in [taxon()] objects.
 #'
-#' @export
-#' @inheritParams new_taxon_info
+#' @param ... Used to pass arguments to methods and allow methods to used additional arguments.
 #'
 #' @importFrom vctrs %<-%
 #'
 #' @return An `S3` object of class `taxa_taxon_info`
-#' @family classes
-#'
-#' @examples
-#'
-taxon_info <- function(info = list()) {
+#' @keywords internal
+taxon_info <- function(...) {
   UseMethod("taxon_info")
 }
 
-
-#' @export
-taxon_info.default <- function(info = list()) {
+#' @rdname taxon_info
+#' @param info A list of arbitrary, user-defined attributes associated with each taxon. Each element
+#'   in the list, one per taxon, should be a named list of zero or more items with unique names.
+#'   Values in this list can be accessed with the [taxon_info] function. All elements in the list do
+#'   not need to contain the same attributes.
+#'
+#' @keywords internal
+taxon_info.default <- function(info = list(), ...) {
   # Cast inputs to correct values
   info <- lapply(info, vctrs::vec_cast, list())
 
@@ -77,46 +78,18 @@ taxon_info.default <- function(info = list()) {
 }
 
 
+#' @rdname taxon_info
+#'
+#' @param x An object with taxa.
+#' @param value The taxa to set. Inputs will be coerced into a list of uniquely named list.
+#'
 #' @export
 `taxon_info<-` <- function(x, value) {
   UseMethod('taxon_info<-')
 }
 
 
-#' @importFrom methods setOldClass
-methods::setOldClass(c("taxa_taxon_info", "vctrs_vctr"))
-
-
-
-#--------------------------------------------------------------------------------
-# S3 getters/setters
-#--------------------------------------------------------------------------------
-
-
-#--------------------------------------------------------------------------------
-# S3 printing functions
-#--------------------------------------------------------------------------------
-
-#' @export
-#' @keywords internal
-obj_print_data.taxa_taxon_info <- function(x) {
-  print(as.list(x))
-}
-
-
-
-#' @export
-#' @keywords internal
-vec_ptype_abbr.taxa_taxon_info <- function(x) {
-  "tax_info"
-}
-
-
-#' @export
-#' @keywords internal
-vec_ptype_full.taxa_taxon_info <- function(x) {
-  "taxon_info"
-}
+setOldClass(c("taxa_taxon_info", "vctrs_vctr"))
 
 
 
@@ -124,6 +97,7 @@ vec_ptype_full.taxa_taxon_info <- function(x) {
 # S3 coercion functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2 taxa_taxon_info
 #' @importFrom vctrs vec_type2
 #' @export
@@ -132,6 +106,7 @@ vec_ptype_full.taxa_taxon_info <- function(x) {
 vec_type2.taxa_taxon_info <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_info", y)
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_info default
 #' @export
 vec_type2.taxa_taxon_info.default <- function(x, y, ..., x_arg = "", y_arg = "") {
@@ -139,21 +114,25 @@ vec_type2.taxa_taxon_info.default <- function(x, y, ..., x_arg = "", y_arg = "")
 }
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_info vctrs_unspecified
 #' @export
 vec_type2.taxa_taxon_info.vctrs_unspecified <- function(x, y, ...) x
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_info taxa_taxon_info
 #' @export
 vec_type2.taxa_taxon_info.taxa_taxon_info <- function(x, y, ...) new_taxon_info()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.taxa_taxon_info list
 #' @export
 vec_type2.taxa_taxon_info.list <- function(x, y, ...) list()
 
 
+#' @rdname taxa_coercion_funcs
 #' @method vec_type2.list taxa_taxon_info
 #' @importFrom vctrs vec_type2.list
 #' @export
@@ -165,6 +144,7 @@ vec_type2.list.taxa_taxon_info <- function(x, y, ...) list()
 # S3 casting functions
 #--------------------------------------------------------------------------------
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast taxa_taxon_info
 #' @importFrom vctrs vec_cast
 #' @export
@@ -173,6 +153,7 @@ vec_type2.list.taxa_taxon_info <- function(x, y, ...) list()
 vec_cast.taxa_taxon_info <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_info")
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_info default
 #' @export
 vec_cast.taxa_taxon_info.default <- function(x, to, x_arg, to_arg) {
@@ -180,27 +161,23 @@ vec_cast.taxa_taxon_info.default <- function(x, to, x_arg, to_arg) {
 }
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_info taxa_taxon_info
 #' @export
 vec_cast.taxa_taxon_info.taxa_taxon_info <- function(x, to, x_arg, to_arg) x
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_info list
 #' @export
 vec_cast.taxa_taxon_info.list <- function(x, to, x_arg, to_arg) taxon_info(x)
 
 
+#' @rdname taxa_casting_funcs
 #' @method vec_cast.list taxa_taxon_info
 #' @importFrom vctrs vec_cast.list
 #' @export
 vec_cast.list.taxa_taxon_info <- function(x, to, x_arg, to_arg) vctrs::field(x, "info")
-
-
-
-#--------------------------------------------------------------------------------
-# S3 equality and comparison functions
-#--------------------------------------------------------------------------------
-
 
 
 
@@ -214,14 +191,8 @@ vec_cast.list.taxa_taxon_info <- function(x, to, x_arg, to_arg) vctrs::field(x, 
 #'
 #' @param x An object to test
 #'
-#' @export
+#' @keywords internal
 is_taxon_info <- function(x) {
   inherits(x, "taxa_taxon_info")
 }
-
-
-
-#--------------------------------------------------------------------------------
-# Internal utility functions
-#--------------------------------------------------------------------------------
 
