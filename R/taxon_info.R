@@ -33,6 +33,20 @@ new_taxon_info <- function(info = list()) {
 #'
 #' @importFrom vctrs %<-%
 #'
+#' @examples
+#'
+#' # Create taxon vector
+#' x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
+#'            info = list(list(n = 1), list(n = 3), list(n = 2), list(n = 9)))
+#'
+#' # Get parts of the taxon vector
+#' taxon_info(x)
+#' taxon_info(x, 'n')
+#'
+#' # Set parts of the taxon vector
+#' taxon_info(x)[3:4] <- list(list(count = NA))
+#' taxon_info(x, 'n')[1:2] <- c(12, 30)
+#'
 #' @export
 taxon_info <- function(...) {
   UseMethod("taxon_info")

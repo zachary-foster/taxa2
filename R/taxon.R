@@ -352,12 +352,24 @@ obj_print_footer.taxa_taxon <- function(x) {
     type_per_db <- split(db_per_type$ind, db_per_type$values)
     db_printed <- vapply(seq_len(length(type_per_db)), FUN.VALUE = character(1), function(i) {
       db_name <- names(type_per_db)[i]
-      db_types <- paste0('(', paste0(type_per_db[[i]], collapse = ','), ')')
-      db_types <- font_secondary(db_types)
+      db_types <- paste0(font_punct('('),
+                         font_secondary(paste0(type_per_db[[i]], collapse = ',')),
+                         font_punct(')'))
       paste0(db_name, db_types)
     })
-    cat(paste0('Databases: ', paste0(db_printed, collapse = ' ')))
+    cat(paste0('Databases: ', paste0(db_printed, collapse = ' '), '\n'))
   }
+
+  # Print names and counts of info keys
+  keys <- unlist(lapply(taxon_info(x), names))
+  if (length(keys) > 0) {
+    counts <- sort(table(keys), decreasing = TRUE)
+    cat(paste0('Info keys: ', paste0(names(counts),
+                                     font_punct('('), font_secondary(counts), font_punct(')'),
+                                     collapse = ' '),
+               '\n'))
+  }
+
 }
 
 
