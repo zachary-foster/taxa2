@@ -54,22 +54,28 @@ new_taxon <- function(name = taxon_name(), rank = taxon_rank(), id = taxon_id(),
 #' @examples
 #'
 #' # Create taxon vector
+#' x <- taxon(c('A', 'B', 'C'))
 #' x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
 #'            rank = c('species', 'genus', 'phylum', 'family'),
 #'            id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
-#'            auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
+#'            auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'),
+#'            info = list(list(n = 1), list(n = 3), list(n = 2), list(n = 9)))
 #'
 #' # Get parts of the taxon vector
 #' taxon_name(x)
 #' taxon_rank(x)
 #' taxon_id(x)
 #' taxon_auth(x)
+#' taxon_info(x)
+#' taxon_info(x, 'n')
 #'
 #' # Set parts of the taxon vector
 #' taxon_name(x) <- tolower(taxon_name(x))
 #' taxon_rank(x)[1] <- NA
 #' taxon_db(taxon_id(x)) <- 'itis'
 #' taxon_auth(x) <- NA
+#' taxon_info(x)[3:4] <- list(list(count = NA))
+#' taxon_info(x, 'n')[1:2] <- c(12, 30)
 #'
 #' @export
 taxon <- function(...) {
@@ -236,20 +242,42 @@ taxon_auth.taxa_taxon <- function(x) {
 }
 
 
-#' @rdname taxon
+#' @rdname taxon_info
 #' @export
-`taxon_info<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_info())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "info") <- value
+`taxon_info<-.taxa_taxon` <- function(x, key = NULL, value) {
+  if (is.null(key)) {
+    value <- vctrs::vec_cast(value, taxon_info())
+    value <- vctrs::vec_recycle(value, length(x))
+    vctrs::field(x, "info") <- value
+  } else {
+    value <- vctrs::vec_recycle(value, length(x))
+    vctrs::field(x, "info") <- mapply(vctrs::field(x, "info"), value,
+                                      SIMPLIFY = FALSE,
+                                      FUN = function(l, v) {
+                                        l[key] <- v
+                                        return(l)
+                                      })
+  }
   return(x)
 }
 
 
-#' @rdname taxon
+#' @rdname taxon_info
+#'
+#' @param key The name of the item to get from the info for each taxon. If the element with the name
+#'   specified is present, `NULL` will be returned/set for those taxa. If a key is not supplied
+#'   (default), then all info for each taxon will be returned/set.
+#'
 #' @export
-taxon_info.taxa_taxon <- function(x, ...) {
-  as.list(vctrs::field(x, "info"))
+taxon_info.taxa_taxon <- function(x, key = NULL, ...) {
+  out <- as.list(vctrs::field(x, "info"))
+  if (is.null(key)) {
+    return(out)
+  } else {
+    return(lapply(out, function(l) {
+      l[[key]]
+    }))
+  }
 }
 
 

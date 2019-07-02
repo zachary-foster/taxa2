@@ -39,7 +39,8 @@ Imports:
     taxize,
     pillar,
     vctrs,
-    methods
+    methods,
+    viridisLite
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,

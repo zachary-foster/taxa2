@@ -4,8 +4,6 @@
 \alias{taxon}
 \alias{taxon.default}
 \alias{taxon<-}
-\alias{taxon_info<-.taxa_taxon}
-\alias{taxon_info.taxa_taxon}
 \title{Taxon class}
 \usage{
 taxon(...)
@@ -14,10 +12,6 @@ taxon(...)
   auth = NA, info = list(NULL), ...)
 
 taxon(x) <- value
-
-\method{taxon_info}{taxa_taxon}(x) <- value
-
-\method{taxon_info}{taxa_taxon}(x, ...)
 }
 \arguments{
 \item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
@@ -53,22 +47,28 @@ Used to store information about taxa, such as names, ranks, id, and other arbitr
 \examples{
 
 # Create taxon vector
+x <- taxon(c('A', 'B', 'C'))
 x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
            rank = c('species', 'genus', 'phylum', 'family'),
            id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
-           auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
+           auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'),
+           info = list(list(n = 1), list(n = 3), list(n = 2), list(n = 9)))
 
 # Get parts of the taxon vector
 taxon_name(x)
 taxon_rank(x)
 taxon_id(x)
 taxon_auth(x)
+taxon_info(x)
+taxon_info(x, 'n')
 
 # Set parts of the taxon vector
 taxon_name(x) <- tolower(taxon_name(x))
 taxon_rank(x)[1] <- NA
 taxon_db(taxon_id(x)) <- 'itis'
 taxon_auth(x) <- NA
+taxon_info(x)[3:4] <- list(list(count = NA))
+taxon_info(x, 'n')[1:2] <- c(12, 30)
 
 }
 \seealso{

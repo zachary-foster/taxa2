@@ -25,27 +25,20 @@ new_taxon_info <- function(info = list()) {
 }
 
 
-#' Taxon info class
+#' Set and get taxon info
 #'
-#' Used to store arbitrary user-defined data assocaited with data. This is typically used to
-#' store taxon info in [taxon()] objects.
+#' Set and get taxon info in [taxon()] objects.
 #'
 #' @param ... Used to pass arguments to methods and allow methods to used additional arguments.
 #'
 #' @importFrom vctrs %<-%
 #'
-#' @return An `S3` object of class `taxa_taxon_info`
-#' @keywords internal
+#' @export
 taxon_info <- function(...) {
   UseMethod("taxon_info")
 }
 
-#' @rdname taxon_info
-#' @param info A list of arbitrary, user-defined attributes associated with each taxon. Each element
-#'   in the list, one per taxon, should be a named list of zero or more items with unique names.
-#'   Values in this list can be accessed with the [taxon_info] function. All elements in the list do
-#'   not need to contain the same attributes.
-#'
+
 #' @keywords internal
 taxon_info.default <- function(info = list(), ...) {
   # Cast inputs to correct values
@@ -84,7 +77,7 @@ taxon_info.default <- function(info = list(), ...) {
 #' @param value The taxa to set. Inputs will be coerced into a list of uniquely named list.
 #'
 #' @export
-`taxon_info<-` <- function(x, value) {
+`taxon_info<-` <- function(x, key = NULL, value) {
   UseMethod('taxon_info<-')
 }
 
