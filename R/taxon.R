@@ -265,11 +265,22 @@ format.taxa_taxon <- function(x, ...) {
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxon <- function(x) {
+  # Dont print anything if nothing to print
   if (length(x) == 0) {
     return()
   }
+
+  # Only print other info for the taxa printed for speed
+  original_length <- length(x)
+  truncated <- original_length > options()$max.print
+  if (truncated) {
+    x <- head(x, options()$max.print)
+  }
+
+  # Print
   out <- printed_taxon(x, color = TRUE)
-  print_with_color(out, quote = FALSE)
+  print_with_color(out, original_length = original_length, quote = FALSE)
+  invisible(x)
 }
 
 
@@ -279,6 +290,13 @@ obj_print_data.taxa_taxon <- function(x) {
 obj_print_footer.taxa_taxon <- function(x) {
   # print taxon rank levels
   vctrs::obj_print_footer(vctrs::field(x, 'rank'))
+
+  # Only print other info for the taxa printed for speed
+  original_length <- length(x)
+  truncated <- original_length > options()$max.print
+  if (truncated) {
+    x <- head(x, options()$max.print)
+  }
 
   # print databases used in names, ranks, and ids
   db_types <- c(name = 'name', rank = 'rank', id = 'id')
@@ -296,18 +314,20 @@ obj_print_footer.taxa_taxon <- function(x) {
                          font_punct(')'))
       paste0(db_name, db_types)
     })
-    cat(paste0('Databases: ', paste0(db_printed, collapse = ' '), '\n'))
+    cat(paste0(ifelse(truncated, 'Databases in printed: ', 'Databases: '),
+               paste0(db_printed, collapse = ' '), '\n'))
   }
 
   # Print names and counts of info keys
   keys <- unlist(lapply(taxon_info(x), names))
-  if (length(keys) > 0) {
-    counts <- sort(table(keys), decreasing = TRUE)
-    cat(paste0('Info keys: ', paste0(names(counts),
-                                     font_punct('('), font_secondary(counts), font_punct(')'),
-                                     collapse = ' '),
-               '\n'))
-  }
+  counts <- sort(table(keys), decreasing = TRUE)
+  cat(paste0(ifelse(truncated, 'Info keys in printed: ', 'Info keys: '),
+             paste0(names(counts),
+                    font_punct('('),
+                    font_secondary(counts),
+                    font_punct(')'),
+                    collapse = ' '),
+             '\n'))
 
 }
 

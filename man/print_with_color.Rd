@@ -4,10 +4,12 @@
 \alias{print_with_color}
 \title{Print that works with color}
 \usage{
-print_with_color(x, ...)
+print_with_color(x, original_length = length(x), ...)
 }
 \arguments{
 \item{x}{What to print, typically a character vector}
+
+\item{original_length}{The length of the full vector if only part was given.}
 
 \item{...}{Passed to \code{print}}
 }

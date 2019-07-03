@@ -75,14 +75,13 @@ font_na <- function(text) {
 #' way I found to replicate the behavior of `print` without rewriting the entire `print` function.
 #'
 #' @param x What to print, typically a character vector
+#' @param original_length The length of the full vector if only part was given.
 #' @param ... Passed to `print`
 #'
 #' @keywords internal
-print_with_color <- function(x, ...) {
-
+print_with_color <- function(x, original_length = length(x), ...) {
   # Apply maximum printing limits
   original_length <- length(x)
-  original_input <- x
   if (original_length > options()$max.print) {
     x <- x[seq_len(options()$max.print)]
   }
@@ -107,7 +106,7 @@ print_with_color <- function(x, ...) {
   # Print output and return input
   output <- paste0(output, '\n')
   cat(output)
-  invisible(original_input)
+  invisible(x)
 }
 
 #' Interleves two vectors
