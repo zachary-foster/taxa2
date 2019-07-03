@@ -20,12 +20,6 @@ vectors.}
 the names of these in functions like \code{\link[=filter_taxa]{filter_taxa()}} will execute the
 function and return the results. If the function has at least one argument,
 the taxmap object is passed to it.}
-
-\item{named_by_rank}{(\code{TRUE}/\code{FALSE}) If  \code{TRUE} and the input is a list of
-vectors with each vector named by ranks, include that rank info in the
-output object, so it can be accessed by \code{out$taxon_ranks()}. If \code{TRUE},
-taxa with different ranks, but the same name and location in the taxonomy,
-will be considered different taxa.}
 }
 \value{
 An \code{R6Class} object of class \code{\link[=taxmap]{taxmap()}}
@@ -190,9 +184,9 @@ ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxon_db_def}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+  \code{\link{hierarchy}}, \code{\link{taxon_db}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
 \concept{classes}

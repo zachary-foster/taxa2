@@ -39,7 +39,6 @@ new_taxon_db_def <- function(name = character(), url = character(), desc = chara
 #' @importFrom vctrs %<-%
 #'
 #' @return An `S3` object of class `taxa_taxon_db_def`
-#' @family classes
 #' @keywords internal
 taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_character_,
                          id_regex = NA_character_, rank_levels = rep(list(NULL), length(name))) {

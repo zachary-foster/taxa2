@@ -25,12 +25,4 @@ An \code{S3} object of class \code{taxa_taxon_db_def}
 \description{
 Used to store information on taxonomic databases that is used to validate information in other classes.
 }
-\seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
-}
-\concept{classes}
 \keyword{internal}

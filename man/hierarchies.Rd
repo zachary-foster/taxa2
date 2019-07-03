@@ -92,9 +92,9 @@ hierarchies(.list = list(hier1, hier2, hier3))
 }
 \seealso{
 Other classes: \code{\link{hierarchy}},
-  \code{\link{taxmap}}, \code{\link{taxon_db_def}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+  \code{\link{taxmap}}, \code{\link{taxon_db}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
 \concept{classes}
