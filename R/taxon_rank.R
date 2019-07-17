@@ -327,58 +327,58 @@ pillar_shaft.taxa_taxon_rank <- function(x, ...) {
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2 taxa_taxon_rank
-#' @importFrom vctrs vec_type2
+#' @method vec_ptype2 taxa_taxon_rank
+#' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_type2.taxa_taxon_rank
+#' @export vec_ptype2.taxa_taxon_rank
 #' @keywords internal
-vec_type2.taxa_taxon_rank <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_rank", y)
+vec_ptype2.taxa_taxon_rank <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_rank", y)
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_rank default
+#' @method vec_ptype2.taxa_taxon_rank default
 #' @export
-vec_type2.taxa_taxon_rank.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.taxa_taxon_rank.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_rank vctrs_unspecified
+#' @method vec_ptype2.taxa_taxon_rank vctrs_unspecified
 #' @export
-vec_type2.taxa_taxon_rank.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.taxa_taxon_rank.vctrs_unspecified <- function(x, y, ...) x
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_rank taxa_taxon_rank
+#' @method vec_ptype2.taxa_taxon_rank taxa_taxon_rank
 #' @export
-vec_type2.taxa_taxon_rank.taxa_taxon_rank <- function(x, y, ...) new_taxon_rank()
+vec_ptype2.taxa_taxon_rank.taxa_taxon_rank <- function(x, y, ...) new_taxon_rank()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_rank character
+#' @method vec_ptype2.taxa_taxon_rank character
 #' @export
-vec_type2.taxa_taxon_rank.character <- function(x, y, ...) character()
+vec_ptype2.taxa_taxon_rank.character <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.character taxa_taxon_rank
-#' @importFrom vctrs vec_type2.character
+#' @method vec_ptype2.character taxa_taxon_rank
+#' @importFrom vctrs vec_ptype2.character
 #' @export
-vec_type2.character.taxa_taxon_rank <- function(x, y, ...) character()
+vec_ptype2.character.taxa_taxon_rank <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_rank factor
+#' @method vec_ptype2.taxa_taxon_rank factor
 #' @export
-vec_type2.taxa_taxon_rank.factor <- function(x, y, ...) factor()
+vec_ptype2.taxa_taxon_rank.factor <- function(x, y, ...) factor()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.factor taxa_taxon_rank
-#' @importFrom vctrs vec_type2.factor
+#' @method vec_ptype2.factor taxa_taxon_rank
+#' @importFrom vctrs vec_ptype2.factor
 #' @export
-vec_type2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
+vec_ptype2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 
 
 

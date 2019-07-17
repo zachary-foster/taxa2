@@ -221,3 +221,81 @@ subtaxa.taxa_taxonomy <- function(x, recursive = TRUE, include_input = FALSE,
   return(output)
 }
 
+
+
+
+#' @export
+supertaxa <- function(x, ...) {
+  UseMethod('supertaxa')
+}
+
+
+#' @rdname supertaxa
+#'
+#' @export
+supertaxa <- function(subset = NULL, recursive = TRUE, simplify = FALSE,
+                      include_input = FALSE, value = "taxon_indexes", na = FALSE) {
+  # non-standard argument evaluation
+  data_used <- eval(substitute(self$data_used(subset)))
+  subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
+  subset <- private$parse_nse_taxon_subset(subset)
+
+  # Get supertaxa
+  parent_index <- match(self$edge_list$from, self$edge_list$to)
+  recursive_part <- function(taxon, n_recursions) {
+    supertaxon <- parent_index[taxon]
+    if (n_recursions) {
+      if (is.na(supertaxon)) {
+        output <- c(taxon, supertaxon)
+      } else {
+        if (is.numeric(n_recursions)) {
+          n_recursions <- n_recursions - 1
+        }
+        output <- c(taxon, recursive_part(supertaxon,
+                                          n_recursions = n_recursions))
+      }
+    } else {
+      output <- c(taxon, supertaxon)
+    }
+    return(unname(output))
+  }
+
+  if (is.numeric(recursive)) {
+    n_recursions <- recursive - 1 # This makes 1 the same as FALSE
+  } else {
+    n_recursions <- recursive
+  }
+
+  if (is.numeric(recursive) && recursive == 0) {
+    output <- setNames(lapply(subset, function(x) numeric(0)), subset)
+  } else {
+    output <- lapply(subset, recursive_part, n_recursions = n_recursions)
+  }
+
+  # Remove query taxa from output
+  if (! include_input) {
+    output <- lapply(output, `[`, -1)
+  }
+
+  # Remove NAs from output
+  if (! na) {
+    output <- lapply(output, function(x) x[!is.na(x)])
+  }
+
+  # Look up values
+  if (!is.null(value)) {
+    possible_values <- self$get_data(value)[[1]]
+    if (is.null(names(possible_values))) {
+      output <- lapply(output, function(i) possible_values[i])
+    } else {
+      output <- lapply(output, function(i) possible_values[self$taxon_ids()[i]])
+    }
+  }
+
+  # Reduce dimensionality
+  if (simplify) {
+    output <- simplify(output)
+  }
+
+  return(output)
+}

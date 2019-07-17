@@ -105,45 +105,45 @@ setOldClass(c("taxa_taxon_info", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2 taxa_taxon_info
-#' @importFrom vctrs vec_type2
+#' @method vec_ptype2 taxa_taxon_info
+#' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_type2.taxa_taxon_info
+#' @export vec_ptype2.taxa_taxon_info
 #' @keywords internal
-vec_type2.taxa_taxon_info <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_info", y)
+vec_ptype2.taxa_taxon_info <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_info", y)
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_info default
+#' @method vec_ptype2.taxa_taxon_info default
 #' @export
-vec_type2.taxa_taxon_info.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.taxa_taxon_info.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_info vctrs_unspecified
+#' @method vec_ptype2.taxa_taxon_info vctrs_unspecified
 #' @export
-vec_type2.taxa_taxon_info.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.taxa_taxon_info.vctrs_unspecified <- function(x, y, ...) x
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_info taxa_taxon_info
+#' @method vec_ptype2.taxa_taxon_info taxa_taxon_info
 #' @export
-vec_type2.taxa_taxon_info.taxa_taxon_info <- function(x, y, ...) new_taxon_info()
+vec_ptype2.taxa_taxon_info.taxa_taxon_info <- function(x, y, ...) new_taxon_info()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_info list
+#' @method vec_ptype2.taxa_taxon_info list
 #' @export
-vec_type2.taxa_taxon_info.list <- function(x, y, ...) list()
+vec_ptype2.taxa_taxon_info.list <- function(x, y, ...) list()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.list taxa_taxon_info
-#' @importFrom vctrs vec_type2.list
+#' @method vec_ptype2.list taxa_taxon_info
+#' @importFrom vctrs vec_ptype2.list
 #' @export
-vec_type2.list.taxa_taxon_info <- function(x, y, ...) list()
+vec_ptype2.list.taxa_taxon_info <- function(x, y, ...) list()
 
 
 

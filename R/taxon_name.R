@@ -210,65 +210,65 @@ pillar_shaft.taxa_taxon_name <- function(x, ...) {
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2 taxa_taxon_name
-#' @importFrom vctrs vec_type2
+#' @method vec_ptype2 taxa_taxon_name
+#' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_type2.taxa_taxon_name
+#' @export vec_ptype2.taxa_taxon_name
 #' @keywords internal
-vec_type2.taxa_taxon_name <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_name", y)
+vec_ptype2.taxa_taxon_name <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_name", y)
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_name default
+#' @method vec_ptype2.taxa_taxon_name default
 #' @export
 #' @keywords internal
-vec_type2.taxa_taxon_name.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.taxa_taxon_name.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_name vctrs_unspecified
+#' @method vec_ptype2.taxa_taxon_name vctrs_unspecified
 #' @export
 #' @keywords internal
-vec_type2.taxa_taxon_name.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.taxa_taxon_name.vctrs_unspecified <- function(x, y, ...) x
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_name taxa_taxon_name
+#' @method vec_ptype2.taxa_taxon_name taxa_taxon_name
 #' @export
 #' @keywords internal
-vec_type2.taxa_taxon_name.taxa_taxon_name <- function(x, y, ...) new_taxon_name()
+vec_ptype2.taxa_taxon_name.taxa_taxon_name <- function(x, y, ...) new_taxon_name()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_name character
+#' @method vec_ptype2.taxa_taxon_name character
 #' @export
 #' @keywords internal
-vec_type2.taxa_taxon_name.character <- function(x, y, ...) character()
+vec_ptype2.taxa_taxon_name.character <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.character taxa_taxon_name
-#' @importFrom vctrs vec_type2.character
+#' @method vec_ptype2.character taxa_taxon_name
+#' @importFrom vctrs vec_ptype2.character
 #' @export
 #' @keywords internal
-vec_type2.character.taxa_taxon_name <- function(x, y, ...) character()
+vec_ptype2.character.taxa_taxon_name <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_name factor
+#' @method vec_ptype2.taxa_taxon_name factor
 #' @export
 #' @keywords internal
-vec_type2.taxa_taxon_name.factor <- function(x, y, ...) factor()
+vec_ptype2.taxa_taxon_name.factor <- function(x, y, ...) factor()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.factor taxa_taxon_name
-#' @importFrom vctrs vec_type2.factor
+#' @method vec_ptype2.factor taxa_taxon_name
+#' @importFrom vctrs vec_ptype2.factor
 #' @export
 #' @keywords internal
-vec_type2.factor.taxa_taxon_name <- function(x, y, ...) factor()
+vec_ptype2.factor.taxa_taxon_name <- function(x, y, ...) factor()
 
 
 

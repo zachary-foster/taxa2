@@ -129,65 +129,65 @@ vec_ptype_full.taxa_taxon_db <- function(x) {
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2 taxa_taxon_db
-#' @importFrom vctrs vec_type2
+#' @method vec_ptype2 taxa_taxon_db
+#' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_type2.taxa_taxon_db
+#' @export vec_ptype2.taxa_taxon_db
 #' @keywords internal
-vec_type2.taxa_taxon_db <- function(x, y, ...) UseMethod("vec_type2.taxa_taxon_db", y)
+vec_ptype2.taxa_taxon_db <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_db", y)
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_db default
+#' @method vec_ptype2.taxa_taxon_db default
 #' @keywords internal
 #' @export
-vec_type2.taxa_taxon_db.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.taxa_taxon_db.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
 }
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_db vctrs_unspecified
+#' @method vec_ptype2.taxa_taxon_db vctrs_unspecified
 #' @keywords internal
 #' @export
-vec_type2.taxa_taxon_db.vctrs_unspecified <- function(x, y, ...) x
+vec_ptype2.taxa_taxon_db.vctrs_unspecified <- function(x, y, ...) x
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_db taxa_taxon_db
+#' @method vec_ptype2.taxa_taxon_db taxa_taxon_db
 #' @keywords internal
 #' @export
-vec_type2.taxa_taxon_db.taxa_taxon_db <- function(x, y, ...) new_taxon_db()
+vec_ptype2.taxa_taxon_db.taxa_taxon_db <- function(x, y, ...) new_taxon_db()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_db character
+#' @method vec_ptype2.taxa_taxon_db character
 #' @keywords internal
 #' @export
-vec_type2.taxa_taxon_db.character <- function(x, y, ...) character()
+vec_ptype2.taxa_taxon_db.character <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.character taxa_taxon_db
-#' @importFrom vctrs vec_type2.character
+#' @method vec_ptype2.character taxa_taxon_db
+#' @importFrom vctrs vec_ptype2.character
 #' @keywords internal
 #' @export
-vec_type2.character.taxa_taxon_db <- function(x, y, ...) character()
+vec_ptype2.character.taxa_taxon_db <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.taxa_taxon_db factor
+#' @method vec_ptype2.taxa_taxon_db factor
 #' @keywords internal
 #' @export
-vec_type2.taxa_taxon_db.factor <- function(x, y, ...) factor()
+vec_ptype2.taxa_taxon_db.factor <- function(x, y, ...) factor()
 
 
 #' @rdname taxa_coercion_funcs
-#' @method vec_type2.factor taxa_taxon_db
-#' @importFrom vctrs vec_type2.factor
+#' @method vec_ptype2.factor taxa_taxon_db
+#' @importFrom vctrs vec_ptype2.factor
 #' @keywords internal
 #' @export
-vec_type2.factor.taxa_taxon_db <- function(x, y, ...) factor()
+vec_ptype2.factor.taxa_taxon_db <- function(x, y, ...) factor()
 
 
 #--------------------------------------------------------------------------------

@@ -4,170 +4,170 @@
 %   R/taxon_rank_level.R
 \name{taxa_coercion_funcs}
 \alias{taxa_coercion_funcs}
-\alias{vec_type2.taxa_taxon}
-\alias{vec_type2.taxa_taxon.default}
-\alias{vec_type2.taxa_taxon.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon.taxa_taxon}
-\alias{vec_type2.taxa_taxon.character}
-\alias{vec_type2.character.taxa_taxon}
-\alias{vec_type2.taxa_taxon.factor}
-\alias{vec_type2.factor.taxa_taxon}
-\alias{vec_type2.taxa_taxon_db}
-\alias{vec_type2.taxa_taxon_db.default}
-\alias{vec_type2.taxa_taxon_db.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_db.taxa_taxon_db}
-\alias{vec_type2.taxa_taxon_db.character}
-\alias{vec_type2.character.taxa_taxon_db}
-\alias{vec_type2.taxa_taxon_db.factor}
-\alias{vec_type2.factor.taxa_taxon_db}
-\alias{vec_type2.taxa_taxon_id}
-\alias{vec_type2.taxa_taxon_id.default}
-\alias{vec_type2.taxa_taxon_id.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_id.taxa_taxon_id}
-\alias{vec_type2.taxa_taxon_id.character}
-\alias{vec_type2.character.taxa_taxon_id}
-\alias{vec_type2.taxa_taxon_id.factor}
-\alias{vec_type2.factor.taxa_taxon_id}
-\alias{vec_type2.taxa_taxon_info}
-\alias{vec_type2.taxa_taxon_info.default}
-\alias{vec_type2.taxa_taxon_info.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_info.taxa_taxon_info}
-\alias{vec_type2.taxa_taxon_info.list}
-\alias{vec_type2.list.taxa_taxon_info}
-\alias{vec_type2.taxa_taxon_name}
-\alias{vec_type2.taxa_taxon_name.default}
-\alias{vec_type2.taxa_taxon_name.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_name.taxa_taxon_name}
-\alias{vec_type2.taxa_taxon_name.character}
-\alias{vec_type2.character.taxa_taxon_name}
-\alias{vec_type2.taxa_taxon_name.factor}
-\alias{vec_type2.factor.taxa_taxon_name}
-\alias{vec_type2.taxa_taxon_rank}
-\alias{vec_type2.taxa_taxon_rank.default}
-\alias{vec_type2.taxa_taxon_rank.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_rank.taxa_taxon_rank}
-\alias{vec_type2.taxa_taxon_rank.character}
-\alias{vec_type2.character.taxa_taxon_rank}
-\alias{vec_type2.taxa_taxon_rank.factor}
-\alias{vec_type2.factor.taxa_taxon_rank}
-\alias{vec_type2.taxa_taxon_rank_level}
-\alias{vec_type2.taxa_taxon_rank_level.default}
-\alias{vec_type2.taxa_taxon_rank_level.vctrs_unspecified}
-\alias{vec_type2.taxa_taxon_rank_level.taxa_taxon_rank_level}
-\alias{vec_type2.taxa_taxon_rank_level.character}
-\alias{vec_type2.character.taxa_taxon_rank_level}
+\alias{vec_ptype2.taxa_taxon}
+\alias{vec_ptype2.taxa_taxon.default}
+\alias{vec_ptype2.taxa_taxon.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon.taxa_taxon}
+\alias{vec_ptype2.taxa_taxon.character}
+\alias{vec_ptype2.character.taxa_taxon}
+\alias{vec_ptype2.taxa_taxon.factor}
+\alias{vec_ptype2.factor.taxa_taxon}
+\alias{vec_ptype2.taxa_taxon_db}
+\alias{vec_ptype2.taxa_taxon_db.default}
+\alias{vec_ptype2.taxa_taxon_db.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_db.taxa_taxon_db}
+\alias{vec_ptype2.taxa_taxon_db.character}
+\alias{vec_ptype2.character.taxa_taxon_db}
+\alias{vec_ptype2.taxa_taxon_db.factor}
+\alias{vec_ptype2.factor.taxa_taxon_db}
+\alias{vec_ptype2.taxa_taxon_id}
+\alias{vec_ptype2.taxa_taxon_id.default}
+\alias{vec_ptype2.taxa_taxon_id.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_id.taxa_taxon_id}
+\alias{vec_ptype2.taxa_taxon_id.character}
+\alias{vec_ptype2.character.taxa_taxon_id}
+\alias{vec_ptype2.taxa_taxon_id.factor}
+\alias{vec_ptype2.factor.taxa_taxon_id}
+\alias{vec_ptype2.taxa_taxon_info}
+\alias{vec_ptype2.taxa_taxon_info.default}
+\alias{vec_ptype2.taxa_taxon_info.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_info.taxa_taxon_info}
+\alias{vec_ptype2.taxa_taxon_info.list}
+\alias{vec_ptype2.list.taxa_taxon_info}
+\alias{vec_ptype2.taxa_taxon_name}
+\alias{vec_ptype2.taxa_taxon_name.default}
+\alias{vec_ptype2.taxa_taxon_name.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_name.taxa_taxon_name}
+\alias{vec_ptype2.taxa_taxon_name.character}
+\alias{vec_ptype2.character.taxa_taxon_name}
+\alias{vec_ptype2.taxa_taxon_name.factor}
+\alias{vec_ptype2.factor.taxa_taxon_name}
+\alias{vec_ptype2.taxa_taxon_rank}
+\alias{vec_ptype2.taxa_taxon_rank.default}
+\alias{vec_ptype2.taxa_taxon_rank.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_rank.taxa_taxon_rank}
+\alias{vec_ptype2.taxa_taxon_rank.character}
+\alias{vec_ptype2.character.taxa_taxon_rank}
+\alias{vec_ptype2.taxa_taxon_rank.factor}
+\alias{vec_ptype2.factor.taxa_taxon_rank}
+\alias{vec_ptype2.taxa_taxon_rank_level}
+\alias{vec_ptype2.taxa_taxon_rank_level.default}
+\alias{vec_ptype2.taxa_taxon_rank_level.vctrs_unspecified}
+\alias{vec_ptype2.taxa_taxon_rank_level.taxa_taxon_rank_level}
+\alias{vec_ptype2.taxa_taxon_rank_level.character}
+\alias{vec_ptype2.character.taxa_taxon_rank_level}
 \title{taxa coercion functions}
 \usage{
-\method{vec_type2}{taxa_taxon}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon}(x, y, ...)
 
-\method{vec_type2.taxa_taxon}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon}{taxa_taxon}(x, y, ...)
+\method{vec_ptype2.taxa_taxon}{taxa_taxon}(x, y, ...)
 
-\method{vec_type2.taxa_taxon}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon}(x, y, ...)
 
-\method{vec_type2.taxa_taxon}{factor}(x, y, ...)
+\method{vec_ptype2.taxa_taxon}{factor}(x, y, ...)
 
-\method{vec_type2.factor}{taxa_taxon}(x, y, ...)
+\method{vec_ptype2.factor}{taxa_taxon}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_db}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_db}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_db}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_db}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_db}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_db}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_db}{taxa_taxon_db}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_db}{taxa_taxon_db}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_db}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_db}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon_db}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon_db}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_db}{factor}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_db}{factor}(x, y, ...)
 
-\method{vec_type2.factor}{taxa_taxon_db}(x, y, ...)
+\method{vec_ptype2.factor}{taxa_taxon_db}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_id}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_id}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_id}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_id}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_id}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_id}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_id}{taxa_taxon_id}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_id}{taxa_taxon_id}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_id}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_id}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon_id}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon_id}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_id}{factor}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_id}{factor}(x, y, ...)
 
-\method{vec_type2.factor}{taxa_taxon_id}(x, y, ...)
+\method{vec_ptype2.factor}{taxa_taxon_id}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_info}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_info}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_info}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_info}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_info}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_info}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_info}{taxa_taxon_info}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_info}{taxa_taxon_info}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_info}{list}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_info}{list}(x, y, ...)
 
-\method{vec_type2.list}{taxa_taxon_info}(x, y, ...)
+\method{vec_ptype2.list}{taxa_taxon_info}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_name}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_name}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_name}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_name}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_name}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_name}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_name}{taxa_taxon_name}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_name}{taxa_taxon_name}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_name}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_name}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon_name}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon_name}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_name}{factor}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_name}{factor}(x, y, ...)
 
-\method{vec_type2.factor}{taxa_taxon_name}(x, y, ...)
+\method{vec_ptype2.factor}{taxa_taxon_name}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_rank}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_rank}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_rank}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_rank}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank}{taxa_taxon_rank}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank}{taxa_taxon_rank}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon_rank}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon_rank}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank}{factor}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank}{factor}(x, y, ...)
 
-\method{vec_type2.factor}{taxa_taxon_rank}(x, y, ...)
+\method{vec_ptype2.factor}{taxa_taxon_rank}(x, y, ...)
 
-\method{vec_type2}{taxa_taxon_rank_level}(x, y, ...)
+\method{vec_ptype2}{taxa_taxon_rank_level}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank_level}{default}(x, y, ..., x_arg = "",
+\method{vec_ptype2.taxa_taxon_rank_level}{default}(x, y, ..., x_arg = "",
   y_arg = "")
 
-\method{vec_type2.taxa_taxon_rank_level}{vctrs_unspecified}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank_level}{vctrs_unspecified}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, y, ...)
 
-\method{vec_type2.taxa_taxon_rank_level}{character}(x, y, ...)
+\method{vec_ptype2.taxa_taxon_rank_level}{character}(x, y, ...)
 
-\method{vec_type2.character}{taxa_taxon_rank_level}(x, y, ...)
+\method{vec_ptype2.character}{taxa_taxon_rank_level}(x, y, ...)
 }
 \description{
 Functions used internally for coercing taxon objects annd other objects to common data types.
