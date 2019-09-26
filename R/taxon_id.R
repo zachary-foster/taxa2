@@ -385,6 +385,31 @@ is.na.taxa_taxon_id <- function(x) {
 }
 
 
+#' @export
+`%in%.taxa_taxon_id` <- function(x, table) {
+  UseMethod("%in%.taxa_taxon_id", table)
+}
+
+
+#' @export
+`%in%.taxa_taxon_id.default` <- function(x, table) {
+  as.character(x) %in% table
+}
+
+
+#' @export
+`%in%.character.taxa_taxon_id` <- function(x, table) {
+  x %in% as.character(table)
+}
+
+
+#' @export
+`%in%.factor.taxa_taxon_id` <- function(x, table) {
+  x %in% as.character(table)
+}
+
+
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------

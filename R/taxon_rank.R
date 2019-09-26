@@ -525,6 +525,30 @@ is.na.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @export
+`%in%.taxa_taxon_rank` <- function(x, table) {
+  UseMethod("%in%.taxa_taxon_rank", table)
+}
+
+
+#' @export
+`%in%.taxa_taxon_rank.default` <- function(x, table) {
+  as.character(x) %in% table
+}
+
+
+#' @export
+`%in%.character.taxa_taxon_rank` <- function(x, table) {
+  x %in% as.character(table)
+}
+
+
+#' @export
+`%in%.factor.taxa_taxon_rank` <- function(x, table) {
+  x %in% as.character(table)
+}
+
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
