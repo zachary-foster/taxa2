@@ -2,38 +2,26 @@
 % Please edit documentation in R/taxon_id.R
 \name{taxon_id}
 \alias{taxon_id}
-\alias{taxon_id.default}
-\alias{taxon_id<-}
-\alias{taxon_id<-.taxa_taxon}
-\alias{taxon_id.taxa_taxon}
+\alias{names.taxa_taxon_id}
+\alias{names<-.taxa_taxon_id}
 \alias{is.na.taxa_taxon_id}
 \title{Taxon ID class}
 \usage{
-taxon_id(...)
+taxon_id(id = character(), db = NA, .names = NULL)
 
-\method{taxon_id}{default}(id = character(), db = NA, ...)
+\method{names}{taxa_taxon_id}(x)
 
-taxon_id(x) <- value
-
-\method{taxon_id}{taxa_taxon}(x) <- value
-
-\method{taxon_id}{taxa_taxon}(x, ...)
+\method{names}{taxa_taxon_id}(x) <- value
 
 \method{is.na}{taxa_taxon_id}(x)
 }
 \arguments{
-\item{...}{Used to pass arguments to methods and allow methods to use additional arguments.}
-
 \item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector if
 possible.}
 
 \item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the default), the
 input must consist of names of databases in \link{database_ref}. The length must be 0, 1, or equal
 to the number of IDs.}
-
-\item{x}{An object with taxon IDs.}
-
-\item{value}{The taxon IDs to set. Inputs will be coerced into a \code{\link[=taxon_id]{taxon_id()}} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_id}
@@ -57,6 +45,8 @@ x <- taxon_id(c('9606', '1386', '4890', '4345'),
 as.character(x)
 x[2:3]
 x[2:3] <- 'ABC'
+names(x) <- c('a', 'b', 'c', 'd')
+tax_db(x) <- 'nbn'
 
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:4)
@@ -70,7 +60,6 @@ data.frame(x = x, y = 1:4)
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_db}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
 \concept{classes}

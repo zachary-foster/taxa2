@@ -40,7 +40,6 @@ new_taxon_rank <- function(rank = character(), db = taxon_db(), levels = taxon_r
 #' @param ... Used to pass arguments to methods and allow methods to use additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon_rank`
-#' @importFrom vctrs %<-%
 #' @family classes
 #'
 #' @examples

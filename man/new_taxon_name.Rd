@@ -2,22 +2,25 @@
 % Please edit documentation in R/taxon_name.R
 \name{new_taxon_name}
 \alias{new_taxon_name}
-\title{Minimal taxon_name constructor}
+\title{Minimal taxon name constructor}
 \usage{
-new_taxon_name(name = character(), db = taxon_db())
+new_taxon_name(name = character(), rank = taxon_rank(),
+  id = taxon_id(), auth = character())
 }
 \arguments{
-\item{name}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
+\item{name}{The names of taxa as a \link{character} vector.}
 
-\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
-default), the input must consist of names of databases in \link{database_ref}. The length must be
-0, 1, or equal to the number of IDs.}
+\item{rank}{The ranks of taxa as a \link{taxon_rank} vector.}
+
+\item{id}{The ids of taxa as a \link{taxon_id} vector.}
+
+\item{auth}{The authority of the taxon as a \link{tax_auth} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_name}
 }
 \description{
-Minimal taxon_name constructor for internal use. Only use when the input is known to be valid since
+Minimal taxon name constructor for internal use. Only use when the input is known to be valid since
 few validity checks are done.
 }
 \keyword{internal}

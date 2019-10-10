@@ -4,7 +4,7 @@
 \alias{new_taxon_id}
 \title{Minimal taxon_id constructor}
 \usage{
-new_taxon_id(id = character(), db = taxon_db())
+new_taxon_id(.names = NULL, id = character(), db = taxon_db())
 }
 \arguments{
 \item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}

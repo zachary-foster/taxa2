@@ -3,70 +3,79 @@
 \name{taxon_name}
 \alias{taxon_name}
 \alias{taxon_name.default}
-\alias{taxon_name<-}
-\alias{taxon_name<-.taxa_taxon}
-\alias{taxon_name.taxa_taxon}
-\alias{is.na.taxa_taxon_name}
 \title{Taxon name class}
 \usage{
 taxon_name(...)
 
-\method{taxon_name}{default}(name = character(), db = NA, ...)
-
-taxon_name(x) <- value
-
-\method{taxon_name}{taxa_taxon}(x) <- value
-
-\method{taxon_name}{taxa_taxon}(x, ...)
-
-\method{is.na}{taxa_taxon_name}(x)
+\method{taxon_name}{default}(name = character(0), rank = NA, id = NA,
+  auth = NA, ...)
 }
 \arguments{
-\item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
+\item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
+is given.}
 
-\item{name}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
+\item{rank}{The ranks of taxa. Inputs with be coerced into a \link{taxon_rank} vector if anything else
+is given.}
 
-\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the
-default), the input must consist of names of databases in \link{database_ref}. The length must be
-0, 1, or equal to the number of IDs.}
+\item{id}{The ids of taxa. These should be unique identifier and are usually associated with a
+database. Inputs with be coerced into a \link{taxon_id} vector if anything else is given.}
 
-\item{x}{An object with taxon names.}
+\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
+anything else is given.}
 
-\item{value}{The taxon names to set. Inputs will be coerced into a \code{\link[=taxon_name]{taxon_name()}} vector.}
+\item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
+is given.}
+
+\item{rank}{The ranks of taxa. Inputs with be coerced into a \link{taxon_rank} vector if anything else
+is given.}
+
+\item{id}{The ids of taxa. These should be unique identifier and are usually associated with a
+database. Inputs with be coerced into a \link{taxon_id} vector if anything else is given.}
+
+\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
+anything else is given.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_name}
 }
 \description{
 \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
-Used to store taxon IDs, either arbitrary or from a taxonomy database. This is typically used to
-store taxon IDs in \code{\link[=taxon]{taxon()}} objects.
+Used to store information about taxa, such as names, ranks, and IDs.
+This should be used when storing information about taxa when things like synonyms or conflicting taxonomies are not needed.
+To support the possiblity of synonyms or encode confliciting taxonomic opinions, use the \code{\link[=taxon]{taxon()}}, \code{\link[=taxonomy]{taxonomy()}}, \code{\link[=hierarchy]{hierarchy()}}, or \code{\link[=taxmap]{taxmap()}} classes.
+For more information on what each class is designed for, see the \link{concepts} section of the help pages.
 }
 \examples{
 
-# Making new objects
-x <- taxon_name(c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'))
-x <- taxon_name(c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
-                db = c('ncbi', 'ncbi', 'itis', 'itis'))
+# Create taxon name vector
+x <- taxon_name(c('A', 'B', 'C'))
+x <- taxon_name(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
+                rank = c('species', 'genus', 'phylum', 'family'),
+                id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
+                auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
 
-# Manipulating objects
-as.character(x)
-x[2:3]
-x[2:3] <- 'ABC'
+# Get parts of the taxon name vector
+tax_name(x)
+tax_rank(x)
+tax_id(x)
+tax_auth(x)
 
-# Using as columns in tables
-tibble::tibble(x = x, y = 1:4)
-data.frame(x = x, y = 1:4)
+# Set parts of the taxon name vector
+tax_name(x) <- tolower(tax_name(x))
+tax_rank(x)[1] <- NA
+tax_db(taxon_id(x)) <- 'itis'
+tax_auth(x) <- NA
 
-# Trying to use an invalid ID with a specified database causes an error
-#taxon_id('NOLETTERS', db = 'ncbi')
+# Manipulate taxon name vectors
+x[1:3]
+x[tax_rank(x) > 'family']
+c(x, x)
 
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
 }
 \concept{classes}

@@ -15,11 +15,19 @@
 #' @return An `S3` object of class `taxa_taxon_id`
 #'
 #' @keywords internal
-new_taxon_id <- function(id = character(), db = taxon_db()) {
+new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
+  if (is.null(names) || all(is.na(.names))) {
+    .names_set <- FALSE
+    .names <- vctrs::vec_recycle(NA_character_, length(id))
+  } else {
+    .names_set <- TRUE
+    vctrs::vec_assert(.names, ptype = character())
+  }
   vctrs::vec_assert(id, ptype = character())
   vctrs::vec_assert(db, ptype = taxon_db())
 
-  vctrs::new_rcrd(list(id = id, db = db), class = "taxa_taxon_id")
+  vctrs::new_rcrd(list(.names = .names, id = id, db = db), .names_set = .names_set,
+                  class = "taxa_taxon_id")
 }
 
 
@@ -30,9 +38,11 @@ new_taxon_id <- function(id = character(), db = taxon_db()) {
 #' that contain them, such as [taxon()], Used to store taxon IDs, either arbitrary or from a
 #' taxonomy database. This is typically used to store taxon IDs in [taxon()] objects.
 #'
-#' @param ... Used to pass arguments to methods and allow methods to use additional arguments.
-#'
-#' @importFrom vctrs %<-%
+#' @param id Zero or more taxonomic ids. Inputs will be transformed to a `character` vector if
+#'   possible.
+#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the default), the
+#'   input must consist of names of databases in [database_ref]. The length must be 0, 1, or equal
+#'   to the number of IDs.
 #'
 #' @return An `S3` object of class `taxa_taxon_id`
 #' @family classes
@@ -50,6 +60,8 @@ new_taxon_id <- function(id = character(), db = taxon_db()) {
 #' as.character(x)
 #' x[2:3]
 #' x[2:3] <- 'ABC'
+#' names(x) <- c('a', 'b', 'c', 'd')
+#' tax_db(x) <- 'nbn'
 #'
 #' # Using as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
@@ -59,37 +71,17 @@ new_taxon_id <- function(id = character(), db = taxon_db()) {
 #' #taxon_id('NOLETTERS', db = 'ncbi')
 #'
 #' @export
-taxon_id <- function(...) {
-  UseMethod("taxon_id")
-}
-
-
-#' @rdname taxon_id
-#'
-#' @param id Zero or more taxonomic ids. Inputs will be transformed to a `character` vector if
-#'   possible.
-#' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the default), the
-#'   input must consist of names of databases in [database_ref]. The length must be 0, 1, or equal
-#'   to the number of IDs.
-#'
-#' @export
-taxon_id.default <- function(id = character(), db = NA, ...) {
+#' @importFrom vctrs %<-%
+taxon_id <- function(id = character(), db = NA, .names = NULL) {
+  if (is.null(.names)) {
+    .names <- NA_character_
+  }
+  .names <- vctrs::vec_cast(.names, character())
   id <- vctrs::vec_cast(id, character())
   db <- vctrs::vec_cast(db, taxon_db())
-  c(id, db) %<-% vctrs::vec_recycle_common(id, db)
+  c(id, db, .names) %<-% vctrs::vec_recycle_common(id, db, .names)
   validate_id_for_database(id, db)
-  new_taxon_id(id, db)
-}
-
-
-#' @rdname taxon_id
-#'
-#' @param x An object with taxon IDs.
-#' @param value The taxon IDs to set. Inputs will be coerced into a [taxon_id()] vector.
-#'
-#' @export
-`taxon_id<-` <- function(x, value) {
-  UseMethod('taxon_id<-')
+  new_taxon_id(.names = .names, id = id, db = db)
 }
 
 
@@ -103,7 +95,14 @@ setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
 
 #' @rdname taxon_db
 #' @export
-`taxon_db<-.taxa_taxon_id` <- function(x, value) {
+`tax_db<-` <- function(x, value) {
+  UseMethod('tax_db<-')
+}
+
+
+#' @rdname taxon_db
+#' @export
+`tax_db<-.taxa_taxon_id` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_db())
   value <- vctrs::vec_recycle(value, length(x))
 
@@ -115,27 +114,42 @@ setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
 
 #' @rdname taxon_db
 #' @export
-taxon_db.taxa_taxon_id <- function(db = character(), ...) {
+tax_db <- function(x) {
+  UseMethod('tax_db')
+}
+
+
+#' @rdname taxon_db
+#' @export
+tax_db.taxa_taxon_id <- function(db = character(), ...) {
   vctrs::field(db, "db")
 }
 
 
 #' @rdname taxon_id
 #' @export
-`taxon_id<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_id())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "id") <- value
-  return(x)
+names.taxa_taxon_id <- function(x) {
+  if (attributes(x)[['.names_set']]) {
+    return(vctrs::field(x, ".names"))
+  } else {
+    return(NULL)
+  }
 }
-
 
 #' @rdname taxon_id
 #' @export
-taxon_id.taxa_taxon <- function(x, ...) {
-  vctrs::field(x, "id")
+`names<-.taxa_taxon_id` <- function(x, value) {
+  if (is.null(value)) {
+    value = NA_character_
+    attr(x, '.names_set') <- FALSE
+  } else {
+    attr(x, '.names_set') <- TRUE
+  }
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, ".names") <- value
+  return(x)
 }
-
 
 
 #--------------------------------------------------------------------------------
@@ -158,6 +172,9 @@ printed_taxon_id <- function(x, color = FALSE) {
   out <- paste0(out, ifelse(is.na(db), '', font_secondary(paste0(' (', db, ')'))))
   if (! color) {
     out <- crayon::strip_style(out)
+  }
+  if (! is.null(names(x))) {
+     names(out) <- names(x)
   }
   return(out)
 }
@@ -353,7 +370,7 @@ vec_cast.data.frame.taxa_taxon_id <- function(x, to, x_arg, to_arg) data.frame(s
 #' @export
 #' @keywords internal
 vec_proxy_equal.taxa_taxon_id <- function(x, ...) {
-  db <- as.character(taxon_db(x))
+  db <- as.character(tax_db(x))
   db[is.na(db)] <- "NA" # avoids NA comparisons always being NA
   data.frame(id = as.character(x),
              db = db,

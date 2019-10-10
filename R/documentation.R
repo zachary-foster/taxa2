@@ -1,3 +1,12 @@
+#' Concepts used in the taxa package
+#'
+#' Not done yet.
+#'
+#' @name concepts
+NULL
+
+
+
 #' taxa printing functions
 #'
 #' Functions used internally for printing information in taxon objects. They have to be exported to

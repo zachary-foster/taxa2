@@ -15,7 +15,6 @@
 #' @keywords internal
 new_taxon_db <- function(db = character()) {
   vctrs::vec_assert(db, character())
-
   vctrs::new_vctr(db, class = "taxa_taxon_db")
 }
 
@@ -40,6 +39,7 @@ new_taxon_db <- function(db = character()) {
 #' # Manipulating objects
 #' as.character(x)
 #' x[2:3]
+#' names(x) <- c('a', 'b', 'c')
 #' x[x == 'itis'] <- 'gbif'
 #' x
 #' y = tibble::tibble(x = x)
