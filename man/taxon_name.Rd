@@ -2,27 +2,11 @@
 % Please edit documentation in R/taxon_name.R
 \name{taxon_name}
 \alias{taxon_name}
-\alias{taxon_name.default}
 \title{Taxon name class}
 \usage{
-taxon_name(...)
-
-\method{taxon_name}{default}(name = character(0), rank = NA, id = NA,
-  auth = NA, ...)
+taxon_name(name = character(0), rank = NA, id = NA, auth = NA)
 }
 \arguments{
-\item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
-is given.}
-
-\item{rank}{The ranks of taxa. Inputs with be coerced into a \link{taxon_rank} vector if anything else
-is given.}
-
-\item{id}{The ids of taxa. These should be unique identifier and are usually associated with a
-database. Inputs with be coerced into a \link{taxon_id} vector if anything else is given.}
-
-\item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
-anything else is given.}
-
 \item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
 is given.}
 

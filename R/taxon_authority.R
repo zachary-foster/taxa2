@@ -310,7 +310,7 @@ vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) taxon_
 #' @importFrom vctrs vec_cast.character
 #' @export
 vec_cast.character.taxa_taxon_authority <- function(x, to, x_arg, to_arg) {
-  paste(vctrs::field(x, "author"), vctrs::field(x, "date"))
+  ifelse(is.na(x), NA_character_, printed_taxon_authority(x, color = FALSE))
 }
 
 
@@ -368,7 +368,7 @@ is_taxon_authority <- function(x) {
 #' @rdname taxon_authority
 #' @export
 is.na.taxa_taxon_authority <- function(x) {
-  is.na(vctrs::vec_cast(x, character()))
+  is.na(vctrs::field(x, "author")) & is.na(vctrs::field(x, "date"))
 }
 
 

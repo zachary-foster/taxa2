@@ -10,18 +10,18 @@
 #' @param name The names of taxa as a [character] vector.
 #' @param rank The ranks of taxa as a [taxon_rank] vector.
 #' @param id The ids of taxa as a [taxon_id] vector.
-#' @param auth The authority of the taxon as a [tax_auth] vector.
+#' @param auth The authority of the taxon as a [tax_authority] vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_name`
 #'
 #' @keywords internal
-new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_id(), auth = character()) {
+new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_id(), auth = taxon_authority()) {
 
   # Check that values are the correct type
   vctrs::vec_assert(name, ptype = character())
   # vctrs::vec_assert(rank, ptype = taxon_rank())
   vctrs::vec_assert(id, ptype = taxon_id())
-  vctrs::vec_assert(auth, ptype = tax_auth())
+  vctrs::vec_assert(auth, ptype = taxon_authority())
 
   # Create new object
   vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth),
@@ -78,29 +78,12 @@ new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_i
 #' c(x, x)
 #'
 #' @export
-taxon_name <- function(...) {
-  UseMethod("taxon_name")
-}
-
-
-#' @rdname taxon_name
-#'
-#' @param name The names of taxa. Inputs with be coerced into a [taxon_name] vector if anything else
-#'   is given.
-#' @param rank The ranks of taxa. Inputs with be coerced into a [taxon_rank] vector if anything else
-#'   is given.
-#' @param id The ids of taxa. These should be unique identifier and are usually associated with a
-#'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
-#' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
-#'   anything else is given.
-#'
-#' @export
-taxon_name.default <- function(name = character(0), rank = NA, id = NA, auth = NA, ...) {
+taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA) {
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, character())
   rank <- vctrs::vec_cast(rank, taxon_rank())
   id <- vctrs::vec_cast(id, taxon_id())
-  auth <- vctrs::vec_cast(auth, tax_auth())
+  auth <- vctrs::vec_cast(auth, taxon_authority())
 
   # Recycle ranks and databases to common length
   c(name, rank, id, auth) %<-% vctrs::vec_recycle_common(name, rank, id, auth)
@@ -108,6 +91,7 @@ taxon_name.default <- function(name = character(0), rank = NA, id = NA, auth = N
   # Create taxon object
   new_taxon_name(name = name, rank = rank, id = id, auth = auth)
 }
+
 
 setOldClass(c("taxa_taxon_name", "vctrs_vctr"))
 
@@ -173,7 +157,7 @@ tax_auth.taxa_taxon_name <- function(x) {
 #' @return character
 #'
 #' @keywords internal
-printed_taxon <- function(x, color = FALSE) {
+printed_taxon_name <- function(x, color = FALSE) {
   id <- vctrs::field(x, 'id')
   rank <- vctrs::field(x, 'rank')
   auth <- vctrs::field(x, 'auth')
@@ -183,7 +167,7 @@ printed_taxon <- function(x, color = FALSE) {
                 out)
   out <- paste0(out, ifelse(is.na(rank), '',
                             paste0(font_punct('|'),
-                                   printed_taxon_rank(rank, color = TRUE, add_db = FALSE))))
+                                   printed_taxon_rank(rank, color = TRUE))))
   if (! color) {
     out <- crayon::strip_style(out)
   }
@@ -196,7 +180,7 @@ printed_taxon <- function(x, color = FALSE) {
 #' @export
 #' @keywords internal
 format.taxa_taxon_name <- function(x, ...) {
-  printed_taxon(x, color = FALSE)
+  printed_taxon_name(x, color = FALSE)
 }
 
 
@@ -218,7 +202,7 @@ obj_print_data.taxa_taxon_name <- function(x) {
   }
 
   # Print
-  out <- printed_taxon(x, color = TRUE)
+  out <- printed_taxon_name(x, color = TRUE)
   print_with_color(out, original_length = original_length, quote = FALSE)
   invisible(x)
 }
@@ -265,7 +249,7 @@ vec_ptype_full.taxa_taxon_name <- function(x) {
 #' @export
 #' @keywords internal
 pillar_shaft.taxa_taxon_name <- function(x, ...) {
-  out <- printed_taxon(x, color = TRUE)
+  out <- printed_taxon_name(x, color = TRUE)
   pillar::new_pillar_shaft_simple(out, align = "left")
 }
 
