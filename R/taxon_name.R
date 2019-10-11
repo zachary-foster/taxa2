@@ -7,6 +7,7 @@
 #' Minimal taxon name constructor for internal use. Only use when the input is known to be valid since
 #' few validity checks are done.
 #'
+#' @param .names The names of the vector.
 #' @param name The names of taxa as a [character] vector.
 #' @param rank The ranks of taxa as a [taxon_rank] vector.
 #' @param id The ids of taxa as a [taxon_id] vector.
@@ -15,7 +16,16 @@
 #' @return An `S3` object of class `taxa_taxon_name`
 #'
 #' @keywords internal
-new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_id(), auth = taxon_authority()) {
+new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(), id = taxon_id(), auth = taxon_authority()) {
+
+  # Set names to NA if not set
+  if (is.null(names) || all(is.na(.names))) {
+    .names_set <- FALSE
+    .names <- vctrs::vec_recycle(NA_character_, length(name))
+  } else {
+    .names_set <- TRUE
+    vctrs::vec_assert(.names, ptype = character())
+  }
 
   # Check that values are the correct type
   vctrs::vec_assert(name, ptype = character())
@@ -24,7 +34,8 @@ new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_i
   vctrs::vec_assert(auth, ptype = taxon_authority())
 
   # Create new object
-  vctrs::new_rcrd(list(name = name, rank = rank, id = id, auth = auth),
+  vctrs::new_rcrd(list(.names = .names, name = name, rank = rank, id = id, auth = auth),
+                  .names_set = .names_set,
                   class = "taxa_taxon_name")
 }
 
@@ -45,6 +56,7 @@ new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_i
 #'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
 #' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
 #'   anything else is given.
+#' @param .names The names of the vector.
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -69,27 +81,31 @@ new_taxon_name <- function(name = character(), rank = taxon_rank(), id = taxon_i
 #' # Set parts of the taxon name vector
 #' tax_name(x) <- tolower(tax_name(x))
 #' tax_rank(x)[1] <- NA
-#' tax_db(taxon_id(x)) <- 'itis'
+#' tax_id(x) <- '9999'
+#' tax_db(tax_id(x)) <- 'itis'
 #' tax_auth(x) <- NA
 #'
 #' # Manipulate taxon name vectors
 #' x[1:3]
 #' x[tax_rank(x) > 'family']
 #' c(x, x)
+#' names(x) <- c('a', 'b', 'c', 'd')
+#' x['b']
 #'
 #' @export
-taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA) {
+taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA) {
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, character())
   rank <- vctrs::vec_cast(rank, taxon_rank())
   id <- vctrs::vec_cast(id, taxon_id())
   auth <- vctrs::vec_cast(auth, taxon_authority())
+  .names <- vctrs::vec_cast(.names, character())
 
   # Recycle ranks and databases to common length
-  c(name, rank, id, auth) %<-% vctrs::vec_recycle_common(name, rank, id, auth)
+  c(name, rank, id, auth, .names) %<-% vctrs::vec_recycle_common(name, rank, id, auth, .names)
 
   # Create taxon object
-  new_taxon_name(name = name, rank = rank, id = id, auth = auth)
+  new_taxon_name(.names = .names, name = name, rank = rank, id = id, auth = auth)
 }
 
 
@@ -100,6 +116,81 @@ setOldClass(c("taxa_taxon_name", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 # S3 getters/setters
 #--------------------------------------------------------------------------------
+
+#' Set and get taxon ids
+#'
+#' Set and get taxon ids in objects that have them, such as [taxon()] objects.
+#'
+#' @param x An object with taxon ids.
+#'
+#' @return A [taxon_id()] vector
+#'
+#' @export
+tax_id <- function(x) {
+  UseMethod('tax_id')
+}
+
+#' @rdname tax_id
+#' @export
+tax_id.taxa_taxon_name <- function(x) {
+  vctrs::field(x, "id")
+}
+
+#' @rdname tax_id
+#'
+#' @param value The taxon ids to set. Inputs will be coerced into a [taxon_id()] vector.
+#'
+#' @export
+`tax_id<-` <- function(x, value) {
+  UseMethod('tax_id<-')
+}
+
+#' @rdname tax_id
+#' @export
+`tax_id<-.taxa_taxon_name` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_id())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "id") <- value
+  return(x)
+}
+
+
+#' Set and get taxon names
+#'
+#' Set and get taxon names in objects that have them, such as [taxon()] objects.
+#'
+#' @param x An object with taxon names.
+#'
+#' @return A [character()] vector
+#'
+#' @export
+tax_name <- function(x) {
+  UseMethod('tax_name')
+}
+
+#' @rdname tax_name
+#' @export
+tax_name.taxa_taxon_name <- function(x) {
+  vctrs::field(x, "name")
+}
+
+#' @rdname tax_name
+#'
+#' @param value The taxon names to set. Inputs will be coerced into a [taxon_name()] vector.
+#'
+#' @export
+`tax_name<-` <- function(x, value) {
+  UseMethod('tax_name<-')
+}
+
+#' @rdname tax_name
+#' @export
+`tax_name<-.taxa_taxon_name` <- function(x, value) {
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "name") <- value
+  return(x)
+}
 
 
 #' Set and get taxon authorities
@@ -115,13 +206,11 @@ tax_auth <- function(x) {
   UseMethod('tax_auth')
 }
 
-
 #' @rdname tax_auth
 #' @export
 tax_auth.taxa_taxon_name <- function(x) {
   vctrs::field(x, "auth")
 }
-
 
 #' @rdname tax_auth
 #'
@@ -132,7 +221,6 @@ tax_auth.taxa_taxon_name <- function(x) {
   UseMethod('tax_auth<-')
 }
 
-
 #' @rdname tax_auth
 #' @export
 `tax_auth<-.taxa_taxon_name` <- function(x, value) {
@@ -142,6 +230,69 @@ tax_auth.taxa_taxon_name <- function(x) {
   return(x)
 }
 
+
+#' Set and get taxon ranks
+#'
+#' Set and get taxon ranks in objects that have them, such as [taxon()] objects.
+#'
+#' @param x An object with taxon ranks.
+#'
+#' @return A [taxon_rank()] vector
+#'
+#' @export
+tax_rank <- function(x) {
+  UseMethod('tax_rank')
+}
+
+#' @rdname tax_rank
+#' @export
+tax_rank.taxa_taxon_name <- function(x) {
+  vctrs::field(x, "rank")
+}
+
+#' @rdname tax_rank
+#'
+#' @param value The taxon ranks to set. Inputs will be coerced into a [taxon_rank()] vector.
+#'
+#' @export
+`tax_rank<-` <- function(x, value) {
+  UseMethod('tax_rank<-')
+}
+
+#' @rdname tax_rank
+#' @export
+`tax_rank<-.taxa_taxon_name` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_rank())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "rank") <- value
+  return(x)
+}
+
+
+#' @rdname taxon_authority
+#' @export
+names.taxa_taxon_name <- function(x) {
+  if (attributes(x)[['.names_set']]) {
+    return(vctrs::field(x, ".names"))
+  } else {
+    return(NULL)
+  }
+}
+
+#' @rdname taxon_authority
+#' @export
+`names<-.taxa_taxon_name` <- function(x, value) {
+  if (is.null(value)) {
+    value = NA_character_
+    attr(x, '.names_set') <- FALSE
+  } else {
+    attr(x, '.names_set') <- TRUE
+  }
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, ".names") <- value
+  return(x)
+}
 
 
 #--------------------------------------------------------------------------------
@@ -170,6 +321,9 @@ printed_taxon_name <- function(x, color = FALSE) {
                                    printed_taxon_rank(rank, color = TRUE))))
   if (! color) {
     out <- crayon::strip_style(out)
+  }
+  if (! is.null(names(x))) {
+    names(out) <- names(x)
   }
   return(out)
 }

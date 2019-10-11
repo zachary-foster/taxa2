@@ -15,6 +15,7 @@
 #'
 #' @keywords internal
 new_taxon_authority <- function(.names = NULL, author = character(), date = character()) {
+  # Set names to NA if not set
   if (is.null(names) || all(is.na(.names))) {
     .names_set <- FALSE
     .names <- vctrs::vec_recycle(NA_character_, length(author))
@@ -62,10 +63,7 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' @export
 #' @importFrom vctrs %<-%
-taxon_authority <- function(author = character(), date = NA, .names = NULL) {
-  if (is.null(.names)) {
-    .names <- NA_character_
-  }
+taxon_authority <- function(author = character(), date = NA, .names = NA) {
   .names <- vctrs::vec_cast(.names, character())
   author <- vctrs::vec_cast(author, character())
   date <- vctrs::vec_cast(date, character())

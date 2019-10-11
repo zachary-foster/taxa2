@@ -15,9 +15,9 @@
 
 \method{levels}{taxa_taxon}(x)
 
-tax_rank.taxa_taxon(x) <- value
+\method{tax_rank}{taxa_taxon}(x) <- value
 
-tax_rank.taxa_taxon(x, ...)
+\method{tax_rank}{taxa_taxon}(x, ...)
 
 taxon_rank(rank = character(), levels = NULL, guess_order = TRUE)
 

@@ -4,7 +4,8 @@
 \alias{taxon_name}
 \title{Taxon name class}
 \usage{
-taxon_name(name = character(0), rank = NA, id = NA, auth = NA)
+taxon_name(name = character(0), rank = NA, id = NA, auth = NA,
+  .names = NA)
 }
 \arguments{
 \item{name}{The names of taxa. Inputs with be coerced into a \link{taxon_name} vector if anything else
@@ -18,6 +19,8 @@ database. Inputs with be coerced into a \link{taxon_id} vector if anything else 
 
 \item{auth}{The authority of the taxon. Inputs with be coerced into a \link{character} vector if
 anything else is given.}
+
+\item{.names}{The names of the vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_name}
@@ -47,13 +50,16 @@ tax_auth(x)
 # Set parts of the taxon name vector
 tax_name(x) <- tolower(tax_name(x))
 tax_rank(x)[1] <- NA
-tax_db(taxon_id(x)) <- 'itis'
+tax_id(x) <- '9999'
+tax_db(tax_id(x)) <- 'itis'
 tax_auth(x) <- NA
 
 # Manipulate taxon name vectors
 x[1:3]
 x[tax_rank(x) > 'family']
 c(x, x)
+names(x) <- c('a', 'b', 'c', 'd')
+x['b']
 
 }
 \seealso{
