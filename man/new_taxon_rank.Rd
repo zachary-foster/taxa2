@@ -4,16 +4,11 @@
 \alias{new_taxon_rank}
 \title{Minimal taxon_rank constructor}
 \usage{
-new_taxon_rank(rank = character(), db = taxon_db(),
-  levels = taxon_rank_level())
+new_taxon_rank(rank = character(), levels = taxon_rank_level())
 }
 \arguments{
 \item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to
 a \code{character} vector.}
-
-\item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA}
-(the default), the input must consist of names of databases in
-\link{database_ref}. The length must be 0, 1, or equal to the number of IDs.}
 
 \item{levels}{A named numeric vector indicating the names and orders of
 possible taxonomic ranks. Higher numbers indicate for fine-scale groupings.

@@ -77,8 +77,8 @@ x <- taxon(NULL)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{taxmap}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
+  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
+  \code{\link{taxon_db}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxonomy}}
 }
 \concept{classes}

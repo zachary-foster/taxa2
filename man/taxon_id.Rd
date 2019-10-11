@@ -58,8 +58,9 @@ data.frame(x = x, y = 1:4)
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}},
+  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
   \code{\link{taxon_db}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}}
+  \code{\link{taxonomy}}
 }
 \concept{classes}

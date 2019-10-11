@@ -464,3 +464,38 @@ is.na.taxa_taxon_name <- function(x) {
 
 
 
+
+######################################################## Needs to be refactored
+
+
+#' @rdname taxon_rank
+#' @export
+`levels<-.taxa_taxon` <- function(x, value) {
+  levels(vctrs::field(x, 'rank')) <- value
+  return(x)
+}
+
+
+#' @rdname taxon_rank
+#' @export
+levels.taxa_taxon <- function(x) {
+  levels(vctrs::field(x, 'rank'))
+}
+
+
+#' @rdname taxon_rank
+#' @export
+`tax_rank<-.taxa_taxon` <- function(x, value) {
+  value <- vctrs::vec_cast(value, taxon_rank())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "rank") <- value
+  return(x)
+}
+
+
+#' @rdname taxon_rank
+#' @export
+tax_rank.taxa_taxon <- function(x, ...) {
+  vctrs::field(x, "rank")
+}
+

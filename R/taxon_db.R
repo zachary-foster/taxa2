@@ -40,13 +40,12 @@ new_taxon_db <- function(db = character()) {
 #' as.character(x)
 #' x[2:3]
 #' names(x) <- c('a', 'b', 'c')
+#' x['b']
 #' x[x == 'itis'] <- 'gbif'
-#' x
-#' y = tibble::tibble(x = x)
-#' y
-#' y = data.frame(x = x)
-#' y
-#' y$x
+#'
+#' # Using as columns in tables
+#' tibble::tibble(x = x, y = 1:3)
+#' data.frame(x = x, y = 1:3)
 #'
 #' # Trying to use an invalid database generates an error
 #' # x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
