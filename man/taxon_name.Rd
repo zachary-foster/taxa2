@@ -75,8 +75,9 @@ c(x, x)
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
+  \code{\link{levels<-.taxa_taxon}},
+  \code{\link{tax_auth_date<-}}, \code{\link{taxmap}},
+  \code{\link{taxon_authority}}, \code{\link{taxon_id}},
   \code{\link{taxonomy}}
 }
 \concept{classes}

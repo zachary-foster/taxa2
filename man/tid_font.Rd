@@ -14,8 +14,9 @@ A simple wrapper to make changing the formatting of text printed easier.
 }
 \seealso{
 Other printer fonts: \code{\link{desc_font}},
-  \code{\link{error_font}}, \code{\link{font_na}},
-  \code{\link{font_punct}}, \code{\link{font_secondary}},
+  \code{\link{error_font}}, \code{\link{font_default}},
+  \code{\link{font_na}}, \code{\link{font_punct}},
+  \code{\link{font_secondary}},
   \code{\link{font_tax_name}}, \code{\link{name_font}},
   \code{\link{punc_font}}
 }

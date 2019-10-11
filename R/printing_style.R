@@ -1,3 +1,18 @@
+#' Default font
+#'
+#' A wrapper to make changing the formatting of text printed easier.
+#'
+#' @param text What to print.
+#'
+#' @family printer fonts
+#'
+#' @keywords internal
+font_default <- function(text) {
+  text
+}
+
+
+
 #' Font for secondary data
 #'
 #' A wrapper to make changing the formatting of text printed easier.
