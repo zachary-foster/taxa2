@@ -7,7 +7,7 @@
 \alias{is.na.taxa_taxon_authority}
 \alias{names.taxa_taxon_name}
 \alias{names<-.taxa_taxon_name}
-\title{Taxon ID class}
+\title{Taxon authority class}
 \usage{
 taxon_authority(author = character(), date = NA, .names = NA,
   citation = NA)
@@ -66,8 +66,8 @@ data.frame(x = x, y = 1:2)
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
   \code{\link{levels<-.taxa_taxon}},
-  \code{\link{tax_date}}, \code{\link{taxmap}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxonomy}}
+  \code{\link{tax_date<-.taxa_taxon_authority}},
+  \code{\link{taxmap}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxonomy}}
 }
 \concept{classes}

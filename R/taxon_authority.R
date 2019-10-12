@@ -34,7 +34,7 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 }
 
 
-#' Taxon ID class
+#' Taxon authority class
 #'
 #' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' The function used to create `taxon_authority` objects
@@ -91,35 +91,13 @@ setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 
 
-
-#' @rdname taxon_auth
-#'
-#' @param value The taxon authors to set. Inputs will be coerced into a [taxon_auth()] vector.
-#'
-#' @export
-`tax_author<-` <- function(x, value) {
-  UseMethod('tax_author<-')
-}
-
+#' @rdname tax_author
 #' @export
 `tax_author<-.taxa_taxon_authority` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
   vctrs::field(x, "author") <- value
   return(x)
-}
-
-#' Set and get taxon authors
-#'
-#' Set and get taxon authors in objects that have them, such as [taxon()] objects.
-#'
-#' @param x An object with taxon authors.
-#'
-#' @return A [character()] vector
-#'
-#' @export
-tax_author <- function(x) {
-  UseMethod('tax_author')
 }
 
 #' @rdname tax_author
@@ -130,14 +108,7 @@ tax_author.taxa_taxon_authority <- function(date = character()) {
 
 
 
-
-
-#' @rdname tax_date
-#' @export
-`tax_date<-` <- function(x, value) {
-  UseMethod('tax_date<-')
-}
-
+#' @rdname taxon_db
 #' @export
 `tax_date<-.taxa_taxon_authority` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
@@ -148,22 +119,11 @@ tax_author.taxa_taxon_authority <- function(date = character()) {
 
 #' @rdname taxon_db
 #' @export
-tax_date <- function(x) {
-  UseMethod('tax_date')
-}
-
-#' @rdname taxon_db
-#' @export
 tax_date.taxa_taxon_authority <- function(date = character()) {
   vctrs::field(date, "date")
 }
 
 
-#' @rdname taxon_db
-#' @export
-`tax_cite<-` <- function(x, value) {
-  UseMethod('tax_cite<-')
-}
 
 #' @rdname taxon_db
 #' @export
@@ -176,15 +136,10 @@ tax_date.taxa_taxon_authority <- function(date = character()) {
 
 #' @rdname taxon_db
 #' @export
-tax_cite <- function(x) {
-  UseMethod('tax_cite')
-}
-
-#' @rdname taxon_db
-#' @export
 tax_cite.taxa_taxon_authority <- function(cite = character()) {
   vctrs::field(cite, "citation")
 }
+
 
 
 #' @rdname taxon_authority
@@ -213,6 +168,7 @@ names.taxa_taxon_authority <- function(x) {
 }
 
 
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -229,7 +185,7 @@ names.taxa_taxon_authority <- function(x) {
 printed_taxon_authority <- function(x, color = FALSE) {
   author <- vctrs::field(x, 'author')
   date <- vctrs::field(x, 'date')
-  out <- font_default(author)
+  out <- font_na(author)
   out <- paste0(out, ifelse(is.na(date), '', paste0(' ', font_secondary(date))))
   if (! color) {
     out <- crayon::strip_style(out)

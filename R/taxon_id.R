@@ -93,14 +93,13 @@ setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
 # S3 getters/setters
 #--------------------------------------------------------------------------------
 
-#' @rdname taxon_db
+#' @rdname tax_db
 #' @export
-`tax_db<-` <- function(x, value) {
-  UseMethod('tax_db<-')
+tax_db.taxa_taxon_id <- function(x) {
+  vctrs::field(x, "db")
 }
 
-
-#' @rdname taxon_db
+#' @rdname tax_db
 #' @export
 `tax_db<-.taxa_taxon_id` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_db())
@@ -111,19 +110,6 @@ setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
   return(x)
 }
 
-
-#' @rdname taxon_db
-#' @export
-tax_db <- function(x) {
-  UseMethod('tax_db')
-}
-
-
-#' @rdname taxon_db
-#' @export
-tax_db.taxa_taxon_id <- function(db = character(), ...) {
-  vctrs::field(db, "db")
-}
 
 
 #' @rdname taxon_id

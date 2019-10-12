@@ -45,14 +45,21 @@ x <- taxon_name(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
 tax_name(x)
 tax_rank(x)
 tax_id(x)
+tax_db(x)
 tax_auth(x)
+tax_author(x)
+tax_date(x)
+tax_cite(x)
 
 # Set parts of the taxon name vector
 tax_name(x) <- tolower(tax_name(x))
 tax_rank(x)[1] <- NA
 tax_id(x) <- '9999'
-tax_db(tax_id(x)) <- 'itis'
+tax_db(x) <- 'itis'
 tax_auth(x) <- NA
+tax_author(x)[2:3] <- c('Joe', 'Billy')
+tax_date(x) <- c('1999', '2013', '1796', '1899')
+tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 
 # Manipulate taxon name vectors
 x[1:3]
@@ -61,7 +68,7 @@ c(x, x)
 names(x) <- c('a', 'b', 'c', 'd')
 x['b']
 
-# Using as columns in tables
+# Use as columns in tables
 tibble::tibble(x = x, y = 1:4)
 data.frame(x = x, y = 1:4)
 
@@ -70,8 +77,8 @@ data.frame(x = x, y = 1:4)
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
   \code{\link{levels<-.taxa_taxon}},
-  \code{\link{tax_date}}, \code{\link{taxmap}},
-  \code{\link{taxon_authority}}, \code{\link{taxon_id}},
-  \code{\link{taxonomy}}
+  \code{\link{tax_date<-.taxa_taxon_authority}},
+  \code{\link{taxmap}}, \code{\link{taxon_authority}},
+  \code{\link{taxon_id}}, \code{\link{taxonomy}}
 }
 \concept{classes}

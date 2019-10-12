@@ -76,14 +76,21 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' tax_name(x)
 #' tax_rank(x)
 #' tax_id(x)
+#' tax_db(x)
 #' tax_auth(x)
+#' tax_author(x)
+#' tax_date(x)
+#' tax_cite(x)
 #'
 #' # Set parts of the taxon name vector
 #' tax_name(x) <- tolower(tax_name(x))
 #' tax_rank(x)[1] <- NA
 #' tax_id(x) <- '9999'
-#' tax_db(tax_id(x)) <- 'itis'
+#' tax_db(x) <- 'itis'
 #' tax_auth(x) <- NA
+#' tax_author(x)[2:3] <- c('Joe', 'Billy')
+#' tax_date(x) <- c('1999', '2013', '1796', '1899')
+#' tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 #'
 #' # Manipulate taxon name vectors
 #' x[1:3]
@@ -121,32 +128,10 @@ setOldClass(c("taxa_taxon_name", "vctrs_vctr"))
 # S3 getters/setters
 #--------------------------------------------------------------------------------
 
-#' Set and get taxon ids
-#'
-#' Set and get taxon ids in objects that have them, such as [taxon()] objects.
-#'
-#' @param x An object with taxon ids.
-#'
-#' @return A [taxon_id()] vector
-#'
-#' @export
-tax_id <- function(x) {
-  UseMethod('tax_id')
-}
-
 #' @rdname tax_id
 #' @export
 tax_id.taxa_taxon_name <- function(x) {
   vctrs::field(x, "id")
-}
-
-#' @rdname tax_id
-#'
-#' @param value The taxon ids to set. Inputs will be coerced into a [taxon_id()] vector.
-#'
-#' @export
-`tax_id<-` <- function(x, value) {
-  UseMethod('tax_id<-')
 }
 
 #' @rdname tax_id
@@ -159,32 +144,71 @@ tax_id.taxa_taxon_name <- function(x) {
 }
 
 
-#' Set and get taxon names
-#'
-#' Set and get taxon names in objects that have them, such as [taxon()] objects.
-#'
-#' @param x An object with taxon names.
-#'
-#' @return A [character()] vector
-#'
+
+#' @rdname tax_db
 #' @export
-tax_name <- function(x) {
-  UseMethod('tax_name')
+tax_db.taxa_taxon_name <- function(x) {
+  tax_db(tax_id(x))
 }
+
+#' @rdname tax_db
+#' @export
+`tax_db<-.taxa_taxon_name` <- function(x, value) {
+  tax_db(tax_id(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_author
+#' @export
+tax_author.taxa_taxon_name <- function(x) {
+  tax_author(tax_auth(x))
+}
+
+#' @rdname tax_author
+#' @export
+`tax_author<-.taxa_taxon_name` <- function(x, value) {
+  tax_author(tax_auth(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_date
+#' @export
+tax_date.taxa_taxon_name <- function(x) {
+  tax_date(tax_auth(x))
+}
+
+#' @rdname tax_date
+#' @export
+`tax_date<-.taxa_taxon_name` <- function(x, value) {
+  tax_date(tax_auth(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_cite
+#' @export
+tax_cite.taxa_taxon_name <- function(x) {
+  tax_cite(tax_auth(x))
+}
+
+#' @rdname tax_cite
+#' @export
+`tax_cite<-.taxa_taxon_name` <- function(x, value) {
+  tax_cite(tax_auth(x)) <- value
+  return(x)
+}
+
+
 
 #' @rdname tax_name
 #' @export
 tax_name.taxa_taxon_name <- function(x) {
   vctrs::field(x, "name")
-}
-
-#' @rdname tax_name
-#'
-#' @param value The taxon names to set. Inputs will be coerced into a [taxon_name()] vector.
-#'
-#' @export
-`tax_name<-` <- function(x, value) {
-  UseMethod('tax_name<-')
 }
 
 #' @rdname tax_name
@@ -197,32 +221,11 @@ tax_name.taxa_taxon_name <- function(x) {
 }
 
 
-#' Set and get taxon authorities
-#'
-#' Set and get taxon authorities in objects that have them, such as [taxon()] objects.
-#'
-#' @param x An object with taxon authorities.
-#'
-#' @return A [character()] vector
-#'
-#' @export
-tax_auth <- function(x) {
-  UseMethod('tax_auth')
-}
 
 #' @rdname tax_auth
 #' @export
 tax_auth.taxa_taxon_name <- function(x) {
   vctrs::field(x, "auth")
-}
-
-#' @rdname tax_auth
-#'
-#' @param value The taxon authorities to set. Inputs will be coerced into a [taxon_auth()] vector.
-#'
-#' @export
-`tax_auth<-` <- function(x, value) {
-  UseMethod('tax_auth<-')
 }
 
 #' @rdname tax_auth
@@ -235,32 +238,11 @@ tax_auth.taxa_taxon_name <- function(x) {
 }
 
 
-#' Set and get taxon ranks
-#'
-#' Set and get taxon ranks in objects that have them, such as [taxon()] objects.
-#'
-#' @param x An object with taxon ranks.
-#'
-#' @return A [taxon_rank()] vector
-#'
-#' @export
-tax_rank <- function(x) {
-  UseMethod('tax_rank')
-}
 
 #' @rdname tax_rank
 #' @export
 tax_rank.taxa_taxon_name <- function(x) {
   vctrs::field(x, "rank")
-}
-
-#' @rdname tax_rank
-#'
-#' @param value The taxon ranks to set. Inputs will be coerced into a [taxon_rank()] vector.
-#'
-#' @export
-`tax_rank<-` <- function(x, value) {
-  UseMethod('tax_rank<-')
 }
 
 #' @rdname tax_rank
@@ -271,6 +253,7 @@ tax_rank.taxa_taxon_name <- function(x) {
   vctrs::field(x, "rank") <- value
   return(x)
 }
+
 
 
 #' @rdname taxon_authority
