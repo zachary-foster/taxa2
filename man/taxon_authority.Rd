@@ -9,7 +9,8 @@
 \alias{names<-.taxa_taxon_name}
 \title{Taxon ID class}
 \usage{
-taxon_authority(author = character(), date = NA, .names = NA)
+taxon_authority(author = character(), date = NA, .names = NA,
+  citation = NA)
 
 \method{names}{taxa_taxon_authority}(x)
 
@@ -27,6 +28,8 @@ taxon_authority(author = character(), date = NA, .names = NA)
 \item{date}{Zero or more dates.}
 
 \item{.names}{The names of the vector.}
+
+\item{citation}{Zero or more literature citations.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_authority}
@@ -47,7 +50,12 @@ as.character(x)
 x[2]
 x[2] <- 'ABC'
 names(x) <- c('a', 'b')
-tax_auth_date(x) <- c('2000', '1234')
+tax_author(x)[1] <- tolower(tax_author(x)[1])
+tax_author(x)
+tax_date(x) <- c('2000', '1234')
+tax_date(x)
+tax_cite(x)[2] <- c('Linnaeus, C. (1771). Mantissa plantarum altera generum.')
+tax_cite(x)
 
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:2)
@@ -58,7 +66,7 @@ data.frame(x = x, y = 1:2)
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
   \code{\link{levels<-.taxa_taxon}},
-  \code{\link{tax_auth_date<-}}, \code{\link{taxmap}},
+  \code{\link{tax_date}}, \code{\link{taxmap}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxonomy}}
 }

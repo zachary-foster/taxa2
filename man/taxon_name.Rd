@@ -61,12 +61,16 @@ c(x, x)
 names(x) <- c('a', 'b', 'c', 'd')
 x['b']
 
+# Using as columns in tables
+tibble::tibble(x = x, y = 1:4)
+data.frame(x = x, y = 1:4)
+
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
   \code{\link{levels<-.taxa_taxon}},
-  \code{\link{tax_auth_date<-}}, \code{\link{taxmap}},
+  \code{\link{tax_date}}, \code{\link{taxmap}},
   \code{\link{taxon_authority}}, \code{\link{taxon_id}},
   \code{\link{taxonomy}}
 }

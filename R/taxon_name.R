@@ -92,6 +92,10 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' names(x) <- c('a', 'b', 'c', 'd')
 #' x['b']
 #'
+#' # Use as columns in tables
+#' tibble::tibble(x = x, y = 1:4)
+#' data.frame(x = x, y = 1:4)
+#'
 #' @export
 taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA) {
   # Cast inputs to correct values
@@ -224,7 +228,7 @@ tax_auth.taxa_taxon_name <- function(x) {
 #' @rdname tax_auth
 #' @export
 `tax_auth<-.taxa_taxon_name` <- function(x, value) {
-  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_cast(value, taxon_authority())
   value <- vctrs::vec_recycle(value, length(x))
   vctrs::field(x, "auth") <- value
   return(x)

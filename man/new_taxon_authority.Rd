@@ -5,7 +5,7 @@
 \title{Minimal taxon_authority constructor}
 \usage{
 new_taxon_authority(.names = NULL, author = character(),
-  date = character())
+  date = character(), citation = character())
 }
 \arguments{
 \item{.names}{The names of the vector.}
@@ -13,6 +13,8 @@ new_taxon_authority(.names = NULL, author = character(),
 \item{author}{Zero or more author names.}
 
 \item{date}{Zero or more dates.}
+
+\item{citation}{Zero or more literature citations.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_authority}

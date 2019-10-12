@@ -186,8 +186,8 @@ ex_taxmap <- taxmap(tiger, cat, mole, human, tomato, potato,
 Other classes: \code{\link{hierarchies}},
   \code{\link{hierarchy}},
   \code{\link{levels<-.taxa_taxon}},
-  \code{\link{tax_auth_date<-}},
-  \code{\link{taxon_authority}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxonomy}}
+  \code{\link{tax_date}}, \code{\link{taxon_authority}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxonomy}}
 }
 \concept{classes}

@@ -80,7 +80,7 @@ x[2] <- taxon_rank('superkingdom')
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}}, \code{\link{tax_auth_date<-}},
+  \code{\link{hierarchy}}, \code{\link{tax_date}},
   \code{\link{taxmap}}, \code{\link{taxon_authority}},
   \code{\link{taxon_id}}, \code{\link{taxon_name}},
   \code{\link{taxonomy}}

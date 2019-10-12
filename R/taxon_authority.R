@@ -10,11 +10,12 @@
 #' @param .names The names of the vector.
 #' @param author Zero or more author names.
 #' @param date Zero or more dates.
+#' @param citation Zero or more literature citations.
 #'
 #' @return An `S3` object of class `taxa_taxon_authority`
 #'
 #' @keywords internal
-new_taxon_authority <- function(.names = NULL, author = character(), date = character()) {
+new_taxon_authority <- function(.names = NULL, author = character(), date = character(), citation = character()) {
   # Set names to NA if not set
   if (is.null(names) || all(is.na(.names))) {
     .names_set <- FALSE
@@ -25,8 +26,10 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
   }
   vctrs::vec_assert(author, ptype = character())
   vctrs::vec_assert(date, ptype = character())
+  vctrs::vec_assert(citation, ptype = character())
 
-  vctrs::new_rcrd(list(.names = .names, author = author, date = date), .names_set = .names_set,
+  vctrs::new_rcrd(list(.names = .names, author = author, date = date, citation = citation),
+                  .names_set = .names_set,
                   class = "taxa_taxon_authority")
 }
 
@@ -38,6 +41,7 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' @param author Zero or more author names.
 #' @param date Zero or more dates.
+#' @param citation Zero or more literature citations.
 #' @param .names The names of the vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_authority`
@@ -55,7 +59,12 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #' x[2]
 #' x[2] <- 'ABC'
 #' names(x) <- c('a', 'b')
-#' tax_auth_date(x) <- c('2000', '1234')
+#' tax_author(x)[1] <- tolower(tax_author(x)[1])
+#' tax_author(x)
+#' tax_date(x) <- c('2000', '1234')
+#' tax_date(x)
+#' tax_cite(x)[2] <- c('Linnaeus, C. (1771). Mantissa plantarum altera generum.')
+#' tax_cite(x)
 #'
 #' # Using as columns in tables
 #' tibble::tibble(x = x, y = 1:2)
@@ -63,12 +72,13 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' @export
 #' @importFrom vctrs %<-%
-taxon_authority <- function(author = character(), date = NA, .names = NA) {
+taxon_authority <- function(author = character(), date = NA, .names = NA, citation = NA) {
   .names <- vctrs::vec_cast(.names, character())
   author <- vctrs::vec_cast(author, character())
   date <- vctrs::vec_cast(date, character())
-  c(author, date, .names) %<-% vctrs::vec_recycle_common(author, date, .names)
-  new_taxon_authority(.names = .names, author = author, date = date)
+  citation <- vctrs::vec_cast(citation, character())
+  c(author, date, citation, .names) %<-% vctrs::vec_recycle_common(author, date, citation, .names)
+  new_taxon_authority(.names = .names, author = author, date = date, citation = citation)
 }
 
 
@@ -80,34 +90,100 @@ setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
 # S3 getters/setters
 #--------------------------------------------------------------------------------
 
-#' @rdname taxon_db
+
+
+#' @rdname taxon_auth
+#'
+#' @param value The taxon authors to set. Inputs will be coerced into a [taxon_auth()] vector.
+#'
 #' @export
-`tax_auth_date<-` <- function(x, value) {
-  UseMethod('tax_auth_date<-')
+`tax_author<-` <- function(x, value) {
+  UseMethod('tax_author<-')
+}
+
+#' @export
+`tax_author<-.taxa_taxon_authority` <- function(x, value) {
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "author") <- value
+  return(x)
+}
+
+#' Set and get taxon authors
+#'
+#' Set and get taxon authors in objects that have them, such as [taxon()] objects.
+#'
+#' @param x An object with taxon authors.
+#'
+#' @return A [character()] vector
+#'
+#' @export
+tax_author <- function(x) {
+  UseMethod('tax_author')
+}
+
+#' @rdname tax_author
+#' @export
+tax_author.taxa_taxon_authority <- function(date = character()) {
+  vctrs::field(date, "author")
 }
 
 
-#' @rdname taxon_db
+
+
+
+#' @rdname tax_date
 #' @export
-`tax_auth_date<-.taxa_taxon_authority` <- function(x, value) {
+`tax_date<-` <- function(x, value) {
+  UseMethod('tax_date<-')
+}
+
+#' @export
+`tax_date<-.taxa_taxon_authority` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
   vctrs::field(x, "date") <- value
   return(x)
 }
 
+#' @rdname taxon_db
+#' @export
+tax_date <- function(x) {
+  UseMethod('tax_date')
+}
 
 #' @rdname taxon_db
 #' @export
-tax_auth_date <- function(x) {
-  UseMethod('tax_auth_date')
+tax_date.taxa_taxon_authority <- function(date = character()) {
+  vctrs::field(date, "date")
 }
 
 
 #' @rdname taxon_db
 #' @export
-tax_auth_date.taxa_taxon_authority <- function(date = character()) {
-  vctrs::field(date, "date")
+`tax_cite<-` <- function(x, value) {
+  UseMethod('tax_cite<-')
+}
+
+#' @rdname taxon_db
+#' @export
+`tax_cite<-.taxa_taxon_authority` <- function(x, value) {
+  value <- vctrs::vec_cast(value, character())
+  value <- vctrs::vec_recycle(value, length(x))
+  vctrs::field(x, "citation") <- value
+  return(x)
+}
+
+#' @rdname taxon_db
+#' @export
+tax_cite <- function(x) {
+  UseMethod('tax_cite')
+}
+
+#' @rdname taxon_db
+#' @export
+tax_cite.taxa_taxon_authority <- function(cite = character()) {
+  vctrs::field(cite, "citation")
 }
 
 
