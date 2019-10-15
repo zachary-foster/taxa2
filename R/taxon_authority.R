@@ -335,7 +335,25 @@ vec_cast.taxa_taxon_authority.taxa_taxon_authority <- function(x, to, x_arg, to_
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority character
 #' @export
-vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) taxon_authority(x)
+vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) {
+  author <- vapply(x, FUN.VALUE = character(1), function(y) {
+    if (grepl(y, pattern = '^.+,? *[0-9]{4} *$')) {
+      out <- sub(y, pattern = '^(.+),? *([0-9]{4}) *$', replacement = '\\1')
+      out <- sub(out, pattern = '[ ,]*$', replacement = '')
+      return(out)
+    } else {
+      return(y)
+    }
+  })
+  date <-  vapply(x, FUN.VALUE = character(1), function(y) {
+    if (grepl(y, pattern = '^.+,? *[0-9]{4} *$')) {
+      return(sub(y, pattern = '^(.+),? *([0-9]{4}) *$', replacement = '\\2'))
+    } else {
+      return(NA_character_)
+    }
+  })
+  taxon_authority(author = unname(author), date = unname(date))
+}
 
 
 #' @rdname taxa_casting_funcs
