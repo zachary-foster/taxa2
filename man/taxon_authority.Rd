@@ -47,6 +47,8 @@ x <- taxon_authority(c('Cham. & Schldl.', 'L.'),
 
 # Manipulating objects
 as.character(x)
+as.data.frame(x)
+as_tibble(x)
 x[2]
 x[2] <- 'ABC'
 names(x) <- c('a', 'b')

@@ -56,6 +56,8 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' # Manipulating objects
 #' as.character(x)
+#' as.data.frame(x)
+#' as_tibble(x)
 #' x[2]
 #' x[2] <- 'ABC'
 #' names(x) <- c('a', 'b')
@@ -81,7 +83,8 @@ taxon_authority <- function(author = character(), date = NA, .names = NA, citati
   new_taxon_authority(.names = .names, author = author, date = date, citation = citation)
 }
 
-
+#' @importFrom methods setOldClass
+#' @exportClass taxa_taxon_authority
 setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
 
 
@@ -426,21 +429,19 @@ is.na.taxa_taxon_authority <- function(x) {
 }
 
 #' @export
-as.data.frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = FALSE, ...) {
-  author <- as.data.frame.vector(tax_author(x), row.names = row.names, optional = optional, ...)
-  date <- as.data.frame.vector(tax_date(x), row.names = row.names, optional = optional, ...)
-  cite <- as.data.frame.vector(tax_cite(x), row.names = row.names, optional = optional, ...)
-  out <- cbind(author, date, cite)
-  names(out) <- c('tax_author', 'tax_date', 'tax_cite')
-  return(out)
+as.data.frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = FALSE, ...,
+                                               stringsAsFactors = default.stringsAsFactors()) {
+  data.frame(tax_author = tax_author(x),
+             tax_date = tax_date(x),
+             tax_cite = tax_cite(x),
+             row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
+
 }
 
-#' @inheritParams as.data.frame.taxa_taxon_authority
-#'
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.taxa_taxon_authority <- function(x, ..., base_vectors = FALSE) {
-  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+as_tibble.taxa_taxon_authority <- function(x, ...) {
+  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
 

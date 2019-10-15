@@ -68,6 +68,8 @@ c(x, x)
 names(x) <- c('a', 'b', 'c', 'd')
 x['b'] <- NA
 is.na(x)
+as.data.frame(x)
+as_tibble(x)
 
 # Use as columns in tables
 tibble::tibble(x = x, y = 1:4)

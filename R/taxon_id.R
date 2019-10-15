@@ -58,6 +58,8 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #'
 #' # Manipulating objects
 #' as.character(x)
+#' as.data.frame(x)
+#' as_tibble(x)
 #' x[2:3]
 #' x[2:3] <- 'ABC'
 #' names(x) <- c('a', 'b', 'c', 'd')
@@ -85,6 +87,8 @@ taxon_id <- function(id = character(), db = NA, .names = NULL) {
 }
 
 
+#' @importFrom methods setOldClass
+#' @exportClass taxa_taxon_id
 setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
 
 
@@ -412,24 +416,20 @@ is.na.taxa_taxon_id <- function(x) {
 }
 
 
-#' @param base_vectors If `TRUE`, convert any columns in the output that are `taxa` classes into base R vectors.
-#'
 #' @export
-as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ..., base_vectors = FALSE) {
-  db_out <- as.data.frame(tax_db(x), row.names = row.names, optional = optional, base_vectors = base_vectors)
-  out <- as.data.frame.vector(as.character(x), row.names = row.names, optional = optional, ...)
-  names(out) <- c('tax_id')
-  out <- cbind(out, db_out)
-  return(out)
+as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ...,
+                                        stringsAsFactors = default.stringsAsFactors()) {
+  cbind(
+    data.frame(tax_id = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
+    as.data.frame(tax_db(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
+  )
 }
 
 
-#' @inheritParams as.data.frame.taxa_taxon_id
-#'
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.taxa_taxon_id <- function(x, ..., base_vectors = FALSE) {
-  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+as_tibble.taxa_taxon_id <- function(x, ...) {
+  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
 #--------------------------------------------------------------------------------

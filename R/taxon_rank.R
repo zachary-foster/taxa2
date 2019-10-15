@@ -96,6 +96,9 @@ taxon_rank <- function(rank = character(), levels = NULL, guess_order = TRUE) {
   new_taxon_rank(rank = rank, levels = levels)
 }
 
+
+#' @importFrom methods setOldClass
+#' @exportClass taxa_taxon_rank
 setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
 
 
@@ -460,25 +463,18 @@ is.na.taxa_taxon_rank <- function(x) {
 }
 
 
-#' @param base_vectors If TRUE, convert taxa package classes to base classes.
-#'
 #' @export
-as.data.frame.taxa_taxon_rank <- function(x, row.names = NULL, optional = FALSE, ..., base_vectors = FALSE) {
-  if (base_vectors) {
-    x <- as.character(x)
-  }
-  out <- as.data.frame.vector(x, row.names = row.names, optional = optional, ...)
-  names(out) <- 'tax_rank'
-  return(out)
+as.data.frame.taxa_taxon_rank <- function(x, row.names = NULL, optional = FALSE, ...,
+                                          stringsAsFactors = default.stringsAsFactors()) {
+  data.frame(tax_rank = as.character(x), row.names = row.names,
+             stringsAsFactors = stringsAsFactors, ...)
 }
 
 
-#' @inheritParams as.data.frame.taxa_taxon_rank
-#'
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.taxa_taxon_rank <- function(x, ..., base_vectors = FALSE) {
-  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+as_tibble.taxa_taxon_rank <- function(x, ...) {
+  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
 
