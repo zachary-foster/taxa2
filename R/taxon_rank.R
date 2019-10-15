@@ -460,6 +460,29 @@ is.na.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @param base_vectors If TRUE, convert taxa package classes to base classes.
+#'
+#' @export
+as.data.frame.taxa_taxon_rank <- function(x, row.names = NULL, optional = FALSE, ..., base_vectors = FALSE) {
+  if (base_vectors) {
+    x <- as.character(x)
+  }
+  out <- as.data.frame.vector(x, row.names = row.names, optional = optional, ...)
+  names(out) <- 'tax_rank'
+  return(out)
+}
+
+
+#' @inheritParams as.data.frame.taxa_taxon_rank
+#'
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon_rank <- function(x, ..., base_vectors = FALSE) {
+  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+}
+
+
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------

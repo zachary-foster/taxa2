@@ -425,6 +425,23 @@ is.na.taxa_taxon_authority <- function(x) {
   x %in% as.character(table)
 }
 
+#' @export
+as.data.frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = FALSE, ...) {
+  author <- as.data.frame.vector(tax_author(x), row.names = row.names, optional = optional, ...)
+  date <- as.data.frame.vector(tax_date(x), row.names = row.names, optional = optional, ...)
+  cite <- as.data.frame.vector(tax_cite(x), row.names = row.names, optional = optional, ...)
+  out <- cbind(author, date, cite)
+  names(out) <- c('tax_author', 'tax_date', 'tax_cite')
+  return(out)
+}
+
+#' @inheritParams as.data.frame.taxa_taxon_authority
+#'
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon_authority <- function(x, ..., base_vectors = FALSE) {
+  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+}
 
 
 #--------------------------------------------------------------------------------

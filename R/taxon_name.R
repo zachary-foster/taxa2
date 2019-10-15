@@ -97,7 +97,8 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' x[tax_rank(x) > 'family']
 #' c(x, x)
 #' names(x) <- c('a', 'b', 'c', 'd')
-#' x['b']
+#' x['b'] <- NA
+#' is.na(x)
 #'
 #' # Use as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
@@ -373,7 +374,7 @@ obj_print_footer.taxa_taxon_name <- function(x) {
 #' @export
 #' @keywords internal
 vec_ptype_abbr.taxa_taxon_name <- function(x) {
-  "taxon"
+  "tax_name"
 }
 
 
@@ -381,7 +382,7 @@ vec_ptype_abbr.taxa_taxon_name <- function(x) {
 #' @export
 #' @keywords internal
 vec_ptype_full.taxa_taxon_name <- function(x) {
-  "taxon"
+  "taxon_name"
 }
 
 
@@ -576,6 +577,37 @@ is.na.taxa_taxon_name <- function(x) {
 #' @export
 `%in%.factor.taxa_taxon_name` <- function(x, table) {
   x %in% as.character(table)
+}
+
+
+#' @param base_vectors If `TRUE`, convert any columns in the output that are `taxa` classes into base R vectors.
+#' @param recursive If `TRUE`, convert any columns in the output that are `taxa` classes into a set of columns of their components.
+#'
+#' @export
+as.data.frame.taxa_taxon_name <- function(x, row.names = NULL, optional = FALSE, ..., base_vectors = FALSE, recursive = FALSE) {
+  name_out <- as.data.frame(as.character(x), row.names = row.names, optional = optional)
+  names(name_out) <- 'tax_name'
+  rank_out <- as.data.frame(tax_rank(x), row.names = row.names, optional = optional, base_vectors = base_vectors)
+  if (recursive) {
+    id_out <- as.data.frame(tax_id(x), row.names = row.names, optional = optional, base_vectors = base_vectors)
+    auth_out <- as.data.frame(tax_auth(x), row.names = row.names, optional = optional)
+  } else {
+    id_out <- as.data.frame(as.character(tax_id(x)), row.names = row.names, optional = optional)
+    names(id_out) <- 'tax_id'
+    auth_out <- as.data.frame(as.character(tax_auth(x)), row.names = row.names, optional = optional)
+    names(auth_out) <- 'tax_auth'
+  }
+  out <- cbind(name_out, rank_out, id_out, auth_out)
+  return(out)
+}
+
+
+#' @inheritParams as.data.frame.taxa_taxon_name
+#'
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon_name <- function(x, ..., base_vectors = FALSE, recursive = FALSE) {
+  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors, recursive = recursive), ...)
 }
 
 

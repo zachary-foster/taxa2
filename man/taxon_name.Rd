@@ -66,7 +66,8 @@ x[1:3]
 x[tax_rank(x) > 'family']
 c(x, x)
 names(x) <- c('a', 'b', 'c', 'd')
-x['b']
+x['b'] <- NA
+is.na(x)
 
 # Use as columns in tables
 tibble::tibble(x = x, y = 1:4)

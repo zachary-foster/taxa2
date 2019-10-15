@@ -412,6 +412,25 @@ is.na.taxa_taxon_id <- function(x) {
 }
 
 
+#' @param base_vectors If `TRUE`, convert any columns in the output that are `taxa` classes into base R vectors.
+#'
+#' @export
+as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ..., base_vectors = FALSE) {
+  db_out <- as.data.frame(tax_db(x), row.names = row.names, optional = optional, base_vectors = base_vectors)
+  out <- as.data.frame.vector(as.character(x), row.names = row.names, optional = optional, ...)
+  names(out) <- c('tax_id')
+  out <- cbind(out, db_out)
+  return(out)
+}
+
+
+#' @inheritParams as.data.frame.taxa_taxon_id
+#'
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon_id <- function(x, ..., base_vectors = FALSE) {
+  tibble::as_tibble(as.data.frame(x, base_vectors = base_vectors), ...)
+}
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
