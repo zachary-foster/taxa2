@@ -111,7 +111,7 @@ tax_author.taxa_taxon_authority <- function(date = character()) {
 
 
 
-#' @rdname taxon_db
+#' @rdname tax_date
 #' @export
 `tax_date<-.taxa_taxon_authority` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
@@ -120,7 +120,7 @@ tax_author.taxa_taxon_authority <- function(date = character()) {
   return(x)
 }
 
-#' @rdname taxon_db
+#' @rdname tax_date
 #' @export
 tax_date.taxa_taxon_authority <- function(date = character()) {
   vctrs::field(date, "date")
@@ -128,7 +128,7 @@ tax_date.taxa_taxon_authority <- function(date = character()) {
 
 
 
-#' @rdname taxon_db
+#' @rdname tax_cite
 #' @export
 `tax_cite<-.taxa_taxon_authority` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
@@ -137,7 +137,7 @@ tax_date.taxa_taxon_authority <- function(date = character()) {
   return(x)
 }
 
-#' @rdname taxon_db
+#' @rdname tax_cite
 #' @export
 tax_cite.taxa_taxon_authority <- function(cite = character()) {
   vctrs::field(cite, "citation")

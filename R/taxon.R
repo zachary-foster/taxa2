@@ -412,7 +412,7 @@ vec_ptype2.taxa_taxon.vctrs_unspecified <- function(x, y, ...) x
 #' @rdname taxa_coercion_funcs
 #' @method vec_ptype2.taxa_taxon taxa_taxon
 #' @export
-vec_ptype2.taxa_taxon.taxa_taxon <- function(x, y, ...) new_taxon()
+vec_ptype2.taxa_taxon.taxa_taxon <- function(x, y, ...) taxon()
 
 
 #' @rdname taxa_coercion_funcs
@@ -429,6 +429,18 @@ vec_ptype2.character.taxa_taxon <- function(x, y, ...) character()
 
 
 #' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon taxa_taxon_name
+#' @export
+vec_ptype2.taxa_taxon.taxa_taxon_name <- function(x, y, ...) taxon()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon_name taxa_taxon
+#' @export
+vec_ptype2.taxa_taxon_name.taxa_taxon <- function(x, y, ...) taxon()
+
+
+#' @rdname taxa_coercion_funcs
 #' @method vec_ptype2.taxa_taxon factor
 #' @export
 vec_ptype2.taxa_taxon.factor <- function(x, y, ...) factor()
@@ -442,61 +454,86 @@ vec_ptype2.factor.taxa_taxon <- function(x, y, ...) factor()
 
 
 
+
 #--------------------------------------------------------------------------------
-# S3 casting functions
+# Exported utility functions
 #--------------------------------------------------------------------------------
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast taxa_taxon
-#' @importFrom vctrs vec_cast
+
+#' Check if is a taxon
+#'
+#' Check if an object is the taxon class
+#'
+#' @param x An object to test
+#'
 #' @export
-#' @export vec_cast.taxa_taxon
-#' @keywords internal
-vec_cast.taxa_taxon <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon")
+is_taxon <- function(x) {
+  inherits(x, "taxa_taxon")
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.taxa_taxon default
 #' @export
-vec_cast.taxa_taxon.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+is.na.taxa_taxon <- function(x) {
+  is.na(tax_name(x))
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.taxa_taxon taxa_taxon
 #' @export
-vec_cast.taxa_taxon.taxa_taxon <- function(x, to, x_arg, to_arg) x
+`%in%.taxa_taxon` <- function(x, table) {
+  UseMethod("%in%.taxa_taxon", table)
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.taxa_taxon character
 #' @export
-vec_cast.taxa_taxon.character <- function(x, to, x_arg, to_arg) taxon(x)
+`%in%.taxa_taxon.default` <- function(x, table) {
+  vapply(x, FUN.VALUE = logical(1), function(y) {
+    any(as.character(y) %in% table)
+  })
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.character taxa_taxon
-#' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon <- function(x, to, x_arg, to_arg) tax_name(x)
+`%in%.character.taxa_taxon` <- function(x, table) {
+  x %in% as.character(as.taxon_name(table))
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.taxa_taxon factor
 #' @export
-vec_cast.taxa_taxon.factor <- function(x, to, x_arg, to_arg) taxon_name(x)
+`%in%.factor.taxa_taxon` <- function(x, table) {
+  x %in% as.character(as.taxon_name(table))
+}
 
 
-#' @rdname taxa_casting_funcs
-#' @method vec_cast.factor taxa_taxon
-#' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon <- function(x, to, x_arg, to_arg) as.factor(tax_name(x))
+as.data.frame.taxa_taxon <- function(x, row.names = NULL, optional = FALSE, ...,
+                                     stringsAsFactors = default.stringsAsFactors()) {
+  tax_name_df <- lapply(x, as.data.frame, row.names = row.names, optional = optional,
+                        stringsAsFactors = stringsAsFactors, ...)
+  tax_name_i <- rep(seq_len(length(tax_name_df)), vapply(tax_name_df, nrow, numeric(1)))
+  tax_name_df <- do.call(rbind, tax_name_df)
+  cbind(taxon = tax_name_i, tax_name_df)
+}
 
+
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon <- function(x, ...) {
+  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+}
+
+#' @export
+as.character.taxa_taxon <- function(x, ...) {
+  tax_name(x)
+}
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
 
+#' Get a value from taxon_name in taxon
+#'
+#' Get a value from taxon_name in taxon
+#'
 #' @param simplify If TRUE, the return a vector composed of the first item in each taxon. Otherwise,
 #'   a list will all data is returned.
 #'

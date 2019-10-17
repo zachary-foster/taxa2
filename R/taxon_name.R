@@ -549,7 +549,7 @@ c.taxa_taxon_name <- function(...) {
 #' @param x An object to test
 #'
 #' @export
-is_taxon <- function(x) {
+is_taxon_name <- function(x) {
   inherits(x, "taxa_taxon_name")
 }
 
@@ -602,6 +602,16 @@ as_tibble.taxa_taxon_name <- function(x, ...) {
   tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
+
+#' @export
+as.taxon_name <- function(x, ...) {
+  UseMethod('as.taxon_name')
+}
+
+#' @export
+as.taxon_name.taxa_taxon <- function(x, ...) {
+  do.call(c, x)
+}
 
 #--------------------------------------------------------------------------------
 # Internal utility functions

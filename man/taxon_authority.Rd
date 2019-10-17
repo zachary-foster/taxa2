@@ -65,11 +65,9 @@ data.frame(x = x, y = 1:2)
 
 }
 \seealso{
-Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{tax_date<-.taxa_taxon_authority}},
-  \code{\link{taxmap}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+Other classes: \code{\link{taxon_db}},
+  \code{\link{taxon_id}}, \code{\link{taxon_name}},
+  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
+  \code{\link{taxon}}
 }
 \concept{classes}

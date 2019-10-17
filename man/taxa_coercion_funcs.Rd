@@ -10,6 +10,8 @@
 \alias{vec_ptype2.taxa_taxon.taxa_taxon}
 \alias{vec_ptype2.taxa_taxon.character}
 \alias{vec_ptype2.character.taxa_taxon}
+\alias{vec_ptype2.taxa_taxon.taxa_taxon_name}
+\alias{vec_ptype2.taxa_taxon_name.taxa_taxon}
 \alias{vec_ptype2.taxa_taxon.factor}
 \alias{vec_ptype2.factor.taxa_taxon}
 \alias{vec_ptype2.taxa_taxon_authority}
@@ -72,6 +74,10 @@
 \method{vec_ptype2.taxa_taxon}{character}(x, y, ...)
 
 \method{vec_ptype2.character}{taxa_taxon}(x, y, ...)
+
+\method{vec_ptype2.taxa_taxon}{taxa_taxon_name}(x, y, ...)
+
+\method{vec_ptype2.taxa_taxon_name}{taxa_taxon}(x, y, ...)
 
 \method{vec_ptype2.taxa_taxon}{factor}(x, y, ...)
 

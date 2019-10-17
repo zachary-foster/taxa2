@@ -39,11 +39,29 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #'
 #' @examples
 #'
+#' x <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+#'                 'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'               supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+#'
+#'
+#'
+#' x <- taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+#'                              'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'                     rank = c('order', 'family', 'genus', 'species',
+#'                              'species', 'family', 'genus', 'species'),
+#'                     id = taxon_id(c('33554', '9681', '9688', '9689',
+#'                                     '9694', '9632', '9639', '9644'),
+#'                                   db = 'ncbi')),
+#'               supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+#'
 #'
 #' @export
 taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
   # Cast inputs to correct values
-  taxa <- vctrs::vec_cast(taxa, taxon())
+  #   NOTE: for some reason vec_cast is not working with taxon vectors in all cases, so not used here.
+  if (!is_taxon(taxa)) {
+    taxa <- taxon(taxa)
+  }
   supertaxa <- vctrs::vec_cast(supertaxa, integer())
 
   # Recycle ranks and databases to common length
