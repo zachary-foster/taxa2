@@ -2,9 +2,15 @@
 % Please edit documentation in R/taxonomy.R
 \name{taxonomy}
 \alias{taxonomy}
+\alias{names.taxa_taxonomy}
+\alias{names<-.taxa_taxonomy}
 \title{Taxonomy class}
 \usage{
 taxonomy(taxa = taxon(), supertaxa = integer())
+
+\method{names}{taxa_taxonomy}(x)
+
+\method{names}{taxa_taxonomy}(x) <- value
 }
 \arguments{
 \item{taxa}{A \code{\link[=taxon]{taxon()}} vector.}
@@ -32,9 +38,30 @@ x <- taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                              'species', 'family', 'genus', 'species'),
                     id = taxon_id(c('33554', '9681', '9688', '9689',
                                     '9694', '9632', '9639', '9644'),
-                                  db = 'ncbi')),
+                                  db = 'ncbi'),
+                    auth = c('Bowdich, 1821', 'Fischer de Waldheim, 1817', 'Oken, 1816', 'L., 1758',
+                             'L., 1758', 'Fischer de Waldheim, 1817', 'L., 1758', 'L., 1758')),
               supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
 
+# Get parts of the taxonomy vector
+tax_name(x)
+tax_rank(x)
+tax_id(x)
+tax_db(x)
+tax_auth(x)
+tax_author(x)
+tax_date(x)
+tax_cite(x)
+
+# Set parts of the taxonomy vector
+tax_name(x) <- tolower(tax_name(x))
+tax_rank(x)[1] <- NA
+tax_id(x) <- '9999'
+tax_db(x) <- 'itis'
+tax_auth(x) <- NA
+tax_author(x)[2:3] <- c('Joe', 'Billy')
+tax_date(x) <- c('1999', '2013', '1796', '1899')
+tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 
 }
 \seealso{

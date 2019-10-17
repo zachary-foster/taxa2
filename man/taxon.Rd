@@ -33,14 +33,14 @@ For more information on what each class is designed for, see the \link{concepts}
 }
 \examples{
 
-# Create taxon name vector
+# Create taxon vector
 x <- taxon(c('A', 'B', 'C'))
 x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
                 rank = c('species', 'genus', 'phylum', 'family'),
                 id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
                 auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
 
-# Get parts of the taxon name vector
+# Get parts of the taxon vector
 tax_name(x)
 tax_rank(x)
 tax_id(x)
@@ -50,7 +50,7 @@ tax_author(x)
 tax_date(x)
 tax_cite(x)
 
-# Set parts of the taxon name vector
+# Set parts of the taxon vector
 tax_name(x) <- tolower(tax_name(x))
 tax_rank(x)[1] <- NA
 tax_id(x) <- '9999'
@@ -60,7 +60,7 @@ tax_author(x)[2:3] <- c('Joe', 'Billy')
 tax_date(x) <- c('1999', '2013', '1796', '1899')
 tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 
-# Manipulate taxon name vectors
+# Manipulate taxon vectors
 x[1:3]
 x[tax_rank(x) > 'family']
 c(x, x)

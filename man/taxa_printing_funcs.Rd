@@ -44,6 +44,9 @@
 \alias{toString.taxa_taxon_rank_level}
 \alias{obj_print_data.taxa_taxonomy}
 \alias{obj_print_footer.taxa_taxonomy}
+\alias{vec_ptype_abbr.taxa_taxonomy}
+\alias{vec_ptype_full.taxa_taxonomy}
+\alias{pillar_shaft.taxa_taxonomy}
 \title{taxa printing functions}
 \usage{
 \method{format}{taxa_taxon}(x, ...)
@@ -125,6 +128,12 @@ vec_ptype_full.taxa_taxon_rank_level(x)
 obj_print_data.taxa_taxonomy(x)
 
 obj_print_footer.taxa_taxonomy(x)
+
+vec_ptype_abbr.taxa_taxonomy(x)
+
+vec_ptype_full.taxa_taxonomy(x)
+
+\method{pillar_shaft}{taxa_taxonomy}(x, ...)
 }
 \description{
 Functions used internally for printing information in taxon objects. They have to be exported to

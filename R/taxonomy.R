@@ -51,9 +51,30 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #'                              'species', 'family', 'genus', 'species'),
 #'                     id = taxon_id(c('33554', '9681', '9688', '9689',
 #'                                     '9694', '9632', '9639', '9644'),
-#'                                   db = 'ncbi')),
+#'                                   db = 'ncbi'),
+#'                     auth = c('Bowdich, 1821', 'Fischer de Waldheim, 1817', 'Oken, 1816', 'L., 1758',
+#'                              'L., 1758', 'Fischer de Waldheim, 1817', 'L., 1758', 'L., 1758')),
 #'               supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
 #'
+#' # Get parts of the taxonomy vector
+#' tax_name(x)
+#' tax_rank(x)
+#' tax_id(x)
+#' tax_db(x)
+#' tax_auth(x)
+#' tax_author(x)
+#' tax_date(x)
+#' tax_cite(x)
+#'
+#' # Set parts of the taxonomy vector
+#' tax_name(x) <- tolower(tax_name(x))
+#' tax_rank(x)[1] <- NA
+#' tax_id(x) <- '9999'
+#' tax_db(x) <- 'itis'
+#' tax_auth(x) <- NA
+#' tax_author(x)[2:3] <- c('Joe', 'Billy')
+#' tax_date(x) <- c('1999', '2013', '1796', '1899')
+#' tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 #'
 #' @export
 taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
@@ -78,6 +99,142 @@ setOldClass(c("taxa_taxonomy", "vctrs_vctr"))
 
 
 
+#--------------------------------------------------------------------------------
+# S3 getters/setters
+#--------------------------------------------------------------------------------
+
+#' @rdname tax_id
+#' @export
+tax_id.taxa_taxonomy <- function(x) {
+  tax_id(vctrs::field(x, "taxa"))
+}
+
+#' @rdname tax_id
+#' @export
+`tax_id<-.taxa_taxonomy` <- function(x, value) {
+  tax_id(vctrs::field(x, "taxa")) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_db
+#' @export
+tax_db.taxa_taxonomy <- function(x) {
+  tax_db(tax_id(x))
+}
+
+#' @rdname tax_db
+#' @export
+`tax_db<-.taxa_taxonomy` <- function(x, value) {
+  tax_db(tax_id(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_author
+#' @export
+tax_author.taxa_taxonomy <- function(x) {
+  tax_author(tax_auth(x))
+}
+
+#' @rdname tax_author
+#' @export
+`tax_author<-.taxa_taxonomy` <- function(x, value) {
+  tax_author(tax_auth(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_date
+#' @export
+tax_date.taxa_taxonomy <- function(x) {
+  tax_date(tax_auth(x))
+}
+
+#' @rdname tax_date
+#' @export
+`tax_date<-.taxa_taxonomy` <- function(x, value) {
+  tax_date(tax_auth(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_cite
+#' @export
+tax_cite.taxa_taxonomy <- function(x) {
+  tax_cite(tax_auth(x))
+}
+
+#' @rdname tax_cite
+#' @export
+`tax_cite<-.taxa_taxonomy` <- function(x, value) {
+  tax_cite(tax_auth(x)) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_name
+#' @export
+tax_name.taxa_taxonomy <- function(x) {
+  tax_name(vctrs::field(x, "taxa"))
+}
+
+#' @rdname tax_name
+#' @export
+`tax_name<-.taxa_taxonomy` <- function(x, value) {
+  tax_name(vctrs::field(x, "taxa")) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_auth
+#' @export
+tax_auth.taxa_taxonomy <- function(x) {
+  tax_auth(vctrs::field(x, "taxa"))
+}
+
+#' @rdname tax_auth
+#' @export
+`tax_auth<-.taxa_taxonomy` <- function(x, value) {
+  tax_auth(vctrs::field(x, "taxa")) <- value
+  return(x)
+}
+
+
+
+#' @rdname tax_rank
+#' @export
+tax_rank.taxa_taxonomy <- function(x) {
+  tax_auth(vctrs::field(x, "taxa"))
+}
+
+#' @rdname tax_rank
+#' @export
+`tax_rank<-.taxa_taxonomy` <- function(x, value) {
+  tax_auth(vctrs::field(x, "taxa")) <- value
+  return(x)
+}
+
+
+
+#' @rdname taxonomy
+#' @export
+names.taxa_taxonomy <- function(x) {
+  names(vctrs::field(x, "taxa"))
+}
+
+#' @rdname taxonomy
+#' @export
+`names<-.taxa_taxonomy` <- function(x, value) {
+  names(vctrs::field(x, "taxa")) <- value
+  return(x)
+}
 
 
 #--------------------------------------------------------------------------------
@@ -97,7 +254,13 @@ obj_print_data.taxa_taxonomy <- function(x) {
   }
 
   # Make tree print out
+  if (! is.null(names(x)) && ! all(is.na(names(x)))) {
+    name_printed <- paste0(font_punct('['), names(x), font_punct(']'))
+  } else {
+    name_printed <- ''
+  }
   tax_char <- paste0(seq_len(length(x)),
+                     name_printed,
                      font_punct(': '),
                      printed_taxon(vctrs::field(x, 'taxa'), color = TRUE))
   sub_char <- lapply(subtaxa(x, recursive = FALSE), function(i) tax_char[i])
@@ -106,17 +269,6 @@ obj_print_data.taxa_taxonomy <- function(x) {
                           subtaxa = I(sub_char))
   trees <- lapply(roots(x), function(i) cli::tree(tree_data, root = tax_char[i]))
   trees <- unlist(trees)
-
-  # if (value != "taxon_ids") {
-  #   value <- self$get_data(value)[[1]]
-  #   ids_in_tree <- sub(trees, pattern = "^[\u2502 \u251C\u2500\u2514]*", replacement = "")
-  #   trees <- vapply(seq_len(length(trees)), FUN.VALUE = character(1),
-  #                   function(i) {
-  #                     sub(trees[i], pattern = ids_in_tree[i],
-  #                         replacement = value[ids_in_tree[i]])
-  #
-  #                   })
-  # }
 
   # Return tree
   class(trees) <- unique(c("tree", "character"))
@@ -131,6 +283,25 @@ obj_print_data.taxa_taxonomy <- function(x) {
 obj_print_footer.taxa_taxonomy <- function(x) {
   vctrs::obj_print_footer(vctrs::field(x, 'taxa'))
 }
+
+
+
+#' @rdname taxa_printing_funcs
+#' @export
+#' @keywords internal
+vec_ptype_abbr.taxa_taxonomy <- function(x) {
+  "taxonomy"
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @export
+#' @keywords internal
+vec_ptype_full.taxa_taxonomy <- function(x) {
+  "taxonomy"
+}
+
+
 
 
 #' @export
