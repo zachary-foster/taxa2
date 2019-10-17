@@ -6,7 +6,6 @@
 \alias{tax_cite<-.taxa_taxon_authority}
 \alias{tax_cite.taxa_taxon_authority}
 \alias{taxon_db}
-\alias{taxon_db.default}
 \alias{taxon_db<-}
 \alias{is.na.taxa_taxon_db}
 \title{Taxon database class}
@@ -19,9 +18,7 @@
 
 \method{tax_cite}{taxa_taxon_authority}(cite = character())
 
-taxon_db(...)
-
-\method{taxon_db}{default}(db = character(), ...)
+taxon_db(db = character())
 
 taxon_db(x) <- value
 
@@ -31,8 +28,6 @@ taxon_db(x) <- value
 \item{x}{An object to set taxon databases for.}
 
 \item{value}{The taxon databases to use. Inputs will be coerced into a \code{\link[=taxon_db]{taxon_db()}} vector.}
-
-\item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
 
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
 \link{db_ref}. Inputs will be transformed to a \code{character} vector if possible.}
@@ -76,9 +71,9 @@ x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 }
 \seealso{
 Other classes: \code{\link{hierarchies}},
-  \code{\link{hierarchy}},
-  \code{\link{levels<-.taxa_taxon}}, \code{\link{taxmap}},
+  \code{\link{hierarchy}}, \code{\link{taxmap}},
   \code{\link{taxon_authority}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxonomy}}
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}

@@ -48,13 +48,13 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' To support the possiblity of synonyms or encode confliciting taxonomic opinions, use the [taxon()], [taxonomy()], [hierarchy()], or [taxmap()] classes.
 #' For more information on what each class is designed for, see the [concepts] section of the help pages.
 #'
-#' @param name The names of taxa. Inputs with be coerced into a [taxon_name] vector if anything else
+#' @param name The names of taxa. Inputs with be coerced into a [character] vector if anything else
 #'   is given.
 #' @param rank The ranks of taxa. Inputs with be coerced into a [taxon_rank] vector if anything else
 #'   is given.
 #' @param id The ids of taxa. These should be unique identifier and are usually associated with a
 #'   database. Inputs with be coerced into a [taxon_id] vector if anything else is given.
-#' @param auth The authority of the taxon. Inputs with be coerced into a [character] vector if
+#' @param auth The authority of the taxon. Inputs with be coerced into a [taxon_authority] vector if
 #'   anything else is given.
 #' @param .names The names of the vector.
 #'
@@ -607,44 +607,4 @@ as_tibble.taxa_taxon_name <- function(x, ...) {
 # Internal utility functions
 #--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-######################################################## Needs to be refactored
-
-
-#' @rdname taxon_rank
-#' @export
-`levels<-.taxa_taxon` <- function(x, value) {
-  levels(vctrs::field(x, 'rank')) <- value
-  return(x)
-}
-
-
-#' @rdname taxon_rank
-#' @export
-levels.taxa_taxon <- function(x) {
-  levels(vctrs::field(x, 'rank'))
-}
-
-
-#' @rdname taxon_rank
-#' @export
-`tax_rank<-.taxa_taxon` <- function(x, value) {
-  value <- vctrs::vec_cast(value, taxon_rank())
-  value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "rank") <- value
-  return(x)
-}
-
-
-#' @rdname taxon_rank
-#' @export
-tax_rank.taxa_taxon <- function(x, ...) {
-  vctrs::field(x, "rank")
-}
 

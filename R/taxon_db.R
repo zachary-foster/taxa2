@@ -24,7 +24,8 @@ new_taxon_db <- function(db = character()) {
 #' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store the names of taxon databases defined in `db_ref`.
 #'
-#' @param ... Used to pass arguments to methods and allow methods to used additional arguments.
+#' @param db Zero or more taxonomic database names. Should be a name contained in
+#'   [db_ref]. Inputs will be transformed to a `character` vector if possible.
 #'
 #' @return An `S3` object of class `taxa_taxon_db`
 #'
@@ -60,18 +61,7 @@ new_taxon_db <- function(db = character()) {
 #' x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 #'
 #' @export
-taxon_db <- function(...) {
-  UseMethod("taxon_db")
-}
-
-
-#' @rdname taxon_db
-#'
-#' @param db Zero or more taxonomic database names. Should be a name contained in
-#'   [db_ref]. Inputs will be transformed to a `character` vector if possible.
-#'
-#' @export
-taxon_db.default <- function(db = character(), ...) {
+taxon_db <- function(db = character()) {
   db <- vctrs::vec_cast(db, character())
   db <- tolower(db)
   validate_db_names(db)
