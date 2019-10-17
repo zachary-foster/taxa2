@@ -42,6 +42,7 @@
 \alias{vec_ptype_abbr.taxa_taxon_rank_level}
 \alias{vec_ptype_full.taxa_taxon_rank_level}
 \alias{toString.taxa_taxon_rank_level}
+\alias{format.taxa_taxonomy}
 \alias{obj_print_data.taxa_taxonomy}
 \alias{obj_print_footer.taxa_taxonomy}
 \alias{vec_ptype_abbr.taxa_taxonomy}
@@ -124,6 +125,8 @@ vec_ptype_abbr.taxa_taxon_rank_level(x)
 vec_ptype_full.taxa_taxon_rank_level(x)
 
 \method{toString}{taxa_taxon_rank_level}(x, ...)
+
+\method{format}{taxa_taxonomy}(x, ...)
 
 obj_print_data.taxa_taxonomy(x)
 

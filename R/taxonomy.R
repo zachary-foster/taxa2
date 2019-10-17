@@ -242,12 +242,16 @@ names.taxa_taxonomy <- function(x) {
 #--------------------------------------------------------------------------------
 
 
-
-#' @rdname taxa_printing_funcs
-#' @rdname taxon
-#' @export
+#' Prepare taxonomy for printing
+#'
+#' Prepare taxonomy for printing. Makes color optional.
+#'
+#' @param color Use color?
+#'
+#' @return character
+#'
 #' @keywords internal
-obj_print_data.taxa_taxonomy <- function(x) {
+printed_taxonomy <- function(x, color = FALSE) {
   # Dont print anything if nothing to print
   if (length(x) == 0) {
     return()
@@ -267,12 +271,35 @@ obj_print_data.taxa_taxonomy <- function(x) {
   tree_data <- data.frame(stringsAsFactors = FALSE,
                           taxa = tax_char,
                           subtaxa = I(sub_char))
-  trees <- lapply(roots(x), function(i) cli::tree(tree_data, root = tax_char[i]))
-  trees <- unlist(trees)
+  out <- lapply(roots(x), function(i) cli::tree(tree_data, root = tax_char[i]))
+  out <- unlist(out)
+
+  # Disable color if needed
+  if (! color) {
+    out <- crayon::strip_style(out)
+  }
 
   # Return tree
-  class(trees) <- unique(c("tree", "character"))
-  print(trees)
+  return(out)
+}
+
+#' @rdname taxa_printing_funcs
+#' @rdname taxonomy
+#' @export
+#' @keywords internal
+format.taxa_taxonomy <- function(x, ...) {
+  out <- printed_taxonomy(x, color = FALSE)
+  stringr::str_pad(out, width = max(nchar(out)), side = 'right')
+}
+
+#' @rdname taxa_printing_funcs
+#' @rdname taxon
+#' @export
+#' @keywords internal
+obj_print_data.taxa_taxonomy <- function(x) {
+  tree <- printed_taxonomy(x, color = TRUE)
+  class(tree) <- unique(c("tree", "character"))
+  print(tree)
   invisible(x)
 }
 
@@ -301,6 +328,14 @@ vec_ptype_full.taxa_taxonomy <- function(x) {
   "taxonomy"
 }
 
+#' @rdname taxa_printing_funcs
+#' @importFrom pillar pillar_shaft
+#' @export
+#' @keywords internal
+pillar_shaft.taxa_taxonomy <- function(x, ...) {
+  out <- printed_taxonomy(x, color = TRUE)
+  pillar::new_pillar_shaft_simple(out, align = "left")
+}
 
 
 
