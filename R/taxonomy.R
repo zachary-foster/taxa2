@@ -15,7 +15,7 @@
 #' @keywords internal
 new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
   # Check that values are the correct type
-  vctrs::vec_assert(taxa, ptype = taxon())
+  # vctrs::vec_assert(taxa, ptype = taxon())
   vctrs::vec_assert(supertaxa, ptype = integer())
 
   # Create new object
@@ -29,7 +29,8 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store information about a set of taxa forming a taxonomic tree.
 #'
-#' @param ... Used to pass arguments to methods and allow methods to used additional arguments.
+#' @param taxa A [taxon()] vector.
+#' @param supertaxa The indexes of `taxa` for each taxon's supertaxon.
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -40,18 +41,7 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #'
 #'
 #' @export
-taxonomy <- function(...) {
-  UseMethod("taxonomy")
-}
-
-
-#' @rdname taxonomy
-#'
-#' @param taxa A [taxon()] vector.
-#' @param supertaxa The indexes of `taxa` for each taxon's supertaxon.
-#'
-#' @export
-taxonomy.default <- function(taxa = taxon(), supertaxa = integer(), ...) {
+taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
   # Cast inputs to correct values
   taxa <- vctrs::vec_cast(taxa, taxon())
   supertaxa <- vctrs::vec_cast(supertaxa, integer())
@@ -64,7 +54,9 @@ taxonomy.default <- function(taxa = taxon(), supertaxa = integer(), ...) {
 }
 
 
-setOldClass(c("taxa_taxon", "vctrs_vctr"))
+#' @importFrom methods setOldClass
+#' @exportClass taxa_taxonomy
+setOldClass(c("taxa_taxonomy", "vctrs_vctr"))
 
 
 

@@ -380,6 +380,119 @@ pillar_shaft.taxa_taxon <- function(x, ...) {
   pillar::new_pillar_shaft_simple(out, align = "left")
 }
 
+
+
+#--------------------------------------------------------------------------------
+# S3 coercion functions
+#--------------------------------------------------------------------------------
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2 taxa_taxon
+#' @importFrom vctrs vec_ptype2
+#' @export
+#' @export vec_ptype2.taxa_taxon
+#' @keywords internal
+vec_ptype2.taxa_taxon <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon", y)
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon default
+#' @export
+vec_ptype2.taxa_taxon.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon vctrs_unspecified
+#' @export
+vec_ptype2.taxa_taxon.vctrs_unspecified <- function(x, y, ...) x
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon taxa_taxon
+#' @export
+vec_ptype2.taxa_taxon.taxa_taxon <- function(x, y, ...) new_taxon()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon character
+#' @export
+vec_ptype2.taxa_taxon.character <- function(x, y, ...) character()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.character taxa_taxon
+#' @importFrom vctrs vec_ptype2.character
+#' @export
+vec_ptype2.character.taxa_taxon <- function(x, y, ...) character()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxon factor
+#' @export
+vec_ptype2.taxa_taxon.factor <- function(x, y, ...) factor()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.factor taxa_taxon
+#' @importFrom vctrs vec_ptype2.factor
+#' @export
+vec_ptype2.factor.taxa_taxon <- function(x, y, ...) factor()
+
+
+
+#--------------------------------------------------------------------------------
+# S3 casting functions
+#--------------------------------------------------------------------------------
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast taxa_taxon
+#' @importFrom vctrs vec_cast
+#' @export
+#' @export vec_cast.taxa_taxon
+#' @keywords internal
+vec_cast.taxa_taxon <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon")
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon default
+#' @export
+vec_cast.taxa_taxon.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon taxa_taxon
+#' @export
+vec_cast.taxa_taxon.taxa_taxon <- function(x, to, x_arg, to_arg) x
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon character
+#' @export
+vec_cast.taxa_taxon.character <- function(x, to, x_arg, to_arg) taxon(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.character taxa_taxon
+#' @importFrom vctrs vec_cast.character
+#' @export
+vec_cast.character.taxa_taxon <- function(x, to, x_arg, to_arg) tax_name(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon factor
+#' @export
+vec_cast.taxa_taxon.factor <- function(x, to, x_arg, to_arg) taxon_name(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.factor taxa_taxon
+#' @importFrom vctrs vec_cast.factor
+#' @export
+vec_cast.factor.taxa_taxon <- function(x, to, x_arg, to_arg) as.factor(tax_name(x))
+
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------

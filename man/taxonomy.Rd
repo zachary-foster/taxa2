@@ -2,27 +2,22 @@
 % Please edit documentation in R/taxonomy--class.R, R/taxonomy.R
 \name{taxonomy}
 \alias{taxonomy}
-\alias{taxonomy.default}
 \title{Taxonomy class}
 \usage{
-taxonomy(...)
+taxonomy(taxa = taxon(), supertaxa = integer())
 
-taxonomy(...)
-
-\method{taxonomy}{default}(taxa = taxon(), supertaxa = integer(), ...)
+taxonomy(taxa = taxon(), supertaxa = integer())
 }
 \arguments{
-\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
-vectors.}
-
 \item{taxa}{A \code{\link[=taxon]{taxon()}} vector.}
 
 \item{supertaxa}{The indexes of \code{taxa} for each taxon's supertaxon.}
 
+\item{...}{Any number of object of class \code{\link[=hierarchy]{hierarchy()}} or character
+vectors.}
+
 \item{.list}{An alternate to the \code{...} input. Any number of object of class
 \code{\link[=hierarchy]{hierarchy()}} or character vectors in a list. Cannot be used with \code{...}.}
-
-\item{...}{Used to pass arguments to methods and allow methods to used additional arguments.}
 }
 \value{
 An \code{R6Class} object of class \code{Taxonomy}
