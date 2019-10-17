@@ -268,6 +268,117 @@ tax_rank.taxa_taxon <- function(x) {
 }
 
 
+#--------------------------------------------------------------------------------
+# S3 printing functions
+#--------------------------------------------------------------------------------
+
+#' Prepare taxon for printing
+#'
+#' Prepare taxon for printing. Makes color optional.
+#'
+#' @param color Use color?
+#'
+#' @return character
+#'
+#' @keywords internal
+printed_taxon <- function(x, color = FALSE) {
+  id <- tax_id(x)
+  rank <- tax_rank(x)
+  auth <- tax_auth(x)
+  out <- font_tax_name(tax_name(x))
+  out <- paste0(out, ifelse(is.na(auth), '', paste0(' ', font_secondary(auth))))
+  out <- paste0(ifelse(is.na(id), '', paste0(font_secondary(id), font_punct('|'))),
+                out)
+  out <- paste0(out, ifelse(is.na(rank), '',
+                            paste0(font_punct('|'),
+                                   printed_taxon_rank(rank, color = TRUE))))
+  if (! color) {
+    out <- crayon::strip_style(out)
+  }
+  if (! is.null(names(x))) {
+    names(out) <- names(x)
+  }
+  return(out)
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @rdname taxon
+#' @export
+#' @keywords internal
+format.taxa_taxon <- function(x, ...) {
+  printed_taxon(x, color = FALSE)
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @rdname taxon
+#' @export
+#' @keywords internal
+obj_print_data.taxa_taxon <- function(x) {
+  # Dont print anything if nothing to print
+  if (length(x) == 0) {
+    return()
+  }
+
+  # Only print other info for the taxa printed for speed
+  original_length <- length(x)
+  truncated <- original_length > options()$max.print
+  if (truncated) {
+    x <- head(x, options()$max.print)
+  }
+
+  # Print
+  out <- printed_taxon(x, color = TRUE)
+  print_with_color(out, original_length = original_length, quote = FALSE)
+  invisible(x)
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @export
+#' @keywords internal
+obj_print_footer.taxa_taxon <- function(x) {
+  # print taxon rank levels
+  vctrs::obj_print_footer(tax_rank(x)) # Might need to print combined level to be safe (CHANGE)
+
+  # Only print other info for the taxa printed for speed
+  original_length <- length(x)
+  truncated <- original_length > options()$max.print
+  if (truncated) {
+    x <- head(x, options()$max.print)
+  }
+
+  # print databases used in ids
+
+
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @export
+#' @keywords internal
+vec_ptype_abbr.taxa_taxon <- function(x) {
+  "taxon"
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @export
+#' @keywords internal
+vec_ptype_full.taxa_taxon <- function(x) {
+  "taxon"
+}
+
+
+#' @rdname taxa_printing_funcs
+#' @importFrom pillar pillar_shaft
+#' @export
+#' @keywords internal
+pillar_shaft.taxa_taxon <- function(x, ...) {
+  out <- printed_taxon(x, color = TRUE)
+  pillar::new_pillar_shaft_simple(out, align = "left")
+}
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
