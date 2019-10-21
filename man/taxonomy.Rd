@@ -4,18 +4,24 @@
 \alias{taxonomy}
 \alias{names.taxa_taxonomy}
 \alias{names<-.taxa_taxonomy}
+\alias{[.taxa_taxonomy}
 \title{Taxonomy class}
 \usage{
-taxonomy(taxa = taxon(), supertaxa = integer())
+taxonomy(taxa = taxon(), supertaxa = integer(), .names = NULL)
 
 \method{names}{taxa_taxonomy}(x)
 
 \method{names}{taxa_taxonomy}(x) <- value
+
+\method{[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE,
+  invert = FALSE)
 }
 \arguments{
-\item{taxa}{A \code{\link[=taxon]{taxon()}} vector.}
+\item{taxa}{A \code{\link[=taxon]{taxon()}} vector or something that can be converted to a \code{\link[=taxon]{taxon()}} vector.}
 
 \item{supertaxa}{The indexes of \code{taxa} for each taxon's supertaxon.}
+
+\item{.names}{The names of the vector (not the names of taxa).}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon}
@@ -71,3 +77,4 @@ Other classes: \code{\link{taxon_authority}},
   \code{\link{taxon}}
 }
 \concept{classes}
+\keyword{internal}

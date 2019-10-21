@@ -29,8 +29,9 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store information about a set of taxa forming a taxonomic tree.
 #'
-#' @param taxa A [taxon()] vector.
+#' @param taxa A [taxon()] vector or something that can be converted to a [taxon()] vector.
 #' @param supertaxa The indexes of `taxa` for each taxon's supertaxon.
+#' @param .names The names of the vector (not the names of taxa).
 #'
 #' @importFrom vctrs %<-%
 #'
@@ -77,9 +78,8 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 #'
 #' @export
-taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
+taxonomy <- function(taxa = taxon(), supertaxa = integer(), .names = NULL) {
   # Cast inputs to correct values
-  #   NOTE: for some reason vec_cast is not working with taxon vectors in all cases, so not used here.
   if (!is_taxon(taxa)) {
     taxa <- taxon(taxa)
   }
@@ -89,7 +89,10 @@ taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
   c(taxa, supertaxa) %<-% vctrs::vec_recycle_common(taxa, supertaxa)
 
   # Create taxon object
-  new_taxonomy(taxa = taxa, supertaxa = supertaxa)
+  out <- new_taxonomy(taxa = taxa, supertaxa = supertaxa)
+  names(out) <- .names
+
+  return(out)
 }
 
 
@@ -211,13 +214,13 @@ tax_auth.taxa_taxonomy <- function(x) {
 #' @rdname tax_rank
 #' @export
 tax_rank.taxa_taxonomy <- function(x) {
-  tax_auth(vctrs::field(x, "taxa"))
+  tax_rank(vctrs::field(x, "taxa"))
 }
 
 #' @rdname tax_rank
 #' @export
 `tax_rank<-.taxa_taxonomy` <- function(x, value) {
-  tax_auth(vctrs::field(x, "taxa")) <- value
+  tax_rank(vctrs::field(x, "taxa")) <- value
   return(x)
 }
 
@@ -267,7 +270,7 @@ printed_taxonomy <- function(x, color = FALSE) {
                      name_printed,
                      font_punct(': '),
                      printed_taxon(vctrs::field(x, 'taxa'), color = TRUE))
-  sub_char <- lapply(subtaxa(x, recursive = FALSE), function(i) tax_char[i])
+  sub_char <- lapply(subtaxa(x, max_depth = 1), function(i) tax_char[i])
   tree_data <- data.frame(stringsAsFactors = FALSE,
                           taxa = tax_char,
                           subtaxa = I(sub_char))
@@ -376,8 +379,7 @@ subtaxa <- function(x, ...) {
 #' @rdname roots
 #'
 #' @export
-subtaxa.taxa_taxonomy <- function(x, recursive = TRUE, include_input = FALSE,
-                                  value = "taxon_indexes", ...) {
+subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE, ...) {
   # Get subtaxa
   get_children <- function(taxon) {
     which(vctrs::field(x, 'supertaxa') == taxon)
@@ -396,8 +398,7 @@ subtaxa.taxa_taxonomy <- function(x, recursive = TRUE, include_input = FALSE,
                               c(taxon, names(child_output)))
     return(output)
   }
-
-  if (recursive) {
+  if (is.null(max_depth) || max_depth > 1) {
     output <- stats::setNames(
       unlist(lapply(roots(x), recursive_part), recursive = FALSE),
       names(subset)
@@ -418,21 +419,22 @@ subtaxa.taxa_taxonomy <- function(x, recursive = TRUE, include_input = FALSE,
   # below each taxon during recursion. Instead, a finite number of
   # recursions are simulated by filtering the results of tarversing the
   # entire tree and comparing rank depth between each taxon and its subtaxa.
-  if (is.numeric(recursive) && recursive >= 0) {
-    stop('not implemented')
-    # all_taxa <- unique(c(self$map_data(taxon_ids, taxon_indexes)[names(output)],
-    #                      unlist(output)))
-    # rank_depth <- vapply(self$supertaxa(all_taxa), length, numeric(1))
-    # output_names <- names(output)
-    # output <- lapply(seq_along(output), function(i) {
-    #   subtaxa_ids <- self$taxon_ids()[output[[i]]]
-    #   subtaxa_depth <- rank_depth[subtaxa_ids]
-    #   current_depth <- rank_depth[names(output[i])]
-    #   passing_taxa <- subtaxa_depth - current_depth <= recursive
-    #   return(output[[i]][passing_taxa])
-    # })
-    # names(output) <- output_names
+  if (! is.null(max_depth)) {
+    rank_depth <- vapply(supertaxa(x), length, numeric(1))
+    output <- lapply(seq_len(length(output)), function(i) {
+      subtaxa_depth <- rank_depth[output[[i]]]
+      current_depth <- rank_depth[i]
+      passing_taxa <- subtaxa_depth - current_depth <= max_depth
+      return(output[[i]][passing_taxa])
+    })
   }
+
+  # Apply names
+  output <- lapply(output, function(i) {
+    names(i) <- names(x)[i]
+    i
+  })
+  names(output) <- names(x)
 
   return(output)
 }
@@ -449,43 +451,23 @@ supertaxa <- function(x, ...) {
 #' @rdname supertaxa
 #'
 #' @export
-supertaxa <- function(subset = NULL, recursive = TRUE, simplify = FALSE,
-                      include_input = FALSE, value = "taxon_indexes", na = FALSE) {
-  # non-standard argument evaluation
-  data_used <- eval(substitute(self$data_used(subset)))
-  subset <- rlang::eval_tidy(rlang::enquo(subset), data = data_used)
-  subset <- private$parse_nse_taxon_subset(subset)
+supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE) {
 
   # Get supertaxa
-  parent_index <- match(self$edge_list$from, self$edge_list$to)
-  recursive_part <- function(taxon, n_recursions) {
+  parent_index <- vctrs::field(x, 'supertaxa')
+  recursive_part <- function(taxon, depth = 1) {
     supertaxon <- parent_index[taxon]
-    if (n_recursions) {
-      if (is.na(supertaxon)) {
-        output <- c(taxon, supertaxon)
-      } else {
-        if (is.numeric(n_recursions)) {
-          n_recursions <- n_recursions - 1
-        }
-        output <- c(taxon, recursive_part(supertaxon,
-                                          n_recursions = n_recursions))
-      }
-    } else {
+    if (is.na(supertaxon) || (! is.null(max_depth) && depth >= max_depth)) {
       output <- c(taxon, supertaxon)
+    } else {
+      output <- c(taxon, recursive_part(supertaxon, depth = depth + 1))
     }
     return(unname(output))
   }
-
-  if (is.numeric(recursive)) {
-    n_recursions <- recursive - 1 # This makes 1 the same as FALSE
+  if (! is.null(max_depth) && max_depth == 0) {
+    output <- lapply(seq_len(length(x)), function(i) numeric(0))
   } else {
-    n_recursions <- recursive
-  }
-
-  if (is.numeric(recursive) && recursive == 0) {
-    output <- setNames(lapply(subset, function(x) numeric(0)), subset)
-  } else {
-    output <- lapply(subset, recursive_part, n_recursions = n_recursions)
+    output <- lapply(seq_len(length(x)), recursive_part)
   }
 
   # Remove query taxa from output
@@ -494,24 +476,57 @@ supertaxa <- function(subset = NULL, recursive = TRUE, simplify = FALSE,
   }
 
   # Remove NAs from output
-  if (! na) {
-    output <- lapply(output, function(x) x[!is.na(x)])
-  }
+  output <- lapply(output, function(x) x[!is.na(x)])
 
-  # Look up values
-  if (!is.null(value)) {
-    possible_values <- self$get_data(value)[[1]]
-    if (is.null(names(possible_values))) {
-      output <- lapply(output, function(i) possible_values[i])
-    } else {
-      output <- lapply(output, function(i) possible_values[self$taxon_ids()[i]])
-    }
-  }
-
-  # Reduce dimensionality
-  if (simplify) {
-    output <- simplify(output)
-  }
+  # Apply names
+  output <- lapply(output, function(i) {
+    names(i) <- names(x)[i]
+    i
+  })
+  names(output) <- names(x)
 
   return(output)
+}
+
+
+
+
+#' @rdname taxonomy
+#' @export
+#' @keywords internal
+`[.taxa_taxonomy` <- function(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE) {
+
+  index <- seq_len(length(x))
+  names(index) <- names(x)
+  subset <- index[...]
+
+  # Get taxa of subset
+  if (is.logical(subtaxa)) {
+    if (subtaxa) {
+      subtaxa = NULL
+    } else {
+      subtaxa = 0
+    }
+  }
+  if (is.logical(supertaxa)) {
+    if (supertaxa) {
+      supertaxa = NULL
+    } else {
+      supertaxa = 0
+    }
+  }
+  taxa_subset <- sort(unique(unlist(c(
+    subset,
+    subtaxa(x, max_depth = subtaxa, include_input = FALSE)[subset],
+    supertaxa(x, max_depth = supertaxa, include_input = FALSE)[subset]
+  ))))
+
+  # Invert selection
+  if (invert) {
+    taxa_subset <- index[-taxa_subset]
+  }
+
+  taxonomy(taxa = vctrs::field(x, 'taxa')[taxa_subset],
+           supertaxa = match(vctrs::field(x, 'supertaxa')[taxa_subset], taxa_subset),
+           .names = names(x)[taxa_subset])
 }
