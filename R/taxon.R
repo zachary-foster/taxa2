@@ -494,13 +494,13 @@ is.na.taxa_taxon <- function(x) {
 
 #' @export
 `%in%.character.taxa_taxon` <- function(x, table) {
-  x %in% as.character(as.taxon_name(table))
+  x %in% as.character(as_taxon_name(table))
 }
 
 
 #' @export
 `%in%.factor.taxa_taxon` <- function(x, table) {
-  x %in% as.character(as.taxon_name(table))
+  x %in% as.character(as_taxon_name(table))
 }
 
 
@@ -524,6 +524,21 @@ as_tibble.taxa_taxon <- function(x, ...) {
 #' @export
 as.character.taxa_taxon <- function(x, ...) {
   tax_name(x)
+}
+
+#' @export
+as_taxon <- function(x, ...) {
+  UseMethod('as_taxon')
+}
+
+#' @export
+as_taxon.taxa_taxon <- function(x, ...) {
+  x
+}
+
+#' @export
+as_taxon.taxa_taxonomy <- function(x, ...) {
+  vctrs::field(x, 'taxa')
 }
 
 #--------------------------------------------------------------------------------

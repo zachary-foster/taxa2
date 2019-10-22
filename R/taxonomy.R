@@ -78,7 +78,7 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 #'
 #' @export
-taxonomy <- function(taxa = taxon(), supertaxa = integer(), .names = NULL) {
+taxonomy <- function(taxa = taxon(), supertaxa = NA, .names = NULL) {
   # Cast inputs to correct values
   if (!is_taxon(taxa)) {
     taxa <- taxon(taxa)
@@ -257,7 +257,7 @@ names.taxa_taxonomy <- function(x) {
 printed_taxonomy <- function(x, color = FALSE) {
   # Dont print anything if nothing to print
   if (length(x) == 0) {
-    return()
+    return(character(0))
   }
 
   # Make tree print out
@@ -300,6 +300,10 @@ format.taxa_taxonomy <- function(x, ...) {
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxonomy <- function(x) {
+  # Dont print anything if nothing to print
+  if (length(x) == 0) {
+    return()
+  }
   tree <- printed_taxonomy(x, color = TRUE)
   class(tree) <- unique(c("tree", "character"))
   print(tree)
@@ -340,6 +344,124 @@ pillar_shaft.taxa_taxonomy <- function(x, ...) {
   pillar::new_pillar_shaft_simple(out, align = "left")
 }
 
+#--------------------------------------------------------------------------------
+# S3 coercion functions
+#--------------------------------------------------------------------------------
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2 taxa_taxonomy
+#' @importFrom vctrs vec_ptype2
+#' @export
+#' @export vec_ptype2.taxa_taxonomy
+#' @keywords internal
+vec_ptype2.taxa_taxonomy <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxonomy", y)
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxonomy default
+#' @export
+vec_ptype2.taxa_taxonomy.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+  vctrs::stop_incompatible_type(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxonomy vctrs_unspecified
+#' @export
+vec_ptype2.taxa_taxonomy.vctrs_unspecified <- function(x, y, ...) x
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxonomy taxa_taxonomy
+#' @export
+vec_ptype2.taxa_taxonomy.taxa_taxonomy <- function(x, y, ...) new_taxonomy()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxonomy character
+#' @export
+vec_ptype2.taxa_taxonomy.character <- function(x, y, ...) character()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.character taxa_taxonomy
+#' @importFrom vctrs vec_ptype2.character
+#' @export
+vec_ptype2.character.taxa_taxonomy <- function(x, y, ...) character()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.taxa_taxonomy factor
+#' @export
+vec_ptype2.taxa_taxonomy.factor <- function(x, y, ...) factor()
+
+
+#' @rdname taxa_coercion_funcs
+#' @method vec_ptype2.factor taxa_taxonomy
+#' @importFrom vctrs vec_ptype2.factor
+#' @export
+vec_ptype2.factor.taxa_taxonomy <- function(x, y, ...) factor()
+
+
+
+#--------------------------------------------------------------------------------
+# S3 casting functions
+#--------------------------------------------------------------------------------
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast taxa_taxonomy
+#' @importFrom vctrs vec_cast
+#' @export
+#' @export vec_cast.taxa_taxonomy
+#' @keywords internal
+vec_cast.taxa_taxonomy <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxonomy")
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxonomy default
+#' @export
+vec_cast.taxa_taxonomy.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxonomy taxa_taxonomy
+#' @export
+vec_cast.taxa_taxonomy.taxa_taxonomy <- function(x, to, x_arg, to_arg) x
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxonomy character
+#' @export
+vec_cast.taxa_taxonomy.character <- function(x, to, x_arg, to_arg) taxonomy(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.character taxa_taxonomy
+#' @importFrom vctrs vec_cast.character
+#' @export
+vec_cast.character.taxa_taxonomy <- function(x, to, x_arg, to_arg) as.character(vctrs::field(x, "taxa"))
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxonomy factor
+#' @export
+vec_cast.taxa_taxonomy.factor <- function(x, to, x_arg, to_arg) taxonomy(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.factor taxa_taxonomy
+#' @importFrom vctrs vec_cast.factor
+#' @export
+vec_cast.factor.taxa_taxonomy <- function(x, to, x_arg, to_arg) as.factor(vctrs::field(x, "taxa"))
+
+
+
+
+#--------------------------------------------------------------------------------
+# Exported utility functions
+#--------------------------------------------------------------------------------
+
 
 
 #' @export
@@ -347,9 +469,6 @@ is_root <- function(x, ...) {
   UseMethod('is_root')
 }
 
-
-#' @rdname is_root
-#'
 #' @export
 is_root.taxa_taxonomy <- function(x, ...) {
   is.na(vctrs::field(x, 'supertaxa'))
@@ -361,25 +480,31 @@ roots <- function(x, ...) {
   UseMethod('roots')
 }
 
-
-#' @rdname roots
-#'
 #' @export
 roots.taxa_taxonomy <- function(x, ...) {
   which(is_root(x))
 }
 
 
+#' Get subtaxa
+#'
+#' Get subtaxa indexes for each taxon or another per-taxon value.
+#'
+#' @param x The object to get subtaxa for.
+#' @param max_depth The number of levels to traverse. For example, `max_depth =
+#'   1` returns only immediate subtaxa. By default (NULL) information for all
+#'   subtaxa is returned.
+#' @param include If `TRUE`, include information for each taxon in the output.
+#' @param value Something to return instead of indexes. Must be the same length
+#'   as the number of taxa.
+#'
 #' @export
-subtaxa <- function(x, ...) {
+subtaxa <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
   UseMethod('subtaxa')
 }
 
-
-#' @rdname roots
-#'
 #' @export
-subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE, ...) {
+subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
   # Get subtaxa
   get_children <- function(taxon) {
     which(vctrs::field(x, 'supertaxa') == taxon)
@@ -408,7 +533,7 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE, ..
   }
 
   # Remove query taxa from output
-  if (! include_input) {
+  if (! include) {
     output <- lapply(output, `[`, -1)
   }
 
@@ -429,6 +554,13 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE, ..
     })
   }
 
+  # Use value other than index if specified
+  if (! is.null(value)) {
+    output <- lapply(output, function(i) {
+      value[i]
+    })
+  }
+
   # Apply names
   output <- lapply(output, function(i) {
     names(i) <- names(x)[i]
@@ -440,18 +572,24 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE, ..
 }
 
 
-
-
+#' Get supertaxa
+#'
+#' Get supertaxa indexes for each taxon or another per-taxon value.
+#'
+#' @param x The object to get supertaxa for.
+#' @param max_depth The number of levels to traverse. For example, `max_depth =
+#'   1` returns only immediate supertaxa. By default (NULL) information for all
+#'   supertaxa is returned.
+#' @param include If `TRUE`, include information for each taxon in the output.
+#' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#'
 #' @export
-supertaxa <- function(x, ...) {
+supertaxa <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
   UseMethod('supertaxa')
 }
 
-
-#' @rdname supertaxa
-#'
 #' @export
-supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE) {
+supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
 
   # Get supertaxa
   parent_index <- vctrs::field(x, 'supertaxa')
@@ -471,7 +609,7 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE) 
   }
 
   # Remove query taxa from output
-  if (! include_input) {
+  if (! include) {
     output <- lapply(output, `[`, -1)
   }
 
@@ -487,8 +625,6 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE) 
 
   return(output)
 }
-
-
 
 
 #' @rdname taxonomy
@@ -530,3 +666,46 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include_input = FALSE) 
            supertaxa = match(vctrs::field(x, 'supertaxa')[taxa_subset], taxa_subset),
            .names = names(x)[taxa_subset])
 }
+
+#' @rdname taxonomy
+#' @export
+#' @keywords internal
+`[[.taxa_taxonomy` <- function(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE) {
+  output <- x[..., subtaxa = subtaxa, supertaxa = supertaxa, invert = invert]
+  as_taxon(x)
+}
+
+
+#' @export
+`%in%.taxa_taxonomy` <- function(x, table) {
+  UseMethod("%in%.taxa_taxonomy", table)
+}
+
+#' @export
+`%in%.taxa_taxonomy.default` <- function(x, table) {
+  as_taxon(x) %in% table
+}
+
+#' @export
+`%in%.character.taxa_taxonomy` <- function(x, table) {
+  x %in% as.character(as_taxon_name(table))
+}
+
+#' @export
+`%in%.factor.taxa_taxonomy` <- function(x, table) {
+  x %in% as.character(as_taxon_name(table))
+}
+
+#' @export
+as.data.frame.taxa_taxonomy <- function(x, row.names = NULL, optional = FALSE, ...,
+                                        stringsAsFactors = default.stringsAsFactors()) {
+  out <- as.data.frame(as_taxon(x))
+  cbind(supertaxon = vctrs::field(x, 'supertaxa')[out$taxon], out)
+}
+
+#' @importFrom tibble as_tibble
+#' @export
+as_tibble.taxa_taxon <- function(x, ...) {
+  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+}
+

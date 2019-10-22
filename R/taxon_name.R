@@ -604,13 +604,18 @@ as_tibble.taxa_taxon_name <- function(x, ...) {
 
 
 #' @export
-as.taxon_name <- function(x, ...) {
-  UseMethod('as.taxon_name')
+as_taxon_name <- function(x, ...) {
+  UseMethod('as_taxon_name')
 }
 
 #' @export
-as.taxon_name.taxa_taxon <- function(x, ...) {
+as_taxon_name.taxa_taxon <- function(x, ...) {
   do.call(c, x)
+}
+
+#' @export
+as_taxon_name.taxa_taxonomy <- function(x, ...) {
+  as_taxon_name(as_taxon(x))
 }
 
 #--------------------------------------------------------------------------------

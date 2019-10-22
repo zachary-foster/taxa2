@@ -5,15 +5,19 @@
 \alias{names.taxa_taxonomy}
 \alias{names<-.taxa_taxonomy}
 \alias{[.taxa_taxonomy}
+\alias{[[.taxa_taxonomy}
 \title{Taxonomy class}
 \usage{
-taxonomy(taxa = taxon(), supertaxa = integer(), .names = NULL)
+taxonomy(taxa = taxon(), supertaxa = NA, .names = NULL)
 
 \method{names}{taxa_taxonomy}(x)
 
 \method{names}{taxa_taxonomy}(x) <- value
 
 \method{[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE,
+  invert = FALSE)
+
+\method{[[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE,
   invert = FALSE)
 }
 \arguments{
