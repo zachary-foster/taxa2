@@ -462,6 +462,16 @@ vec_cast.factor.taxa_taxonomy <- function(x, to, x_arg, to_arg) as.factor(vctrs:
 # Exported utility functions
 #--------------------------------------------------------------------------------
 
+#' Check if is a taxonomy
+#'
+#' Check if an object is the taxonomy class
+#'
+#' @param x An object to test
+#'
+#' @export
+is_taxonomy <- function(x) {
+  inherits(x, "taxa_taxonomy")
+}
 
 
 #' @export
@@ -471,7 +481,9 @@ is_root <- function(x, ...) {
 
 #' @export
 is_root.taxa_taxonomy <- function(x, ...) {
-  is.na(vctrs::field(x, 'supertaxa'))
+  out <- is.na(vctrs::field(x, 'supertaxa'))
+  names(out) <- names(x)
+  return(out)
 }
 
 
@@ -482,7 +494,9 @@ roots <- function(x, ...) {
 
 #' @export
 roots.taxa_taxonomy <- function(x, ...) {
-  which(is_root(x))
+  out <- which(is_root(x))
+  names(out) <- names(x)[out]
+  return(out)
 }
 
 
@@ -554,20 +568,22 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = 
     })
   }
 
-  # Use value other than index if specified
-  if (! is.null(value)) {
-    output <- lapply(output, function(i) {
-      value[i]
-    })
-  }
-
-  # Apply names
-  output <- lapply(output, function(i) {
-    names(i) <- names(x)[i]
-    i
-  })
+  # Set names and values
+  output <- apply_names_and_values(x, index_list = output, value = value)
   names(output) <- names(x)
 
+  return(output)
+}
+
+#' @export
+n_subtaxa <- function(x, ...) {
+  UseMethod('n_subtaxa')
+}
+
+#' @export
+n_subtaxa.taxa_taxonomy <- function(x, ...) {
+  output <- vapply(subtaxa(x), length, numeric(1))
+  names(output) <- names(x)
   return(output)
 }
 
@@ -616,13 +632,22 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value 
   # Remove NAs from output
   output <- lapply(output, function(x) x[!is.na(x)])
 
-  # Apply names
-  output <- lapply(output, function(i) {
-    names(i) <- names(x)[i]
-    i
-  })
+  # Set names and values
+  output <- apply_names_and_values(x, index_list = output, value = value)
   names(output) <- names(x)
 
+  return(output)
+}
+
+#' @export
+n_supertaxa <- function(x, ...) {
+  UseMethod('n_supertaxa')
+}
+
+#' @export
+n_supertaxa.taxa_taxonomy <- function(x, ...) {
+  output <- vapply(supertaxa(x), length, numeric(1))
+  names(output) <- names(x)
   return(output)
 }
 
@@ -705,7 +730,154 @@ as.data.frame.taxa_taxonomy <- function(x, row.names = NULL, optional = FALSE, .
 
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.taxa_taxon <- function(x, ...) {
+as_tibble.taxa_taxonomy <- function(x, ...) {
   tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
+
+#' Get stems
+#'
+#' Get stem indexes for each taxon or another per-taxon value.
+#'
+#' @param x The object to get stems for.
+#' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#'
+#' @export
+stems <- function(x, value = NULL, ...) {
+  UseMethod('stems')
+}
+
+#' @export
+stems.taxa_taxonomy <- function(x, value = NULL, ...) {
+  # Search until taxa with multiple subtaxa are found
+  recursive_part <- function(index) {
+    children <- which(vctrs::field(x, 'supertaxa') == index)
+    if (length(children) == 0) {
+      output <- index
+    } else if (length(children) == 1) {
+      output <- c(index, recursive_part(children))
+    } else {
+      output <- numeric(0)
+    }
+    return(unname(output))
+  }
+  output <- lapply(roots(x), recursive_part)
+
+  # Set names and values
+  output <- apply_names_and_values(x, index_list = output, value = value)
+
+  return(output)
+}
+
+#' @export
+is_stem <- function(x, ...) {
+  UseMethod('is_stem')
+}
+
+#' @export
+is_stem.taxa_taxonomy <- function(x, ...) {
+  output <- seq_len(length(x)) %in% unlist(stems(x))
+  names(output) <- names(x)
+  return(output)
+}
+
+
+#' Get leaves
+#'
+#' Get leaves indexes for each taxon or another per-taxon value.
+#'
+#' @param x The object to get leaves for.
+#' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#'
+#' @export
+leaves <- function(x, value = NULL, ...) {
+  UseMethod('leaves')
+}
+
+#' @export
+leaves.taxa_taxonomy <- function(x, value = NULL, ...) {
+  # Find taxa without subtaxa (leaves)
+  subtax <- subtaxa(x)
+  no_subtaxa <- which(vapply(subtax, length, numeric(1)) == 0)
+
+  # Subset subtaxa results to just leaves
+  output <- lapply(subtax, function(i) i[i %in% no_subtaxa])
+
+  # Set names and values
+  output <- apply_names_and_values(x, index_list = output, value = value)
+  names(output) <- names(x)
+
+  return(output)
+}
+
+#' @export
+is_leaf <- function(x, ...) {
+  UseMethod('is_leaf')
+}
+
+#' @export
+is_leaf.taxa_taxonomy <- function(x, ...) {
+  output <- ! seq_len(length(x)) %in% vctrs::field(x, 'supertaxa')
+  names(output) <- names(x)
+  return(output)
+}
+
+#' @export
+n_leaves <- function(x, ...) {
+  UseMethod('n_leaves')
+}
+
+#' @export
+n_leaves.taxa_taxonomy <- function(x, ...) {
+  output <- vapply(leaves(x), length, numeric(1))
+  names(output) <- names(x)
+  return(output)
+}
+
+
+#' Get internodes
+#'
+#' Get internodes indexes for each taxon or another per-taxon value.
+#'
+#' @param x The object to get internodes for.
+#' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#'
+#' @export
+internodes <- function(x, ...) {
+  UseMethod('internodes')
+}
+
+#' @export
+internodes.taxa_taxonomy <- function(x, ...) {
+  output <- which(is_internode(x))
+  names(output) <- names(x)[output]
+  return(output)
+}
+
+#' @export
+is_internode <- function(x, ...) {
+  UseMethod('is_internode')
+}
+
+#' @export
+is_internode.taxa_taxonomy <- function(x, ...) {
+  output <- n_subtaxa(x) == 1 & n_supertaxa(x) == 1
+  names(output) <- names(x)
+  return(output)
+}
+
+
+#--------------------------------------------------------------------------------
+# Internal utility functions
+#--------------------------------------------------------------------------------
+
+
+#' @keywords internal
+apply_names_and_values <- function(x, index_list, value) {
+  if (is.null(value)) {
+    value <- seq_len(length(x))
+  }
+  lapply(index_list, function(i) {
+    setNames(value[i], names(x)[i])
+  })
+}
