@@ -65,9 +65,9 @@ data.frame(x = x, y = 1:2)
 
 }
 \seealso{
-Other classes: \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxonomy}},
-  \code{\link{taxon}}
+Other classes: \code{\link{classification}},
+  \code{\link{taxon_db}}, \code{\link{taxon_id}},
+  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
+  \code{\link{taxonomy}}, \code{\link{taxon}}
 }
 \concept{classes}
