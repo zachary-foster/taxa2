@@ -474,26 +474,38 @@ is_taxonomy <- function(x) {
 }
 
 
+#' Test if taxa are roots
+#'
+#' Check if each taxon is a root. A root is a taxon with no supertaxon.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-is_root <- function(x, ...) {
+is_root <- function(x) {
   UseMethod('is_root')
 }
 
 #' @export
-is_root.taxa_taxonomy <- function(x, ...) {
+is_root.taxa_taxonomy <- function(x) {
   out <- is.na(vctrs::field(x, 'supertaxa'))
   names(out) <- names(x)
   return(out)
 }
 
 
+#' Get root indexes
+#'
+#' Get the indexs for roots.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-roots <- function(x, ...) {
+roots <- function(x) {
   UseMethod('roots')
 }
 
 #' @export
-roots.taxa_taxonomy <- function(x, ...) {
+roots.taxa_taxonomy <- function(x) {
   out <- which(is_root(x))
   names(out) <- names(x)[out]
   return(out)
@@ -575,13 +587,19 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = 
   return(output)
 }
 
+#' Number of subtaxa per taxon
+#'
+#' Get the number of subtaxa per taxon.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-n_subtaxa <- function(x, ...) {
+n_subtaxa <- function(x) {
   UseMethod('n_subtaxa')
 }
 
 #' @export
-n_subtaxa.taxa_taxonomy <- function(x, ...) {
+n_subtaxa.taxa_taxonomy <- function(x) {
   output <- vapply(subtaxa(x), length, numeric(1))
   names(output) <- names(x)
   return(output)
@@ -639,13 +657,19 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value 
   return(output)
 }
 
+#' Number of supertaxa per taxon
+#'
+#' Get the number of supertaxa per taxon.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-n_supertaxa <- function(x, ...) {
+n_supertaxa <- function(x) {
   UseMethod('n_supertaxa')
 }
 
 #' @export
-n_supertaxa.taxa_taxonomy <- function(x, ...) {
+n_supertaxa.taxa_taxonomy <- function(x) {
   output <- vapply(supertaxa(x), length, numeric(1))
   names(output) <- names(x)
   return(output)
@@ -769,13 +793,19 @@ stems.taxa_taxonomy <- function(x, value = NULL, ...) {
   return(output)
 }
 
+#' Check if taxa are stems
+#'
+#' Check if each taxon is a stem. A stem is any taxa from a root to the first taxon with multiple subtaxa.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-is_stem <- function(x, ...) {
+is_stem <- function(x) {
   UseMethod('is_stem')
 }
 
 #' @export
-is_stem.taxa_taxonomy <- function(x, ...) {
+is_stem.taxa_taxonomy <- function(x) {
   output <- seq_len(length(x)) %in% unlist(stems(x))
   names(output) <- names(x)
   return(output)
@@ -810,25 +840,38 @@ leaves.taxa_taxonomy <- function(x, value = NULL, ...) {
   return(output)
 }
 
+#' Check if taxa are leaves
+#'
+#' Check if each taxon is a leaf. A leaf is a taxon with no subtaxa.
+#' subtaxa.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-is_leaf <- function(x, ...) {
+is_leaf <- function(x) {
   UseMethod('is_leaf')
 }
 
 #' @export
-is_leaf.taxa_taxonomy <- function(x, ...) {
+is_leaf.taxa_taxonomy <- function(x) {
   output <- ! seq_len(length(x)) %in% vctrs::field(x, 'supertaxa')
   names(output) <- names(x)
   return(output)
 }
 
+#' Number of leaves per taxon
+#'
+#' Get the number of leaves per taxon. A leaf is a taxon with no subtaxa.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-n_leaves <- function(x, ...) {
+n_leaves <- function(x) {
   UseMethod('n_leaves')
 }
 
 #' @export
-n_leaves.taxa_taxonomy <- function(x, ...) {
+n_leaves.taxa_taxonomy <- function(x) {
   output <- vapply(leaves(x), length, numeric(1))
   names(output) <- names(x)
   return(output)
@@ -837,30 +880,37 @@ n_leaves.taxa_taxonomy <- function(x, ...) {
 
 #' Get internodes
 #'
-#' Get internodes indexes for each taxon or another per-taxon value.
+#' Get internodes indexes for each taxon or another per-taxon value. An internode is a taxon with
+#' exactly one supertaxon and one subtaxon.
 #'
 #' @param x The object to get internodes for.
-#' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
 #'
 #' @export
-internodes <- function(x, ...) {
+internodes <- function(x) {
   UseMethod('internodes')
 }
 
 #' @export
-internodes.taxa_taxonomy <- function(x, ...) {
+internodes.taxa_taxonomy <- function(x) {
   output <- which(is_internode(x))
   names(output) <- names(x)[output]
   return(output)
 }
 
+#' Check if taxa are internodes
+#'
+#' Check if each taxon is a internode. An internode is a taxon with exactly one supertaxon and one
+#' subtaxon.
+#'
+#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#'
 #' @export
-is_internode <- function(x, ...) {
+is_internode <- function(x) {
   UseMethod('is_internode')
 }
 
 #' @export
-is_internode.taxa_taxonomy <- function(x, ...) {
+is_internode.taxa_taxonomy <- function(x) {
   output <- n_subtaxa(x) == 1 & n_supertaxa(x) == 1
   names(output) <- names(x)
   return(output)

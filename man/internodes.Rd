@@ -4,13 +4,12 @@
 \alias{internodes}
 \title{Get internodes}
 \usage{
-internodes(x, ...)
+internodes(x)
 }
 \arguments{
 \item{x}{The object to get internodes for.}
-
-\item{value}{Something to return instead of indexes. Must be the same length as the number of taxa.}
 }
 \description{
-Get internodes indexes for each taxon or another per-taxon value.
+Get internodes indexes for each taxon or another per-taxon value. An internode is a taxon with
+exactly one supertaxon and one subtaxon.
 }
