@@ -618,6 +618,20 @@ as_taxon_name.taxa_taxonomy <- function(x, ...) {
   as_taxon_name(as_taxon(x))
 }
 
+#' @export
+as_taxon_name.taxa_classification <- function(x, ...) {
+  do.call(c, lapply(as_taxon(x), `[[`, 1))
+}
+
+#' @export
+c.taxa_taxon_name <- function(...) {
+  out <- vctrs::vec_c(...)
+  if (is_taxon_name(out)) {
+    attr(tax_rank(out), 'levels') <- do.call(c, lapply(list(...), function(x) attr(tax_rank(x), 'levels')))
+  }
+  return(out)
+}
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------

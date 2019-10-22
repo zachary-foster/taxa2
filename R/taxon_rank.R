@@ -477,12 +477,6 @@ as_tibble.taxa_taxon_rank <- function(x, ...) {
   tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
 }
 
-
-
-#--------------------------------------------------------------------------------
-# Internal utility functions
-#--------------------------------------------------------------------------------
-
 #' @export
 c.taxa_taxon_rank <- function(...) {
   out <- vctrs::vec_c(...)
@@ -491,6 +485,11 @@ c.taxa_taxon_rank <- function(...) {
   }
   return(out)
 }
+
+
+#--------------------------------------------------------------------------------
+# Internal utility functions
+#--------------------------------------------------------------------------------
 
 
 #' @keywords internal

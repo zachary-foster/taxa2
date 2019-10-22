@@ -541,6 +541,21 @@ as_taxon.taxa_taxonomy <- function(x, ...) {
   vctrs::field(x, 'taxa')
 }
 
+#' @export
+as_taxon.taxa_classification <- function(x, ...) {
+  as_taxon(attr(x, 'taxonomy'))[x]
+}
+
+#' @export
+c.taxa_taxon <- function(...) {
+  out <- vctrs::vec_c(...)
+  if (is_taxon(out)) {
+    attr(tax_rank(out), 'levels') <- do.call(c, lapply(list(...), function(x) attr(tax_rank(x), 'levels')))
+  }
+  return(out)
+}
+
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
