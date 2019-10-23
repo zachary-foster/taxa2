@@ -483,6 +483,7 @@ n_supertaxa.taxa_classification <- function(x) {
   n_supertaxa(attr(x, 'taxonomy'))
 }
 
+#' @method %in% taxa_classification
 #' @export
 `%in%.taxa_classification` <- function(x, table) {
   UseMethod("%in%.taxa_classification", table)
@@ -518,7 +519,7 @@ as_tibble.taxa_classification <- function(x, ...) {
 
 #' @export
 stems.taxa_classification <- function(x, value = NULL, ...) {
-  n_supertaxa(attr(x, 'taxonomy'), value = value, ...)
+  stems(attr(x, 'taxonomy'), value = value, ...)
 }
 
 #' @export

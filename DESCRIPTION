@@ -40,7 +40,8 @@ Imports:
     pillar,
     vctrs,
     methods,
-    viridisLite
+    viridisLite,
+    cli
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,

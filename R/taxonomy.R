@@ -725,6 +725,7 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 }
 
 
+#' @method %in% taxa_taxonomy
 #' @export
 `%in%.taxa_taxonomy` <- function(x, table) {
   UseMethod("%in%.taxa_taxonomy", table)
@@ -928,6 +929,6 @@ apply_names_and_values <- function(x, index_list, value) {
     value <- seq_len(length(x))
   }
   lapply(index_list, function(i) {
-    setNames(value[i], names(x)[i])
+    stats::setNames(value[i], names(x)[i])
   })
 }

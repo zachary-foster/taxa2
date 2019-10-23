@@ -105,8 +105,8 @@ setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
 
 #' @rdname tax_author
 #' @export
-tax_author.taxa_taxon_authority <- function(date = character()) {
-  vctrs::field(date, "author")
+tax_author.taxa_taxon_authority <- function(x) {
+  vctrs::field(x, "author")
 }
 
 
@@ -122,8 +122,8 @@ tax_author.taxa_taxon_authority <- function(date = character()) {
 
 #' @rdname tax_date
 #' @export
-tax_date.taxa_taxon_authority <- function(date = character()) {
-  vctrs::field(date, "date")
+tax_date.taxa_taxon_authority <- function(x) {
+  vctrs::field(x, "date")
 }
 
 
@@ -139,8 +139,8 @@ tax_date.taxa_taxon_authority <- function(date = character()) {
 
 #' @rdname tax_cite
 #' @export
-tax_cite.taxa_taxon_authority <- function(cite = character()) {
-  vctrs::field(cite, "citation")
+tax_cite.taxa_taxon_authority <- function(x) {
+  vctrs::field(x, "citation")
 }
 
 
@@ -423,6 +423,7 @@ is.na.taxa_taxon_authority <- function(x) {
 }
 
 
+#' @method %in% taxa_taxon_authority
 #' @export
 `%in%.taxa_taxon_authority` <- function(x, table) {
   UseMethod("%in%.taxa_taxon_authority", table)

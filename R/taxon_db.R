@@ -256,6 +256,7 @@ is.na.taxa_taxon_db <- function(x) {
 }
 
 
+#' @method %in% taxa_taxon_db
 #' @export
 `%in%.taxa_taxon_db` <- function(x, table) {
   UseMethod("%in%.taxa_taxon_db", table)

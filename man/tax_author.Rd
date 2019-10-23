@@ -31,7 +31,7 @@ tax_author(x) <- value
 
 \method{tax_author}{taxa_taxon_authority}(x) <- value
 
-\method{tax_author}{taxa_taxon_authority}(date = character())
+\method{tax_author}{taxa_taxon_authority}(x)
 
 \method{tax_author}{taxa_taxon_name}(x)
 

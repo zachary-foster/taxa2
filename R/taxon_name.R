@@ -344,7 +344,7 @@ obj_print_data.taxa_taxon_name <- function(x) {
   original_length <- length(x)
   truncated <- original_length > options()$max.print
   if (truncated) {
-    x <- head(x, options()$max.print)
+    x <- utils::head(x, options()$max.print)
   }
 
   # Print
@@ -365,7 +365,7 @@ obj_print_footer.taxa_taxon_name <- function(x) {
   original_length <- length(x)
   truncated <- original_length > options()$max.print
   if (truncated) {
-    x <- head(x, options()$max.print)
+    x <- utils::head(x, options()$max.print)
   }
 
   # print databases used in ids
@@ -560,6 +560,7 @@ is.na.taxa_taxon_name <- function(x) {
 }
 
 
+#' @method %in% taxa_taxon_name
 #' @export
 `%in%.taxa_taxon_name` <- function(x, table) {
   UseMethod("%in%.taxa_taxon_name", table)

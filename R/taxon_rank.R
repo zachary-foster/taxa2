@@ -439,6 +439,7 @@ is.na.taxa_taxon_rank <- function(x) {
 }
 
 
+#' @method %in% taxa_taxon_rank
 #' @export
 `%in%.taxa_taxon_rank` <- function(x, table) {
   UseMethod("%in%.taxa_taxon_rank", table)

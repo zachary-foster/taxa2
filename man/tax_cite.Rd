@@ -31,7 +31,7 @@ tax_cite(x) <- value
 
 \method{tax_cite}{taxa_taxon_authority}(x) <- value
 
-\method{tax_cite}{taxa_taxon_authority}(cite = character())
+\method{tax_cite}{taxa_taxon_authority}(x)
 
 \method{tax_cite}{taxa_taxon_name}(x)
 
