@@ -1,6 +1,6 @@
 #' Set and get taxon authors
 #'
-#' Set and get taxon authors in objects that have them, such as [taxon_auth()] objects.
+#' Set and get taxon authors in objects that have them, such as [taxon_authority()] objects.
 #'
 #' @param x An object with taxon authors.
 #'
@@ -22,7 +22,7 @@ tax_author <- function(x) {
 
 #' Set and get taxon authority dates
 #'
-#' Set and get the taxon authority dates in objects that have them, such as [taxon_auth()] objects.
+#' Set and get the taxon authority dates in objects that have them, such as [taxon_authority()] objects.
 #'
 #' @param x An object with taxon authority dates.
 #'
@@ -44,7 +44,7 @@ tax_date <- function(x) {
 
 #' Set and get taxon authority citations
 #'
-#' Set and get the taxon authority citations in objects that have them, such as [taxon_auth()] objects.
+#' Set and get the taxon authority citations in objects that have them, such as [taxon_authority()] objects.
 #'
 #' @param x An object with taxon authority dates.
 #'
@@ -55,7 +55,7 @@ tax_cite <- function(x) {
 
 #' @rdname tax_cite
 #'
-#' @param value The taxon citations to set. Inputs will be coerced into a [taxon_auth()] vector.
+#' @param value The taxon citations to set. Inputs will be coerced into a [taxon_authority()] vector.
 #'
 #' @export
 `tax_cite<-` <- function(x, value) {

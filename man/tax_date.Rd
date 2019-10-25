@@ -47,5 +47,5 @@ tax_date(x) <- value
 \item{value}{The taxon authority dates to set. Inputs will be coerced into a \code{\link[=character]{character()}} vector.}
 }
 \description{
-Set and get the taxon authority dates in objects that have them, such as \code{\link[=taxon_auth]{taxon_auth()}} objects.
+Set and get the taxon authority dates in objects that have them, such as \code{\link[=taxon_authority]{taxon_authority()}} objects.
 }

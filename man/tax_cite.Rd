@@ -44,8 +44,8 @@ tax_cite(x) <- value
 \arguments{
 \item{x}{An object with taxon authority dates.}
 
-\item{value}{The taxon citations to set. Inputs will be coerced into a \code{\link[=taxon_auth]{taxon_auth()}} vector.}
+\item{value}{The taxon citations to set. Inputs will be coerced into a \code{\link[=taxon_authority]{taxon_authority()}} vector.}
 }
 \description{
-Set and get the taxon authority citations in objects that have them, such as \code{\link[=taxon_auth]{taxon_auth()}} objects.
+Set and get the taxon authority citations in objects that have them, such as \code{\link[=taxon_authority]{taxon_authority()}} objects.
 }

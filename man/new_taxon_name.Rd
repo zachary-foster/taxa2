@@ -5,7 +5,8 @@
 \title{Minimal taxon name constructor}
 \usage{
 new_taxon_name(.names = NULL, name = character(),
-  rank = taxon_rank(), id = taxon_id(), auth = taxon_authority())
+  rank = taxon_rank(), id = taxon_id(), auth = taxon_authority(),
+  ...)
 }
 \arguments{
 \item{.names}{The names of the vector.}
@@ -16,7 +17,7 @@ new_taxon_name(.names = NULL, name = character(),
 
 \item{id}{The ids of taxa as a \link{taxon_id} vector.}
 
-\item{auth}{The authority of the taxon as a \link{tax_authority} vector.}
+\item{auth}{The authority of the taxon as a \link{taxon_authority} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_name}

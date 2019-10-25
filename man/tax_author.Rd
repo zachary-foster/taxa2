@@ -47,5 +47,5 @@ tax_author(x) <- value
 \item{value}{The taxon authors to set. Inputs will be coerced into a \code{\link[=character]{character()}} vector.}
 }
 \description{
-Set and get taxon authors in objects that have them, such as \code{\link[=taxon_auth]{taxon_auth()}} objects.
+Set and get taxon authors in objects that have them, such as \code{\link[=taxon_authority]{taxon_authority()}} objects.
 }

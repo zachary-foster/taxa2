@@ -9,8 +9,8 @@
 \alias{names<-.taxa_taxon_name}
 \title{Taxon authority class}
 \usage{
-taxon_authority(author = character(), date = NA, .names = NA,
-  citation = NA)
+taxon_authority(author = character(), date = NA, citation = NA,
+  .names = NA, extract_date = TRUE)
 
 \method{names}{taxa_taxon_authority}(x)
 
@@ -27,16 +27,19 @@ taxon_authority(author = character(), date = NA, .names = NA,
 
 \item{date}{Zero or more dates.}
 
+\item{citation}{Zero or more literature citations.}
+
 \item{.names}{The names of the vector.}
 
-\item{citation}{Zero or more literature citations.}
+\item{extract_date}{If \code{TRUE} (the default), then if a date is detected in the \code{author} input and
+no \code{date} input is given, then the date is seperated from the author input.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_authority}
 }
 \description{
-\Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
-The function used to create \code{taxon_authority} objects
+\Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")} The function used to create
+\code{taxon_authority} objects
 }
 \examples{
 

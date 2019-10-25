@@ -11,12 +11,12 @@
 #' @param name The names of taxa as a [character] vector.
 #' @param rank The ranks of taxa as a [taxon_rank] vector.
 #' @param id The ids of taxa as a [taxon_id] vector.
-#' @param auth The authority of the taxon as a [tax_authority] vector.
+#' @param auth The authority of the taxon as a [taxon_authority] vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_name`
 #'
 #' @keywords internal
-new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(), id = taxon_id(), auth = taxon_authority()) {
+new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(), id = taxon_id(), auth = taxon_authority(), ...) {
 
   # Set names to NA if not set
   if (is.null(names) || all(is.na(.names))) {
@@ -36,6 +36,7 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
   # Create new object
   vctrs::new_rcrd(list(.names = .names, name = name, rank = rank, id = id, auth = auth),
                   .names_set = .names_set,
+                  ...,
                   class = "taxa_taxon_name")
 }
 
@@ -45,7 +46,6 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 #' Used to store information about taxa, such as names, ranks, and IDs.
 #' This should be used when storing information about taxa when things like synonyms or conflicting taxonomies are not needed.
-#' To support the possiblity of synonyms or encode confliciting taxonomic opinions, use the [taxon()], [taxonomy()], [hierarchy()], or [taxmap()] classes.
 #' For more information on what each class is designed for, see the [concepts] section of the help pages.
 #'
 #' @param name The names of taxa. Inputs with be coerced into a [character] vector if anything else
@@ -107,7 +107,7 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' data.frame(x = x, y = 1:4)
 #'
 #' @export
-taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA) {
+taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA, ...) {
   # Cast inputs to correct values
   name <- vctrs::vec_cast(name, character())
   rank <- vctrs::vec_cast(rank, taxon_rank())
@@ -119,7 +119,7 @@ taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .name
   c(name, rank, id, auth, .names) %<-% vctrs::vec_recycle_common(name, rank, id, auth, .names)
 
   # Create taxon object
-  new_taxon_name(.names = .names, name = name, rank = rank, id = id, auth = auth)
+  new_taxon_name(.names = .names, name = name, rank = rank, id = id, auth = auth, ...)
 }
 
 

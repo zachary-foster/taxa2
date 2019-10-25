@@ -4,7 +4,7 @@
 \alias{new_taxon_db}
 \title{Minimal taxon_db constructor}
 \usage{
-new_taxon_db(db = character())
+new_taxon_db(db = character(), ...)
 }
 \arguments{
 \item{db}{Zero or more taxonomic database names. Should be a name contained in

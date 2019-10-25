@@ -5,7 +5,7 @@
 \title{Taxon name class}
 \usage{
 taxon_name(name = character(0), rank = NA, id = NA, auth = NA,
-  .names = NA)
+  .names = NA, ...)
 }
 \arguments{
 \item{name}{The names of taxa. Inputs with be coerced into a \link{character} vector if anything else
@@ -29,7 +29,6 @@ An \code{S3} object of class \code{taxa_taxon_name}
 \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
 Used to store information about taxa, such as names, ranks, and IDs.
 This should be used when storing information about taxa when things like synonyms or conflicting taxonomies are not needed.
-To support the possiblity of synonyms or encode confliciting taxonomic opinions, use the \code{\link[=taxon]{taxon()}}, \code{\link[=taxonomy]{taxonomy()}}, \code{\link[=hierarchy]{hierarchy()}}, or \code{\link[=taxmap]{taxmap()}} classes.
 For more information on what each class is designed for, see the \link{concepts} section of the help pages.
 }
 \examples{

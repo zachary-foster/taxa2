@@ -6,7 +6,7 @@
 \alias{is.na.taxa_taxon_db}
 \title{Taxon database class}
 \usage{
-taxon_db(db = character())
+taxon_db(db = character(), ...)
 
 taxon_db(x) <- value
 

@@ -36,12 +36,14 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 
 #' Taxon authority class
 #'
-#' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
-#' The function used to create `taxon_authority` objects
+#' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")} The function used to create
+#' `taxon_authority` objects
 #'
 #' @param author Zero or more author names.
 #' @param date Zero or more dates.
 #' @param citation Zero or more literature citations.
+#' @param extract_date If `TRUE` (the default), then if a date is detected in the `author` input and
+#'   no `date` input is given, then the date is seperated from the author input.
 #' @param .names The names of the vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_authority`
@@ -74,13 +76,17 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' @export
 #' @importFrom vctrs %<-%
-taxon_authority <- function(author = character(), date = NA, .names = NA, citation = NA) {
+taxon_authority <- function(author = character(), date = NA, citation = NA, .names = NA, extract_date = TRUE) {
   .names <- vctrs::vec_cast(.names, character())
   author <- vctrs::vec_cast(author, character())
   date <- vctrs::vec_cast(date, character())
   citation <- vctrs::vec_cast(citation, character())
   c(author, date, citation, .names) %<-% vctrs::vec_recycle_common(author, date, citation, .names)
-  new_taxon_authority(.names = .names, author = author, date = date, citation = citation)
+  out <- new_taxon_authority(.names = .names, author = author, date = date, citation = citation)
+  if (extract_date) {
+    out <- parse_date_from_author(out)
+  }
+  return(out)
 }
 
 #' @importFrom methods setOldClass
@@ -277,7 +283,7 @@ vec_ptype2.taxa_taxon_authority.vctrs_unspecified <- function(x, y, ...) x
 #' @rdname taxa_coercion_funcs
 #' @method vec_ptype2.taxa_taxon_authority taxa_taxon_authority
 #' @export
-vec_ptype2.taxa_taxon_authority.taxa_taxon_authority <- function(x, y, ...) new_taxon_authority()
+vec_ptype2.taxa_taxon_authority.taxa_taxon_authority <- function(x, y, ...) taxon_authority()
 
 
 #' @rdname taxa_coercion_funcs
@@ -336,23 +342,7 @@ vec_cast.taxa_taxon_authority.taxa_taxon_authority <- function(x, to, x_arg, to_
 #' @method vec_cast.taxa_taxon_authority character
 #' @export
 vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) {
-  author <- vapply(x, FUN.VALUE = character(1), function(y) {
-    if (grepl(y, pattern = '^.+,? *[0-9]{4} *$')) {
-      out <- sub(y, pattern = '^(.+),? *([0-9]{4}) *$', replacement = '\\1')
-      out <- sub(out, pattern = '[ ,]*$', replacement = '')
-      return(out)
-    } else {
-      return(y)
-    }
-  })
-  date <-  vapply(x, FUN.VALUE = character(1), function(y) {
-    if (grepl(y, pattern = '^.+,? *[0-9]{4} *$')) {
-      return(sub(y, pattern = '^(.+),? *([0-9]{4}) *$', replacement = '\\2'))
-    } else {
-      return(NA_character_)
-    }
-  })
-  taxon_authority(author = unname(author), date = unname(date))
+  taxon_authority(x)
 }
 
 
@@ -467,3 +457,12 @@ as_tibble.taxa_taxon_authority <- function(x, ...) {
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
+
+#' @keywords internal
+parse_date_from_author <- function(x) {
+  parts <- stringr::str_match(tax_author(x), '^(.+?),? *([0-9]{4}) *$')
+  to_replace <- complete.cases(parts) & is.na(tax_date(x))
+  tax_author(x)[to_replace] <- parts[to_replace, 2]
+  tax_date(x)[to_replace] <- parts[to_replace, 3]
+  return(x)
+}

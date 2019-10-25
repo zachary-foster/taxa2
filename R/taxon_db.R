@@ -13,9 +13,9 @@
 #' @return An `S3` object of class `taxa_taxon_db`
 #'
 #' @keywords internal
-new_taxon_db <- function(db = character()) {
+new_taxon_db <- function(db = character(), ...) {
   vctrs::vec_assert(db, character())
-  vctrs::new_vctr(db, class = "taxa_taxon_db")
+  vctrs::new_vctr(db, ..., class = "taxa_taxon_db")
 }
 
 
@@ -61,11 +61,11 @@ new_taxon_db <- function(db = character()) {
 #' x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 #'
 #' @export
-taxon_db <- function(db = character()) {
+taxon_db <- function(db = character(), ...) {
   db <- vctrs::vec_cast(db, character())
   db <- tolower(db)
   validate_db_names(db)
-  new_taxon_db(db)
+  new_taxon_db(db, ...)
 }
 
 
