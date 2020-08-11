@@ -168,19 +168,19 @@ vec_ptype_full.taxa_taxon_db_def <- function(x) {
 #' @export
 #' @export vec_cast.taxa_taxon_db_def
 #' @keywords internal
-vec_cast.taxa_taxon_db_def <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db_def")
+vec_cast.taxa_taxon_db_def <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db_def")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_db_def default
 #' @export
-vec_cast.taxa_taxon_db_def.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxon_db_def.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_db_def taxa_taxon_db_def
 #' @export
-vec_cast.taxa_taxon_db_def.taxa_taxon_db_def <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_taxon_db_def.taxa_taxon_db_def <- function(x, to, ..., x_arg, to_arg) x
 
 
 

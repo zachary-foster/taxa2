@@ -326,25 +326,25 @@ vec_ptype2.factor.taxa_taxon_authority <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_authority
 #' @keywords internal
-vec_cast.taxa_taxon_authority <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_authority")
+vec_cast.taxa_taxon_authority <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_authority")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority default
 #' @export
-vec_cast.taxa_taxon_authority.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxon_authority.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority taxa_taxon_authority
 #' @export
-vec_cast.taxa_taxon_authority.taxa_taxon_authority <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_taxon_authority.taxa_taxon_authority <- function(x, to, ..., x_arg, to_arg) x
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority character
 #' @export
-vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) {
+vec_cast.taxa_taxon_authority.character <- function(x, to, ..., x_arg, to_arg) {
   taxon_authority(x)
 }
 
@@ -353,7 +353,7 @@ vec_cast.taxa_taxon_authority.character <- function(x, to, x_arg, to_arg) {
 #' @method vec_cast.character taxa_taxon_authority
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_authority <- function(x, to, x_arg, to_arg) {
+vec_cast.character.taxa_taxon_authority <- function(x, to, ..., x_arg, to_arg) {
   ifelse(is.na(x), NA_character_, printed_taxon_authority(x, color = FALSE))
 }
 
@@ -361,27 +361,27 @@ vec_cast.character.taxa_taxon_authority <- function(x, to, x_arg, to_arg) {
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority factor
 #' @export
-vec_cast.taxa_taxon_authority.factor <- function(x, to, x_arg, to_arg) taxon_authority(x)
+vec_cast.taxa_taxon_authority.factor <- function(x, to, ..., x_arg, to_arg) taxon_authority(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxon_authority
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_authority <- function(x, to, x_arg, to_arg) factor(as.character(x))
+vec_cast.factor.taxa_taxon_authority <- function(x, to, ..., x_arg, to_arg) factor(as.character(x))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_authority integer
 #' @export
-vec_cast.taxa_taxon_authority.integer <- function(x, to, x_arg, to_arg) taxon_authority(x)
+vec_cast.taxa_taxon_authority.integer <- function(x, to, ..., x_arg, to_arg) taxon_authority(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.data.frame taxa_taxon_authority
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
-vec_cast.data.frame.taxa_taxon_authority <- function(x, to, x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
+vec_cast.data.frame.taxa_taxon_authority <- function(x, to, ..., x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
                                                                                       author = vctrs::field(x, "author"),
                                                                                       date = vctrs::field(x, "date"))
 

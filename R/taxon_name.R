@@ -472,45 +472,45 @@ vec_ptype2.factor.taxa_taxon_name <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_name
 #' @keywords internal
-vec_cast.taxa_taxon_name <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_name")
+vec_cast.taxa_taxon_name <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_name")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_name default
 #' @export
-vec_cast.taxa_taxon_name.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxon_name.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_name taxa_taxon_name
 #' @export
-vec_cast.taxa_taxon_name.taxa_taxon_name <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_taxon_name.taxa_taxon_name <- function(x, to, ..., x_arg, to_arg) x
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_name character
 #' @export
-vec_cast.taxa_taxon_name.character <- function(x, to, x_arg, to_arg) taxon_name(x)
+vec_cast.taxa_taxon_name.character <- function(x, to, ..., x_arg, to_arg) taxon_name(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_taxon_name
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_name <- function(x, to, x_arg, to_arg) as.character(vctrs::field(x, "name"))
+vec_cast.character.taxa_taxon_name <- function(x, to, ..., x_arg, to_arg) as.character(vctrs::field(x, "name"))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_name factor
 #' @export
-vec_cast.taxa_taxon_name.factor <- function(x, to, x_arg, to_arg) taxon_name(x)
+vec_cast.taxa_taxon_name.factor <- function(x, to, ..., x_arg, to_arg) taxon_name(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxon_name
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_name <- function(x, to, x_arg, to_arg) as.factor(vctrs::field(x, "name"))
+vec_cast.factor.taxa_taxon_name <- function(x, to, ..., x_arg, to_arg) as.factor(vctrs::field(x, "name"))
 
 
 

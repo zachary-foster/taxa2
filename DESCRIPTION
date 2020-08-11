@@ -14,7 +14,8 @@ Authors@R: c(
        email = "zacharyfoster1989@gmail.com", comment = c(ORCID = "0000-0002-5075-0948"))
     )
 Depends:
-    R (>= 3.0.2)
+    R (>= 3.0.2),
+    vctrs
 VignetteBuilder: knitr
 LazyLoad: yes
 LazyData: yes
@@ -38,7 +39,6 @@ Imports:
     utils,
     taxize,
     pillar,
-    vctrs,
     methods,
     viridisLite,
     cli

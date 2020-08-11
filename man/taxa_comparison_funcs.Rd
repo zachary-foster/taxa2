@@ -10,13 +10,13 @@
 \alias{Ops.taxa_taxon_rank}
 \title{taxa comparision functions}
 \usage{
-vec_proxy_equal.taxa_taxon_id(x, ...)
+\method{vec_proxy_equal}{taxa_taxon_id}(x, ...)
 
-vec_proxy_compare.taxa_taxon_name(x, ...)
+\method{vec_proxy_compare}{taxa_taxon_name}(x, ...)
 
-vec_proxy_compare.taxa_taxon_rank(x, ...)
+\method{vec_proxy_compare}{taxa_taxon_rank}(x, ...)
 
-vec_proxy_equal.taxa_taxon_rank(x, ...)
+\method{vec_proxy_equal}{taxa_taxon_rank}(x, ...)
 
 \method{Ops}{taxa_taxon_rank}(e1, e2)
 }

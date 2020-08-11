@@ -403,33 +403,33 @@ vec_ptype2.factor.taxa_classification <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_classification
 #' @keywords internal
-vec_cast.taxa_classification <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_classification")
+vec_cast.taxa_classification <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_classification")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_classification default
 #' @export
-vec_cast.taxa_classification.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_classification.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_classification taxa_classification
 #' @export
-vec_cast.taxa_classification.taxa_classification <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_classification.taxa_classification <- function(x, to, ..., x_arg, to_arg) x
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_classification
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_classification <- function(x, to, x_arg, to_arg) as.character(format(x))
+vec_cast.character.taxa_classification <- function(x, to, ..., x_arg, to_arg) as.character(format(x))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_classification
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_classification <- function(x, to, x_arg, to_arg) as.factor(format(x))
+vec_cast.factor.taxa_classification <- function(x, to, ..., x_arg, to_arg) as.factor(format(x))
 
 
 

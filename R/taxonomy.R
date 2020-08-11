@@ -413,45 +413,45 @@ vec_ptype2.factor.taxa_taxonomy <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxonomy
 #' @keywords internal
-vec_cast.taxa_taxonomy <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxonomy")
+vec_cast.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxonomy")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxonomy default
 #' @export
-vec_cast.taxa_taxonomy.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxonomy.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxonomy taxa_taxonomy
 #' @export
-vec_cast.taxa_taxonomy.taxa_taxonomy <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_taxonomy.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) x
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxonomy character
 #' @export
-vec_cast.taxa_taxonomy.character <- function(x, to, x_arg, to_arg) taxonomy(x)
+vec_cast.taxa_taxonomy.character <- function(x, to, ..., x_arg, to_arg) taxonomy(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_taxonomy
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxonomy <- function(x, to, x_arg, to_arg) as.character(vctrs::field(x, "taxa"))
+vec_cast.character.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) as.character(vctrs::field(x, "taxa"))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxonomy factor
 #' @export
-vec_cast.taxa_taxonomy.factor <- function(x, to, x_arg, to_arg) taxonomy(x)
+vec_cast.taxa_taxonomy.factor <- function(x, to, ..., x_arg, to_arg) taxonomy(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxonomy
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxonomy <- function(x, to, x_arg, to_arg) as.factor(vctrs::field(x, "taxa"))
+vec_cast.factor.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) as.factor(vctrs::field(x, "taxa"))
 
 
 

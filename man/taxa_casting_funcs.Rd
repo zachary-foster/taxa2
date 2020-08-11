@@ -69,131 +69,131 @@
 \alias{vec_cast.factor.taxa_taxonomy}
 \title{taxa casting functions}
 \usage{
-\method{vec_cast}{taxa_classification}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_classification}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_classification}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_classification}{taxa_classification}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_classification}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_classification}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_classification}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_authority}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_authority}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_authority}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{taxa_taxon_authority}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_authority}{taxa_taxon_authority}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_authority}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_authority}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_authority}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_authority}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxon_authority}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxon_authority}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{integer}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_authority}{integer}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.data.frame}{taxa_taxon_authority}(x, to, x_arg, to_arg)
+\method{vec_cast.data.frame}{taxa_taxon_authority}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_db}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_db}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db}{taxa_taxon_db}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db}{taxa_taxon_db}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_db}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_db}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxon_db}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxon_db}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_db_def}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_db_def}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db_def}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db_def}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db_def}{taxa_taxon_db_def}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_db_def}{taxa_taxon_db_def}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_id}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_id}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_id}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_id}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_id}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_id}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_id}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_id}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_id}{integer}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_id}{integer}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.integer}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast.integer}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.data.frame}{taxa_taxon_id}(x, to, x_arg, to_arg)
+\method{vec_cast.data.frame}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_name}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_name}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_name}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_name}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_name}{taxa_taxon_name}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_name}{taxa_taxon_name}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_name}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_name}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_name}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_name}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_name}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_name}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxon_name}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxon_name}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank}{double}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank}{double}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.double}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast.double}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.data.frame}{taxa_taxon_rank}(x, to, x_arg, to_arg)
+\method{vec_cast.data.frame}{taxa_taxon_rank}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxon_rank_level}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxon_rank_level}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank_level}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank_level}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank_level}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank_level}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxon_rank_level}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxon_rank_level}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast}{taxa_taxonomy}(x, to, x_arg, to_arg)
+\method{vec_cast}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxonomy}{default}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxonomy}{default}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxonomy}{taxa_taxonomy}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxonomy}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxonomy}{character}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxonomy}{character}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.character}{taxa_taxonomy}(x, to, x_arg, to_arg)
+\method{vec_cast.character}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.taxa_taxonomy}{factor}(x, to, x_arg, to_arg)
+\method{vec_cast.taxa_taxonomy}{factor}(x, to, ..., x_arg, to_arg)
 
-\method{vec_cast.factor}{taxa_taxonomy}(x, to, x_arg, to_arg)
+\method{vec_cast.factor}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
 }
 \description{
 Functions used internally for casting taxon objects to other types. They have to be exported to

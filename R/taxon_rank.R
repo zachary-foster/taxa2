@@ -309,66 +309,66 @@ vec_ptype2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 #' @export
 #' @export vec_cast.taxa_taxon_rank
 #' @keywords internal
-vec_cast.taxa_taxon_rank <- function(x, to, x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank")
+vec_cast.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank")
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank default
 #' @export
-vec_cast.taxa_taxon_rank.default <- function(x, to, x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+vec_cast.taxa_taxon_rank.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank taxa_taxon_rank
 #' @export
-vec_cast.taxa_taxon_rank.taxa_taxon_rank <- function(x, to, x_arg, to_arg) x
+vec_cast.taxa_taxon_rank.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) x
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank character
 #' @export
-vec_cast.taxa_taxon_rank.character <- function(x, to, x_arg, to_arg) taxon_rank(x)
+vec_cast.taxa_taxon_rank.character <- function(x, to, ..., x_arg, to_arg) taxon_rank(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.character taxa_taxon_rank
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon_rank <- function(x, to, x_arg, to_arg) vctrs::vec_data(x)
+vec_cast.character.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) vctrs::vec_data(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank factor
 #' @export
-vec_cast.taxa_taxon_rank.factor <- function(x, to, x_arg, to_arg) taxon_rank(x)
+vec_cast.taxa_taxon_rank.factor <- function(x, to, ..., x_arg, to_arg) taxon_rank(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.factor taxa_taxon_rank
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon_rank <- function(x, to, x_arg, to_arg) factor(vctrs::vec_data(x))
+vec_cast.factor.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) factor(vctrs::vec_data(x))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.taxa_taxon_rank double
 #' @export
-vec_cast.taxa_taxon_rank.double <- function(x, to, x_arg, to_arg) taxon_rank(x)
+vec_cast.taxa_taxon_rank.double <- function(x, to, ..., x_arg, to_arg) taxon_rank(x)
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.double taxa_taxon_rank
 #' @importFrom vctrs vec_cast.double
 #' @export
-vec_cast.double.taxa_taxon_rank <- function(x, to, x_arg, to_arg) as.numeric(vctrs::vec_data(x))
+vec_cast.double.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) as.numeric(vctrs::vec_data(x))
 
 
 #' @rdname taxa_casting_funcs
 #' @method vec_cast.data.frame taxa_taxon_rank
 #' @importFrom vctrs vec_cast.data.frame
 #' @export
-vec_cast.data.frame.taxa_taxon_rank <- function(x, to, x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
-                                                                                 rank = vctrs::vec_data(x))
+vec_cast.data.frame.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) data.frame(stringsAsFactors = FALSE,
+                                                                                      rank = vctrs::vec_data(x))
 
 
 
