@@ -203,7 +203,6 @@ toString.taxa_taxon_rank_level <- function(x, ...) {
 #' @method vec_ptype2 taxa_taxon_rank_level
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_taxon_rank_level
 #' @keywords internal
 vec_ptype2.taxa_taxon_rank_level <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_rank_level", y)
 
@@ -250,7 +249,6 @@ vec_ptype2.character.taxa_taxon_rank_level <- function(x, y, ...) character()
 #' @method vec_cast taxa_taxon_rank_level
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_taxon_rank_level
 #' @keywords internal
 vec_cast.taxa_taxon_rank_level <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank_level")
 

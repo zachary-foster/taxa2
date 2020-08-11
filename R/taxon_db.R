@@ -123,7 +123,6 @@ vec_ptype_full.taxa_taxon_db <- function(x) {
 #' @method vec_ptype2 taxa_taxon_db
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_taxon_db
 #' @keywords internal
 vec_ptype2.taxa_taxon_db <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_db", y)
 
@@ -189,7 +188,6 @@ vec_ptype2.factor.taxa_taxon_db <- function(x, y, ...) factor()
 #' @method vec_cast taxa_taxon_db
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_taxon_db
 #' @keywords internal
 vec_cast.taxa_taxon_db <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db")
 

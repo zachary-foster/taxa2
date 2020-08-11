@@ -391,7 +391,6 @@ pillar_shaft.taxa_taxon <- function(x, ...) {
 #' @method vec_ptype2 taxa_taxon
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_taxon
 #' @keywords internal
 vec_ptype2.taxa_taxon <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon", y)
 

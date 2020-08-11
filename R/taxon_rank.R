@@ -247,7 +247,6 @@ pillar_shaft.taxa_taxon_rank <- function(x, ...) {
 #' @method vec_ptype2 taxa_taxon_rank
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_taxon_rank
 #' @keywords internal
 vec_ptype2.taxa_taxon_rank <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_rank", y)
 
@@ -307,7 +306,6 @@ vec_ptype2.factor.taxa_taxon_rank <- function(x, y, ...) factor()
 #' @method vec_cast taxa_taxon_rank
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_taxon_rank
 #' @keywords internal
 vec_cast.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_rank")
 

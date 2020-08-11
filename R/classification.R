@@ -341,7 +341,6 @@ pillar_shaft.taxa_classification <- function(x, ...) {
 #' @method vec_ptype2 taxa_classification
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_classification
 #' @keywords internal
 vec_ptype2.taxa_classification <- function(x, y, ...) UseMethod("vec_ptype2.taxa_classification", y)
 
@@ -401,7 +400,6 @@ vec_ptype2.factor.taxa_classification <- function(x, y, ...) factor()
 #' @method vec_cast taxa_classification
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_classification
 #' @keywords internal
 vec_cast.taxa_classification <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_classification")
 

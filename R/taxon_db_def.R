@@ -166,7 +166,6 @@ vec_ptype_full.taxa_taxon_db_def <- function(x) {
 #' @method vec_cast taxa_taxon_db_def
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_taxon_db_def
 #' @keywords internal
 vec_cast.taxa_taxon_db_def <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_db_def")
 

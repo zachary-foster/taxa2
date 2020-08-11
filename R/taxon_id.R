@@ -227,7 +227,6 @@ pillar_shaft.taxa_taxon_id <- function(x, ...) {
 #' @method vec_ptype2 taxa_taxon_id
 #' @importFrom vctrs vec_ptype2
 #' @export
-#' @export vec_ptype2.taxa_taxon_id
 #' @keywords internal
 vec_ptype2.taxa_taxon_id <- function(x, y, ...) UseMethod("vec_ptype2.taxa_taxon_id", y)
 
@@ -287,7 +286,6 @@ vec_ptype2.factor.taxa_taxon_id <- function(x, y, ...) factor()
 #' @method vec_cast taxa_taxon_id
 #' @importFrom vctrs vec_cast
 #' @export
-#' @export vec_cast.taxa_taxon_id
 #' @keywords internal
 vec_cast.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_id")
 
