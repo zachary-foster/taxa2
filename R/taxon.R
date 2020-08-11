@@ -306,7 +306,6 @@ printed_taxon <- function(x, color = FALSE) {
 
 
 #' @rdname taxa_printing_funcs
-#' @rdname taxon
 #' @export
 #' @keywords internal
 format.taxa_taxon <- function(x, ...) {
@@ -315,7 +314,6 @@ format.taxa_taxon <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
-#' @rdname taxon
 #' @export
 #' @keywords internal
 obj_print_data.taxa_taxon <- function(x) {

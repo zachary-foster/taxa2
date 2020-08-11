@@ -95,6 +95,7 @@ font_na <- function(text) {
 #'
 #' @keywords internal
 print_with_color <- function(x, original_length = length(x), ...) {
+  print(x)
   # Apply maximum printing limits
   original_length <- length(x)
   if (original_length > options()$max.print) {

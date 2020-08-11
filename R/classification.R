@@ -278,7 +278,6 @@ printed_classification <- function(x, color = FALSE) {
 }
 
 #' @rdname taxa_printing_funcs
-#' @rdname classification
 #' @export
 #' @keywords internal
 format.taxa_classification <- function(x, ...) {
@@ -286,7 +285,6 @@ format.taxa_classification <- function(x, ...) {
 }
 
 #' @rdname taxa_printing_funcs
-#' @rdname classification
 #' @export
 #' @keywords internal
 obj_print_data.taxa_classification <- function(x) {
