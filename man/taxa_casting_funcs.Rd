@@ -73,8 +73,7 @@
 
 \method{vec_cast.taxa_classification}{default}(x, to, x_arg, to_arg)
 
-\method{vec_cast.taxa_classification}{taxa_classification}(x, to, x_arg,
-  to_arg)
+\method{vec_cast.taxa_classification}{taxa_classification}(x, to, x_arg, to_arg)
 
 \method{vec_cast.character}{taxa_classification}(x, to, x_arg, to_arg)
 
@@ -84,8 +83,7 @@
 
 \method{vec_cast.taxa_taxon_authority}{default}(x, to, x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_authority}{taxa_taxon_authority}(x, to, x_arg,
-  to_arg)
+\method{vec_cast.taxa_taxon_authority}{taxa_taxon_authority}(x, to, x_arg, to_arg)
 
 \method{vec_cast.taxa_taxon_authority}{character}(x, to, x_arg, to_arg)
 
@@ -117,8 +115,7 @@
 
 \method{vec_cast.taxa_taxon_db_def}{default}(x, to, x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_db_def}{taxa_taxon_db_def}(x, to, x_arg,
-  to_arg)
+\method{vec_cast.taxa_taxon_db_def}{taxa_taxon_db_def}(x, to, x_arg, to_arg)
 
 \method{vec_cast}{taxa_taxon_id}(x, to, x_arg, to_arg)
 
@@ -178,8 +175,7 @@
 
 \method{vec_cast.taxa_taxon_rank_level}{default}(x, to, x_arg, to_arg)
 
-\method{vec_cast.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, to,
-  x_arg, to_arg)
+\method{vec_cast.taxa_taxon_rank_level}{taxa_taxon_rank_level}(x, to, x_arg, to_arg)
 
 \method{vec_cast.taxa_taxon_rank_level}{character}(x, to, x_arg, to_arg)
 

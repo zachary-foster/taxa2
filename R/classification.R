@@ -38,8 +38,6 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #'   object.
 #' @param .names The names of the vector.
 #'
-#' @importFrom vctrs %<-%
-#'
 #' @return An `S3` object of class `taxa_classification`
 #' @family classes
 #'

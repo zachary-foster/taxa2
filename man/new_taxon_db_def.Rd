@@ -4,8 +4,13 @@
 \alias{new_taxon_db_def}
 \title{Minimal taxon_db_def constructor}
 \usage{
-new_taxon_db_def(name = character(), url = character(),
-  desc = character(), id_regex = character(), rank_levels = list())
+new_taxon_db_def(
+  name = character(),
+  url = character(),
+  desc = character(),
+  id_regex = character(),
+  rank_levels = list()
+)
 }
 \arguments{
 \item{name}{Name of the database in lower case. Inputs will be transformed to a \code{character} vector.}

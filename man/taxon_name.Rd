@@ -4,8 +4,14 @@
 \alias{taxon_name}
 \title{Taxon name class}
 \usage{
-taxon_name(name = character(0), rank = NA, id = NA, auth = NA,
-  .names = NA, ...)
+taxon_name(
+  name = character(0),
+  rank = NA,
+  id = NA,
+  auth = NA,
+  .names = NA,
+  ...
+)
 }
 \arguments{
 \item{name}{The names of taxa. Inputs with be coerced into a \link{character} vector if anything else
@@ -76,9 +82,13 @@ data.frame(x = x, y = 1:4)
 
 }
 \seealso{
-Other classes: \code{\link{classification}},
-  \code{\link{taxon_authority}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+Other classes: 
+\code{\link{classification}()},
+\code{\link{taxon_authority}()},
+\code{\link{taxon_db}()},
+\code{\link{taxon_id}()},
+\code{\link{taxon_rank}()},
+\code{\link{taxonomy}()},
+\code{\link{taxon}()}
 }
 \concept{classes}

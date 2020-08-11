@@ -17,7 +17,6 @@
 #'
 #' @keywords internal
 new_taxon_rank <- function(rank = character(), levels = taxon_rank_level()) {
-
   # Check that values are the correct type
   vctrs::vec_assert(rank, ptype = character())
   vctrs::vec_assert(levels, ptype = taxon_rank_level())

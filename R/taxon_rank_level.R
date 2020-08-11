@@ -33,8 +33,6 @@ new_taxon_rank_level <- function(level = character(), order = numeric()) {
 #' @param guess_order If `TRUE` and no order is given, try to guess order based on rank names.
 #' @param impute_na If `TRUE`, fill in NAs based on nearby values (assumed in ascending order).
 #'
-#' @importFrom vctrs %<-%
-#'
 #' @return An `S3` object of class `taxa_taxon_rank_level`
 #'
 #' @keywords internal
@@ -67,7 +65,9 @@ taxon_rank_level <- function(level = character(), order = NULL, guess_order = TR
   order <- vctrs::vec_cast(order, numeric())
 
   # Recycle to common length
-  c(level, order) %<-% vctrs::vec_recycle_common(level, order)
+  recycled <- vctrs::vec_recycle_common(level, order)
+  level <- recycled[[1]]
+  order <- recycled[[2]]
 
   # Fill in NAs based on nearby values (assumed in ascending order)
   if (impute_na && order_inferred) {
@@ -76,7 +76,9 @@ taxon_rank_level <- function(level = character(), order = NULL, guess_order = TR
   }
 
   # Reorder inputs in specified order
-  c(level, order) %<-% check_taxon_rank_order(level, order, warn = FALSE)
+  reorded <- check_taxon_rank_order(level, order, warn = FALSE)
+  level <- reorded[[1]]
+  order <- reorded[[2]]
 
   # Check that levels are unique
   not_unique <- which(duplicated(level))

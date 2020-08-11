@@ -14,11 +14,9 @@ taxonomy(taxa = taxon(), supertaxa = NA, .names = NULL)
 
 \method{names}{taxa_taxonomy}(x) <- value
 
-\method{[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE,
-  invert = FALSE)
+\method{[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE)
 
-\method{[[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE,
-  invert = FALSE)
+\method{[[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE)
 }
 \arguments{
 \item{taxa}{A \code{\link[=taxon]{taxon()}} vector or something that can be converted to a \code{\link[=taxon]{taxon()}} vector.}
@@ -75,10 +73,14 @@ tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 
 }
 \seealso{
-Other classes: \code{\link{classification}},
-  \code{\link{taxon_authority}}, \code{\link{taxon_db}},
-  \code{\link{taxon_id}}, \code{\link{taxon_name}},
-  \code{\link{taxon_rank}}, \code{\link{taxon}}
+Other classes: 
+\code{\link{classification}()},
+\code{\link{taxon_authority}()},
+\code{\link{taxon_db}()},
+\code{\link{taxon_id}()},
+\code{\link{taxon_name}()},
+\code{\link{taxon_rank}()},
+\code{\link{taxon}()}
 }
 \concept{classes}
 \keyword{internal}

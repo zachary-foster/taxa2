@@ -14,9 +14,11 @@ A wrapper to make changing the formatting of text printed easier.
 This is used for print data associated with other data.
 }
 \seealso{
-Other printer fonts: \code{\link{font_default}},
-  \code{\link{font_na}}, \code{\link{font_punct}},
-  \code{\link{font_tax_name}}
+Other printer fonts: 
+\code{\link{font_default}()},
+\code{\link{font_na}()},
+\code{\link{font_punct}()},
+\code{\link{font_tax_name}()}
 }
 \concept{printer fonts}
 \keyword{internal}

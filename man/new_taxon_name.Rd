@@ -4,9 +4,14 @@
 \alias{new_taxon_name}
 \title{Minimal taxon name constructor}
 \usage{
-new_taxon_name(.names = NULL, name = character(),
-  rank = taxon_rank(), id = taxon_id(), auth = taxon_authority(),
-  ...)
+new_taxon_name(
+  .names = NULL,
+  name = character(),
+  rank = taxon_rank(),
+  id = taxon_id(),
+  auth = taxon_authority(),
+  ...
+)
 }
 \arguments{
 \item{.names}{The names of the vector.}

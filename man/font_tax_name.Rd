@@ -14,9 +14,11 @@ A simple wrapper to make changing the formatting of text printed easier.
 This is used for taxon names.
 }
 \seealso{
-Other printer fonts: \code{\link{font_default}},
-  \code{\link{font_na}}, \code{\link{font_punct}},
-  \code{\link{font_secondary}}
+Other printer fonts: 
+\code{\link{font_default}()},
+\code{\link{font_na}()},
+\code{\link{font_punct}()},
+\code{\link{font_secondary}()}
 }
 \concept{printer fonts}
 \keyword{internal}

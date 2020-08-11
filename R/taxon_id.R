@@ -73,7 +73,6 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #' #taxon_id('NOLETTERS', db = 'ncbi')
 #'
 #' @export
-#' @importFrom vctrs %<-%
 taxon_id <- function(id = character(), db = NA, .names = NULL) {
   if (is.null(.names)) {
     .names <- NA_character_
@@ -81,7 +80,10 @@ taxon_id <- function(id = character(), db = NA, .names = NULL) {
   .names <- vctrs::vec_cast(.names, character())
   id <- vctrs::vec_cast(id, character())
   db <- vctrs::vec_cast(db, taxon_db())
-  c(id, db, .names) %<-% vctrs::vec_recycle_common(id, db, .names)
+  recycled <- vctrs::vec_recycle_common(id, db, .names)
+  id <- recycled[[1]]
+  db <- recycled[[2]]
+  .names <- recycled[[3]]
   validate_id_for_database(id, db)
   new_taxon_id(.names = .names, id = id, db = db)
 }

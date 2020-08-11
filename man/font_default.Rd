@@ -13,9 +13,11 @@ font_default(text)
 A wrapper to make changing the formatting of text printed easier.
 }
 \seealso{
-Other printer fonts: \code{\link{font_na}},
-  \code{\link{font_punct}}, \code{\link{font_secondary}},
-  \code{\link{font_tax_name}}
+Other printer fonts: 
+\code{\link{font_na}()},
+\code{\link{font_punct}()},
+\code{\link{font_secondary}()},
+\code{\link{font_tax_name}()}
 }
 \concept{printer fonts}
 \keyword{internal}

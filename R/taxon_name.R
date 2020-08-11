@@ -58,8 +58,6 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #'   anything else is given.
 #' @param .names The names of the vector.
 #'
-#' @importFrom vctrs %<-%
-#'
 #' @return An `S3` object of class `taxa_taxon_name`
 #' @family classes
 #'
@@ -116,7 +114,12 @@ taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .name
   .names <- vctrs::vec_cast(.names, character())
 
   # Recycle ranks and databases to common length
-  c(name, rank, id, auth, .names) %<-% vctrs::vec_recycle_common(name, rank, id, auth, .names)
+  recycled <- vctrs::vec_recycle_common(name, rank, id, auth, .names)
+  name <- recycled[[1]]
+  rank <- recycled[[2]]
+  id <- recycled[[3]]
+  auth <- recycled[[4]]
+  .names <- recycled[[5]]
 
   # Create taxon object
   new_taxon_name(.names = .names, name = name, rank = rank, id = id, auth = auth, ...)

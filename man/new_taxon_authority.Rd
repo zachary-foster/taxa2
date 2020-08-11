@@ -4,8 +4,12 @@
 \alias{new_taxon_authority}
 \title{Minimal taxon_authority constructor}
 \usage{
-new_taxon_authority(.names = NULL, author = character(),
-  date = character(), citation = character())
+new_taxon_authority(
+  .names = NULL,
+  author = character(),
+  date = character(),
+  citation = character()
+)
 }
 \arguments{
 \item{.names}{The names of the vector.}

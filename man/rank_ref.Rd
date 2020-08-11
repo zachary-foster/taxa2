@@ -4,7 +4,9 @@
 \name{rank_ref}
 \alias{rank_ref}
 \title{All known taxonomic ranks}
-\format{An object of class \code{numeric} of length 52.}
+\format{
+An object of class \code{numeric} of length 52.
+}
 \usage{
 rank_ref
 }

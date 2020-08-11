@@ -75,13 +75,16 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #' data.frame(x = x, y = 1:2)
 #'
 #' @export
-#' @importFrom vctrs %<-%
 taxon_authority <- function(author = character(), date = NA, citation = NA, .names = NA, extract_date = TRUE) {
   .names <- vctrs::vec_cast(.names, character())
   author <- vctrs::vec_cast(author, character())
   date <- vctrs::vec_cast(date, character())
   citation <- vctrs::vec_cast(citation, character())
-  c(author, date, citation, .names) %<-% vctrs::vec_recycle_common(author, date, citation, .names)
+  recycled <- vctrs::vec_recycle_common(author, date, citation, .names)
+  author <- recycled[[1]]
+  date <- recycled[[2]]
+  citation <- recycled[[3]]
+  names <- recycled[[4]]
   out <- new_taxon_authority(.names = .names, author = author, date = date, citation = citation)
   if (extract_date) {
     out <- parse_date_from_author(out)

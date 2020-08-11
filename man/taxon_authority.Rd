@@ -9,8 +9,13 @@
 \alias{names<-.taxa_taxon_name}
 \title{Taxon authority class}
 \usage{
-taxon_authority(author = character(), date = NA, citation = NA,
-  .names = NA, extract_date = TRUE)
+taxon_authority(
+  author = character(),
+  date = NA,
+  citation = NA,
+  .names = NA,
+  extract_date = TRUE
+)
 
 \method{names}{taxa_taxon_authority}(x)
 
@@ -68,9 +73,13 @@ data.frame(x = x, y = 1:2)
 
 }
 \seealso{
-Other classes: \code{\link{classification}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+Other classes: 
+\code{\link{classification}()},
+\code{\link{taxon_db}()},
+\code{\link{taxon_id}()},
+\code{\link{taxon_name}()},
+\code{\link{taxon_rank}()},
+\code{\link{taxonomy}()},
+\code{\link{taxon}()}
 }
 \concept{classes}

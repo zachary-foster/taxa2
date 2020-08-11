@@ -4,8 +4,12 @@
 \alias{classification}
 \title{Taxon class}
 \usage{
-classification(taxa = taxon(), supertaxa = NA, instances = integer(),
-  .names = NULL)
+classification(
+  taxa = taxon(),
+  supertaxa = NA,
+  instances = integer(),
+  .names = NULL
+)
 }
 \arguments{
 \item{taxa}{A \code{\link[=taxon]{taxon()}} vector or something that can be converted to a
@@ -84,9 +88,13 @@ data.frame(x = x, y = 1:4)
 
 }
 \seealso{
-Other classes: \code{\link{taxon_authority}},
-  \code{\link{taxon_db}}, \code{\link{taxon_id}},
-  \code{\link{taxon_name}}, \code{\link{taxon_rank}},
-  \code{\link{taxonomy}}, \code{\link{taxon}}
+Other classes: 
+\code{\link{taxon_authority}()},
+\code{\link{taxon_db}()},
+\code{\link{taxon_id}()},
+\code{\link{taxon_name}()},
+\code{\link{taxon_rank}()},
+\code{\link{taxonomy}()},
+\code{\link{taxon}()}
 }
 \concept{classes}

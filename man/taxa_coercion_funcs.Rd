@@ -80,8 +80,7 @@
 \usage{
 \method{vec_ptype2}{taxa_classification}(x, y, ...)
 
-\method{vec_ptype2.taxa_classification}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_classification}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_classification}{vctrs_unspecified}(x, y, ...)
 
@@ -97,8 +96,7 @@
 
 \method{vec_ptype2}{taxa_taxon}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon}{vctrs_unspecified}(x, y, ...)
 
@@ -118,8 +116,7 @@
 
 \method{vec_ptype2}{taxa_taxon_authority}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_authority}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_authority}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_authority}{vctrs_unspecified}(x, y, ...)
 
@@ -135,8 +132,7 @@
 
 \method{vec_ptype2}{taxa_taxon_db}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_db}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_db}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_db}{vctrs_unspecified}(x, y, ...)
 
@@ -152,8 +148,7 @@
 
 \method{vec_ptype2}{taxa_taxon_id}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_id}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_id}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_id}{vctrs_unspecified}(x, y, ...)
 
@@ -169,8 +164,7 @@
 
 \method{vec_ptype2}{taxa_taxon_name}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_name}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_name}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_name}{vctrs_unspecified}(x, y, ...)
 
@@ -186,8 +180,7 @@
 
 \method{vec_ptype2}{taxa_taxon_rank}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_rank}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_rank}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_rank}{vctrs_unspecified}(x, y, ...)
 
@@ -203,8 +196,7 @@
 
 \method{vec_ptype2}{taxa_taxon_rank_level}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxon_rank_level}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxon_rank_level}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxon_rank_level}{vctrs_unspecified}(x, y, ...)
 
@@ -216,8 +208,7 @@
 
 \method{vec_ptype2}{taxa_taxonomy}(x, y, ...)
 
-\method{vec_ptype2.taxa_taxonomy}{default}(x, y, ..., x_arg = "",
-  y_arg = "")
+\method{vec_ptype2.taxa_taxonomy}{default}(x, y, ..., x_arg = "", y_arg = "")
 
 \method{vec_ptype2.taxa_taxonomy}{vctrs_unspecified}(x, y, ...)
 

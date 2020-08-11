@@ -4,9 +4,13 @@
 \alias{taxon_db_def}
 \title{Taxon database definition class}
 \usage{
-taxon_db_def(name = character(), url = NA_character_,
-  desc = NA_character_, id_regex = NA_character_,
-  rank_levels = rep(list(NULL), length(name)))
+taxon_db_def(
+  name = character(),
+  url = NA_character_,
+  desc = NA_character_,
+  id_regex = NA_character_,
+  rank_levels = rep(list(NULL), length(name))
+)
 }
 \arguments{
 \item{name}{Name of the database in lower case. Inputs will be transformed to a \code{character} vector.}

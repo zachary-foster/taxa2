@@ -33,8 +33,6 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' @param supertaxa The indexes of `taxa` for each taxon's supertaxon.
 #' @param .names The names of the vector (not the names of taxa).
 #'
-#' @importFrom vctrs %<-%
-#'
 #' @return An `S3` object of class `taxa_taxon`
 #' @family classes
 #'
@@ -86,7 +84,9 @@ taxonomy <- function(taxa = taxon(), supertaxa = NA, .names = NULL) {
   supertaxa <- vctrs::vec_cast(supertaxa, integer())
 
   # Recycle ranks and databases to common length
-  c(taxa, supertaxa) %<-% vctrs::vec_recycle_common(taxa, supertaxa)
+  recycled <- vctrs::vec_recycle_common(taxa, supertaxa)
+  taxa <- recycled[[1]]
+  supertaxa <- recycled[[2]]
 
   # Create taxon object
   out <- new_taxonomy(taxa = taxa, supertaxa = supertaxa)

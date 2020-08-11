@@ -4,8 +4,12 @@
 \alias{taxon_rank_level}
 \title{Taxon rank level}
 \usage{
-taxon_rank_level(level = character(), order = NULL,
-  guess_order = TRUE, impute_na = FALSE)
+taxon_rank_level(
+  level = character(),
+  order = NULL,
+  guess_order = TRUE,
+  impute_na = FALSE
+)
 }
 \arguments{
 \item{level}{Zero or more taxonomic rank names. If a named numeric is

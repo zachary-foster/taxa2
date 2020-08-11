@@ -36,8 +36,6 @@ new_taxon_db_def <- function(name = character(), url = character(), desc = chara
 #'
 #' @inheritParams new_taxon_db_def
 #'
-#' @importFrom vctrs %<-%
-#'
 #' @return An `S3` object of class `taxa_taxon_db_def`
 #' @keywords internal
 taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_character_,
@@ -70,7 +68,12 @@ taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_char
   })
 
   # Recycle inputs to common length
-  c(name, url, desc, id_regex, rank_levels) %<-% vctrs::vec_recycle_common(name, url, desc, id_regex, rank_levels)
+  recycled_output <- vctrs::vec_recycle_common(name, url, desc, id_regex, rank_levels)
+  names <- recycled_output[[1]]
+  url <- recycled_output[[2]]
+  desc <- recycled_output[[3]]
+  id_regex <- recycled_output[[4]]
+  rank_levels <- recycled_output[[5]]
 
   # Create new object
   new_taxon_db_def(name, url, desc, id_regex, rank_levels)
