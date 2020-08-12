@@ -375,6 +375,7 @@ vec_cast.data.frame.taxa_taxon_rank <- function(x, to, ..., x_arg, to_arg) data.
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_comparison_funcs
+#' @importFrom vctrs vec_proxy_compare
 #' @export
 #' @keywords internal
 vec_proxy_compare.taxa_taxon_rank <- function(x, ...) {
@@ -383,6 +384,7 @@ vec_proxy_compare.taxa_taxon_rank <- function(x, ...) {
 
 
 #' @rdname taxa_comparison_funcs
+#' @importFrom vctrs vec_proxy_equal
 #' @export
 #' @keywords internal
 vec_proxy_equal.taxa_taxon_rank <- function(x, ...) {
