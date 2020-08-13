@@ -98,7 +98,7 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' x['b'] <- NA
 #' is.na(x)
 #' as.data.frame(x)
-#' as_tibble(x)
+#' tibble::as_tibble(x)
 #'
 #' # Use as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
@@ -289,6 +289,34 @@ names.taxa_taxon_name <- function(x) {
   return(x)
 }
 
+
+#' @export
+`[<-.taxa_taxon_name` <- function(x, i, j, value) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  i_original <- i
+  names_original <- names(x)
+  if (is.character(i)) {
+    i_temp <- rep(0, length(i))
+    i_temp[i %in% names(x)] <- match(i[i %in% names(x)], names(x))
+    i_temp[! i %in% names(x)] <- length(x) + seq_len(sum(! i %in% names(x)))
+    i <- i_temp
+  }
+  x <- NextMethod()
+  if (is.character(i_original)) {
+    names(x)[i] <- i_original
+  } else {
+    names(x)[i] <- names_original[i]
+  }
+  return(x)
+}
+
+
+#' @export
+`[[<-.taxa_taxon_name` <- function(x, i, j, value) {
+  NextMethod()
+}
 
 #--------------------------------------------------------------------------------
 # S3 printing functions

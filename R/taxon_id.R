@@ -51,7 +51,6 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #'
 #' # Making new objects
 #' x <- taxon_id(c('A', 'B', 'C'))
-#' x <- taxon_id(c(1232, 3232, 1242))
 #' x <- taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi')
 #' x <- taxon_id(c('9606', '1386', '4890', '4345'),
 #'               db = c('ncbi', 'ncbi', 'itis', 'itis'))
@@ -59,6 +58,7 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #' # Manipulating objects
 #' as.character(x)
 #' as.data.frame(x)
+#' library(tibble)
 #' as_tibble(x)
 #' x[2:3]
 #' x[2:3] <- 'ABC'
@@ -339,6 +339,19 @@ vec_cast.taxa_taxon_id.integer <- function(x, to, ..., x_arg, to_arg) taxon_id(x
 #' @importFrom vctrs vec_cast.integer
 #' @export
 vec_cast.integer.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) integer(vctrs::field(x, "id"))
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon_id double
+#' @export
+vec_cast.taxa_taxon_id.double <- function(x, to, ..., x_arg, to_arg) taxon_id(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.double taxa_taxon_id
+#' @importFrom vctrs vec_cast.double
+#' @export
+vec_cast.double.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) double(vctrs::field(x, "id"))
 
 
 #' @rdname taxa_casting_funcs

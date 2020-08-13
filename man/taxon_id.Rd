@@ -36,7 +36,6 @@ taxonomy database. This is typically used to store taxon IDs in \code{\link[=tax
 
 # Making new objects
 x <- taxon_id(c('A', 'B', 'C'))
-x <- taxon_id(c(1232, 3232, 1242))
 x <- taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi')
 x <- taxon_id(c('9606', '1386', '4890', '4345'),
               db = c('ncbi', 'ncbi', 'itis', 'itis'))
@@ -44,6 +43,7 @@ x <- taxon_id(c('9606', '1386', '4890', '4345'),
 # Manipulating objects
 as.character(x)
 as.data.frame(x)
+library(tibble)
 as_tibble(x)
 x[2:3]
 x[2:3] <- 'ABC'

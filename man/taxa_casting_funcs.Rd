@@ -37,6 +37,8 @@
 \alias{vec_cast.factor.taxa_taxon_id}
 \alias{vec_cast.taxa_taxon_id.integer}
 \alias{vec_cast.integer.taxa_taxon_id}
+\alias{vec_cast.taxa_taxon_id.double}
+\alias{vec_cast.double.taxa_taxon_id}
 \alias{vec_cast.data.frame.taxa_taxon_id}
 \alias{vec_cast.taxa_taxon_name}
 \alias{vec_cast.taxa_taxon_name.default}
@@ -134,6 +136,10 @@
 \method{vec_cast.taxa_taxon_id}{integer}(x, to, ..., x_arg, to_arg)
 
 \method{vec_cast.integer}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
+
+\method{vec_cast.taxa_taxon_id}{double}(x, to, ..., x_arg, to_arg)
+
+\method{vec_cast.double}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
 \method{vec_cast.data.frame}{taxa_taxon_id}(x, to, ..., x_arg, to_arg)
 
