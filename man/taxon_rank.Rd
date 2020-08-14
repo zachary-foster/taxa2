@@ -54,6 +54,7 @@ x[x > 'family'] <- taxon_rank('unknown')
 x[1] <- taxon_rank('order')
 names(x) <- c('a', 'b', 'c', 'd')
 x['b']
+x['b'] <- 'order'
 
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:4)

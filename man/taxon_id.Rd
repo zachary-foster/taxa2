@@ -48,6 +48,8 @@ as_tibble(x)
 x[2:3]
 x[2:3] <- 'ABC'
 names(x) <- c('a', 'b', 'c', 'd')
+x[c('a', 'c')] <- '123'
+x[['b']] <- taxon_id('123423', db = 'ncbi')
 tax_db(x) <- 'nbn'
 
 # Using as columns in tables

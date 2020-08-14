@@ -63,6 +63,8 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #' x[2:3]
 #' x[2:3] <- 'ABC'
 #' names(x) <- c('a', 'b', 'c', 'd')
+#' x[c('a', 'c')] <- '123'
+#' x[['b']] <- taxon_id('123423', db = 'ncbi')
 #' tax_db(x) <- 'nbn'
 #'
 #' # Using as columns in tables
@@ -140,6 +142,42 @@ names.taxa_taxon_id <- function(x) {
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
   vctrs::field(x, ".names") <- value
+  return(x)
+}
+
+
+#' @export
+`[<-.taxa_taxon_id` <- function(x, i, j, value) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  i_original <- i
+  names_original <- names(x)
+  if (is.character(i)) {
+    i_temp <- rep(0, length(i))
+    i_temp[i %in% names(x)] <- match(i[i %in% names(x)], names(x))
+    i_temp[! i %in% names(x)] <- length(x) + seq_len(sum(! i %in% names(x)))
+    i <- i_temp
+  }
+  x <- NextMethod()
+  if (is.character(i_original)) {
+    names(x)[i] <- i_original
+  } else {
+    names(x)[i] <- names_original[i]
+  }
+  return(x)
+}
+
+
+#' @export
+`[[<-.taxa_taxon_id` <- function(x, i, j, value) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  if (length(i) > 1) {
+    stop('attempt to select more than one element')
+  }
+  x[i] <- value
   return(x)
 }
 
@@ -430,14 +468,14 @@ is.na.taxa_taxon_id <- function(x) {
 }
 
 
-#' @export
-as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ...,
-                                        stringsAsFactors = default.stringsAsFactors()) {
-  cbind(
-    data.frame(tax_id = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
-    as.data.frame(tax_db(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
-  )
-}
+#' #' @export
+#' as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ...,
+#'                                         stringsAsFactors = default.stringsAsFactors()) {
+#'   cbind(
+#'     data.frame(tax_id = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
+#'     as.data.frame(tax_db(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
+#'   )
+#' }
 
 
 #' @importFrom tibble as_tibble

@@ -96,13 +96,14 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' c(x, x)
 #' names(x) <- c('a', 'b', 'c', 'd')
 #' x['b'] <- NA
+#' x[c('c', 'd')] <- 'unknown'
 #' is.na(x)
 #' as.data.frame(x)
 #' tibble::as_tibble(x)
 #'
 #' # Use as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
-#' data.frame(x = x, y = 1:4)
+#' data.frame(x = I(x), y = 1:4)
 #'
 #' @export
 taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA, ...) {
@@ -315,7 +316,14 @@ names.taxa_taxon_name <- function(x) {
 
 #' @export
 `[[<-.taxa_taxon_name` <- function(x, i, j, value) {
-  NextMethod()
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  if (length(i) > 1) {
+    stop('attempt to select more than one element')
+  }
+  x[i] <- value
+  return(x)
 }
 
 #--------------------------------------------------------------------------------

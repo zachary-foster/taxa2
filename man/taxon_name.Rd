@@ -72,13 +72,14 @@ x[tax_rank(x) > 'family']
 c(x, x)
 names(x) <- c('a', 'b', 'c', 'd')
 x['b'] <- NA
+x[c('c', 'd')] <- 'unknown'
 is.na(x)
 as.data.frame(x)
 tibble::as_tibble(x)
 
 # Use as columns in tables
 tibble::tibble(x = x, y = 1:4)
-data.frame(x = x, y = 1:4)
+data.frame(x = I(x), y = 1:4)
 
 }
 \seealso{

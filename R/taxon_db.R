@@ -40,8 +40,10 @@ new_taxon_db <- function(db = character(), ...) {
 #' # Manipulating objects
 #' as.character(x)
 #' x[2:3]
+#' x[2:3] <- 'nbn'
 #' names(x) <- c('a', 'b', 'c')
 #' x['b']
+#' x['b'] <- 'nbn'
 #' x[x == 'itis'] <- 'gbif'
 #'
 #' # Using as columns in tables

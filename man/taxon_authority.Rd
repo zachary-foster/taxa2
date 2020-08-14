@@ -60,6 +60,7 @@ as_tibble(x)
 x[2]
 x[2] <- 'ABC'
 names(x) <- c('a', 'b')
+x['b'] <- 'David Bowie'
 tax_author(x)[1] <- tolower(tax_author(x)[1])
 tax_author(x)
 tax_date(x) <- c('2000', '1234')
