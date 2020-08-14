@@ -660,10 +660,13 @@ c.taxa_taxon <- function(...) {
 #'   a list will all data is returned.
 #'
 #' @keywords internal
-get_taxon_field <- function(x, i, simplify = TRUE) {
+get_taxon_field <- function(x, i, simplify = TRUE, only_first = TRUE) {
+  if (only_first) {
+    x <- get_first_of_each(x)
+  }
   out <- get_field_in_list(x, i)
   if (simplify) {
-    out <- get_first_of_each(out)
+    out <- do.call(c, out)
   }
   return(out)
 }
@@ -671,13 +674,23 @@ get_taxon_field <- function(x, i, simplify = TRUE) {
 #' @keywords internal
 get_first_of_each <- function(a_list) {
   do.call(c, lapply(a_list, function(x) {
-    x[1]
+    if (is.null(x)) {
+      return(taxon_name(NA))
+    } else {
+      return(x[1])
+    }
   }))
 }
 
 #' @keywords internal
 get_field_in_list <- function(list_vctr, id) {
-  lapply(list_vctr, vctrs::field, i = id)
+  lapply(list_vctr, function(x) {
+    if (is.null(x)) {
+      return(NA)
+    } else {
+      return(vctrs::field(x, id))
+    }
+  })
 }
 
 

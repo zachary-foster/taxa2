@@ -4,7 +4,7 @@
 \alias{get_taxon_field}
 \title{Get a value from taxon_name in taxon}
 \usage{
-get_taxon_field(x, i, simplify = TRUE)
+get_taxon_field(x, i, simplify = TRUE, only_first = TRUE)
 }
 \arguments{
 \item{simplify}{If TRUE, the return a vector composed of the first item in each taxon. Otherwise,
