@@ -105,7 +105,7 @@ setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
 #' @rdname tax_db
 #' @export
 tax_db.taxa_taxon_id <- function(x) {
-  vctrs::field(x, "db")
+  named_field(x, "db")
 }
 
 #' @rdname tax_db

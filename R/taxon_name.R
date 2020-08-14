@@ -83,6 +83,7 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' # Set parts of the taxon name vector
 #' tax_name(x) <- tolower(tax_name(x))
 #' tax_rank(x)[1] <- NA
+#' tax_name(x)['b'] <- 'Billy'
 #' tax_id(x) <- '9999'
 #' tax_db(x) <- 'itis'
 #' tax_auth(x) <- NA
@@ -142,7 +143,7 @@ setOldClass(c("taxa_taxon_name", "vctrs_vctr"))
 #' @rdname tax_id
 #' @export
 tax_id.taxa_taxon_name <- function(x) {
-  vctrs::field(x, "id")
+  named_field(x, "id")
 }
 
 #' @rdname tax_id
@@ -219,7 +220,7 @@ tax_cite.taxa_taxon_name <- function(x) {
 #' @rdname tax_name
 #' @export
 tax_name.taxa_taxon_name <- function(x) {
-  vctrs::field(x, "name")
+  named_field(x, "name")
 }
 
 #' @rdname tax_name
@@ -236,7 +237,7 @@ tax_name.taxa_taxon_name <- function(x) {
 #' @rdname tax_auth
 #' @export
 tax_auth.taxa_taxon_name <- function(x) {
-  vctrs::field(x, "auth")
+  named_field(x, "auth")
 }
 
 #' @rdname tax_auth
@@ -253,7 +254,7 @@ tax_auth.taxa_taxon_name <- function(x) {
 #' @rdname tax_rank
 #' @export
 tax_rank.taxa_taxon_name <- function(x) {
-  vctrs::field(x, "rank")
+  named_field(x, "rank")
 }
 
 #' @rdname tax_rank

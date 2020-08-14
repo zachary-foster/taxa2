@@ -120,7 +120,7 @@ setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
 #' @rdname tax_author
 #' @export
 tax_author.taxa_taxon_authority <- function(x) {
-  vctrs::field(x, "author")
+  named_field(x, "author")
 }
 
 
@@ -137,7 +137,7 @@ tax_author.taxa_taxon_authority <- function(x) {
 #' @rdname tax_date
 #' @export
 tax_date.taxa_taxon_authority <- function(x) {
-  vctrs::field(x, "date")
+  named_field(x, "date")
 }
 
 
@@ -154,7 +154,7 @@ tax_date.taxa_taxon_authority <- function(x) {
 #' @rdname tax_cite
 #' @export
 tax_cite.taxa_taxon_authority <- function(x) {
-  vctrs::field(x, "citation")
+  named_field(x, "citation")
 }
 
 

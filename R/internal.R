@@ -337,14 +337,15 @@ clone_if_r6 <- function(input) {
   }
 }
 
-
-
+#' @keywords internal
 ct <- function(l) Filter(Negate(is.null), l)
 
+#' @keywords internal
 `%||%` <- function(x, y) {
   if (is.null(x)) y else x
 }
 
+#' @keywords internal
 add_names <- function(...) {
   tt <- sapply(match.call(), deparse)[-1]
   nms <- unname(sapply(tt, function(x) strsplit(x, split = "\\$")[[1]][2]))
@@ -362,12 +363,21 @@ assert <- function(x, y) {
   }
 }
 
+#' @keywords internal
 csep2vec <- function(z, uniq = TRUE) {
   tmp <- unlist(lapply(z, function(w) strsplit(w, split = ",")[[1]]), FALSE)
   if (uniq) return(unique(tmp))
   return(tmp)
 }
 
+#' @keywords internal
 strex <- function(str, pattern) regmatches(str, regexpr(pattern, str))
 
-
+#' @keywords internal
+named_field <- function(x, i) {
+  out <- vctrs::field(x, i)
+  if (! is.null(names(x))) {
+    names(out) <- names(x)
+  }
+  return(out)
+}
