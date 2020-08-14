@@ -53,6 +53,7 @@ new_taxon_rank <- function(rank = character(), levels = taxon_rank_level()) {
 #'            levels = c('D', 'C', 'B', 'A'))
 #' taxon_rank(c('A', 'B', 'C', 'D', 'A', 'D', 'D'),
 #'            levels = c(D = NA, A = 10, B = 20, C = 30))
+#' names(x) <- c('a', 'b', 'c', 'd')
 #'
 #' # Manipulating objects
 #' as.character(x)
@@ -61,9 +62,9 @@ new_taxon_rank <- function(rank = character(), levels = taxon_rank_level()) {
 #' x[2:3]
 #' x[x > 'family'] <- taxon_rank('unknown')
 #' x[1] <- taxon_rank('order')
-#' names(x) <- c('a', 'b', 'c', 'd')
 #' x['b']
 #' x['b'] <- 'order'
+#' # c(x, x) # Not working for named vectors due to bug in vctrs
 #'
 #' # Using as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
@@ -485,7 +486,7 @@ as_tibble.taxa_taxon_rank <- function(x, ...) {
 
 #' @export
 c.taxa_taxon_rank <- function(...) {
-  out <- vctrs::vec_c(...)
+  out <- NextMethod()
   if (is_taxon_rank(out)) {
     attr(out, 'levels') <- do.call(c, lapply(list(...), function(x) attr(x, 'levels')))
   }

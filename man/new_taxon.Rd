@@ -4,19 +4,31 @@
 \alias{new_taxon}
 \title{Minimal taxon constructor}
 \usage{
-new_taxon(.names = NULL, taxa = list())
+new_taxon(
+  .names = NULL,
+  name = character(),
+  rank = taxon_rank(),
+  id = taxon_id(),
+  auth = taxon_authority(),
+  ...
+)
 }
 \arguments{
 \item{.names}{The names of the vector.}
 
-\item{taxa}{The taxa to store as list of \link{taxon_name} vectors. Each item in the list represents a
-singel taxon, potentially with multiple names.}
+\item{name}{The names of taxa as a \link{character} vector.}
+
+\item{rank}{The ranks of taxa as a \link{taxon_rank} vector.}
+
+\item{id}{The ids of taxa as a \link{taxon_id} vector.}
+
+\item{auth}{The authority of the taxon as a \link{taxon_authority} vector.}
 }
 \value{
-An \code{S3} object of class \code{taxa_taxon_name}
+An \code{S3} object of class \code{taxa_taxon}
 }
 \description{
-Minimal taxon constructor for internal use. Only use when the input is known to be valid
-since few validity checks are done.
+Minimal taxon constructor for internal use. Only use when the input is known to be valid since
+few validity checks are done.
 }
 \keyword{internal}

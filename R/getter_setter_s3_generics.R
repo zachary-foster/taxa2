@@ -88,7 +88,7 @@ tax_db <- function(x) {
 
 #' Set and get taxon names
 #'
-#' Set and get the taxon names in objects that have them, such as [taxon_name()] objects.
+#' Set and get the taxon names in objects that have them, such as [taxon()] objects.
 #' Note that this is not the same as adding vector names with [names()].
 #'
 #' @param x An object with taxon names.
@@ -111,7 +111,7 @@ tax_name <- function(x) {
 
 #' Set and get taxon IDs
 #'
-#' Set and get the taxon IDs in objects that have them, such as [taxon_name()] objects.
+#' Set and get the taxon IDs in objects that have them, such as [taxon()] objects.
 #'
 #' @param x An object with taxon IDs.
 #'
@@ -133,7 +133,7 @@ tax_id <- function(x) {
 
 #' Set and get taxon authorities
 #'
-#' Set and get the taxon authorities in objects that have them, such as [taxon_name()] objects.
+#' Set and get the taxon authorities in objects that have them, such as [taxon()] objects.
 #' Note that this sets all the authority information, such as author name, date, and citations.
 #' To set or get just one of part of the authorities, use [tax_author()], [tax_date()], or [tax_cite()] instead.
 #'
@@ -157,7 +157,7 @@ tax_auth <- function(x) {
 
 #' Set and get taxon ranks
 #'
-#' Set and get the taxon ranks in objects that have them, such as [taxon_name()] objects.
+#' Set and get the taxon ranks in objects that have them, such as [taxon()] objects.
 #'
 #' @param x An object with taxon ranks.
 #'

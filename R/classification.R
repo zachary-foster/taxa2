@@ -490,12 +490,12 @@ n_supertaxa.taxa_classification <- function(x) {
 
 #' @export
 `%in%.character.taxa_classification` <- function(x, table) {
-  x %in% as.character(as_taxon_name(table))
+  x %in% as.character(as_taxon(table))
 }
 
 #' @export
 `%in%.factor.taxa_classification` <- function(x, table) {
-  x %in% as.character(as_taxon_name(table))
+  x %in% as.character(as_taxon(table))
 }
 
 #' @export

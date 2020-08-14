@@ -734,12 +734,12 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 
 #' @export
 `%in%.character.taxa_taxonomy` <- function(x, table) {
-  x %in% as.character(as_taxon_name(table))
+  x %in% as.character(as_taxon(table))
 }
 
 #' @export
 `%in%.factor.taxa_taxonomy` <- function(x, table) {
-  x %in% as.character(as_taxon_name(table))
+  x %in% as.character(as_taxon(table))
 }
 
 #' @export

@@ -39,15 +39,16 @@ x <- taxon_id(c('A', 'B', 'C'))
 x <- taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi')
 x <- taxon_id(c('9606', '1386', '4890', '4345'),
               db = c('ncbi', 'ncbi', 'itis', 'itis'))
+names(x) <- c('a', 'b', 'c', 'd')
 
 # Manipulating objects
 as.character(x)
 x[2:3]
 x[2:3] <- 'ABC'
-names(x) <- c('a', 'b', 'c', 'd')
 x[c('a', 'c')] <- '123'
 x[['b']] <- taxon_id('123423', db = 'ncbi')
 tax_db(x) <- 'nbn'
+c(x, x)
 
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:4)
@@ -64,9 +65,8 @@ as_data_frame(x)
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{taxon_authority}()},
+\code{\link{names.taxa_taxon}()},
 \code{\link{taxon_db}()},
-\code{\link{taxon_name}()},
 \code{\link{taxon_rank}()},
 \code{\link{taxonomy}()},
 \code{\link{taxon}()}

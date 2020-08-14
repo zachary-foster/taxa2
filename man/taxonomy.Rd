@@ -75,10 +75,9 @@ tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{taxon_authority}()},
+\code{\link{names.taxa_taxon}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
-\code{\link{taxon_name}()},
 \code{\link{taxon_rank}()},
 \code{\link{taxon}()}
 }

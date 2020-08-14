@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxon.R
 \name{is_taxon}
 \alias{is_taxon}
-\title{Check if is a taxon}
+\title{Check if is a taxon name}
 \usage{
 is_taxon(x)
 }
@@ -10,5 +10,5 @@ is_taxon(x)
 \item{x}{An object to test}
 }
 \description{
-Check if an object is the taxon class
+Check if an object is the taxon name class
 }

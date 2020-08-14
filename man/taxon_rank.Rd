@@ -44,6 +44,7 @@ taxon_rank(c('A', 'B', 'C', 'D', 'A', 'D', 'D'),
            levels = c('D', 'C', 'B', 'A'))
 taxon_rank(c('A', 'B', 'C', 'D', 'A', 'D', 'D'),
            levels = c(D = NA, A = 10, B = 20, C = 30))
+names(x) <- c('a', 'b', 'c', 'd')
 
 # Manipulating objects
 as.character(x)
@@ -52,9 +53,9 @@ as.ordered(x)
 x[2:3]
 x[x > 'family'] <- taxon_rank('unknown')
 x[1] <- taxon_rank('order')
-names(x) <- c('a', 'b', 'c', 'd')
 x['b']
 x['b'] <- 'order'
+# c(x, x) # Not working for named vectors due to bug in vctrs
 
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:4)
@@ -74,10 +75,9 @@ x[2] <- taxon_rank('superkingdom')
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{taxon_authority}()},
+\code{\link{names.taxa_taxon}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
-\code{\link{taxon_name}()},
 \code{\link{taxonomy}()},
 \code{\link{taxon}()}
 }
