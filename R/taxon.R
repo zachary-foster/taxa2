@@ -273,6 +273,21 @@ tax_rank.taxa_taxon <- function(x) {
 }
 
 
+#' @export
+`[<-.taxa_taxon` <- function(x, i, j, value) {
+  # NOTE: This is a hack to make a vctrs list_of class work with multiple assignment.
+  #   At the time of writing, this is not supported.
+  #   It should be unnecessary eventually
+  recycled <- vctrs::vec_recycle_common(i, value)
+  i <- recycled[[1]]
+  value <- recycled[[2]]
+  for (index in seq_len(length(i))) {
+    x[[i[index]]] <- value[[index]]
+  }
+  return(x)
+}
+
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -388,6 +403,43 @@ pillar_shaft.taxa_taxon <- function(x, ...) {
 }
 
 
+#--------------------------------------------------------------------------------
+# S3 casting functions
+#--------------------------------------------------------------------------------
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast taxa_taxon
+#' @importFrom vctrs vec_cast
+#' @export
+#' @keywords internal
+vec_cast.taxa_taxon <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon")
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon default
+#' @export
+vec_cast.taxa_taxon.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon taxa_taxon
+#' @export
+vec_cast.taxa_taxon.taxa_taxon <- function(x, to, ..., x_arg, to_arg) x
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon character
+#' @export
+vec_cast.taxa_taxon.character <- function(x, to, ..., x_arg, to_arg) taxon(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.character taxa_taxon
+#' @importFrom vctrs vec_cast.character
+#' @export
+vec_cast.character.taxa_taxon <- function(x, to, ..., x_arg, to_arg) tax_name(x)
+
+
 
 #--------------------------------------------------------------------------------
 # S3 coercion functions
@@ -458,6 +510,39 @@ vec_ptype2.taxa_taxon.factor <- function(x, y, ...) factor()
 #' @export
 vec_ptype2.factor.taxa_taxon <- function(x, y, ...) factor()
 
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast taxa_taxon_id
+#' @importFrom vctrs vec_cast
+#' @export
+#' @keywords internal
+vec_cast.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) UseMethod("vec_cast.taxa_taxon_id")
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon_id default
+#' @export
+vec_cast.taxa_taxon_id.default <- function(x, to, ..., x_arg, to_arg) vctrs::vec_default_cast(x, to, x_arg, to_arg)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon_id taxa_taxon_id
+#' @export
+vec_cast.taxa_taxon_id.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) x
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon_id character
+#' @export
+vec_cast.taxa_taxon_id.character <- function(x, to, ..., x_arg, to_arg) taxon_id(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.character taxa_taxon_id
+#' @importFrom vctrs vec_cast.character
+#' @export
+vec_cast.character.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) vctrs::field(x, "id")
 
 
 

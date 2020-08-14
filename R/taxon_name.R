@@ -98,12 +98,14 @@ new_taxon_name <- function(.names = NULL, name = character(), rank = taxon_rank(
 #' x['b'] <- NA
 #' x[c('c', 'd')] <- 'unknown'
 #' is.na(x)
-#' as.data.frame(x)
-#' tibble::as_tibble(x)
 #'
 #' # Use as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
-#' data.frame(x = I(x), y = 1:4)
+#' data.frame(x = x, y = 1:4)
+#'
+#' # Converting to tables
+#' tibble::as_tibble(x)
+#' as_data_frame(x)
 #'
 #' @export
 taxon_name <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA, ...) {
