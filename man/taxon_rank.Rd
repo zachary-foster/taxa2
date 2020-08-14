@@ -60,6 +60,10 @@ x['b'] <- 'order'
 tibble::tibble(x = x, y = 1:4)
 data.frame(x = x, y = 1:4)
 
+# Converting to tables
+tibble::as_tibble(x)
+as_data_frame(x)
+
 # Trying to add an unknown level as a character causes an error
 #x[2] <- 'superkingdom'
 

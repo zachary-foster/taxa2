@@ -75,6 +75,10 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #' tibble::tibble(x = x, y = 1:2)
 #' data.frame(x = x, y = 1:2)
 #'
+#' # Converting to tables
+#' tibble::as_tibble(x)
+#' as_data_frame(x)
+#'
 #' @export
 taxon_authority <- function(author = character(), date = NA, citation = NA, .names = NA, extract_date = TRUE) {
   .names <- vctrs::vec_cast(.names, character())
@@ -474,7 +478,7 @@ is.na.taxa_taxon_authority <- function(x) {
 }
 
 #' @export
-as.data.frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = FALSE, ...,
+as_data_frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = FALSE, ...,
                                                stringsAsFactors = default.stringsAsFactors()) {
   data.frame(tax_author = tax_author(x),
              tax_date = tax_date(x),
@@ -486,7 +490,7 @@ as.data.frame.taxa_taxon_authority <- function(x, row.names = NULL, optional = F
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxon_authority <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 

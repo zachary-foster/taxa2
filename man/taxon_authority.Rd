@@ -72,6 +72,10 @@ tax_cite(x)
 tibble::tibble(x = x, y = 1:2)
 data.frame(x = x, y = 1:2)
 
+# Converting to tables
+tibble::as_tibble(x)
+as_data_frame(x)
+
 }
 \seealso{
 Other classes: 

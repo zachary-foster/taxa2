@@ -743,16 +743,16 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 }
 
 #' @export
-as.data.frame.taxa_taxonomy <- function(x, row.names = NULL, optional = FALSE, ...,
+as_data_frame.taxa_taxonomy <- function(x, row.names = NULL, optional = FALSE, ...,
                                         stringsAsFactors = default.stringsAsFactors()) {
-  out <- as.data.frame(as_taxon(x))
+  out <- as_data_frame(as_taxon(x))
   cbind(supertaxon = vctrs::field(x, 'supertaxa')[out$taxon], out)
 }
 
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxonomy <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 

@@ -50,6 +50,10 @@ new_taxon_db <- function(db = character(), ...) {
 #' tibble::tibble(x = x, y = 1:3)
 #' data.frame(x = x, y = 1:3)
 #'
+#' # Converting to tables
+#' tibble::as_tibble(x)
+#' as_data_frame(x)
+#'
 #' # Trying to use an invalid database generates an error
 #' # x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 #' # x[x == 'itis'] <- 'my_custom_db'
@@ -282,7 +286,7 @@ is.na.taxa_taxon_db <- function(x) {
 
 
 #' @export
-as.data.frame.taxa_taxon_db <- function(x, row.names = NULL, optional = FALSE, ...,
+as_data_frame.taxa_taxon_db <- function(x, row.names = NULL, optional = FALSE, ...,
                                         stringsAsFactors = default.stringsAsFactors()) {
   data.frame(tax_db = as.character(x), row.names = row.names,
              stringsAsFactors = stringsAsFactors, ...)
@@ -292,7 +296,7 @@ as.data.frame.taxa_taxon_db <- function(x, row.names = NULL, optional = FALSE, .
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxon_db <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 

@@ -82,12 +82,14 @@ new_taxon <- function(.names = NULL, taxa = list()) {
 #' names(x) <- c('a', 'b', 'c', 'd')
 #' x['b'] <- NA
 #' is.na(x)
-#' as.data.frame(x)
-#' as_tibble(x)
 #'
 #' # Use as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
 #' data.frame(x = x, y = 1:4)
+#'
+#' # Converting to tables
+#' tibble::as_tibble(x)
+#' as_data_frame(x)
 #'
 #' @export
 taxon <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = NA) {
@@ -510,9 +512,9 @@ is.na.taxa_taxon <- function(x) {
 
 
 #' @export
-as.data.frame.taxa_taxon <- function(x, row.names = NULL, optional = FALSE, ...,
+as_data_frame.taxa_taxon <- function(x, row.names = NULL, optional = FALSE, ...,
                                      stringsAsFactors = default.stringsAsFactors()) {
-  tax_name_df <- lapply(x, as.data.frame, row.names = row.names, optional = optional,
+  tax_name_df <- lapply(x, as_data_frame, row.names = row.names, optional = optional,
                         stringsAsFactors = stringsAsFactors, ...)
   tax_name_i <- rep(seq_len(length(tax_name_df)), vapply(tax_name_df, nrow, numeric(1)))
   tax_name_df <- do.call(rbind, tax_name_df)
@@ -523,7 +525,7 @@ as.data.frame.taxa_taxon <- function(x, row.names = NULL, optional = FALSE, ...,
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxon <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 #' @export

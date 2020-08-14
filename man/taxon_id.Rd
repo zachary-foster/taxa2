@@ -42,9 +42,6 @@ x <- taxon_id(c('9606', '1386', '4890', '4345'),
 
 # Manipulating objects
 as.character(x)
-as.data.frame(x)
-library(tibble)
-as_tibble(x)
 x[2:3]
 x[2:3] <- 'ABC'
 names(x) <- c('a', 'b', 'c', 'd')
@@ -55,6 +52,10 @@ tax_db(x) <- 'nbn'
 # Using as columns in tables
 tibble::tibble(x = x, y = 1:4)
 data.frame(x = x, y = 1:4)
+
+# Convert to tables
+tibble::as_tibble(x)
+as_data_frame(x)
 
 # Trying to use an invalid ID with a specified database causes an error
 #taxon_id('NOLETTERS', db = 'ncbi')

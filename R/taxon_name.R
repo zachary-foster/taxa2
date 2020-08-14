@@ -621,13 +621,13 @@ is.na.taxa_taxon_name <- function(x) {
 
 
 #' @export
-as.data.frame.taxa_taxon_name <- function(x, row.names = NULL, optional = FALSE, ...,
+as_data_frame.taxa_taxon_name <- function(x, row.names = NULL, optional = FALSE, ...,
                                           stringsAsFactors = default.stringsAsFactors()) {
   cbind(
     data.frame(tax_name = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
-    as.data.frame(tax_rank(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
-    as.data.frame(tax_id(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
-    as.data.frame(tax_auth(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
+    as_data_frame(tax_rank(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
+    as_data_frame(tax_id(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
+    as_data_frame(tax_auth(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
   )
 }
 
@@ -635,7 +635,7 @@ as.data.frame.taxa_taxon_name <- function(x, row.names = NULL, optional = FALSE,
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxon_name <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 

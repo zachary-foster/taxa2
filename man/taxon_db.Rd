@@ -46,6 +46,10 @@ x[x == 'itis'] <- 'gbif'
 tibble::tibble(x = x, y = 1:3)
 data.frame(x = x, y = 1:3)
 
+# Converting to tables
+tibble::as_tibble(x)
+as_data_frame(x)
+
 # Trying to use an invalid database generates an error
 # x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 # x[x == 'itis'] <- 'my_custom_db'

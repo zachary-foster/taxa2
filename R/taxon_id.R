@@ -57,9 +57,6 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #'
 #' # Manipulating objects
 #' as.character(x)
-#' as.data.frame(x)
-#' library(tibble)
-#' as_tibble(x)
 #' x[2:3]
 #' x[2:3] <- 'ABC'
 #' names(x) <- c('a', 'b', 'c', 'd')
@@ -70,6 +67,10 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #' # Using as columns in tables
 #' tibble::tibble(x = x, y = 1:4)
 #' data.frame(x = x, y = 1:4)
+#'
+#' # Convert to tables
+#' tibble::as_tibble(x)
+#' as_data_frame(x)
 #'
 #' # Trying to use an invalid ID with a specified database causes an error
 #' #taxon_id('NOLETTERS', db = 'ncbi')
@@ -468,20 +469,20 @@ is.na.taxa_taxon_id <- function(x) {
 }
 
 
-#' #' @export
-#' as.data.frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ...,
-#'                                         stringsAsFactors = default.stringsAsFactors()) {
-#'   cbind(
-#'     data.frame(tax_id = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
-#'     as.data.frame(tax_db(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
-#'   )
-#' }
+#' @export
+as_data_frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, ...,
+                                        stringsAsFactors = default.stringsAsFactors()) {
+  cbind(
+    data.frame(tax_id = as.character(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...),
+    as_data_frame(tax_db(x), row.names = row.names, stringsAsFactors = stringsAsFactors, ...)
+  )
+}
 
 
 #' @importFrom tibble as_tibble
 #' @export
 as_tibble.taxa_taxon_id <- function(x, ...) {
-  tibble::as_tibble(as.data.frame(x, stringsAsFactors = FALSE), ...)
+  tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
 
 #--------------------------------------------------------------------------------
