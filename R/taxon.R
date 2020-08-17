@@ -647,12 +647,12 @@ as_taxon <- function(x, ...) {
 
 #' @export
 as_taxon.taxa_taxon <- function(x, ...) {
-  do.call(c, x)
+  x
 }
 
 #' @export
 as_taxon.taxa_taxonomy <- function(x, ...) {
-  as_taxon(as_taxon(x))
+  vctrs::field(x, 'taxa')
 }
 
 #' @export

@@ -50,6 +50,14 @@ x <- taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                     auth = c('Bowdich, 1821', 'Fischer de Waldheim, 1817', 'Oken, 1816', 'L., 1758',
                              'L., 1758', 'Fischer de Waldheim, 1817', 'L., 1758', 'L., 1758')),
               supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+names(x) <- letters[1:8]
+
+# Subset taxonomy vector
+x[2] # By default, all subtaxa are included
+x['b'] # Names can also be used
+x[2:3, subtaxa = F] # Disable subtaxa
+x[3, supertaxa = T] # include supertaxa
+x[is_leaf(x)] # Subset by logical vector
 
 # Get parts of the taxonomy vector
 tax_name(x)
@@ -68,8 +76,30 @@ tax_id(x) <- '9999'
 tax_db(x) <- 'itis'
 tax_auth(x) <- NA
 tax_author(x)[2:3] <- c('Joe', 'Billy')
-tax_date(x) <- c('1999', '2013', '1796', '1899')
-tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
+tax_date(x) <- c('1999', '2013', '1796', '1899',
+                 '1997', '2003', '1996', '1859')
+tax_cite(x)['c'] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
+
+# Convert to table
+tibble::as_tibble(x)
+as_data_frame(x)
+
+# Get taxonomy attributes
+subtaxa(x)
+subtaxa(x, value = tax_name(x))
+subtaxa(x, value = as_taxon(x))
+n_subtaxa(x)
+supertaxa(x)
+n_supertaxa(x)
+leaves(x)
+n_leaves(x)
+is_leaf(x)
+stems(x)
+is_stem(x)
+roots(x)
+is_root(x)
+internodes(x)
+is_internode(x)
 
 }
 \seealso{
