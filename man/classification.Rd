@@ -51,6 +51,7 @@ x <- classification(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera
                                    'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
                     supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
                     instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+names(x) <- letters[1:12]
 
 # Get parts of the classification vector
 tax_name(x)

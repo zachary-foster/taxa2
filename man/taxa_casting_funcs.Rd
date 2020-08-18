@@ -8,6 +8,7 @@
 \alias{vec_cast.taxa_classification.taxa_classification}
 \alias{vec_cast.character.taxa_classification}
 \alias{vec_cast.factor.taxa_classification}
+\alias{vec_cast.integer.taxa_classification}
 \alias{taxa_casting_funcs}
 \alias{vec_cast.taxa_taxon}
 \alias{vec_cast.taxa_taxon.default}
@@ -80,6 +81,8 @@
 \method{vec_cast.character}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
 \method{vec_cast.factor}{taxa_classification}(x, to, ..., x_arg, to_arg)
+
+\method{vec_cast.integer}{taxa_classification}(x, to, ..., x_arg, to_arg)
 
 \method{vec_cast}{taxa_taxon}(x, to, ..., x_arg, to_arg)
 

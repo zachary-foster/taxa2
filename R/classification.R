@@ -60,6 +60,7 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #'                                    'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
 #'                     supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
 #'                     instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+#' names(x) <- letters[1:12]
 #'
 #' # Get parts of the classification vector
 #' tax_name(x)
@@ -121,7 +122,7 @@ setOldClass(c("taxa_classification", "vctrs_vctr"))
 #' @rdname tax_id
 #' @export
 tax_id.taxa_classification <- function(x) {
-  tax_id(attr(x, 'taxonomy'))
+  get_taxonomy_named_field(x, tax_id)
 }
 
 #' @rdname tax_id
@@ -196,7 +197,7 @@ tax_cite.taxa_classification <- function(x) {
 #' @rdname tax_name
 #' @export
 tax_name.taxa_classification <- function(x) {
-  tax_name(attr(x, 'taxonomy'))
+  get_taxonomy_named_field(x, tax_name)
 }
 
 #' @rdname tax_name
@@ -211,7 +212,7 @@ tax_name.taxa_classification <- function(x) {
 #' @rdname tax_auth
 #' @export
 tax_auth.taxa_classification <- function(x) {
-  tax_auth(attr(x, 'taxonomy'))
+  get_taxonomy_named_field(x, tax_auth)
 }
 
 #' @rdname tax_auth
@@ -226,7 +227,7 @@ tax_auth.taxa_classification <- function(x) {
 #' @rdname tax_rank
 #' @export
 tax_rank.taxa_classification <- function(x) {
-  tax_rank(attr(x, 'taxonomy'))
+  get_taxonomy_named_field(x, tax_rank)
 }
 
 #' @rdname tax_rank
@@ -429,6 +430,16 @@ vec_cast.character.taxa_classification <- function(x, to, ..., x_arg, to_arg) as
 #' @export
 vec_cast.factor.taxa_classification <- function(x, to, ..., x_arg, to_arg) as.factor(format(x))
 
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.integer taxa_classification
+#' @importFrom vctrs vec_cast.integer
+#' @export
+vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
+  out <- unclass(x)
+  attr(out, "taxonomy") <- NULL
+  return(out)
+}
+
 
 
 #--------------------------------------------------------------------------------
@@ -546,10 +557,11 @@ is_internode.taxa_classification <- function(x) {
   is_internode(attr(x, 'taxonomy'))
 }
 
+
+
 #--------------------------------------------------------------------------------
 # Internal utility functions
 #--------------------------------------------------------------------------------
-
 
 #' @keywords internal
 attr_as_classification <- function(x, value) {
@@ -560,3 +572,11 @@ attr_as_classification <- function(x, value) {
   return(out)
 }
 
+#' @keywords internal
+get_taxonomy_named_field <- function(x, func) {
+  out <- func(attr(x, 'taxonomy'))[unname(as.integer(x))]
+  if (! is.null(names(x))) {
+    names(out) <- names(x)
+  }
+  return(out)
+}

@@ -300,7 +300,7 @@ printed_taxonomy <- function(x, color = FALSE) {
                      name_printed,
                      font_punct(': '),
                      printed_taxon(vctrs::field(x, 'taxa'), color = TRUE))
-  sub_char <- lapply(subtaxa(x, max_depth = 1), function(i) tax_char[i])
+  sub_char <- unname(lapply(subtaxa(x, max_depth = 1), function(i) tax_char[i]))
   tree_data <- data.frame(stringsAsFactors = FALSE,
                           taxa = tax_char,
                           subtaxa = I(sub_char))
@@ -748,6 +748,13 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 `[[.taxa_taxonomy` <- function(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE) {
   output <- x[..., subtaxa = subtaxa, supertaxa = supertaxa, invert = invert]
   as_taxon(output)
+}
+
+
+
+#' @export
+`[<-.taxa_taxonomy` <- function(x, i, j, value) {
+  NextMethod()
 }
 
 
