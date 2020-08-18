@@ -538,7 +538,7 @@ rank_level_color_funcs <- function(levels) {
   lev <- sort(levels, na.last = TRUE)
   colored_lev <- unique(lev[! is.na(lev)])
   if (length(colored_lev) > 0) {
-    colors <- viridisLite::viridis(length(colored_lev), begin = 0.85, end = 0.15)
+    colors <- viridisLite::viridis(length(colored_lev), begin = 0.8, end = 0.2)
   } else {
     colors <- character(0)
   }

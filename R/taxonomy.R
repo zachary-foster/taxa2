@@ -754,7 +754,23 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 
 #' @export
 `[<-.taxa_taxonomy` <- function(x, i, j, value) {
-  NextMethod()
+  if (missing(j)) { # j is the supertaxon index/name
+    x <- NextMethod()
+  } else {
+    rec <- vctrs::vec_recycle_common(i, j, value)
+    i = rec[[1]]
+    j = rec[[2]]
+    value = rec[[3]]
+    x[i] <- value # Calls this function again to make new rows, but without j
+    if (is.numeric(j)) {
+      vctrs::field(x, 'supertaxa')[i] <- j
+    } else if (is.character(j)) {
+      vctrs::field(x, 'supertaxa')[i] <- match(j, names(x))
+    } else {
+      stop(call. = FALSE, "Invlaid suptaxon index value.")
+    }
+  }
+  return(x)
 }
 
 
