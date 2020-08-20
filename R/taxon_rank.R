@@ -195,9 +195,10 @@ format.taxa_taxon_rank <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon_rank <- function(x) {
+obj_print_data.taxa_taxon_rank <- function(x, ...) {
   if (length(x) == 0) {
     return()
   }
@@ -207,9 +208,10 @@ obj_print_data.taxa_taxon_rank <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_footer
 #' @export
 #' @keywords internal
-obj_print_footer.taxa_taxon_rank <- function(x) {
+obj_print_footer.taxa_taxon_rank <- function(x, ...) {
   levels <- attr(x, 'levels')
   if (length(levels) == 0) {
     return()
@@ -220,17 +222,19 @@ obj_print_footer.taxa_taxon_rank <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxon_rank <- function(x) {
+vec_ptype_abbr.taxa_taxon_rank <- function(x, ...) {
   "tax_rank"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon_rank <- function(x) {
+vec_ptype_full.taxa_taxon_rank <- function(x, ...) {
   paste0("taxon_rank")
 }
 

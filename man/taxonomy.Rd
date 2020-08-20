@@ -55,8 +55,8 @@ names(x) <- letters[1:8]
 # Subset taxonomy vector
 x[2] # By default, all subtaxa are included
 x['b'] # Names can also be used
-x[2:3, subtaxa = F] # Disable subtaxa
-x[3, supertaxa = T] # include supertaxa
+x[2:3, subtaxa = FALSE] # Disable subtaxa
+x[3, supertaxa = TRUE] # include supertaxa
 x[is_leaf(x)] # Subset by logical vector
 
 # Get parts of the taxonomy vector

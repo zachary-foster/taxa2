@@ -72,29 +72,18 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #' tax_date(x)
 #' tax_cite(x)
 #'
-#' # Set parts of the classification vector
-#' tax_name(x) <- tolower(tax_name(x))
-#' tax_rank(x)[1] <- NA
-#' tax_id(x) <- '9999'
-#' tax_db(x) <- 'itis'
-#' tax_auth(x) <- NA
-#' tax_author(x)[2:3] <- c('Joe', 'Billy')
-#' tax_date(x) <- c('1999', '2013', '1796', '1899')
-#' tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
-#'
 #' # Manipulate classification vectors
 #' x[1:3]
 #' x[tax_rank(x) > 'family']
-#' c(x, x)
-#' names(x) <- c('a', 'b', 'c', 'd')
+#' # c(x, x)
 #' x['b'] <- NA
 #' is.na(x)
-#' as.data.frame(x)
-#' as_tibble(x)
+#' # as.data.frame(x)
+#' # tibble::as_tibble(x)
 #'
 #' # Use as columns in tables
-#' tibble::tibble(x = x, y = 1:4)
-#' data.frame(x = x, y = 1:4)
+#' tibble::tibble(x = x, y = 1:12)
+#' data.frame(x = x, y = 1:12)
 #'
 #' @export
 classification <- function(taxa = taxon(), supertaxa = NA, instances = integer(), .names = NULL) {
@@ -286,9 +275,10 @@ format.taxa_classification <- function(x, ...) {
 }
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_classification <- function(x) {
+obj_print_data.taxa_classification <- function(x, ...) {
   # Dont print anything if nothing to print
   if (length(x) == 0) {
     return()
@@ -300,26 +290,29 @@ obj_print_data.taxa_classification <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_footer
 #' @export
 #' @keywords internal
-obj_print_footer.taxa_classification <- function(x) {
+obj_print_footer.taxa_classification <- function(x, ...) {
   vctrs::obj_print_footer(attr(x, 'taxonomy'))
 }
 
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_classification <- function(x) {
+vec_ptype_abbr.taxa_classification <- function(x, ...) {
   "classif"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_classification <- function(x) {
+vec_ptype_full.taxa_classification <- function(x, ...) {
   "classification"
 }
 

@@ -371,9 +371,10 @@ format.taxa_taxon <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon <- function(x) {
+obj_print_data.taxa_taxon <- function(x, ...) {
   # Dont print anything if nothing to print
   if (length(x) == 0) {
     return()
@@ -394,9 +395,10 @@ obj_print_data.taxa_taxon <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_footer
 #' @export
 #' @keywords internal
-obj_print_footer.taxa_taxon <- function(x) {
+obj_print_footer.taxa_taxon <- function(x, ...) {
   # print taxon rank levels
   vctrs::obj_print_footer(vctrs::field(x, 'rank'))
 
@@ -413,17 +415,19 @@ obj_print_footer.taxa_taxon <- function(x) {
 }
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxon <- function(x) {
+vec_ptype_abbr.taxa_taxon <- function(x, ...) {
   "tax_name"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon <- function(x) {
+vec_ptype_full.taxa_taxon <- function(x, ...) {
   "taxon"
 }
 
@@ -554,6 +558,7 @@ vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(vctr
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_comparison_funcs
+#' @importFrom vctrs vec_proxy_compare
 #' @export
 #' @keywords internal
 vec_proxy_compare.taxa_taxon <- function(x, ...) {

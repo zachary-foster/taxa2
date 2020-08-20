@@ -196,26 +196,29 @@ printed_taxon_rank_level <- function(x, color = FALSE) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon_rank_level <- function(x) {
+obj_print_data.taxa_taxon_rank_level <- function(x, ...) {
   level_text <- paste0(printed_taxon_rank_level(x, color = TRUE), '\n')
   cat(level_text)
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxon_rank_level <- function(x) {
+vec_ptype_abbr.taxa_taxon_rank_level <- function(x, ...) {
   "tax_rank_lev"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon_rank_level <- function(x) {
+vec_ptype_full.taxa_taxon_rank_level <- function(x, ...) {
   "taxon_rank_level"
 }
 

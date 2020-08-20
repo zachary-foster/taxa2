@@ -58,8 +58,6 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #'
 #' # Manipulating objects
 #' as.character(x)
-#' as.data.frame(x)
-#' as_tibble(x)
 #' x[2]
 #' x[2] <- 'ABC'
 #' names(x) <- c('a', 'b')
@@ -257,9 +255,10 @@ format.taxa_taxon_authority <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon_authority <- function(x) {
+obj_print_data.taxa_taxon_authority <- function(x, ...) {
   if (length(x) == 0) {
     return()
   }
@@ -269,17 +268,19 @@ obj_print_data.taxa_taxon_authority <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxon_authority <- function(x) {
+vec_ptype_abbr.taxa_taxon_authority <- function(x, ...) {
   "tax_auth"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon_authority <- function(x) {
+vec_ptype_full.taxa_taxon_authority <- function(x, ...) {
   paste0("taxon_authority")
 }
 
@@ -501,7 +502,7 @@ as_tibble.taxa_taxon_authority <- function(x, ...) {
 #' @keywords internal
 parse_date_from_author <- function(x) {
   parts <- stringr::str_match(tax_author(x), '^(.+?),? *([0-9]{4}) *$')
-  to_replace <- complete.cases(parts) & is.na(tax_date(x))
+  to_replace <- stats::complete.cases(parts) & is.na(tax_date(x))
   tax_author(x)[to_replace] <- parts[to_replace, 2]
   tax_date(x)[to_replace] <- parts[to_replace, 3]
   return(x)

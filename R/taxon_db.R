@@ -105,17 +105,19 @@ format.taxa_taxon_db <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @keywords internal
 #' @export
-vec_ptype_abbr.taxa_taxon_db <- function(x) {
+vec_ptype_abbr.taxa_taxon_db <- function(x, ...) {
   "tax_db"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @keywords internal
 #' @export
-vec_ptype_full.taxa_taxon_db <- function(x) {
+vec_ptype_full.taxa_taxon_db <- function(x, ...) {
   paste0("taxon_db")
 }
 

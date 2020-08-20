@@ -221,9 +221,10 @@ format.taxa_taxon_id <- function(x, ...) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon_id <- function(x) {
+obj_print_data.taxa_taxon_id <- function(x, ...) {
   if (length(x) == 0) {
     return()
   }
@@ -233,17 +234,19 @@ obj_print_data.taxa_taxon_id <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxon_id <- function(x) {
+vec_ptype_abbr.taxa_taxon_id <- function(x, ...) {
   "tax_id"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon_id <- function(x) {
+vec_ptype_full.taxa_taxon_id <- function(x, ...) {
   paste0("taxon_id")
 }
 
@@ -410,6 +413,7 @@ vec_cast.data.frame.taxa_taxon_id <- function(x, to, ..., x_arg, to_arg) data.fr
 
 
 #' @rdname taxa_comparison_funcs
+#' @importFrom vctrs vec_proxy_equal
 #' @export
 #' @keywords internal
 vec_proxy_equal.taxa_taxon_id <- function(x, ...) {

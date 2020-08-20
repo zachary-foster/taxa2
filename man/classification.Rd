@@ -63,29 +63,18 @@ tax_author(x)
 tax_date(x)
 tax_cite(x)
 
-# Set parts of the classification vector
-tax_name(x) <- tolower(tax_name(x))
-tax_rank(x)[1] <- NA
-tax_id(x) <- '9999'
-tax_db(x) <- 'itis'
-tax_auth(x) <- NA
-tax_author(x)[2:3] <- c('Joe', 'Billy')
-tax_date(x) <- c('1999', '2013', '1796', '1899')
-tax_cite(x)[1] <- 'Linnaeus, C. (1771). Mantissa plantarum altera generum.'
-
 # Manipulate classification vectors
 x[1:3]
 x[tax_rank(x) > 'family']
-c(x, x)
-names(x) <- c('a', 'b', 'c', 'd')
+# c(x, x)
 x['b'] <- NA
 is.na(x)
-as.data.frame(x)
-as_tibble(x)
+# as.data.frame(x)
+# tibble::as_tibble(x)
 
 # Use as columns in tables
-tibble::tibble(x = x, y = 1:4)
-data.frame(x = x, y = 1:4)
+tibble::tibble(x = x, y = 1:12)
+data.frame(x = x, y = 1:12)
 
 }
 \seealso{

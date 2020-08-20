@@ -52,89 +52,89 @@
 \usage{
 \method{format}{taxa_classification}(x, ...)
 
-\method{obj_print_data}{taxa_classification}(x)
+\method{obj_print_data}{taxa_classification}(x, ...)
 
-\method{obj_print_footer}{taxa_classification}(x)
+\method{obj_print_footer}{taxa_classification}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_classification}(x)
+\method{vec_ptype_abbr}{taxa_classification}(x, ...)
 
-\method{vec_ptype_full}{taxa_classification}(x)
+\method{vec_ptype_full}{taxa_classification}(x, ...)
 
 \method{pillar_shaft}{taxa_classification}(x, ...)
 
 \method{format}{taxa_taxon}(x, ...)
 
-\method{obj_print_data}{taxa_taxon}(x)
+\method{obj_print_data}{taxa_taxon}(x, ...)
 
-\method{obj_print_footer}{taxa_taxon}(x)
+\method{obj_print_footer}{taxa_taxon}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon}(x)
+\method{vec_ptype_abbr}{taxa_taxon}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon}(x)
+\method{vec_ptype_full}{taxa_taxon}(x, ...)
 
 \method{pillar_shaft}{taxa_taxon}(x, ...)
 
 \method{format}{taxa_taxon_authority}(x, ...)
 
-\method{obj_print_data}{taxa_taxon_authority}(x)
+\method{obj_print_data}{taxa_taxon_authority}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon_authority}(x)
+\method{vec_ptype_abbr}{taxa_taxon_authority}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_authority}(x)
+\method{vec_ptype_full}{taxa_taxon_authority}(x, ...)
 
 \method{pillar_shaft}{taxa_taxon_authority}(x, ...)
 
 \method{format}{taxa_taxon_db}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon_db}(x)
+\method{vec_ptype_abbr}{taxa_taxon_db}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_db}(x)
+\method{vec_ptype_full}{taxa_taxon_db}(x, ...)
 
-\method{obj_print_data}{taxa_taxon_db_def}(x)
+\method{obj_print_data}{taxa_taxon_db_def}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_db_def}(x)
+\method{vec_ptype_full}{taxa_taxon_db_def}(x, ...)
 
 \method{format}{taxa_taxon_id}(x, ...)
 
-\method{obj_print_data}{taxa_taxon_id}(x)
+\method{obj_print_data}{taxa_taxon_id}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon_id}(x)
+\method{vec_ptype_abbr}{taxa_taxon_id}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_id}(x)
+\method{vec_ptype_full}{taxa_taxon_id}(x, ...)
 
 \method{pillar_shaft}{taxa_taxon_id}(x, ...)
 
 \method{format}{taxa_taxon_rank}(x, ...)
 
-\method{obj_print_data}{taxa_taxon_rank}(x)
+\method{obj_print_data}{taxa_taxon_rank}(x, ...)
 
-\method{obj_print_footer}{taxa_taxon_rank}(x)
+\method{obj_print_footer}{taxa_taxon_rank}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon_rank}(x)
+\method{vec_ptype_abbr}{taxa_taxon_rank}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_rank}(x)
+\method{vec_ptype_full}{taxa_taxon_rank}(x, ...)
 
 \method{pillar_shaft}{taxa_taxon_rank}(x, ...)
 
 \method{format}{taxa_taxon_rank_level}(x, ...)
 
-\method{obj_print_data}{taxa_taxon_rank_level}(x)
+\method{obj_print_data}{taxa_taxon_rank_level}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxon_rank_level}(x)
+\method{vec_ptype_abbr}{taxa_taxon_rank_level}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxon_rank_level}(x)
+\method{vec_ptype_full}{taxa_taxon_rank_level}(x, ...)
 
 \method{toString}{taxa_taxon_rank_level}(x, ...)
 
 \method{format}{taxa_taxonomy}(x, ...)
 
-\method{obj_print_data}{taxa_taxonomy}(x)
+\method{obj_print_data}{taxa_taxonomy}(x, ...)
 
-\method{obj_print_footer}{taxa_taxonomy}(x)
+\method{obj_print_footer}{taxa_taxonomy}(x, ...)
 
-\method{vec_ptype_abbr}{taxa_taxonomy}(x)
+\method{vec_ptype_abbr}{taxa_taxonomy}(x, ...)
 
-\method{vec_ptype_full}{taxa_taxonomy}(x)
+\method{vec_ptype_full}{taxa_taxonomy}(x, ...)
 
 \method{pillar_shaft}{taxa_taxonomy}(x, ...)
 }

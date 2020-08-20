@@ -124,9 +124,10 @@ setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxon_db_def <- function(x) {
+obj_print_data.taxa_taxon_db_def <- function(x, ...) {
   spacer <- '   '
   screen_width <- round(getOption("width") * 0.9)
   max_value_nchar <- round(screen_width * 0.8)
@@ -186,9 +187,10 @@ obj_print_data.taxa_taxon_db_def <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxon_db_def <- function(x) {
+vec_ptype_full.taxa_taxon_db_def <- function(x, ...) {
   paste0("taxon_db_def")
 }
 

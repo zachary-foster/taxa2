@@ -59,8 +59,8 @@ new_taxonomy <- function(taxa = taxon(), supertaxa = integer()) {
 #' # Subset taxonomy vector
 #' x[2] # By default, all subtaxa are included
 #' x['b'] # Names can also be used
-#' x[2:3, subtaxa = F] # Disable subtaxa
-#' x[3, supertaxa = T] # include supertaxa
+#' x[2:3, subtaxa = FALSE] # Disable subtaxa
+#' x[3, supertaxa = TRUE] # include supertaxa
 #' x[is_leaf(x)] # Subset by logical vector
 #'
 #' # Get parts of the taxonomy vector
@@ -325,9 +325,10 @@ format.taxa_taxonomy <- function(x, ...) {
 }
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_data
 #' @export
 #' @keywords internal
-obj_print_data.taxa_taxonomy <- function(x) {
+obj_print_data.taxa_taxonomy <- function(x, ...) {
   # Dont print anything if nothing to print
   if (length(x) == 0) {
     return()
@@ -340,26 +341,29 @@ obj_print_data.taxa_taxonomy <- function(x) {
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs obj_print_footer
 #' @export
 #' @keywords internal
-obj_print_footer.taxa_taxonomy <- function(x) {
+obj_print_footer.taxa_taxonomy <- function(x, ...) {
   vctrs::obj_print_footer(vctrs::field(x, 'taxa'))
 }
 
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_abbr
 #' @export
 #' @keywords internal
-vec_ptype_abbr.taxa_taxonomy <- function(x) {
+vec_ptype_abbr.taxa_taxonomy <- function(x, ...) {
   "taxonomy"
 }
 
 
 #' @rdname taxa_printing_funcs
+#' @importFrom vctrs vec_ptype_full
 #' @export
 #' @keywords internal
-vec_ptype_full.taxa_taxonomy <- function(x) {
+vec_ptype_full.taxa_taxonomy <- function(x, ...) {
   "taxonomy"
 }
 
