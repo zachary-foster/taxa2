@@ -741,8 +741,15 @@ n_supertaxa.taxa_taxonomy <- function(x) {
     taxa_subset <- index[-taxa_subset]
   }
 
+  # Replace supertaxa filtered out for preserved taxa
+  supertaxa(x)[taxa_subset]
+  nearest_supertaxa <- unname(unlist(lapply(supertaxa(x)[taxa_subset], function(s) {
+    s[s %in% taxa_subset][1]
+  })))
+
+  # Apply supset
   taxonomy(taxa = vctrs::field(x, 'taxa')[taxa_subset],
-           supertaxa = match(vctrs::field(x, 'supertaxa')[taxa_subset], taxa_subset),
+           supertaxa = match(nearest_supertaxa, taxa_subset),
            .names = names(x)[taxa_subset])
 }
 
@@ -757,19 +764,27 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 
 
 #' @export
-`[<-.taxa_taxonomy` <- function(x, i, j, value) {
-  if (missing(j)) { # j is the supertaxon index/name
+`[<-.taxa_taxonomy` <- function(x, i, supertaxa, value) {
+  if (missing(supertaxa)) { # supertaxa is the supertaxon index/name
     x <- NextMethod()
   } else {
-    rec <- vctrs::vec_recycle_common(i, j, value)
+    # Recycle inputs to same length
+    rec <- vctrs::vec_recycle_common(i, supertaxa, value)
     i = rec[[1]]
-    j = rec[[2]]
+    supertaxa = rec[[2]]
     value = rec[[3]]
-    x[i] <- value # Calls this function again to make new rows, but without j
-    if (is.numeric(j)) {
-      vctrs::field(x, 'supertaxa')[i] <- j
-    } else if (is.character(j)) {
-      vctrs::field(x, 'supertaxa')[i] <- match(j, names(x))
+
+    # Calls this function again to make new rows, but without supertaxa
+    x[i] <- value
+
+    # Reset overwritten supertaxa
+
+
+    # Set supertaxa
+    if (is.numeric(supertaxa)) {
+      vctrs::field(x, 'supertaxa')[i] <- supertaxa
+    } else if (is.character(supertaxa)) {
+      vctrs::field(x, 'supertaxa')[i] <- match(supertaxa, names(x))
     } else {
       stop(call. = FALSE, "Invlaid suptaxon index value.")
     }
