@@ -4,7 +4,7 @@
 \alias{subtaxa}
 \title{Get subtaxa}
 \usage{
-subtaxa(x, max_depth = NULL, include = FALSE, value = NULL, ...)
+subtaxa(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...)
 }
 \arguments{
 \item{x}{The object to get subtaxa for.}

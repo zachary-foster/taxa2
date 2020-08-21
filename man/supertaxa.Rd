@@ -4,7 +4,14 @@
 \alias{supertaxa}
 \title{Get supertaxa}
 \usage{
-supertaxa(x, max_depth = NULL, include = FALSE, value = NULL, ...)
+supertaxa(
+  x,
+  subset = NULL,
+  max_depth = NULL,
+  include = FALSE,
+  value = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{The object to get supertaxa for.}

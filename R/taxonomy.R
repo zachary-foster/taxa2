@@ -533,7 +533,8 @@ is_root.taxa_taxonomy <- function(x, subset = NULL) {
   if (is.null(subset)) {
     out <- is.na(vctrs::field(x, 'supertaxa'))
   } else {
-    subset <- unname(unlist(subtaxa(x, include = TRUE)[subset])) # NOTE: replace with 'subset' version of subtaxa
+    subset <- parse_subset_argument(x, subset)
+    # subset <- unname(unlist(subtaxa(x, include = TRUE)[subset])) # NOTE: replace with 'subset' version of subtaxa
     supertaxa <- vctrs::field(x, 'supertaxa')
     out <-  seq_len(length(x)) %in% subset & ((! supertaxa %in% subset) | is.na(supertaxa))
   }
@@ -575,12 +576,17 @@ roots.taxa_taxonomy <- function(x, subset = NULL) {
 #'   as the number of taxa.
 #'
 #' @export
-subtaxa <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
+subtaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
   UseMethod('subtaxa')
 }
 
 #' @export
-subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
+subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+  # Parse arguments
+  subset <- parse_subset_argument(x, subset)
+  original_names <- names(x)
+  names(x) <- as.character(seq_len(length(x)))
+
   # Get subtaxa
   get_children <- function(taxon) {
     which(vctrs::field(x, 'supertaxa') == taxon)
@@ -600,12 +606,12 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = 
     return(output)
   }
   if (is.null(max_depth) || max_depth > 1) {
-    output <- stats::setNames(
-      unlist(lapply(roots(x), recursive_part), recursive = FALSE),
-      names(subset)
-    )
+    output <- unlist(unname(lapply(roots(x, subset = subset), recursive_part)), recursive = FALSE)
   } else {
-    output <- lapply(seq_len(length(x)), function(i) c(i, get_children(i)))
+    output <- stats::setNames(
+      lapply(seq_len(length(x)), function(i) c(i, get_children(i))),
+      names(x)
+    )
   }
 
   # Remove query taxa from output
@@ -618,11 +624,11 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = 
   # To increase speed, the recursive algorithm only searches starting at
   # root taxa, but this makes it hard to limit the number of rankes returned
   # below each taxon during recursion. Instead, a finite number of
-  # recursions are simulated by filtering the results of tarversing the
+  # recursions are simulated by filtering the results of traversing the
   # entire tree and comparing rank depth between each taxon and its subtaxa.
   if (! is.null(max_depth)) {
-    rank_depth <- vapply(supertaxa(x), length, numeric(1))
-    output <- lapply(seq_len(length(output)), function(i) {
+    rank_depth <- vapply(supertaxa(x, subset = as.numeric(names(output))), length, numeric(1))
+    output[] <- lapply(seq_len(length(output)), function(i) {
       subtaxa_depth <- rank_depth[output[[i]]]
       current_depth <- rank_depth[i]
       passing_taxa <- subtaxa_depth - current_depth <= max_depth
@@ -630,9 +636,13 @@ subtaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = 
     })
   }
 
+  # Only return information for the subset
+  output <- output[as.character(subset)]
+
   # Set names and values
+  names(x) <- original_names
   output <- apply_names_and_values(x, index_list = output, value = value)
-  names(output) <- names(x)
+  names(output) <- original_names[subset]
 
   return(output)
 }
@@ -668,12 +678,14 @@ n_subtaxa.taxa_taxonomy <- function(x) {
 #' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
 #'
 #' @export
-supertaxa <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
+supertaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
   UseMethod('supertaxa')
 }
 
 #' @export
-supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
+supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+  # Parse arguments
+  subset <- parse_subset_argument(x, subset)
 
   # Get supertaxa
   parent_index <- vctrs::field(x, 'supertaxa')
@@ -687,9 +699,9 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value 
     return(unname(output))
   }
   if (! is.null(max_depth) && max_depth == 0) {
-    output <- lapply(seq_len(length(x)), function(i) numeric(0))
+    output <- lapply(subset, function(i) numeric(0))
   } else {
-    output <- lapply(seq_len(length(x)), recursive_part)
+    output <- lapply(subset, recursive_part)
   }
 
   # Remove query taxa from output
@@ -702,7 +714,7 @@ supertaxa.taxa_taxonomy <- function(x, max_depth = NULL, include = FALSE, value 
 
   # Set names and values
   output <- apply_names_and_values(x, index_list = output, value = value)
-  names(output) <- names(x)
+  names(output) <- names(x)[subset]
 
   return(output)
 }
@@ -1058,4 +1070,19 @@ enclosing_taxon <- function(x, subset) {
     possible <- possible[which.max(n_supertaxa(x)[possible])] # NOTE use subset version of n_supertaxa
   }
   return(possible)
+}
+
+
+#' @keywords internal
+parse_subset_argument <- function(x, subset) {
+  if (is.null(subset)) {
+    subset <- seq_len(length(x))
+  } else {
+    if (is.character(subset)) {
+      subset <- match(subset, names(x))
+    } else if (! is.numeric(subset)) {
+      stop(call. = FALSE, "Invalid value for 'subset' argument of class '", class(x)[1], "'.")
+    }
+  }
+  return(subset)
 }

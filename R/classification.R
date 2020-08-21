@@ -452,13 +452,13 @@ is_classification <- function(x) {
 
 
 #' @export
-is_root.taxa_classification <- function(x) {
-  is_root(attr(x, 'taxonomy'))
+is_root.taxa_classification <- function(x, subset = NULL) {
+  is_root(attr(x, 'taxonomy'), subset = subset)
 }
 
 #' @export
-roots.taxa_classification <- function(x) {
-  roots(attr(x, 'taxonomy'))
+roots.taxa_classification <- function(x, subset = NULL) {
+  roots(attr(x, 'taxonomy'), subset = subset)
 }
 
 #' @export
