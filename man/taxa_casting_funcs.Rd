@@ -70,6 +70,8 @@
 \alias{vec_cast.character.taxa_taxonomy}
 \alias{vec_cast.taxa_taxonomy.factor}
 \alias{vec_cast.factor.taxa_taxonomy}
+\alias{vec_cast.taxa_taxonomy.taxa_taxon}
+\alias{vec_cast.taxa_taxon.taxa_taxonomy}
 \title{taxa casting functions}
 \usage{
 \method{vec_cast}{taxa_classification}(x, to, ..., x_arg, to_arg)
@@ -203,6 +205,10 @@
 \method{vec_cast.taxa_taxonomy}{factor}(x, to, ..., x_arg, to_arg)
 
 \method{vec_cast.factor}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
+
+\method{vec_cast.taxa_taxonomy}{taxa_taxon}(x, to, ..., x_arg, to_arg)
+
+\method{vec_cast.taxa_taxon}{taxa_taxonomy}(x, to, ..., x_arg, to_arg)
 }
 \description{
 Functions used internally for casting taxon objects to other types. They have to be exported to

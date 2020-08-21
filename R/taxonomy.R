@@ -486,6 +486,18 @@ vec_cast.taxa_taxonomy.factor <- function(x, to, ..., x_arg, to_arg) taxonomy(x)
 vec_cast.factor.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) as.factor(vctrs::field(x, "taxa"))
 
 
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxonomy taxa_taxon
+#' @export
+vec_cast.taxa_taxonomy.taxa_taxon <- function(x, to, ..., x_arg, to_arg) taxonomy(x)
+
+
+#' @rdname taxa_casting_funcs
+#' @method vec_cast.taxa_taxon taxa_taxonomy
+#' @export
+vec_cast.taxa_taxon.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) vctrs::field(x, "taxa")
+
+
 
 
 #--------------------------------------------------------------------------------
@@ -742,7 +754,6 @@ n_supertaxa.taxa_taxonomy <- function(x) {
   }
 
   # Replace supertaxa filtered out for preserved taxa
-  supertaxa(x)[taxa_subset]
   nearest_supertaxa <- unname(unlist(lapply(supertaxa(x)[taxa_subset], function(s) {
     s[s %in% taxa_subset][1]
   })))
@@ -774,13 +785,16 @@ n_supertaxa.taxa_taxonomy <- function(x) {
     supertaxa = rec[[2]]
     value = rec[[3]]
 
+    # Reset overwritten supertaxa
+    nearest_supertaxa <- unname(unlist(lapply(supertaxa(x), function(s) {
+      s[! s %in% i][1]
+    })))
+    vctrs::field(x, 'supertaxa') <- nearest_supertaxa
+
     # Calls this function again to make new rows, but without supertaxa
     x[i] <- value
 
-    # Reset overwritten supertaxa
-
-
-    # Set supertaxa
+    # Set supertaxa for replaced
     if (is.numeric(supertaxa)) {
       vctrs::field(x, 'supertaxa')[i] <- supertaxa
     } else if (is.character(supertaxa)) {
