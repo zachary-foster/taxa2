@@ -521,7 +521,7 @@ is_taxonomy <- function(x) {
 #' Check if each taxon is a root. A root is a taxon with no supertaxon.
 #'
 #' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
-#' @param subset The subset of the tree to search for roots to that subset.
+#' @param subset The subset of the tree to search for roots to that subset. Can be indexes or names.
 #'
 #' @export
 is_root <- function(x, subset = NULL) {
@@ -783,15 +783,21 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 
 
 #' @export
-`[<-.taxa_taxonomy` <- function(x, i, supertaxa, subtaxa, value) {
-  if (missing(supertaxa)) { # supertaxa is the supertaxon index/name
+`[<-.taxa_taxonomy` <- function(x, i, supertaxa = NULL, subtaxa = NULL, value) {
+  if (is.null(supertaxa) && is.null(subtaxa)) { # supertaxa is the supertaxon index/name
     x <- NextMethod()
   } else {
-    # Prepare subtaxa
-    if (! is.list(subtaxa)) {
-      subtaxa <- list(subtaxa)
-    }
 
+    # Prepare subtaxa and infer supertaxa if not specified
+    if (! is.null(subtaxa)) {
+      if (! is.list(subtaxa)) {
+        subtaxa <- list(subtaxa)
+      }
+      subtaxa <- lapply(subtaxa, function(s) roots(x, subset = s))
+      if (is.null(supertaxa)) {
+        supertaxa <- vapply(subtaxa, function(s) enclosing_taxon(x, subset = s), numeric(1))
+      }
+    }
 
     # Recycle inputs to same length
     rec <- vctrs::vec_recycle_common(i, supertaxa, subtaxa, value)
@@ -806,6 +812,12 @@ n_supertaxa.taxa_taxonomy <- function(x) {
     })))
     vctrs::field(x, 'supertaxa') <- nearest_supertaxa
 
+    # Set subtaxa
+    if (!is.null(subtaxa)) {
+      to_set <- unlist(subtaxa)
+      vctrs::field(x, 'supertaxa')[to_set] <- rep(i, vapply(subtaxa, length, numeric(1)))
+    }
+
     # Calls this function again to make new rows, but without supertaxa
     x[i] <- value
 
@@ -817,6 +829,7 @@ n_supertaxa.taxa_taxonomy <- function(x) {
     } else {
       stop(call. = FALSE, "Invlaid suptaxon index value.")
     }
+
   }
   return(x)
 }
@@ -1032,4 +1045,17 @@ apply_names_and_values <- function(x, index_list, value) {
   lapply(index_list, function(i) {
     stats::setNames(value[i], names(x)[i])
   })
+}
+
+
+#' @keywords internal
+enclosing_taxon <- function(x, subset) {
+  super <- table(unname(unlist((supertaxa(x)[subset])))) # NOTE use subset version of supertaxa
+  possible <- as.numeric(names(super[super == length(subset)]))
+  if (length(possible) == 0) {
+    possible <- NA
+  } else if (length(possible) > 1) {
+    possible <- possible[which.max(n_supertaxa(x)[possible])] # NOTE use subset version of n_supertaxa
+  }
+  return(possible)
 }
