@@ -462,23 +462,23 @@ roots.taxa_classification <- function(x, subset = NULL) {
 }
 
 #' @export
-subtaxa.taxa_classification <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
-  subtaxa(attr(x, 'taxonomy'), max_depth = max_depth, include = include, value = value, ...)
+subtaxa.taxa_classification <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+  subtaxa(attr(x, 'taxonomy'), subset = subset, max_depth = max_depth, include = include, value = value, ...)
 }
 
 #' @export
-n_subtaxa.taxa_classification <- function(x) {
-  subtaxa(attr(x, 'taxonomy'))
+n_subtaxa.taxa_classification <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
+  subtaxa(attr(x, 'taxonomy'), subset = subset, max_depth = max_depth, include = include)
 }
 
 #' @export
-supertaxa.taxa_classification <- function(x, max_depth = NULL, include = FALSE, value = NULL, ...) {
-  supertaxa(attr(x, 'taxonomy'), max_depth = max_depth, include = include, value = value, ...)
+supertaxa.taxa_classification <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+  supertaxa(attr(x, 'taxonomy'), subset = subset, max_depth = max_depth, include = include, value = value, ...)
 }
 
 #' @export
-n_supertaxa.taxa_classification <- function(x) {
-  n_supertaxa(attr(x, 'taxonomy'))
+n_supertaxa.taxa_classification <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
+  n_supertaxa(attr(x, 'taxonomy'), subset = subset, max_depth = max_depth, include = include)
 }
 
 #' @method %in% taxa_classification

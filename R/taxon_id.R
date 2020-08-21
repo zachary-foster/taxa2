@@ -11,6 +11,7 @@
 #' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the
 #'   default), the input must consist of names of databases in [database_ref]. The length must be
 #'   0, 1, or equal to the number of IDs.
+#' @param .names The names to apply to the vector
 #'
 #' @return An `S3` object of class `taxa_taxon_id`
 #'
@@ -43,6 +44,7 @@ new_taxon_id <- function(.names = NULL, id = character(), db = taxon_db()) {
 #' @param db The name(s) of the database(s) associated with the IDs. If not `NA` (the default), the
 #'   input must consist of names of databases in [database_ref]. The length must be 0, 1, or equal
 #'   to the number of IDs.
+#' @param .names The names that will be applied to the vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_id`
 #' @family classes
@@ -93,6 +95,13 @@ taxon_id <- function(id = character(), db = NA, .names = NULL) {
 }
 
 
+#' Taxon ID class
+#'
+#' Taxon ID class. See [taxon_id] for more information
+#'
+#' @name taxa_taxon_id-class
+#' @aliases taxa_taxon_id
+#' @rdname taxa_taxon_id
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxon_id
 setOldClass(c("taxa_taxon_id", "vctrs_vctr"))
@@ -122,7 +131,6 @@ tax_db.taxa_taxon_id <- function(x) {
 
 
 
-#' @rdname taxon_id
 #' @export
 names.taxa_taxon_id <- function(x) {
   if (attributes(x)[['.names_set']]) {
@@ -132,7 +140,6 @@ names.taxa_taxon_id <- function(x) {
   }
 }
 
-#' @rdname taxon_id
 #' @export
 `names<-.taxa_taxon_id` <- function(x, value) {
   if (is.null(value)) {
@@ -442,7 +449,6 @@ is_taxon_id <- function(x) {
 }
 
 
-#' @rdname taxon_id
 #' @export
 is.na.taxa_taxon_id <- function(x) {
   is.na(vctrs::vec_cast(x, character()))

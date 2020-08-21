@@ -16,6 +16,8 @@ taxon_db(x) <- value
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
 \link{db_ref}. Inputs will be transformed to a \code{character} vector if possible.}
 
+\item{...}{Additional arguments.}
+
 \item{x}{An object to set taxon databases for.}
 
 \item{value}{The taxon databases to use. Inputs will be coerced into a \code{\link[=taxon_db]{taxon_db()}} vector.}
@@ -66,7 +68,7 @@ x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},
 \code{\link{taxonomy}()},

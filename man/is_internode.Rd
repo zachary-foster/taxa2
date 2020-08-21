@@ -7,7 +7,7 @@
 is_internode(x)
 }
 \arguments{
-\item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+\item{x}{The object to get internodes for.}
 }
 \description{
 Check if each taxon is a internode. An internode is a taxon with exactly one supertaxon and one

@@ -7,7 +7,7 @@
 is_stem(x)
 }
 \arguments{
-\item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+\item{x}{The object to get stems for.}
 }
 \description{
 Check if each taxon is a stem. A stem is any taxa from a root to the first taxon with multiple subtaxa.

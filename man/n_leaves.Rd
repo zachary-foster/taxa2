@@ -7,7 +7,7 @@
 n_leaves(x)
 }
 \arguments{
-\item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+\item{x}{The object to get leaves for.}
 }
 \description{
 Get the number of leaves per taxon. A leaf is a taxon with no subtaxa.

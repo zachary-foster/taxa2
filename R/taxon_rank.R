@@ -103,6 +103,13 @@ taxon_rank <- function(rank = character(), levels = NULL, guess_order = TRUE) {
 }
 
 
+#' Taxon rank class
+#'
+#' Taxon rank class. See [taxon_rank] for more information
+#'
+#' @name taxa_taxon_rank-class
+#' @aliases taxa_taxon_rank
+#' @rdname taxa_taxon_rank
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxon_rank
 setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
@@ -114,7 +121,6 @@ setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
 #--------------------------------------------------------------------------------
 
 
-#' @rdname taxon_rank
 #' @export
 `levels<-.taxa_taxon_rank` <- function(x, value) {
   levels <- vctrs::vec_cast(value, taxon_rank_level())
@@ -125,7 +131,6 @@ setOldClass(c("taxa_taxon_rank", "vctrs_vctr"))
 }
 
 
-#' @rdname taxon_rank
 #' @export
 levels.taxa_taxon_rank <- function(x) {
   stats::setNames(vctrs::field(attr(x, 'levels'), 'order'),
@@ -442,7 +447,6 @@ is_taxon_rank <- function(x) {
 }
 
 
-#' @rdname taxon_rank
 #' @export
 is.na.taxa_taxon_rank <- function(x) {
   is.na(vctrs::vec_cast(x, character()))

@@ -7,6 +7,8 @@
 new_taxon_id(.names = NULL, id = character(), db = taxon_db())
 }
 \arguments{
+\item{.names}{The names to apply to the vector}
+
 \item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector.}
 
 \item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the

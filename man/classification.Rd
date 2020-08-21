@@ -79,7 +79,7 @@ data.frame(x = x, y = 1:12)
 }
 \seealso{
 Other classes: 
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},

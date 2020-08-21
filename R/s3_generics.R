@@ -1,3 +1,9 @@
+#' Value matching for taxa package
+#'
+#' A wrapper for the base value matching %in% that is used to take into consideration features of the taxa package.
+#'
+#' @inheritParams base::match
+#'
 #' @export
 `%in%` <- function(x, table) {
   UseMethod('%in%')
@@ -49,6 +55,12 @@
 }
 
 
+#' Coerce taxa objects to a Data Frame
+#'
+#' Convert taxa objects to data.frames.
+#'
+#' @inheritParams base::as.data.frame
+#'
 #' @export
 as_data_frame <- function(x, row.names = NULL, optional = FALSE, ...,
                           stringsAsFactors = default.stringsAsFactors()) {

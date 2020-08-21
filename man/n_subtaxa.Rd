@@ -4,10 +4,17 @@
 \alias{n_subtaxa}
 \title{Number of subtaxa per taxon}
 \usage{
-n_subtaxa(x)
+n_subtaxa(x, subset = NULL, max_depth = NULL, include = FALSE)
 }
 \arguments{
-\item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+\item{x}{The object to get subtaxa for.}
+
+\item{subset}{The subset of the tree to search for roots to that subset. Can be indexes or names.}
+
+\item{max_depth}{The number of levels to traverse. For example, \code{max_depth = 1} returns only immediate subtaxa. By default (NULL) information for all
+subtaxa is returned.}
+
+\item{include}{If \code{TRUE}, include information for each taxon in the output.}
 }
 \description{
 Get the number of subtaxa per taxon.

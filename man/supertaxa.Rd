@@ -16,12 +16,16 @@ supertaxa(
 \arguments{
 \item{x}{The object to get supertaxa for.}
 
+\item{subset}{The subset of the tree to search for roots to that subset. Can be indexes or names.}
+
 \item{max_depth}{The number of levels to traverse. For example, \code{max_depth = 1} returns only immediate supertaxa. By default (NULL) information for all
 supertaxa is returned.}
 
 \item{include}{If \code{TRUE}, include information for each taxon in the output.}
 
 \item{value}{Something to return instead of indexes. Must be the same length as the number of taxa.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Get supertaxa indexes for each taxon or another per-taxon value.

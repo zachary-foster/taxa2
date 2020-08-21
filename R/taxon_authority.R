@@ -95,6 +95,13 @@ taxon_authority <- function(author = character(), date = NA, citation = NA, .nam
   return(out)
 }
 
+#' Taxon authority class
+#'
+#' Taxon authority class. See [taxon_authority] for more information
+#'
+#' @name taxa_taxon_authority-class
+#' @aliases taxa_taxon_authority
+#' @rdname taxa_taxon_authority
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxon_authority
 setOldClass(c("taxa_taxon_authority", "vctrs_vctr"))
@@ -157,7 +164,6 @@ tax_cite.taxa_taxon_authority <- function(x) {
 
 
 
-#' @rdname taxon_authority
 #' @export
 names.taxa_taxon_authority <- function(x) {
   if (attributes(x)[['.names_set']]) {
@@ -167,7 +173,6 @@ names.taxa_taxon_authority <- function(x) {
   }
 }
 
-#' @rdname taxon_authority
 #' @export
 `names<-.taxa_taxon_authority` <- function(x, value) {
   if (is.null(value)) {
@@ -447,7 +452,6 @@ is_taxon_authority <- function(x) {
 }
 
 
-#' @rdname taxon_authority
 #' @export
 is.na.taxa_taxon_authority <- function(x) {
   is.na(vctrs::field(x, "author")) & is.na(vctrs::field(x, "date"))

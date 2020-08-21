@@ -10,6 +10,8 @@ stems(x, value = NULL, ...)
 \item{x}{The object to get stems for.}
 
 \item{value}{Something to return instead of indexes. Must be the same length as the number of taxa.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Get stem indexes for each taxon or another per-taxon value.

@@ -56,6 +56,7 @@ new_taxon <- function(.names = NULL, name = character(), rank = taxon_rank(), id
 #' @param auth The authority of the taxon. Inputs with be coerced into a [taxon_authority] vector if
 #'   anything else is given.
 #' @param .names The names of the vector.
+#' @param ... Additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon`
 #' @family classes
@@ -129,6 +130,13 @@ taxon <- function(name = character(0), rank = NA, id = NA, auth = NA, .names = N
 }
 
 
+#' Taxon class
+#'
+#' Taxon class. See [taxon] for more information
+#'
+#' @name taxa_taxon-class
+#' @aliases taxa_taxon
+#' @rdname taxa_taxon
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxon
 setOldClass(c("taxa_taxon", "vctrs_vctr"))
@@ -266,8 +274,6 @@ tax_rank.taxa_taxon <- function(x) {
 }
 
 
-
-#' @rdname taxon_authority
 #' @export
 names.taxa_taxon <- function(x) {
   if (attributes(x)[['.names_set']]) {
@@ -277,7 +283,6 @@ names.taxa_taxon <- function(x) {
   }
 }
 
-#' @rdname taxon_authority
 #' @export
 `names<-.taxa_taxon` <- function(x, value) {
   if (is.null(value)) {
@@ -645,6 +650,13 @@ as_tibble.taxa_taxon <- function(x, ...) {
 }
 
 
+#' Convert to a taxon vector
+#'
+#' Convert other objects to taxon vectors
+#'
+#' @param x An object to be converted to a taxon vector
+#' @param ... Additional parameters.
+#'
 #' @export
 as_taxon <- function(x, ...) {
   UseMethod('as_taxon')

@@ -2,18 +2,9 @@
 % Please edit documentation in R/taxon_rank.R
 \name{taxon_rank}
 \alias{taxon_rank}
-\alias{levels<-.taxa_taxon_rank}
-\alias{levels.taxa_taxon_rank}
-\alias{is.na.taxa_taxon_rank}
 \title{Taxon rank class}
 \usage{
 taxon_rank(rank = character(), levels = NULL, guess_order = TRUE)
-
-\method{levels}{taxa_taxon_rank}(x) <- value
-
-\method{levels}{taxa_taxon_rank}(x)
-
-\method{is.na}{taxa_taxon_rank}(x)
 }
 \arguments{
 \item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to a \code{character}
@@ -75,7 +66,7 @@ x[2] <- taxon_rank('superkingdom')
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
 \code{\link{taxonomy}()},

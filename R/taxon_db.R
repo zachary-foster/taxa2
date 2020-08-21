@@ -9,6 +9,7 @@
 #'
 #' @param db Zero or more taxonomic database names. Should be a name contained in
 #'   `names(db_ref)`. Inputs will be transformed to a `character` vector.
+#' @param ... Additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon_db`
 #'
@@ -26,6 +27,7 @@ new_taxon_db <- function(db = character(), ...) {
 #'
 #' @param db Zero or more taxonomic database names. Should be a name contained in
 #'   [db_ref]. Inputs will be transformed to a `character` vector if possible.
+#' @param ... Additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon_db`
 #'
@@ -86,6 +88,13 @@ taxon_db <- function(db = character(), ...) {
 }
 
 
+#' Taxon database class
+#'
+#' Taxon database class. See [taxon_db] for more information
+#'
+#' @name taxa_taxon_db-class
+#' @aliases taxa_taxon_db
+#' @rdname taxa_taxon_db
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxon_db
 setOldClass(c("taxa_taxon_db", "vctrs_vctr"))

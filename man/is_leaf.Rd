@@ -7,7 +7,7 @@
 is_leaf(x)
 }
 \arguments{
-\item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+\item{x}{The object to get leaves for.}
 }
 \description{
 Check if each taxon is a leaf. A leaf is a taxon with no subtaxa.

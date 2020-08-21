@@ -9,6 +9,8 @@ subtaxa(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...)
 \arguments{
 \item{x}{The object to get subtaxa for.}
 
+\item{subset}{The subset of the tree to search for roots to that subset. Can be indexes or names.}
+
 \item{max_depth}{The number of levels to traverse. For example, \code{max_depth = 1} returns only immediate subtaxa. By default (NULL) information for all
 subtaxa is returned.}
 
@@ -16,6 +18,8 @@ subtaxa is returned.}
 
 \item{value}{Something to return instead of indexes. Must be the same length
 as the number of taxa.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Get subtaxa indexes for each taxon or another per-taxon value.

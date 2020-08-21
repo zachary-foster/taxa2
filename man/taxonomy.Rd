@@ -105,7 +105,7 @@ is_internode(x)
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},

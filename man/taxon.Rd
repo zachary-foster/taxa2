@@ -20,6 +20,8 @@ database. Inputs with be coerced into a \link{taxon_id} vector if anything else 
 anything else is given.}
 
 \item{.names}{The names of the vector.}
+
+\item{...}{Additional arguments.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon}
@@ -80,7 +82,7 @@ as_data_frame(x)
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},

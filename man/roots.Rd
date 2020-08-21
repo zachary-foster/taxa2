@@ -9,7 +9,7 @@ roots(x, subset = NULL)
 \arguments{
 \item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
 
-\item{subset}{The subset of the tree to search for roots to that subset.}
+\item{subset}{The subset of the tree to search for roots to that subset. Can be indexes or names.}
 }
 \description{
 Get the indexs for roots.

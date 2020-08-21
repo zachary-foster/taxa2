@@ -2,18 +2,9 @@
 % Please edit documentation in R/taxon_id.R
 \name{taxon_id}
 \alias{taxon_id}
-\alias{names.taxa_taxon_id}
-\alias{names<-.taxa_taxon_id}
-\alias{is.na.taxa_taxon_id}
 \title{Taxon ID class}
 \usage{
 taxon_id(id = character(), db = NA, .names = NULL)
-
-\method{names}{taxa_taxon_id}(x)
-
-\method{names}{taxa_taxon_id}(x) <- value
-
-\method{is.na}{taxa_taxon_id}(x)
 }
 \arguments{
 \item{id}{Zero or more taxonomic ids. Inputs will be transformed to a \code{character} vector if
@@ -22,6 +13,8 @@ possible.}
 \item{db}{The name(s) of the database(s) associated with the IDs. If not \code{NA} (the default), the
 input must consist of names of databases in \link{database_ref}. The length must be 0, 1, or equal
 to the number of IDs.}
+
+\item{.names}{The names that will be applied to the vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_id}
@@ -65,7 +58,7 @@ as_data_frame(x)
 \seealso{
 Other classes: 
 \code{\link{classification}()},
-\code{\link{names.taxa_taxon}()},
+\code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_rank}()},
 \code{\link{taxonomy}()},

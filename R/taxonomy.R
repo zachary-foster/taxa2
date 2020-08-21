@@ -126,6 +126,13 @@ taxonomy <- function(taxa = taxon(), supertaxa = NA, .names = NULL) {
 }
 
 
+#' Taxonomy class
+#'
+#' Taxonomy class. See [taxonomy] for more information
+#'
+#' @name taxa_taxonomy-class
+#' @aliases taxa_taxonomy
+#' @rdname taxa_taxonomy
 #' @importFrom methods setOldClass
 #' @exportClass taxa_taxonomy
 setOldClass(c("taxa_taxonomy", "vctrs_vctr"))
@@ -547,8 +554,7 @@ is_root.taxa_taxonomy <- function(x, subset = NULL) {
 #'
 #' Get the indexs for roots.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
-#' @param subset The subset of the tree to search for roots to that subset.
+#' @inheritParams is_root
 #'
 #' @export
 roots <- function(x, subset = NULL) {
@@ -568,12 +574,14 @@ roots.taxa_taxonomy <- function(x, subset = NULL) {
 #' Get subtaxa indexes for each taxon or another per-taxon value.
 #'
 #' @param x The object to get subtaxa for.
+#' @param subset The subset of the tree to search for roots to that subset. Can be indexes or names.
 #' @param max_depth The number of levels to traverse. For example, `max_depth =
 #'   1` returns only immediate subtaxa. By default (NULL) information for all
 #'   subtaxa is returned.
 #' @param include If `TRUE`, include information for each taxon in the output.
 #' @param value Something to return instead of indexes. Must be the same length
 #'   as the number of taxa.
+#' @param ... Additional arguments.
 #'
 #' @export
 subtaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
@@ -651,16 +659,16 @@ subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = 
 #'
 #' Get the number of subtaxa per taxon.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams subtaxa
 #'
 #' @export
-n_subtaxa <- function(x) {
+n_subtaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
   UseMethod('n_subtaxa')
 }
 
 #' @export
-n_subtaxa.taxa_taxonomy <- function(x) {
-  output <- vapply(subtaxa(x), length, numeric(1))
+n_subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
+  output <- vapply(subtaxa(x, subset = subset, max_depth = max_depth, include = include), length, numeric(1))
   names(output) <- names(x)
   return(output)
 }
@@ -671,11 +679,13 @@ n_subtaxa.taxa_taxonomy <- function(x) {
 #' Get supertaxa indexes for each taxon or another per-taxon value.
 #'
 #' @param x The object to get supertaxa for.
+#' @param subset The subset of the tree to search for roots to that subset. Can be indexes or names.
 #' @param max_depth The number of levels to traverse. For example, `max_depth =
 #'   1` returns only immediate supertaxa. By default (NULL) information for all
 #'   supertaxa is returned.
 #' @param include If `TRUE`, include information for each taxon in the output.
 #' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#' @param ... Additional arguments.
 #'
 #' @export
 supertaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
@@ -723,16 +733,16 @@ supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include 
 #'
 #' Get the number of supertaxa per taxon.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams supertaxa
 #'
 #' @export
-n_supertaxa <- function(x) {
+n_supertaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
   UseMethod('n_supertaxa')
 }
 
 #' @export
-n_supertaxa.taxa_taxonomy <- function(x) {
-  output <- vapply(supertaxa(x), length, numeric(1))
+n_supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE) {
+  output <- vapply(supertaxa(x, subset = subset, max_depth = max_depth, include = include), length, numeric(1))
   names(output) <- names(x)
   return(output)
 }
@@ -892,6 +902,7 @@ as_tibble.taxa_taxonomy <- function(x, ...) {
 #'
 #' @param x The object to get stems for.
 #' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#' @param ... Additional arguments.
 #'
 #' @export
 stems <- function(x, value = NULL, ...) {
@@ -924,7 +935,7 @@ stems.taxa_taxonomy <- function(x, value = NULL, ...) {
 #'
 #' Check if each taxon is a stem. A stem is any taxa from a root to the first taxon with multiple subtaxa.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams stems
 #'
 #' @export
 is_stem <- function(x) {
@@ -945,6 +956,7 @@ is_stem.taxa_taxonomy <- function(x) {
 #'
 #' @param x The object to get leaves for.
 #' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#' @param ... Additional arguments.
 #'
 #' @export
 leaves <- function(x, value = NULL, ...) {
@@ -972,7 +984,7 @@ leaves.taxa_taxonomy <- function(x, value = NULL, ...) {
 #' Check if each taxon is a leaf. A leaf is a taxon with no subtaxa.
 #' subtaxa.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams leaves
 #'
 #' @export
 is_leaf <- function(x) {
@@ -990,7 +1002,7 @@ is_leaf.taxa_taxonomy <- function(x) {
 #'
 #' Get the number of leaves per taxon. A leaf is a taxon with no subtaxa.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams leaves
 #'
 #' @export
 n_leaves <- function(x) {
@@ -1029,7 +1041,7 @@ internodes.taxa_taxonomy <- function(x) {
 #' Check if each taxon is a internode. An internode is a taxon with exactly one supertaxon and one
 #' subtaxon.
 #'
-#' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @inheritParams internodes
 #'
 #' @export
 is_internode <- function(x) {
