@@ -4,10 +4,12 @@
 \alias{is_root}
 \title{Test if taxa are roots}
 \usage{
-is_root(x)
+is_root(x, subset = NULL)
 }
 \arguments{
 \item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+
+\item{subset}{The subset of the tree to search for roots to that subset.}
 }
 \description{
 Check if each taxon is a root. A root is a taxon with no supertaxon.

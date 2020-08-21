@@ -521,15 +521,22 @@ is_taxonomy <- function(x) {
 #' Check if each taxon is a root. A root is a taxon with no supertaxon.
 #'
 #' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @param subset The subset of the tree to search for roots to that subset.
 #'
 #' @export
-is_root <- function(x) {
+is_root <- function(x, subset = NULL) {
   UseMethod('is_root')
 }
 
 #' @export
-is_root.taxa_taxonomy <- function(x) {
-  out <- is.na(vctrs::field(x, 'supertaxa'))
+is_root.taxa_taxonomy <- function(x, subset = NULL) {
+  if (is.null(subset)) {
+    out <- is.na(vctrs::field(x, 'supertaxa'))
+  } else {
+    subset <- unname(unlist(subtaxa(x, include = TRUE)[subset])) # NOTE: replace with 'subset' version of subtaxa
+    supertaxa <- vctrs::field(x, 'supertaxa')
+    out <-  seq_len(length(x)) %in% subset & ((! supertaxa %in% subset) | is.na(supertaxa))
+  }
   names(out) <- names(x)
   return(out)
 }
@@ -540,15 +547,16 @@ is_root.taxa_taxonomy <- function(x) {
 #' Get the indexs for roots.
 #'
 #' @param x An object with taxon supertaxon-subtaxa relationships, such as [taxonomy()] objects.
+#' @param subset The subset of the tree to search for roots to that subset.
 #'
 #' @export
-roots <- function(x) {
+roots <- function(x, subset = NULL) {
   UseMethod('roots')
 }
 
 #' @export
-roots.taxa_taxonomy <- function(x) {
-  out <- which(is_root(x))
+roots.taxa_taxonomy <- function(x, subset = NULL) {
+  out <- which(is_root(x, subset = subset))
   names(out) <- names(x)[out]
   return(out)
 }
@@ -775,15 +783,22 @@ n_supertaxa.taxa_taxonomy <- function(x) {
 
 
 #' @export
-`[<-.taxa_taxonomy` <- function(x, i, supertaxa, value) {
+`[<-.taxa_taxonomy` <- function(x, i, supertaxa, subtaxa, value) {
   if (missing(supertaxa)) { # supertaxa is the supertaxon index/name
     x <- NextMethod()
   } else {
+    # Prepare subtaxa
+    if (! is.list(subtaxa)) {
+      subtaxa <- list(subtaxa)
+    }
+
+
     # Recycle inputs to same length
-    rec <- vctrs::vec_recycle_common(i, supertaxa, value)
+    rec <- vctrs::vec_recycle_common(i, supertaxa, subtaxa, value)
     i = rec[[1]]
     supertaxa = rec[[2]]
-    value = rec[[3]]
+    subtaxa = rec[[3]]
+    value = rec[[4]]
 
     # Reset overwritten supertaxa
     nearest_supertaxa <- unname(unlist(lapply(supertaxa(x), function(s) {

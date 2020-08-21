@@ -4,10 +4,12 @@
 \alias{roots}
 \title{Get root indexes}
 \usage{
-roots(x)
+roots(x, subset = NULL)
 }
 \arguments{
 \item{x}{An object with taxon supertaxon-subtaxa relationships, such as \code{\link[=taxonomy]{taxonomy()}} objects.}
+
+\item{subset}{The subset of the tree to search for roots to that subset.}
 }
 \description{
 Get the indexs for roots.
