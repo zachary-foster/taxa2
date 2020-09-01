@@ -58,8 +58,8 @@ font_tax_name <- function(text) {
   if (is_taxon(text)) {
     ranks_below_genus <- names(rank_ref[rank_ref >= rank_ref['genus']])
     ranks_below_genus <- ranks_below_genus[! is.na(ranks_below_genus)]
-    out <- ifelse(! is.na(text) & tolower(taxon_rank(text)) %in% ranks_below_genus,
-                  crayon::italic(text), as.character(text))
+    out <- ifelse(! is.na(text) & tolower(tax_rank(text)) %in% ranks_below_genus,
+                  crayon::italic(vctrs::field(text, 'name')), vctrs::field(text, 'name'))
     out <- font_na(out)
   } else {
     out <- text

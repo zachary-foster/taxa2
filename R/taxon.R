@@ -563,9 +563,9 @@ vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(vctr
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_comparison_funcs
+#' @method vec_proxy_compare taxa_taxon
 #' @importFrom vctrs vec_proxy_compare
 #' @export
-#' @keywords internal
 vec_proxy_compare.taxa_taxon <- function(x, ...) {
   data.frame(stringsAsFactors = FALSE,
              rank = as.character(taxon_rank(x)),
@@ -602,7 +602,7 @@ is_taxon <- function(x) {
 
 #' @export
 is.na.taxa_taxon <- function(x) {
-  is.na(vctrs::vec_cast(x, character()))
+  is.na(vctrs::field(x, 'name'))
 }
 
 

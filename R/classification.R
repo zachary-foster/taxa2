@@ -17,7 +17,6 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
   # Check that values are the correct type
   vctrs::vec_assert(instances, ptype = integer())
 
-
   # Create new object
   vctrs::new_vctr(instances, taxonomy = taxonomy, class = "taxa_classification")
 }
