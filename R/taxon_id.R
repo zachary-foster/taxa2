@@ -514,6 +514,6 @@ validate_id_for_database <- function(id, db) {
 #' @keywords internal
 is_valid_database_id <- function(id, db) {
   mapply(function(i, r) {
-    grepl(i, pattern = r)
+    grepl(i, pattern = r) | is.na(i)
   }, i = id, r = db_ref$get(value = 'id_regex')[db])
 }
