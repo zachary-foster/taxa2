@@ -83,40 +83,40 @@ taxon_db_def <- function(name = character(), url = NA_character_, desc = NA_char
 setOldClass(c("taxa_taxon_db_def", "vctrs_vctr"))
 
 
-#' @export
-`[<-.taxa_taxon_db_def` <- function(x, i, j, value) {
-  # NOTE: This is a hack to make a vctrs rcrd class work with names.
-  #   At the time of writing, names are not supported.
-  #   It should be unnecessary eventually
-  i_original <- i
-  names_original <- names(x)
-  if (is.character(i)) {
-    i_temp <- rep(0, length(i))
-    i_temp[i %in% names(x)] <- match(i[i %in% names(x)], names(x))
-    i_temp[! i %in% names(x)] <- length(x) + seq_len(sum(! i %in% names(x)))
-    i <- i_temp
-  }
-  x <- NextMethod()
-  if (is.character(i_original)) {
-    names(x)[i] <- i_original
-  } else {
-    names(x)[i] <- names_original[i]
-  }
-  return(x)
-}
-
-
-#' @export
-`[[<-.taxa_taxon_db_def` <- function(x, i, j, value) {
-  # NOTE: This is a hack to make a vctrs rcrd class work with names.
-  #   At the time of writing, names are not supported.
-  #   It should be unnecessary eventually
-  if (length(i) > 1) {
-    stop('attempt to select more than one element')
-  }
-  x[i] <- value
-  return(x)
-}
+# #' @export
+# `[<-.taxa_taxon_db_def` <- function(x, i, j, value) {
+#   # NOTE: This is a hack to make a vctrs rcrd class work with names.
+#   #   At the time of writing, names are not supported.
+#   #   It should be unnecessary eventually
+#   i_original <- i
+#   names_original <- names(x)
+#   if (is.character(i)) {
+#     i_temp <- rep(0, length(i))
+#     i_temp[i %in% names(x)] <- match(i[i %in% names(x)], names(x))
+#     i_temp[! i %in% names(x)] <- length(x) + seq_len(sum(! i %in% names(x)))
+#     i <- i_temp
+#   }
+#   x <- NextMethod()
+#   if (is.character(i_original)) {
+#     names(x)[i] <- i_original
+#   } else {
+#     names(x)[i] <- names_original[i]
+#   }
+#   return(x)
+# }
+#
+#
+# #' @export
+# `[[<-.taxa_taxon_db_def` <- function(x, i, j, value) {
+#   # NOTE: This is a hack to make a vctrs rcrd class work with names.
+#   #   At the time of writing, names are not supported.
+#   #   It should be unnecessary eventually
+#   if (length(i) > 1) {
+#     stop('attempt to select more than one element')
+#   }
+#   x[i] <- value
+#   return(x)
+# }
 
 
 #--------------------------------------------------------------------------------

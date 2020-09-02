@@ -27,6 +27,7 @@ new_taxon_db <- function(db = character(), ...) {
 #'
 #' @param db Zero or more taxonomic database names. Should be a name contained in
 #'   [db_ref]. Inputs will be transformed to a `character` vector if possible.
+#' @param .names The names of the vector.
 #' @param ... Additional arguments.
 #'
 #' @return An `S3` object of class `taxa_taxon_db`
@@ -69,11 +70,26 @@ new_taxon_db <- function(db = character(), ...) {
 #' x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 #'
 #' @export
-taxon_db <- function(db = character(), ...) {
+taxon_db <- function(db = character(), .names = NULL, ...) {
+  # Make input lower case character
   db <- vctrs::vec_cast(db, character())
   db <- tolower(db)
+
+  # Recycle input and names to common length
+  recycled <- vctrs::vec_recycle_common(db, .names)
+  db <- recycled[[1]]
+  .names <- recycled[[2]]
+
+  # Create taxon_db object
   validate_db_names(db)
-  new_taxon_db(db, ...)
+  out <- new_taxon_db(db, ...)
+
+  # Add names if needed
+  if (! is.null(.names)) {
+    names(out) <- .names
+  }
+
+  return(out)
 }
 
 

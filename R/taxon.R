@@ -424,7 +424,7 @@ obj_print_footer.taxa_taxon <- function(x, ...) {
 #' @export
 #' @keywords internal
 vec_ptype_abbr.taxa_taxon <- function(x, ...) {
-  "tax_name"
+  "taxon"
 }
 
 

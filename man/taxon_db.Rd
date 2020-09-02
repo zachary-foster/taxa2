@@ -6,7 +6,7 @@
 \alias{is.na.taxa_taxon_db}
 \title{Taxon database class}
 \usage{
-taxon_db(db = character(), ...)
+taxon_db(db = character(), .names = NULL, ...)
 
 taxon_db(x) <- value
 
@@ -15,6 +15,8 @@ taxon_db(x) <- value
 \arguments{
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
 \link{db_ref}. Inputs will be transformed to a \code{character} vector if possible.}
+
+\item{.names}{The names of the vector.}
 
 \item{...}{Additional arguments.}
 
