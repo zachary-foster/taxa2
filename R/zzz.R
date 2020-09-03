@@ -73,8 +73,7 @@ rank_ref <- c(
 
 #' Database list
 #'
-#' The list of known databases. Not currently used much, but will be when we add
-#' more check for taxon IDs and taxon ranks from particular databases.
+#' The list of known databases.
 #'
 #' @keywords internal
 database_ref <- c(

@@ -191,6 +191,18 @@ names.taxa_taxon_id <- function(x) {
 }
 
 
+#' @export
+`[[.taxa_taxon_id` <- function(x, i, j) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  if (length(i) > 1) {
+    stop('attempt to select more than one element')
+  }
+  return(unname(x[i]))
+}
+
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -495,6 +507,16 @@ as_data_frame.taxa_taxon_id <- function(x, row.names = NULL, optional = FALSE, .
 as_tibble.taxa_taxon_id <- function(x, ...) {
   tibble::as_tibble(as_data_frame(x, stringsAsFactors = FALSE), ...)
 }
+
+
+#' @export
+as.character.taxa_taxon_id <- function(x, ...) {
+  out <- NextMethod()
+  names(out) <- names(x)
+  return(out)
+}
+
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions

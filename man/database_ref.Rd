@@ -11,7 +11,6 @@ An object of class \code{taxa_taxon_db_def} (inherits from \code{vctrs_rcrd}, \c
 database_ref
 }
 \description{
-The list of known databases. Not currently used much, but will be when we add
-more check for taxon IDs and taxon ranks from particular databases.
+The list of known databases.
 }
 \keyword{internal}

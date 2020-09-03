@@ -268,6 +268,7 @@ vec_cast.factor.taxa_taxon_db <- function(x, to, ..., x_arg, to_arg) factor(vctr
 # Exported utility functions
 #--------------------------------------------------------------------------------
 
+
 #' Check if is a taxond database
 #'
 #' Check if an object is a taxon database class
