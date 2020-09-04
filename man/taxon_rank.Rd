@@ -4,11 +4,18 @@
 \alias{taxon_rank}
 \title{Taxon rank class}
 \usage{
-taxon_rank(rank = character(), levels = NULL, guess_order = TRUE)
+taxon_rank(
+  rank = character(),
+  .names = NULL,
+  levels = NULL,
+  guess_order = TRUE
+)
 }
 \arguments{
 \item{rank}{Zero or more taxonomic rank names. Inputs will be transformed to a \code{character}
 vector.}
+
+\item{.names}{The names of the vector}
 
 \item{levels}{A named numeric vector indicating the names and orders of possible taxonomic ranks.
 Higher numbers indicate for fine-scale groupings. Ranks of unknown order can be indicated with

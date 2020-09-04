@@ -34,6 +34,7 @@ new_taxon_rank <- function(rank = character(), levels = taxon_rank_level()) {
 #'
 #' @param rank Zero or more taxonomic rank names. Inputs will be transformed to a `character`
 #'   vector.
+#' @param .names The names of the vector
 #' @param levels A named numeric vector indicating the names and orders of possible taxonomic ranks.
 #'   Higher numbers indicate for fine-scale groupings. Ranks of unknown order can be indicated with
 #'   `NA` instead of a number.
@@ -82,7 +83,7 @@ new_taxon_rank <- function(rank = character(), levels = taxon_rank_level()) {
 #' x[2] <- taxon_rank('superkingdom')
 #'
 #' @export
-taxon_rank <- function(rank = character(), levels = NULL, guess_order = TRUE) {
+taxon_rank <- function(rank = character(), .names = NULL, levels = NULL, guess_order = TRUE) {
   # Cast inputs to correct values
   rank <- vctrs::vec_cast(rank, character())
 
@@ -99,7 +100,15 @@ taxon_rank <- function(rank = character(), levels = NULL, guess_order = TRUE) {
   validate_rank_levels(rank, levels)
 
   # Create taxon_rank object
-  new_taxon_rank(rank = rank, levels = levels)
+  out <- new_taxon_rank(rank = rank, levels = levels)
+
+  # Add names if needed
+  if (! is.null(.names)) {
+    names(out) <- .names
+  }
+
+  return(out)
+
 }
 
 
@@ -552,7 +561,7 @@ rank_level_color_funcs <- function(levels) {
   }
   out <- lapply(lev, function(l) {
     if (is.na(l)) {
-      return(crayon::white)
+      return(crayon::make_style(grDevices::rgb(.5, .5, .5)))
     } else {
       crayon::make_style(colors[colored_lev == l])
     }
