@@ -381,3 +381,18 @@ named_field <- function(x, i) {
   }
   return(out)
 }
+
+
+#' Remove names from fields in a vctrs rcrd
+#'
+#' Remove names from fields in a vctrs rcrd
+#'
+#' @param x a vctrs rcrd
+#'
+#' @keywords internal
+unname_fields <- function(x) {
+  for (f in vctrs::fields(x)) {
+    vctrs::field(x, f) <- unname(vctrs::field(x, f))
+  }
+  return(x)
+}

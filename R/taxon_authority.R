@@ -223,6 +223,18 @@ names.taxa_taxon_authority <- function(x) {
 }
 
 
+#' @export
+`[[.taxa_taxon_authority` <- function(x, i, j) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  if (length(i) > 1) {
+    stop('attempt to select more than one element')
+  }
+  return(unname(unname_fields(x[i])))
+}
+
+
 #--------------------------------------------------------------------------------
 # S3 printing functions
 #--------------------------------------------------------------------------------
@@ -506,7 +518,7 @@ as_tibble.taxa_taxon_authority <- function(x, ...) {
 #' @keywords internal
 parse_date_from_author <- function(x) {
   parts <- stringr::str_match(tax_author(x), '^(.+?),? *([0-9]{4}) *$')
-  to_replace <- stats::complete.cases(parts) & is.na(tax_date(x))
+  to_replace <- unname(stats::complete.cases(parts) & is.na(tax_date(x)))
   tax_author(x)[to_replace] <- parts[to_replace, 2]
   tax_date(x)[to_replace] <- parts[to_replace, 3]
   return(x)
