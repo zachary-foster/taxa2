@@ -322,6 +322,18 @@ names.taxa_taxon <- function(x) {
 
 
 #' @export
+`[[.taxa_taxon` <- function(x, i, j) {
+  # NOTE: This is a hack to make a vctrs rcrd class work with names.
+  #   At the time of writing, names are not supported.
+  #   It should be unnecessary eventually
+  if (length(i) > 1) {
+    stop('attempt to select more than one element')
+  }
+  return(unname(unname_fields(x[i])))
+}
+
+
+#' @export
 `[[<-.taxa_taxon` <- function(x, i, j, value) {
   # NOTE: This is a hack to make a vctrs rcrd class work with names.
   #   At the time of writing, names are not supported.
@@ -541,7 +553,7 @@ vec_cast.taxa_taxon.character <- function(x, to, ..., x_arg, to_arg) taxon(x)
 #' @method vec_cast.character taxa_taxon
 #' @importFrom vctrs vec_cast.character
 #' @export
-vec_cast.character.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.character(vctrs::field(x, "name"))
+vec_cast.character.taxa_taxon <- function(x, to, ..., x_arg, to_arg) named_field(x, "name")
 
 
 #' @rdname taxa_casting_funcs
@@ -554,7 +566,7 @@ vec_cast.taxa_taxon.factor <- function(x, to, ..., x_arg, to_arg) taxon(x)
 #' @method vec_cast.factor taxa_taxon
 #' @importFrom vctrs vec_cast.factor
 #' @export
-vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(vctrs::field(x, "name"))
+vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(named_field(x, "name"))
 
 
 

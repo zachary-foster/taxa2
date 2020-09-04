@@ -155,7 +155,7 @@ test_that("taxon_authority objects can be converted to factor", {
 
 test_that("named taxon_authority objects can be converted to factor", {
   x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
-  expect_equal(as.factor(x), as.factor(stats::setNames(paste(c('Cham. & Schldl.', 'L.', 'Billy'), c('1827', '1753', '2000')), letters[1:3])))
+  expect_equivalent(as.factor(x), as.factor(stats::setNames(paste(c('Cham. & Schldl.', 'L.', 'Billy'), c('1827', '1753', '2000')), letters[1:3])))
 })
 
 
