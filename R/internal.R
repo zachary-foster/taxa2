@@ -396,3 +396,16 @@ unname_fields <- function(x) {
   }
   return(x)
 }
+
+
+#' @keywords internal
+must_be_length_1 <- function(x) {
+  if (is.logical(x)) {
+    x <- which(x)
+  }
+  if (length(x) < 1) {
+    stop(call. = FALSE, 'attempt to select less than one element')
+  } else if (length(x) > 1) {
+    stop(call. = FALSE, 'attempt to select more than one element')
+  }
+}

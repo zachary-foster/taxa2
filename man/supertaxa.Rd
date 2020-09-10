@@ -10,6 +10,7 @@ supertaxa(
   max_depth = NULL,
   include = FALSE,
   value = NULL,
+  use_na = FALSE,
   ...
 )
 }
@@ -24,6 +25,8 @@ supertaxa is returned.}
 \item{include}{If \code{TRUE}, include information for each taxon in the output.}
 
 \item{value}{Something to return instead of indexes. Must be the same length as the number of taxa.}
+
+\item{use_na}{Add a NA to represent the root of the taxonomy (i.e. no supertaxon)}
 
 \item{...}{Additional arguments.}
 }

@@ -685,15 +685,16 @@ n_subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include 
 #'   supertaxa is returned.
 #' @param include If `TRUE`, include information for each taxon in the output.
 #' @param value Something to return instead of indexes. Must be the same length as the number of taxa.
+#' @param use_na Add a NA to represent the root of the taxonomy (i.e. no supertaxon)
 #' @param ... Additional arguments.
 #'
 #' @export
-supertaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+supertaxa <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, use_na = FALSE, ...) {
   UseMethod('supertaxa')
 }
 
 #' @export
-supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, ...) {
+supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = FALSE, value = NULL, use_na = FALSE, ...) {
   # Parse arguments
   subset <- parse_subset_argument(x, subset)
 
@@ -720,7 +721,9 @@ supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include 
   }
 
   # Remove NAs from output
-  output <- lapply(output, function(x) x[!is.na(x)])
+  if (! use_na) {
+    output <- lapply(output, function(x) x[!is.na(x)])
+  }
 
   # Set names and values
   output <- apply_names_and_values(x, index_list = output, value = value)
@@ -783,76 +786,95 @@ n_supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, includ
     taxa_subset <- index[-taxa_subset]
   }
 
-  # Replace supertaxa filtered out for preserved taxa
-  nearest_supertaxa <- unname(unlist(lapply(supertaxa(x)[taxa_subset], function(s) {
-    s[s %in% taxa_subset][1]
-  })))
-
   # Apply supset
   taxonomy(taxa = vctrs::field(x, 'taxa')[taxa_subset],
-           supertaxa = match(nearest_supertaxa, taxa_subset),
+           supertaxa = match(nearest_supertaxa(x, taxa_subset), taxa_subset),
            .names = names(x)[taxa_subset])
 }
 
 #' @rdname taxonomy
 #' @export
 #' @keywords internal
-`[[.taxa_taxonomy` <- function(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE) {
-  output <- x[..., subtaxa = subtaxa, supertaxa = supertaxa, invert = invert]
-  as_taxon(output)
+`[[.taxa_taxonomy` <- function(x, i, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE) {
+  must_be_length_1(i)
+  x[i, ..., subtaxa = subtaxa, supertaxa = supertaxa, invert = invert]
 }
 
 
 
 #' @export
 `[<-.taxa_taxonomy` <- function(x, i, supertaxa = NULL, subtaxa = NULL, value) {
-  if (is.null(supertaxa) && is.null(subtaxa)) { # supertaxa is the supertaxon index/name
+  # Standardize index input
+  i <- to_index(x, i)
+
+  # If supertaxa are undefined, use current supertaxa for replaced values and NA for new values
+  if (is.null(supertaxa)) {
+    parents <- rep(NA, length(i))
+    is_replacing <- i %in% seq_len(length(x))
+    parents[is_replacing] <- unname(unlist(supertaxa(x, subset = i[is_replacing], max_depth = 1, use_na = TRUE)))
+  } else {
+    parents <- supertaxa
+  }
+
+  # Simplify subtaxa and infer supertaxa if not specified
+  if (is.null(subtaxa)) {
+    children <- subtaxa(x, subset = i, max_depth = 1)
+  } else {
+    if (! is.list(subtaxa)) {
+      subtaxa <- list(subtaxa)
+    }
+    children <- lapply(subtaxa, function(s) roots(x, subset = s))
+    if (is.null(supertaxa)) {
+      parents <- vapply(subtaxa, function(s) enclosing_taxon(x, subset = s), numeric(1))
+    }
+  }
+
+  # Recycle inputs to same length
+  rec <- vctrs::vec_recycle_common(i, parents, children, value)
+  i = rec[[1]]
+  parents = rec[[2]]
+  children = rec[[3]]
+  value = rec[[4]]
+
+  # Check that taxa are not made supertaxa of themselves
+  if (any(! is.na(parents) & i == parents)) {
+    stop(call. = FALSE, 'Cannot set a taxon to be a supertaxon of itself')
+  }
+
+  # Check that taxa are not made subtaxa of themselves
+  cyclical_subtaxa <- any(vapply(seq_len(length(i)),
+                                 function(index) i[[index]] %in% children[[index]],
+                                 logical(1)))
+  if (cyclical_subtaxa) {
+    stop(call. = FALSE, 'Cannot set a taxon to be a subtaxon of itself')
+  }
+
+  if (is.null(supertaxa) && is.null(subtaxa)) {
     x <- NextMethod()
   } else {
-
-    # Prepare subtaxa and infer supertaxa if not specified
-    if (! is.null(subtaxa)) {
-      if (! is.list(subtaxa)) {
-        subtaxa <- list(subtaxa)
-      }
-      subtaxa <- lapply(subtaxa, function(s) roots(x, subset = s))
-      if (is.null(supertaxa)) {
-        supertaxa <- vapply(subtaxa, function(s) enclosing_taxon(x, subset = s), numeric(1))
-      }
-    }
-
-    # Recycle inputs to same length
-    rec <- vctrs::vec_recycle_common(i, supertaxa, subtaxa, value)
-    i = rec[[1]]
-    supertaxa = rec[[2]]
-    subtaxa = rec[[3]]
-    value = rec[[4]]
-
-    # Reset overwritten supertaxa
-    nearest_supertaxa <- unname(unlist(lapply(supertaxa(x), function(s) {
-      s[! s %in% i][1]
-    })))
-    vctrs::field(x, 'supertaxa') <- nearest_supertaxa
-
-    # Set subtaxa
-    if (!is.null(subtaxa)) {
-      to_set <- unlist(subtaxa)
-      vctrs::field(x, 'supertaxa')[to_set] <- rep(i, vapply(subtaxa, length, numeric(1)))
-    }
-
-    # Calls this function again to make new rows, but without supertaxa
+    # Calls this function to make new rows
     x[i] <- value
-
-    # Set supertaxa for replaced
-    if (is.numeric(supertaxa)) {
-      vctrs::field(x, 'supertaxa')[i] <- supertaxa
-    } else if (is.character(supertaxa)) {
-      vctrs::field(x, 'supertaxa')[i] <- match(supertaxa, names(x))
-    } else {
-      stop(call. = FALSE, "Invlaid suptaxon index value.")
-    }
-
   }
+
+  # Remove any cycles in the taxonomy
+  # parents_to_reset <- parents[mapply(function(p, c) p %in% unlist(subtaxa(x, subset = c, include = TRUE)), parents, children)]
+  children <- lapply(seq_len(length(children)), function(i) {
+    children[[i]][children[[i]] != parents[i]]
+  })
+
+  # Reset overwritten supertaxa
+  nearest_supertaxa <- unname(unlist(lapply(supertaxa(x), function(s) {
+    s[! s %in% i][1]
+  })))
+  vctrs::field(x, 'supertaxa') <- nearest_supertaxa
+
+  # Set supertaxa
+  vctrs::field(x, 'supertaxa')[i] <- parents
+
+  # Set subtaxa
+  to_set <- unlist(children)
+  vctrs::field(x, 'supertaxa')[to_set] <- rep(i, vapply(children, length, numeric(1)))
+
   return(x)
 }
 
@@ -1055,6 +1077,17 @@ is_internode.taxa_taxonomy <- function(x) {
   return(output)
 }
 
+#' @export
+c.taxa_taxonomy <- function(...) {
+  out <- NextMethod()
+  if (is_taxonomy(out) && length(list(...)) > 1) {
+    in_lengths <- vapply(list(...), length, numeric(1))
+    supertaxon_index_offsets <- rep(c(0, cumsum(in_lengths)[-length(in_lengths)]), in_lengths)
+    vctrs::field(out, 'supertaxa') <- vctrs::field(out, 'supertaxa') + supertaxon_index_offsets
+  }
+  return(out)
+}
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
@@ -1097,4 +1130,30 @@ parse_subset_argument <- function(x, subset) {
     }
   }
   return(subset)
+}
+
+
+# Returns the nearest supertaxa in the subset for each item in the subset
+#' @keywords internal
+nearest_supertaxa <- function(x, taxa_subset) {
+  unname(unlist(lapply(supertaxa(x)[taxa_subset], function(s) {
+    s[s %in% taxa_subset][1]
+  })))
+
+}
+
+
+# Convert a logical or name vector to index
+#' @keywords internal
+to_index <- function(x, i) {
+  if (is.numeric(i)) {
+    return(i)
+  }
+  if (is.character(i)) {
+    return(match(i, names(x)))
+  }
+  if (is.logical(i) && length(i) == length(x)) {
+    return(which(i))
+  }
+  stop('Cannot convery input into an index')
 }

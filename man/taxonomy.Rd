@@ -16,7 +16,7 @@ taxonomy(taxa = taxon(), supertaxa = NA, .names = NULL)
 
 \method{[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE)
 
-\method{[[}{taxa_taxonomy}(x, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE)
+\method{[[}{taxa_taxonomy}(x, i, ..., subtaxa = TRUE, supertaxa = FALSE, invert = FALSE)
 }
 \arguments{
 \item{taxa}{A \code{\link[=taxon]{taxon()}} vector or something that can be converted to a \code{\link[=taxon]{taxon()}} vector.}
