@@ -433,6 +433,25 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 }
 
 
+#' @rdname taxonomy
+#' @export
+#' @keywords internal
+`[.taxa_classification` <- function(x, ...) {
+
+  index <- seq_len(length(x))
+  names(index) <- names(x)
+  subset <- index[...]
+
+  # Subset instances
+  x <- NextMethod()
+
+  # Remove any unused taxa from the taxonomy
+  attr(x, 'taxonomy') <- attr(x, 'taxonomy')[as.integer(x)[subset], supertaxa = TRUE]
+
+  return(x)
+}
+
+
 
 #--------------------------------------------------------------------------------
 # Exported utility functions

@@ -72,11 +72,11 @@ x[2] <- taxon_rank('superkingdom')
 }
 \seealso{
 Other classes: 
+\code{\link{[.taxa_classification}()},
 \code{\link{classification}()},
 \code{\link{taxon_authority}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
-\code{\link{taxonomy}()},
 \code{\link{taxon}()}
 }
 \concept{classes}
