@@ -2,6 +2,7 @@
 % Please edit documentation in R/classification.R, R/taxonomy.R
 \name{[.taxa_classification}
 \alias{[.taxa_classification}
+\alias{[[.taxa_classification}
 \alias{taxonomy}
 \alias{names.taxa_taxonomy}
 \alias{names<-.taxa_taxonomy}
@@ -10,6 +11,8 @@
 \title{Taxonomy class}
 \usage{
 \method{[}{taxa_classification}(x, ...)
+
+\method{[[}{taxa_classification}(x, i)
 
 taxonomy(taxa = taxon(), supertaxa = NA, .names = NULL)
 

@@ -36,7 +36,7 @@ test_that("classification objects can be created with names", {
 
 # Subsetting taxonomy objects with `[`
 
-test_that("taxonomy objects can be `[` subset by index", {
+test_that("taxonomy objects can be subset with `[`", {
   x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                         'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
                       supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
@@ -44,6 +44,8 @@ test_that("taxonomy objects can be `[` subset by index", {
                       .names = letters[1:12])
 
   expect_equal(length(x[2:5]), 4)
+  expect_equal(x[letters[2:5]], x[2:5])
+  expect_equal(x[1:12 %in% 2:5], x[2:5])
   expect_equal(class(x[2:5])[1], 'taxa_classification')
   expect_equal(names(x[2:5]), letters[2:5])
 
@@ -52,4 +54,32 @@ test_that("taxonomy objects can be `[` subset by index", {
                taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo','Panthera tigris'),
                         supertaxa = c(NA, 1, 2, 3, 3)))
 
+})
+
+# Subsetting taxonomy objects with `[[`
+
+test_that("taxonomy objects can be subset with `[[`", {
+  x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                        'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
+                      instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+                      .names = letters[1:12])
+
+  expect_equal(length(x[[2]]), 1)
+  expect_equal(class(x[[2]])[1], 'taxa_classification')
+  expect_equal(x[[2]], unname(x[2])) # names are dropped for [[
+  expect_equal(x[['b']], x[[2]])
+  expect_equal(x[[1:12 == 2]], x[[2]])
+})
+
+test_that("taxonomy objects can only select one item with `[[`", {
+  x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                        'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
+                      instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+                      .names = letters[1:12])
+
+  expect_error(x[[2:4]], 'attempt to select more than one element')
+  expect_error(x[[c('b', 'c')]], 'attempt to select more than one element')
+  expect_error(x[[1:12 %in% 2:3]], 'attempt to select more than one element')
 })
