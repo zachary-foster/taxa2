@@ -36,7 +36,7 @@ test_that("classification objects can be created with names", {
 
 # Subsetting taxonomy objects with `[`
 
-test_that("taxonomy objects can be subset with `[`", {
+test_that("classification objects can be subset with `[`", {
   x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                         'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
                       supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
@@ -58,7 +58,7 @@ test_that("taxonomy objects can be subset with `[`", {
 
 # Subsetting taxonomy objects with `[[`
 
-test_that("taxonomy objects can be subset with `[[`", {
+test_that("classification objects can be subset with `[[`", {
   x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                         'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
                       supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
@@ -72,7 +72,7 @@ test_that("taxonomy objects can be subset with `[[`", {
   expect_equal(x[[1:12 == 2]], x[[2]])
 })
 
-test_that("taxonomy objects can only select one item with `[[`", {
+test_that("classification objects can only select one item with `[[`", {
   x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                         'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
                       supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
@@ -83,3 +83,26 @@ test_that("taxonomy objects can only select one item with `[[`", {
   expect_error(x[[c('b', 'c')]], 'attempt to select more than one element')
   expect_error(x[[1:12 %in% 2:3]], 'attempt to select more than one element')
 })
+
+
+# Assigning values to classification objects with `[`
+
+test_that("Assigning values to classification objects with `[`", {
+  x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                        'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
+                      instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+                      .names = letters[1:12])
+
+  x[2, 2:3] <- c('Ursidae', 'Ursus')
+
+
+})
+
+
+x[2] <- 'Carnivora|Ursidae'
+x[2] <- list(c('Carnivora', 'Ursidae'))
+x[2:3] <- list(c('Carnivora', 'Ursidae'), c('Carnivora', 'Felidae'))
+x[2, 2] <- 'Ursidae'
+x[2, 2:3] <- 'Ursidae|Ursus'
+x[, 1] <- 'Carnivors'

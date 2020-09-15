@@ -1084,10 +1084,16 @@ c.taxa_taxonomy <- function(...) {
     in_lengths <- vapply(list(...), length, numeric(1))
     supertaxon_index_offsets <- rep(c(0, cumsum(in_lengths)[-length(in_lengths)]), in_lengths)
     vctrs::field(out, 'supertaxa') <- vctrs::field(out, 'supertaxa') + supertaxon_index_offsets
+    attr(tax_rank(out), 'levels') <- do.call(c, lapply(list(...), function(x) attr(tax_rank(x), 'levels')))
   }
   return(out)
 }
 
+#' @export
+unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
+                                 nmax = NA, ...) {
+
+}
 
 #--------------------------------------------------------------------------------
 # Internal utility functions

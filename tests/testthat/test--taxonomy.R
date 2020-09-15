@@ -227,30 +227,40 @@ test_that("Cannot make values supertaxa/subtaxa of themselves", {
 # Can be concatenated
 
 test_that("taxonomy objects can be combined", {
-  x <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-                  'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+  x <- taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                        'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      rank = c('order', 'family', 'genus', 'species',
+                               'species', 'family', 'genus', 'species')),
                 supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
                 .names = letters[1:8])
-  y <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+  y <- taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+                      rank = c('order', 'family', 'genus', 'species')),
                 supertaxa = c(NA, 1, 2, 3),
                 .names = letters[1:4])
-  z <- taxonomy(c('Carnivora', 'Felidae'),
+  z <- taxonomy(taxon(c('Carnivora', 'Felidae'), rank = c('order', 'family')),
                 supertaxa = c(NA, 1),
                 .names = letters[1:2])
-  expect_equal(
+  expect_equivalent(
     c(x, y),
-    taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-               'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
-               'Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+    taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                     'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
+                     'Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+                   rank = c('order', 'family', 'genus', 'species',
+                            'species', 'family', 'genus', 'species',
+                            'order', 'family', 'genus', 'species')),
              supertaxa = c(c(NA, 1, 2, 3, 3, 1, 6, 7),  c(NA, 1, 2, 3) + 8),
              .names = c(letters[1:8], letters[1:4]))
   )
-  expect_equal(
+  expect_equivalent(
     c(x, y, z),
-    taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-               'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
-               'Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-               'Carnivora', 'Felidae'),
+    taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                     'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
+                     'Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                     'Carnivora', 'Felidae'),
+                   rank = c('order', 'family', 'genus', 'species',
+                            'species', 'family', 'genus', 'species',
+                            'order', 'family', 'genus', 'species',
+                            'order', 'family')),
              supertaxa = c(c(NA, 1, 2, 3, 3, 1, 6, 7),  c(NA, 1, 2, 3) + 8, c(NA, 1) + 12),
              .names = c(letters[1:8], letters[1:4], letters[1:2]))
   )

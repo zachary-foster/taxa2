@@ -18,7 +18,9 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
   vctrs::vec_assert(instances, ptype = integer())
 
   # Create new object
-  vctrs::new_vctr(instances, taxonomy = taxonomy, class = "taxa_classification")
+  vctrs::new_vctr(instances, taxonomy = taxonomy,
+                  class = "taxa_classification",
+                  sep = '|')
 }
 
 
@@ -249,7 +251,7 @@ printed_classification <- function(x, color = FALSE) {
   # Make print out
   out <- vapply(supertaxa(attr(x, 'taxonomy'), include = TRUE)[x], FUN.VALUE = character(1), function(i) {
     taxa <- as.character(attr(x, 'taxonomy'))[rev(i)]
-    paste(taxa, collapse = font_punct('|'))
+    paste(taxa, collapse = font_punct(attr(x, 'sep')))
   })
 
   # Disable color if needed
@@ -460,6 +462,59 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 }
 
 
+# NOTES:
+#  * everything downstream of a new taxon must be duplicated and the leaf becomes the instance index
+#  * taxa are only the same if they have to same supertaxon and value
+#  * could add all new parts of taxonomy, change instance indexes, and prune unsed parts of tree
+#  * input values that would caused the same change should be deteceted so the same change does not happen mutliple times
+#' @export
+`[<-.taxa_classification` <- function(x, i, j = NULL, value) {
+  # Standardize index input to numeric indexes
+  i <- to_index(x, i)
+  j <- to_index(x, j)
+
+  # Standardize value input to list of character vectors
+  if (is.null(j) && is.character(value)) {
+    value <- strsplit(value, split = attr(x, 'sep'), fixed = TRUE)
+  }
+
+  # Standardize value to taxon vector
+
+  # Generate index for unique taxon values already in the taxonomy
+
+  # Generate new indexes for unique input values
+
+  # Convert consecutive taxa to taxonomies for new taxa
+
+
+  # Recycle inputs to same length
+  rec <- vctrs::vec_recycle_common(i, j, value)
+  i = rec[[1]]
+  j = rec[[2]]
+  value = rec[[3]]
+
+  tax_super <- lapply(supertaxa(x, subset = as.integer(x)), rev)
+  tax_index <- vapply(seq_len(length(i)), function(index) {
+    tax_super[[i[index]]][j[index]]
+  }, integer(1))
+
+
+  # Generate new taxa for unique inputs
+  new_tax_offset <- vapply(seq_len(length(i)),
+                          FUN.VALUE = integer(1),
+                          function(index) {
+                            min(which(value == value[index] & tax_index == tax_index[index]))
+                          })
+  new_tax_index <- new_tax_offset + length(attr(x, 'taxonomy'))
+  attr(x, 'taxonomy')[unique(new_tax_index)] <- value[unique(new_tax_offset)]
+
+  # Delete any unused taxa
+  attr(x, 'taxonomy') <- attr(x, 'taxonomy')[unique(as.integer(x)), supertaxa = TRUE, subtaxa = FALSE]
+
+
+
+}
+
 
 #--------------------------------------------------------------------------------
 # Exported utility functions
@@ -530,7 +585,7 @@ n_supertaxa.taxa_classification <- function(x, subset = NULL, max_depth = NULL, 
 
 #' @export
 as_data_frame.taxa_classification <- function(x, row.names = NULL, optional = FALSE, ...,
-                                        stringsAsFactors = default.stringsAsFactors()) {
+                                              stringsAsFactors = default.stringsAsFactors()) {
   out <- as_data_frame(as_taxon(x))
   cbind(supertaxon = vctrs::field(x, 'supertaxa')[out$taxon], out)
 }
