@@ -483,6 +483,11 @@ test_that("taxa in taxonomy objects can be made unique", {
                 supertaxa = c(NA, 1, 2, 3, 3, 3))
   x <- c(x, y)
 
-  unique(x)
+  expect_equal(
+    unique(x),
+    taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+               'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos', 'Kitty'),
+             supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7, 3))
+  )
 })
 

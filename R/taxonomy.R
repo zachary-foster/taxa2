@@ -627,6 +627,8 @@ subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = 
   }
   if (is.null(max_depth) || max_depth > 1) {
     output <- unlist(unname(lapply(roots(x, subset = subset), recursive_part)), recursive = FALSE)
+  } else if (max_depth == 0) {
+    output <- rep(list(integer(0)), length(x))
   } else {
     output <- stats::setNames(
       lapply(seq_len(length(x)), function(i) c(i, get_children(i))),
@@ -646,7 +648,7 @@ subtaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, include = 
   # below each taxon during recursion. Instead, a finite number of
   # recursions are simulated by filtering the results of traversing the
   # entire tree and comparing rank depth between each taxon and its subtaxa.
-  if (! is.null(max_depth)) {
+  if (! is.null(max_depth) && max_depth > 0) {
     rank_depth <- vapply(supertaxa(x, subset = as.numeric(names(output))), length, numeric(1))
     output[] <- lapply(seq_len(length(output)), function(i) {
       subtaxa_depth <- rank_depth[output[[i]]]
@@ -773,25 +775,20 @@ n_supertaxa.taxa_taxonomy <- function(x, subset = NULL, max_depth = NULL, includ
   subset <- index[...]
 
   # Get taxa of subset
-  if (is.logical(subtaxa)) {
-    if (subtaxa) {
+  taxa_subset <- subset
+  if (is.null(subtaxa) || (is.logical(subtaxa) && subtaxa) || (is.numeric(subtaxa) && subtaxa > 0)) {
+    if (is.logical(subtaxa) && subtaxa) {
       subtaxa = NULL
-    } else {
-      subtaxa = 0
     }
+    taxa_subset <- c(taxa_subset, unlist(subtaxa(x, max_depth = subtaxa, include_input = FALSE)[subset]))
   }
-  if (is.logical(supertaxa)) {
-    if (supertaxa) {
+  if (is.null(supertaxa) || (is.logical(supertaxa) && supertaxa) || (is.numeric(supertaxa) && supertaxa > 0)) {
+    if (is.logical(supertaxa) && supertaxa) {
       supertaxa = NULL
-    } else {
-      supertaxa = 0
     }
+    taxa_subset <- c(taxa_subset, unlist(supertaxa(x, max_depth = supertaxa, include_input = FALSE)[subset]))
   }
-  taxa_subset <- sort(unique(unlist(c(
-    subset,
-    subtaxa(x, max_depth = subtaxa, include_input = FALSE)[subset],
-    supertaxa(x, max_depth = supertaxa, include_input = FALSE)[subset]
-  ))))
+  taxa_subset <- sort(unique(taxa_subset))
 
   # Invert selection
   if (invert) {
@@ -1109,7 +1106,8 @@ unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
   }
 
   # Precalculate subtaxa and comparison proxy object for speed
-  cached_subtaxa <- subtaxa(x, max_depth = 1)
+  cached_supertaxa <- vctrs::field(x, 'supertaxa')
+  cached_subtaxa <- lapply(seq_len(length(x)), function(i) which(cached_supertaxa == i))
   proxy <- proxy_func(x)
 
   # Find which taxa are the same and should be combined
@@ -1124,7 +1122,7 @@ unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
   changes <- dplyr::bind_rows(find_changes(roots(x)))
 
   # Set supertaxa for subtaxa of combined taxa
-  vctrs::field(x, 'supertaxa') <- vapply(vctrs::field(x, 'supertaxa'), function(i) {
+  vctrs::field(x, 'supertaxa') <- vapply(cached_supertaxa, function(i) {
     if (i %in% changes$from) {
       return(changes$to[changes$from == i])
     } else {
@@ -1133,7 +1131,7 @@ unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
   }, integer(1))
 
   # Remove duplicate taxa
-  x[changes$from, invert = TRUE]
+  x[-changes$from, subtaxa = FALSE]
 }
 
 
