@@ -109,6 +109,14 @@ test_that("named taxon objects can be combined", {
 })
 
 
+# Taxon can be compared with eachother
+
+test_that("taxon objects can be compared with eachother", {
+  x <- taxon(c('A', 'B', 'C'))
+  expect_equal(x == x[1], c(TRUE, FALSE, FALSE))
+})
+
+
 # Works with `rep`
 
 test_that("taxon objects work with `rep`", {

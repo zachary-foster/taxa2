@@ -505,6 +505,18 @@ vec_cast.taxa_taxonomy.taxa_taxon <- function(x, to, ..., x_arg, to_arg) taxonom
 vec_cast.taxa_taxon.taxa_taxonomy <- function(x, to, ..., x_arg, to_arg) vctrs::field(x, "taxa")
 
 
+#--------------------------------------------------------------------------------
+# S3 equality and comparison functions
+#--------------------------------------------------------------------------------
+
+#' @rdname taxa_comparison_funcs
+#' @method vec_proxy_equal taxa_taxonomy
+#' @importFrom vctrs vec_proxy_equal
+#' @export
+vec_proxy_equal.taxa_taxonomy <- function(x, ...) {
+  vec_proxy_equal(as_taxon(x))
+}
+
 
 
 #--------------------------------------------------------------------------------
@@ -1083,7 +1095,7 @@ c.taxa_taxonomy <- function(...) {
   if (is_taxonomy(out) && length(list(...)) > 1) {
     in_lengths <- vapply(list(...), length, numeric(1))
     supertaxon_index_offsets <- rep(c(0, cumsum(in_lengths)[-length(in_lengths)]), in_lengths)
-    vctrs::field(out, 'supertaxa') <- vctrs::field(out, 'supertaxa') + supertaxon_index_offsets
+    vctrs::field(out, 'supertaxa') <- as.integer(vctrs::field(out, 'supertaxa') + supertaxon_index_offsets)
     attr(tax_rank(out), 'levels') <- do.call(c, lapply(list(...), function(x) attr(tax_rank(x), 'levels')))
   }
   return(out)
@@ -1091,26 +1103,29 @@ c.taxa_taxonomy <- function(...) {
 
 #' @export
 unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
-                                 nmax = NA, ..., proxy_func = tax_name) {
-  recursive_part <- function(i) {
+                                 nmax = NA, ..., proxy_func = as_taxon) {
+  # Find which taxa are the same and should be combined
+  find_changes <- function(i) {
     t <- as_taxon(x[i, subtaxa = FALSE])
     t_sub <- subtaxa(x, subset = i, max_depth = 1)
     unique_i <- i[duplicated_index(t, proxy_func = proxy_func)]
     is_duplicated <- i != unique_i
     out <- data.frame(from = i[is_duplicated], to = unique_i[is_duplicated])
     combined_subtaxa <- lapply(unique(unique_i), function(identical_i) unlist(t_sub[unique_i == identical_i]))
-    c(list(out), unlist(lapply(combined_subtaxa, recursive_part), recursive = FALSE))
+    c(list(out), unlist(lapply(combined_subtaxa, find_changes), recursive = FALSE)) # NOTE: This is recursive
   }
+  changes <- dplyr::bind_rows(find_changes(roots(x)))
 
-  changes <- dplyr::bind_rows(recursive_part(roots(x)))
-  vctrs::field(x, 'supertaxa')[seq_len(length(x))] <- vapply(vctrs::field(x, 'supertaxa'), function(i) {
+  # Set supertaxa for subtaxa of combined taxa
+  vctrs::field(x, 'supertaxa') <- vapply(vctrs::field(x, 'supertaxa'), function(i) {
     if (i %in% changes$from) {
       return(changes$to[changes$from == i])
     } else {
       return(i)
     }
-  }, numeric(1))
+  }, integer(1))
 
+  # Remove duplicate taxa
   x[changes$from, invert = TRUE]
 }
 
@@ -1188,7 +1203,11 @@ to_index <- function(x, i) {
 #' Returns the index of the first occurrence of each unique element
 #'
 #' @keywords internal
-duplicated_index <- function(x, proxy_func = c) {
-  proxy <- proxy_func(x)
+duplicated_index <- function(x, proxy_func = NULL) {
+  if (is.null(proxy_func)) {
+    proxy <- x
+  } else {
+    proxy <- proxy_func(x)
+  }
   vapply(seq_len(length(x)), function(i) which(proxy == proxy[[i]])[1], numeric(1))
 }

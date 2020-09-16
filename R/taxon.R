@@ -575,14 +575,16 @@ vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(name
 #--------------------------------------------------------------------------------
 
 #' @rdname taxa_comparison_funcs
-#' @method vec_proxy_compare taxa_taxon
-#' @importFrom vctrs vec_proxy_compare
+#' @method vec_proxy_equal taxa_taxon
+#' @importFrom vctrs vec_proxy_equal
 #' @export
-vec_proxy_compare.taxa_taxon <- function(x, ...) {
-  data.frame(stringsAsFactors = FALSE,
-             rank = as.character(taxon_rank(x)),
-             name = as.character(taxon(x)),
-             id   = as.character(taxon_id(x)))
+vec_proxy_equal.taxa_taxon <- function(x, ...) {
+  out <- as_data_frame(x)
+  out[] <- lapply(out, function(a_col) {
+    a_col[is.na(a_col)] <- "*.___NA___.*" # Bit of a hack, could cause a bug if a user has the same string in their data
+    a_col
+  })
+  return(out)
 }
 
 

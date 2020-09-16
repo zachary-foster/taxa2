@@ -240,7 +240,7 @@ test_that("taxonomy objects can be combined", {
   z <- taxonomy(taxon(c('Carnivora', 'Felidae'), rank = c('order', 'family')),
                 supertaxa = c(NA, 1),
                 .names = letters[1:2])
-  expect_equivalent(
+  expect_equal(
     c(x, y),
     taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                      'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
@@ -251,7 +251,7 @@ test_that("taxonomy objects can be combined", {
              supertaxa = c(c(NA, 1, 2, 3, 3, 1, 6, 7),  c(NA, 1, 2, 3) + 8),
              .names = c(letters[1:8], letters[1:4]))
   )
-  expect_equivalent(
+  expect_equal(
     c(x, y, z),
     taxonomy(taxon(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
                      'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos',
@@ -264,7 +264,8 @@ test_that("taxonomy objects can be combined", {
              supertaxa = c(c(NA, 1, 2, 3, 3, 1, 6, 7),  c(NA, 1, 2, 3) + 8, c(NA, 1) + 12),
              .names = c(letters[1:8], letters[1:4], letters[1:2]))
   )
-  expect_equal(c(x, x, x, x), c(c(x, x), c(x, x)))
+  expect_equal(c(x, y, x, y), c(c(x, y), c(x, y)))
+  expect_equal(c(x), x)
 })
 
 
