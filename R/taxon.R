@@ -579,11 +579,12 @@ vec_cast.factor.taxa_taxon <- function(x, to, ..., x_arg, to_arg) as.factor(name
 #' @importFrom vctrs vec_proxy_equal
 #' @export
 vec_proxy_equal.taxa_taxon <- function(x, ...) {
-  out <- as_data_frame(x)
-  out[] <- lapply(out, function(a_col) {
-    a_col[is.na(a_col)] <- "*.___NA___.*" # Bit of a hack, could cause a bug if a user has the same string in their data
-    a_col
-  })
+  # out <- as_data_frame(x)
+  # out[] <- lapply(out, function(a_col) {
+  #   a_col[is.na(a_col)] <- "*.___NA___.*" # Bit of a hack, could cause a bug if a user has the same string in their data
+  #   a_col
+  # })
+  out <- taxon_comp_hash(x)
   return(out)
 }
 
@@ -705,3 +706,12 @@ c.taxa_taxon <- function(...) {
 #--------------------------------------------------------------------------------
 
 
+#' @keywords internal
+taxon_comp_hash <- function(x) {
+  paste0('N: ', tax_name(x), '; ',
+         'I: ', tax_id(x), '; ',
+         'D: ', tax_db(x), '; ',
+         'R: ', tax_rank(x), '; ',
+         'A: ', tax_auth(x), '; ',
+         'C: ', tax_cite(x), ';')
+}

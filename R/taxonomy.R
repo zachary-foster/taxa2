@@ -1103,12 +1103,19 @@ c.taxa_taxonomy <- function(...) {
 
 #' @export
 unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
-                                 nmax = NA, ..., proxy_func = as_taxon) {
+                                 nmax = NA, ..., proxy_func = NULL) {
+  if (is.null(proxy_func)) {
+    proxy_func <- taxon_comp_hash
+  }
+
+  # Precalculate subtaxa and comparison proxy object for speed
+  cached_subtaxa <- subtaxa(x, max_depth = 1)
+  proxy <- proxy_func(x)
+
   # Find which taxa are the same and should be combined
   find_changes <- function(i) {
-    t <- as_taxon(x[i, subtaxa = FALSE])
-    t_sub <- subtaxa(x, subset = i, max_depth = 1)
-    unique_i <- i[duplicated_index(t, proxy_func = proxy_func)]
+    t_sub <- cached_subtaxa[i]
+    unique_i <- i[duplicated_index(proxy[i])]
     is_duplicated <- i != unique_i
     out <- data.frame(from = i[is_duplicated], to = unique_i[is_duplicated])
     combined_subtaxa <- lapply(unique(unique_i), function(identical_i) unlist(t_sub[unique_i == identical_i]))
@@ -1210,4 +1217,14 @@ duplicated_index <- function(x, proxy_func = NULL) {
     proxy <- proxy_func(x)
   }
   vapply(seq_len(length(x)), function(i) which(proxy == proxy[[i]])[1], numeric(1))
+}
+
+
+#' @keywords internal
+list_to_taxonomy <- function(x) {
+  class_length <- vapply(x, length, numeric(1))
+  parents <- unlist(lapply(class_length, function(l) c(NA, seq_len(l - 1))))
+  parents <- parents + rep(c(0, cumsum(class_length[-length(class_length)] )), class_length)
+  taxonomy(unlist(x, recursive = FALSE),
+           supertaxa = parents)
 }
