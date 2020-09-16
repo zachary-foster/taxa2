@@ -1091,9 +1091,29 @@ c.taxa_taxonomy <- function(...) {
 
 #' @export
 unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
-                                 nmax = NA, ...) {
+                                 nmax = NA, ..., proxy_func = tax_name) {
+  recursive_part <- function(i) {
+    t <- as_taxon(x[i, subtaxa = FALSE])
+    t_sub <- subtaxa(x, subset = i, max_depth = 1)
+    unique_i <- i[duplicated_index(t, proxy_func = proxy_func)]
+    is_duplicated <- i != unique_i
+    out <- data.frame(from = i[is_duplicated], to = unique_i[is_duplicated])
+    combined_subtaxa <- lapply(unique(unique_i), function(identical_i) unlist(t_sub[unique_i == identical_i]))
+    c(list(out), unlist(lapply(combined_subtaxa, recursive_part), recursive = FALSE))
+  }
 
+  changes <- dplyr::bind_rows(recursive_part(roots(x)))
+  vctrs::field(x, 'supertaxa')[seq_len(length(x))] <- vapply(vctrs::field(x, 'supertaxa'), function(i) {
+    if (i %in% changes$from) {
+      return(changes$to[changes$from == i])
+    } else {
+      return(i)
+    }
+  }, numeric(1))
+
+  x[changes$from, invert = TRUE]
 }
+
 
 #--------------------------------------------------------------------------------
 # Internal utility functions
@@ -1162,4 +1182,13 @@ to_index <- function(x, i) {
     return(which(i))
   }
   stop('Cannot convery input into an index')
+}
+
+
+#' Returns the index of the first occurrence of each unique element
+#'
+#' @keywords internal
+duplicated_index <- function(x, proxy_func = c) {
+  proxy <- proxy_func(x)
+  vapply(seq_len(length(x)), function(i) which(proxy == proxy[[i]])[1], numeric(1))
 }

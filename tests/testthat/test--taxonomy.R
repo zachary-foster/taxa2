@@ -264,6 +264,7 @@ test_that("taxonomy objects can be combined", {
              supertaxa = c(c(NA, 1, 2, 3, 3, 1, 6, 7),  c(NA, 1, 2, 3) + 8, c(NA, 1) + 12),
              .names = c(letters[1:8], letters[1:4], letters[1:2]))
   )
+  expect_equal(c(x, x, x, x), c(c(x, x), c(x, x)))
 })
 
 
@@ -468,3 +469,19 @@ test_that("named taxonomy objects can be converted to a tibble", {
     )
   )
 })
+
+
+# Can be made unique
+
+test_that("taxa in taxonomy objects can be made unique", {
+  x <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                  'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+  y <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                  'Panthera tigris', 'Kitty'),
+                supertaxa = c(NA, 1, 2, 3, 3, 3))
+  x <- c(x, y)
+
+  unique(x)
+})
+
