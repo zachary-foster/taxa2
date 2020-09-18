@@ -478,15 +478,6 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
     value <- strsplit(value, split = attr(x, 'sep'), fixed = TRUE)
   }
 
-  # Standardize value to taxon vector
-
-  # Generate index for unique taxon values already in the taxonomy
-
-  # Generate new indexes for unique input values
-
-  # Convert consecutive taxa to taxonomies for new taxa
-
-
   # Recycle inputs to same length
   rec <- vctrs::vec_recycle_common(i, j, value)
   i = rec[[1]]
@@ -631,6 +622,34 @@ is_internode.taxa_classification <- function(x) {
   is_internode(attr(x, 'taxonomy'))
 }
 
+#' @export
+c.taxa_classification <- function(...) {
+  input <- list(...)
+
+  # Combine taxonomy
+  tax_list <- lapply(input, function(x) attr(x, 'taxonomy'))
+  combined_taxonomy <- do.call(c, tax_list)
+
+  # Add offsets to instance indexes and combine
+  tax_lengths <- vapply(tax_list, length, numeric(1))
+  instance_lengths <- vapply(input, length, numeric(1))
+  index_offsets <- rep(c(0, cumsum(tax_lengths)[-length(tax_lengths)]), instance_lengths)
+  combined_instances <- unlist(lapply(input, as.integer)) + index_offsets
+
+  # Remove redundant taxonomic information
+  unique_indexes <- duplicated_index_taxonomy(combined_taxonomy)
+  vctrs::field(combined_taxonomy, 'supertaxa') <- unique_indexes[vctrs::field(combined_taxonomy, 'supertaxa')]
+  combined_taxonomy <- combined_taxonomy[unique(unique_indexes), subtaxa = FALSE]
+  unique_indexes[! duplicated(unique_indexes)] <- seq_len(sum(! duplicated(unique_indexes)))
+  combined_instances <- unique_indexes[combined_instances]
+
+  # Make new classification object
+  out <- classification(taxa = vctrs::field(combined_taxonomy, 'taxa'),
+                        supertaxa = vctrs::field(combined_taxonomy, 'supertaxa'),
+                        instances = combined_instances)
+
+  return(out)
+}
 
 
 #--------------------------------------------------------------------------------

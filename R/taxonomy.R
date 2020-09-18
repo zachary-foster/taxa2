@@ -1086,6 +1086,7 @@ is_internode.taxa_taxonomy <- function(x) {
   return(output)
 }
 
+
 #' @export
 c.taxa_taxonomy <- function(...) {
   out <- NextMethod()
@@ -1101,37 +1102,14 @@ c.taxa_taxonomy <- function(...) {
 #' @export
 unique.taxa_taxonomy <- function(x, incomparables = FALSE, fromLast = FALSE,
                                  nmax = NA, ..., proxy_func = NULL) {
-  if (is.null(proxy_func)) {
-    proxy_func <- taxon_comp_hash
-  }
-
-  # Precalculate subtaxa and comparison proxy object for speed
-  cached_supertaxa <- vctrs::field(x, 'supertaxa')
-  cached_subtaxa <- lapply(seq_len(length(x)), function(i) which(cached_supertaxa == i))
-  proxy <- proxy_func(x)
-
-  # Find which taxa are the same and should be combined
-  find_changes <- function(i) {
-    t_sub <- cached_subtaxa[i]
-    unique_i <- i[duplicated_index(proxy[i])]
-    is_duplicated <- i != unique_i
-    out <- data.frame(from = i[is_duplicated], to = unique_i[is_duplicated])
-    combined_subtaxa <- lapply(unique(unique_i), function(identical_i) unlist(t_sub[unique_i == identical_i]))
-    c(list(out), unlist(lapply(combined_subtaxa, find_changes), recursive = FALSE)) # NOTE: This is recursive
-  }
-  changes <- dplyr::bind_rows(find_changes(roots(x)))
+  # Find duplicated taxa
+  unique_indexes <- duplicated_index_taxonomy(x, proxy_func = proxy_func)
 
   # Set supertaxa for subtaxa of combined taxa
-  vctrs::field(x, 'supertaxa') <- vapply(cached_supertaxa, function(i) {
-    if (i %in% changes$from) {
-      return(changes$to[changes$from == i])
-    } else {
-      return(i)
-    }
-  }, integer(1))
+  vctrs::field(x, 'supertaxa') <- unique_indexes[vctrs::field(x, 'supertaxa')]
 
   # Remove duplicate taxa
-  x[-changes$from, subtaxa = FALSE]
+  x[unique(unique_indexes), subtaxa = FALSE]
 }
 
 
@@ -1215,6 +1193,34 @@ duplicated_index <- function(x, proxy_func = NULL) {
     proxy <- proxy_func(x)
   }
   vapply(seq_len(length(x)), function(i) which(proxy == proxy[[i]])[1], numeric(1))
+}
+
+#' Returns the index of the first occurrence of each unique taxon in a taxonomy
+#'
+#' @keywords internal
+duplicated_index_taxonomy <- function(x, proxy_func = NULL) {
+  if (is.null(proxy_func)) {
+    proxy_func <- taxon_comp_hash
+  }
+
+  # Precalculate subtaxa and comparison proxy object for speed
+  cached_supertaxa <- vctrs::field(x, 'supertaxa')
+  cached_subtaxa <- lapply(seq_len(length(x)), function(i) which(cached_supertaxa == i))
+  proxy <- proxy_func(x)
+
+  # Find which taxa are the same and should be combined
+  find_changes <- function(i) {
+    t_sub <- cached_subtaxa[i]
+    unique_i <- i[duplicated_index(proxy[i])]
+    is_duplicated <- i != unique_i
+    out <- data.frame(from = i[is_duplicated], to = unique_i[is_duplicated])
+    combined_subtaxa <- lapply(unique(unique_i), function(identical_i) unlist(t_sub[unique_i == identical_i]))
+    c(list(out), unlist(lapply(combined_subtaxa, find_changes), recursive = FALSE)) # NOTE: This is recursive
+  }
+  changes <- dplyr::bind_rows(find_changes(roots(x)))
+  out <- seq_len(length(x))
+  out[changes$from] <- changes$to
+  return(out)
 }
 
 

@@ -99,10 +99,22 @@ test_that("Assigning values to classification objects with `[`", {
 
 })
 
+# classification objects can be combined with `c`
 
-x[2] <- 'Carnivora|Ursidae'
-x[2] <- list(c('Carnivora', 'Ursidae'))
-x[2:3] <- list(c('Carnivora', 'Ursidae'), c('Carnivora', 'Felidae'))
-x[2, 2] <- 'Ursidae'
-x[2, 2:3] <- 'Ursidae|Ursus'
-x[, 1] <- 'Carnivors'
+test_that("classification objects can be combined with `c`", {
+  x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                        'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
+                      instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+  y = classification(c('Carnivora', 'Felidae', 'Panthera', 'Kitty'), supertaxa = c(NA, 1, 2, 3), instances = 3:4)
+
+  expect_equal(
+    c(x, y),
+    classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                     'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos', 'Kitty'),
+                   supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7, 3),
+                   instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2, 3, 9))
+  )
+})
+
+
