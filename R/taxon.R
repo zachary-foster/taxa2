@@ -158,7 +158,7 @@ tax_id.taxa_taxon <- function(x) {
 `tax_id<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_id())
   value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "id") <- value
+  vctrs::field(x, "id") <- unname(value)
   return(x)
 }
 
@@ -235,7 +235,7 @@ tax_name.taxa_taxon <- function(x) {
 `tax_name<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "name") <- value
+  vctrs::field(x, "name") <- unname(value)
   return(x)
 }
 
@@ -252,7 +252,7 @@ tax_auth.taxa_taxon <- function(x) {
 `tax_auth<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_authority())
   value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "auth") <- value
+  vctrs::field(x, "auth") <- unname(value)
   return(x)
 }
 
@@ -269,7 +269,7 @@ tax_rank.taxa_taxon <- function(x) {
 `tax_rank<-.taxa_taxon` <- function(x, value) {
   value <- vctrs::vec_cast(value, taxon_rank())
   value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, "rank") <- value
+  vctrs::field(x, "rank") <- unname(value)
   return(x)
 }
 
@@ -293,7 +293,7 @@ names.taxa_taxon <- function(x) {
   }
   value <- vctrs::vec_cast(value, character())
   value <- vctrs::vec_recycle(value, length(x))
-  vctrs::field(x, ".names") <- value
+  vctrs::field(x, ".names") <- unname(value)
   return(x)
 }
 
