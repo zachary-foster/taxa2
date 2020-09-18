@@ -31,12 +31,13 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #' on what each class is designed for, see the [concepts] section of the help
 #' pages.
 #'
-#' @param taxa A [taxon()] vector or something that can be converted to a
-#'   [taxon()] vector.
-#' @param supertaxa The indexes of `taxa` for each taxon's supertaxon.
-#' @param instances The indexes of each instance of a taxon in the taxonomy. Can
+#' @param x One of:
+#' * A list where each item represents a series of nested taxa. The contents of
+#' the list can be in any form that can be converted to a [taxon] vector.
+#' * The indexes/names of each instance of a taxon in a [taxonomy] object specified by the `taxonomy` option. Can
 #'   be any length, but must consist of valid indexes for taxa in the `taxonomy`
 #'   object.
+#' @param taxonomy A [taxonomy] object. Only needed if taxon indexes are supplied as the first argument.
 #' @param .names The names of the vector.
 #'
 #' @return An `S3` object of class `taxa_classification`
@@ -44,24 +45,35 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #'
 #' @examples
 #'
-#' # Create taxon vector
-#' x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-#'                      'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
-#'                     supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
-#'                     instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+#' # Create classification vector with a list
+#' x <- classification(list(
+#'   c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+#'   c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris'),
+#'   c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'   c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'   c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris')
+#' ))
 #'
-#' x <- classification(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-#'                                    'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
-#'                           rank = c('order', 'family', 'genus', 'species',
-#'                                    'species', 'family', 'genus', 'species'),
-#'                           id = taxon_id(c('33554', '9681', '9688', '9689',
-#'                                           '9694', '9632', '9639', '9644'),
-#'                                         db = 'ncbi'),
-#'                           auth = c('Bowdich, 1821', 'Fischer, 1817', 'Oken, 1816', 'L., 1758',
-#'                                    'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
-#'                     supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
-#'                     instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+#'
+#' # Create classification vector with indexes and a taxonomy
+#' x <- classification(c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+#'                     taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+#'                                'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'                              supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7)))
+#'
+#' x <- classification(c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+#'                     taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+#'                                             'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+#'                                    rank = c('order', 'family', 'genus', 'species',
+#'                                             'species', 'family', 'genus', 'species'),
+#'                                    id = taxon_id(c('33554', '9681', '9688', '9689',
+#'                                                    '9694', '9632', '9639', '9644'),
+#'                                                  db = 'ncbi'),
+#'                                    auth = c('Bowdich, 1821', 'Fischer, 1817', 'Oken, 1816', 'L., 1758',
+#'                                             'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
+#'                              supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7)))
 #' names(x) <- letters[1:12]
+#'
 #'
 #' # Get parts of the classification vector
 #' tax_name(x)
@@ -87,15 +99,35 @@ new_classification <- function(taxonomy = taxonomy(), instances = integer()) {
 #' data.frame(x = x, y = 1:12)
 #'
 #' @export
-classification <- function(taxa = taxon(), supertaxa = NA, instances = integer(), .names = NULL) {
+classification <- function(x = NULL, taxonomy = NULL, .names = NULL) {
+  # If no input, return an empty object
+  if (is.null(x)) {
+    return(new_classification(taxonomy(), integer(0)))
+  }
+
+  # Check user input
+  if (is.numeric(x) || is.character(x)) {
+    if (! is_taxonomy(taxonomy)) {
+      stop(call. = FALSE, 'If `x` is a vector of indexes or names, then a taxonomy object must be supplied with the `taxonomy` option.')
+    } else {
+      x <- to_index(taxonomy, x)
+    }
+  }
+  if (is.list(x) && (! is.null(taxonomy))) {
+    stop(call. = FALSE, 'If `x` is a list, then the `taxonomy` option cannot be used')
+  }
+
   # Cast inputs to correct values
   .names <- vctrs::vec_cast(.names, character())
-  instances <- vctrs::vec_cast(instances, integer())
-  my_taxonomy <- taxonomy(taxa = taxa, supertaxa = supertaxa)
 
   # Create classification object
-  out <- new_classification(taxonomy = my_taxonomy, instances = instances)
+  if (is.list(x)) {
+    out <- list_to_classification(x)
+  } else {
+    out <- new_classification(taxonomy = taxonomy, instances = as.integer(x))
+  }
   names(out) <- .names
+
   return(out)
 }
 
@@ -640,13 +672,14 @@ c.taxa_classification <- function(...) {
   unique_indexes <- duplicated_index_taxonomy(combined_taxonomy)
   vctrs::field(combined_taxonomy, 'supertaxa') <- unique_indexes[vctrs::field(combined_taxonomy, 'supertaxa')]
   combined_taxonomy <- combined_taxonomy[unique(unique_indexes), subtaxa = FALSE]
-  unique_indexes[! duplicated(unique_indexes)] <- seq_len(sum(! duplicated(unique_indexes)))
-  combined_instances <- unique_indexes[combined_instances]
+
+  # Fix instance indexes after taxonomy subset
+  combined_instances <- match(unique_indexes[combined_instances], unique(unique_indexes))
 
   # Make new classification object
-  out <- classification(taxa = vctrs::field(combined_taxonomy, 'taxa'),
-                        supertaxa = vctrs::field(combined_taxonomy, 'supertaxa'),
-                        instances = combined_instances)
+  out <- classification(combined_instances,
+                        taxonomy = taxonomy(vctrs::field(combined_taxonomy, 'taxa'),
+                                            supertaxa = vctrs::field(combined_taxonomy, 'supertaxa')))
 
   return(out)
 }
@@ -672,4 +705,13 @@ get_taxonomy_named_field <- function(x, func) {
     names(out) <- names(x)
   }
   return(out)
+}
+
+
+#' @keywords internal
+list_to_classification <- function(x) {
+  # class_length <- vapply(x, length, numeric(1))
+  # classification(cumsum(class_length), taxonomy = list_to_taxonomy(x))
+  classes <- lapply(x, function(y) classification(length(y), taxonomy = taxonomy(y, supertaxa = c(NA, 1:(length(y) - 1)))))
+  do.call(c, classes)
 }

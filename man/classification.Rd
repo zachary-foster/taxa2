@@ -4,22 +4,19 @@
 \alias{classification}
 \title{Taxon class}
 \usage{
-classification(
-  taxa = taxon(),
-  supertaxa = NA,
-  instances = integer(),
-  .names = NULL
-)
+classification(x = NULL, taxonomy = NULL, .names = NULL)
 }
 \arguments{
-\item{taxa}{A \code{\link[=taxon]{taxon()}} vector or something that can be converted to a
-\code{\link[=taxon]{taxon()}} vector.}
-
-\item{supertaxa}{The indexes of \code{taxa} for each taxon's supertaxon.}
-
-\item{instances}{The indexes of each instance of a taxon in the taxonomy. Can
+\item{x}{One of:
+\itemize{
+\item A list where each item represents a series of nested taxa. The contents of
+the list can be in any form that can be converted to a \link{taxon} vector.
+\item The indexes/names of each instance of a taxon in a \link{taxonomy} object specified by the \code{taxonomy} option. Can
 be any length, but must consist of valid indexes for taxa in the \code{taxonomy}
-object.}
+object.
+}}
+
+\item{taxonomy}{A \link{taxonomy} object. Only needed if taxon indexes are supplied as the first argument.}
 
 \item{.names}{The names of the vector.}
 }
@@ -34,24 +31,35 @@ pages.
 }
 \examples{
 
-# Create taxon vector
-x <- classification(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-                     'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
-                    supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
-                    instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+# Create classification vector with a list
+x <- classification(list(
+  c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+  c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris'),
+  c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+  c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+  c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris')
+))
 
-x <- classification(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-                                   'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
-                          rank = c('order', 'family', 'genus', 'species',
-                                   'species', 'family', 'genus', 'species'),
-                          id = taxon_id(c('33554', '9681', '9688', '9689',
-                                          '9694', '9632', '9639', '9644'),
-                                        db = 'ncbi'),
-                          auth = c('Bowdich, 1821', 'Fischer, 1817', 'Oken, 1816', 'L., 1758',
-                                   'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
-                    supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
-                    instances = c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2))
+
+# Create classification vector with indexes and a taxonomy
+x <- classification(c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+                    taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                               'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                             supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7)))
+
+x <- classification(c(3, 4, 4, 5, 5, 6, 8, 8, 2, 5, 6, 2),
+                    taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                                            'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                                   rank = c('order', 'family', 'genus', 'species',
+                                            'species', 'family', 'genus', 'species'),
+                                   id = taxon_id(c('33554', '9681', '9688', '9689',
+                                                   '9694', '9632', '9639', '9644'),
+                                                 db = 'ncbi'),
+                                   auth = c('Bowdich, 1821', 'Fischer, 1817', 'Oken, 1816', 'L., 1758',
+                                            'L., 1758', 'Fischer, 1817', 'L., 1758', 'L., 1758')),
+                             supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7)))
 names(x) <- letters[1:12]
+
 
 # Get parts of the classification vector
 tax_name(x)

@@ -33,6 +33,24 @@ test_that("classification objects can be created with names", {
   expect_equal(names(x), letters[1:12])
 })
 
+test_that("classification objects can be created with a list of taxon info", {
+  x <- classification(list(
+    c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo'),
+    c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris'),
+    c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+    c('Carnivora', 'Ursidae', 'Ursus', 'Ursus arctos'),
+    c('Carnivora', 'Felidae', 'Panthera', 'Panthera tigris')
+  ))
+  expect_equal(
+    x,
+    classification(c(4, 5, 8, 8, 5),
+                   taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                              'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                            supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7)))
+  )
+
+})
+
 
 # Subsetting taxonomy objects with `[`
 
