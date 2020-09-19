@@ -113,7 +113,6 @@ test_that("Assigning values to classification objects with `[`", {
                       .names = letters[1:12])
 
   x[2, 2:3] <- c('Ursidae', 'Ursus')
-  x[4:5, 2:3] <- list(c('Ursidae', 'Ursus'))
 })
 
 # classification objects can be combined with `c`

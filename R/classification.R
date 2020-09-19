@@ -501,6 +501,14 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 #  * input values that would caused the same change should be deteceted so the same change does not happen mutliple times
 #' @export
 `[<-.taxa_classification` <- function(x, i, j = NULL, value) {
+  # If numeric input, set instances rather than adding/replacing taxa
+  if (is.numeric(value)) {
+    if (! is.null(j)) {
+      stop(call. = FALSE, '`j` cannot be used if the input value is a taxon index (numeric)')
+    }
+    return(NextMethod())
+  }
+
   # Standardize index input to numeric indexes
   i <- to_index(x, i)
   if (! is.numeric(j)) {
@@ -541,16 +549,22 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
   #                                }
   #                              })
 
-  # Add new taxa to the taxonomy
+  # Convert replaced taxa to new classification
   new_class <- classification(new_branches)
-  new_instance <- as.integer(new_class) + length(attr(x, 'taxonomy'))
-  attr(x, 'taxonomy') <- c(attr(x, 'taxonomy'), attr(new_class, 'taxonomy'))
-  unique_index <- duplicated_index_taxonomy(attr(x, 'taxonomy'))
-  vec_slice(x, i) <- match(new_instance, unique(unique_index))
-  attr(x, 'taxonomy') <- unique(attr(x, 'taxonomy'))
+  new_taxonomy <- c(attr(x, 'taxonomy'), attr(new_class, 'taxonomy'))
 
-  # Delete any unused taxa
-  attr(x, 'taxonomy') <- attr(x, 'taxonomy')[unique(as.integer(x)), supertaxa = TRUE, subtaxa = FALSE]
+  # Adjust instance indexes
+  tax_reassignment_key <- duplicated_index_taxonomy(new_taxonomy)
+  tax_reassignment_key[! duplicated(tax_reassignment_key)] <- seq_len(sum(! duplicated(tax_reassignment_key)))
+  new_instance_index <- tax_reassignment_key[as.integer(new_class) + length(attr(x, 'taxonomy'))]
+
+  # Apply changes to indexes and taxonomy
+  x[] <- tax_reassignment_key[as.integer(x)]
+  x[i] <- new_instance_index
+  attr(x, 'taxonomy') <- unique(new_taxonomy)
+
+  # Delete any unused taxa after changes
+  x <- delete_unused_class_taxa(x)
 
   return(x)
 }
@@ -731,4 +745,20 @@ list_to_classification <- function(x) {
   # classification(cumsum(class_length), taxonomy = list_to_taxonomy(x))
   classes <- lapply(x, function(y) classification(length(y), taxonomy = taxonomy(y, supertaxa = c(NA, 1:(length(y) - 1)))))
   do.call(c, classes)
+}
+
+#' Removes taxa from the taxonomy of a classification that are not used by any of the instances
+#'
+#' @keywords internal
+delete_unused_class_taxa <- function(x) {
+  # Find which taxa will be preserved
+  preserved <- sort(unique(unlist(supertaxa(attr(x, 'taxonomy'), subset = unique(as.integer(x)), include = TRUE))))
+
+  # Delete any unused taxa
+  attr(x, 'taxonomy') <- attr(x, 'taxonomy')[unique(as.integer(x)), supertaxa = TRUE, subtaxa = FALSE]
+
+  # Adjust the instance indexes
+  x[] <- match(as.integer(x), preserved)
+
+  return(x)
 }
