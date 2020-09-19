@@ -500,7 +500,7 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 #  * could add all new parts of taxonomy, change instance indexes, and prune unsed parts of tree
 #  * input values that would caused the same change should be deteceted so the same change does not happen mutliple times
 #' @export
-`[<-.taxa_classification` <- function(x, i, j = NULL, value) {
+`[<-.taxa_classification` <- function(x, i = NULL, j = NULL, value) {
   # If numeric input, set instances rather than adding/replacing taxa
   if (is.numeric(value)) {
     if (! is.null(j)) {
@@ -509,18 +509,28 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
     return(NextMethod())
   }
 
-  # Standardize index input to numeric indexes
-  i <- to_index(x, i)
-  if (! is.numeric(j)) {
+  # Standardize inputs
+  if (is.null(i)) {
+    i <- seq_along(x)
+  } else {
+    i <- to_index(x, i)
+  }
+  if (! is.null(j) && ! is.numeric(j)) {
     stop(call. = FALSE, '`j` must be an index')
   }
-  if (is.vector(value)) {
-    value <- list(value)
-  }
-
-  # Standardize value input to list of character vectors
-  if (is.null(j) && is.character(value)) {
-    value <- strsplit(value, split = attr(x, 'sep'), fixed = TRUE)
+  if (is.null(j)) {
+    if (is.factor(value)) {
+      value <- as.character(value)
+    }
+    if (is.character(value)) {
+      value <- strsplit(value, split = attr(x, 'sep'), fixed = TRUE)
+    } else {
+      value <- as.list(value)
+    }
+  } else {
+    if (is.character(value) || is.factor(value) || is_taxon(value)) {
+      value <- list(value)
+    }
   }
 
   # Recycle inputs to same length
@@ -531,12 +541,16 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 
   # Make new taxa for each change
   new_branches <- lapply(seq_along(i), function(index) {
-    class_indexes <- rev(supertaxa(attr(x, 'taxonomy'), subset = as.integer(x)[i[[index]]], include = TRUE)[[1]])
-    modified_indexes <- seq(min(j[[index]]), max(class_indexes))
-    out <- as_taxon(attr(x, 'taxonomy')[class_indexes, subtaxa = FALSE, supertaxa = FALSE])
-    out[j[[index]]] <- value[[index]]
-    # return(out[modified_indexes])
-    return(out)
+    if (is.null(j[[index]])) {
+      return(taxon(value[[index]]))
+    } else {
+      class_indexes <- rev(supertaxa(attr(x, 'taxonomy'), subset = as.integer(x)[i[[index]]], include = TRUE)[[1]])
+      # modified_indexes <- seq(min(j[[index]]), max(class_indexes))
+      out <- vctrs::field(attr(x, 'taxonomy'), 'taxa')[class_indexes]
+      out[j[[index]]] <- value[[index]]
+      # return(out[modified_indexes])
+      return(out)
+    }
   })
   # new_branch_parents <- vapply(seq_along(i), FUN.VALUE = numeric(1),
   #                              function(index) {
@@ -758,7 +772,7 @@ delete_unused_class_taxa <- function(x) {
   attr(x, 'taxonomy') <- attr(x, 'taxonomy')[unique(as.integer(x)), supertaxa = TRUE, subtaxa = FALSE]
 
   # Adjust the instance indexes
-  x[] <- match(as.integer(x), preserved)
+  x[seq_along(x)] <- match(as.integer(x), preserved)
 
   return(x)
 }
