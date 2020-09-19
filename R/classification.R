@@ -503,7 +503,12 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
 `[<-.taxa_classification` <- function(x, i, j = NULL, value) {
   # Standardize index input to numeric indexes
   i <- to_index(x, i)
-  j <- to_index(x, j)
+  if (! is.numeric(j)) {
+    stop(call. = FALSE, '`j` must be an index')
+  }
+  if (is.vector(value)) {
+    value <- list(value)
+  }
 
   # Standardize value input to list of character vectors
   if (is.null(j) && is.character(value)) {
@@ -511,31 +516,43 @@ vec_cast.integer.taxa_classification <- function(x, to, ..., x_arg, to_arg) {
   }
 
   # Recycle inputs to same length
-  rec <- vctrs::vec_recycle_common(i, j, value)
+  rec <- vctrs::vec_recycle_common(i, list(j), value)
   i = rec[[1]]
   j = rec[[2]]
   value = rec[[3]]
 
-  tax_super <- lapply(supertaxa(x, subset = as.integer(x)), rev)
-  tax_index <- vapply(seq_len(length(i)), function(index) {
-    tax_super[[i[index]]][j[index]]
-  }, integer(1))
+  # Make new taxa for each change
+  new_branches <- lapply(seq_along(i), function(index) {
+    class_indexes <- rev(supertaxa(attr(x, 'taxonomy'), subset = as.integer(x)[i[[index]]], include = TRUE)[[1]])
+    modified_indexes <- seq(min(j[[index]]), max(class_indexes))
+    out <- as_taxon(attr(x, 'taxonomy')[class_indexes, subtaxa = FALSE, supertaxa = FALSE])
+    out[j[[index]]] <- value[[index]]
+    # return(out[modified_indexes])
+    return(out)
+  })
+  # new_branch_parents <- vapply(seq_along(i), FUN.VALUE = numeric(1),
+  #                              function(index) {
+  #                                class_indexes <- rev(supertaxa(attr(x, 'taxonomy'), subset = as.integer(x)[i[[index]]], include = TRUE)[[1]])
+  #                                parent_index <- min(j[[index]]) - 1
+  #                                if (parent_index <= 0) {
+  #                                  return(NA)
+  #                                } else {
+  #                                  return(class_indexes[min(j[[index]]) - 1])
+  #                                }
+  #                              })
 
-
-  # Generate new taxa for unique inputs
-  new_tax_offset <- vapply(seq_len(length(i)),
-                          FUN.VALUE = integer(1),
-                          function(index) {
-                            min(which(value == value[index] & tax_index == tax_index[index]))
-                          })
-  new_tax_index <- new_tax_offset + length(attr(x, 'taxonomy'))
-  attr(x, 'taxonomy')[unique(new_tax_index)] <- value[unique(new_tax_offset)]
+  # Add new taxa to the taxonomy
+  new_class <- classification(new_branches)
+  new_instance <- as.integer(new_class) + length(attr(x, 'taxonomy'))
+  attr(x, 'taxonomy') <- c(attr(x, 'taxonomy'), attr(new_class, 'taxonomy'))
+  unique_index <- duplicated_index_taxonomy(attr(x, 'taxonomy'))
+  vec_slice(x, i) <- match(new_instance, unique(unique_index))
+  attr(x, 'taxonomy') <- unique(attr(x, 'taxonomy'))
 
   # Delete any unused taxa
   attr(x, 'taxonomy') <- attr(x, 'taxonomy')[unique(as.integer(x)), supertaxa = TRUE, subtaxa = FALSE]
 
-
-
+  return(x)
 }
 
 
