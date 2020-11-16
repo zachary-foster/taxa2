@@ -1,5 +1,5 @@
 context("taxon_db")
-library(taxa)
+library(taxa2)
 
 
 # Creating taxon_db objects

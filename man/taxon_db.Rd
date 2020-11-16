@@ -3,18 +3,15 @@
 \name{taxon_db}
 \alias{taxon_db}
 \alias{taxon_db<-}
-\alias{is.na.taxa_taxon_db}
 \title{Taxon database class}
 \usage{
 taxon_db(db = character(), .names = NULL, ...)
 
 taxon_db(x) <- value
-
-\method{is.na}{taxa_taxon_db}(x)
 }
 \arguments{
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
-\link{db_ref}. Inputs will be transformed to a \code{character} vector if possible.}
+\link{db_ref}. Inputs will be transformed to a \link{character} vector if possible.}
 
 \item{.names}{The names of the vector.}
 
@@ -28,8 +25,9 @@ taxon_db(x) <- value
 An \code{S3} object of class \code{taxa_taxon_db}
 }
 \description{
-\Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
-Used to store the names of taxon databases defined in \code{db_ref}.
+\Sexpr[results=rd, stage=render]{taxa2:::lifecycle("maturing")}
+Used to store the names of taxon databases defined in \link{db_ref}. Primarily
+used in other classes like \link{taxon_id} to define databases for each item.
 }
 \examples{
 
@@ -69,11 +67,10 @@ x <- taxon_db(c('ncbi', 'ncbi', 'my_custom_db'))
 }
 \seealso{
 Other classes: 
-\code{\link{[.taxa_classification}()},
-\code{\link{classification}()},
 \code{\link{taxon_authority}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},
+\code{\link{taxonomy}()},
 \code{\link{taxon}()}
 }
 \concept{classes}

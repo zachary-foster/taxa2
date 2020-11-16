@@ -1,12 +1,13 @@
-Package: taxa
+Package: taxa2
 Type: Package
-Title: Taxonomic Classes
-Description: Provides taxonomic classes for
-    groupings of taxonomic names without data, and those
-    with data. Methods provided are "taxonomically aware", in
-    that they know about ordering of ranks, and methods that
-    filter based on taxonomy also filter associated data.
-Version: 1.0.0
+Title: Classes for storing and manipulating taxonomic data
+Description: Provides classes for storing and manipulating taxonomic data. 
+ Most of the classes can be treated like base R vectors (e.g. can be used 
+ in tables as columns and can be named. Vectorized classes can store taxon names
+ and authorities, taxon IDs from databases, taxon ranks, and other types of
+ information. More complex classes are provided to store taxonomic trees and
+ user-defined data associated with them.
+Version: 0.1.0
 Authors@R: c(
     person("Scott", "Chamberlain", role = "aut", 
        email = "myrmecocystus+r@gmail.com", comment = c(ORCID = "0000-0003-1444-9135")),
@@ -21,8 +22,8 @@ LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
 License: MIT + file LICENSE
-URL: https://github.com/ropensci/taxa
-BugReports: https://github.com/ropensci/taxa/issues
+URL: https://github.com/ropensci/taxa2
+BugReports: https://github.com/ropensci/taxa2/issues
 Roxygen: list(markdown = TRUE)
 Imports:
     R6,

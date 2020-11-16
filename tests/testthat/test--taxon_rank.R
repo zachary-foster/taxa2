@@ -1,5 +1,5 @@
 context("taxon_rank")
-library(taxa)
+library(taxa2)
 
 
 # Creating taxon_rank objects

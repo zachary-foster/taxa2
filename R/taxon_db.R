@@ -22,11 +22,12 @@ new_taxon_db <- function(db = character(), ...) {
 
 #' Taxon database class
 #'
-#' \Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")}
-#' Used to store the names of taxon databases defined in `db_ref`.
+#' \Sexpr[results=rd, stage=render]{taxa2:::lifecycle("maturing")}
+#' Used to store the names of taxon databases defined in [db_ref]. Primarily
+#' used in other classes like [taxon_id] to define databases for each item.
 #'
 #' @param db Zero or more taxonomic database names. Should be a name contained in
-#'   [db_ref]. Inputs will be transformed to a `character` vector if possible.
+#'   [db_ref]. Inputs will be transformed to a [character] vector if possible.
 #' @param .names The names of the vector.
 #' @param ... Additional arguments.
 #'
@@ -269,11 +270,16 @@ vec_cast.factor.taxa_taxon_db <- function(x, to, ..., x_arg, to_arg) factor(vctr
 #--------------------------------------------------------------------------------
 
 
-#' Check if is a taxond database
+#' Check if something is a [taxon_db]
 #'
-#' Check if an object is a taxon database class
+#' Check if an object is of the [taxon_db] class
 #'
 #' @param x An object to test
+#'
+#' @examples
+#' x <- taxon_db(c('ncbi', 'ncbi', 'itis'))
+#' is_taxon_db(x)
+#' is_taxon_db(1:3)
 #'
 #' @export
 is_taxon_db <- function(x) {
@@ -281,7 +287,6 @@ is_taxon_db <- function(x) {
 }
 
 
-#' @rdname taxon_db
 #' @export
 is.na.taxa_taxon_db <- function(x) {
   is.na(vctrs::vec_cast(x, character()))

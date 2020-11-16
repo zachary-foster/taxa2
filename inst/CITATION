@@ -1,10 +1,6 @@
-
-bibentry("Manual",
-  title = "Taxa: An R package implementing data standards and methods for taxonomic data.",
+bibentry("unpublished",
+  title = "taxa2: Classes for storing and manipulating taxonomic data.",
   author = c(person("Foster", "Zachary"), person("Chamberlain", "Scott"), person("Grunwald", "Niklaus")),
-  journal = "F1000Research",
-  year = "2018",
-  volume = "7",
-  number = "272",
-  doi = "10.12688/f1000research.14013.1"
+  year = 2020,
+  note = "Software under development."
 )

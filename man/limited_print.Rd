@@ -39,9 +39,9 @@ Prints the start and end values for a character vector. The number of values
 printed depend on the width of the screen by default.
 }
 \examples{
-taxa:::limited_print(1:100)
-taxa:::limited_print(1:10000)
-taxa:::limited_print(1:10000, prefix = "stuff:")
+taxa2:::limited_print(1:100)
+taxa2:::limited_print(1:10000)
+taxa2:::limited_print(1:10000, prefix = "stuff:")
 
 }
 \keyword{internal}

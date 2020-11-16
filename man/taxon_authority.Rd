@@ -28,8 +28,7 @@ no \code{date} input is given, then the date is seperated from the author input.
 An \code{S3} object of class \code{taxa_taxon_authority}
 }
 \description{
-\Sexpr[results=rd, stage=render]{taxa:::lifecycle("experimental")} The function used to create
-\code{taxon_authority} objects
+\Sexpr[results=rd, stage=render]{taxa2:::lifecycle("maturing")} Used to store information on taxon authorities, such as author names, date, and citation.
 }
 \examples{
 
@@ -62,11 +61,10 @@ as_data_frame(x)
 }
 \seealso{
 Other classes: 
-\code{\link{[.taxa_classification}()},
-\code{\link{classification}()},
 \code{\link{taxon_db}()},
 \code{\link{taxon_id}()},
 \code{\link{taxon_rank}()},
+\code{\link{taxonomy}()},
 \code{\link{taxon}()}
 }
 \concept{classes}

@@ -1,5 +1,5 @@
 context("taxonomy")
-library(taxa)
+library(taxa2)
 
 
 # Creating taxonomy objects

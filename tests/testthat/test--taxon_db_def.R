@@ -1,11 +1,11 @@
 context("taxon_db_def")
-library(taxa)
+library(taxa2)
 
 
 # `db_ref$get()` returns the correct default
 
 test_that("`db_ref$get()` returns the correct default", {
-  expect_equal(db_ref$get(), taxa:::database_ref)
+  expect_equal(db_ref$get(), taxa2:::database_ref)
 })
 
 
@@ -13,8 +13,8 @@ test_that("`db_ref$get()` returns the correct default", {
 
 test_that("`db_ref$set()` can add new values", {
   db_ref$set(name = 'my_custom_db', desc = 'I just made this up')
-  expect_equal(length(db_ref$get()), length(taxa:::database_ref) + 1)
-  expect_equal(db_ref$get()[length(db_ref$get())], taxa:::taxon_db_def(name = 'my_custom_db', desc = 'I just made this up'))
+  expect_equal(length(db_ref$get()), length(taxa2:::database_ref) + 1)
+  expect_equal(db_ref$get()[length(db_ref$get())], taxa2:::taxon_db_def(name = 'my_custom_db', desc = 'I just made this up'))
 })
 
 
@@ -22,8 +22,8 @@ test_that("`db_ref$set()` can add new values", {
 
 test_that("`db_ref$set()` can replace values", {
   db_ref$set(name = 'gbif', desc = 'New gbif')
-  expect_equal(length(db_ref$get()), length(taxa:::database_ref) + 1)
-  expect_equal(db_ref$get('gbif'), taxa:::taxon_db_def(name = 'gbif', desc = 'New gbif'))
+  expect_equal(length(db_ref$get()), length(taxa2:::database_ref) + 1)
+  expect_equal(db_ref$get('gbif'), taxa2:::taxon_db_def(name = 'gbif', desc = 'New gbif'))
 })
 
 
@@ -32,6 +32,6 @@ test_that("`db_ref$set()` can replace values", {
 test_that("`db_ref$set()` can replace values", {
   db_ref$set(name = 'gbif', desc = 'New gbif')
   db_ref$reset()
-  expect_equal(db_ref$get(), taxa:::database_ref)
+  expect_equal(db_ref$get(), taxa2:::database_ref)
 })
 
