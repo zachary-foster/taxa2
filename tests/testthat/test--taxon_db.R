@@ -124,7 +124,7 @@ test_that("taxon_db objects can be combined", {
 test_that("named taxon_db objects can be combined", {
   x <- taxon_db(c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
   expect_equal(c(x, x), taxon_db(rep(c('ncbi', 'ncbi', 'itis'), 2), .names = rep(letters[1:3], 2)))
-  expect_equal(c(x, x, x), taxon_db(rep(c('ncbi', 'ncbi', 'itis'), 3, .names = rep(letters[1:3], 3))))
+  expect_equal(c(x, x, x), taxon_db(rep(c('ncbi', 'ncbi', 'itis'), 3), .names = rep(letters[1:3], 3)))
 })
 
 
