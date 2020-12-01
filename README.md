@@ -1,6 +1,9 @@
 taxa2
 =====
 
+[![Build
+Status](https://travis-ci.org/zachary-foster/taxa2.svg?branch=main)](https://travis-ci.org/zachary-foster/taxa2)
+
 This is an R package that provides classes to store and manipulate
 taxonomic data. Most of the classes can be used like base R vectors.
 This project is currently under development and will eventually replace
