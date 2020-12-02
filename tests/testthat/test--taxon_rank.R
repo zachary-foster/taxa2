@@ -26,6 +26,14 @@ test_that("taxon_rank objects can be created with names", {
   expect_equal(as.character(x[3]), c(c = 'phylum'))
 })
 
+# Printing taxon objects
+
+test_that("taxon_id objects can be printed", {
+  x <- taxon_rank(c('species', 'species', 'phylum', 'family', 'customA', 'customB'), .names = letters[1:6])
+  verify_output(path = test_path('print_outputs', 'taxon_rank.txt'),
+                code = {print(x)},
+                crayon = TRUE)
+})
 
 # Subsetting taxon_rank objects with `[`
 

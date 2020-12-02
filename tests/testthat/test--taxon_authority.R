@@ -8,6 +8,7 @@ test_that("taxon_authority objects can be created from character input", {
   x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'))
   expect_equal(length(x), 3)
   expect_equal(class(x)[1], 'taxa_taxon_authority')
+  expect_true(is_taxon_authority(x))
   expect_equal(as.character(x[2]), 'L. 1753')
 })
 
@@ -78,6 +79,8 @@ test_that("taxon_authority objects can have values assigned to them", {
   x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
   x[2] <- '4'
   expect_equal(x[2], taxon_authority('4', .names = letters[2]))
+  x[[2]] <- '5'
+  expect_equal(x[2], taxon_authority('5', .names = letters[2]))
   x['b'] <- '4'
   expect_equal(x[2], taxon_authority('4', .names = letters[2]))
   x[c(FALSE, TRUE, FALSE)] <- '4'
@@ -88,6 +91,25 @@ test_that("taxon_authority assignment is recycled correctly", {
   x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
   x[1:3] <- '4'
   expect_equal(x,  taxon_authority(c('4', '4', '4'), .names = letters[1:3]))
+})
+
+test_that("(taxon_authority) multiple items can not be used with [[", {
+  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
+  expect_error(x[[1:3]] <- '4', 'attempt to select more than one element')
+  expect_error(x[[1:3]], 'attempt to select more than one element')
+})
+
+
+# Assign info for components
+
+test_that("taxon_authority objects can be combined", {
+  x <- taxon_authority(c('1', '2', '3'))
+  tax_cite(x) <- c('a', 'b', 'c')
+  expect_equal(tax_cite(x), c('a', 'b', 'c'))
+  tax_date(x) <- c('1', '2', '3')
+  expect_equal(tax_date(x), c('1', '2', '3'))
+  tax_author(x) <- c('x', 'y', 'x')
+  expect_equal(tax_author(x), c('x', 'y', 'x'))
 })
 
 
@@ -189,9 +211,26 @@ test_that("taxon_authority objects can be converted to a tibble", {
 })
 
 test_that("named taxon_authority objects can be converted to a tibble", {
-  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), citation = c(NA, NA, 'cite'), .names = letters[1:3])
+  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'),
+                       date = c('1827', '1753', '2000'),
+                       citation = c(NA, NA, 'cite'),
+                       .names = letters[1:3])
   expect_equal(
     tibble::as_tibble(x),
     tibble::tibble(tax_author = c('Cham. & Schldl.', 'L.', 'Billy'), tax_date = c('1827', '1753', '2000'), tax_cite = c(NA, NA, 'cite'))
   )
 })
+
+# works with %in%
+
+test_that("taxon objects work with %in%", {
+  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'),
+                       date = c('1827', '1753', '2000'),
+                       citation = c(NA, NA, 'cite'),
+                       .names = letters[1:3])
+  expect_true('L. 1753' %in% x)
+  expect_equal(x %in% 'L. 1753', c(FALSE, TRUE, FALSE))
+  expect_true(x[1] %in% x)
+  expect_equal(x %in% x[2],  c(FALSE, TRUE, FALSE))
+})
+

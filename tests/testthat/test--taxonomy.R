@@ -31,6 +31,26 @@ test_that("taxonomy objects can be created with names", {
 })
 
 
+# Printing
+
+test_that("taxonomy objects can be printed", {
+  x <- taxonomy(taxon(name = c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                               'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                      rank = c('order', 'family', 'genus', 'species',
+                               'species', 'family', 'genus', 'species'),
+                      id = taxon_id(c('33554', '9681', '9688', '9689',
+                                      '9694', '9632', '9639', '9644'),
+                                    db = 'ncbi'),
+                      auth = c('Bowdich, 1821', 'Fischer de Waldheim, 1817', 'Oken, 1816', 'L., 1758',
+                               'L., 1758', 'Fischer de Waldheim, 1817', 'L., 1758', 'L., 1758')),
+                supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+  names(x) <- letters[1:8]
+  verify_output(path = test_path('print_outputs', 'taxonomy.txt'),
+                code = {print(x)},
+                crayon = TRUE)
+})
+
+
 # Subsetting taxonomy objects with `[`
 
 test_that("taxonomy objects can be `[` subset by index", {
@@ -275,19 +295,6 @@ test_that("taxonomy objects can be combined", {
 })
 
 
-
-# Works with `rep`
-
-# NOTE: not working yet, but not really sure it is important to work with rep
-#
-# test_that("taxonomy objects work with `rep`", {
-#   x <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
-#                   'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
-#                 supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7),
-#                 .names = letters[1:8])
-#   expect_equal(rep(x, 2), c(x, x))
-#   expect_equal(rep(x, 3), c(x, x, x))
-# })
 
 
 # Works with `seq_along`

@@ -716,10 +716,6 @@ as_taxon.taxa_taxonomy <- function(x, ...) {
   vctrs::field(x, 'taxa')
 }
 
-#' @export
-as_taxon.taxa_classification <- function(x, ...) {
-  do.call(c, lapply(as_taxon(x), `[[`, 1))
-}
 
 #' @export
 c.taxa_taxon <- function(...) {

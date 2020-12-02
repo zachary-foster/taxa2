@@ -8,6 +8,7 @@ test_that("taxon_db objects can be created from character input", {
   x <- taxon_db(c('ncbi', 'ncbi', 'itis'))
   expect_equal(length(x), 3)
   expect_equal(class(x)[1], 'taxa_taxon_db')
+  expect_true(is_taxon_db(x))
   expect_equal(as.character(x[3]), 'itis')
 })
 
@@ -216,4 +217,15 @@ test_that("named taxon_db objects can be converted to a tibble", {
     tibble::as_tibble(x),
     tibble::tibble(tax_db = c('ncbi', 'ncbi', 'itis'))
   )
+})
+
+
+# works with %in%
+
+test_that("taxon_db objects work with %in%", {
+  x <- taxon_db(c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
+  expect_true('ncbi' %in% x)
+  expect_equal(x %in% 'itis', c(FALSE, FALSE, TRUE))
+  expect_true(x[1] %in% x)
+  expect_equal(x %in% x[2],  c(TRUE, TRUE, FALSE))
 })

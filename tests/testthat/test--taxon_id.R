@@ -26,6 +26,16 @@ test_that("taxon_id objects can be created with names", {
   expect_equal(names(x), letters[1:3])
 })
 
+# Printing taxon objects
+
+test_that("taxon_id objects can be printed", {
+  x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'))
+  names(x) <- c('a', 'b', 'c')
+  verify_output(path = test_path('print_outputs', 'taxon_id.txt'),
+                code = {print(x)},
+                crayon = TRUE)
+})
+
 
 # Subsetting taxon_id objects with `[`
 
@@ -81,6 +91,8 @@ test_that("taxon_id objects can have values assigned to them", {
   x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
   x[2] <- '4'
   expect_equal(x[2], taxon_id('4', .names = letters[2]))
+  x[[2]] <- '5'
+  expect_equal(x[2], taxon_id('5', .names = letters[2]))
   x['b'] <- '4'
   expect_equal(x[2], taxon_id('4', .names = letters[2]))
   x[c(FALSE, TRUE, FALSE)] <- '4'
@@ -91,6 +103,12 @@ test_that("taxon_id assignment is recycled correctly", {
   x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
   x[1:3] <- '4'
   expect_equal(x,  taxon_id(c('4', '4', '4'), .names = letters[1:3]))
+})
+
+test_that("(taxon_id) multiple items can not be used with [[", {
+  x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
+  expect_error(x[[1:3]] <- '4', 'attempt to select more than one element')
+  expect_error(x[[1:3]], 'attempt to select more than one element')
 })
 
 
@@ -108,6 +126,22 @@ test_that("taxon_id objects cannot be assigned invalid values woth `[`", {
 test_that("taxon_id objects cannot be assigned invalid values woth `[[`", {
   x <- taxon_id(c('1', '2', '3'), .names = letters[1:3])
   expect_error(tax_db(x)[[2]] <- 'not_valid', "Taxon database names must be defined in `db_ref`")
+})
+
+# Assign values to components
+
+test_that("components of taxon objects can be assigned", {
+  x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
+  tax_db(x) <- 'nbn'
+  expect_true(all(tax_db(x) == 'nbn'))
+})
+
+# Assign taxon db
+
+test_that("taxon_authority objects can be combined", {
+  x <- taxon_id(c('1', '2', '3'))
+  tax_db(x) <- 'nbn'
+  expect_equal(tax_db(x), taxon_db(rep('nbn', 3)))
 })
 
 
@@ -214,4 +248,22 @@ test_that("named taxon_id objects can be converted to a tibble", {
     tibble::as_tibble(x),
     tibble::tibble(tax_id = c('1', '2', '3'), tax_db = c('ncbi', 'ncbi', 'itis'))
   )
+})
+
+# works with is.na
+
+test_that("taxon_id objects work with is.na", {
+  x <- taxon_id(c('1', NA, '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
+  expect_equal(is.na(x), is.na(c('1', NA, '3')))
+})
+
+
+# works with %in%
+
+test_that("taxon_id objects work with %in%", {
+  x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
+  expect_true('1' %in% x)
+  expect_equal(x %in% c('1', '2'), c('1', '2', '3') %in% c('1', '2'))
+  expect_true(x[1] %in% x)
+  expect_equal(x %in% x[1:2], c('1', '2', '3') %in% c('1', '2'))
 })
