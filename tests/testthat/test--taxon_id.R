@@ -8,6 +8,7 @@ test_that("taxon_id objects can be created from character input", {
   x <- taxon_id(c('1', '2', '3'))
   expect_equal(length(x), 3)
   expect_equal(class(x)[1], 'taxa_taxon_id')
+  expect_true(is_taxon_id(x))
   expect_equal(as.character(x[3]), '3')
 })
 
@@ -26,7 +27,12 @@ test_that("taxon_id objects can be created with names", {
   expect_equal(names(x), letters[1:3])
 })
 
-# Printing taxon objects
+test_that("taxon_id values must match the regex of the database", {
+  expect_error(taxon_id('NOLETTERS', db = 'ncbi'), 'Taxon IDs must follow the database ID conventions ')
+})
+
+
+# Printing taxon_id objects
 
 test_that("taxon_id objects can be printed", {
   x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'))
@@ -36,6 +42,15 @@ test_that("taxon_id objects can be printed", {
                 crayon = TRUE)
 })
 
+test_that("taxon_id objects can be printed in tables", {
+  x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'))
+  verify_output(path = test_path('print_outputs', 'taxon_id_tibble.txt'),
+                code = {print(tibble::tibble(x))},
+                crayon = TRUE)
+  verify_output(path = test_path('print_outputs', 'taxon_id_data_frame.txt'),
+                code = {print(data.frame(x))},
+                crayon = TRUE)
+})
 
 # Subsetting taxon_id objects with `[`
 
@@ -263,7 +278,9 @@ test_that("taxon_id objects work with is.na", {
 test_that("taxon_id objects work with %in%", {
   x <- taxon_id(c('1', '2', '3'), db = c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
   expect_true('1' %in% x)
+  expect_true(factor('1') %in% x)
   expect_equal(x %in% c('1', '2'), c('1', '2', '3') %in% c('1', '2'))
+  expect_equal(x %in% factor(c('1', '2')), c('1', '2', '3') %in% c('1', '2'))
   expect_true(x[1] %in% x)
   expect_equal(x %in% x[1:2], c('1', '2', '3') %in% c('1', '2'))
 })

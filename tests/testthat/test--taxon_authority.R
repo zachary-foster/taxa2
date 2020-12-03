@@ -25,6 +25,24 @@ test_that("taxon_authority objects can be created with names", {
   expect_equal(names(x), letters[1:3])
 })
 
+# Printing taxon_authority objects
+
+test_that("taxon_authority objects can be printed", {
+  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
+  verify_output(path = test_path('print_outputs', 'taxon_authority.txt'),
+                code = {print(x)},
+                crayon = TRUE)
+})
+
+test_that("taxon_authority objects can be printed in tables", {
+  x <- taxon_authority(c('Cham. & Schldl.', 'L.', 'Billy'), date = c('1827', '1753', '2000'), .names = letters[1:3])
+  verify_output(path = test_path('print_outputs', 'taxon_authority_tibble.txt'),
+                code = {print(tibble::tibble(x))},
+                crayon = TRUE)
+  verify_output(path = test_path('print_outputs', 'taxon_authority_data_frame.txt'),
+                code = {print(data.frame(x))},
+                crayon = TRUE)
+})
 
 # Subsetting taxon_authority objects with `[`
 

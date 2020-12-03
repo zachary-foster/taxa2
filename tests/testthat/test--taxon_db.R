@@ -27,6 +27,25 @@ test_that("taxon_db objects can be created with names", {
   expect_equal(names(x), letters[1:3])
 })
 
+# Printing taxon_db objects
+
+test_that("taxon_db objects can be printed", {
+  x <- taxon_db(as.factor(c('ncbi', 'ncbi', 'itis')))
+  verify_output(path = test_path('print_outputs', 'taxon_db.txt'),
+                code = {print(x)},
+                crayon = TRUE)
+})
+
+test_that("taxon_db objects can be printed in tables", {
+  x <- taxon_db(as.factor(c('ncbi', 'ncbi', 'itis')))
+  verify_output(path = test_path('print_outputs', 'taxon_db_tibble.txt'),
+                code = {print(tibble::tibble(x))},
+                crayon = TRUE)
+  verify_output(path = test_path('print_outputs', 'taxon_db_data_frame.txt'),
+                code = {print(data.frame(x))},
+                crayon = TRUE)
+})
+
 
 # Subsetting taxon_db objects
 
@@ -225,7 +244,9 @@ test_that("named taxon_db objects can be converted to a tibble", {
 test_that("taxon_db objects work with %in%", {
   x <- taxon_db(c('ncbi', 'ncbi', 'itis'), .names = letters[1:3])
   expect_true('ncbi' %in% x)
+  expect_true(factor('ncbi') %in% x)
   expect_equal(x %in% 'itis', c(FALSE, FALSE, TRUE))
+  expect_equal(x %in% 'itis', x %in% factor('itis'))
   expect_true(x[1] %in% x)
   expect_equal(x %in% x[2],  c(TRUE, TRUE, FALSE))
 })

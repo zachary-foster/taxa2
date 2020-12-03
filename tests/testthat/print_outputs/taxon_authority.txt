@@ -1,0 +1,5 @@
+> print(x)
+<taxon_authority[3]>
+                   a                    b                    c 
+Cham. & Schldl. [38;5;248m1827[39m              L. [38;5;248m1753[39m           Billy [38;5;248m2000[39m 
+

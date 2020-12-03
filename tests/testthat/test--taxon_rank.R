@@ -89,6 +89,8 @@ test_that("taxon_rank objects can have values assigned to them", {
   x <- taxon_rank(c('species', 'species', 'phylum', 'family', 'customA', 'customB'), .names = letters[1:6])
   x[2] <- 'family'
   expect_equal(x[2], taxon_rank('family', levels = levels(x), .names = 'b'))
+  x[[2]] <- 'species'
+  expect_equal(x[2], taxon_rank('species', levels = levels(x), .names = 'b'))
   x['c'] <- 'family'
   expect_equal(x[3], taxon_rank('family', levels = levels(x), .names ='c'))
   x[c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE)] <- 'family'

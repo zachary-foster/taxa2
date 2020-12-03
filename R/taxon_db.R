@@ -94,17 +94,6 @@ taxon_db <- function(db = character(), .names = NULL, ...) {
 }
 
 
-#' @rdname taxon_db
-#'
-#' @param x An object to set taxon databases for.
-#' @param value The taxon databases to use. Inputs will be coerced into a [taxon_db()] vector.
-#'
-#' @export
-`taxon_db<-` <- function(x, value) {
-  UseMethod('taxon_db<-')
-}
-
-
 #' Taxon database class
 #'
 #' Taxon database class. See [taxon_db] for more information

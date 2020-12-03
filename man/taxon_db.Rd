@@ -2,12 +2,9 @@
 % Please edit documentation in R/taxon_db.R
 \name{taxon_db}
 \alias{taxon_db}
-\alias{taxon_db<-}
 \title{Taxon database class}
 \usage{
 taxon_db(db = character(), .names = NULL, ...)
-
-taxon_db(x) <- value
 }
 \arguments{
 \item{db}{Zero or more taxonomic database names. Should be a name contained in
@@ -16,10 +13,6 @@ taxon_db(x) <- value
 \item{.names}{The names of the vector.}
 
 \item{...}{Additional arguments.}
-
-\item{x}{An object to set taxon databases for.}
-
-\item{value}{The taxon databases to use. Inputs will be coerced into a \code{\link[=taxon_db]{taxon_db()}} vector.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_db}
