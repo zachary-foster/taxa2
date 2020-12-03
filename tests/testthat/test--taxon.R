@@ -42,6 +42,7 @@ test_that("taxon objects can be printed", {
   verify_output(path = test_path('print_outputs', 'taxon.txt'),
                 code = {print(x)},
                 crayon = TRUE)
+  options(max.print = 1000)
   expect_output(print(rep(x, 1000)), regexp = 'reached getOption("max.print")', fixed = TRUE)
   expect_output(print(taxon()), "<taxon[0]>", fixed = TRUE)
 })
