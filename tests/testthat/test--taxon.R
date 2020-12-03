@@ -26,6 +26,11 @@ test_that("taxon objects can be created with names", {
   expect_equal(names(x), letters[1:3])
 })
 
+test_that("taxon objects can be created with as_taxon", {
+  expect_equal(as_taxon(c('A', 'B', 'C')), taxon(c('A', 'B', 'C')))
+  expect_equal(as_taxon(taxon(c('A', 'B', 'C'))), taxon(c('A', 'B', 'C')))
+})
+
 # Printing taxon objects
 
 test_that("taxon objects can be printed", {
@@ -36,6 +41,22 @@ test_that("taxon objects can be printed", {
   names(x) <- c('a', 'b', 'c', 'd')
   verify_output(path = test_path('print_outputs', 'taxon.txt'),
                 code = {print(x)},
+                crayon = TRUE)
+  expect_output(print(rep(x, 1000)), regexp = 'reached getOption("max.print")', fixed = TRUE)
+  expect_output(print(taxon()), "<taxon[0]>", fixed = TRUE)
+})
+
+test_that("taxon objects can be printed in tables", {
+  x <- taxon(name = c('Homo sapiens', 'Bacillus', 'Ascomycota', 'Ericaceae'),
+             rank = c('species', 'genus', 'phylum', 'family'),
+             id = taxon_id(c('9606', '1386', '4890', '4345'), db = 'ncbi'),
+             auth = c('Linnaeus, 1758', 'Cohn 1872', NA, 'Juss., 1789'))
+  names(x) <- c('a', 'b', 'c', 'd')
+  verify_output(path = test_path('print_outputs', 'taxon_tibble.txt'),
+                code = {print(tibble::tibble(x))},
+                crayon = TRUE)
+  verify_output(path = test_path('print_outputs', 'taxon_data_frame.txt'),
+                code = {print(data.frame(x))},
                 crayon = TRUE)
 })
 
@@ -310,6 +331,8 @@ test_that("taxon objects work with %in%", {
   expect_true(x[1] %in% x)
   expect_equal(x %in% x[1:2], tax_name(x) %in% c('Homo sapiens', 'Bacillus'))
   expect_false('sapiens' %in% x)
+  expect_true(factor('Homo sapiens') %in% x)
+  expect_equal(which(x %in% factor('Homo sapiens')), 1)
 })
 
 
