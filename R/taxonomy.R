@@ -1388,13 +1388,3 @@ duplicated_index_taxonomy <- function(x, proxy_func = NULL) {
   out[changes$from] <- changes$to
   return(out)
 }
-
-
-#' @keywords internal
-list_to_taxonomy <- function(x) {
-  class_length <- vapply(x, length, numeric(1))
-  parents <- unlist(lapply(class_length, function(l) c(NA, seq_len(l - 1))))
-  parents <- parents + rep(c(0, cumsum(class_length[-length(class_length)] )), class_length)
-  taxonomy(unlist(x, recursive = FALSE),
-           supertaxa = parents)
-}

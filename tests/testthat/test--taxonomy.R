@@ -148,6 +148,28 @@ test_that("Replacing a value with no taxonomic context does not change its place
   expect_equal(vctrs::field(x, 'supertaxa')[4:5], c(3, 3))
 })
 
+# Assign values to components
+
+test_that("components of taxonomy objects can be assigned", {
+  x <- taxonomy(c('A', 'B', 'C'))
+  tax_auth(x) <- c('a', 'b', 'c')
+  expect_equal(tax_auth(x), taxon_authority(c('a', 'b', 'c')))
+  tax_name(x) <- c('d', 'e', 'f')
+  expect_equal(tax_name(x), c('d', 'e', 'f'))
+  tax_rank(x) <- c('a', 'b', 'c')
+  expect_equal(tax_rank(x), taxon_rank(c('a', 'b', 'c')))
+  tax_id(x) <- c('1', '2', '3')
+  expect_equal(tax_id(x), taxon_id(c('1', '2', '3')))
+  tax_db(x) <- c('ncbi', 'ncbi', 'ncbi')
+  expect_equal(tax_db(x), taxon_db(c('ncbi', 'ncbi', 'ncbi')))
+  tax_author(x) <- c('g', 'h', 'i')
+  expect_equal(tax_author(x), c('g', 'h', 'i'))
+  tax_date(x) <- c('4', '5', '6')
+  expect_equal(tax_date(x), c('4', '5', '6'))
+  tax_cite(x) <- c('x', 'y', 'z')
+  expect_equal(tax_cite(x), c('x', 'y', 'z'))
+})
+
 # NOTE: It seems vctrs does not allow defining new values by index. Not sure if we will try to make this work anyway
 #
 # test_that("New values with no taxonomic context are added at the root of the tree", {
@@ -506,3 +528,18 @@ test_that("taxa in taxonomy objects can be made unique", {
   )
 })
 
+
+# works with %in%
+
+test_that("taxonomy objects work with %in%", {
+  x <- taxonomy(c('Carnivora', 'Felidae', 'Panthera', 'Panthera leo',
+                  'Panthera tigris', 'Ursidae', 'Ursus', 'Ursus arctos'),
+                supertaxa = c(NA, 1, 2, 3, 3, 1, 6, 7))
+  expect_true('Carnivora' %in% x)
+  expect_equal(x %in% 'Carnivora', tax_name(x) %in% 'Carnivora')
+  expect_true(x[1, subtaxa = FALSE] %in% x)
+  expect_equal(x %in% x[1, subtaxa = FALSE], tax_name(x) %in% 'Carnivora')
+  expect_false('sapiens' %in% x)
+  expect_true(factor('Carnivora') %in% x)
+  expect_equal(which(x %in% factor('Carnivora')), 1)
+})
