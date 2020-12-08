@@ -42,7 +42,7 @@ new_taxon_authority <- function(.names = NULL, author = character(), date = char
 #' @param date Zero or more dates.
 #' @param citation Zero or more literature citations.
 #' @param extract_date If `TRUE` (the default), then if a date is detected in the `author` input and
-#'   no `date` input is given, then the date is seperated from the author input.
+#'   no `date` input is given, then the date is separated from the author input.
 #' @param .names The names of the vector.
 #'
 #' @return An `S3` object of class `taxa_taxon_authority`

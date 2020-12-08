@@ -22,7 +22,7 @@ taxon_authority(
 \item{.names}{The names of the vector.}
 
 \item{extract_date}{If \code{TRUE} (the default), then if a date is detected in the \code{author} input and
-no \code{date} input is given, then the date is seperated from the author input.}
+no \code{date} input is given, then the date is separated from the author input.}
 }
 \value{
 An \code{S3} object of class \code{taxa_taxon_authority}

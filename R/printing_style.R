@@ -123,7 +123,7 @@ print_with_color <- function(x, original_length = length(x), ...) {
   invisible(x)
 }
 
-#' Interleves two vectors
+#' Interleaves two vectors
 #'
 #' Taken from "http://r.789695.n4.nabble.com/Interleaving-elements-of-two-vectors-td795123.html"
 #'
