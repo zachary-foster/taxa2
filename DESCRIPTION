@@ -49,4 +49,3 @@ Suggests:
 RoxygenNote: 7.1.1
 X-schema.org-applicationCategory: Taxonomy
 X-schema.org-keywords: taxonomy, biology, hierarchy
-X-schema.org-isPartOf: https://ropensci.org

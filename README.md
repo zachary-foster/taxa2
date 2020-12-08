@@ -23,13 +23,13 @@ We welcome comments, criticisms, and especially contributions! GitHub
 issues are the preferred way to report bugs, ask questions, or request
 new features. You can submit issues here:
 
-<a href="https://github.com/ropensci/taxa2/issues" class="uri">https://github.com/ropensci/taxa2/issues</a>
+<a href="https://github.com/zachary-foster/taxa2/issues" class="uri">https://github.com/zachary-foster/taxa2/issues</a>
 
 Meta
 ----
 
 -   Please [report any issues or
-    bugs](https://github.com/ropensci/taxa/issues).
+    bugs](https://github.com/zachary-foster/taxa2/issues).
 -   License: MIT
 -   Get citation information for `taxa` in R doing
     `citation(package = 'taxa')`
