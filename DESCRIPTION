@@ -22,8 +22,8 @@ LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
 License: MIT + file LICENSE
-URL: https://github.com/ropensci/taxa2
-BugReports: https://github.com/ropensci/taxa2/issues
+URL: https://github.com/zachary-foster/taxa2
+BugReports: https://github.com/zachary-foster/taxa2/issues
 Roxygen: list(markdown = TRUE)
 Imports:
     R6,
