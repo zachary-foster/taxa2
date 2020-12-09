@@ -3,7 +3,7 @@ Type: Package
 Title: Classes for storing and manipulating taxonomic data
 Description: Provides classes for storing and manipulating taxonomic data. 
  Most of the classes can be treated like base R vectors (e.g. can be used 
- in tables as columns and can be named. Vectorized classes can store taxon names
+ in tables as columns and can be named). Vectorized classes can store taxon names
  and authorities, taxon IDs from databases, taxon ranks, and other types of
  information. More complex classes are provided to store taxonomic trees and
  user-defined data associated with them.
