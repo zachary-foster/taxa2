@@ -4,20 +4,19 @@
     "http://schema.org"
   ],
   "@type": "SoftwareSourceCode",
-  "identifier": "taxa",
-  "description": "Provides taxonomic classes for\n    groupings of taxonomic names without data, and those\n    with data. Methods provided are \"taxonomically aware\", in\n    that they know about ordering of ranks, and methods that\n    filter based on taxonomy also filter associated data.",
-  "name": "taxa: Taxonomic Classes",
-  "codeRepository": "https://github.com/ropensci/taxa",
-  "issueTracker": "https://github.com/ropensci/taxa/issues",
+  "identifier": "taxa2",
+  "description": "Provides classes for storing and manipulating taxonomic data. \n Most of the classes can be treated like base R vectors (e.g. can be used \n in tables as columns and can be named). Vectorized classes can store taxon names\n and authorities, taxon IDs from databases, taxon ranks, and other types of\n information. More complex classes are provided to store taxonomic trees and\n user-defined data associated with them.",
+  "name": "taxa2: Classes for storing and manipulating taxonomic data",
+  "codeRepository": "https://github.com/zachary-foster/taxa2",
+  "issueTracker": "https://github.com/zachary-foster/taxa2/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.3.2",
+  "version": "0.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
+  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -95,6 +94,18 @@
       "identifier": "R",
       "name": "R",
       "version": ">= 3.0.2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "vctrs",
+      "name": "vctrs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vctrs"
     },
     {
       "@type": "SoftwareApplication",
@@ -235,29 +246,57 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "taxize",
-      "name": "taxize",
+      "identifier": "pillar",
+      "name": "pillar",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=taxize"
+      "sameAs": "https://CRAN.R-project.org/package=pillar"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "viridisLite",
+      "name": "viridisLite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=viridisLite"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
     }
   ],
-  "contIntegration": "https://travis-ci.org/ropensci/taxa",
-  "developmentStatus": "[![Project Status: WIP - Initial development is in progress, but there",
-  "releaseNotes": "https://github.com/ropensci/taxa/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/taxa/blob/master/README.md",
-  "fileSize": "1835.02KB",
+  "contIntegration": ["https://travis-ci.org/zachary-foster/taxa2", "https://codecov.io/gh/zachary-foster/taxa2"],
+  "releaseNotes": "https://github.com/zachary-foster/taxa2/blob/master/NEWS.md",
+  "readme": "https://github.com/zachary-foster/taxa2/blob/main/README.md",
+  "fileSize": "372.848KB",
   "applicationCategory": "Taxonomy",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["taxonomy", "biology", "hierarchy", "taxon", "data-cleaning", "rstats", "r", "r-package"],
+  "keywords": ["taxonomy", "biology", "hierarchy"],
   "citation": [
     {
-      "@type": "SoftwareSourceCode",
-      "datePublished": "2018",
+      "@type": "CreativeWork",
+      "datePublished": "2020",
       "author": [
         {
           "@type": "Person",
@@ -275,20 +314,11 @@
           "familyName": "Niklaus"
         }
       ],
-      "name": "Taxa: An R package implementing data standards and methods for taxonomic data.",
-      "identifier": "10.12688/f1000research.14013.1",
-      "@id": "https://doi.org/10.12688/f1000research.14013.1",
-      "sameAs": "https://doi.org/10.12688/f1000research.14013.1",
-      "isPartOf": {
-        "@type": "PublicationIssue",
-        "issueNumber": "272",
-        "datePublished": "2018",
-        "isPartOf": {
-          "@type": ["PublicationVolume", "Periodical"],
-          "volumeNumber": "7",
-          "name": "F1000Research"
-        }
-      }
+      "name": "taxa2: Classes for storing and manipulating taxonomic data.",
+      "description": "Software under development."
     }
-  ]
+  ],
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {}
 }
