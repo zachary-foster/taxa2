@@ -33,6 +33,6 @@ Meta
 -   License: MIT
 -   Get citation information for `taxa` in R doing
     `citation(package = 'taxa')`
--   Please note that this project is released with a [Contributor Code
-    of Conduct](CONDUCT.md). By participating in this project you agree
+-   Please note that this project is released with a Contributor Code of
+    Conduct (see CONDUCT.md). By participating in this project you agree
     to abide by its terms.
