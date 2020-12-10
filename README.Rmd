@@ -40,4 +40,4 @@ https://github.com/zachary-foster/taxa2/issues
 * Please [report any issues or bugs](https://github.com/zachary-foster/taxa2/issues).
 * License: MIT
 * Get citation information for `taxa` in R doing `citation(package = 'taxa')`
-* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a Contributor Code of Conduct (see CONDUCT.md). By participating in this project you agree to abide by its terms.
